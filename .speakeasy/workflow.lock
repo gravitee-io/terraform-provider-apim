@@ -2,8 +2,8 @@ speakeasyVersion: 1.581.2
 sources:
     Gravitee.io - Automation API:
         sourceNamespace: gravitee-io-gko---automation-api
-        sourceRevisionDigest: sha256:5f23acb2accacc822717d0b0eadcc2b5bc3f9a229d28834a285c6f3e939f285d
-        sourceBlobDigest: sha256:95dd9ef7978aaffb9c48235f73d086e9cc46bbd479e193485948add2c5b4ade9
+        sourceRevisionDigest: sha256:1058d03fe5b304b59a6a08ec7961c3f05a89aabd274284deb7b05ea507d1073f
+        sourceBlobDigest: sha256:b08ee9e5103b40efa2078fd9aa0f623685bd05d11fba0cb3c34a9fcbcd81fa8c
         tags:
             - latest
             - 0.2.0
@@ -11,8 +11,8 @@ targets:
     gravitee-apim:
         source: Gravitee.io - Automation API
         sourceNamespace: gravitee-io-gko---automation-api
-        sourceRevisionDigest: sha256:5f23acb2accacc822717d0b0eadcc2b5bc3f9a229d28834a285c6f3e939f285d
-        sourceBlobDigest: sha256:95dd9ef7978aaffb9c48235f73d086e9cc46bbd479e193485948add2c5b4ade9
+        sourceRevisionDigest: sha256:1058d03fe5b304b59a6a08ec7961c3f05a89aabd274284deb7b05ea507d1073f
+        sourceBlobDigest: sha256:b08ee9e5103b40efa2078fd9aa0f623685bd05d11fba0cb3c34a9fcbcd81fa8c
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest

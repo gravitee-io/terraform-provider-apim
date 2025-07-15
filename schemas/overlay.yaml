@@ -4,6 +4,17 @@ info:
   title: Terraform overlay
   version: 0.0.1
 actions:
+  - target: $.info
+    description: Update description so it feat to Terraform
+    update:
+      title: Gravitee
+  - target: $.info
+    description: Update description so it feat to Terraform
+    update:
+      description: |
+        APIM Terraform Provider (alpha)
+        
+        Manage APIs and Shared Policy Groups with Terraform
   - target: $
     description: |
       Promote environment_id and organization_id parameters to optional

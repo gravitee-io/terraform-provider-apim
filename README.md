@@ -9,7 +9,9 @@
 <!-- Start Summary [summary] -->
 ## Summary
 
-Gravitee.io GKO - Automation API: The APIM automation API.
+Gravitee: APIM Terraform Provider (alpha)
+
+Manage APIs and Shared Policy Groups with Terraform
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->

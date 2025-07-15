@@ -3,12 +3,15 @@
 page_title: "gravitee-apim Provider"
 subcategory: ""
 description: |-
-  Gravitee.io GKO - Automation API: The APIM automation API.
+  Gravitee: APIM Terraform Provider (alpha)
+  Manage APIs and Shared Policy Groups with Terraform
 ---
 
 # gravitee-apim Provider
 
-Gravitee.io GKO - Automation API: The APIM automation API.
+Gravitee: APIM Terraform Provider (alpha)
+
+Manage APIs and Shared Policy Groups with Terraform
 
 ## Example Usage
 

@@ -65,7 +65,9 @@ func (p *GraviteeApimProvider) Schema(ctx context.Context, req provider.SchemaRe
 				Optional:    true,
 			},
 		},
-		MarkdownDescription: `Gravitee.io GKO - Automation API: The APIM automation API.`,
+		MarkdownDescription: `Gravitee: APIM Terraform Provider (alpha)` + "\n" +
+			`` + "\n" +
+			`Manage APIs and Shared Policy Groups with Terraform`,
 	}
 }
 

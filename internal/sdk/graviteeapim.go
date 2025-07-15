@@ -48,7 +48,9 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// GraviteeApim - Gravitee.io GKO - Automation API: The APIM automation API.
+// GraviteeApim - Gravitee: APIM Terraform Provider (alpha)
+//
+// Manage APIs and Shared Policy Groups with Terraform
 type GraviteeApim struct {
 	SDKVersion string
 	// Everything about APIs
