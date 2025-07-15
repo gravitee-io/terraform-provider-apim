@@ -1,0 +1,51 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Root terraform overlay
+  version: 0.0.1
+actions:
+  - target: $
+    description: | 
+      Setup SDK retries
+    update:
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 500 # 500 milliseconds
+          maxInterval: 60000 # 60 seconds
+          maxElapsedTime: 3600000 # 1 hour
+          exponent: 1.5
+        statusCodes:
+          - 5XX
+        retryConnectionErrors: true
+  - target: $
+    description: |
+      Promote environment_id and organization_id parameters to optional
+      provider-level configuration for all underlying resources that use them.
+    update:
+      x-speakeasy-globals:
+        parameters:
+          - $ref: '#/components/parameters/envIdParam'
+          - $ref: '#/components/parameters/orgIdParam'
+  - target: $.info
+    description: Update description so it feat to Terraform
+    update:
+      title: Gravitee
+  - target: $.info
+    description: Update description so it feat to Terraform
+    update:
+      description: |
+        APIM Terraform Provider (alpha)
+        
+        Manage APIs and Shared Policy Groups with Terraform
+#  - target: $.security
+#    description: Add cloud auth security scheme
+#    update:
+#      - CloudAuth: [ ]
+#  - target: $.components.securitySchemes
+#    description: Add cloud auth security scheme definition
+#    update:
+#      CloudAuth:
+#        type: http
+#        scheme: bearer
+#        bearerFormat: JWT

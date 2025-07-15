@@ -1,0 +1,29 @@
+name: Lint OAS
+on:
+  pull_request:
+#    paths:
+#      - "schemas/automation-api-oas.yaml"
+jobs:
+  lint:
+    permissions:
+      contents: read
+    runs-on:
+      - ubuntu-latest
+    steps:
+      - name: Install Speakeasy
+        uses: mheap/setup-go-cli@fa9b01cdd4115eac636164f0de43bf7d51c82697 #
+        with:
+          owner: speakeasy-api
+          repo: speakeasy
+          cli_name: speakeasy
+          package_type: zip
+      - name: Configure speakeasy CLI
+        run: |
+          mkdir -p ~/.speakeasy
+          echo 'speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}' > ~/.speakeasy/config.yaml
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Run lint
+        run: make lint

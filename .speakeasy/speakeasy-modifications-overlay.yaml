@@ -1,0 +1,70 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Speakeasy Modifications
+  version: 0.0.2
+  x-speakeasy-metadata:
+    after: ""
+    before: ""
+    type: speakeasy-modifications
+actions:
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/shared-policy-groups"]["put"]
+    update:
+      x-speakeasy-group: sharedPolicyGroups
+      x-speakeasy-name-override: createOrUpdate
+    x-speakeasy-metadata:
+      after: sdk.sharedPolicyGroups.createOrUpdate()
+      before: sdk.Shared Policy Group.createOrUpdatePolicyGroup()
+      created_at: 1752593643698
+      reviewed_at: 1752593648759
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/apis"]["put"]
+    update:
+      x-speakeasy-group: apis
+      x-speakeasy-name-override: createOrUpdate
+    x-speakeasy-metadata:
+      after: sdk.apis.createOrUpdate()
+      before: sdk.APIs.createOrUpdateApis()
+      created_at: 1752593643698
+      reviewed_at: 1752593648759
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/apis/{hrid}"]["get"]
+    update:
+      x-speakeasy-group: apis
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.apis.get()
+      before: sdk.APIs.getApi()
+      created_at: 1752593643698
+      reviewed_at: 1752593648759
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/apis/{hrid}"]["delete"]
+    update:
+      x-speakeasy-group: apis
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.apis.delete()
+      before: sdk.APIs.deleteApi()
+      created_at: 1752593643698
+      reviewed_at: 1752593648759
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/shared-policy-groups/{hrid}"]["get"]
+    update:
+      x-speakeasy-group: sharedPolicyGroups
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.sharedPolicyGroups.get()
+      before: sdk.Shared Policy Group.getPolicyGroup()
+      created_at: 1752593643698
+      reviewed_at: 1752593648759
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/shared-policy-groups/{hrid}"]["delete"]
+    update:
+      x-speakeasy-group: sharedPolicyGroups
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.sharedPolicyGroups.delete()
+      before: sdk.Shared Policy Group.deletePolicyGroup()
+      created_at: 1752593643698
+      reviewed_at: 1752593648759
+      type: method-name
