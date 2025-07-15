@@ -1,7 +1,5 @@
-.terraform
-.terraform*
-*.tfstate*
+# .gitignore
 .DS_Store
 **/.speakeasy/temp/
 **/.speakeasy/logs/
-.vscode
+.speakeasy/reports
