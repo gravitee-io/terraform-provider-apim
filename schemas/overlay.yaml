@@ -16,6 +16,20 @@ actions:
         
         Manage APIs and Shared Policy Groups with Terraform
   - target: $
+    description: | 
+      Setup SDK retries
+    update:
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 500 # 500 milliseconds
+          maxInterval: 60000 # 60 seconds
+          maxElapsedTime: 3600000 # 1 hour
+          exponent: 1.5
+        statusCodes:
+          - 5XX
+        retryConnectionErrors: true
+  - target: $
     description: |
       Promote environment_id and organization_id parameters to optional
       provider-level configuration for all underlying resources that use them.

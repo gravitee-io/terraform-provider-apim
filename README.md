@@ -32,14 +32,14 @@ To install this provider, copy and paste this code into your Terraform configura
 ```hcl
 terraform {
   required_providers {
-    gravitee-apim = {
-      source  = "speakeasy/gravitee-apim"
-      version = "0.2.0"
+    apim = {
+      source  = "gravitee-io/apim"
+      version = "0.4.0"
     }
   }
 }
 
-provider "gravitee-apim" {
+provider "apim" {
   # Configuration options
 }
 ```
@@ -50,12 +50,12 @@ provider "gravitee-apim" {
 
 ### Resources
 
-* [gravitee-apim_apiv4](docs/resources/apiv4.md)
-* [gravitee-apim_shared_policy_group](docs/resources/shared_policy_group.md)
+* [apim_apiv4](docs/resources/apiv4.md)
+* [apim_shared_policy_group](docs/resources/shared_policy_group.md)
 ### Data Sources
 
-* [gravitee-apim_apiv4](docs/data-sources/apiv4.md)
-* [gravitee-apim_shared_policy_group](docs/data-sources/shared_policy_group.md)
+* [apim_apiv4](docs/data-sources/apiv4.md)
+* [apim_shared_policy_group](docs/data-sources/shared_policy_group.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Testing the provider locally [usage] -->
@@ -80,7 +80,7 @@ TF_REATTACH_PROVIDERS=... terraform apply
 
 Terraform allows you to use local provider builds by setting a `dev_overrides` block in a configuration file called `.terraformrc`. This block overrides all other configured installation methods.
 
-1. Execute `go build` to construct a binary called `terraform-provider-gravitee-apim`
+1. Execute `go build` to construct a binary called `terraform-provider-apim`
 2. Ensure that the `.terraformrc` file is configured with a `dev_overrides` section such that your local copy of terraform can see the provider binary
 
 Terraform searches for the `.terraformrc` file in your home directory and applies any configuration settings you set.
@@ -89,7 +89,7 @@ Terraform searches for the `.terraformrc` file in your home directory and applie
 provider_installation {
 
   dev_overrides {
-      "registry.terraform.io/speakeasy/gravitee-apim" = "<PATH>"
+      "registry.terraform.io/gravitee-io/apim" = "<PATH>"
   }
 
   # For all other providers, install them directly from their origin provider

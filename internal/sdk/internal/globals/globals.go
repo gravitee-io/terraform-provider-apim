@@ -3,7 +3,7 @@
 package globals
 
 import (
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/utils"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
 type Globals struct {

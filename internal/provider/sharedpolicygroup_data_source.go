@@ -5,12 +5,12 @@ package provider
 import (
 	"context"
 	"fmt"
+	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	tfTypes "github.com/speakeasy/terraform-provider-gravitee-apim/internal/provider/types"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -147,12 +147,12 @@ func (r *SharedPolicyGroupDataSource) Configure(ctx context.Context, req datasou
 		return
 	}
 
-	providerData, ok := req.ProviderData.(*GraviteeApimProviderConfigureData)
+	providerData, ok := req.ProviderData.(*ApimProviderConfigureData)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected DataSource Configure Type",
-			fmt.Sprintf("Expected *GraviteeApimProviderConfigureData, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *ApimProviderConfigureData, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
@@ -195,7 +195,7 @@ func (r *SharedPolicyGroupDataSource) Read(ctx context.Context, req datasource.R
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.SharedPolicyGroup.GetPolicyGroup(ctx, *request)
+	res, err := r.client.SharedPolicyGroups.Get(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

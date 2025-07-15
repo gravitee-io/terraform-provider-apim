@@ -1,4 +1,4 @@
-resource "gravitee-apim_shared_policy_group" "my_sharedpolicygroup" {
+resource "apim_shared_policy_group" "my_sharedpolicygroup" {
   api_type             = "MESSAGE"
   description          = "this is a shared policy group"
   environment_id       = "...my_environment_id..."

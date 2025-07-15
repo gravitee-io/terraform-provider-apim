@@ -1,12 +1,12 @@
 terraform {
   required_providers {
-    gravitee-apim = {
-      source  = "speakeasy/gravitee-apim"
-      version = "0.2.0"
+    apim = {
+      source  = "gravitee-io/apim"
+      version = "0.4.0"
     }
   }
 }
 
-provider "gravitee-apim" {
+provider "apim" {
   # Configuration options
 }

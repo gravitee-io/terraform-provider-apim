@@ -68,6 +68,8 @@ paths:
         "500":
           description: Internal server error
       x-speakeasy-entity-operation: APIV4#create,update
+      x-speakeasy-group: apis
+      x-speakeasy-name-override: createOrUpdate
   /organizations/{orgId}/environments/{envId}/apis/{hrid}:
     parameters:
       - $ref: "#/components/parameters/orgIdParam"
@@ -97,6 +99,8 @@ paths:
         "500":
           description: Internal server error
       x-speakeasy-entity-operation: APIV4#read
+      x-speakeasy-group: apis
+      x-speakeasy-name-override: get
     delete:
       operationId: deleteApi
       tags:
@@ -113,6 +117,8 @@ paths:
         default:
           $ref: "#/components/responses/Error"
       x-speakeasy-entity-operation: APIV4#delete
+      x-speakeasy-group: apis
+      x-speakeasy-name-override: delete
   # Shared Policy Groups
   /organizations/{orgId}/environments/{envId}/shared-policy-groups/{hrid}:
     parameters:
@@ -139,6 +145,8 @@ paths:
         "500":
           description: Internal server error
       x-speakeasy-entity-operation: SharedPolicyGroup#read
+      x-speakeasy-group: sharedPolicyGroups
+      x-speakeasy-name-override: get
     delete:
       operationId: deletePolicyGroup
       tags:
@@ -153,6 +161,8 @@ paths:
         default:
           $ref: "#/components/responses/Error"
       x-speakeasy-entity-operation: SharedPolicyGroup#delete
+      x-speakeasy-group: sharedPolicyGroups
+      x-speakeasy-name-override: delete
   /organizations/{orgId}/environments/{envId}/shared-policy-groups:
     put:
       operationId: createOrUpdatePolicyGroup
@@ -186,6 +196,8 @@ paths:
         "500":
           description: Internal server error
       x-speakeasy-entity-operation: SharedPolicyGroup#create,update
+      x-speakeasy-group: sharedPolicyGroups
+      x-speakeasy-name-override: createOrUpdate
 components:
   schemas:
     Hrid:
@@ -1757,6 +1769,16 @@ components:
       type: http
       scheme: bearer
       bearerFormat: Gravitee service account ID
+x-speakeasy-retries:
+  strategy: backoff
+  backoff:
+    initialInterval: 500 # 500 milliseconds
+    maxInterval: 60000 # 60 seconds
+    maxElapsedTime: 3600000 # 1 hour
+    exponent: 1.5
+  statusCodes:
+    - 5XX
+  retryConnectionErrors: true
 x-speakeasy-globals:
   parameters:
     - $ref: '#/components/parameters/envIdParam'

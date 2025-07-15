@@ -22,7 +22,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 terraform:
-  version: 0.2.0
+  version: 0.4.0
   additionalDataSources: []
   additionalDependencies: {}
   additionalEphemeralResources: []
@@ -31,9 +31,9 @@ terraform:
     tlsSkipVerify: ""
   additionalResources: []
   allowUnknownFieldsInWeakUnions: false
-  author: speakeasy
-  baseErrorName: GraviteeApimError
+  author: gravitee-io
+  baseErrorName: ApimError
   defaultErrorName: APIError
   enableTypeDeduplication: false
   environmentVariables: []
-  packageName: gravitee-apim
+  packageName: apim

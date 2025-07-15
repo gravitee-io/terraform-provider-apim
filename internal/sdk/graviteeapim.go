@@ -7,12 +7,12 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/config"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/globals"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/hooks"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/utils"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/models/shared"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/retry"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/config"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/globals"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/hooks"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/retry"
 	"net/http"
 	"time"
 )
@@ -52,11 +52,9 @@ func Pointer[T any](v T) *T { return &v }
 //
 // Manage APIs and Shared Policy Groups with Terraform
 type GraviteeApim struct {
-	SDKVersion string
-	// Everything about APIs
-	APIs *APIs
-	// Everything about Shared Policy Groups
-	SharedPolicyGroup *SharedPolicyGroup
+	SDKVersion         string
+	Apis               *Apis
+	SharedPolicyGroups *SharedPolicyGroups
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -146,9 +144,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *GraviteeApim {
 	sdk := &GraviteeApim{
-		SDKVersion: "0.2.0",
+		SDKVersion: "0.4.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.2.0 2.656.9 0.2.0 github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.4.0 2.656.9 0.2.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
 			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},
@@ -170,8 +168,8 @@ func New(opts ...SDKOption) *GraviteeApim {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 
-	sdk.APIs = newAPIs(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.SharedPolicyGroup = newSharedPolicyGroup(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Apis = newApis(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.SharedPolicyGroups = newSharedPolicyGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

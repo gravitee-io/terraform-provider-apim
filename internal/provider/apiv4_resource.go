@@ -7,6 +7,19 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_boolplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/boolplanmodifier"
+	speakeasy_int32planmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/int32planmodifier"
+	speakeasy_int64planmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/int64planmodifier"
+	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
+	speakeasy_mapplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/mapplanmodifier"
+	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
+	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
+	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	"github.com/gravitee-io/terraform-provider-apim/internal/validators"
+	speakeasy_listvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/listvalidators"
+	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
+	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
@@ -25,19 +38,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	speakeasy_boolplanmodifier "github.com/speakeasy/terraform-provider-gravitee-apim/internal/planmodifiers/boolplanmodifier"
-	speakeasy_int32planmodifier "github.com/speakeasy/terraform-provider-gravitee-apim/internal/planmodifiers/int32planmodifier"
-	speakeasy_int64planmodifier "github.com/speakeasy/terraform-provider-gravitee-apim/internal/planmodifiers/int64planmodifier"
-	speakeasy_listplanmodifier "github.com/speakeasy/terraform-provider-gravitee-apim/internal/planmodifiers/listplanmodifier"
-	speakeasy_mapplanmodifier "github.com/speakeasy/terraform-provider-gravitee-apim/internal/planmodifiers/mapplanmodifier"
-	speakeasy_objectplanmodifier "github.com/speakeasy/terraform-provider-gravitee-apim/internal/planmodifiers/objectplanmodifier"
-	speakeasy_stringplanmodifier "github.com/speakeasy/terraform-provider-gravitee-apim/internal/planmodifiers/stringplanmodifier"
-	tfTypes "github.com/speakeasy/terraform-provider-gravitee-apim/internal/provider/types"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/validators"
-	speakeasy_listvalidators "github.com/speakeasy/terraform-provider-gravitee-apim/internal/validators/listvalidators"
-	speakeasy_objectvalidators "github.com/speakeasy/terraform-provider-gravitee-apim/internal/validators/objectvalidators"
-	speakeasy_stringvalidators "github.com/speakeasy/terraform-provider-gravitee-apim/internal/validators/stringvalidators"
 	"regexp"
 )
 
@@ -3622,12 +3622,12 @@ func (r *Apiv4Resource) Configure(ctx context.Context, req resource.ConfigureReq
 		return
 	}
 
-	providerData, ok := req.ProviderData.(*GraviteeApimProviderConfigureData)
+	providerData, ok := req.ProviderData.(*ApimProviderConfigureData)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *GraviteeApimProviderConfigureData, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *ApimProviderConfigureData, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
@@ -3670,7 +3670,7 @@ func (r *Apiv4Resource) Create(ctx context.Context, req resource.CreateRequest, 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.APIs.CreateOrUpdateApis(ctx, *request)
+	res, err := r.client.Apis.CreateOrUpdate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -3707,7 +3707,7 @@ func (r *Apiv4Resource) Create(ctx context.Context, req resource.CreateRequest, 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.APIs.GetAPI(ctx, *request1)
+	res1, err := r.client.Apis.Get(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -3767,7 +3767,7 @@ func (r *Apiv4Resource) Read(ctx context.Context, req resource.ReadRequest, resp
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.APIs.GetAPI(ctx, *request)
+	res, err := r.client.Apis.Get(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -3829,7 +3829,7 @@ func (r *Apiv4Resource) Update(ctx context.Context, req resource.UpdateRequest, 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.APIs.CreateOrUpdateApis(ctx, *request)
+	res, err := r.client.Apis.CreateOrUpdate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -3866,7 +3866,7 @@ func (r *Apiv4Resource) Update(ctx context.Context, req resource.UpdateRequest, 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.APIs.GetAPI(ctx, *request1)
+	res1, err := r.client.Apis.Get(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -3934,7 +3934,7 @@ func (r *Apiv4Resource) Delete(ctx context.Context, req resource.DeleteRequest, 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.APIs.DeleteAPI(ctx, *request)
+	res, err := r.client.Apis.Delete(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

@@ -7,15 +7,15 @@ import (
 	"flag"
 	"log"
 
+	"github.com/gravitee-io/terraform-provider-apim/internal/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/provider"
 )
 
 // Run "go generate" to generate the docs for the registry/website on each regeneration of the provider.
 
 // Run the docs generation tool, check its repository for more information on how it works and how docs
 // can be customized.
-//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate --provider-name terraform-provider-gravitee-apim --rendered-provider-name terraform-provider-gravitee-apim
+//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate --provider-name terraform-provider-apim --rendered-provider-name terraform-provider-apim
 
 var (
 	// these will be set by the goreleaser configuration
@@ -30,7 +30,7 @@ func main() {
 	flag.Parse()
 
 	opts := providerserver.ServeOpts{
-		Address: "registry.terraform.io/speakeasy/gravitee-apim",
+		Address: "registry.terraform.io/gravitee-io/apim",
 		Debug:   debug,
 	}
 

@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: ac3198152f3e19c50c39c88a61c9605f
+  docChecksum: 084546de051d260236cdc89e9a403248
   docVersion: 0.2.0
   speakeasyVersion: 1.581.2
   generationVersion: 2.656.9
-  releaseVersion: 0.2.0
-  configChecksum: 1954e0db9a885a32442e78760fb80117
+  releaseVersion: 0.4.0
+  configChecksum: a9d7a51db1922ee193e531c3f8aa79d3
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -16,22 +16,24 @@ features:
     globalSecurity: 2.81.12
     globalServerURLs: 2.82.2
     globals: 3.0.0
+    groups: 2.81.2
     ignores: 2.81.1
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.3
+    retries: 2.81.3
     typeOverrides: 2.81.1
     unions: 2.81.17
 generatedFiles:
   - .gitattributes
   - USAGE.md
   - examples/README.md
-  - examples/data-sources/gravitee-apim_apiv4/data-source.tf
-  - examples/data-sources/gravitee-apim_shared_policy_group/data-source.tf
+  - examples/data-sources/apim_apiv4/data-source.tf
+  - examples/data-sources/apim_shared_policy_group/data-source.tf
   - examples/provider/provider.tf
-  - examples/resources/gravitee-apim_apiv4/import.sh
-  - examples/resources/gravitee-apim_apiv4/resource.tf
-  - examples/resources/gravitee-apim_shared_policy_group/import.sh
-  - examples/resources/gravitee-apim_shared_policy_group/resource.tf
+  - examples/resources/apim_apiv4/import.sh
+  - examples/resources/apim_apiv4/resource.tf
+  - examples/resources/apim_shared_policy_group/import.sh
+  - examples/resources/apim_shared_policy_group/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -117,6 +119,7 @@ generatedFiles:
   - internal/provider/utils.go
   - internal/sdk/.gitattributes
   - internal/sdk/apis.go
+  - internal/sdk/docs/models/operations/option.md
   - internal/sdk/graviteeapim.go
   - internal/sdk/internal/config/sdkconfiguration.go
   - internal/sdk/internal/globals/globals.go
@@ -210,7 +213,7 @@ generatedFiles:
   - internal/sdk/models/shared/tracingv4.go
   - internal/sdk/models/shared/visibility.go
   - internal/sdk/retry/config.go
-  - internal/sdk/sharedpolicygroup.go
+  - internal/sdk/sharedpolicygroups.go
   - internal/sdk/types/bigint.go
   - internal/sdk/types/date.go
   - internal/sdk/types/datetime.go

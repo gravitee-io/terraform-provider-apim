@@ -1,4 +1,4 @@
-resource "gravitee-apim_apiv4" "my_apiv4" {
+resource "apim_apiv4" "my_apiv4" {
   analytics = {
     enabled = false
     logging = {

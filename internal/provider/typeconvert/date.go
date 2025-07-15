@@ -3,7 +3,7 @@
 package typeconvert
 
 import (
-	sdkTypes "github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/types"
+	sdkTypes "github.com/gravitee-io/terraform-provider-apim/internal/sdk/types"
 )
 
 // Converts a date types.Date to string.

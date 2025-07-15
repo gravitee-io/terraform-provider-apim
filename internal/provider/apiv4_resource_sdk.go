@@ -5,12 +5,12 @@ package provider
 import (
 	"context"
 	"encoding/json"
+	"github.com/gravitee-io/terraform-provider-apim/internal/provider/typeconvert"
+	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/provider/typeconvert"
-	tfTypes "github.com/speakeasy/terraform-provider-gravitee-apim/internal/provider/types"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/models/operations"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/models/shared"
 )
 
 func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, resp *shared.APIV4State) diag.Diagnostics {

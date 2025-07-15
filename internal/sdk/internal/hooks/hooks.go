@@ -5,7 +5,7 @@ package hooks
 import (
 	"context"
 	"errors"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/config"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/config"
 	"net/http"
 )
 

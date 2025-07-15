@@ -4,8 +4,8 @@ package operations
 
 import (
 	"errors"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/utils"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/retry"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/retry"
 	"time"
 )
 

@@ -1,4 +1,4 @@
-module github.com/speakeasy/terraform-provider-gravitee-apim
+module github.com/gravitee-io/terraform-provider-apim
 
 go 1.23.0
 

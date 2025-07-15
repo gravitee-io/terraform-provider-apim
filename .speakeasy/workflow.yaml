@@ -6,6 +6,7 @@ sources:
             - location: schemas/automation-api-oas.yaml
         overlays:
             - location: schemas/overlay.yaml
+            - location: .speakeasy/speakeasy-modifications-overlay.yaml
         output: schemas/output-oas.yaml
         registry:
             location: registry.speakeasyapi.dev/gravitee/gravitee/gravitee-io-gko---automation-api

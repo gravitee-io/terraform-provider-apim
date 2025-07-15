@@ -2,8 +2,8 @@ speakeasyVersion: 1.581.2
 sources:
     Gravitee.io - Automation API:
         sourceNamespace: gravitee-io-gko---automation-api
-        sourceRevisionDigest: sha256:1058d03fe5b304b59a6a08ec7961c3f05a89aabd274284deb7b05ea507d1073f
-        sourceBlobDigest: sha256:b08ee9e5103b40efa2078fd9aa0f623685bd05d11fba0cb3c34a9fcbcd81fa8c
+        sourceRevisionDigest: sha256:1931ee88b0b97e59974570d6c092d40b8cfe639d37757600281853513f3fb033
+        sourceBlobDigest: sha256:e5bdd28116e0660af601a098573e8a5044ef09f829e56844984aec28f40ca240
         tags:
             - latest
             - 0.2.0
@@ -11,8 +11,8 @@ targets:
     gravitee-apim:
         source: Gravitee.io - Automation API
         sourceNamespace: gravitee-io-gko---automation-api
-        sourceRevisionDigest: sha256:1058d03fe5b304b59a6a08ec7961c3f05a89aabd274284deb7b05ea507d1073f
-        sourceBlobDigest: sha256:b08ee9e5103b40efa2078fd9aa0f623685bd05d11fba0cb3c34a9fcbcd81fa8c
+        sourceRevisionDigest: sha256:1931ee88b0b97e59974570d6c092d40b8cfe639d37757600281853513f3fb033
+        sourceBlobDigest: sha256:e5bdd28116e0660af601a098573e8a5044ef09f829e56844984aec28f40ca240
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -22,6 +22,7 @@ workflow:
                 - location: schemas/automation-api-oas.yaml
             overlays:
                 - location: schemas/overlay.yaml
+                - location: .speakeasy/speakeasy-modifications-overlay.yaml
             output: schemas/output-oas.yaml
             registry:
                 location: registry.speakeasyapi.dev/gravitee/gravitee/gravitee-io-gko---automation-api

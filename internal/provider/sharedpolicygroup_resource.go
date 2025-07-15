@@ -7,6 +7,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,9 +19,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
-	tfTypes "github.com/speakeasy/terraform-provider-gravitee-apim/internal/provider/types"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk"
-	speakeasy_objectvalidators "github.com/speakeasy/terraform-provider-gravitee-apim/internal/validators/objectvalidators"
 	"regexp"
 )
 
@@ -198,12 +198,12 @@ func (r *SharedPolicyGroupResource) Configure(ctx context.Context, req resource.
 		return
 	}
 
-	providerData, ok := req.ProviderData.(*GraviteeApimProviderConfigureData)
+	providerData, ok := req.ProviderData.(*ApimProviderConfigureData)
 
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
-			fmt.Sprintf("Expected *GraviteeApimProviderConfigureData, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+			fmt.Sprintf("Expected *ApimProviderConfigureData, got: %T. Please report this issue to the provider developers.", req.ProviderData),
 		)
 
 		return
@@ -246,7 +246,7 @@ func (r *SharedPolicyGroupResource) Create(ctx context.Context, req resource.Cre
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.SharedPolicyGroup.CreateOrUpdatePolicyGroup(ctx, *request)
+	res, err := r.client.SharedPolicyGroups.CreateOrUpdate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -283,7 +283,7 @@ func (r *SharedPolicyGroupResource) Create(ctx context.Context, req resource.Cre
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.SharedPolicyGroup.GetPolicyGroup(ctx, *request1)
+	res1, err := r.client.SharedPolicyGroups.Get(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -343,7 +343,7 @@ func (r *SharedPolicyGroupResource) Read(ctx context.Context, req resource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.SharedPolicyGroup.GetPolicyGroup(ctx, *request)
+	res, err := r.client.SharedPolicyGroups.Get(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -405,7 +405,7 @@ func (r *SharedPolicyGroupResource) Update(ctx context.Context, req resource.Upd
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.SharedPolicyGroup.CreateOrUpdatePolicyGroup(ctx, *request)
+	res, err := r.client.SharedPolicyGroups.CreateOrUpdate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -442,7 +442,7 @@ func (r *SharedPolicyGroupResource) Update(ctx context.Context, req resource.Upd
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res1, err := r.client.SharedPolicyGroup.GetPolicyGroup(ctx, *request1)
+	res1, err := r.client.SharedPolicyGroups.Get(ctx, *request1)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
@@ -510,7 +510,7 @@ func (r *SharedPolicyGroupResource) Delete(ctx context.Context, req resource.Del
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.SharedPolicyGroup.DeletePolicyGroup(ctx, *request)
+	res, err := r.client.SharedPolicyGroups.Delete(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

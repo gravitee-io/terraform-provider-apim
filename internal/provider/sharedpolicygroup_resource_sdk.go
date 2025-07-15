@@ -4,11 +4,11 @@ package provider
 
 import (
 	"context"
+	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	tfTypes "github.com/speakeasy/terraform-provider-gravitee-apim/internal/provider/types"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/models/operations"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/models/shared"
 )
 
 func (r *SharedPolicyGroupResourceModel) RefreshFromSharedSharedPolicyGroupState(ctx context.Context, resp *shared.SharedPolicyGroupState) diag.Diagnostics {

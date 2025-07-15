@@ -4,48 +4,48 @@ package provider
 
 import (
 	"context"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk"
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/models/shared"
 	"net/http"
 )
 
-var _ provider.Provider = (*GraviteeApimProvider)(nil)
-var _ provider.ProviderWithEphemeralResources = (*GraviteeApimProvider)(nil)
+var _ provider.Provider = (*ApimProvider)(nil)
+var _ provider.ProviderWithEphemeralResources = (*ApimProvider)(nil)
 
-type GraviteeApimProvider struct {
+type ApimProvider struct {
 	// version is set to the provider version on release, "dev" when the
 	// provider is built and ran locally, and "test" when running acceptance
 	// testing.
 	version string
 }
 
-// GraviteeApimProviderConfigureData describes provider configuration data passed to resources.
-type GraviteeApimProviderConfigureData struct {
+// ApimProviderConfigureData describes provider configuration data passed to resources.
+type ApimProviderConfigureData struct {
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	OrganizationID types.String `tfsdk:"organization_id"`
 	SDKClient      *sdk.GraviteeApim
 }
 
-// GraviteeApimProviderModel describes the provider data model.
-type GraviteeApimProviderModel struct {
+// ApimProviderModel describes the provider data model.
+type ApimProviderModel struct {
 	BearerAuth     types.String `tfsdk:"bearer_auth"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	OrganizationID types.String `tfsdk:"organization_id"`
 	ServerURL      types.String `tfsdk:"server_url"`
 }
 
-func (p *GraviteeApimProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
-	resp.TypeName = "gravitee-apim"
+func (p *ApimProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
+	resp.TypeName = "apim"
 	resp.Version = p.version
 }
 
-func (p *GraviteeApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
+func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"bearer_auth": schema.StringAttribute{
@@ -71,8 +71,8 @@ func (p *GraviteeApimProvider) Schema(ctx context.Context, req provider.SchemaRe
 	}
 }
 
-func (p *GraviteeApimProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
-	var data GraviteeApimProviderModel
+func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
+	var data ApimProviderModel
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
@@ -122,7 +122,7 @@ func (p *GraviteeApimProvider) Configure(ctx context.Context, req provider.Confi
 	}
 
 	client := sdk.New(opts...)
-	configureData := &GraviteeApimProviderConfigureData{
+	configureData := &ApimProviderConfigureData{
 		EnvironmentID:  data.EnvironmentID,
 		OrganizationID: data.OrganizationID,
 		SDKClient:      client,
@@ -133,27 +133,27 @@ func (p *GraviteeApimProvider) Configure(ctx context.Context, req provider.Confi
 	resp.ResourceData = configureData
 }
 
-func (p *GraviteeApimProvider) Resources(ctx context.Context) []func() resource.Resource {
+func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewApiv4Resource,
 		NewSharedPolicyGroupResource,
 	}
 }
 
-func (p *GraviteeApimProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
+func (p *ApimProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewApiv4DataSource,
 		NewSharedPolicyGroupDataSource,
 	}
 }
 
-func (p *GraviteeApimProvider) EphemeralResources(ctx context.Context) []func() ephemeral.EphemeralResource {
+func (p *ApimProvider) EphemeralResources(ctx context.Context) []func() ephemeral.EphemeralResource {
 	return []func() ephemeral.EphemeralResource{}
 }
 
 func New(version string) func() provider.Provider {
 	return func() provider.Provider {
-		return &GraviteeApimProvider{
+		return &ApimProvider{
 			version: version,
 		}
 	}
