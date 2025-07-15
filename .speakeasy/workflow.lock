@@ -8,6 +8,11 @@ sources:
             - latest
             - 0.2.0
 targets:
+    apim:
+        source: Gravitee.io - Automation API
+        sourceNamespace: gravitee-io-gko---automation-api
+        sourceRevisionDigest: sha256:1931ee88b0b97e59974570d6c092d40b8cfe639d37757600281853513f3fb033
+        sourceBlobDigest: sha256:e5bdd28116e0660af601a098573e8a5044ef09f829e56844984aec28f40ca240
     gravitee-apim:
         source: Gravitee.io - Automation API
         sourceNamespace: gravitee-io-gko---automation-api
@@ -27,6 +32,6 @@ workflow:
             registry:
                 location: registry.speakeasyapi.dev/gravitee/gravitee/gravitee-io-gko---automation-api
     targets:
-        gravitee-apim:
+        apim:
             target: terraform
             source: Gravitee.io - Automation API

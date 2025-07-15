@@ -11,6 +11,6 @@ sources:
         registry:
             location: registry.speakeasyapi.dev/gravitee/gravitee/gravitee-io-gko---automation-api
 targets:
-    gravitee-apim:
+    apim:
         target: terraform
         source: Gravitee.io - Automation API
