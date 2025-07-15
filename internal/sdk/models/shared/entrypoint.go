@@ -6,16 +6,13 @@ import (
 	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/utils"
 )
 
-type EntrypointConfiguration struct {
-}
-
 type Entrypoint struct {
 	// The type of the entrypoint
 	Type string `json:"type"`
 	// Type of the quality of service.
-	Qos           *Qos                     `default:"AUTO" json:"qos"`
-	Dlq           *Dlq                     `json:"dlq,omitempty"`
-	Configuration *EntrypointConfiguration `json:"configuration,omitempty"`
+	Qos           *Qos `default:"AUTO" json:"qos"`
+	Dlq           *Dlq `json:"dlq,omitempty"`
+	Configuration any  `json:"configuration,omitempty"`
 }
 
 func (e Entrypoint) MarshalJSON() ([]byte, error) {
@@ -50,7 +47,7 @@ func (o *Entrypoint) GetDlq() *Dlq {
 	return o.Dlq
 }
 
-func (o *Entrypoint) GetConfiguration() *EntrypointConfiguration {
+func (o *Entrypoint) GetConfiguration() any {
 	if o == nil {
 		return nil
 	}

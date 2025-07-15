@@ -9,7 +9,7 @@
 <!-- Start Summary [summary] -->
 ## Summary
 
-Gravitee.io - Automation API: The APIM automation API.
+Gravitee.io GKO - Automation API: The APIM automation API.
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
@@ -32,7 +32,7 @@ terraform {
   required_providers {
     gravitee-apim = {
       source  = "speakeasy/gravitee-apim"
-      version = "0.1.2"
+      version = "0.2.0"
     }
   }
 }
@@ -48,7 +48,12 @@ provider "gravitee-apim" {
 
 ### Resources
 
+* [gravitee-apim_apiv4](docs/resources/apiv4.md)
+* [gravitee-apim_shared_policy_group](docs/resources/shared_policy_group.md)
 ### Data Sources
+
+* [gravitee-apim_apiv4](docs/data-sources/apiv4.md)
+* [gravitee-apim_shared_policy_group](docs/data-sources/shared_policy_group.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- Start Testing the provider locally [usage] -->

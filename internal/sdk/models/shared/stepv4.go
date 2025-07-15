@@ -6,10 +6,6 @@ import (
 	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/utils"
 )
 
-// StepV4Configuration - The configuration of the step
-type StepV4Configuration struct {
-}
-
 type StepV4 struct {
 	// The name of the step
 	Name *string `json:"name,omitempty"`
@@ -20,7 +16,7 @@ type StepV4 struct {
 	// The policy of the step
 	Policy *string `json:"policy,omitempty"`
 	// The configuration of the step
-	Configuration *StepV4Configuration `json:"configuration,omitempty"`
+	Configuration any `json:"configuration,omitempty"`
 	// The condition of the step
 	Condition *string `json:"condition,omitempty"`
 	// The message condition of the step
@@ -66,7 +62,7 @@ func (o *StepV4) GetPolicy() *string {
 	return o.Policy
 }
 
-func (o *StepV4) GetConfiguration() *StepV4Configuration {
+func (o *StepV4) GetConfiguration() any {
 	if o == nil {
 		return nil
 	}

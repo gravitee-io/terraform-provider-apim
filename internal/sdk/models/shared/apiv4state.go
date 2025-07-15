@@ -2,13 +2,9 @@
 
 package shared
 
-import (
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/utils"
-)
-
 // APIV4State - ApiV4DefinitionSpec defines the desired state of ApiDefinition.
 type APIV4State struct {
-	// A unique human readable id identifying this resource
+	// A unique human readable id identifying this object
 	Hrid string `json:"hrid"`
 	// the context where the api definition was created.
 	//
@@ -31,9 +27,9 @@ type APIV4State struct {
 	Failover       *FailoverV4       `json:"failover,omitempty"`
 	Properties     []PropertyOutput  `json:"properties,omitempty"`
 	Resources      []Resource        `json:"resources,omitempty"`
-	// List of Plans for the API
-	Plans         []PlanV4       `json:"plans,omitempty"`
-	FlowExecution *FlowExecution `json:"flowExecution,omitempty"`
+	// Map of plan IDs to Plan objects
+	Plans         map[string]Plan `json:"plans,omitempty"`
+	FlowExecution *FlowExecution  `json:"flowExecution,omitempty"`
 	// List of flows for the API
 	Flows []FlowV4 `json:"flows,omitempty"`
 	// A list of Response Templates for the API (Not applicable for Native API)
@@ -52,13 +48,11 @@ type APIV4State struct {
 	// The list of API's metadata.
 	Metadata []Metadata `json:"metadata,omitempty"`
 	// The status of the API regarding the console.
-	LifecycleState *APILifecycleState `default:"CREATED" json:"lifecycleState"`
+	LifecycleState APILifecycleState `json:"lifecycleState"`
 	// The list of category keys associated with this API.
 	Categories []string `json:"categories,omitempty"`
 	// Set of members associated with the plan
-	Members []Member `json:"members,omitempty"`
-	// List of Pages for the API
-	Pages                            []PageV4                  `json:"pages,omitempty"`
+	Members                          []Member                  `json:"members,omitempty"`
 	ConsoleNotificationConfiguration *PortalNotificationConfig `json:"consoleNotificationConfiguration,omitempty"`
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during admission
 	Errors *Errors `json:"errors,omitempty"`
@@ -66,21 +60,6 @@ type APIV4State struct {
 	ID *string `json:"id,omitempty"`
 	// When promoting an API from one environment to the other, this ID identifies the API across those different environments.
 	CrossID *string `json:"crossId,omitempty"`
-	// The environment ID of the API.
-	EnvironmentID *string `json:"environmentId,omitempty"`
-	// The organization ID of the API.
-	OrganizationID *string `json:"organizationId,omitempty"`
-}
-
-func (a APIV4State) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *APIV4State) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (o *APIV4State) GetHrid() string {
@@ -174,7 +153,7 @@ func (o *APIV4State) GetResources() []Resource {
 	return o.Resources
 }
 
-func (o *APIV4State) GetPlans() []PlanV4 {
+func (o *APIV4State) GetPlans() map[string]Plan {
 	if o == nil {
 		return nil
 	}
@@ -251,9 +230,9 @@ func (o *APIV4State) GetMetadata() []Metadata {
 	return o.Metadata
 }
 
-func (o *APIV4State) GetLifecycleState() *APILifecycleState {
+func (o *APIV4State) GetLifecycleState() APILifecycleState {
 	if o == nil {
-		return nil
+		return APILifecycleState("")
 	}
 	return o.LifecycleState
 }
@@ -270,13 +249,6 @@ func (o *APIV4State) GetMembers() []Member {
 		return nil
 	}
 	return o.Members
-}
-
-func (o *APIV4State) GetPages() []PageV4 {
-	if o == nil {
-		return nil
-	}
-	return o.Pages
 }
 
 func (o *APIV4State) GetConsoleNotificationConfiguration() *PortalNotificationConfig {
@@ -305,18 +277,4 @@ func (o *APIV4State) GetCrossID() *string {
 		return nil
 	}
 	return o.CrossID
-}
-
-func (o *APIV4State) GetEnvironmentID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.EnvironmentID
-}
-
-func (o *APIV4State) GetOrganizationID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.OrganizationID
 }

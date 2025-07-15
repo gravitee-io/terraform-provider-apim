@@ -8,11 +8,43 @@ import (
 	"net/http"
 )
 
+type DeleteAPIGlobals struct {
+	// Id of an organization.
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	// Id of an environment.
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (d DeleteAPIGlobals) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DeleteAPIGlobals) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *DeleteAPIGlobals) GetOrganizationID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.OrganizationID
+}
+
+func (o *DeleteAPIGlobals) GetEnvironmentID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EnvironmentID
+}
+
 type DeleteAPIRequest struct {
 	// Id of an organization.
-	OrgID string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Id of an environment.
-	EnvID string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Human-readable ID of a spec
 	Hrid string `pathParam:"style=simple,explode=false,name=hrid"`
 }
@@ -28,18 +60,18 @@ func (d *DeleteAPIRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DeleteAPIRequest) GetOrgID() string {
+func (o *DeleteAPIRequest) GetOrganizationID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
-	return o.OrgID
+	return o.OrganizationID
 }
 
-func (o *DeleteAPIRequest) GetEnvID() string {
+func (o *DeleteAPIRequest) GetEnvironmentID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
-	return o.EnvID
+	return o.EnvironmentID
 }
 
 func (o *DeleteAPIRequest) GetHrid() string {
@@ -56,7 +88,7 @@ type DeleteAPIResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Unauthenticated
+	// Validation error
 	Error *shared.Error
 }
 

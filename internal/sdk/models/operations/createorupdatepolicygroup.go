@@ -8,11 +8,43 @@ import (
 	"net/http"
 )
 
+type CreateOrUpdatePolicyGroupGlobals struct {
+	// Id of an organization.
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	// Id of an environment.
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (c CreateOrUpdatePolicyGroupGlobals) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreateOrUpdatePolicyGroupGlobals) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *CreateOrUpdatePolicyGroupGlobals) GetOrganizationID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.OrganizationID
+}
+
+func (o *CreateOrUpdatePolicyGroupGlobals) GetEnvironmentID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EnvironmentID
+}
+
 type CreateOrUpdatePolicyGroupRequest struct {
 	// Id of an organization.
-	OrgID string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Id of an environment.
-	EnvID string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting
 	// the state of the underlying spec.
 	//
@@ -31,18 +63,18 @@ func (c *CreateOrUpdatePolicyGroupRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CreateOrUpdatePolicyGroupRequest) GetOrgID() string {
+func (o *CreateOrUpdatePolicyGroupRequest) GetOrganizationID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
-	return o.OrgID
+	return o.OrganizationID
 }
 
-func (o *CreateOrUpdatePolicyGroupRequest) GetEnvID() string {
+func (o *CreateOrUpdatePolicyGroupRequest) GetEnvironmentID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
-	return o.EnvID
+	return o.EnvironmentID
 }
 
 func (o *CreateOrUpdatePolicyGroupRequest) GetDryRun() *bool {
@@ -69,7 +101,7 @@ type CreateOrUpdatePolicyGroupResponse struct {
 	// State of the successfully created / updated Shared Policy Group
 	SharedPolicyGroupState *shared.SharedPolicyGroupState
 	// Validation error
-	Error *shared.ErrorResponse
+	Error *shared.Error
 }
 
 func (o *CreateOrUpdatePolicyGroupResponse) GetContentType() string {
@@ -100,7 +132,7 @@ func (o *CreateOrUpdatePolicyGroupResponse) GetSharedPolicyGroupState() *shared.
 	return o.SharedPolicyGroupState
 }
 
-func (o *CreateOrUpdatePolicyGroupResponse) GetError() *shared.ErrorResponse {
+func (o *CreateOrUpdatePolicyGroupResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

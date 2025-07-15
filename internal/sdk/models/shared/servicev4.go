@@ -6,15 +6,11 @@ import (
 	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/utils"
 )
 
-// ServiceV4Configuration - The configuration of the service
-type ServiceV4Configuration struct {
-}
-
 type ServiceV4 struct {
 	// Override the configuration of the service
 	OverrideConfiguration *bool `default:"false" json:"overrideConfiguration"`
 	// The configuration of the service
-	Configuration *ServiceV4Configuration `json:"configuration,omitempty"`
+	Configuration any `json:"configuration,omitempty"`
 	// Is the service enabled or not.
 	Enabled *bool   `default:"true" json:"enabled"`
 	Type    *string `json:"type,omitempty"`
@@ -38,7 +34,7 @@ func (o *ServiceV4) GetOverrideConfiguration() *bool {
 	return o.OverrideConfiguration
 }
 
-func (o *ServiceV4) GetConfiguration() *ServiceV4Configuration {
+func (o *ServiceV4) GetConfiguration() any {
 	if o == nil {
 		return nil
 	}

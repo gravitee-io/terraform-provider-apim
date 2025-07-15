@@ -8,11 +8,43 @@ import (
 	"net/http"
 )
 
+type DeletePolicyGroupGlobals struct {
+	// Id of an organization.
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	// Id of an environment.
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (d DeletePolicyGroupGlobals) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DeletePolicyGroupGlobals) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *DeletePolicyGroupGlobals) GetOrganizationID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.OrganizationID
+}
+
+func (o *DeletePolicyGroupGlobals) GetEnvironmentID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EnvironmentID
+}
+
 type DeletePolicyGroupRequest struct {
 	// Id of an organization.
-	OrgID string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Id of an environment.
-	EnvID string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Human-readable ID of a spec
 	Hrid string `pathParam:"style=simple,explode=false,name=hrid"`
 	// For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting
@@ -32,18 +64,18 @@ func (d *DeletePolicyGroupRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DeletePolicyGroupRequest) GetOrgID() string {
+func (o *DeletePolicyGroupRequest) GetOrganizationID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
-	return o.OrgID
+	return o.OrganizationID
 }
 
-func (o *DeletePolicyGroupRequest) GetEnvID() string {
+func (o *DeletePolicyGroupRequest) GetEnvironmentID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
-	return o.EnvID
+	return o.EnvironmentID
 }
 
 func (o *DeletePolicyGroupRequest) GetHrid() string {
@@ -68,7 +100,7 @@ type DeletePolicyGroupResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Validation error
-	Error *shared.ErrorResponse
+	Error *shared.Error
 }
 
 func (o *DeletePolicyGroupResponse) GetContentType() string {
@@ -92,7 +124,7 @@ func (o *DeletePolicyGroupResponse) GetRawResponse() *http.Response {
 	return o.RawResponse
 }
 
-func (o *DeletePolicyGroupResponse) GetError() *shared.ErrorResponse {
+func (o *DeletePolicyGroupResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

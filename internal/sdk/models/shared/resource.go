@@ -2,14 +2,11 @@
 
 package shared
 
-type ResourceConfiguration struct {
-}
-
 type Resource struct {
-	Name          string                `json:"name"`
-	Type          string                `json:"type"`
-	Configuration ResourceConfiguration `json:"configuration"`
-	Enabled       *bool                 `json:"enabled,omitempty"`
+	Name          string `json:"name"`
+	Type          string `json:"type"`
+	Configuration any    `json:"configuration"`
+	Enabled       *bool  `json:"enabled,omitempty"`
 }
 
 func (o *Resource) GetName() string {
@@ -26,9 +23,9 @@ func (o *Resource) GetType() string {
 	return o.Type
 }
 
-func (o *Resource) GetConfiguration() ResourceConfiguration {
+func (o *Resource) GetConfiguration() any {
 	if o == nil {
-		return ResourceConfiguration{}
+		return nil
 	}
 	return o.Configuration
 }

@@ -2,16 +2,13 @@
 
 package shared
 
-type SharedConfiguration struct {
-}
-
 type EndpointGroupV4 struct {
 	// The name of the endpoint group
 	Name *string `json:"name,omitempty"`
 	// The type of the endpoint group
 	Type                string                 `json:"type"`
 	LoadBalancer        *LoadBalancer          `json:"loadBalancer,omitempty"`
-	SharedConfiguration *SharedConfiguration   `json:"sharedConfiguration,omitempty"`
+	SharedConfiguration any                    `json:"sharedConfiguration,omitempty"`
 	Endpoints           []EndpointV4           `json:"endpoints,omitempty"`
 	Services            *EndpointGroupServices `json:"services,omitempty"`
 }
@@ -37,7 +34,7 @@ func (o *EndpointGroupV4) GetLoadBalancer() *LoadBalancer {
 	return o.LoadBalancer
 }
 
-func (o *EndpointGroupV4) GetSharedConfiguration() *SharedConfiguration {
+func (o *EndpointGroupV4) GetSharedConfiguration() any {
 	if o == nil {
 		return nil
 	}

@@ -32,7 +32,7 @@ func (o *Detail) GetInvalidValue() *string {
 	return o.InvalidValue
 }
 
-// Error - Request is invalid
+// Error - Validation error
 type Error struct {
 	// The error code
 	HTTPStatus *int `json:"httpStatus,omitempty"`

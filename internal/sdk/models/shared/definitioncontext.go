@@ -8,18 +8,18 @@ import (
 	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/utils"
 )
 
-// DefinitionContextOrigin - The origin of the API.
-type DefinitionContextOrigin string
+// Origin - The origin of the API.
+type Origin string
 
 const (
-	DefinitionContextOriginManagement DefinitionContextOrigin = "MANAGEMENT"
-	DefinitionContextOriginKubernetes DefinitionContextOrigin = "KUBERNETES"
+	OriginManagement Origin = "MANAGEMENT"
+	OriginKubernetes Origin = "KUBERNETES"
 )
 
-func (e DefinitionContextOrigin) ToPointer() *DefinitionContextOrigin {
+func (e Origin) ToPointer() *Origin {
 	return &e
 }
-func (e *DefinitionContextOrigin) UnmarshalJSON(data []byte) error {
+func (e *Origin) UnmarshalJSON(data []byte) error {
 	var v string
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
@@ -28,10 +28,10 @@ func (e *DefinitionContextOrigin) UnmarshalJSON(data []byte) error {
 	case "MANAGEMENT":
 		fallthrough
 	case "KUBERNETES":
-		*e = DefinitionContextOrigin(v)
+		*e = Origin(v)
 		return nil
 	default:
-		return fmt.Errorf("invalid value for DefinitionContextOrigin: %v", v)
+		return fmt.Errorf("invalid value for Origin: %v", v)
 	}
 }
 
@@ -103,7 +103,7 @@ func (e *SyncFrom) UnmarshalJSON(data []byte) error {
 // Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 type DefinitionContext struct {
 	// The origin of the API.
-	origin *DefinitionContextOrigin `const:"KUBERNETES" json:"origin,omitempty"`
+	origin *Origin `const:"KUBERNETES" json:"origin,omitempty"`
 	// The mode of the API.
 	// fully_managed: Mode indicating the api is fully managed by the origin and so, only the origin should be able to manage the api.
 	// api_definition_only: Mode indicating the api is partially managed by the origin and so, only the origin should be able to manage the api definition part of the api. This includes everything regarding the definition of the apis (plans, flows, metadata, ...)
@@ -130,8 +130,8 @@ func (d *DefinitionContext) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DefinitionContext) GetOrigin() *DefinitionContextOrigin {
-	return DefinitionContextOriginKubernetes.ToPointer()
+func (o *DefinitionContext) GetOrigin() *Origin {
+	return OriginKubernetes.ToPointer()
 }
 
 func (o *DefinitionContext) GetMode() *Mode {

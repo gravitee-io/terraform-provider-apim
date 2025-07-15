@@ -13,31 +13,26 @@
 # limitations under the License.
 openapi: 3.1.0
 info:
-  title: Gravitee.io - Automation API
+  title: Gravitee.io GKO - Automation API
   description: "The APIM automation API. "
   contact:
     email: team-gko@graviteesource.com
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
+  version: 0.2.0
 security:
   - BearerAuth: []
-  - BasicAuth: []
 servers:
   - url: "https://apim-master-api.team-apim.gravitee.dev/automation"
 tags:
   - name: APIs
     description: Everything about APIs
-  - name: Applications
-    description: Everything about Applications
   - name: Shared Policy Group
     description: Everything about Shared Policy Groups
-  - name: Subscriptions
-    description: Everything about subscriptions
 paths:
   # APIs
-  /organizations/{orgId}/environments/{envId}/apis:
+  /organizations/{orgId}/environments/{envId}/apis/:
     put:
       operationId: createOrUpdateApis
       tags:
@@ -62,15 +57,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/ApiV4State"
         "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        default:
           $ref: "#/components/responses/Error"
-      x-speakeasy-group: apis
-      x-speakeasy-name-override: createOrUpdate
+        "401":
+          description: No credential provided
+        "403":
+          description: Wrong credentials
+        "500":
+          description: Internal server error
+      x-speakeasy-entity-operation: APIV4#create,update
   /organizations/{orgId}/environments/{envId}/apis/{hrid}:
     parameters:
       - $ref: "#/components/parameters/orgIdParam"
@@ -99,8 +93,7 @@ paths:
           description: Wrong credentials
         "500":
           description: Internal server error
-      x-speakeasy-group: apis
-      x-speakeasy-name-override: get
+      x-speakeasy-entity-operation: APIV4#read
     delete:
       operationId: deleteApi
       tags:
@@ -114,179 +107,9 @@ paths:
       responses:
         "204":
           description: API successfully deleted
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
         default:
           $ref: "#/components/responses/Error"
-      x-speakeasy-group: apis
-      x-speakeasy-name-override: delete
-  # Applications
-  /organizations/{orgId}/environments/{envId}/applications:
-    put:
-      operationId: createOrUpdateApplications
-      tags:
-        - Applications
-      summary: Create or update Applications from Application Spec
-      description: Create or update Applications from Application Spec
-      parameters:
-        - $ref: "#/components/parameters/orgIdParam"
-        - $ref: "#/components/parameters/envIdParam"
-        - $ref: "#/components/parameters/dryRunQueryParam"
-      requestBody:
-        content:
-          "application/json":
-            schema:
-              $ref: "#/components/schemas/ApplicationSpec"
-        required: true
-      responses:
-        "204":
-          description: API successfully deleted
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        default:
-          $ref: "#/components/responses/Error"
-      x-speakeasy-name-override: createOrUpdate
-  /organizations/{orgId}/environments/{envId}/applications/{hrid}:
-    parameters:
-      - $ref: "#/components/parameters/orgIdParam"
-      - $ref: "#/components/parameters/envIdParam"
-      - $ref: "#/components/parameters/hridParam"
-    get:
-      operationId: getApplication
-      tags:
-        - Applications
-      summary: Get one Application
-      description: Get one Application
-      parameters:
-        - $ref: "#/components/parameters/orgIdParam"
-        - $ref: "#/components/parameters/envIdParam"
-        - $ref: "#/components/parameters/hridParam"
-      responses:
-        "200":
-          description: Successful retrieval
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApplicationState"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        default:
-          $ref: "#/components/responses/Error"
-      x-speakeasy-name-override: get
-    delete:
-      operationId: deleteApplication
-      tags:
-        - Applications
-      summary: Delete one Application
-      description: Delete one Application
-      parameters:
-        - $ref: "#/components/parameters/orgIdParam"
-        - $ref: "#/components/parameters/envIdParam"
-        - $ref: "#/components/parameters/hridParam"
-      responses:
-        "204":
-          description: Application successfully deleted
-        "401":
-          description: Unauthanticated
-        "403":
-          description: Unauthorized
-        "500":
-          description: Internal Server Error
-        default:
-          $ref: "#/components/responses/Error"
-      x-speakeasy-name-override: delete
-  # Subscription
-  /organizations/{orgId}/environments/{envId}/subscriptions:
-    put:
-      operationId: createOrUpdateSubscriptions
-      tags:
-        - Subscriptions
-      summary: Create or update Subscriptions from SubscriptionSpec
-      description: Create or update Subscription from SubscriptionSpec
-      parameters:
-        - $ref: "#/components/parameters/orgIdParam"
-        - $ref: "#/components/parameters/envIdParam"
-      requestBody:
-        content:
-          "application/json":
-            schema:
-              $ref: "#/components/schemas/SubscriptionSpec"
-        required: true
-      responses:
-        "200":
-          description: State of the successfully created Subscription
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SubscriptionState"
-        "400":
-          $ref: "#/components/responses/Error"
-        "401":
-          description: No credential provided
-        "403":
-          description: Wrong credentials
-        "500":
-          description: Internal server error
-      x-speakeasy-name-override: createOrUpdate
-  /organizations/{orgId}/environments/{envId}/subscriptions/{hrid}:
-    parameters:
-      - $ref: "#/components/parameters/orgIdParam"
-      - $ref: "#/components/parameters/envIdParam"
-      - $ref: "#/components/parameters/hridParam"
-    get:
-      operationId: getSubscription
-      tags:
-        - Subscriptions
-      summary: Get one Subscription
-      description: Get one Subscription
-      parameters:
-        - $ref: "#/components/parameters/orgIdParam"
-        - $ref: "#/components/parameters/envIdParam"
-        - $ref: "#/components/parameters/hridParam"
-      responses:
-        "200":
-          description: Successful retrieval
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ApplicationState"
-        "401":
-          description: No credential provided
-        "403":
-          description: Wrong credentials
-        "500":
-          description: Internal server error
-      x-speakeasy-name-override: get
-    delete:
-      operationId: deleteSubscription
-      tags:
-        - Subscriptions
-      summary: Delete one Subscription
-      description: Delete one Subscription
-      parameters:
-        - $ref: "#/components/parameters/orgIdParam"
-        - $ref: "#/components/parameters/envIdParam"
-        - $ref: "#/components/parameters/hridParam"
-      responses:
-        "204":
-          description: Subscription successfully deleted
-        default:
-          $ref: "#/components/responses/Error"
-      x-speakeasy-name-override: delete
+      x-speakeasy-entity-operation: APIV4#delete
   # Shared Policy Groups
   /organizations/{orgId}/environments/{envId}/shared-policy-groups/{hrid}:
     parameters:
@@ -312,8 +135,7 @@ paths:
           description: Wrong credentials
         "500":
           description: Internal server error
-      x-speakeasy-group: sharedPolicyGroups
-      x-speakeasy-name-override: get
+      x-speakeasy-entity-operation: SharedPolicyGroup#read
     delete:
       operationId: deletePolicyGroup
       tags:
@@ -327,8 +149,7 @@ paths:
           description: Shared Policy Group successfully deleted
         default:
           $ref: "#/components/responses/Error"
-      x-speakeasy-group: sharedPolicyGroups
-      x-speakeasy-name-override: delete
+      x-speakeasy-entity-operation: SharedPolicyGroup#delete
   /organizations/{orgId}/environments/{envId}/shared-policy-groups:
     put:
       operationId: createOrUpdatePolicyGroup
@@ -361,26 +182,21 @@ paths:
           description: Wrong credentials
         "500":
           description: Internal server error
-      x-speakeasy-group: sharedPolicyGroups
-      x-speakeasy-name-override: createOrUpdate
+      x-speakeasy-entity-operation: SharedPolicyGroup#create,update
 components:
   schemas:
     Hrid:
       type: string
       pattern: '^[a-zA-Z][a-zA-Z0-9_-]{2,}$'
-      description: A unique human readable id identifying this resource
-      examples:
-        - my_demo_api
-        - simple_demo_app
-        - keyless_demo_plan
-        - demo_subscription
-        - demo_shared_policy_groups
+      description: A unique human readable id identifying this object
     ApiV4Spec:
       description: ApiV4DefinitionSpec defines the desired state of ApiDefinition.
       type: object
       properties:
         hrid:
           $ref: "#/components/schemas/Hrid"
+          examples:
+            - echo_api
         definitionContext:
           $ref: "#/components/schemas/DefinitionContext"
         name:
@@ -402,25 +218,30 @@ components:
           description: API's description. A short description of your API.
           examples:
             - I can use many characters to describe this API.
+          x-speakeasy-param-suppress-computed-diff: true
         tags:
           type: array
           description: The list of sharding tags associated with this API.
           examples:
-            - ["public"]
+            - public
+            - private
           items:
             type: string
           uniqueItems: true
+          x-speakeasy-param-suppress-computed-diff: true
         listeners:
           type: array
           description: The list of listeners associated with this API.
           items:
             $ref: "#/components/schemas/Listener"
           minItems: 1
+          x-speakeasy-param-suppress-computed-diff: true
         endpointGroups:
           type: array
           items:
             $ref: "#/components/schemas/EndpointGroupV4"
           minItems: 1
+          x-speakeasy-param-suppress-computed-diff: true
         analytics:
           $ref: "#/components/schemas/Analytics"
         failover:
@@ -429,16 +250,14 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Property"
+          x-speakeasy-param-suppress-computed-diff: true
         resources:
           type: array
           items:
             $ref: "#/components/schemas/Resource"
+          x-speakeasy-param-suppress-computed-diff: true
         plans:
-          default: []
-          description: List of Plans for the API
-          items:
-            $ref: '#/components/schemas/PlanV4'
-          type: array
+          $ref: '#/components/schemas/PlansMap'
         flowExecution:
           $ref: "#/components/schemas/FlowExecution"
         flows:
@@ -447,6 +266,7 @@ components:
           items:
             $ref: "#/components/schemas/FlowV4"
           type: array
+          x-speakeasy-param-suppress-computed-diff: true
         responseTemplates:
           type: object
           description: A list of Response Templates for the API (Not applicable for Native API)
@@ -454,6 +274,7 @@ components:
             type: object
             additionalProperties:
               $ref: "#/components/schemas/ResponseTemplate"
+          x-speakeasy-terraform-ignore: true
         services:
           $ref: "#/components/schemas/ApiServices"
         groups:
@@ -493,6 +314,7 @@ components:
             - media
           items:
             type: string
+          x-speakeasy-param-suppress-computed-diff: true
         members:
           type: array
           description: Set of members associated with the plan
@@ -507,11 +329,7 @@ components:
           type: boolean
           writeOnly: true
         pages:
-          default: []
-          description: List of Pages for the API
-          items:
-            $ref: '#/components/schemas/PageV4'
-          type: array
+          $ref: '#/components/schemas/PagesMap'
         consoleNotificationConfiguration:
           $ref: '#/components/schemas/PortalNotificationConfig'
       required:
@@ -523,6 +341,7 @@ components:
         - version
         - definitionContext
         - lifecycleState
+      x-speakeasy-entity: APIV4
     ApiV4State:
       allOf:
         - $ref: "#/components/schemas/ApiV4Spec"
@@ -539,238 +358,7 @@ components:
               type: string
               description: >-
                 When promoting an API from one environment to the other, this ID identifies the API across those different environments.
-            environmentId:
-              description: The environment ID of the API.
-              type: string
-            organizationId:
-              description: The organization ID of the API.
-              type: string
-    Error:
-      type: object
-      properties:
-        httpStatus:
-          type: integer
-          format: int32
-          description: The error code
-          examples:
-            - "400"
-        message:
-          type: string
-          description: The error message
-          examples:
-            - Bad request
-        technicalCode:
-          type: string
-          description: A technical code to identify the error
-          examples:
-            - invalid.import.definition
-        parameters:
-          type: object
-          description: A map of parameters to be used in the error message
-          additionalProperties:
-            type: string
-        details:
-          type: array
-          description: A list of details about the error
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: The error message
-                examples:
-                  - Bad request
-              location:
-                type: string
-                description: The json path of the field in error.
-                examples:
-                  - updateApi.properties[0].key
-              invalidValue:
-                type: string
-                description: The invalid value.
-    ApplicationSpec:
-      description: ApplicationSpec defines the desired state of Application.
-      type: object
-      properties:
-        hrid:
-          $ref: "#/components/schemas/Hrid"
-        name:
-          type: string
-          description: Application's name. Duplicate names can exists.
-          examples:
-            - My Application
-          minLength: 1
-        description:
-          type: string
-          description: Application's description.
-          examples:
-            - My Demo Application
-          minLength: 1
-        domain:
-          type: string
-          description: Application's domain.
-        groups:
-          default: []
-          description: >-
-            List of groups associated with the API.
-
-            This groups are id or name references to existing groups in APIM.
-          items:
-            type: string
-          type: array
-        status:
-          type: string
-          description: Application's status
-          enum:
-            - ACTIVE
-            - ARCHIVED
-        pictureUrl:
-          type: string
-          description: Application's picture Url.
-        notifyMembers:
-          default: false
-          description: |-
-            If true, new members added to the Application spec will
-            be notified when the Application is synced with APIM.
-          type: boolean
-          writeOnly: true
-        background:
-          type: string
-          description: Application's background.
-        origin:
-          type: string
-          description: The origin of the Application.
-          enum:
-            - kubernetes
-            - management
-        primaryOwner:
-          $ref: "#/components/schemas/PrimaryOwner"
-        settings:
-          $ref: "#/components/schemas/ApplicationSettings"
-        metadata:
-          type: array
-          description: The list of Application's metadata.
-          items:
-            $ref: "#/components/schemas/Metadata"
-          uniqueItems: true
-        members:
-          type: array
-          description: Set of members associated with the plan
-          items:
-            $ref: '#/components/schemas/Member'
-          uniqueItems: true
-      required:
-        - hrid
-        - name
-        - description
-    ApplicationSettings:
-      properties:
-        app:
-          $ref: '#/components/schemas/SimpleApplicationSettings'
-        oauth:
-          $ref: '#/components/schemas/ApplicationOAuthClientSettings'
-        tls:
-          $ref: '#/components/schemas/ApplicationTLSSettings'
-    SimpleApplicationSettings:
-      properties:
-        type:
-          type: string
-          description: Simple application type
-        clientId:
-          type: string
-          description: Simple application client ID
-    ApplicationOAuthClientSettings:
-      properties:
-        grantTypes:
-          description: OAuth client grant types
-          items:
-            type: string
-          type: array
-        redirectUris:
-          description: OAuth client redirect Uris
-          items:
-            type: string
-          type: array
-        applicationType:
-          type: string
-          description: OAuth client application type
-    ApplicationTLSSettings:
-      properties:
-        clientCertificate:
-          type: string
-          description: Application TLS client certificate
-    ApplicationState:
-      allOf:
-        - $ref: "#/components/schemas/ApplicationSpec"
-        - type: object
-          properties:
-            errors:
-              $ref: "#/components/schemas/Errors"
-        - type: object
-          properties:
-            id:
-              type: string
-              description: Application's uuid.
-            environmentId:
-              description: The environment ID of the Application.
-              type: string
-            organizationId:
-              description: The organization ID of the Application.
-              type: string
-    # Subscription
-    SubscriptionSpec:
-      description: SubscriptionSpec defines the desired state of Subscription.
-      type: object
-      properties:
-        hrid:
-          $ref: "#/components/schemas/Hrid"
-        applicationHrid:
-          type: string
-          description: Application's Hrid that needs to subscribe to the API.
-          example: demo-app
-          minLength: 1
-        apiHrid:
-          type: string
-          description: The API's Hrid that you want to subscribe to.
-          example: demo-api
-          minLength: 1
-        planHrid:
-          type: string
-          description: API plan's Hrid
-          example: demo-plan
-        startingAt:
-          type: string
-          format: date-time
-          example: "2040-12-25T09:12:28Z"
-          writeOnly: true
-        endingAt:
-          type: string
-          format: date-time
-          example: "2040-12-25T09:12:28Z"
-      required:
-        - hrid
-        - applicationHrid
-        - apiHrid
-        - planHrid
-        - endingAt
-    SubscriptionState:
-      allOf:
-        - $ref: "#/components/schemas/SubscriptionSpec"
-        - type: object
-          properties:
-            errors:
-              $ref: "#/components/schemas/Errors"
-        - type: object
-          properties:
-            id:
-              type: string
-              description: Subscription's uuid.
-            environmentId:
-              description: The environment ID of the Subscription.
-              type: string
-            organizationId:
-              description: The organization ID of the Subscription.
-              type: string
+          x-speakeasy-param-suppress-computed-diff: true
     Errors:
       description: >-
         When a resource has been created regardless of errors, this field is used to persist the error message encountered during admission
@@ -792,6 +380,7 @@ components:
             type: string
           type: array
       type: object
+      x-speakeasy-terraform-ignore: true
     SharedPolicyGroupState:
       allOf:
         - $ref: "#/components/schemas/SharedPolicyGroupSpec"
@@ -819,6 +408,8 @@ components:
       properties:
         hrid:
           $ref: "#/components/schemas/Hrid"
+          examples:
+            - partner_config
         apiType:
           $ref: "#/components/schemas/ApiType"
         description:
@@ -851,6 +442,84 @@ components:
         - apiType
         - name
         - phase
+      x-speakeasy-entity: SharedPolicyGroup
+    SharedPolicyGroupLifecycleState:
+      type: string
+      description: The lifecycle state of a shared policy group
+      enum:
+        - DEPLOYED
+        - UNDEPLOYED
+        - PENDING
+    ApiV4DefinitionVersion:
+      type: string
+      description: The definition version of the API.
+      enum:
+        - V4
+      default: V4
+    Status:
+      description: ApiV4DefinitionStatus defines the observed state of API Definition.
+      properties:
+        id:
+          description: The ID of the API definition in the Gravitee API Management instance (if an API context has been configured).
+          type: string
+        crossId:
+          description: The Cross ID is used to identify an API that has been promoted from one environment to another.
+          type: string
+        organizationId:
+          description: The organization ID, if a management context has been defined to sync with an APIM instance
+          type: string
+        environmentId:
+          description: The environment ID, if a management context has been defined to sync with an APIM instance
+          type: string
+        errors:
+          description: >-
+            When API has been created regardless of errors, this field is
+
+            used to persist the error message encountered during admission
+          properties:
+            severe:
+              description: >-
+                severe errors do not pass admission and will block reconcile
+
+                hence, this field should always be during the admission phase
+
+                and is very unlikely to be persisted in the status
+              items:
+                type: string
+              type: array
+            warning:
+              description: >-
+                warning errors do not block object reconciliation,
+
+                most of the time because the value is ignored or defaulted
+
+                when the API gets synced with APIM
+              items:
+                type: string
+              type: array
+          type: object
+        plans:
+          additionalProperties:
+            type: string
+          description: >-
+            This field is used to store the list of plans that have been created
+
+            for the API definition if a management context has been defined
+
+            to sync the API with an APIM instance
+          type: object
+        processingStatus:
+          description: The processing status of the API definition.
+          type: string
+        state:
+          description: The state of the API. Can be either STARTED or STOPPED.
+          enum:
+            - STARTED
+            - STOPPED
+          type: string
+        subscriptions:
+          description: The number of subscriptions that reference the API
+          type: integer
     FlowPhase:
       type: string
       description: The execution phase of a policy.
@@ -869,7 +538,7 @@ components:
           type: string
         configuration:
           description: FlowStep configuration is a map of arbitrary key-values
-          type: object
+          type: string
           x-kubernetes-preserve-unknown-fields: true
         description:
           description: FlowStep description
@@ -889,11 +558,14 @@ components:
           type: string
       required:
         - enabled
-    PlanV4:
+    PlansMap:
+      type: object
+      description: Map of plan IDs to Plan objects
+      additionalProperties:
+        $ref: '#/components/schemas/Plan'
+    Plan:
       type: object
       properties:
-        hrid:
-          $ref: "#/components/schemas/Hrid"
         id:
           type: string
           description: Unique identifier for the plan
@@ -920,6 +592,7 @@ components:
           type: string
         order:
           type: integer
+          x-speakeasy-terraform-ignore: true
         selectionRule:
           type: string
         status:
@@ -939,10 +612,10 @@ components:
         mode:
           $ref: '#/components/schemas/PlanMode'
       required:
-        - hrid
         - status
         - type
         - mode
+      x-speakeasy-param-suppress-computed-diff: true
     Member:
       type: object
       properties:
@@ -981,6 +654,7 @@ components:
       required:
         - config_type
         - name
+      x-speakeasy-param-suppress-computed-diff: true
     Analytics:
       type: object
       properties:
@@ -994,6 +668,7 @@ components:
           $ref: "#/components/schemas/LoggingV4"
         tracing:
           $ref: "#/components/schemas/TracingV4"
+      x-speakeasy-param-suppress-computed-diff: true
     ApiLifecycleState:
       type: string
       description: The status of the API regarding the console.
@@ -1005,12 +680,34 @@ components:
         - DEPRECATED
         - PUBLISHED
         - UNPUBLISHED
-      default: CREATED
     ApiServices:
       type: object
       properties:
         dynamicProperty:
           $ref: "#/components/schemas/ServiceV4"
+      x-speakeasy-param-suppress-computed-diff: true
+    ApiSearchQuery:
+      type: object
+      properties:
+        query:
+          type: string
+          description: The query to search for.
+          examples:
+            - my api
+        ids:
+          type: array
+          items:
+            type: string
+          description: List of ids to find
+          examples:
+            - apiId-1
+            - apiId-2
+        definitionVersion:
+          $ref: "#/components/schemas/DefinitionVersion"
+        definitionVersions:
+          type: array
+          items:
+            $ref: "#/components/schemas/DefinitionVersion"
     ApiType:
       type: string
       description: API's type.
@@ -1028,6 +725,17 @@ components:
       enum:
         - PUBLIC
         - PRIVATE
+    ApiWorkflowState:
+      type: string
+      description: The status of the API regarding the review feature.
+      examples:
+        - DRAFT
+      enum:
+        - DRAFT
+        - IN_REVIEW
+        - REQUEST_FOR_CHANGES
+        - REVIEW_OK
+      readOnly: true
     ChannelSelector:
       type: object
       title: "ChannelSelector"
@@ -1148,6 +856,17 @@ components:
           enum:
             - MANAGEMENT
             - KUBERNETES
+      x-speakeasy-param-suppress-computed-diff: true
+    DefinitionVersion:
+      type: string
+      description: API's gravitee definition version.
+      examples:
+        - V4
+      enum:
+        - V1
+        - V2
+        - V4
+        - FEDERATED
     EndpointV4:
       type: object
       properties:
@@ -1172,8 +891,10 @@ components:
           default: false
         configuration:
           type: object
+          x-speakeasy-type-override: any
         sharedConfigurationOverride:
           type: object
+          x-speakeasy-type-override: any
         services:
           $ref: "#/components/schemas/EndpointServices"
         secondary:
@@ -1204,6 +925,7 @@ components:
           $ref: "#/components/schemas/LoadBalancer"
         sharedConfiguration:
           type: object
+          x-speakeasy-type-override: any
         endpoints:
           type: array
           items:
@@ -1240,6 +962,49 @@ components:
           $ref: "#/components/schemas/Dlq"
         configuration:
           type: object
+          x-speakeasy-type-override: any
+    Error:
+      type: object
+      properties:
+        httpStatus:
+          type: integer
+          format: int32
+          description: The error code
+          examples:
+            - 400
+        message:
+          type: string
+          description: The error message
+          examples:
+            - Bad request
+        technicalCode:
+          type: string
+          description: A technical code to identify the error
+          examples:
+            - invalid.import.definition
+        parameters:
+          type: object
+          description: A map of parameters to be used in the error message
+          additionalProperties:
+            type: string
+        details:
+          type: array
+          description: A list of details about the error
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: The error message
+                examples:
+                  - Bad request
+              location:
+                type: string
+                description: The json path of the field in error.
+                examples:
+                  - updateApi.properties[0].key
+              invalidValue:
+                description: The invalid value.
     FlowV4:
       type: object
       properties:
@@ -1310,6 +1075,7 @@ components:
           type: boolean
           description: Is the flow execution match required.
           default: false
+      x-speakeasy-param-suppress-computed-diff: true
     FlowMode:
       type: string
       description: API's flow mode.
@@ -1379,6 +1145,24 @@ components:
               items:
                 $ref: "#/components/schemas/HttpMethod"
               uniqueItems: true
+    Links:
+      description: List of links for pagination
+      properties:
+        self:
+          type: string
+          description: Link to current resource
+        first:
+          type: string
+          description: In a paginated response, link to the first page
+        last:
+          type: string
+          description: In a paginated response, link to the last page
+        previous:
+          type: string
+          description: In a paginated response, link to the previous page. Maybe null if current is the first page
+        next:
+          type: string
+          description: In a paginated response, link to the next page. Maybe null if current is the last page
     Listener:
       oneOf:
         - $ref: "#/components/schemas/HttpListener"
@@ -1488,6 +1272,28 @@ components:
         verbose:
           type: boolean
           description: Enable technical tracing to get more details on request execution. Be careful this settings would generate more noise and would impact performance.
+    ResponseMetadata:
+      description: Generic object to handle additional information about an entity. Can also be used for pagination data.
+      type: object
+    MoreInformation:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Plugin's description.
+          examples:
+            - Let your consumers send synchronous, on-demand requests for events via a standard HTTP GET requests. Use a standard HTTP proxy to mediate between client applications as data consumers and event brokers such as Kafka.
+        documentationUrl:
+          type: string
+          description: Plugin's documentation URL.
+          examples:
+            - https://documentation.gravitee.io
+        schemaImg:
+          type: string
+          description: Plugin's schema image as base64.
+          format: base64
+          examples:
+            - data:image/png;base64,aFDqfda
     Operator:
       type: string
       description: The path operator of the selector
@@ -1497,12 +1303,21 @@ components:
       enum:
         - EQUALS
         - STARTS_WITH
-    PageV4:
+    PagesMap:
+      type: object
+      description: >-
+        A map of pages objects.
+
+        Keys uniquely identify pages and are used to keep them in sync with APIM when using a management context.
+
+        Renaming a key is the equivalent of deleting the page and recreating it holding a new ID in APIM.
+      additionalProperties:
+        $ref: '#/components/schemas/Page'
+      x-speakeasy-ignore: true
+    Page:
       description: Documentation page. Can be of multiple formats.
       type: object
       properties:
-        hrid:
-          $ref: "#/components/schemas/Hrid"
         id:
           type: string
           description: Page's uuid.
@@ -1599,7 +1414,7 @@ components:
           type: array
           description: List of page translations.
           items:
-            $ref: "#/components/schemas/PageV4"
+            $ref: "#/components/schemas/Page"
         contentRevision:
           $ref: "#/components/schemas/Revision"
         hidden:
@@ -1608,8 +1423,6 @@ components:
         generalConditions:
           type: boolean
           description: If page is used as General Conditions of an active plan.
-      required:
-        - hrid
     PageType:
       type: string
       description: The type of the page.
@@ -1656,6 +1469,7 @@ components:
         configuration:
           type: object
           description: Page source's configuration.
+          x-speakeasy-type-override: any
     PageMedia:
       type: object
       properties:
@@ -1688,6 +1502,37 @@ components:
           description: Revision number.
           examples:
             - 1
+    Pagination:
+      description: Generic object to handle pagination data.
+      type: object
+      properties:
+        page:
+          type: integer
+          description: The current page.
+        perPage:
+          type: integer
+          description: The number of items requested per page.
+        pageCount:
+          type: integer
+          description: The total number of pages.
+        pageItemsCount:
+          type: integer
+          description: The number of items for the current page.
+        totalCount:
+          type: integer
+          format: int64
+          description: The total number of items.
+    Path:
+      type: object
+      properties:
+        host:
+          type: string
+        path:
+          type: string
+          default: "/"
+        overrideAccess:
+          type: boolean
+          default: false
     PathV4:
       type: object
       properties:
@@ -1699,6 +1544,12 @@ components:
         overrideAccess:
           type: boolean
           default: false
+    ApiReview:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Optional message from the API reviewer.
     PlanSecurity:
       type: object
       properties:
@@ -1706,6 +1557,7 @@ components:
           $ref: "#/components/schemas/PlanSecurityType"
         configuration:
           type: object
+          x-speakeasy-type-override: any
       required:
         - type
     PlanSecurityType:
@@ -1772,6 +1624,7 @@ components:
           minLength: 1
         type:
           $ref: "#/components/schemas/MembershipMemberType"
+      x-speakeasy-param-suppress-computed-diff: true
     Property:
       type: object
       required:
@@ -1813,6 +1666,7 @@ components:
           type: string
         configuration:
           type: object
+          x-speakeasy-type-override: any
         enabled:
           type: boolean
     ResponseTemplate:
@@ -1889,6 +1743,7 @@ components:
         configuration:
           type: object
           description: The configuration of the service
+          x-speakeasy-type-override: any
         enabled:
           type: boolean
           description: Is the service enabled or not.
@@ -1914,6 +1769,7 @@ components:
         configuration:
           type: object
           description: The configuration of the step
+          x-speakeasy-type-override: any
         condition:
           type: string
           description: The condition of the step
@@ -1967,6 +1823,30 @@ components:
                 - 8080
           required:
             - "host"
+    VerifyApiPaths:
+      title: "VerifyApiPaths"
+      properties:
+        apiId:
+          type: string
+        paths:
+          type: array
+          items:
+            $ref: "#/components/schemas/Path"
+      required: [paths]
+    VerifyApiHosts:
+      title: "VerifyApiHosts"
+      properties:
+        apiId:
+          type: string
+        listenerType:
+          $ref: "#/components/schemas/ListenerType"
+        hosts:
+          type: array
+          examples:
+            - foo.example.com
+          items:
+            type: string
+      required: [hosts]
     # Failover v4
     FailoverV4:
       type: object
@@ -2003,6 +1883,7 @@ components:
           type: boolean
           description: If true, a circuit breaker breaker will be dedicated for each subscriber, else, one and only circuit breaker will be used for the API.
           default: true
+      x-speakeasy-param-suppress-computed-diff: true
     # Metadata Page
     Metadata:
       type: object
@@ -2023,10 +1904,6 @@ components:
         defaultValue:
           type: string
           description: The default value of the metadata.
-        hidden:
-          default: false
-          description: Specify if metadata is hidden or not.
-          type: boolean
     MetadataFormat:
       type: string
       description: The format of the metadata.
@@ -2039,6 +1916,29 @@ components:
         - DATE
         - MAIL
         - URL
+    Rule:
+      type: object
+      properties:
+        methods:
+          type: array
+          items:
+            $ref: "#/components/schemas/HttpMethod"
+        description:
+          type: string
+          description: The description of the rule
+        enabled:
+          type: boolean
+          description: Is the rule enabled or not.
+          default: true
+        operation:
+          type: string
+          description: The operation of the rule
+        configuration:
+          type: object
+          description: The configuration of the rule
+          x-speakeasy-type-override: any
+      additionalProperties:
+        type: object
     LifecycleState:
       type: string
       description: The state of the API regarding the gateway(s).
@@ -2051,30 +1951,39 @@ components:
         - STOPPED
         - STOPPING
   responses:
-    NotFound:
-      description: Resource not found
+    ApisResponse:
+      description: Page of apis
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
-    Unauthorized:
-      description: Unauthorized
+            title: "ApisResponse"
+            type: object
+            properties:
+              data:
+                description: List of Apis.
+                type: array
+                items:
+                  $ref: "#/components/schemas/ApiV4State"
+              pagination:
+                $ref: "#/components/schemas/Pagination"
+              links:
+                $ref: "#/components/schemas/Links"
+    SharedPolicyGroupsResponse:
+      description: Page of shared policy groups
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
-    Unauthenticated:
-      description: Unauthenticated
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Error"
-    BadRequest:
-      description: Request is invalid
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Error"
+            title: "Shared Policy Groups Response"
+            properties:
+              data:
+                description: List of SharedPolicyGroup.
+                type: array
+                items:
+                  $ref: "#/components/schemas/SharedPolicyGroupState"
+              pagination:
+                $ref: "#/components/schemas/Pagination"
+              links:
+                $ref: "#/components/schemas/Links"
     Error:
       description: Validation error
       content:
@@ -2131,6 +2040,7 @@ components:
       schema:
         type: string
         default: DEFAULT
+      x-speakeasy-name-override: environmentId
     orgIdParam:
       name: orgId
       in: path
@@ -2139,6 +2049,7 @@ components:
       schema:
         type: string
         default: DEFAULT
+      x-speakeasy-name-override: organizationId
     dryRunQueryParam:
       name: dryRun
       in: query
@@ -2146,6 +2057,14 @@ components:
       schema:
         type: boolean
         default: false
+      x-speakeasy-terraform-ignore: true
+    apiIdParam:
+      name: apiId
+      in: path
+      required: true
+      description: Id of an API.
+      schema:
+        type: string
     hridParam:
       name: hrid
       in: path
@@ -2153,6 +2072,23 @@ components:
       description: Human-readable ID of a spec
       schema:
         type: string
+    pageParam:
+      name: page
+      in: query
+      required: false
+      description: The page number for pagination.
+      schema:
+        type: integer
+        default: 1
+    perPageParam:
+      name: perPage
+      in: query
+      required: false
+      description: |
+        The number of items per page for pagination.
+      schema:
+        type: integer
+        default: 10
   securitySchemes:
     BasicAuth:
       type: http
@@ -2161,3 +2097,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: Gravitee service account ID
+x-speakeasy-globals:
+  parameters:
+    - $ref: '#/components/parameters/envIdParam'
+    - $ref: '#/components/parameters/orgIdParam'

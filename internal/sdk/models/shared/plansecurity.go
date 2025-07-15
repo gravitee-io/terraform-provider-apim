@@ -2,13 +2,10 @@
 
 package shared
 
-type PlanSecurityConfiguration struct {
-}
-
 type PlanSecurity struct {
 	// Plan security type.
-	Type          PlanSecurityType           `json:"type"`
-	Configuration *PlanSecurityConfiguration `json:"configuration,omitempty"`
+	Type          PlanSecurityType `json:"type"`
+	Configuration any              `json:"configuration,omitempty"`
 }
 
 func (o *PlanSecurity) GetType() PlanSecurityType {
@@ -18,7 +15,7 @@ func (o *PlanSecurity) GetType() PlanSecurityType {
 	return o.Type
 }
 
-func (o *PlanSecurity) GetConfiguration() *PlanSecurityConfiguration {
+func (o *PlanSecurity) GetConfiguration() any {
 	if o == nil {
 		return nil
 	}

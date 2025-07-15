@@ -8,7 +8,7 @@ import (
 
 // APIV4Spec - ApiV4DefinitionSpec defines the desired state of ApiDefinition.
 type APIV4Spec struct {
-	// A unique human readable id identifying this resource
+	// A unique human readable id identifying this object
 	Hrid string `json:"hrid"`
 	// the context where the api definition was created.
 	//
@@ -31,9 +31,9 @@ type APIV4Spec struct {
 	Failover       *FailoverV4       `json:"failover,omitempty"`
 	Properties     []Property        `json:"properties,omitempty"`
 	Resources      []Resource        `json:"resources,omitempty"`
-	// List of Plans for the API
-	Plans         []PlanV4Input  `json:"plans,omitempty"`
-	FlowExecution *FlowExecution `json:"flowExecution,omitempty"`
+	// Map of plan IDs to Plan objects
+	Plans         map[string]PlanInput `json:"plans,omitempty"`
+	FlowExecution *FlowExecution       `json:"flowExecution,omitempty"`
 	// List of flows for the API
 	Flows []FlowV4Input `json:"flows,omitempty"`
 	// A list of Response Templates for the API (Not applicable for Native API)
@@ -52,16 +52,14 @@ type APIV4Spec struct {
 	// The list of API's metadata.
 	Metadata []Metadata `json:"metadata,omitempty"`
 	// The status of the API regarding the console.
-	LifecycleState *APILifecycleState `default:"CREATED" json:"lifecycleState"`
+	LifecycleState APILifecycleState `json:"lifecycleState"`
 	// The list of category keys associated with this API.
 	Categories []string `json:"categories,omitempty"`
 	// Set of members associated with the plan
 	Members []Member `json:"members,omitempty"`
 	// If true, new members added to the API spec will
 	// be notified when the API is synced with APIM.
-	NotifyMembers *bool `default:"true" json:"notifyMembers"`
-	// List of Pages for the API
-	Pages                            []PageV4Input             `json:"pages,omitempty"`
+	NotifyMembers                    *bool                     `default:"true" json:"notifyMembers"`
 	ConsoleNotificationConfiguration *PortalNotificationConfig `json:"consoleNotificationConfiguration,omitempty"`
 }
 
@@ -167,7 +165,7 @@ func (o *APIV4Spec) GetResources() []Resource {
 	return o.Resources
 }
 
-func (o *APIV4Spec) GetPlans() []PlanV4Input {
+func (o *APIV4Spec) GetPlans() map[string]PlanInput {
 	if o == nil {
 		return nil
 	}
@@ -244,9 +242,9 @@ func (o *APIV4Spec) GetMetadata() []Metadata {
 	return o.Metadata
 }
 
-func (o *APIV4Spec) GetLifecycleState() *APILifecycleState {
+func (o *APIV4Spec) GetLifecycleState() APILifecycleState {
 	if o == nil {
-		return nil
+		return APILifecycleState("")
 	}
 	return o.LifecycleState
 }
@@ -270,13 +268,6 @@ func (o *APIV4Spec) GetNotifyMembers() *bool {
 		return nil
 	}
 	return o.NotifyMembers
-}
-
-func (o *APIV4Spec) GetPages() []PageV4Input {
-	if o == nil {
-		return nil
-	}
-	return o.Pages
 }
 
 func (o *APIV4Spec) GetConsoleNotificationConfiguration() *PortalNotificationConfig {

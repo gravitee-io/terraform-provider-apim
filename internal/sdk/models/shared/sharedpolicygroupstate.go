@@ -4,7 +4,7 @@ package shared
 
 // SharedPolicyGroupState - Shared Policy Group Spec
 type SharedPolicyGroupState struct {
-	// A unique human readable id identifying this resource
+	// A unique human readable id identifying this object
 	Hrid string `json:"hrid"`
 	// API's type.
 	APIType APIType `json:"apiType"`

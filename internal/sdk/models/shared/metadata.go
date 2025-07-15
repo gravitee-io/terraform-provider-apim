@@ -2,10 +2,6 @@
 
 package shared
 
-import (
-	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/utils"
-)
-
 type Metadata struct {
 	// The key of the metadata.
 	Key *string `json:"key,omitempty"`
@@ -17,19 +13,6 @@ type Metadata struct {
 	Value *string `json:"value,omitempty"`
 	// The default value of the metadata.
 	DefaultValue *string `json:"defaultValue,omitempty"`
-	// Specify if metadata is hidden or not.
-	Hidden *bool `default:"false" json:"hidden"`
-}
-
-func (m Metadata) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(m, "", false)
-}
-
-func (m *Metadata) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &m, "", false, false); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (o *Metadata) GetKey() *string {
@@ -65,11 +48,4 @@ func (o *Metadata) GetDefaultValue() *string {
 		return nil
 	}
 	return o.DefaultValue
-}
-
-func (o *Metadata) GetHidden() *bool {
-	if o == nil {
-		return nil
-	}
-	return o.Hidden
 }

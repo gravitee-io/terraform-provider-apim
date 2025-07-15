@@ -2,12 +2,13 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.0.0 and generator version 2.656.9
+// Generated from OpenAPI doc version 0.2.0 and generator version 2.656.9
 
 import (
 	"context"
 	"fmt"
 	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/config"
+	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/globals"
 	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/hooks"
 	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/utils"
 	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/models/shared"
@@ -47,15 +48,13 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// GraviteeApim - Gravitee.io - Automation API: The APIM automation API.
+// GraviteeApim - Gravitee.io GKO - Automation API: The APIM automation API.
 type GraviteeApim struct {
 	SDKVersion string
-	Apis       *Apis
-	// Everything about Applications
-	Applications *Applications
-	// Everything about subscriptions
-	Subscriptions      *Subscriptions
-	SharedPolicyGroups *SharedPolicyGroups
+	// Everything about APIs
+	APIs *APIs
+	// Everything about Shared Policy Groups
+	SharedPolicyGroup *SharedPolicyGroup
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -115,6 +114,20 @@ func WithSecuritySource(security func(context.Context) (shared.Security, error))
 	}
 }
 
+// WithEnvironmentID allows setting the EnvironmentID parameter for all supported operations
+func WithEnvironmentID(environmentID string) SDKOption {
+	return func(sdk *GraviteeApim) {
+		sdk.sdkConfiguration.Globals.EnvironmentID = &environmentID
+	}
+}
+
+// WithOrganizationID allows setting the OrganizationID parameter for all supported operations
+func WithOrganizationID(organizationID string) SDKOption {
+	return func(sdk *GraviteeApim) {
+		sdk.sdkConfiguration.Globals.OrganizationID = &organizationID
+	}
+}
+
 func WithRetryConfig(retryConfig retry.Config) SDKOption {
 	return func(sdk *GraviteeApim) {
 		sdk.sdkConfiguration.RetryConfig = &retryConfig
@@ -131,9 +144,10 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *GraviteeApim {
 	sdk := &GraviteeApim{
-		SDKVersion: "0.1.2",
+		SDKVersion: "0.2.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.1.2 2.656.9 1.0.0 github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.2.0 2.656.9 0.2.0 github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk",
+			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},
 		hooks: hooks.New(),
@@ -154,10 +168,8 @@ func New(opts ...SDKOption) *GraviteeApim {
 		sdk.sdkConfiguration.ServerURL = serverURL
 	}
 
-	sdk.Apis = newApis(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Applications = newApplications(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.Subscriptions = newSubscriptions(sdk, sdk.sdkConfiguration, sdk.hooks)
-	sdk.SharedPolicyGroups = newSharedPolicyGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APIs = newAPIs(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.SharedPolicyGroup = newSharedPolicyGroup(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

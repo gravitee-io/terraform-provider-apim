@@ -6,12 +6,6 @@ import (
 	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/utils"
 )
 
-type EndpointV4Configuration struct {
-}
-
-type SharedConfigurationOverride struct {
-}
-
 type EndpointV4 struct {
 	// The name of the endpoint
 	Name *string `json:"name,omitempty"`
@@ -20,10 +14,10 @@ type EndpointV4 struct {
 	// The weight of the endpoint
 	Weight *int `default:"1" json:"weight"`
 	// Is the configuration of the endpoint inherited from the endpoint group it belongs to.
-	InheritConfiguration        *bool                        `default:"false" json:"inheritConfiguration"`
-	Configuration               *EndpointV4Configuration     `json:"configuration,omitempty"`
-	SharedConfigurationOverride *SharedConfigurationOverride `json:"sharedConfigurationOverride,omitempty"`
-	Services                    *EndpointServices            `json:"services,omitempty"`
+	InheritConfiguration        *bool             `default:"false" json:"inheritConfiguration"`
+	Configuration               any               `json:"configuration,omitempty"`
+	SharedConfigurationOverride any               `json:"sharedConfigurationOverride,omitempty"`
+	Services                    *EndpointServices `json:"services,omitempty"`
 	// Is the endpoint a secondary endpoint.
 	Secondary *bool `default:"false" json:"secondary"`
 	// The list of tenants associated to the endpoint.
@@ -69,14 +63,14 @@ func (o *EndpointV4) GetInheritConfiguration() *bool {
 	return o.InheritConfiguration
 }
 
-func (o *EndpointV4) GetConfiguration() *EndpointV4Configuration {
+func (o *EndpointV4) GetConfiguration() any {
 	if o == nil {
 		return nil
 	}
 	return o.Configuration
 }
 
-func (o *EndpointV4) GetSharedConfigurationOverride() *SharedConfigurationOverride {
+func (o *EndpointV4) GetSharedConfigurationOverride() any {
 	if o == nil {
 		return nil
 	}

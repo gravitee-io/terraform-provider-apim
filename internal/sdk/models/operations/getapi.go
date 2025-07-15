@@ -8,11 +8,43 @@ import (
 	"net/http"
 )
 
+type GetAPIGlobals struct {
+	// Id of an organization.
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	// Id of an environment.
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (g GetAPIGlobals) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GetAPIGlobals) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *GetAPIGlobals) GetOrganizationID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.OrganizationID
+}
+
+func (o *GetAPIGlobals) GetEnvironmentID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EnvironmentID
+}
+
 type GetAPIRequest struct {
 	// Id of an organization.
-	OrgID string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Id of an environment.
-	EnvID string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Human-readable ID of a spec
 	Hrid string `pathParam:"style=simple,explode=false,name=hrid"`
 }
@@ -28,18 +60,18 @@ func (g *GetAPIRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GetAPIRequest) GetOrgID() string {
+func (o *GetAPIRequest) GetOrganizationID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
-	return o.OrgID
+	return o.OrganizationID
 }
 
-func (o *GetAPIRequest) GetEnvID() string {
+func (o *GetAPIRequest) GetEnvironmentID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
-	return o.EnvID
+	return o.EnvironmentID
 }
 
 func (o *GetAPIRequest) GetHrid() string {

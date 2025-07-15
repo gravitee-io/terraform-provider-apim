@@ -8,11 +8,43 @@ import (
 	"net/http"
 )
 
+type CreateOrUpdateApisGlobals struct {
+	// Id of an organization.
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	// Id of an environment.
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+}
+
+func (c CreateOrUpdateApisGlobals) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *CreateOrUpdateApisGlobals) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (o *CreateOrUpdateApisGlobals) GetOrganizationID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.OrganizationID
+}
+
+func (o *CreateOrUpdateApisGlobals) GetEnvironmentID() *string {
+	if o == nil {
+		return nil
+	}
+	return o.EnvironmentID
+}
+
 type CreateOrUpdateApisRequest struct {
 	// Id of an organization.
-	OrgID string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// Id of an environment.
-	EnvID string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting
 	// the state of the underlying spec.
 	//
@@ -31,18 +63,18 @@ func (c *CreateOrUpdateApisRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CreateOrUpdateApisRequest) GetOrgID() string {
+func (o *CreateOrUpdateApisRequest) GetOrganizationID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
-	return o.OrgID
+	return o.OrganizationID
 }
 
-func (o *CreateOrUpdateApisRequest) GetEnvID() string {
+func (o *CreateOrUpdateApisRequest) GetEnvironmentID() *string {
 	if o == nil {
-		return ""
+		return nil
 	}
-	return o.EnvID
+	return o.EnvironmentID
 }
 
 func (o *CreateOrUpdateApisRequest) GetDryRun() *bool {
@@ -68,7 +100,7 @@ type CreateOrUpdateApisResponse struct {
 	RawResponse *http.Response
 	// State of the successfully created API
 	APIV4State *shared.APIV4State
-	// Request is invalid
+	// Validation error
 	Error *shared.Error
 }
 

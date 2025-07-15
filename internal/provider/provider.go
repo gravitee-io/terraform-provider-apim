@@ -25,12 +25,19 @@ type GraviteeApimProvider struct {
 	version string
 }
 
+// GraviteeApimProviderConfigureData describes provider configuration data passed to resources.
+type GraviteeApimProviderConfigureData struct {
+	EnvironmentID  types.String `tfsdk:"environment_id"`
+	OrganizationID types.String `tfsdk:"organization_id"`
+	SDKClient      *sdk.GraviteeApim
+}
+
 // GraviteeApimProviderModel describes the provider data model.
 type GraviteeApimProviderModel struct {
-	BearerAuth types.String `tfsdk:"bearer_auth"`
-	Password   types.String `tfsdk:"password"`
-	ServerURL  types.String `tfsdk:"server_url"`
-	Username   types.String `tfsdk:"username"`
+	BearerAuth     types.String `tfsdk:"bearer_auth"`
+	EnvironmentID  types.String `tfsdk:"environment_id"`
+	OrganizationID types.String `tfsdk:"organization_id"`
+	ServerURL      types.String `tfsdk:"server_url"`
 }
 
 func (p *GraviteeApimProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -42,23 +49,23 @@ func (p *GraviteeApimProvider) Schema(ctx context.Context, req provider.SchemaRe
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"bearer_auth": schema.StringAttribute{
-				Optional:  true,
+				Required:  true,
 				Sensitive: true,
 			},
-			"password": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+			"environment_id": schema.StringAttribute{
+				Description: `Id of an environment.`,
+				Optional:    true,
+			},
+			"organization_id": schema.StringAttribute{
+				Description: `Id of an organization.`,
+				Optional:    true,
 			},
 			"server_url": schema.StringAttribute{
 				Description: `Server URL (defaults to https://apim-master-api.team-apim.gravitee.dev/automation)`,
 				Optional:    true,
 			},
-			"username": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
-			},
 		},
-		MarkdownDescription: `Gravitee.io - Automation API: The APIM automation API.`,
+		MarkdownDescription: `Gravitee.io GKO - Automation API: The APIM automation API.`,
 	}
 }
 
@@ -80,21 +87,14 @@ func (p *GraviteeApimProvider) Configure(ctx context.Context, req provider.Confi
 	security := shared.Security{}
 
 	if !data.BearerAuth.IsUnknown() {
-		security.BearerAuth = data.BearerAuth.ValueStringPointer()
+		security.BearerAuth = data.BearerAuth.ValueString()
 	}
 
-	basicAuth := &shared.SchemeBasicAuth{}
-
-	if !data.Username.IsUnknown() {
-		basicAuth.Username = data.Username.ValueString()
-	}
-
-	if !data.Password.IsUnknown() {
-		basicAuth.Password = data.Password.ValueString()
-	}
-
-	if basicAuth.Username != "" || basicAuth.Password != "" {
-		security.BasicAuth = basicAuth
+	if security.BearerAuth == "" {
+		resp.Diagnostics.AddError(
+			"Missing Provider Security Configuration",
+			"Provider configuration bearer_auth attribute must be configured.",
+		)
 	}
 
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
@@ -111,18 +111,38 @@ func (p *GraviteeApimProvider) Configure(ctx context.Context, req provider.Confi
 		sdk.WithClient(httpClient),
 	}
 
+	if !data.EnvironmentID.IsUnknown() && !data.EnvironmentID.IsNull() {
+		opts = append(opts, sdk.WithEnvironmentID(data.EnvironmentID.ValueString()))
+	}
+
+	if !data.OrganizationID.IsUnknown() && !data.OrganizationID.IsNull() {
+		opts = append(opts, sdk.WithOrganizationID(data.OrganizationID.ValueString()))
+	}
+
 	client := sdk.New(opts...)
-	resp.DataSourceData = client
-	resp.EphemeralResourceData = client
-	resp.ResourceData = client
+	configureData := &GraviteeApimProviderConfigureData{
+		EnvironmentID:  data.EnvironmentID,
+		OrganizationID: data.OrganizationID,
+		SDKClient:      client,
+	}
+
+	resp.DataSourceData = configureData
+	resp.EphemeralResourceData = configureData
+	resp.ResourceData = configureData
 }
 
 func (p *GraviteeApimProvider) Resources(ctx context.Context) []func() resource.Resource {
-	return []func() resource.Resource{}
+	return []func() resource.Resource{
+		NewApiv4Resource,
+		NewSharedPolicyGroupResource,
+	}
 }
 
 func (p *GraviteeApimProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{}
+	return []func() datasource.DataSource{
+		NewApiv4DataSource,
+		NewSharedPolicyGroupDataSource,
+	}
 }
 
 func (p *GraviteeApimProvider) EphemeralResources(ctx context.Context) []func() ephemeral.EphemeralResource {

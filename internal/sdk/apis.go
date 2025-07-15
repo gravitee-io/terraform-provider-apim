@@ -15,23 +15,29 @@ import (
 	"net/http"
 )
 
-type Apis struct {
+// APIs - Everything about APIs
+type APIs struct {
 	rootSDK          *GraviteeApim
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
 }
 
-func newApis(rootSDK *GraviteeApim, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *Apis {
-	return &Apis{
+func newAPIs(rootSDK *GraviteeApim, sdkConfig config.SDKConfiguration, hooks *hooks.Hooks) *APIs {
+	return &APIs{
 		rootSDK:          rootSDK,
 		sdkConfiguration: sdkConfig,
 		hooks:            hooks,
 	}
 }
 
-// CreateOrUpdate - Create or update APIs from API Spec
+// CreateOrUpdateApis - Create or update APIs from API Spec
 // Create or update APIs from API Spec
-func (s *Apis) CreateOrUpdate(ctx context.Context, request operations.CreateOrUpdateApisRequest, opts ...operations.Option) (*operations.CreateOrUpdateApisResponse, error) {
+func (s *APIs) CreateOrUpdateApis(ctx context.Context, request operations.CreateOrUpdateApisRequest, opts ...operations.Option) (*operations.CreateOrUpdateApisResponse, error) {
+	globals := operations.CreateOrUpdateApisGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -49,7 +55,7 @@ func (s *Apis) CreateOrUpdate(ctx context.Context, request operations.CreateOrUp
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/apis", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/apis/", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -89,7 +95,7 @@ func (s *Apis) CreateOrUpdate(ctx context.Context, request operations.CreateOrUp
 		req.Header.Set("Content-Type", reqContentType)
 	}
 
-	if err := utils.PopulateQueryParams(ctx, req, request, nil); err != nil {
+	if err := utils.PopulateQueryParams(ctx, req, request, globals); err != nil {
 		return nil, fmt.Errorf("error populating query params: %w", err)
 	}
 
@@ -159,60 +165,50 @@ func (s *Apis) CreateOrUpdate(ctx context.Context, request operations.CreateOrUp
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 400:
-		fallthrough
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.Error
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.Error = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out shared.Error
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Error = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
+	case httpRes.StatusCode == 500:
 	default:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out shared.Error
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Error = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		rawBody, err := utils.ConsumeRawBody(httpRes)
+		if err != nil {
+			return nil, err
 		}
+		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
 	}
 
 	return res, nil
 
 }
 
+// GetAPI - Get one API
 // Get one API
-// Get one API
-func (s *Apis) Get(ctx context.Context, request operations.GetAPIRequest, opts ...operations.Option) (*operations.GetAPIResponse, error) {
+func (s *APIs) GetAPI(ctx context.Context, request operations.GetAPIRequest, opts ...operations.Option) (*operations.GetAPIResponse, error) {
+	globals := operations.GetAPIGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -230,7 +226,7 @@ func (s *Apis) Get(ctx context.Context, request operations.GetAPIRequest, opts .
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/apis/{hrid}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/apis/{hrid}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -344,9 +340,14 @@ func (s *Apis) Get(ctx context.Context, request operations.GetAPIRequest, opts .
 
 }
 
+// DeleteAPI - Delete one API
 // Delete one API
-// Delete one API
-func (s *Apis) Delete(ctx context.Context, request operations.DeleteAPIRequest, opts ...operations.Option) (*operations.DeleteAPIResponse, error) {
+func (s *APIs) DeleteAPI(ctx context.Context, request operations.DeleteAPIRequest, opts ...operations.Option) (*operations.DeleteAPIResponse, error) {
+	globals := operations.DeleteAPIGlobals{
+		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
+		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
+	}
+
 	o := operations.Options{}
 	supportedOptions := []string{
 		operations.SupportedOptionTimeout,
@@ -364,7 +365,7 @@ func (s *Apis) Delete(ctx context.Context, request operations.DeleteAPIRequest, 
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/apis/{hrid}", request, nil)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/apis/{hrid}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -442,31 +443,6 @@ func (s *Apis) Delete(ctx context.Context, request operations.DeleteAPIRequest, 
 
 	switch {
 	case httpRes.StatusCode == 204:
-	case httpRes.StatusCode == 401:
-		fallthrough
-	case httpRes.StatusCode == 403:
-		fallthrough
-	case httpRes.StatusCode == 404:
-		switch {
-		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-
-			var out shared.Error
-			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
-				return nil, err
-			}
-
-			res.Error = &out
-		default:
-			rawBody, err := utils.ConsumeRawBody(httpRes)
-			if err != nil {
-				return nil, err
-			}
-			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
-		}
 	default:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):

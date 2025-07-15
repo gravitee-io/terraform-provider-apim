@@ -6,15 +6,11 @@ import (
 	"github.com/speakeasy/terraform-provider-gravitee-apim/internal/sdk/internal/utils"
 )
 
-// FlowStepConfiguration - FlowStep configuration is a map of arbitrary key-values
-type FlowStepConfiguration struct {
-}
-
 type FlowStep struct {
 	// FlowStep condition
 	Condition *string `json:"condition,omitempty"`
 	// FlowStep configuration is a map of arbitrary key-values
-	Configuration *FlowStepConfiguration `json:"configuration,omitempty"`
+	Configuration *string `json:"configuration,omitempty"`
 	// FlowStep description
 	Description *string `json:"description,omitempty"`
 	// Indicate if this FlowStep is enabled or not
@@ -45,7 +41,7 @@ func (o *FlowStep) GetCondition() *string {
 	return o.Condition
 }
 
-func (o *FlowStep) GetConfiguration() *FlowStepConfiguration {
+func (o *FlowStep) GetConfiguration() *string {
 	if o == nil {
 		return nil
 	}
