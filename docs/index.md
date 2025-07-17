@@ -20,7 +20,7 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "0.1.0"
+      version = "4.8.0-alpha.1"
     }
   }
 }

@@ -7,7 +7,7 @@ import (
 	"flag"
 	"log"
 
-	"github.com/gravitee-io/terraform-provider-apim/internal/provider"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
 

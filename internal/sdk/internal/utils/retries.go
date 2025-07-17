@@ -6,7 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/retry"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/retry"
 	"math"
 	"math/rand"
 	"net/http"

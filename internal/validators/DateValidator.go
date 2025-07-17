@@ -4,7 +4,7 @@ package validators
 
 import (
 	"context"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/types"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/types"
 	"github.com/hashicorp/terraform-plugin-framework-validators/helpers/validatordiag"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 )

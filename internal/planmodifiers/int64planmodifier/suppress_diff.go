@@ -4,7 +4,7 @@ package int64planmodifier
 
 import (
 	"context"
-	"github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/utils"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/planmodifiers/utils"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 )

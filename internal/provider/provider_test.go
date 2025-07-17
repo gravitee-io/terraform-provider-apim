@@ -1,7 +1,7 @@
 package provider_test
 
 import (
-	"github.com/gravitee-io/terraform-provider-apim/internal/provider"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/provider"
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 )

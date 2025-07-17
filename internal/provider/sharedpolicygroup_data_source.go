@@ -5,8 +5,8 @@ package provider
 import (
 	"context"
 	"fmt"
-	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	tfTypes "github.com/gravitee-io/terraform-provider-apim/v4/internal/provider/types"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"

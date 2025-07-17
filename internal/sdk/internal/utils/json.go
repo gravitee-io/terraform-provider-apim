@@ -13,7 +13,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/types"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/types"
 
 	"github.com/ericlagergren/decimal"
 )

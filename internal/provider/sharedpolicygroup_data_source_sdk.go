@@ -4,9 +4,9 @@ package provider
 
 import (
 	"context"
-	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
+	tfTypes "github.com/gravitee-io/terraform-provider-apim/v4/internal/provider/types"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/models/operations"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )

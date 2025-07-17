@@ -14,7 +14,7 @@ import (
 
 	"github.com/ericlagergren/decimal"
 
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/types"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/types"
 )
 
 func PopulateQueryParams(_ context.Context, req *http.Request, queryParams interface{}, globals interface{}) error {

@@ -4,8 +4,8 @@ package provider
 
 import (
 	"context"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
 	"github.com/hashicorp/terraform-plugin-framework/provider"

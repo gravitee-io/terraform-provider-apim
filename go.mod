@@ -1,4 +1,4 @@
-module github.com/gravitee-io/terraform-provider-apim
+module github.com/gravitee-io/terraform-provider-apim/v4
 
 go 1.23.0
 

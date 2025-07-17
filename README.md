@@ -34,7 +34,7 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "0.1.0"
+      version = "4.8.0-alpha.1"
     }
   }
 }
@@ -108,8 +108,8 @@ Automated tests take Terraform configuration(s) and then perform create, read, i
 
 The testing code is conventionally written as a Go test file (`internal/provider/xxx_resource_test.go`) while configurations are in `internal/provider/testdata` directories named after the test. For example:
 
-* [Example provider testing code](https://github.com/speakeasy-sdks/terraform-provider-gravitee/blob/master/internal/provider/apiv4_resource_test.go)
-* [Example provider testing configuration](https://github.com/speakeasy-sdks/terraform-provider-gravitee/blob/master/internal/provider/testdata/TestAPIV4Resource_lifecycle/main.tf).
+* [Example provider testing code](internal/provider/apiv4_resource_test.go)
+* [Example provider testing configuration](internal/provider/testdata/TestAPIV4Resource_lifecycle/main.tf).
 
 To test the APIM Terraform Provider you need to set environment variables:
 
@@ -137,13 +137,14 @@ provider_installation {
 You can use GKO make targets to start an APIM cluster
 
 ```shell
-cd gravitee-kubernetes-operator
+cd ../gravitee-kubernetes-operator
 make start-cluster
 ```
 
 Run:
 
 ```shell
+cd ../terraform-provider-apim
 go test -count=1 -timeout=10m -v ./internal/provider
 ```
 

@@ -4,8 +4,8 @@ package config
 
 import (
 	"context"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/globals"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/retry"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/internal/globals"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/retry"
 	"net/http"
 	"time"
 )

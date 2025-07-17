@@ -7,12 +7,12 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/config"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/globals"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/hooks"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/retry"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/internal/config"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/internal/globals"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/internal/hooks"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/internal/utils"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/models/shared"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/retry"
 	"net/http"
 	"time"
 )
@@ -144,9 +144,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *GraviteeApim {
 	sdk := &GraviteeApim{
-		SDKVersion: "0.1.0",
+		SDKVersion: "4.8.0-alpha.1",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.1.0 2.657.1 0.2.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 4.8.0-alpha.1 2.657.1 0.2.0 github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk",
 			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},

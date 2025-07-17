@@ -13,7 +13,7 @@ import (
 
 	"github.com/ericlagergren/decimal"
 
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/types"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/types"
 )
 
 func GenerateURL(_ context.Context, serverURL, path string, pathParams interface{}, globals interface{}) (string, error) {

@@ -5,7 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/internal/utils"
 )
 
 // LoadBalancerType - Load balancer type.

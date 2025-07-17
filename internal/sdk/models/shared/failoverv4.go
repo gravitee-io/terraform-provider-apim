@@ -3,7 +3,7 @@
 package shared
 
 import (
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+	"github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk/internal/utils"
 )
 
 type FailoverV4 struct {
