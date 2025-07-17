@@ -34,7 +34,7 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "0.4.1"
+      version = "0.1.0"
     }
   }
 }
@@ -99,5 +99,53 @@ provider_installation {
 }
 ```
 <!-- End Testing the provider locally [usage] -->
+
+<!-- Testing Instruction -->
+
+### Automated Testing
+
+Automated tests take Terraform configuration(s) and then perform create, read, import, update, and delete against those using real Terraform commands. Automated testing also supports writing assertions against the Terraform plan or state per test step.
+
+The testing code is conventionally written as a Go test file (`internal/provider/xxx_resource_test.go`) while configurations are in `internal/provider/testdata` directories named after the test. For example:
+
+* [Example provider testing code](https://github.com/speakeasy-sdks/terraform-provider-gravitee/blob/master/internal/provider/apiv4_resource_test.go)
+* [Example provider testing configuration](https://github.com/speakeasy-sdks/terraform-provider-gravitee/blob/master/internal/provider/testdata/TestAPIV4Resource_lifecycle/main.tf).
+
+To test the APIM Terraform Provider you need to set environment variables:
+
+```shell
+export APIM_TOKEN=xxxx 
+export APIM_SERVER_URL=http://localhost:30083/automation
+export APIM_ORG_ID=DEFAULT
+export APIM_ENV_ID=DEFAULT
+export TF_ACC=1
+```
+
+Content of `.terraformrc` must be 
+
+```hcl
+provider_installation {
+
+  dev_overrides {
+      "registry.terraform.io/hashicorp/gravitee" = "/path/to/terraform-provider-apim"
+  }
+  
+  direct {}
+}
+```
+
+You can use GKO make targets to start an APIM cluster
+
+```shell
+cd gravitee-kubernetes-operator
+make start-cluster
+```
+
+Run:
+
+```shell
+go test -count=1 -timeout=10m -v ./internal/provider
+```
+
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->

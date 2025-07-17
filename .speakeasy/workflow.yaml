@@ -1,7 +1,7 @@
 workflowVersion: 1.0.0
 speakeasyVersion: latest
 sources:
-    Gravitee.io - Automation API:
+    automation-api:
         inputs:
             - location: schemas/automation-api-oas.yaml
         overlays:
@@ -13,4 +13,4 @@ sources:
 targets:
     apim:
         target: terraform
-        source: Gravitee.io - Automation API
+        source: automation-api

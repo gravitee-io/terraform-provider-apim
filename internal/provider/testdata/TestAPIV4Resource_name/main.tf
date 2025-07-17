@@ -14,7 +14,7 @@ variable "organization_id" {
   type = string
 }
 
-resource "gravitee_apiv4" "test" {
+resource "apim_apiv4" "test" {
   environment_id  = var.environment_id
   hrid            = var.hrid
   lifecycle_state = "UNPUBLISHED"

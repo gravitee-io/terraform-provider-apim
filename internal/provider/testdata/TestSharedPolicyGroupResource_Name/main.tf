@@ -14,7 +14,7 @@ variable "organization_id" {
   type = string
 }
 
-resource "gravitee_shared_policy_group" "test" {
+resource "apim_shared_policy_group" "test" {
   api_type        = "PROXY"
   environment_id  = var.environment_id
   hrid            = var.hrid

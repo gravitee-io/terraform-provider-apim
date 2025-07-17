@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"net/http"
+	"os"
 )
 
 var _ provider.Provider = (*ApimProvider)(nil)
@@ -49,7 +50,7 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"bearer_auth": schema.StringAttribute{
-				Required:  true,
+				Optional:  true,
 				Sensitive: true,
 			},
 			"environment_id": schema.StringAttribute{
@@ -82,20 +83,34 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 
 	ServerURL := data.ServerURL.ValueString()
 
+	if ServerURL == "" && len(os.Getenv("APIM_SERVER_URL")) > 0 {
+		ServerURL = os.Getenv("APIM_SERVER_URL")
+	}
 	if ServerURL == "" {
 		ServerURL = "https://apim-master-api.team-apim.gravitee.dev/automation"
 	}
 
+	if environmentIDEnvVar, ok := os.LookupEnv("APIM_ENV_ID"); ok && data.EnvironmentID.IsNull() {
+		data.EnvironmentID = types.StringValue(environmentIDEnvVar)
+	}
+
+	if organizationIDEnvVar, ok := os.LookupEnv("APIM_ORG_ID"); ok && data.OrganizationID.IsNull() {
+		data.OrganizationID = types.StringValue(organizationIDEnvVar)
+	}
 	security := shared.Security{}
 
 	if !data.BearerAuth.IsUnknown() {
 		security.BearerAuth = data.BearerAuth.ValueString()
 	}
 
+	if bearerAuthEnvVar := os.Getenv("APIM_TOKEN"); security.BearerAuth == "" && bearerAuthEnvVar != "" {
+		security.BearerAuth = bearerAuthEnvVar
+	}
+
 	if security.BearerAuth == "" {
 		resp.Diagnostics.AddError(
 			"Missing Provider Security Configuration",
-			"Provider configuration bearer_auth attribute must be configured.",
+			"Either the environment variable APIM_TOKEN or provider configuration bearer_auth attribute must be configured.",
 		)
 	}
 

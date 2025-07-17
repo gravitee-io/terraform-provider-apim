@@ -18,7 +18,7 @@ func TestAPIV4Resource_lifecycle(t *testing.T) {
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
 	randomId := "test-" + acctest.RandString(10)
-	resourceAddress := "gravitee_apiv4.test"
+	resourceAddress := "apim_apiv4.test"
 
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories: testProviders(),
@@ -73,7 +73,7 @@ func TestAPIV4Resource_Name(t *testing.T) {
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
 	randomId := "test-" + acctest.RandString(10)
-	resourceAddress := "gravitee_apiv4.test"
+	resourceAddress := "apim_apiv4.test"
 
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories: testProviders(),

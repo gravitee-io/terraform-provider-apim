@@ -22,7 +22,7 @@ func TestSharedPolicyGroupResource_lifecycle(t *testing.T) {
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
 	randomId := "test-" + acctest.RandString(10)
-	resourceAddress := "gravitee_shared_policy_group.test"
+	resourceAddress := "apim_shared_policy_group.test"
 
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories: testProviders(),
@@ -81,7 +81,7 @@ func TestSharedPolicyGroupResource_Name(t *testing.T) {
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
 	randomId := "test-" + acctest.RandString(10)
-	resourceAddress := "gravitee_shared_policy_group.test"
+	resourceAddress := "apim_shared_policy_group.test"
 
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories: testProviders(),

@@ -1,4 +1,4 @@
-speakeasyVersion: 1.581.2
+speakeasyVersion: 1.582.0
 sources:
     Gravitee.io - Automation API:
         sourceNamespace: gravitee-io-gko---automation-api
@@ -7,9 +7,16 @@ sources:
         tags:
             - latest
             - 0.2.0
+    automation-api:
+        sourceNamespace: gravitee-io-gko---automation-api
+        sourceRevisionDigest: sha256:1931ee88b0b97e59974570d6c092d40b8cfe639d37757600281853513f3fb033
+        sourceBlobDigest: sha256:e5bdd28116e0660af601a098573e8a5044ef09f829e56844984aec28f40ca240
+        tags:
+            - latest
+            - 0.2.0
 targets:
     apim:
-        source: Gravitee.io - Automation API
+        source: automation-api
         sourceNamespace: gravitee-io-gko---automation-api
         sourceRevisionDigest: sha256:1931ee88b0b97e59974570d6c092d40b8cfe639d37757600281853513f3fb033
         sourceBlobDigest: sha256:e5bdd28116e0660af601a098573e8a5044ef09f829e56844984aec28f40ca240
@@ -22,7 +29,7 @@ workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
     sources:
-        Gravitee.io - Automation API:
+        automation-api:
             inputs:
                 - location: schemas/automation-api-oas.yaml
             overlays:
@@ -34,4 +41,4 @@ workflow:
     targets:
         apim:
             target: terraform
-            source: Gravitee.io - Automation API
+            source: automation-api

@@ -22,7 +22,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 terraform:
-  version: 0.4.1
+  version: 0.1.0
   additionalDataSources: []
   additionalDependencies: {}
   additionalEphemeralResources: []
@@ -35,5 +35,13 @@ terraform:
   baseErrorName: ApimError
   defaultErrorName: APIError
   enableTypeDeduplication: false
-  environmentVariables: []
+  environmentVariables:
+    - env: APIM_SERVER_URL
+      providerAttribute: server_url
+    - env: APIM_TOKEN
+      providerAttribute: bearer_auth
+    - env: APIM_ORG_ID
+      providerAttribute: organization_id
+    - env: APIM_ENV_ID
+      providerAttribute: environment_id
   packageName: apim

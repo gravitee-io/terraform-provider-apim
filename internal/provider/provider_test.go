@@ -11,6 +11,6 @@ import (
 // resource.TestCase.ProtoV6ProtocolFactories field.
 func testProviders() map[string]func() (tfprotov6.ProviderServer, error) {
 	return map[string]func() (tfprotov6.ProviderServer, error){
-		"gravitee": providerserver.NewProtocol6WithError(provider.New("test")()),
+		"apim": providerserver.NewProtocol6WithError(provider.New("test")()),
 	}
 }
