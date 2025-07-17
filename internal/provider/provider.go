@@ -36,6 +36,7 @@ type ApimProviderConfigureData struct {
 // ApimProviderModel describes the provider data model.
 type ApimProviderModel struct {
 	BearerAuth     types.String `tfsdk:"bearer_auth"`
+	CloudAuth      types.String `tfsdk:"cloud_auth"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	OrganizationID types.String `tfsdk:"organization_id"`
 	ServerURL      types.String `tfsdk:"server_url"`
@@ -50,6 +51,10 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"bearer_auth": schema.StringAttribute{
+				Optional:  true,
+				Sensitive: true,
+			},
+			"cloud_auth": schema.StringAttribute{
 				Optional:  true,
 				Sensitive: true,
 			},
@@ -100,18 +105,19 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	security := shared.Security{}
 
 	if !data.BearerAuth.IsUnknown() {
-		security.BearerAuth = data.BearerAuth.ValueString()
+		security.BearerAuth = data.BearerAuth.ValueStringPointer()
 	}
 
-	if bearerAuthEnvVar := os.Getenv("APIM_TOKEN"); security.BearerAuth == "" && bearerAuthEnvVar != "" {
-		security.BearerAuth = bearerAuthEnvVar
+	if bearerAuthEnvVar := os.Getenv("APIM_SA_TOKEN"); security.BearerAuth == nil && bearerAuthEnvVar != "" {
+		security.BearerAuth = &bearerAuthEnvVar
 	}
 
-	if security.BearerAuth == "" {
-		resp.Diagnostics.AddError(
-			"Missing Provider Security Configuration",
-			"Either the environment variable APIM_TOKEN or provider configuration bearer_auth attribute must be configured.",
-		)
+	if !data.CloudAuth.IsUnknown() {
+		security.CloudAuth = data.CloudAuth.ValueStringPointer()
+	}
+
+	if cloudAuthEnvVar := os.Getenv("APIM_CLOUD_TOKEN"); security.CloudAuth == nil && cloudAuthEnvVar != "" {
+		security.CloudAuth = &cloudAuthEnvVar
 	}
 
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{

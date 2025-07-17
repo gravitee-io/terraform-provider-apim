@@ -59,6 +59,17 @@ actions:
   - target: $.security[?@.BasicAuth]
     description: Basic authentication is not used in Terraform
     remove: true
+  - target: $.security
+    description: Add cloud auth security scheme
+    update:
+      - CloudAuth: [ ]
+  - target: $.components.securitySchemes
+    description: Add cloud auth security scheme definition
+    update:
+      CloudAuth:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
 
   #
   # APIV4 data and managed resource

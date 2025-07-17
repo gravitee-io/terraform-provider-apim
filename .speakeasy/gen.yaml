@@ -22,7 +22,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 terraform:
-  version: 4.8.0-alpha.1
+  version: 4.8.0-alpha.2
   additionalDataSources: []
   additionalDependencies: {}
   additionalEphemeralResources: []
@@ -38,8 +38,10 @@ terraform:
   environmentVariables:
     - env: APIM_SERVER_URL
       providerAttribute: server_url
-    - env: APIM_TOKEN
+    - env: APIM_SA_TOKEN
       providerAttribute: bearer_auth
+    - env: APIM_CLOUD_TOKEN
+      providerAttribute: cloud_auth
     - env: APIM_ORG_ID
       providerAttribute: organization_id
     - env: APIM_ENV_ID

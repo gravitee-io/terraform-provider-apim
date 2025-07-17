@@ -20,7 +20,7 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "4.8.0-alpha.1"
+      version = "4.8.0-alpha.2"
     }
   }
 }
@@ -36,6 +36,7 @@ provider "apim" {
 ### Optional
 
 - `bearer_auth` (String, Sensitive)
+- `cloud_auth` (String, Sensitive)
 - `environment_id` (String) Id of an environment.
 - `organization_id` (String) Id of an organization.
 - `server_url` (String) Server URL (defaults to https://apim-master-api.team-apim.gravitee.dev/automation)
