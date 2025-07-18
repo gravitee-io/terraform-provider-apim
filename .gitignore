@@ -5,3 +5,4 @@
 **/.speakeasy/temp/
 **/.speakeasy/logs/
 .vscode
+.idea/
