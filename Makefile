@@ -6,10 +6,9 @@ APIM_SERVER_URL ?= http://localhost:30083/automation
 
 .PHONY: speakeasy
 speakeasy: ## Run speakeasy generation with curated examples and docs
-	@rm -rf examples/data-sources
 	speakeasy run --set-version $(VERSION) --skip-versioning --output console --minimal
 	@go mod tidy
-	@git clean -fd examples/data-sources docs/data-sources examples/README.md USAGE.md > /dev/null
+	@rm -rf examples/data-sources docs/data-sources examples/README.md USAGE.md > /dev/null
 
 .PHONY: acceptance-tests
 acceptance-tests: ## Run acceptance tests against a running environment
