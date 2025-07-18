@@ -1,1 +1,11 @@
+.terraform
+.terraform*
+*.tfstate*
+.DS_Store
+**/.speakeasy/temp/
+**/.speakeasy/logs/
 .vscode
+.idea/
+terraform-provider-apim
+docs/data-sources/
+examples/data-sources/
