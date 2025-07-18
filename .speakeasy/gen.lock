@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 8e04fc4efe39af238ff2ffaf39eead54
+  docChecksum: 41afd37fb7ab40a7f90ef6ef01ea0438
   docVersion: 0.2.0
   speakeasyVersion: 1.582.0
   generationVersion: 2.657.1
-  releaseVersion: 4.8.0-alpha.5
-  configChecksum: 447167f8991a770c0a847ee847cc1695
+  releaseVersion: 4.8.0-alpha
+  configChecksum: e1393bd2412670722cbe11326783a8d7
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -202,6 +202,7 @@ generatedFiles:
   - internal/sdk/models/shared/resource.go
   - internal/sdk/models/shared/responsetemplate.go
   - internal/sdk/models/shared/sampling.go
+  - internal/sdk/models/shared/schemebasicauth.go
   - internal/sdk/models/shared/security.go
   - internal/sdk/models/shared/selector.go
   - internal/sdk/models/shared/servicev4.go

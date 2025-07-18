@@ -3,8 +3,9 @@
 package shared
 
 type Security struct {
-	BearerAuth *string `security:"scheme,type=http,subtype=bearer,name=Authorization"`
-	CloudAuth  *string `security:"scheme,type=http,subtype=bearer,name=Authorization"`
+	BearerAuth *string          `security:"scheme,type=http,subtype=bearer,name=Authorization"`
+	BasicAuth  *SchemeBasicAuth `security:"scheme,type=http,subtype=basic"`
+	CloudAuth  *string          `security:"scheme,type=http,subtype=bearer,name=Authorization"`
 }
 
 func (o *Security) GetBearerAuth() *string {
@@ -12,6 +13,13 @@ func (o *Security) GetBearerAuth() *string {
 		return nil
 	}
 	return o.BearerAuth
+}
+
+func (o *Security) GetBasicAuth() *SchemeBasicAuth {
+	if o == nil {
+		return nil
+	}
+	return o.BasicAuth
 }
 
 func (o *Security) GetCloudAuth() *string {

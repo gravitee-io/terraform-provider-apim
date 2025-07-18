@@ -39,7 +39,9 @@ type ApimProviderModel struct {
 	CloudAuth      types.String `tfsdk:"cloud_auth"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	OrganizationID types.String `tfsdk:"organization_id"`
+	Password       types.String `tfsdk:"password"`
 	ServerURL      types.String `tfsdk:"server_url"`
+	Username       types.String `tfsdk:"username"`
 }
 
 func (p *ApimProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
@@ -66,9 +68,17 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				Description: `Id of an organization.`,
 				Optional:    true,
 			},
+			"password": schema.StringAttribute{
+				Optional:  true,
+				Sensitive: true,
+			},
 			"server_url": schema.StringAttribute{
 				Description: `Server URL (defaults to https://apim-master-api.team-apim.gravitee.dev/automation)`,
 				Optional:    true,
+			},
+			"username": schema.StringAttribute{
+				Optional:  true,
+				Sensitive: true,
 			},
 		},
 		MarkdownDescription: `Gravitee: APIM Terraform Provider (alpha)` + "\n" +
@@ -110,6 +120,28 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 
 	if bearerAuthEnvVar := os.Getenv("APIM_SA_TOKEN"); security.BearerAuth == nil && bearerAuthEnvVar != "" {
 		security.BearerAuth = &bearerAuthEnvVar
+	}
+
+	basicAuth := &shared.SchemeBasicAuth{}
+
+	if !data.Username.IsUnknown() {
+		basicAuth.Username = data.Username.ValueString()
+	}
+
+	if usernameEnvVar := os.Getenv("APIM_USERNAME"); basicAuth.Username == "" && usernameEnvVar != "" {
+		basicAuth.Username = usernameEnvVar
+	}
+
+	if !data.Password.IsUnknown() {
+		basicAuth.Password = data.Password.ValueString()
+	}
+
+	if passwordEnvVar := os.Getenv("APIM_PASSWORD"); basicAuth.Password == "" && passwordEnvVar != "" {
+		basicAuth.Password = passwordEnvVar
+	}
+
+	if basicAuth.Username != "" || basicAuth.Password != "" {
+		security.BasicAuth = basicAuth
 	}
 
 	if !data.CloudAuth.IsUnknown() {

@@ -56,9 +56,6 @@ actions:
       not found in oneOf (should have #/components/schemas/ prefix)
     update:
       CONDITION: '#/components/schemas/ConditionSelector'
-  - target: $.security[?@.BasicAuth]
-    description: Basic authentication is not used in Terraform
-    remove: true
   - target: $.security
     description: Add cloud auth security scheme
     update:

@@ -33,7 +33,7 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "4.8.0-alpha.5"
+      version = "4.8.0-alpha"
     }
   }
 }
@@ -61,39 +61,30 @@ provider "apim" {
 
 <!-- Testing Instruction -->
 
-### Automated Testing
+### Run acceptance tests
 
 Automated tests take Terraform configuration(s) and then perform create, read, import, update, and delete against those using real Terraform commands. Automated testing also supports writing assertions against the Terraform plan or state per test step.
 
 The testing code is conventionally written as a Go test file (`internal/provider/xxx_resource_test.go`) while configurations are in `internal/provider/testdata` directories named after the test. For example:
 
-* [Example provider testing code](internal/provider/apiv4_resource_test.go)
-* [Example provider testing configuration](internal/provider/testdata/TestAPIV4Resource_lifecycle/main.tf).
+* [Example provider testing code](v4/internal/provider/apiv4_resource_test.go)
+* [Example provider testing configuration](v4/internal/provider/testdata/TestAPIV4Resource_lifecycle/main.tf).
 
-To test the APIM Terraform Provider you need to set environment variables:
+To test the APIM Terraform Provider you need to set environment variables (examples):
 
 ```shell
-export APIM_TOKEN=xxxx 
+export APIM_SA_TOKEN=xxxx 
+# or
+export APIM_USERNAME=admin
+export APIM_PASSWORD=admin
+# to test elsewhere than master env
 export APIM_SERVER_URL=http://localhost:30083/automation
+# optionally
 export APIM_ORG_ID=DEFAULT
 export APIM_ENV_ID=DEFAULT
-export TF_ACC=1
 ```
 
-Content of `.terraformrc` must be 
-
-```hcl
-provider_installation {
-
-  dev_overrides {
-      "registry.terraform.io/hashicorp/gravitee" = "/path/to/terraform-provider-apim"
-  }
-  
-  direct {}
-}
-```
-
-You can use GKO make targets to start an APIM cluster
+You can use GKO make targets to start an APIM local cluster
 
 ```shell
 cd ../gravitee-kubernetes-operator
@@ -104,8 +95,17 @@ Run:
 
 ```shell
 cd ../terraform-provider-apim
-go test -count=1 -timeout=10m -v ./internal/provider
+make acceptance-tests
 ```
 
+### Debug 
+```sh
+go run main.go --debug
+# Copy the TF_REATTACH_PROVIDERS env var
+# In a new terminal
+cd examples/your-example
+TF_REATTACH_PROVIDERS=... terraform init
+TF_REATTACH_PROVIDERS=... terraform apply
+```
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->

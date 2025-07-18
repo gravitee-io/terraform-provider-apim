@@ -144,9 +144,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *GraviteeApim {
 	sdk := &GraviteeApim{
-		SDKVersion: "4.8.0-alpha.5",
+		SDKVersion: "4.8.0-alpha",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 4.8.0-alpha.5 2.657.1 0.2.0 github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 4.8.0-alpha 2.657.1 0.2.0 github.com/gravitee-io/terraform-provider-apim/v4/internal/sdk",
 			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},

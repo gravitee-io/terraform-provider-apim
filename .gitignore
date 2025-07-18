@@ -6,3 +6,6 @@
 **/.speakeasy/logs/
 .vscode
 .idea/
+terraform-provider-apim
+docs/data-sources/
+examples/data-sources/

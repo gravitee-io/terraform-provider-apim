@@ -26,6 +26,7 @@ info:
   version: 0.2.0
 security:
   - BearerAuth: []
+  - BasicAuth: []
   - CloudAuth: []
 servers:
   - url: "https://apim-master-api.team-apim.gravitee.dev/automation"
