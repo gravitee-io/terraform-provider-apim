@@ -1,0 +1,18 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Common schema Terraform overlay
+  version: 0.0.1
+actions:
+  - target: $.components.schemas.FlowStep.properties.condition
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowStep.properties.messageCondition
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowStep.properties.description
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true

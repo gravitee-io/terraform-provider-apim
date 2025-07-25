@@ -1,0 +1,48 @@
+speakeasyVersion: 1.589.0
+sources:
+    Gravitee.io - Automation API:
+        sourceNamespace: gravitee-io-gko---automation-api
+        sourceRevisionDigest: sha256:1931ee88b0b97e59974570d6c092d40b8cfe639d37757600281853513f3fb033
+        sourceBlobDigest: sha256:e5bdd28116e0660af601a098573e8a5044ef09f829e56844984aec28f40ca240
+        tags:
+            - latest
+            - 0.2.0
+    automation-api:
+        sourceNamespace: gravitee-io-gko---automation-api
+        sourceRevisionDigest: sha256:bab17b7ee971030244585104419bd2e025337a71191a04a90b9e9f391a846d90
+        sourceBlobDigest: sha256:4a4673299cbc2cf546fac978aea2022ab153782abd659ebfd69df628ebf8f8a0
+        tags:
+            - latest
+            - 0.2.0
+targets:
+    apim:
+        source: automation-api
+        sourceNamespace: gravitee-io-gko---automation-api
+        sourceRevisionDigest: sha256:bab17b7ee971030244585104419bd2e025337a71191a04a90b9e9f391a846d90
+        sourceBlobDigest: sha256:4a4673299cbc2cf546fac978aea2022ab153782abd659ebfd69df628ebf8f8a0
+    gravitee-apim:
+        source: Gravitee.io - Automation API
+        sourceNamespace: gravitee-io-gko---automation-api
+        sourceRevisionDigest: sha256:1931ee88b0b97e59974570d6c092d40b8cfe639d37757600281853513f3fb033
+        sourceBlobDigest: sha256:e5bdd28116e0660af601a098573e8a5044ef09f829e56844984aec28f40ca240
+workflow:
+    workflowVersion: 1.0.0
+    speakeasyVersion: latest
+    sources:
+        automation-api:
+            inputs:
+                - location: schemas/automation-api-oas.yaml
+            overlays:
+                - location: schemas/overlays/apiv4.yaml
+                - location: schemas/overlays/common-param.yaml
+                - location: schemas/overlays/common-schema.yaml
+                - location: schemas/overlays/oas-core.yaml
+                - location: schemas/overlays/shared-policy-group.yaml
+                - location: .speakeasy/speakeasy-modifications-overlay.yaml
+            output: schemas/output/computed.yaml
+            registry:
+                location: registry.speakeasyapi.dev/gravitee/gravitee/gravitee-io-gko---automation-api
+    targets:
+        apim:
+            target: terraform
+            source: automation-api

@@ -1,0 +1,389 @@
+lockVersion: 2.0.0
+id: b5451c3d-2473-444c-bd62-9bf8987cd90b
+management:
+  docChecksum: 82b4976a3a012bdfc83c16cf1015990b
+  docVersion: 0.2.0
+  speakeasyVersion: 1.589.0
+  generationVersion: 2.664.0
+  releaseVersion: 0.2.11
+  configChecksum: 532eec776d85b2c0859965162d31cac8
+features:
+  terraform:
+    additionalDependencies: 0.1.0
+    constsAndDefaults: 0.2.1
+    core: 3.43.0
+    deprecations: 2.82.0
+    globalSecurity: 2.81.12
+    globalServerURLs: 2.82.2
+    globals: 3.0.0
+    groups: 2.81.2
+    ignores: 2.81.1
+    inputOutputModels: 2.83.0
+    nameOverrides: 2.81.3
+    retries: 2.81.3
+    typeOverrides: 2.81.1
+    unions: 2.81.17
+generatedFiles:
+  - .gitattributes
+  - USAGE.md
+  - examples/README.md
+  - examples/data-sources/apim_apiv4/data-source.tf
+  - examples/data-sources/apim_shared_policy_group/data-source.tf
+  - examples/provider/provider.tf
+  - examples/resources/apim_apiv4/import.sh
+  - examples/resources/apim_apiv4/resource.tf
+  - examples/resources/apim_shared_policy_group/import.sh
+  - examples/resources/apim_shared_policy_group/resource.tf
+  - go.mod
+  - go.sum
+  - internal/planmodifiers/boolplanmodifier/suppress_diff.go
+  - internal/planmodifiers/float32planmodifier/suppress_diff.go
+  - internal/planmodifiers/float64planmodifier/suppress_diff.go
+  - internal/planmodifiers/int32planmodifier/suppress_diff.go
+  - internal/planmodifiers/int64planmodifier/suppress_diff.go
+  - internal/planmodifiers/listplanmodifier/suppress_diff.go
+  - internal/planmodifiers/mapplanmodifier/suppress_diff.go
+  - internal/planmodifiers/numberplanmodifier/suppress_diff.go
+  - internal/planmodifiers/objectplanmodifier/suppress_diff.go
+  - internal/planmodifiers/setplanmodifier/suppress_diff.go
+  - internal/planmodifiers/stringplanmodifier/suppress_diff.go
+  - internal/planmodifiers/utils/state_check.go
+  - internal/provider/apiv4_data_source.go
+  - internal/provider/apiv4_data_source_sdk.go
+  - internal/provider/apiv4_resource.go
+  - internal/provider/apiv4_resource_sdk.go
+  - internal/provider/provider.go
+  - internal/provider/reflect/diags.go
+  - internal/provider/reflect/doc.go
+  - internal/provider/reflect/generic_attr_value.go
+  - internal/provider/reflect/helpers.go
+  - internal/provider/reflect/interfaces.go
+  - internal/provider/reflect/into.go
+  - internal/provider/reflect/map.go
+  - internal/provider/reflect/number.go
+  - internal/provider/reflect/options.go
+  - internal/provider/reflect/outof.go
+  - internal/provider/reflect/pointer.go
+  - internal/provider/reflect/primitive.go
+  - internal/provider/reflect/slice.go
+  - internal/provider/reflect/struct.go
+  - internal/provider/sharedpolicygroup_data_source.go
+  - internal/provider/sharedpolicygroup_data_source_sdk.go
+  - internal/provider/sharedpolicygroup_resource.go
+  - internal/provider/sharedpolicygroup_resource_sdk.go
+  - internal/provider/typeconvert/date.go
+  - internal/provider/typeconvert/datetime.go
+  - internal/provider/typeconvert/int.go
+  - internal/provider/types/analytics.go
+  - internal/provider/types/api_services.go
+  - internal/provider/types/channel_selector.go
+  - internal/provider/types/condition_selector.go
+  - internal/provider/types/cors.go
+  - internal/provider/types/definition_context.go
+  - internal/provider/types/dlq.go
+  - internal/provider/types/endpoint_group_services.go
+  - internal/provider/types/endpoint_group_v4.go
+  - internal/provider/types/endpoint_services.go
+  - internal/provider/types/endpoint_v4.go
+  - internal/provider/types/entrypoint.go
+  - internal/provider/types/failover_v4.go
+  - internal/provider/types/flow_execution.go
+  - internal/provider/types/flow_step.go
+  - internal/provider/types/flow_v4.go
+  - internal/provider/types/http_listener.go
+  - internal/provider/types/http_selector.go
+  - internal/provider/types/kafka_listener.go
+  - internal/provider/types/listener.go
+  - internal/provider/types/load_balancer.go
+  - internal/provider/types/logging_content_v4.go
+  - internal/provider/types/logging_mode_v4.go
+  - internal/provider/types/logging_phase.go
+  - internal/provider/types/logging_v4.go
+  - internal/provider/types/member.go
+  - internal/provider/types/metadata.go
+  - internal/provider/types/path_v4.go
+  - internal/provider/types/plan.go
+  - internal/provider/types/plan_security.go
+  - internal/provider/types/primary_owner.go
+  - internal/provider/types/property.go
+  - internal/provider/types/property1.go
+  - internal/provider/types/resource.go
+  - internal/provider/types/response_template.go
+  - internal/provider/types/sampling.go
+  - internal/provider/types/selector.go
+  - internal/provider/types/service_v4.go
+  - internal/provider/types/step_v4.go
+  - internal/provider/types/subscription_listener.go
+  - internal/provider/types/tcp_listener.go
+  - internal/provider/types/tracing_v4.go
+  - internal/provider/utils.go
+  - internal/sdk/.gitattributes
+  - internal/sdk/apis.go
+  - internal/sdk/docs/models/operations/option.md
+  - internal/sdk/graviteeapim.go
+  - internal/sdk/internal/config/sdkconfiguration.go
+  - internal/sdk/internal/globals/globals.go
+  - internal/sdk/internal/hooks/hooks.go
+  - internal/sdk/internal/utils/contenttype.go
+  - internal/sdk/internal/utils/env.go
+  - internal/sdk/internal/utils/form.go
+  - internal/sdk/internal/utils/headers.go
+  - internal/sdk/internal/utils/json.go
+  - internal/sdk/internal/utils/pathparams.go
+  - internal/sdk/internal/utils/queryparams.go
+  - internal/sdk/internal/utils/requestbody.go
+  - internal/sdk/internal/utils/retries.go
+  - internal/sdk/internal/utils/security.go
+  - internal/sdk/internal/utils/utils.go
+  - internal/sdk/models/errors/apierror.go
+  - internal/sdk/models/operations/createorupdateapis.go
+  - internal/sdk/models/operations/createorupdatepolicygroup.go
+  - internal/sdk/models/operations/deleteapi.go
+  - internal/sdk/models/operations/deletepolicygroup.go
+  - internal/sdk/models/operations/getapi.go
+  - internal/sdk/models/operations/getpolicygroup.go
+  - internal/sdk/models/operations/options.go
+  - internal/sdk/models/shared/analytics.go
+  - internal/sdk/models/shared/apilifecyclestate.go
+  - internal/sdk/models/shared/apiservices.go
+  - internal/sdk/models/shared/apitype.go
+  - internal/sdk/models/shared/apiv4spec.go
+  - internal/sdk/models/shared/apiv4state.go
+  - internal/sdk/models/shared/channelselector.go
+  - internal/sdk/models/shared/conditionselector.go
+  - internal/sdk/models/shared/cors.go
+  - internal/sdk/models/shared/definitioncontext.go
+  - internal/sdk/models/shared/dlq.go
+  - internal/sdk/models/shared/endpointgroupservices.go
+  - internal/sdk/models/shared/endpointgroupv4.go
+  - internal/sdk/models/shared/endpointservices.go
+  - internal/sdk/models/shared/endpointv4.go
+  - internal/sdk/models/shared/entrypoint.go
+  - internal/sdk/models/shared/error.go
+  - internal/sdk/models/shared/errors.go
+  - internal/sdk/models/shared/failoverv4.go
+  - internal/sdk/models/shared/flowexecution.go
+  - internal/sdk/models/shared/flowmode.go
+  - internal/sdk/models/shared/flowphase.go
+  - internal/sdk/models/shared/flowstep.go
+  - internal/sdk/models/shared/flowv4.go
+  - internal/sdk/models/shared/flowv4input.go
+  - internal/sdk/models/shared/httplistener.go
+  - internal/sdk/models/shared/httpmethod.go
+  - internal/sdk/models/shared/httpselector.go
+  - internal/sdk/models/shared/kafkalistener.go
+  - internal/sdk/models/shared/lifecyclestate.go
+  - internal/sdk/models/shared/listener.go
+  - internal/sdk/models/shared/listenertype.go
+  - internal/sdk/models/shared/loadbalancer.go
+  - internal/sdk/models/shared/loggingcontentv4.go
+  - internal/sdk/models/shared/loggingmodev4.go
+  - internal/sdk/models/shared/loggingphase.go
+  - internal/sdk/models/shared/loggingv4.go
+  - internal/sdk/models/shared/member.go
+  - internal/sdk/models/shared/membershipmembertype.go
+  - internal/sdk/models/shared/metadata.go
+  - internal/sdk/models/shared/metadataformat.go
+  - internal/sdk/models/shared/operator.go
+  - internal/sdk/models/shared/pathv4.go
+  - internal/sdk/models/shared/plan.go
+  - internal/sdk/models/shared/planinput.go
+  - internal/sdk/models/shared/planmode.go
+  - internal/sdk/models/shared/plansecurity.go
+  - internal/sdk/models/shared/plansecuritytype.go
+  - internal/sdk/models/shared/planstatus.go
+  - internal/sdk/models/shared/plantype.go
+  - internal/sdk/models/shared/planvalidation.go
+  - internal/sdk/models/shared/primaryowner.go
+  - internal/sdk/models/shared/property.go
+  - internal/sdk/models/shared/propertyoutput.go
+  - internal/sdk/models/shared/qos.go
+  - internal/sdk/models/shared/resource.go
+  - internal/sdk/models/shared/responsetemplate.go
+  - internal/sdk/models/shared/sampling.go
+  - internal/sdk/models/shared/schemebasicauth.go
+  - internal/sdk/models/shared/security.go
+  - internal/sdk/models/shared/selector.go
+  - internal/sdk/models/shared/servicev4.go
+  - internal/sdk/models/shared/sharedpolicygroupspec.go
+  - internal/sdk/models/shared/sharedpolicygroupstate.go
+  - internal/sdk/models/shared/stepv4.go
+  - internal/sdk/models/shared/subscriptionlistener.go
+  - internal/sdk/models/shared/tcplistener.go
+  - internal/sdk/models/shared/tracingv4.go
+  - internal/sdk/models/shared/visibility.go
+  - internal/sdk/retry/config.go
+  - internal/sdk/sharedpolicygroups.go
+  - internal/sdk/types/bigint.go
+  - internal/sdk/types/date.go
+  - internal/sdk/types/datetime.go
+  - internal/sdk/types/decimal.go
+  - internal/sdk/types/pointers.go
+  - internal/validators/DateValidator.go
+  - internal/validators/ExactlyOneChild.go
+  - internal/validators/JSONParseValidator.go
+  - internal/validators/RFC3339Validator.go
+  - internal/validators/boolvalidators/not_null.go
+  - internal/validators/float32validators/not_null.go
+  - internal/validators/float64validators/not_null.go
+  - internal/validators/int32validators/not_null.go
+  - internal/validators/int64validators/not_null.go
+  - internal/validators/listvalidators/not_null.go
+  - internal/validators/mapvalidators/not_null.go
+  - internal/validators/numbervalidators/not_null.go
+  - internal/validators/objectvalidators/not_null.go
+  - internal/validators/setvalidators/not_null.go
+  - internal/validators/stringvalidators/not_null.go
+  - main.go
+  - terraform-registry-manifest.json
+  - tools/tools.go
+examples:
+  createOrUpdateApis:
+    speakeasy-default-create-or-update-apis:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+        query:
+          dryRun: false
+      requestBody:
+        application/json: {"hrid": "my_demo_api", "definitionContext": {"origin": "KUBERNETES", "mode": "FULLY_MANAGED", "syncFrom": "MANAGEMENT"}, "name": "My Api", "version": "1.0.0", "type": "MESSAGE", "description": "I can use many characters to describe this API.", "tags": ["public"], "listeners": [], "endpointGroups": [{"name": "default-endpoint-group", "type": "default", "loadBalancer": {"type": "ROUND_ROBIN"}, "endpoints": [{"name": "default-endpoint", "type": "mock", "weight": 1, "inheritConfiguration": false, "secondary": false}]}], "plans": {}, "flowExecution": {"mode": "BEST_MATCH", "matchRequired": false}, "flows": [], "groups": [], "visibility": "PUBLIC", "state": "STARTED", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "displayName": "John Doe"}, "labels": [], "metadata": [{"format": "DATE"}], "lifecycleState": "CREATED", "categories": ["health"], "notifyMembers": true}
+      responses:
+        "200":
+          application/json: {"hrid": "my_demo_api", "definitionContext": {"origin": "KUBERNETES", "mode": "FULLY_MANAGED", "syncFrom": "MANAGEMENT"}, "name": "My Api", "version": "1.0.0", "type": "MESSAGE", "description": "I can use many characters to describe this API.", "tags": ["public"], "listeners": [], "endpointGroups": [{"name": "default-endpoint-group", "type": "default", "loadBalancer": {"type": "ROUND_ROBIN"}, "endpoints": [{"name": "default-endpoint", "type": "mock", "weight": 1, "inheritConfiguration": false, "secondary": false}]}], "plans": {}, "flowExecution": {"mode": "BEST_MATCH", "matchRequired": false}, "flows": [], "groups": [], "visibility": "PUBLIC", "state": "STARTED", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "displayName": "John Doe"}, "labels": [], "metadata": [{"format": "DATE"}], "lifecycleState": "CREATED", "categories": ["health"]}
+        "400":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+  getApi:
+    speakeasy-default-get-api:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          hrid: "<id>"
+      responses:
+        "200":
+          application/json: {"hrid": "my_demo_api", "definitionContext": {"origin": "KUBERNETES", "mode": "FULLY_MANAGED", "syncFrom": "MANAGEMENT"}, "name": "My Api", "version": "1.0.0", "type": "MESSAGE", "description": "I can use many characters to describe this API.", "tags": ["public"], "listeners": [{"type": "KAFKA", "host": "unique-king.org"}], "endpointGroups": [{"name": "default-endpoint-group", "type": "default", "loadBalancer": {"type": "ROUND_ROBIN"}, "endpoints": [{"name": "default-endpoint", "type": "mock", "weight": 1, "inheritConfiguration": false, "secondary": false}]}], "plans": {}, "flowExecution": {"mode": "BEST_MATCH", "matchRequired": false}, "flows": [], "groups": [], "visibility": "PUBLIC", "state": "STARTED", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "displayName": "John Doe"}, "labels": [], "metadata": [{"format": "DATE"}], "lifecycleState": "CREATED", "categories": ["health"]}
+  deleteApi:
+    speakeasy-default-delete-api:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          hrid: "<id>"
+      responses:
+        "401":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+  createOrUpdateApplications:
+    speakeasy-default-create-or-update-applications:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+        query:
+          dryRun: false
+      requestBody:
+        application/json: {"hrid": "my_demo_api", "name": "My Application", "description": "My Demo Application", "groups": [], "notifyMembers": false, "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "displayName": "John Doe"}, "metadata": [{"format": "DATE", "hidden": false}]}
+      responses:
+        "400":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+  getApplication:
+    speakeasy-default-get-application:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          hrid: "<id>"
+      responses:
+        "200":
+          application/json: {"hrid": "my_demo_api", "name": "My Application", "description": "My Demo Application", "groups": [], "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "displayName": "John Doe"}, "metadata": [{"format": "DATE", "hidden": false}]}
+        "401":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+  deleteApplication:
+    speakeasy-default-delete-application:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          hrid: "<id>"
+      responses:
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+  createOrUpdateSubscriptions:
+    speakeasy-default-create-or-update-subscriptions:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+      requestBody:
+        application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "apiHrid": "demo-api", "planHrid": "demo-plan", "startingAt": "2040-12-25T09:12:28Z", "endingAt": "2040-12-25T09:12:28Z"}
+      responses:
+        "200":
+          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "apiHrid": "demo-api", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z"}
+        "400":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+  getSubscription:
+    speakeasy-default-get-subscription:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          hrid: "<id>"
+      responses:
+        "200":
+          application/json: {"hrid": "my_demo_api", "name": "My Application", "description": "My Demo Application", "groups": [], "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "displayName": "John Doe"}, "metadata": [{"format": "DATE", "hidden": false}]}
+  deleteSubscription:
+    speakeasy-default-delete-subscription:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          hrid: "<id>"
+      responses:
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+  getPolicyGroup:
+    speakeasy-default-get-policy-group:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          hrid: "<id>"
+      responses:
+        "200":
+          application/json: {"hrid": "my_demo_api", "apiType": "MESSAGE", "description": "this is a shared policy group", "prerequisiteMessage": "the resource cache \"my-cache\" is required", "name": "My Shared Policy Group", "phase": "REQUEST"}
+  deletePolicyGroup:
+    speakeasy-default-delete-policy-group:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          hrid: "<id>"
+        query:
+          dryRun: false
+      responses:
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+  createOrUpdatePolicyGroup:
+    speakeasy-default-create-or-update-policy-group:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+        query:
+          dryRun: false
+      requestBody:
+        application/json: {"hrid": "my_demo_api", "apiType": "MESSAGE", "description": "this is a shared policy group", "prerequisiteMessage": "the resource cache \"my-cache\" is required", "name": "My Shared Policy Group", "phase": "RESPONSE"}
+      responses:
+        "200":
+          application/json: {"hrid": "my_demo_api", "apiType": "MESSAGE", "description": "this is a shared policy group", "prerequisiteMessage": "the resource cache \"my-cache\" is required", "name": "My Shared Policy Group", "phase": "INTERACT"}
+        "400":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+examplesVersion: 1.0.2

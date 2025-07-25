@@ -1,0 +1,51 @@
+configVersion: 2.0.0
+generation:
+  sdkClassName: GraviteeApim
+  maintainOpenAPIOrder: true
+  usageSnippets:
+    optionalPropertyRendering: withExample
+    sdkInitStyle: constructor
+  useClassNamesForArrayFields: true
+  fixes:
+    nameResolutionDec2023: true
+    nameResolutionFeb2025: true
+    parameterOrderingFeb2024: true
+    requestResponseComponentNamesFeb2024: true
+    securityFeb2025: true
+    sharedErrorComponentsApr2025: true
+  auth:
+    oAuth2ClientCredentialsEnabled: true
+    oAuth2PasswordEnabled: true
+  sdkHooksConfigAccess: true
+  tests:
+    generateTests: false
+    generateNewTests: true
+    skipResponseBodyAssertions: false
+terraform:
+  version: 0.2.11
+  additionalDataSources: []
+  additionalDependencies: {}
+  additionalEphemeralResources: []
+  additionalProviderAttributes:
+    httpHeaders: ""
+    tlsSkipVerify: ""
+  additionalResources: []
+  allowUnknownFieldsInWeakUnions: false
+  author: gravitee-io
+  baseErrorName: ApimError
+  defaultErrorName: APIError
+  enableTypeDeduplication: false
+  environmentVariables:
+    - env: APIM_SERVER_URL
+      providerAttribute: server_url
+    - env: APIM_SA_TOKEN
+      providerAttribute: bearer_auth
+    - env: APIM_USERNAME
+      providerAttribute: username
+    - env: APIM_PASSWORD
+      providerAttribute: password
+    - env: APIM_ORG_ID
+      providerAttribute: organization_id
+    - env: APIM_ENV_ID
+      providerAttribute: environment_id
+  packageName: apim

@@ -1,0 +1,228 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: V4API Terraform overlay
+  version: 0.0.1
+actions:
+
+
+  # Entity management
+
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis"].put
+    update:
+      x-speakeasy-entity-operation: APIV4#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: APIV4#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: APIV4#delete
+  - target: $.components.schemas.ApiV4Spec
+    update:
+      x-speakeasy-entity: APIV4
+
+
+  # Customizations
+
+  ## Avoid diff for optional properties
+
+  ### API Spec
+  - target: $.components.schemas.ApiV4Spec.properties.categories
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.description
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.endpointGroups
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.flows
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.listeners
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.properties
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.resources
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.members
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.tags
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ### API State
+  - target: $.components.schemas.ApiV4State.allOf[?@.properties.id]
+    description: Not returned by the API, so prevent null values during refresh
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4State.allOf[?@.properties.crossId]
+    description: Not returned by the API, so prevent null values during refresh
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+
+  ### Schemas
+  - target: $.components.schemas.Analytics
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiServices
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.BaseOriginContext
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.DefinitionContext
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FailoverV4
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowExecution
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.Plan
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PagesMap
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.Metadata
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PortalNotificationConfig
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PrimaryOwner
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ResponseTemplate
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ## Defaults
+  - target: $.components.schemas.ApiLifecycleState.default
+    description: |
+      Prevent perpetual differences in plans, such as:
+      ~ lifecycle_state    = "UNPUBLISHED" -> "CREATED"
+    remove: true
+  - target: $.components.schemas.ResponseTemplate.properties.propagateErrorKeyToLogs
+    description: Default boolean to false
+    update:
+      default: false
+
+  ## Required fields
+  - target: $.components.schemas.ResponseTemplate.required
+    description: Add required fields
+    update:
+      - status
+
+  ## Field removal
+  - target: $.components.schemas.ApiV4State.allOf[?@.properties.environmentId].properties.environmentId
+    description: Not returned by the API, so prevent null values during refresh
+    remove: true
+  - target: $.components.schemas.ApiV4State.allOf[?@.properties.organizationId].properties.organizationId
+    description: Not returned by the API, so prevent null values during refresh
+    remove: true
+
+  ## Schemaless config
+  - target: $.components.schemas.BaseStep.properties.configuration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
+  - target: $.components.schemas.EndpointGroupV4.properties.sharedConfiguration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
+  - target: $.components.schemas.EndpointV4.properties.configuration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
+  - target: $.components.schemas.EndpointV4.properties.sharedConfigurationOverride
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
+  - target: $.components.schemas.Entrypoint.properties.configuration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
+  - target: $.components.schemas.PageSource.properties.configuration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
+  - target: $.components.schemas.PlanSecurity.properties.configuration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
+  - target: $.components.schemas.Resource.properties.configuration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
+  - target: $.components.schemas.Rule.properties.configuration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
+  - target: $.components.schemas.ServiceV4.properties.configuration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
+
+  ## Type change
+  - target: $.components.schemas.FlowStep.properties.configuration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      type: string
+
+  ## SDK Ignored
+  - target: $.components.schemas.PagesMap
+    description: Remove recursive schema to prevent generation error
+    update:
+      x-speakeasy-ignore: true
+  - target: $.components.schemas.PortalNotificationConfig
+    description: Remove unsupported feature as not returned by the API
+    update:
+      x-speakeasy-ignore: true
+
+  ## Terraform Ignored
+  - target: $.components.schemas.Errors
+    description: Intentionally ignored for Terraform state
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.Plan.properties.order
+    description: |
+      May not be immediately populated, which can cause import testing errors:
+
+      apiv4_resource_test.go:23: Step 2/2 error running import: ImportStateVerify attributes not equivalent. Difference is shown below. The - symbol indicates attributes missing after import.
+
+        map[string]string{
+      +       "plans.Keyless.order": "0",
+        }
+
+      This property is unnecessary for Terraform anyways, so it is ignored.
+    update:
+      x-speakeasy-terraform-ignore: true

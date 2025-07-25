@@ -1,0 +1,39 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Shared Policy Group Terraform overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.components.schemas.SharedPolicyGroupSpec
+    update:
+      x-speakeasy-entity:
+        SharedPolicyGroup
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/shared-policy-groups"].put
+    update:
+      x-speakeasy-entity-operation: SharedPolicyGroup#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/shared-policy-groups/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: SharedPolicyGroup#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/shared-policy-groups/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: SharedPolicyGroup#delete
+
+
+  # Customizations
+
+  ## Avoid diff for optional properties
+
+  - target: $.components.schemas.SharedPolicyGroupState.allOf[?@.properties.id]
+    description: Not required for Terraform
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.SharedPolicyGroupState.allOf[?@.properties.crossId]
+    description: Not required for Terraform
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.SharedPolicyGroupSpec.properties.prerequisiteMessage
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true

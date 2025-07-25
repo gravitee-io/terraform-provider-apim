@@ -1,0 +1,28 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Common param Terraform overlay
+  version: 0.0.1
+actions:
+  - target: $.components.parameters.dryRunQueryParam
+    description: Not necessary in Terraform context
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.parameters.envIdParam
+    description: Align parameter naming with property naming so envId is not a separate attribute
+    update:
+      x-speakeasy-name-override: environmentId
+  - target: $.components.parameters.orgIdParam
+    description: Align parameter naming with property naming so orgId is not a separate attribute
+    update:
+      x-speakeasy-name-override: organizationId
+  - target: $.components.schemas.Selector.discriminator.mapping
+    description: |
+      Prevent validation error: discriminator mapping ref ConditionSelector
+      not found in oneOf (should have #/components/schemas/ prefix)
+    update:
+      CONDITION: '#/components/schemas/ConditionSelector'
+  - target: $.components.parameters.hridParam
+    description: Make sure that any changes to hrid creates a new resource and delete the old one
+    update:
+      x-speakeasy-param-force-new: true
