@@ -14,7 +14,7 @@
 openapi: 3.1.0
 info:
   title: Gravitee
-  description: "APIM Terraform Provider (alpha)\n\nManage APIs and Shared Policy Groups with Terraform\n\nCompatible with APIM 4.8 and above\n"
+  description: "APIM Terraform Provider (alpha)\n\nManage APIs and Shared Policy Groups with Terraform\n\nCompatible with APIM 4.8 and above\n\n[Checkout Gravitee docs for configuration options](https://documentation.gravitee.io/apim/terraform/configure-the-gravitee-provider)\n"
   contact:
     email: team-gko@graviteesource.com
   license:

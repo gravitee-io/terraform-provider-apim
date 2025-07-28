@@ -40,6 +40,8 @@ actions:
         Manage APIs and Shared Policy Groups with Terraform
         
         Compatible with APIM 4.8 and above
+        
+        [Checkout Gravitee docs for configuration options](https://documentation.gravitee.io/apim/terraform/configure-the-gravitee-provider)
 #  - target: $.security
 #    description: Add cloud auth security scheme
 #    update:

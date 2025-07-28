@@ -52,7 +52,9 @@ func Pointer[T any](v T) *T { return &v }
 //
 // # Manage APIs and Shared Policy Groups with Terraform
 //
-// Compatible with APIM 4.8 and above
+// # Compatible with APIM 4.8 and above
+//
+// [Checkout Gravitee docs for configuration options](https://documentation.gravitee.io/apim/terraform/configure-the-gravitee-provider)
 type GraviteeApim struct {
 	SDKVersion         string
 	Apis               *Apis
@@ -146,9 +148,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *GraviteeApim {
 	sdk := &GraviteeApim{
-		SDKVersion: "0.2.12",
+		SDKVersion: "0.2.13",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.2.12 2.666.0 0.2.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.2.13 2.666.0 0.2.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
 			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},

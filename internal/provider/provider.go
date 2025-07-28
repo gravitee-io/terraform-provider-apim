@@ -80,7 +80,9 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			`` + "\n" +
 			`Manage APIs and Shared Policy Groups with Terraform` + "\n" +
 			`` + "\n" +
-			`Compatible with APIM 4.8 and above`,
+			`Compatible with APIM 4.8 and above` + "\n" +
+			`` + "\n" +
+			`[Checkout Gravitee docs for configuration options](https://documentation.gravitee.io/apim/terraform/configure-the-gravitee-provider)`,
 	}
 }
 
