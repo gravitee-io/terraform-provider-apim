@@ -441,7 +441,7 @@ resource "apim_apiv4" "my_apiv4" {
 
 - `definition_context` (Attributes, Deprecated) the context where the api definition was created. (see [below for nested schema](#nestedatt--definition_context))
 - `endpoint_groups` (Attributes List) (see [below for nested schema](#nestedatt--endpoint_groups))
-- `hrid` (String) A unique human readable id identifying this object
+- `hrid` (String) A unique human readable id identifying this object. Requires replacement if changed.
 - `lifecycle_state` (String) The status of the API regarding the console. must be one of ["ARCHIVED", "CREATED", "DEPRECATED", "PUBLISHED", "UNPUBLISHED"]
 - `listeners` (Attributes List) The list of listeners associated with this API. (see [below for nested schema](#nestedatt--listeners))
 - `name` (String) API's name. Duplicate names can exists.
