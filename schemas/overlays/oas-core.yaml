@@ -38,6 +38,8 @@ actions:
         APIM Terraform Provider (alpha)
         
         Manage APIs and Shared Policy Groups with Terraform
+        
+        Compatible with APIM 4.8 and above
 #  - target: $.security
 #    description: Add cloud auth security scheme
 #    update:
