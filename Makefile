@@ -4,7 +4,7 @@ APIM_SERVER_URL ?= http://localhost:30083/automation
 
 .PHONY: speakeasy
 speakeasy: ## Run speakeasy generation with curated examples and docs
-	speakeasy run --output console --minimal
+	speakeasy run --output console --minimal --skip-versioning
 	@go mod tidy
 	@rm -rf examples/data-sources docs/data-sources examples/README.md USAGE.md > /dev/null
 	go build
