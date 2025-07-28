@@ -42,7 +42,7 @@ resource "apim_shared_policy_group" "my_sharedpolicygroup" {
 ### Required
 
 - `api_type` (String) API's type. must be one of ["MESSAGE", "PROXY", "NATIVE"]
-- `hrid` (String) A unique human readable id identifying this object
+- `hrid` (String) A unique human readable id identifying this object. Requires replacement if changed.
 - `name` (String) The name of the shared policy group
 - `phase` (String) The execution phase of a policy. must be one of ["REQUEST", "RESPONSE", "INTERACT", "CONNECT", "PUBLISH", "SUBSCRIBE"]
 
