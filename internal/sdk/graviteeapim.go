@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 0.2.0 and generator version 2.666.0
+// Generated from OpenAPI doc version 0.2.0 and generator version 2.667.0
 
 import (
 	"context"
@@ -150,7 +150,7 @@ func New(opts ...SDKOption) *GraviteeApim {
 	sdk := &GraviteeApim{
 		SDKVersion: "0.2.13",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.2.13 2.666.0 0.2.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.2.13 2.667.0 0.2.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
 			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},
