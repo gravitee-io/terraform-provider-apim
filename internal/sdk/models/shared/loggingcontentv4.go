@@ -2,6 +2,7 @@
 
 package shared
 
+// LoggingContentV4 - API logging content
 type LoggingContentV4 struct {
 	Headers         *bool `json:"headers,omitempty"`
 	MessageHeaders  *bool `json:"messageHeaders,omitempty"`

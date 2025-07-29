@@ -1,11 +1,11 @@
-resource "apim_apiv4" "simple-api" {
+resource "apim_apiv4" "proxy" {
   # should match the resource name
-  hrid            = "simple-api2"
+  hrid            = "proxy"
   name            = "[Terraform] Simple PROXY API"
   description     = <<-EOT
-    A simple API that routes traffic to gravitee echo API with an extra header.
-    It is published to the API portal as public API and
-    deployed to the Gateway
+A simple API that routes traffic to gravitee echo API with an extra header.
+It is published to the API portal as public API and
+deployed to the Gateway
   EOT
   version         = "1.0"
   type            = "PROXY"
@@ -23,7 +23,7 @@ resource "apim_apiv4" "simple-api" {
         ]
         paths = [
           {
-            path = "/simple-api/"
+            path = "/proxy/"
           }
         ]
       }
@@ -38,9 +38,9 @@ resource "apim_apiv4" "simple-api" {
       }
       endpoints = [
         {
-          name   = "Default HTTP proxy"
-          type   = "http-proxy"
-          weight = 1
+          name                  = "Default HTTP proxy"
+          type                  = "http-proxy"
+          weight                = 1
           inherit_configuration = false
           # Configuration is JSON as is depends on the type schema
           configuration = jsonencode({
@@ -63,15 +63,15 @@ resource "apim_apiv4" "simple-api" {
             type         = "HTTP"
             path         = "/"
             pathOperator = "STARTS_WITH"
-            methods = []
+            methods      = []
           }
         }
       ]
       request = [
         {
           enabled = true
-          name      = "Add 1 header"
-          policy = "transform-headers"
+          name    = "Add 1 header"
+          policy  = "transform-headers"
           # Configuration is JSON as the schema depends on the policy used
           configuration = jsonencode({
             scope = "REQUEST"
@@ -89,12 +89,10 @@ resource "apim_apiv4" "simple-api" {
   analytics = {
     enabled = false
   }
-  # known limitation: will dispear in next version
-  definition_context = {}
-  plans = {
-    # known limitation, key have to match name to avoid terraform plan to remain inconsistent
-    KeyLess = {
-      name        = "KeyLess"
+  plans = [
+    {
+      hrid        = "KeyLess"
+      name        = "No security"
       type        = "API"
       mode        = "STANDARD"
       validation  = "AUTO"
@@ -104,5 +102,5 @@ resource "apim_apiv4" "simple-api" {
         type = "KEY_LESS"
       }
     }
-  }
+  ]
 }

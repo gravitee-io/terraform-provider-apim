@@ -2,9 +2,9 @@
 
 package shared
 
-// SharedPolicyGroupState - Shared Policy Group Spec
+// SharedPolicyGroupState - State of Shared Policy Groups that has been created/updated
 type SharedPolicyGroupState struct {
-	// A unique human readable id identifying this object
+	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
 	// API's type.
 	APIType APIType `json:"apiType"`
@@ -18,7 +18,7 @@ type SharedPolicyGroupState struct {
 	Phase FlowPhase `json:"phase"`
 	// SharedPolicyGroup Steps
 	Steps []FlowStep `json:"steps,omitempty"`
-	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during admission
+	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
 	Errors *Errors `json:"errors,omitempty"`
 	// The id of the shared policy group.
 	ID *string `json:"id,omitempty"`

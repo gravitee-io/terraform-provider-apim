@@ -56,11 +56,11 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				Sensitive: true,
 			},
 			"environment_id": schema.StringAttribute{
-				Description: `Id of an environment.`,
+				Description: `environment ID`,
 				Optional:    true,
 			},
 			"organization_id": schema.StringAttribute{
-				Description: `Id of an organization.`,
+				Description: `organization ID`,
 				Optional:    true,
 			},
 			"password": schema.StringAttribute{
@@ -93,13 +93,14 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		return
 	}
 
-	ServerURL := data.ServerURL.ValueString()
+	serverUrl := data.ServerURL.ValueString()
 
-	if ServerURL == "" && len(os.Getenv("APIM_SERVER_URL")) > 0 {
-		ServerURL = os.Getenv("APIM_SERVER_URL")
+	if serverUrl == "" && os.Getenv("APIM_SERVER_URL") != "" {
+		serverUrl = os.Getenv("APIM_SERVER_URL")
 	}
-	if ServerURL == "" {
-		ServerURL = "https://apim-master-api.team-apim.gravitee.dev/automation"
+
+	if serverUrl == "" {
+		serverUrl = "https://apim-master-api.team-apim.gravitee.dev/automation"
 	}
 
 	if environmentIDEnvVar, ok := os.LookupEnv("APIM_ENV_ID"); ok && data.EnvironmentID.IsNull() {
@@ -150,7 +151,7 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	httpClient.Transport = NewProviderHTTPTransport(providerHTTPTransportOpts)
 
 	opts := []sdk.SDKOption{
-		sdk.WithServerURL(ServerURL),
+		sdk.WithServerURL(serverUrl),
 		sdk.WithSecurity(security),
 		sdk.WithClient(httpClient),
 	}
@@ -178,14 +179,18 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewApiv4Resource,
+		NewApplicationResource,
 		NewSharedPolicyGroupResource,
+		NewSubscriptionResource,
 	}
 }
 
 func (p *ApimProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewApiv4DataSource,
+		NewApplicationDataSource,
 		NewSharedPolicyGroupDataSource,
+		NewSubscriptionDataSource,
 	}
 }
 

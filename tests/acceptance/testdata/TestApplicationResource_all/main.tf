@@ -1,0 +1,48 @@
+variable "hrid" {
+  type = string
+}
+
+variable "organization_id" {
+  type = string
+}
+
+variable "environment_id" {
+  type = string
+}
+
+resource "apim_application" "test" {
+  hrid            = var.hrid
+  environment_id  = var.environment_id
+  organization_id = var.organization_id
+  name            = "terraform example"
+  description     = "Conformance tests application with all attributes"
+  domain          = "examples.com"
+  notify_members  = true
+  members = [
+    {
+      role      = "USER"
+      source    = "memory"
+      source_id = "api1"
+    }
+  ]
+  background  = "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png"
+  picture_url = "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png"
+  settings = {
+    app = {
+      client_id = "client-id-${var.hrid}"
+      type      = "backend to backend"
+    }
+    tls = {
+      client_certificate = "-----BEGIN CERTIFICATE-----\nMIIDfjCCAmagAwIBAgIUfHj3mygGaOfd1u1Uj09L6vY5stcwDQYJKoZIhvcNAQEL\nBQAwRTELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoM\nGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDAeFw0yNTA4MDUxNTUyMTBaFw0yNjA4\nMDUxNTUyMTBaMGkxCzAJBgNVBAYTAlVTMQ4wDAYDVQQIDAVTdGF0ZTENMAsGA1UE\nBwwEQ2l0eTEVMBMGA1UECgwMT3JnYW5pemF0aW9uMRMwEQYDVQQLDApEZXBhcnRt\nZW50MQ8wDQYDVQQDDAZjbGllbnQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK\nAoIBAQDW862KHvjkq0EtwZJO/xw+QoTnRB0qm4E5+1wspC1er6tOm3hTJqCzfKwQ\ngZQKoP1Eq1PhM8GzceeqGjh8VZJaDmWwiJZdk5fprrZ1Lvwwl010lnh4MEhtN0Dw\nlwHSZCQ/vSvEDWJXugiE4F1OvAgi2+lIR5uYfyy2U6YbhlcVPdGAboBAFSQnxECF\n1gDpc3dFarPXfO/X3yf/BzAHys6IyMyqvBbur3K2UTO4gJL+59/DEyAwx7ofwukj\nTWpgGNDXlNFYwKk9qTSTbxdcofAVCjrBCEDTdoPkvrr5SxI7dV/ha5y33iOI4VPV\no6vN/58RJz+ZMI0mbOBeluqBW+xBAgMBAAGjQjBAMB0GA1UdDgQWBBTjpQ+KfcmK\nw4hCptY8iK/LX9BOhzAfBgNVHSMEGDAWgBQYdcUWurMS8FEEMzcJlFm2d4Dk3DAN\nBgkqhkiG9w0BAQsFAAOCAQEAoyv0RhgEbRNmyFF6WoTeH4durjmZRe3SCtum0Mnv\n4TOGT4sstPdz0l24psroL33z3jtsY8IrbqnSfTXWbziSCanDXnMHOewLykgN0ld0\nPHa2i5naU5tMeGdWeM80ZTXU7GMiiCkgrRai/V7GkXNKYTIdBontiLpbxUaGLpjY\naMYoCmHIEizazQP9xaAtm40CkYub1o40kgyQULyrwftqrlRtKshfYmHB6yxYVz60\npikgTVupVbhYcNMLOVXO7Q31UEYfC7fxMGqzybXg67EhvzoykXhhYo3YqAjho2yh\num2oEO8b5eQVAwRaooVLh0uqjZCpfN2ozscPpiTM9Pj3xQ==\n-----END CERTIFICATE-----"
+    }
+  }
+  metadata = [
+    {
+      key          = "usage"
+      name         = "Usage"
+      format       = "STRING"
+      defaultValue = "Any"
+    }
+  ]
+  status = "ACTIVE"
+}

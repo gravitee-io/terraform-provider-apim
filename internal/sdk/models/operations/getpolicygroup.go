@@ -9,9 +9,9 @@ import (
 )
 
 type GetPolicyGroupGlobals struct {
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 }
 
@@ -41,9 +41,9 @@ func (o *GetPolicyGroupGlobals) GetEnvironmentID() *string {
 }
 
 type GetPolicyGroupRequest struct {
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Human-readable ID of a spec
 	Hrid string `pathParam:"style=simple,explode=false,name=hrid"`
@@ -88,8 +88,12 @@ type GetPolicyGroupResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Successful retrieval
+	// Shared policy group successfully retrieved
 	SharedPolicyGroupState *shared.SharedPolicyGroupState
+	// Unauthenticated
+	HTTPError *shared.HTTPError
+	// Default error
+	Error *shared.Error
 }
 
 func (o *GetPolicyGroupResponse) GetContentType() string {
@@ -118,4 +122,18 @@ func (o *GetPolicyGroupResponse) GetSharedPolicyGroupState() *shared.SharedPolic
 		return nil
 	}
 	return o.SharedPolicyGroupState
+}
+
+func (o *GetPolicyGroupResponse) GetHTTPError() *shared.HTTPError {
+	if o == nil {
+		return nil
+	}
+	return o.HTTPError
+}
+
+func (o *GetPolicyGroupResponse) GetError() *shared.Error {
+	if o == nil {
+		return nil
+	}
+	return o.Error
 }

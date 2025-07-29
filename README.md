@@ -35,7 +35,7 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "0.3.0"
+      version = "0.3.2"
     }
   }
 }
@@ -52,11 +52,15 @@ provider "apim" {
 ### Resources
 
 * [apim_apiv4](docs/resources/apiv4.md)
+* [apim_application](docs/resources/application.md)
 * [apim_shared_policy_group](docs/resources/shared_policy_group.md)
+* [apim_subscription](docs/resources/subscription.md)
 ### Data Sources
 
 * [apim_apiv4](docs/data-sources/apiv4.md)
+* [apim_application](docs/data-sources/application.md)
 * [apim_shared_policy_group](docs/data-sources/shared_policy_group.md)
+* [apim_subscription](docs/data-sources/subscription.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- No End Testing the provider locally [usage] -->

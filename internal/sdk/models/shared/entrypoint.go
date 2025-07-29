@@ -6,11 +6,13 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// Entrypoint - API Endpoint
 type Entrypoint struct {
 	// The type of the entrypoint
 	Type string `json:"type"`
 	// Type of the quality of service.
-	Qos           *Qos `default:"AUTO" json:"qos"`
+	Qos *Qos `default:"AUTO" json:"qos"`
+	// DLQ
 	Dlq           *Dlq `json:"dlq,omitempty"`
 	Configuration any  `json:"configuration,omitempty"`
 }

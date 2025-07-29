@@ -2,6 +2,7 @@
 
 package shared
 
+// PrimaryOwner - Primary owner, the creator of the application. Can perform all possible API actions.
 type PrimaryOwner struct {
 	// Owner's uuid.
 	ID *string `json:"id,omitempty"`

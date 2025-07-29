@@ -2,15 +2,18 @@
 
 package shared
 
+// EndpointGroupV4 - API Endpoint Group
 type EndpointGroupV4 struct {
 	// The name of the endpoint group
 	Name *string `json:"name,omitempty"`
 	// The type of the endpoint group
-	Type                string                 `json:"type"`
-	LoadBalancer        *LoadBalancer          `json:"loadBalancer,omitempty"`
-	SharedConfiguration any                    `json:"sharedConfiguration,omitempty"`
-	Endpoints           []EndpointV4           `json:"endpoints,omitempty"`
-	Services            *EndpointGroupServices `json:"services,omitempty"`
+	Type string `json:"type"`
+	// Load Balancer
+	LoadBalancer        *LoadBalancer `json:"loadBalancer,omitempty"`
+	SharedConfiguration any           `json:"sharedConfiguration,omitempty"`
+	Endpoints           []EndpointV4  `json:"endpoints,omitempty"`
+	// API Endpoint Group Services
+	Services *EndpointGroupServices `json:"services,omitempty"`
 }
 
 func (o *EndpointGroupV4) GetName() *string {

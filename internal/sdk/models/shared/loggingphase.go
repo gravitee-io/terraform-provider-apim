@@ -2,6 +2,7 @@
 
 package shared
 
+// LoggingPhase - Logging phase
 type LoggingPhase struct {
 	Request  *bool `json:"request,omitempty"`
 	Response *bool `json:"response,omitempty"`

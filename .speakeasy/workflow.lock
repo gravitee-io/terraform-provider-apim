@@ -1,4 +1,4 @@
-speakeasyVersion: 1.592.1
+speakeasyVersion: 1.599.0
 sources:
     Gravitee.io - Automation API:
         sourceNamespace: gravitee-io-gko---automation-api
@@ -9,17 +9,17 @@ sources:
             - 0.2.0
     automation-api:
         sourceNamespace: gravitee-io-gko---automation-api
-        sourceRevisionDigest: sha256:bab17b7ee971030244585104419bd2e025337a71191a04a90b9e9f391a846d90
-        sourceBlobDigest: sha256:4a4673299cbc2cf546fac978aea2022ab153782abd659ebfd69df628ebf8f8a0
+        sourceRevisionDigest: sha256:b130827e0dac24fabbb65741c7a2fbef8e9a5124f850617b50720f3813ab699f
+        sourceBlobDigest: sha256:f2cd7e2a6eba0ad301023d871dc405f64522a179558e3143477aa68a2e72314e
         tags:
             - latest
-            - 0.2.0
+            - 1.0.0
 targets:
     apim:
         source: automation-api
         sourceNamespace: gravitee-io-gko---automation-api
-        sourceRevisionDigest: sha256:bab17b7ee971030244585104419bd2e025337a71191a04a90b9e9f391a846d90
-        sourceBlobDigest: sha256:4a4673299cbc2cf546fac978aea2022ab153782abd659ebfd69df628ebf8f8a0
+        sourceRevisionDigest: sha256:b130827e0dac24fabbb65741c7a2fbef8e9a5124f850617b50720f3813ab699f
+        sourceBlobDigest: sha256:f2cd7e2a6eba0ad301023d871dc405f64522a179558e3143477aa68a2e72314e
     gravitee-apim:
         source: Gravitee.io - Automation API
         sourceNamespace: gravitee-io-gko---automation-api
@@ -33,11 +33,13 @@ workflow:
             inputs:
                 - location: schemas/automation-api-oas.yaml
             overlays:
-                - location: schemas/overlays/apiv4.yaml
+                - location: schemas/overlays/oas-core.yaml
                 - location: schemas/overlays/common-param.yaml
                 - location: schemas/overlays/common-schema.yaml
-                - location: schemas/overlays/oas-core.yaml
+                - location: schemas/overlays/apiv4.yaml
                 - location: schemas/overlays/shared-policy-group.yaml
+                - location: schemas/overlays/application.yaml
+                - location: schemas/overlays/subscription.yaml
                 - location: .speakeasy/speakeasy-modifications-overlay.yaml
             output: schemas/output/computed.yaml
             registry:

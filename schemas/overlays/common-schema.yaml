@@ -4,6 +4,8 @@ info:
   title: Common schema Terraform overlay
   version: 0.0.1
 actions:
+
+  # Suppress diff
   - target: $.components.schemas.FlowStep.properties.condition
     description: Prevent unknown values in plans if unconfigured
     update:
@@ -16,3 +18,13 @@ actions:
     description: Prevent unknown values in plans if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PrimaryOwner
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+  # Terraform ignored
+  - target: $.components.schemas.Errors
+    description: Intentionally ignored for Terraform state
+    update:
+      x-speakeasy-terraform-ignore: true

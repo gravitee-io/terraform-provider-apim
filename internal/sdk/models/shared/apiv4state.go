@@ -2,14 +2,14 @@
 
 package shared
 
-// APIV4State - ApiV4DefinitionSpec defines the desired state of ApiDefinition.
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
+// APIV4State - API state
 type APIV4State struct {
-	// A unique human readable id identifying this object
+	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
-	// the context where the api definition was created.
-	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	DefinitionContext DefinitionContext `json:"definitionContext"`
 	// API's name. Duplicate names can exists.
 	Name string `json:"name"`
 	// API's version. It's a simple string only used in the portal.
@@ -23,26 +23,31 @@ type APIV4State struct {
 	// The list of listeners associated with this API.
 	Listeners      []Listener        `json:"listeners"`
 	EndpointGroups []EndpointGroupV4 `json:"endpointGroups"`
-	Analytics      *Analytics        `json:"analytics,omitempty"`
-	Failover       *FailoverV4       `json:"failover,omitempty"`
-	Properties     []PropertyOutput  `json:"properties,omitempty"`
-	Resources      []Resource        `json:"resources,omitempty"`
-	// Map of plan IDs to Plan objects
-	Plans         map[string]Plan `json:"plans,omitempty"`
-	FlowExecution *FlowExecution  `json:"flowExecution,omitempty"`
+	// API analytics
+	Analytics *Analytics `json:"analytics,omitempty"`
+	// API Failover
+	Failover   *FailoverV4      `json:"failover,omitempty"`
+	Properties []PropertyOutput `json:"properties,omitempty"`
+	Resources  []Resource       `json:"resources,omitempty"`
+	// List of Plans for the API
+	Plans []PlanV4 `json:"plans,omitempty"`
+	// Flow execution
+	FlowExecution *FlowExecution `json:"flowExecution,omitempty"`
 	// List of flows for the API
 	Flows []FlowV4 `json:"flows,omitempty"`
 	// A list of Response Templates for the API (Not applicable for Native API)
 	ResponseTemplates map[string]map[string]ResponseTemplate `json:"responseTemplates,omitempty"`
-	Services          *APIServices                           `json:"services,omitempty"`
+	// Api services
+	Services *APIServices `json:"services,omitempty"`
 	// List of groups associated with the API.
 	// This groups are id or name references to existing groups in APIM.
 	Groups []string `json:"groups,omitempty"`
 	// The visibility of the resource regarding the portal.
-	Visibility *Visibility `json:"visibility,omitempty"`
+	Visibility *Visibility `default:"PUBLIC" json:"visibility"`
 	// The state of the API regarding the gateway(s).
-	State        *LifecycleState `json:"state,omitempty"`
-	PrimaryOwner *PrimaryOwner   `json:"primaryOwner,omitempty"`
+	State *LifecycleState `json:"state,omitempty"`
+	// Primary owner, the creator of the application. Can perform all possible API actions.
+	PrimaryOwner *PrimaryOwner `json:"primaryOwner,omitempty"`
 	// List of labels of the API
 	Labels []string `json:"labels,omitempty"`
 	// The list of API's metadata.
@@ -53,7 +58,9 @@ type APIV4State struct {
 	Categories []string `json:"categories,omitempty"`
 	// Set of members associated with the plan
 	Members []Member `json:"members,omitempty"`
-	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during admission
+	// List of Pages for the API
+	Pages []PageV4 `json:"pages,omitempty"`
+	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
 	Errors *Errors `json:"errors,omitempty"`
 	// API's uuid.
 	ID *string `json:"id,omitempty"`
@@ -61,18 +68,22 @@ type APIV4State struct {
 	CrossID *string `json:"crossId,omitempty"`
 }
 
+func (a APIV4State) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *APIV4State) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *APIV4State) GetHrid() string {
 	if o == nil {
 		return ""
 	}
 	return o.Hrid
-}
-
-func (o *APIV4State) GetDefinitionContext() DefinitionContext {
-	if o == nil {
-		return DefinitionContext{}
-	}
-	return o.DefinitionContext
 }
 
 func (o *APIV4State) GetName() string {
@@ -152,7 +163,7 @@ func (o *APIV4State) GetResources() []Resource {
 	return o.Resources
 }
 
-func (o *APIV4State) GetPlans() map[string]Plan {
+func (o *APIV4State) GetPlans() []PlanV4 {
 	if o == nil {
 		return nil
 	}
@@ -248,6 +259,13 @@ func (o *APIV4State) GetMembers() []Member {
 		return nil
 	}
 	return o.Members
+}
+
+func (o *APIV4State) GetPages() []PageV4 {
+	if o == nil {
+		return nil
+	}
+	return o.Pages
 }
 
 func (o *APIV4State) GetErrors() *Errors {

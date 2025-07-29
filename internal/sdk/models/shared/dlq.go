@@ -2,6 +2,7 @@
 
 package shared
 
+// Dlq - DLQ
 type Dlq struct {
 	// The endpoint of the DLQ.
 	Endpoint *string `json:"endpoint,omitempty"`

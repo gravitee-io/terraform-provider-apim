@@ -6,6 +6,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// Cors - Http listener Cross-Origin Resource Sharing
 type Cors struct {
 	AllowCredentials *bool    `json:"allowCredentials,omitempty"`
 	AllowHeaders     []string `json:"allowHeaders,omitempty"`

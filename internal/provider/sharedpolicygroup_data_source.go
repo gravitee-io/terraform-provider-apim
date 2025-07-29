@@ -29,10 +29,10 @@ type SharedPolicyGroupDataSource struct {
 	// Provider configured SDK client.
 	client *sdk.GraviteeApim
 
-	// Id of an environment.
+	// environment ID
 	EnvironmentID types.String `tfsdk:"environment_id"`
 
-	// Id of an organization.
+	// organization ID
 	OrganizationID types.String `tfsdk:"organization_id"`
 }
 
@@ -77,7 +77,7 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Id of an environment.`,
+				Description: `environment ID`,
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
@@ -97,7 +97,7 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Id of an organization.`,
+				Description: `organization ID`,
 			},
 			"phase": schema.StringAttribute{
 				Computed:    true,

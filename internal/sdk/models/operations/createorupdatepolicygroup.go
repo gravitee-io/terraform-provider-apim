@@ -9,9 +9,9 @@ import (
 )
 
 type CreateOrUpdatePolicyGroupGlobals struct {
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 }
 
@@ -41,14 +41,15 @@ func (o *CreateOrUpdatePolicyGroupGlobals) GetEnvironmentID() *string {
 }
 
 type CreateOrUpdatePolicyGroupRequest struct {
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting
 	// the state of the underlying spec.
 	//
-	DryRun                *bool                        `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
+	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
+	// Shared Policy Group Specification
 	SharedPolicyGroupSpec shared.SharedPolicyGroupSpec `request:"mediaType=application/json"`
 }
 
@@ -100,7 +101,9 @@ type CreateOrUpdatePolicyGroupResponse struct {
 	RawResponse *http.Response
 	// State of the successfully created / updated Shared Policy Group
 	SharedPolicyGroupState *shared.SharedPolicyGroupState
-	// Validation error
+	// Request is invalid
+	HTTPError *shared.HTTPError
+	// Default error
 	Error *shared.Error
 }
 
@@ -130,6 +133,13 @@ func (o *CreateOrUpdatePolicyGroupResponse) GetSharedPolicyGroupState() *shared.
 		return nil
 	}
 	return o.SharedPolicyGroupState
+}
+
+func (o *CreateOrUpdatePolicyGroupResponse) GetHTTPError() *shared.HTTPError {
+	if o == nil {
+		return nil
+	}
+	return o.HTTPError
 }
 
 func (o *CreateOrUpdatePolicyGroupResponse) GetError() *shared.Error {

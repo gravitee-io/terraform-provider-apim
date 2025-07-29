@@ -6,6 +6,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// StepV4 - Flow step
 type StepV4 struct {
 	// The name of the step
 	Name *string `json:"name,omitempty"`

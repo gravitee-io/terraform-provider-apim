@@ -2,11 +2,16 @@
 
 package shared
 
+// PropertyOutput - Api property
 type PropertyOutput struct {
-	Key       string `json:"key"`
-	Value     string `json:"value"`
-	Encrypted *bool  `json:"encrypted,omitempty"`
-	Dynamic   *bool  `json:"dynamic,omitempty"`
+	// property key
+	Key string `json:"key"`
+	// property value
+	Value string `json:"value"`
+	// is property encrypted or not?
+	Encrypted *bool `json:"encrypted,omitempty"`
+	// is a dynamic property or not?
+	Dynamic *bool `json:"dynamic,omitempty"`
 }
 
 func (o *PropertyOutput) GetKey() string {

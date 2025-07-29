@@ -1,0 +1,95 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Application Terraform overlay
+  version: 0.0.1
+actions:
+
+
+  # Entity management
+
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/applications"].put
+    update:
+      x-speakeasy-entity-operation: Application#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/applications/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: Application#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/applications/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: Application#delete
+  - target: $.components.schemas.ApplicationSpec
+    update:
+      x-speakeasy-entity: Application
+
+
+  # Customizations
+
+  ## Avoid diff for optional properties
+
+  ### API Spec
+  - target: $.components.schemas.ApplicationSpec.properties.domain
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApplicationSpec.properties.groups
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApplicationSpec.properties.pictureUrl
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApplicationSpec.properties.background
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApplicationSpec.properties.metadata
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApplicationSpec.properties.members
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApplicationSpec.properties.settings
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ### API State
+  - target: $.components.schemas.ApplicationState.allOf[?@.properties.id]
+    description: Not returned by the API, so prevent null values during refresh
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApplicationState.allOf[?@.properties.crossId]
+    description: Not returned by the API, so prevent null values during refresh
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApplicationState.allOf[?@.properties.metadata]
+    description: Metadata are not ordered
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+
+  ## Field removal
+  - target: $.components.schemas.ApplicationState.allOf[?@.properties.environmentId].properties.environmentId
+    description: Not returned by the API, so prevent null values during refresh
+    remove: true
+  - target: $.components.schemas.ApplicationState.allOf[?@.properties.organizationId].properties.organizationId
+    description: Not returned by the API, so prevent null values during refresh
+    remove: true
+  - target: $.components.schemas.ApplicationSpec.settings.oauth
+    description: Not supported anymore but comm
+    remove: true
+
+  ## XOR for app settings
+  - target: $.components.schemas.ApplicationSettings.properties.app
+    description:
+    update:
+      x-speakeasy-xor-with:
+        - ../oauth
+  - target: $.components.schemas.ApplicationSettings.properties.oauth
+    description:
+    update:
+      x-speakeasy-xor-with:
+        - ../app

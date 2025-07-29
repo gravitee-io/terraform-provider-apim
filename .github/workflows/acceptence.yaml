@@ -25,7 +25,7 @@ jobs:
           terraform_wrapper: false
       - name: Run Acceptance tests
         env:
-          APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL }}
+          APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL_MASTER }}
           APIM_USERNAME: ${{ secrets.TEST_USER }}
           APIM_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
-        run: make acceptance-tests
+        run: make acceptance-tests examples-tests

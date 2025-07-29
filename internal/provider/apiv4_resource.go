@@ -55,10 +55,10 @@ type Apiv4Resource struct {
 	// Provider configured SDK client.
 	client *sdk.GraviteeApim
 
-	// Id of an environment.
+	// environment ID
 	EnvironmentID types.String `tfsdk:"environment_id"`
 
-	// Id of an organization.
+	// organization ID
 	OrganizationID types.String `tfsdk:"organization_id"`
 }
 
@@ -67,7 +67,6 @@ type Apiv4ResourceModel struct {
 	Analytics         *tfTypes.Analytics                             `tfsdk:"analytics"`
 	Categories        []types.String                                 `tfsdk:"categories"`
 	CrossID           types.String                                   `tfsdk:"cross_id"`
-	DefinitionContext tfTypes.DefinitionContext                      `tfsdk:"definition_context"`
 	Description       types.String                                   `tfsdk:"description"`
 	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
 	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
@@ -85,7 +84,8 @@ type Apiv4ResourceModel struct {
 	Name              types.String                                   `tfsdk:"name"`
 	NotifyMembers     types.Bool                                     `tfsdk:"notify_members"`
 	OrganizationID    types.String                                   `tfsdk:"organization_id"`
-	Plans             map[string]tfTypes.Plan                        `tfsdk:"plans"`
+	Pages             []tfTypes.PageV4                               `tfsdk:"pages"`
+	Plans             []tfTypes.PlanV4                               `tfsdk:"plans"`
 	PrimaryOwner      *tfTypes.PrimaryOwner                          `tfsdk:"primary_owner"`
 	Properties        []tfTypes.Property                             `tfsdk:"properties"`
 	Resources         []tfTypes.Resource                             `tfsdk:"resources"`
@@ -179,6 +179,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 								},
+								Description: `API logging content`,
 							},
 							"message_condition": schema.StringAttribute{
 								Computed: true,
@@ -209,6 +210,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 								},
+								Description: `API logging mode`,
 							},
 							"phase": schema.SingleNestedAttribute{
 								Computed: true,
@@ -232,8 +234,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 								},
+								Description: `Logging phase`,
 							},
 						},
+						Description: `API logging configuration`,
 					},
 					"sampling": schema.SingleNestedAttribute{
 						Computed: true,
@@ -267,6 +271,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Description: `The value of the sampling`,
 							},
 						},
+						Description: `API analytics sampling`,
 					},
 					"tracing": schema.SingleNestedAttribute{
 						Computed: true,
@@ -292,8 +297,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Description: `Enable technical tracing to get more details on request execution. Be careful this settings would generate more noise and would impact performance.`,
 							},
 						},
+						Description: `API analytic tracing`,
 					},
 				},
+				Description: `API analytics`,
 			},
 			"categories": schema.ListAttribute{
 				Computed: true,
@@ -310,14 +317,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `When promoting an API from one environment to the other, this ID identifies the API across those different environments.`,
-			},
-			"definition_context": schema.SingleNestedAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.Object{
-					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-				},
-				DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-				Description:        `the context where the api definition was created.`,
 			},
 			"description": schema.StringAttribute{
 				Computed: true,
@@ -442,8 +441,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 														},
 													},
 												},
+												Description: `Service`,
 											},
 										},
+										Description: `API Endpoint Services`,
 									},
 									"shared_configuration_override": schema.StringAttribute{
 										Computed: true,
@@ -513,6 +514,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
+							Description: `Load Balancer`,
 						},
 						"name": schema.StringAttribute{
 							Computed: true,
@@ -573,6 +575,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 										},
 									},
+									Description: `Service`,
 								},
 								"health_check": schema.SingleNestedAttribute{
 									Computed: true,
@@ -618,8 +621,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 										},
 									},
+									Description: `Service`,
 								},
 							},
+							Description: `API Endpoint Group Services`,
 						},
 						"shared_configuration": schema.StringAttribute{
 							Computed: true,
@@ -653,7 +658,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Computed:    true,
 				Optional:    true,
 				Default:     stringdefault.StaticString(`DEFAULT`),
-				Description: `Id of an environment. Default: "DEFAULT"`,
+				Description: `environment ID. Default: "DEFAULT"`,
 			},
 			"failover": schema.SingleNestedAttribute{
 				Computed: true,
@@ -726,6 +731,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 					},
 				},
+				Description: `API Failover`,
 			},
 			"flow_execution": schema.SingleNestedAttribute{
 				Computed: true,
@@ -759,6 +765,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 					},
 				},
+				Description: `Flow execution`,
 			},
 			"flows": schema.ListNestedAttribute{
 				Computed: true,
@@ -850,7 +857,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
-							Description: `Flow step used for NATIVE APIs`,
+							Description: `Connect flow steps used for NATIVE APIs`,
 						},
 						"enabled": schema.BoolAttribute{
 							Computed: true,
@@ -863,6 +870,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						"id": schema.StringAttribute{
 							Computed: true,
+							Optional: true,
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
@@ -944,7 +952,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
-							Description: `Flow step used for NATIVE APIs`,
+							Description: `Interact flow steps used for NATIVE APIs`,
 						},
 						"name": schema.StringAttribute{
 							Computed: true,
@@ -1030,7 +1038,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
-							Description: `Flow step used for MESSAGE and NATIVE APIs`,
+							Description: `Publish flow steps used for MESSAGE and NATIVE APIs`,
 						},
 						"request": schema.ListNestedAttribute{
 							Computed: true,
@@ -1108,7 +1116,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
-							Description: `Flow step used for PROXY and MESSAGE APIs`,
+							Description: `Request flow steps used for PROXY and MESSAGE APIs`,
 						},
 						"response": schema.ListNestedAttribute{
 							Computed: true,
@@ -1186,7 +1194,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
-							Description: `Flow step used for PROXY and MESSAGE APIs`,
+							Description: `Response flow steps used for PROXY and MESSAGE APIs`,
 						},
 						"selectors": schema.ListNestedAttribute{
 							Computed: true,
@@ -1273,6 +1281,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 										},
+										Description: `Channel selector`,
 										Validators: []validator.Object{
 											objectvalidator.ConflictsWith(path.Expressions{
 												path.MatchRelative().AtParent().AtName("condition"),
@@ -1315,6 +1324,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 										},
+										Description: `Condition selector`,
 										Validators: []validator.Object{
 											objectvalidator.ConflictsWith(path.Expressions{
 												path.MatchRelative().AtParent().AtName("channel"),
@@ -1381,6 +1391,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 										},
+										Description: `HTTP selector`,
 										Validators: []validator.Object{
 											objectvalidator.ConflictsWith(path.Expressions{
 												path.MatchRelative().AtParent().AtName("channel"),
@@ -1467,7 +1478,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
-							Description: `Flow step used for MESSAGE and NATIVE APIs`,
+							Description: `Subscribe flow steps used for MESSAGE and NATIVE APIs`,
 						},
 						"tags": schema.ListAttribute{
 							Computed: true,
@@ -1502,7 +1513,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `A unique human readable id identifying this object. Requires replacement if changed.`,
+				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
 				},
@@ -1642,6 +1653,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 										},
 									},
+									Description: `Http listener Cross-Origin Resource Sharing`,
 								},
 								"entrypoints": schema.ListNestedAttribute{
 									Computed: true,
@@ -1684,6 +1696,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 														Description: `The endpoint of the DLQ.`,
 													},
 												},
+												Description: `DLQ`,
 											},
 											"qos": schema.StringAttribute{
 												Computed: true,
@@ -1798,6 +1811,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
+							Description: `HTTP Listener`,
 							Validators: []validator.Object{
 								objectvalidator.ConflictsWith(path.Expressions{
 									path.MatchRelative().AtParent().AtName("kafka"),
@@ -1854,6 +1868,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 														Description: `The endpoint of the DLQ.`,
 													},
 												},
+												Description: `DLQ`,
 											},
 											"qos": schema.StringAttribute{
 												Computed: true,
@@ -1934,6 +1949,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
+							Description: `Kafka listener`,
 							Validators: []validator.Object{
 								objectvalidator.ConflictsWith(path.Expressions{
 									path.MatchRelative().AtParent().AtName("http"),
@@ -1990,6 +2006,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 														Description: `The endpoint of the DLQ.`,
 													},
 												},
+												Description: `DLQ`,
 											},
 											"qos": schema.StringAttribute{
 												Computed: true,
@@ -2051,6 +2068,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
+							Description: `Subscription listener`,
 							Validators: []validator.Object{
 								objectvalidator.ConflictsWith(path.Expressions{
 									path.MatchRelative().AtParent().AtName("http"),
@@ -2107,6 +2125,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 														Description: `The endpoint of the DLQ.`,
 													},
 												},
+												Description: `DLQ`,
 											},
 											"qos": schema.StringAttribute{
 												Computed: true,
@@ -2181,6 +2200,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
+							Description: `TCP listener`,
 							Validators: []validator.Object{
 								objectvalidator.ConflictsWith(path.Expressions{
 									path.MatchRelative().AtParent().AtName("http"),
@@ -2212,16 +2232,20 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					Attributes: map[string]schema.Attribute{
 						"id": schema.StringAttribute{
 							Computed: true,
-							Optional: true,
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
+							Description: `User UUID of the memeber`,
 						},
 						"role": schema.StringAttribute{
 							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `The role of the user in regards of the managed oject (API, Application, etc.). Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"source": schema.StringAttribute{
@@ -2230,12 +2254,20 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
+							Description: `Where the memeber was created (system, idp, etc.). Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
 						},
 						"source_id": schema.StringAttribute{
 							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Id of the user in the source. Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 					},
@@ -2265,7 +2297,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `The default value of the metadata.`,
+							Description: `The default value of the metadata if the value is not set.`,
 						},
 						"format": schema.StringAttribute{
 							Computed: true,
@@ -2273,8 +2305,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `The format of the metadata. must be one of ["STRING", "NUMERIC", "BOOLEAN", "DATE", "MAIL", "URL"]`,
+							Description: `The format of the metadata. Not Null; must be one of ["STRING", "NUMERIC", "BOOLEAN", "DATE", "MAIL", "URL"]`,
 							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
 								stringvalidator.OneOf(
 									"STRING",
 									"NUMERIC",
@@ -2291,7 +2324,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `The key of the metadata.`,
+							Description: `The key of the metadata if different from sanitized name (lowercase + hyphens).`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtLeast(1),
 							},
@@ -2302,7 +2335,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `The name of the metadata.`,
+							Description: `The name of the metadata. Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
 						},
 						"value": schema.StringAttribute{
 							Computed: true,
@@ -2344,13 +2380,681 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Computed:    true,
 				Optional:    true,
 				Default:     stringdefault.StaticString(`DEFAULT`),
-				Description: `Id of an organization. Default: "DEFAULT"`,
+				Description: `organization ID. Default: "DEFAULT"`,
 			},
-			"plans": schema.MapNestedAttribute{
+			"pages": schema.ListNestedAttribute{
 				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.Map{
-					speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+				PlanModifiers: []planmodifier.List{
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+				},
+				NestedObject: schema.NestedAttributeObject{
+					Validators: []validator.Object{
+						speakeasy_objectvalidators.NotNull(),
+					},
+					PlanModifiers: []planmodifier.Object{
+						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+					},
+					Attributes: map[string]schema.Attribute{
+						"access_controls": schema.ListNestedAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+							},
+							NestedObject: schema.NestedAttributeObject{
+								Validators: []validator.Object{
+									speakeasy_objectvalidators.NotNull(),
+								},
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
+								Attributes: map[string]schema.Attribute{
+									"reference_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `The id of the resource used to check the access control`,
+									},
+									"reference_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `The type of the resource used to check the access control`,
+									},
+								},
+							},
+							Description: `List of access controls.`,
+						},
+						"attached_media": schema.ListNestedAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+							},
+							NestedObject: schema.NestedAttributeObject{
+								Validators: []validator.Object{
+									speakeasy_objectvalidators.NotNull(),
+								},
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
+								Attributes: map[string]schema.Attribute{
+									"attached_at": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Media's attachment date.`,
+										Validators: []validator.String{
+											validators.IsRFC3339(),
+										},
+									},
+									"hash": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Media's hash.`,
+									},
+									"name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Media's name.`,
+									},
+								},
+							},
+							Description: `List of attached media.`,
+						},
+						"configuration": schema.MapAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Map{
+								speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+							},
+							ElementType: types.StringType,
+							Description: `Page's configuration.`,
+						},
+						"content": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Page's content.`,
+						},
+						"content_revision": schema.SingleNestedAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Object{
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							},
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
+									Description: `Id of the page used to fill the content attributes.`,
+								},
+								"revision": schema.Int64Attribute{
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.Int64{
+										speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+									},
+									Description: `Revision number.`,
+								},
+							},
+							Description: `Page revision`,
+						},
+						"content_type": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Page's content type.`,
+						},
+						"cross_id": schema.StringAttribute{
+							Computed: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Page's cross uuid.`,
+						},
+						"excluded_access_controls": schema.BoolAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+							},
+							Description: `Flag to restrict access to user matching the restrictions.`,
+						},
+						"general_conditions": schema.BoolAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+							},
+							Description: `If page is used as General Conditions of an active plan.`,
+						},
+						"hidden": schema.BoolAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+							},
+							Description: `If folder is published but not shown in Portal.`,
+						},
+						"homepage": schema.BoolAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+							},
+							Description: `Page's homepage status.`,
+						},
+						"hrid": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `A unique human readable id identifying this resource. Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
+							},
+						},
+						"last_contributor": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Page's last contributor. Id of a user.`,
+						},
+						"metadata": schema.MapAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Map{
+								speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+							},
+							ElementType: types.StringType,
+							Description: `Page's metadata.`,
+						},
+						"name": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Page's name.`,
+						},
+						"order": schema.Int64Attribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Int64{
+								speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+							},
+							Description: `Page's order.`,
+						},
+						"parent_id": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Page's parent id.`,
+						},
+						"parent_path": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Page's parent path.`,
+						},
+						"published": schema.BoolAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+							},
+							Description: `Page's published status.`,
+						},
+						"source": schema.SingleNestedAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.Object{
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							},
+							Attributes: map[string]schema.Attribute{
+								"configuration": schema.StringAttribute{
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
+									Description: `Page source's configuration. Parsed as JSON.`,
+									Validators: []validator.String{
+										validators.IsValidJSON(),
+									},
+								},
+								"type": schema.StringAttribute{
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
+									Description: `The type of the page source (=fetcher type).`,
+								},
+							},
+							Description: `Page source`,
+						},
+						"translations": schema.ListNestedAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+							},
+							NestedObject: schema.NestedAttributeObject{
+								Validators: []validator.Object{
+									speakeasy_objectvalidators.NotNull(),
+								},
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
+								Attributes: map[string]schema.Attribute{
+									"access_controls": schema.ListNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
+										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+											},
+											Attributes: map[string]schema.Attribute{
+												"reference_id": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
+													Description: `The id of the resource used to check the access control`,
+												},
+												"reference_type": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
+													Description: `The type of the resource used to check the access control`,
+												},
+											},
+										},
+										Description: `List of access controls.`,
+									},
+									"attached_media": schema.ListNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+										},
+										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+											},
+											Attributes: map[string]schema.Attribute{
+												"attached_at": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
+													Description: `Media's attachment date.`,
+													Validators: []validator.String{
+														validators.IsRFC3339(),
+													},
+												},
+												"hash": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
+													Description: `Media's hash.`,
+												},
+												"name": schema.StringAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.String{
+														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+													},
+													Description: `Media's name.`,
+												},
+											},
+										},
+										Description: `List of attached media.`,
+									},
+									"configuration": schema.MapAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Map{
+											speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+										},
+										ElementType: types.StringType,
+										Description: `Page's configuration.`,
+									},
+									"content": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Page's content.`,
+									},
+									"content_revision": schema.SingleNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
+										Attributes: map[string]schema.Attribute{
+											"id": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
+												Description: `Id of the page used to fill the content attributes.`,
+											},
+											"revision": schema.Int64Attribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.Int64{
+													speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+												},
+												Description: `Revision number.`,
+											},
+										},
+										Description: `Page revision`,
+									},
+									"content_type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Page's content type.`,
+									},
+									"cross_id": schema.StringAttribute{
+										Computed: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Page's cross uuid.`,
+									},
+									"excluded_access_controls": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Flag to restrict access to user matching the restrictions.`,
+									},
+									"general_conditions": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `If page is used as General Conditions of an active plan.`,
+									},
+									"hidden": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `If folder is published but not shown in Portal.`,
+									},
+									"homepage": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Page's homepage status.`,
+									},
+									"hrid": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `A unique human readable id identifying this resource. Not Null`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+											stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
+										},
+									},
+									"last_contributor": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Page's last contributor. Id of a user.`,
+									},
+									"metadata": schema.MapAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Map{
+											speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+										},
+										ElementType: types.StringType,
+										Description: `Page's metadata.`,
+									},
+									"name": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Page's name.`,
+									},
+									"order": schema.Int64Attribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Int64{
+											speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
+										},
+										Description: `Page's order.`,
+									},
+									"parent_id": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Page's parent id.`,
+									},
+									"parent_path": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Page's parent path.`,
+									},
+									"published": schema.BoolAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Bool{
+											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+										},
+										Description: `Page's published status.`,
+									},
+									"source": schema.SingleNestedAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
+										Attributes: map[string]schema.Attribute{
+											"configuration": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
+												Description: `Page source's configuration. Parsed as JSON.`,
+												Validators: []validator.String{
+													validators.IsValidJSON(),
+												},
+											},
+											"type": schema.StringAttribute{
+												Computed: true,
+												Optional: true,
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
+												Description: `The type of the page source (=fetcher type).`,
+											},
+										},
+										Description: `Page source`,
+									},
+									"type": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `The type of the page. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]`,
+										Validators: []validator.String{
+											speakeasy_stringvalidators.NotNull(),
+											stringvalidator.OneOf(
+												"ASCIIDOC",
+												"ASYNCAPI",
+												"MARKDOWN",
+												"MARKDOWN_TEMPLATE",
+												"SWAGGER",
+												"FOLDER",
+												"LINK",
+												"ROOT",
+												"SYSTEM_FOLDER",
+												"TRANSLATION",
+											),
+										},
+									},
+									"updated_at": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `Page's last update date.`,
+										Validators: []validator.String{
+											validators.IsRFC3339(),
+										},
+									},
+									"visibility": schema.StringAttribute{
+										Computed: true,
+										Optional: true,
+										Default:  stringdefault.StaticString(`PUBLIC`),
+										PlanModifiers: []planmodifier.String{
+											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+										},
+										Description: `The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]`,
+										Validators: []validator.String{
+											stringvalidator.OneOf(
+												"PUBLIC",
+												"PRIVATE",
+											),
+										},
+									},
+								},
+							},
+							Description: `List of page translations.`,
+						},
+						"type": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `The type of the page. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+								stringvalidator.OneOf(
+									"ASCIIDOC",
+									"ASYNCAPI",
+									"MARKDOWN",
+									"MARKDOWN_TEMPLATE",
+									"SWAGGER",
+									"FOLDER",
+									"LINK",
+									"ROOT",
+									"SYSTEM_FOLDER",
+									"TRANSLATION",
+								),
+							},
+						},
+						"updated_at": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Page's last update date.`,
+							Validators: []validator.String{
+								validators.IsRFC3339(),
+							},
+						},
+						"visibility": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+							Default:  stringdefault.StaticString(`PUBLIC`),
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]`,
+							Validators: []validator.String{
+								stringvalidator.OneOf(
+									"PUBLIC",
+									"PRIVATE",
+								),
+							},
+						},
+					},
+				},
+				Description: `List of Pages for the API`,
+			},
+			"plans": schema.ListNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
@@ -2367,13 +3071,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},
 							ElementType: types.StringType,
-						},
-						"cross_id": schema.StringAttribute{
-							Computed: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
-							Description: `Cross-reference ID`,
 						},
 						"description": schema.StringAttribute{
 							Computed: true,
@@ -2480,7 +3177,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 										},
-										Description: `Flow step used for NATIVE APIs`,
+										Description: `Connect flow steps used for NATIVE APIs`,
 									},
 									"enabled": schema.BoolAttribute{
 										Computed: true,
@@ -2493,6 +3190,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"id": schema.StringAttribute{
 										Computed: true,
+										Optional: true,
 										PlanModifiers: []planmodifier.String{
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
@@ -2574,7 +3272,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 										},
-										Description: `Flow step used for NATIVE APIs`,
+										Description: `Interact flow steps used for NATIVE APIs`,
 									},
 									"name": schema.StringAttribute{
 										Computed: true,
@@ -2660,7 +3358,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 										},
-										Description: `Flow step used for MESSAGE and NATIVE APIs`,
+										Description: `Publish flow steps used for MESSAGE and NATIVE APIs`,
 									},
 									"request": schema.ListNestedAttribute{
 										Computed: true,
@@ -2738,7 +3436,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 										},
-										Description: `Flow step used for PROXY and MESSAGE APIs`,
+										Description: `Request flow steps used for PROXY and MESSAGE APIs`,
 									},
 									"response": schema.ListNestedAttribute{
 										Computed: true,
@@ -2816,7 +3514,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 										},
-										Description: `Flow step used for PROXY and MESSAGE APIs`,
+										Description: `Response flow steps used for PROXY and MESSAGE APIs`,
 									},
 									"selectors": schema.ListNestedAttribute{
 										Computed: true,
@@ -2903,6 +3601,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 													},
+													Description: `Channel selector`,
 													Validators: []validator.Object{
 														objectvalidator.ConflictsWith(path.Expressions{
 															path.MatchRelative().AtParent().AtName("condition"),
@@ -2945,6 +3644,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 													},
+													Description: `Condition selector`,
 													Validators: []validator.Object{
 														objectvalidator.ConflictsWith(path.Expressions{
 															path.MatchRelative().AtParent().AtName("channel"),
@@ -3011,6 +3711,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 													},
+													Description: `HTTP selector`,
 													Validators: []validator.Object{
 														objectvalidator.ConflictsWith(path.Expressions{
 															path.MatchRelative().AtParent().AtName("channel"),
@@ -3097,7 +3798,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 										},
-										Description: `Flow step used for MESSAGE and NATIVE APIs`,
+										Description: `Subscribe flow steps used for MESSAGE and NATIVE APIs`,
 									},
 									"tags": schema.ListAttribute{
 										Computed: true,
@@ -3121,12 +3822,17 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 						},
-						"id": schema.StringAttribute{
+						"hrid": schema.StringAttribute{
 							Computed: true,
+							Optional: true,
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Unique identifier for the plan`,
+							Description: `A unique human readable id identifying this resource. Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
+							},
 						},
 						"mode": schema.StringAttribute{
 							Computed: true,
@@ -3148,6 +3854,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Optional: true,
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"security": schema.SingleNestedAttribute{
@@ -3186,6 +3896,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										),
 									},
 								},
+							},
+							Description: `API plan security. Not Null`,
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
 							},
 						},
 						"selection_rule": schema.StringAttribute{
@@ -3241,8 +3955,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Plan validation type. must be one of ["AUTO", "MANUAL"]`,
+							Description: `Plan validation type. Not Null; must be one of ["AUTO", "MANUAL"]`,
 							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
 								stringvalidator.OneOf(
 									"AUTO",
 									"MANUAL",
@@ -3251,7 +3966,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 					},
 				},
-				Description: `Map of plan IDs to Plan objects`,
+				Description: `List of Plans for the API`,
 			},
 			"primary_owner": schema.SingleNestedAttribute{
 				Computed: true,
@@ -3302,6 +4017,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 					},
 				},
+				Description: `Primary owner, the creator of the application. Can perform all possible API actions.`,
 			},
 			"properties": schema.ListNestedAttribute{
 				Computed: true,
@@ -3323,6 +4039,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.Bool{
 								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 							},
+							Description: `is a dynamic property or not?`,
 						},
 						"encryptable": schema.BoolAttribute{
 							Computed: true,
@@ -3330,6 +4047,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.Bool{
 								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 							},
+							Description: `is property encryptable?`,
 						},
 						"encrypted": schema.BoolAttribute{
 							Computed: true,
@@ -3337,6 +4055,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.Bool{
 								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 							},
+							Description: `is property encrypted or not?`,
 						},
 						"key": schema.StringAttribute{
 							Computed: true,
@@ -3344,7 +4063,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Not Null`,
+							Description: `property key. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
@@ -3355,7 +4074,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Not Null`,
+							Description: `property value. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
@@ -3383,7 +4102,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Not Null; Parsed as JSON.`,
+							Description: `Resource configuration. Not Null; Parsed as JSON.`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 								validators.IsValidJSON(),
@@ -3395,6 +4114,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.Bool{
 								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 							},
+							Description: `API resource is enabled or not?`,
 						},
 						"name": schema.StringAttribute{
 							Computed: true,
@@ -3402,7 +4122,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Not Null`,
+							Description: `Resource name. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
@@ -3413,7 +4133,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Not Null`,
+							Description: `Resource type. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
@@ -3492,8 +4212,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 							},
 						},
+						Description: `Service`,
 					},
 				},
+				Description: `Api services`,
 			},
 			"state": schema.StringAttribute{
 				Computed: true,
@@ -3551,10 +4273,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"visibility": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
+				Default:  stringdefault.StaticString(`PUBLIC`),
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `The visibility of the resource regarding the portal. must be one of ["PUBLIC", "PRIVATE"]`,
+				Description: `The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"PUBLIC",

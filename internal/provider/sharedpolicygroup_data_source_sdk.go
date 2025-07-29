@@ -26,11 +26,10 @@ func (r *SharedPolicyGroupDataSourceModel) RefreshFromSharedSharedPolicyGroupSta
 		r.Phase = types.StringValue(string(resp.Phase))
 		r.PrerequisiteMessage = types.StringPointerValue(resp.PrerequisiteMessage)
 		r.Steps = []tfTypes.FlowStep{}
-		if len(r.Steps) > len(resp.Steps) {
-			r.Steps = r.Steps[:len(resp.Steps)]
-		}
-		for stepsCount, stepsItem := range resp.Steps {
+
+		for _, stepsItem := range resp.Steps {
 			var steps tfTypes.FlowStep
+
 			steps.Condition = types.StringPointerValue(stepsItem.Condition)
 			steps.Configuration = types.StringPointerValue(stepsItem.Configuration)
 			steps.Description = types.StringPointerValue(stepsItem.Description)
@@ -38,17 +37,8 @@ func (r *SharedPolicyGroupDataSourceModel) RefreshFromSharedSharedPolicyGroupSta
 			steps.MessageCondition = types.StringPointerValue(stepsItem.MessageCondition)
 			steps.Name = types.StringPointerValue(stepsItem.Name)
 			steps.Policy = types.StringPointerValue(stepsItem.Policy)
-			if stepsCount+1 > len(r.Steps) {
-				r.Steps = append(r.Steps, steps)
-			} else {
-				r.Steps[stepsCount].Condition = steps.Condition
-				r.Steps[stepsCount].Configuration = steps.Configuration
-				r.Steps[stepsCount].Description = steps.Description
-				r.Steps[stepsCount].Enabled = steps.Enabled
-				r.Steps[stepsCount].MessageCondition = steps.MessageCondition
-				r.Steps[stepsCount].Name = steps.Name
-				r.Steps[stepsCount].Policy = steps.Policy
-			}
+
+			r.Steps = append(r.Steps, steps)
 		}
 	}
 
