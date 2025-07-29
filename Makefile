@@ -14,8 +14,8 @@ lint: ## Run speakeasy lint accepting no error or warning
 	@speakeasy lint openapi --schema schemas/automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
 
 .PHONY: sync-oas
-lint: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-management
-	@cp ../gravitee-apim-management/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml schemas/automation-api-oas.yaml
+sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-management
+	@cp ../gravitee-api-management/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml schemas/automation-api-oas.yaml
 
 
 .PHONY: acceptance-tests
