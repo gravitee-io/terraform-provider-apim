@@ -6,6 +6,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// FailoverV4 - API Failover
 type FailoverV4 struct {
 	// Is the failover enabled.
 	Enabled *bool `default:"false" json:"enabled"`

@@ -6,6 +6,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// FlowExecution - Flow execution
 type FlowExecution struct {
 	// API's flow mode.
 	Mode *FlowMode `default:"DEFAULT" json:"mode"`

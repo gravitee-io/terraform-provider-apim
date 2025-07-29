@@ -2,6 +2,7 @@
 
 package shared
 
+// PrimaryOwner - Primary owner
 type PrimaryOwner struct {
 	// Owner's uuid.
 	ID *string `json:"id,omitempty"`

@@ -6,16 +6,16 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type Plan struct {
+type PlanV4 struct {
 	Characteristics   []types.String `tfsdk:"characteristics"`
-	CrossID           types.String   `tfsdk:"cross_id"`
 	Description       types.String   `tfsdk:"description"`
 	ExcludedGroups    []types.String `tfsdk:"excluded_groups"`
 	Flows             []FlowV4       `tfsdk:"flows"`
 	GeneralConditions types.String   `tfsdk:"general_conditions"`
-	ID                types.String   `tfsdk:"id"`
+	Hrid              types.String   `tfsdk:"hrid"`
 	Mode              types.String   `tfsdk:"mode"`
 	Name              types.String   `tfsdk:"name"`
+	Order             types.Int64    `tfsdk:"order"`
 	Security          *PlanSecurity  `tfsdk:"security"`
 	SelectionRule     types.String   `tfsdk:"selection_rule"`
 	Status            types.String   `tfsdk:"status"`

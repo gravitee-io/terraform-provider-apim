@@ -9,6 +9,7 @@ import (
 type Metadata struct {
 	DefaultValue types.String `tfsdk:"default_value"`
 	Format       types.String `tfsdk:"format"`
+	Hidden       types.Bool   `tfsdk:"hidden"`
 	Key          types.String `tfsdk:"key"`
 	Name         types.String `tfsdk:"name"`
 	Value        types.String `tfsdk:"value"`

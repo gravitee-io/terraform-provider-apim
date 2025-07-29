@@ -2,13 +2,13 @@
 
 package shared
 
-type Plan struct {
-	// Unique identifier for the plan
-	ID *string `json:"id,omitempty"`
-	// Cross-reference ID
-	CrossID           *string       `json:"crossId,omitempty"`
-	Name              *string       `json:"name,omitempty"`
-	Description       *string       `json:"description,omitempty"`
+// PlanV4Input - API Plan
+type PlanV4Input struct {
+	// A unique human readable id identifying this resource
+	Hrid        string  `json:"hrid"`
+	Name        *string `json:"name,omitempty"`
+	Description *string `json:"description,omitempty"`
+	// API plan security
 	Security          *PlanSecurity `json:"security,omitempty"`
 	Characteristics   []string      `json:"characteristics,omitempty"`
 	ExcludedGroups    []string      `json:"excludedGroups,omitempty"`
@@ -22,117 +22,110 @@ type Plan struct {
 	Type PlanType `json:"type"`
 	// Plan validation type.
 	Validation *PlanValidation `json:"validation,omitempty"`
-	Flows      []FlowV4        `json:"flows,omitempty"`
+	Flows      []FlowV4Input   `json:"flows,omitempty"`
 	// The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan).
 	Mode PlanMode `json:"mode"`
 }
 
-func (o *Plan) GetID() *string {
+func (o *PlanV4Input) GetHrid() string {
 	if o == nil {
-		return nil
+		return ""
 	}
-	return o.ID
+	return o.Hrid
 }
 
-func (o *Plan) GetCrossID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.CrossID
-}
-
-func (o *Plan) GetName() *string {
+func (o *PlanV4Input) GetName() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Name
 }
 
-func (o *Plan) GetDescription() *string {
+func (o *PlanV4Input) GetDescription() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Description
 }
 
-func (o *Plan) GetSecurity() *PlanSecurity {
+func (o *PlanV4Input) GetSecurity() *PlanSecurity {
 	if o == nil {
 		return nil
 	}
 	return o.Security
 }
 
-func (o *Plan) GetCharacteristics() []string {
+func (o *PlanV4Input) GetCharacteristics() []string {
 	if o == nil {
 		return nil
 	}
 	return o.Characteristics
 }
 
-func (o *Plan) GetExcludedGroups() []string {
+func (o *PlanV4Input) GetExcludedGroups() []string {
 	if o == nil {
 		return nil
 	}
 	return o.ExcludedGroups
 }
 
-func (o *Plan) GetGeneralConditions() *string {
+func (o *PlanV4Input) GetGeneralConditions() *string {
 	if o == nil {
 		return nil
 	}
 	return o.GeneralConditions
 }
 
-func (o *Plan) GetOrder() *int64 {
+func (o *PlanV4Input) GetOrder() *int64 {
 	if o == nil {
 		return nil
 	}
 	return o.Order
 }
 
-func (o *Plan) GetSelectionRule() *string {
+func (o *PlanV4Input) GetSelectionRule() *string {
 	if o == nil {
 		return nil
 	}
 	return o.SelectionRule
 }
 
-func (o *Plan) GetStatus() PlanStatus {
+func (o *PlanV4Input) GetStatus() PlanStatus {
 	if o == nil {
 		return PlanStatus("")
 	}
 	return o.Status
 }
 
-func (o *Plan) GetTags() []string {
+func (o *PlanV4Input) GetTags() []string {
 	if o == nil {
 		return nil
 	}
 	return o.Tags
 }
 
-func (o *Plan) GetType() PlanType {
+func (o *PlanV4Input) GetType() PlanType {
 	if o == nil {
 		return PlanType("")
 	}
 	return o.Type
 }
 
-func (o *Plan) GetValidation() *PlanValidation {
+func (o *PlanV4Input) GetValidation() *PlanValidation {
 	if o == nil {
 		return nil
 	}
 	return o.Validation
 }
 
-func (o *Plan) GetFlows() []FlowV4 {
+func (o *PlanV4Input) GetFlows() []FlowV4Input {
 	if o == nil {
 		return nil
 	}
 	return o.Flows
 }
 
-func (o *Plan) GetMode() PlanMode {
+func (o *PlanV4Input) GetMode() PlanMode {
 	if o == nil {
 		return PlanMode("")
 	}

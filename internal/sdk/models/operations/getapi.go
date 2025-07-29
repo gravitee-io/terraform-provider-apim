@@ -9,9 +9,9 @@ import (
 )
 
 type GetAPIGlobals struct {
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 }
 
@@ -41,9 +41,9 @@ func (o *GetAPIGlobals) GetEnvironmentID() *string {
 }
 
 type GetAPIRequest struct {
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Human-readable ID of a spec
 	Hrid string `pathParam:"style=simple,explode=false,name=hrid"`
@@ -88,8 +88,12 @@ type GetAPIResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Successful retrieval
+	// API successfully retrieved
 	APIV4State *shared.APIV4State
+	// Unauthenticated
+	HTTPError *shared.HTTPError
+	// Default error
+	Error *shared.Error
 }
 
 func (o *GetAPIResponse) GetContentType() string {
@@ -118,4 +122,18 @@ func (o *GetAPIResponse) GetAPIV4State() *shared.APIV4State {
 		return nil
 	}
 	return o.APIV4State
+}
+
+func (o *GetAPIResponse) GetHTTPError() *shared.HTTPError {
+	if o == nil {
+		return nil
+	}
+	return o.HTTPError
+}
+
+func (o *GetAPIResponse) GetError() *shared.Error {
+	if o == nil {
+		return nil
+	}
+	return o.Error
 }

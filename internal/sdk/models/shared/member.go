@@ -2,6 +2,7 @@
 
 package shared
 
+// Member
 type Member struct {
 	ID       *string `json:"id,omitempty"`
 	Source   *string `json:"source,omitempty"`

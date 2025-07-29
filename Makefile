@@ -13,6 +13,11 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 lint: ## Run speakeasy lint accepting no error or warning
 	@speakeasy lint openapi --schema schemas/automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
 
+.PHONY: sync-oas
+lint: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-management
+	@cp ../gravitee-apim-management/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml schemas/automation-api-oas.yaml
+
+
 .PHONY: acceptance-tests
 acceptance-tests: ## Run acceptance tests against a running environment
 	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD=${APIM_PASSWORD} APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -v ./internal/provider

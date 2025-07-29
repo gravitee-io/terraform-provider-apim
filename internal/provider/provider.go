@@ -56,11 +56,11 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				Sensitive: true,
 			},
 			"environment_id": schema.StringAttribute{
-				Description: `Id of an environment.`,
+				Description: `environment ID`,
 				Optional:    true,
 			},
 			"organization_id": schema.StringAttribute{
-				Description: `Id of an organization.`,
+				Description: `organization ID`,
 				Optional:    true,
 			},
 			"password": schema.StringAttribute{

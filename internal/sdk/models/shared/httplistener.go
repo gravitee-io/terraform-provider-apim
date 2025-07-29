@@ -2,6 +2,7 @@
 
 package shared
 
+// HTTPListener - HTTP Listener
 type HTTPListener struct {
 	// Listener type.
 	Type         ListenerType `json:"type"`
@@ -9,7 +10,8 @@ type HTTPListener struct {
 	Servers      []string     `json:"servers,omitempty"`
 	Paths        []PathV4     `json:"paths,omitempty"`
 	PathMappings []string     `json:"pathMappings,omitempty"`
-	Cors         *Cors        `json:"cors,omitempty"`
+	// Http listener Cross-Origin Resource Sharing
+	Cors *Cors `json:"cors,omitempty"`
 }
 
 func (o *HTTPListener) GetType() ListenerType {
