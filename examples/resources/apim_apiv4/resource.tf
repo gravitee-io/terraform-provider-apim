@@ -453,7 +453,6 @@ resource "apim_apiv4" "my_apiv4" {
       hrid               = "my_demo_api"
       mode               = "STANDARD"
       name               = "...my_name..."
-      order              = 6
       security = {
         configuration = "{ \"see\": \"documentation\" }"
         type          = "KEY_LESS"

@@ -1,0 +1,26 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Subscription Terraform overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/subscriptions"].put
+    update:
+      x-speakeasy-entity-operation: Subscription#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/subscriptions/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: Subscription#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/subscriptions/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: Subscription#delete
+  - target: $.components.schemas.SubscriptionSpec
+    update:
+      x-speakeasy-entity: Subscription
+
+  # Customizations
+  - target: $.components.schemas.SubscriptionSpec.properties.startingAt
+    description: Prevent unknown values in plans if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true

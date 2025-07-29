@@ -178,14 +178,18 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewApiv4Resource,
+		NewApplicationResource,
 		NewSharedPolicyGroupResource,
+		NewSubscriptionResource,
 	}
 }
 
 func (p *ApimProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewApiv4DataSource,
+		NewApplicationDataSource,
 		NewSharedPolicyGroupDataSource,
+		NewSubscriptionDataSource,
 	}
 }
 

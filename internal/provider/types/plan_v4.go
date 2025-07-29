@@ -15,7 +15,6 @@ type PlanV4 struct {
 	Hrid              types.String   `tfsdk:"hrid"`
 	Mode              types.String   `tfsdk:"mode"`
 	Name              types.String   `tfsdk:"name"`
-	Order             types.Int64    `tfsdk:"order"`
 	Security          *PlanSecurity  `tfsdk:"security"`
 	SelectionRule     types.String   `tfsdk:"selection_rule"`
 	Status            types.String   `tfsdk:"status"`

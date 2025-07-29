@@ -1212,7 +1212,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			plans.Hrid = types.StringValue(plansItem.Hrid)
 			plans.Mode = types.StringValue(string(plansItem.Mode))
 			plans.Name = types.StringPointerValue(plansItem.Name)
-			plans.Order = types.Int64PointerValue(plansItem.Order)
 			if plansItem.Security == nil {
 				plans.Security = nil
 			} else {
@@ -1248,7 +1247,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				r.Plans[plansCount].Hrid = plans.Hrid
 				r.Plans[plansCount].Mode = plans.Mode
 				r.Plans[plansCount].Name = plans.Name
-				r.Plans[plansCount].Order = plans.Order
 				r.Plans[plansCount].Security = plans.Security
 				r.Plans[plansCount].SelectionRule = plans.SelectionRule
 				r.Plans[plansCount].Status = plans.Status
@@ -2275,12 +2273,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			generalConditions = nil
 		}
-		order := new(int64)
-		if !plansItem.Order.IsUnknown() && !plansItem.Order.IsNull() {
-			*order = plansItem.Order.ValueInt64()
-		} else {
-			order = nil
-		}
 		selectionRule := new(string)
 		if !plansItem.SelectionRule.IsUnknown() && !plansItem.SelectionRule.IsNull() {
 			*selectionRule = plansItem.SelectionRule.ValueString()
@@ -2728,7 +2720,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Characteristics:   characteristics,
 			ExcludedGroups:    excludedGroups,
 			GeneralConditions: generalConditions,
-			Order:             order,
 			SelectionRule:     selectionRule,
 			Status:            status,
 			Tags:              tags1,
@@ -3415,11 +3406,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			content1 = nil
 		}
-		order1 := new(int64)
+		order := new(int64)
 		if !pagesItem.Order.IsUnknown() && !pagesItem.Order.IsNull() {
-			*order1 = pagesItem.Order.ValueInt64()
+			*order = pagesItem.Order.ValueInt64()
 		} else {
-			order1 = nil
+			order = nil
 		}
 		lastContributor := new(string)
 		if !pagesItem.LastContributor.IsUnknown() && !pagesItem.LastContributor.IsNull() {
@@ -3600,11 +3591,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				content2 = nil
 			}
-			order2 := new(int64)
+			order1 := new(int64)
 			if !translationsItem.Order.IsUnknown() && !translationsItem.Order.IsNull() {
-				*order2 = translationsItem.Order.ValueInt64()
+				*order1 = translationsItem.Order.ValueInt64()
 			} else {
-				order2 = nil
+				order1 = nil
 			}
 			lastContributor1 := new(string)
 			if !translationsItem.LastContributor.IsUnknown() && !translationsItem.LastContributor.IsNull() {
@@ -3772,7 +3763,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				Name:                   name22,
 				Type:                   type10,
 				Content:                content2,
-				Order:                  order2,
+				Order:                  order1,
 				LastContributor:        lastContributor1,
 				Published:              published1,
 				Visibility:             visibility2,
@@ -3797,7 +3788,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Name:                   name20,
 			Type:                   type9,
 			Content:                content1,
-			Order:                  order1,
+			Order:                  order,
 			LastContributor:        lastContributor,
 			Published:              published,
 			Visibility:             visibility1,

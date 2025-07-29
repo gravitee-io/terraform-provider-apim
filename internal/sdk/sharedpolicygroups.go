@@ -106,9 +106,9 @@ func (s *SharedPolicyGroups) Get(ctx context.Context, request operations.GetPoli
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
 					InitialInterval: 500,
-					MaxInterval:     60000,
+					MaxInterval:     30000,
 					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					MaxElapsedTime:  60000,
 				},
 				RetryConnectionErrors: true,
 			}
@@ -354,9 +354,9 @@ func (s *SharedPolicyGroups) Delete(ctx context.Context, request operations.Dele
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
 					InitialInterval: 500,
-					MaxInterval:     60000,
+					MaxInterval:     30000,
 					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					MaxElapsedTime:  60000,
 				},
 				RetryConnectionErrors: true,
 			}
@@ -589,9 +589,9 @@ func (s *SharedPolicyGroups) CreateOrUpdate(ctx context.Context, request operati
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
 					InitialInterval: 500,
-					MaxInterval:     60000,
+					MaxInterval:     30000,
 					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					MaxElapsedTime:  60000,
 				},
 				RetryConnectionErrors: true,
 			}

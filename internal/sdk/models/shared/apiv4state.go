@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // APIV4State - API state
 type APIV4State struct {
 	// A unique human readable id identifying this resource
@@ -39,7 +43,7 @@ type APIV4State struct {
 	// This groups are id or name references to existing groups in APIM.
 	Groups []string `json:"groups,omitempty"`
 	// The visibility of the resource regarding the portal.
-	Visibility *Visibility `json:"visibility,omitempty"`
+	Visibility *Visibility `default:"PUBLIC" json:"visibility"`
 	// The state of the API regarding the gateway(s).
 	State *LifecycleState `json:"state,omitempty"`
 	// Primary owner
@@ -62,6 +66,17 @@ type APIV4State struct {
 	ID *string `json:"id,omitempty"`
 	// When promoting an API from one environment to the other, this ID identifies the API across those different environments.
 	CrossID *string `json:"crossId,omitempty"`
+}
+
+func (a APIV4State) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *APIV4State) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *APIV4State) GetHrid() string {

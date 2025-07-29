@@ -43,7 +43,7 @@ type APIV4Spec struct {
 	// This groups are id or name references to existing groups in APIM.
 	Groups []string `json:"groups,omitempty"`
 	// The visibility of the resource regarding the portal.
-	Visibility *Visibility `json:"visibility,omitempty"`
+	Visibility *Visibility `default:"PUBLIC" json:"visibility"`
 	// The state of the API regarding the gateway(s).
 	State *LifecycleState `json:"state,omitempty"`
 	// Primary owner

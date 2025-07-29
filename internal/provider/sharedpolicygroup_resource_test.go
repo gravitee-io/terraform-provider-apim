@@ -11,7 +11,7 @@ import (
 )
 
 // Verifies the create, read, import, and delete lifecycle of the
-// `gravitee_shared_policy_group` resource.
+// `apim_shared_policy_group` resource.
 func TestSharedPolicyGroupResource_lifecycle(t *testing.T) {
 	t.Parallel()
 

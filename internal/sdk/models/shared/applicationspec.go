@@ -3,64 +3,8 @@
 package shared
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
-
-// ApplicationSpecStatus - Application's status
-type ApplicationSpecStatus string
-
-const (
-	ApplicationSpecStatusActive   ApplicationSpecStatus = "ACTIVE"
-	ApplicationSpecStatusArchived ApplicationSpecStatus = "ARCHIVED"
-)
-
-func (e ApplicationSpecStatus) ToPointer() *ApplicationSpecStatus {
-	return &e
-}
-func (e *ApplicationSpecStatus) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "ACTIVE":
-		fallthrough
-	case "ARCHIVED":
-		*e = ApplicationSpecStatus(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ApplicationSpecStatus: %v", v)
-	}
-}
-
-// ApplicationSpecOrigin - The origin of the Application.
-type ApplicationSpecOrigin string
-
-const (
-	ApplicationSpecOriginKubernetes ApplicationSpecOrigin = "kubernetes"
-	ApplicationSpecOriginManagement ApplicationSpecOrigin = "management"
-)
-
-func (e ApplicationSpecOrigin) ToPointer() *ApplicationSpecOrigin {
-	return &e
-}
-func (e *ApplicationSpecOrigin) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "kubernetes":
-		fallthrough
-	case "management":
-		*e = ApplicationSpecOrigin(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ApplicationSpecOrigin: %v", v)
-	}
-}
 
 // ApplicationSpec defines the desired state of Application.
 type ApplicationSpec struct {
@@ -75,8 +19,6 @@ type ApplicationSpec struct {
 	// List of groups associated with the Application.
 	// This groups are id or name references to existing groups in APIM.
 	Groups []string `json:"groups,omitempty"`
-	// Application's status
-	Status *ApplicationSpecStatus `json:"status,omitempty"`
 	// Application's picture Url.
 	PictureURL *string `json:"pictureUrl,omitempty"`
 	// If true, new members added to the Application spec will
@@ -84,8 +26,6 @@ type ApplicationSpec struct {
 	NotifyMembers *bool `default:"false" json:"notifyMembers"`
 	// Application's background.
 	Background *string `json:"background,omitempty"`
-	// The origin of the Application.
-	Origin *ApplicationSpecOrigin `json:"origin,omitempty"`
 	// Primary owner
 	PrimaryOwner *PrimaryOwner `json:"primaryOwner,omitempty"`
 	// Application settings
@@ -142,13 +82,6 @@ func (o *ApplicationSpec) GetGroups() []string {
 	return o.Groups
 }
 
-func (o *ApplicationSpec) GetStatus() *ApplicationSpecStatus {
-	if o == nil {
-		return nil
-	}
-	return o.Status
-}
-
 func (o *ApplicationSpec) GetPictureURL() *string {
 	if o == nil {
 		return nil
@@ -168,13 +101,6 @@ func (o *ApplicationSpec) GetBackground() *string {
 		return nil
 	}
 	return o.Background
-}
-
-func (o *ApplicationSpec) GetOrigin() *ApplicationSpecOrigin {
-	if o == nil {
-		return nil
-	}
-	return o.Origin
 }
 
 func (o *ApplicationSpec) GetPrimaryOwner() *PrimaryOwner {

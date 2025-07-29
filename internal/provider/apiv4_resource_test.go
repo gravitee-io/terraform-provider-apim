@@ -11,7 +11,7 @@ import (
 )
 
 // Verifies the create, read, import, and delete lifecycle of the
-// `gravitee_apiv4` resource.
+// `apim_apiv4` resource.
 func TestAPIV4Resource_lifecycle(t *testing.T) {
 	t.Parallel()
 

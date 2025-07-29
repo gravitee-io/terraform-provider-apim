@@ -118,9 +118,9 @@ func (s *Applications) CreateOrUpdate(ctx context.Context, request operations.Cr
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
 					InitialInterval: 500,
-					MaxInterval:     60000,
+					MaxInterval:     30000,
 					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					MaxElapsedTime:  60000,
 				},
 				RetryConnectionErrors: true,
 			}
@@ -364,9 +364,9 @@ func (s *Applications) Get(ctx context.Context, request operations.GetApplicatio
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
 					InitialInterval: 500,
-					MaxInterval:     60000,
+					MaxInterval:     30000,
 					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					MaxElapsedTime:  60000,
 				},
 				RetryConnectionErrors: true,
 			}
@@ -608,9 +608,9 @@ func (s *Applications) Delete(ctx context.Context, request operations.DeleteAppl
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
 					InitialInterval: 500,
-					MaxInterval:     60000,
+					MaxInterval:     30000,
 					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					MaxElapsedTime:  60000,
 				},
 				RetryConnectionErrors: true,
 			}

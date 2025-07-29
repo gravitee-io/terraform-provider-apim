@@ -114,9 +114,9 @@ func (s *Subscriptions) CreateOrUpdate(ctx context.Context, request operations.C
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
 					InitialInterval: 500,
-					MaxInterval:     60000,
+					MaxInterval:     30000,
 					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					MaxElapsedTime:  60000,
 				},
 				RetryConnectionErrors: true,
 			}
@@ -358,9 +358,9 @@ func (s *Subscriptions) Get(ctx context.Context, request operations.GetSubscript
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
 					InitialInterval: 500,
-					MaxInterval:     60000,
+					MaxInterval:     30000,
 					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					MaxElapsedTime:  60000,
 				},
 				RetryConnectionErrors: true,
 			}
@@ -602,9 +602,9 @@ func (s *Subscriptions) Delete(ctx context.Context, request operations.DeleteSub
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
 					InitialInterval: 500,
-					MaxInterval:     60000,
+					MaxInterval:     30000,
 					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					MaxElapsedTime:  60000,
 				},
 				RetryConnectionErrors: true,
 			}

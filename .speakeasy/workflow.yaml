@@ -5,11 +5,13 @@ sources:
         inputs:
             - location: schemas/automation-api-oas.yaml
         overlays:
-            - location: schemas/overlays/apiv4.yaml
+            - location: schemas/overlays/oas-core.yaml
             - location: schemas/overlays/common-param.yaml
             - location: schemas/overlays/common-schema.yaml
-            - location: schemas/overlays/oas-core.yaml
+            - location: schemas/overlays/apiv4.yaml
             - location: schemas/overlays/shared-policy-group.yaml
+            - location: schemas/overlays/application.yaml
+            - location: schemas/overlays/subscription.yaml
             - location: .speakeasy/speakeasy-modifications-overlay.yaml
         output: schemas/output/computed.yaml
         registry:

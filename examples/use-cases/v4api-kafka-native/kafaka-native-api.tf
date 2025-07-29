@@ -67,11 +67,10 @@ resource "apim_apiv4" "kafka_native_api" {
     },
   ]
   # known limitation, some default value is returned by default which appears to be remove during plan
-  metadata=[{}]
-  definition_context = {}
-  plans = {
-    # known limitation, key have to match name to avoid terraform plan to remain inconsistent
-    KeyLess = {
+  metadata = [{}]
+  plans = [
+    {
+      hrid       = "KeyLess"
       name       = "KeyLess"
       type       = "API"
       mode       = "STANDARD"
@@ -81,5 +80,5 @@ resource "apim_apiv4" "kafka_native_api" {
         type = "KEY_LESS"
       }
     }
-  }
+  ]
 }

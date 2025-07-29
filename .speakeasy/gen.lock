@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 42bc57267f697dc2b87d78e1cc9350fe
+  docChecksum: ced37ba8f966d93b2f18f33d6e184c1b
   docVersion: 1.0.0
   speakeasyVersion: 1.592.1
   generationVersion: 2.667.0
@@ -27,12 +27,18 @@ generatedFiles:
   - USAGE.md
   - examples/README.md
   - examples/data-sources/apim_apiv4/data-source.tf
+  - examples/data-sources/apim_application/data-source.tf
   - examples/data-sources/apim_shared_policy_group/data-source.tf
+  - examples/data-sources/apim_subscription/data-source.tf
   - examples/provider/provider.tf
   - examples/resources/apim_apiv4/import.sh
   - examples/resources/apim_apiv4/resource.tf
+  - examples/resources/apim_application/import.sh
+  - examples/resources/apim_application/resource.tf
   - examples/resources/apim_shared_policy_group/import.sh
   - examples/resources/apim_shared_policy_group/resource.tf
+  - examples/resources/apim_subscription/import.sh
+  - examples/resources/apim_subscription/resource.tf
   - go.mod
   - go.sum
   - internal/planmodifiers/boolplanmodifier/suppress_diff.go
@@ -51,6 +57,10 @@ generatedFiles:
   - internal/provider/apiv4_data_source_sdk.go
   - internal/provider/apiv4_resource.go
   - internal/provider/apiv4_resource_sdk.go
+  - internal/provider/application_data_source.go
+  - internal/provider/application_data_source_sdk.go
+  - internal/provider/application_resource.go
+  - internal/provider/application_resource_sdk.go
   - internal/provider/provider.go
   - internal/provider/reflect/diags.go
   - internal/provider/reflect/doc.go
@@ -70,12 +80,19 @@ generatedFiles:
   - internal/provider/sharedpolicygroup_data_source_sdk.go
   - internal/provider/sharedpolicygroup_resource.go
   - internal/provider/sharedpolicygroup_resource_sdk.go
+  - internal/provider/subscription_data_source.go
+  - internal/provider/subscription_data_source_sdk.go
+  - internal/provider/subscription_resource.go
+  - internal/provider/subscription_resource_sdk.go
   - internal/provider/typeconvert/date.go
   - internal/provider/typeconvert/datetime.go
   - internal/provider/typeconvert/int.go
   - internal/provider/types/access_control.go
   - internal/provider/types/analytics.go
   - internal/provider/types/api_services.go
+  - internal/provider/types/application_o_auth_client_settings.go
+  - internal/provider/types/application_settings.go
+  - internal/provider/types/application_tls_settings.go
   - internal/provider/types/channel_selector.go
   - internal/provider/types/condition_selector.go
   - internal/provider/types/cors.go
@@ -116,6 +133,7 @@ generatedFiles:
   - internal/provider/types/sampling.go
   - internal/provider/types/selector.go
   - internal/provider/types/service_v4.go
+  - internal/provider/types/simple_application_settings.go
   - internal/provider/types/step_v4.go
   - internal/provider/types/subscription_listener.go
   - internal/provider/types/tcp_listener.go

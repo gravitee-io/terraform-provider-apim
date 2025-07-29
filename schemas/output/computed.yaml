@@ -173,6 +173,7 @@ paths:
           $ref: "#/components/responses/NotFound"
         default:
           $ref: "#/components/responses/Error"
+      x-speakeasy-entity-operation: Application#create,update
       x-speakeasy-name-override: createOrUpdate
   /organizations/{orgId}/environments/{envId}/applications/{hrid}:
     parameters:
@@ -204,6 +205,7 @@ paths:
           $ref: "#/components/responses/NotFound"
         default:
           $ref: "#/components/responses/Error"
+      x-speakeasy-entity-operation: Application#read
       x-speakeasy-name-override: get
     delete:
       operationId: deleteApplication
@@ -226,6 +228,7 @@ paths:
           $ref: "#/components/responses/NotFound"
         default:
           $ref: "#/components/responses/Error"
+      x-speakeasy-entity-operation: Application#delete
       x-speakeasy-name-override: delete
   # Subscription
   /organizations/{orgId}/environments/{envId}/subscriptions:
@@ -260,6 +263,7 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         default:
           $ref: "#/components/responses/Error"
+      x-speakeasy-entity-operation: Subscription#create,update
       x-speakeasy-name-override: createOrUpdate
   /organizations/{orgId}/environments/{envId}/subscriptions/{hrid}:
     parameters:
@@ -291,6 +295,7 @@ paths:
           $ref: "#/components/responses/NotFound"
         default:
           $ref: "#/components/responses/Error"
+      x-speakeasy-entity-operation: Subscription#read
       x-speakeasy-name-override: get
     delete:
       operationId: deleteSubscription
@@ -313,6 +318,7 @@ paths:
           $ref: "#/components/responses/NotFound"
         default:
           $ref: "#/components/responses/Error"
+      x-speakeasy-entity-operation: Subscription#delete
       x-speakeasy-name-override: delete
   # Shared Policy Groups
   /organizations/{orgId}/environments/{envId}/shared-policy-groups/{hrid}:
@@ -588,51 +594,6 @@ components:
               description: >-
                 When promoting an API from one environment to the other, this ID identifies the API across those different environments.
           x-speakeasy-param-suppress-computed-diff: true
-    HttpError:
-      description: Error
-      type: object
-      properties:
-        httpStatus:
-          type: integer
-          format: int32
-          description: Error code
-          examples:
-            - 200
-            - 400
-        message:
-          type: string
-          description: Error message
-          examples:
-            - Bad request
-        technicalCode:
-          type: string
-          description: A technical code to identify the error
-          examples:
-            - invalid.import.definition
-        parameters:
-          type: object
-          description: A map of parameters to be used in the error message
-          additionalProperties:
-            type: string
-        details:
-          type: array
-          description: A list of details about the error
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: The error message
-                examples:
-                  - Bad request
-              location:
-                type: string
-                description: The json path of the field in error.
-                examples:
-                  - updateApi.properties[0].key
-              invalidValue:
-                type: string
-                description: The invalid value.
     ApplicationSpec:
       description: ApplicationSpec defines the desired state of Application.
       type: object
@@ -654,6 +615,7 @@ components:
         domain:
           type: string
           description: Application's domain.
+          x-speakeasy-param-suppress-computed-diff: true
         groups:
           default: []
           description: >-
@@ -663,15 +625,11 @@ components:
           items:
             type: string
           type: array
-        status:
-          type: string
-          description: Application's status
-          enum:
-            - ACTIVE
-            - ARCHIVED
+          x-speakeasy-param-suppress-computed-diff: true
         pictureUrl:
           type: string
           description: Application's picture Url.
+          x-speakeasy-param-suppress-computed-diff: true
         notifyMembers:
           default: false
           description: |-
@@ -682,32 +640,32 @@ components:
         background:
           type: string
           description: Application's background.
-        origin:
-          type: string
-          description: The origin of the Application.
-          enum:
-            - kubernetes
-            - management
+          x-speakeasy-param-suppress-computed-diff: true
         primaryOwner:
           $ref: "#/components/schemas/PrimaryOwner"
+          x-speakeasy-param-suppress-computed-diff: true
         settings:
           $ref: "#/components/schemas/ApplicationSettings"
+          x-speakeasy-param-suppress-computed-diff: true
         metadata:
           type: array
           description: The list of Application's metadata.
           items:
             $ref: "#/components/schemas/Metadata"
           uniqueItems: true
+          x-speakeasy-param-suppress-computed-diff: true
         members:
           type: array
           description: Set of members associated with the application
           items:
             $ref: '#/components/schemas/Member'
           uniqueItems: true
+          x-speakeasy-param-suppress-computed-diff: true
       required:
         - hrid
         - name
         - description
+      x-speakeasy-entity: Application
     ApplicationSettings:
       description: Application settings
       properties:
@@ -761,12 +719,7 @@ components:
             id:
               type: string
               description: Application's uuid.
-            environmentId:
-              description: The environment ID of the Application.
-              type: string
-            organizationId:
-              description: The organization ID of the Application.
-              type: string
+          x-speakeasy-param-suppress-computed-diff: true
     # Subscription
     SubscriptionSpec:
       description: SubscriptionSpec defines the desired state of Subscription.
@@ -793,6 +746,7 @@ components:
           format: date-time
           example: "2040-12-25T09:12:28Z"
           writeOnly: true
+          x-speakeasy-param-suppress-computed-diff: true
         endingAt:
           type: string
           format: date-time
@@ -802,6 +756,7 @@ components:
         - applicationHrid
         - apiHrid
         - planHrid
+      x-speakeasy-entity: Subscription
     SubscriptionState:
       description: State of subscription that has been created/update
       allOf:
@@ -821,28 +776,6 @@ components:
             organizationId:
               description: The organization ID of the Subscription.
               type: string
-    Errors:
-      description: >-
-        When a resource has been created regardless of errors, this field is used to persist the error message encountered during admission
-      properties:
-        severe:
-          description: >-
-            severe errors do not pass admission and will block reconcile hence, this field should always be populated during the admission phase and is very unlikely to be persisted in the status
-          items:
-            type: string
-          type: array
-        warning:
-          description: >-
-            warning errors do not block object reconciliation,
-
-            most of the time because the value is ignored or defaulted
-
-            when the resource gets synced with APIM
-          items:
-            type: string
-          type: array
-      type: object
-      x-speakeasy-terraform-ignore: true
     SharedPolicyGroupState:
       description: State of Shared Policy Groups that has been created/updated
       allOf:
@@ -972,6 +905,7 @@ components:
           type: string
         order:
           type: integer
+          x-speakeasy-terraform-ignore: true
         selectionRule:
           type: string
         status:
@@ -1082,6 +1016,7 @@ components:
     Visibility:
       type: string
       description: The visibility of the resource regarding the portal.
+      default: PUBLIC
       examples:
         - PUBLIC
       enum:
@@ -2149,6 +2084,73 @@ components:
         - STARTED
         - STOPPED
         - STOPPING
+    HttpError:
+      description: Error
+      type: object
+      properties:
+        httpStatus:
+          type: integer
+          format: int32
+          description: Error code
+          examples:
+            - 200
+            - 400
+        message:
+          type: string
+          description: Error message
+          examples:
+            - Bad request
+        technicalCode:
+          type: string
+          description: A technical code to identify the error
+          examples:
+            - invalid.import.definition
+        parameters:
+          type: object
+          description: A map of parameters to be used in the error message
+          additionalProperties:
+            type: string
+        details:
+          type: array
+          description: A list of details about the error
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: The error message
+                examples:
+                  - Bad request
+              location:
+                type: string
+                description: The json path of the field in error.
+                examples:
+                  - updateApi.properties[0].key
+              invalidValue:
+                type: string
+                description: The invalid value.
+    Errors:
+      description: >-
+        When a resource has been created regardless of errors, this field is used to persist the error message encountered during admission
+      properties:
+        severe:
+          description: >-
+            severe errors do not pass admission and will block reconcile hence, this field should always be populated during the admission phase and is very unlikely to be persisted in the status
+          items:
+            type: string
+          type: array
+        warning:
+          description: >-
+            warning errors do not block object reconciliation,
+
+            most of the time because the value is ignored or defaulted
+
+            when the resource gets synced with APIM
+          items:
+            type: string
+          type: array
+      type: object
+      x-speakeasy-terraform-ignore: true
   responses:
     NotFound:
       description: Resource not found
@@ -2231,8 +2233,8 @@ x-speakeasy-retries:
   strategy: backoff
   backoff:
     initialInterval: 500 # 500 milliseconds
-    maxInterval: 60000 # 60 seconds
-    maxElapsedTime: 3600000 # 1 hour
+    maxInterval: 30000 # 30 seconds
+    maxElapsedTime: 60000 # 1 minute
     exponent: 1.5
   statusCodes:
     - 5XX

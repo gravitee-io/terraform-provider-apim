@@ -10,8 +10,13 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 	go build
 
 .PHONY: lint
-lint: ## Run speakeasy lint accepting no error or warning
-	@speakeasy lint openapi --schema schemas/automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
+lint: ## Run speakeasy lint check run terraform resource formatting
+	speakeasy lint openapi --schema schemas/automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
+	@terraform fmt -recursive -check || (echo "Error: Above terraform files are not properly formatted. Please run 'terraform fmt -recursive' to fix formatting issues" && exit 1)
+
+.PHONY: lint-fix
+lint-fix: ## Fix issues that can be found
+	@terraform fmt -recursive
 
 .PHONY: sync-oas
 sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-management

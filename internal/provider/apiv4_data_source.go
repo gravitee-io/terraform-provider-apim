@@ -1668,9 +1668,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"name": schema.StringAttribute{
 							Computed: true,
 						},
-						"order": schema.Int64Attribute{
-							Computed: true,
-						},
 						"security": schema.SingleNestedAttribute{
 							Computed: true,
 							Attributes: map[string]schema.Attribute{

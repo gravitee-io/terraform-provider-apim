@@ -1,13 +1,13 @@
-resource "apim_apiv4" "api-with-pages-inline" {
+resource "apim_apiv4" "api-with-pages-fetcher" {
   # should match the resource name
-  hrid            = "api-with-pages-inline"
-  name            = "Terraform: Simple PROXY API, Page with inlined Markdown"
-  description     = "Simple proxy API containing an inline documentation written in Markdown"
+  hrid            = "api-with-pages-fetcher"
+  name            = "Terraform: Simple PROXY API, Page from HTTP fetcher"
+  description     = "Simple proxy API containing PetStore Swagger API spec fetched from swagger website"
   version         = "1"
   type            = "PROXY"
-  state           = "STARTED"
+  state           = "STOPPED"
   visibility      = "PRIVATE"
-  lifecycle_state = "PUBLISHED"
+  lifecycle_state = "UNPUBLISHED"
   listeners = [
     {
       http = {
@@ -19,7 +19,7 @@ resource "apim_apiv4" "api-with-pages-inline" {
         ]
         paths = [
           {
-            path = "/api-with-pages-inline"
+            path = "/api-with-pages-fetcher/"
           }
         ]
       }
@@ -54,28 +54,35 @@ resource "apim_apiv4" "api-with-pages-inline" {
   analytics = {
     enabled = false
   }
-  pages = {
-    markdown = {
-      content = <<-EOT
-          Hello world!
-          --
-          This is markdown.
-          EOT
-      name    = "hello-markdown"
-      parent  = "markdowns-folder"
-      type    = "MARKDOWN"
-    }
-    markdowns-folder = {
-      name = "markdowns"
+  pages = [
+    {
+      hrid = "docs-folder"
+      name = "specifications"
       type = "FOLDER"
+      //visibility = "PRIVATE"
+    },
+    {
+      hrid   = "swagger"
+      name   = "pet-store"
+      parent = "docs-folder"
+      source = {
+        configuration = jsonencode({
+          fetchCron = "*/10 * * * * *"
+          url       = "https://petstore.swagger.io/v2/swagger.json"
+          autoFetch      = false
+          useSystemProxy = false
+        })
+        type = "http-fetcher"
+      }
+      type = "SWAGGER"
+      //visibility = "PRIVATE"
     }
-  }
-  # known limitation: will dispear in next version
-  definition_context = {}
-  plans = {
-    # known limitation, key have to match name to avoid terraform plan to remain inconsistent
-    KeyLess = {
-      name        = "KeyLess"
+  ]
+
+  plans = [
+    {
+      hrid        = "KeyLess"
+      name        = "No security"
       type        = "API"
       mode        = "STANDARD"
       validation  = "AUTO"
@@ -85,5 +92,6 @@ resource "apim_apiv4" "api-with-pages-inline" {
         type = "KEY_LESS"
       }
     }
-  }
+  ]
+
 }

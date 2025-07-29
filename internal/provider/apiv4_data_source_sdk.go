@@ -1211,7 +1211,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			plans.Hrid = types.StringValue(plansItem.Hrid)
 			plans.Mode = types.StringValue(string(plansItem.Mode))
 			plans.Name = types.StringPointerValue(plansItem.Name)
-			plans.Order = types.Int64PointerValue(plansItem.Order)
 			if plansItem.Security == nil {
 				plans.Security = nil
 			} else {
@@ -1247,7 +1246,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				r.Plans[plansCount].Hrid = plans.Hrid
 				r.Plans[plansCount].Mode = plans.Mode
 				r.Plans[plansCount].Name = plans.Name
-				r.Plans[plansCount].Order = plans.Order
 				r.Plans[plansCount].Security = plans.Security
 				r.Plans[plansCount].SelectionRule = plans.SelectionRule
 				r.Plans[plansCount].Status = plans.Status

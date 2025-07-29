@@ -468,7 +468,6 @@ resource "apim_apiv4" "my_apiv4" {
       hrid               = "my_demo_api"
       mode               = "STANDARD"
       name               = "...my_name..."
-      order              = 6
       security = {
         configuration = "{ \"see\": \"documentation\" }"
         type          = "KEY_LESS"
@@ -1238,7 +1237,6 @@ Optional:
 - `hrid` (String) A unique human readable id identifying this resource. Not Null
 - `mode` (String) The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan). Not Null; must be one of ["STANDARD", "PUSH"]
 - `name` (String)
-- `order` (Number)
 - `security` (Attributes) API plan security (see [below for nested schema](#nestedatt--plans--security))
 - `selection_rule` (String)
 - `status` (String) Plan status. Not Null; must be one of ["STAGING", "PUBLISHED", "DEPRECATED", "CLOSED"]

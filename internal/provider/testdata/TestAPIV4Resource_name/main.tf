@@ -29,8 +29,6 @@ resource "apim_apiv4" "test" {
     enabled = true
   }
 
-  definition_context = {}
-
   endpoint_groups = [
     {
       name = "Default HTTP proxy group"
@@ -110,18 +108,18 @@ resource "apim_apiv4" "test" {
     }
   ]
 
-  plans = {
-    Keyless = {
+  plans = [
+    {
+      hrid        = "Keyless"
       description = "No sec"
       mode        = "STANDARD"
-      name        = "Keyless"
+      name        = "No security"
       status      = "PUBLISHED"
       type        = "API"
       validation  = "AUTO"
-
       security = {
         type = "KEY_LESS"
       }
     }
-  }
+  ]
 }

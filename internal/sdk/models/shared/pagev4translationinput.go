@@ -24,7 +24,7 @@ type PageV4TranslationInput struct {
 	// Page's published status.
 	Published *bool `json:"published,omitempty"`
 	// The visibility of the resource regarding the portal.
-	Visibility *Visibility `json:"visibility,omitempty"`
+	Visibility *Visibility `default:"PUBLIC" json:"visibility"`
 	// Page's last update date.
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	// Page's content type.

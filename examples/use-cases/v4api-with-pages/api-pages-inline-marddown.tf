@@ -1,13 +1,13 @@
-resource "apim_apiv4" "api-with-pages-fetcher" {
+resource "apim_apiv4" "api-with-pages-inline" {
   # should match the resource name
-  hrid            = "api-with-pages-fetcher"
-  name            = "Terraform: Simple PROXY API, Page from HTTP fetcher"
-  description     = "Simple proxy API containing PetStore Swagger API spec fetched from swagger website"
+  hrid            = "api-with-pages-inline"
+  name            = "Terraform: Simple PROXY API, Page with inlined Markdown"
+  description     = "Simple proxy API containing an inline documentation written in Markdown"
   version         = "1"
   type            = "PROXY"
-  state           = "STOPPED"
+  state           = "STARTED"
   visibility      = "PRIVATE"
-  lifecycle_state = "UNPUBLISHED"
+  lifecycle_state = "PUBLISHED"
   listeners = [
     {
       http = {
@@ -19,7 +19,7 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
         ]
         paths = [
           {
-            path = "/api-with-pages-fetcher"
+            path = "/api-with-pages-inline/"
           }
         ]
       }
@@ -34,9 +34,9 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
       }
       endpoints = [
         {
-          name   = "Default HTTP proxy"
-          type   = "http-proxy"
-          weight = 1
+          name                  = "Default HTTP proxy"
+          type                  = "http-proxy"
+          weight                = 1
           inherit_configuration = false
           # Configuration is JSON as is depends on the type schema
           configuration = jsonencode({
@@ -54,30 +54,30 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
   analytics = {
     enabled = false
   }
-  pages = {
-    docs-folder = {
-      name = "specifications"
+  pages = [
+    {
+      hrid    = "markdown"
+      content = <<-EOT
+          Hello world!
+          --
+          This is markdown.
+          EOT
+      name    = "hello-markdown"
+      parent  = "markdowns-folder"
+      type    = "MARKDOWN"
+      //visibility = "PRIVATE"
+    },
+    {
+      hrid = "markdowns-folder"
+      name = "markdowns"
       type = "FOLDER"
+      //visibility = "PRIVATE"
     }
-    swagger = {
-      name   = "pet-store"
-      parent = "docs-folder"
-      source = {
-        configuration = {
-          fetchCron = "*/10 * * * * *"
-          url       = "https://petstore.swagger.io/v2/swagger.json"
-        }
-        type = "http-fetcher"
-      }
-      type = "SWAGGER"
-    }
-  }
-  # known limitation: will dispear in next version
-  definition_context = {}
-  plans = {
-    # known limitation, key have to match name to avoid terraform plan to remain inconsistent
-    KeyLess = {
-      name        = "KeyLess"
+  ]
+  plans = [
+    {
+      hrid        = "KeyLess"
+      name        = "No security"
       type        = "API"
       mode        = "STANDARD"
       validation  = "AUTO"
@@ -87,5 +87,5 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
         type = "KEY_LESS"
       }
     }
-  }
+  ]
 }

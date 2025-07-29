@@ -2,65 +2,6 @@
 
 package shared
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
-// ApplicationStateStatus - Application's status
-type ApplicationStateStatus string
-
-const (
-	ApplicationStateStatusActive   ApplicationStateStatus = "ACTIVE"
-	ApplicationStateStatusArchived ApplicationStateStatus = "ARCHIVED"
-)
-
-func (e ApplicationStateStatus) ToPointer() *ApplicationStateStatus {
-	return &e
-}
-func (e *ApplicationStateStatus) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "ACTIVE":
-		fallthrough
-	case "ARCHIVED":
-		*e = ApplicationStateStatus(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ApplicationStateStatus: %v", v)
-	}
-}
-
-// ApplicationStateOrigin - The origin of the Application.
-type ApplicationStateOrigin string
-
-const (
-	ApplicationStateOriginKubernetes ApplicationStateOrigin = "kubernetes"
-	ApplicationStateOriginManagement ApplicationStateOrigin = "management"
-)
-
-func (e ApplicationStateOrigin) ToPointer() *ApplicationStateOrigin {
-	return &e
-}
-func (e *ApplicationStateOrigin) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "kubernetes":
-		fallthrough
-	case "management":
-		*e = ApplicationStateOrigin(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ApplicationStateOrigin: %v", v)
-	}
-}
-
 // ApplicationState - Application state that has been created/updated
 type ApplicationState struct {
 	// A unique human readable id identifying this resource
@@ -74,14 +15,10 @@ type ApplicationState struct {
 	// List of groups associated with the Application.
 	// This groups are id or name references to existing groups in APIM.
 	Groups []string `json:"groups,omitempty"`
-	// Application's status
-	Status *ApplicationStateStatus `json:"status,omitempty"`
 	// Application's picture Url.
 	PictureURL *string `json:"pictureUrl,omitempty"`
 	// Application's background.
 	Background *string `json:"background,omitempty"`
-	// The origin of the Application.
-	Origin *ApplicationStateOrigin `json:"origin,omitempty"`
 	// Primary owner
 	PrimaryOwner *PrimaryOwner `json:"primaryOwner,omitempty"`
 	// Application settings
@@ -94,10 +31,6 @@ type ApplicationState struct {
 	Errors *Errors `json:"errors,omitempty"`
 	// Application's uuid.
 	ID *string `json:"id,omitempty"`
-	// The environment ID of the Application.
-	EnvironmentID *string `json:"environmentId,omitempty"`
-	// The organization ID of the Application.
-	OrganizationID *string `json:"organizationId,omitempty"`
 }
 
 func (o *ApplicationState) GetHrid() string {
@@ -135,13 +68,6 @@ func (o *ApplicationState) GetGroups() []string {
 	return o.Groups
 }
 
-func (o *ApplicationState) GetStatus() *ApplicationStateStatus {
-	if o == nil {
-		return nil
-	}
-	return o.Status
-}
-
 func (o *ApplicationState) GetPictureURL() *string {
 	if o == nil {
 		return nil
@@ -154,13 +80,6 @@ func (o *ApplicationState) GetBackground() *string {
 		return nil
 	}
 	return o.Background
-}
-
-func (o *ApplicationState) GetOrigin() *ApplicationStateOrigin {
-	if o == nil {
-		return nil
-	}
-	return o.Origin
 }
 
 func (o *ApplicationState) GetPrimaryOwner() *PrimaryOwner {
@@ -203,18 +122,4 @@ func (o *ApplicationState) GetID() *string {
 		return nil
 	}
 	return o.ID
-}
-
-func (o *ApplicationState) GetEnvironmentID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.EnvironmentID
-}
-
-func (o *ApplicationState) GetOrganizationID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.OrganizationID
 }

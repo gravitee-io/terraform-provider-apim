@@ -2973,10 +2973,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									"visibility": schema.StringAttribute{
 										Computed: true,
 										Optional: true,
+										Default:  stringdefault.StaticString(`PUBLIC`),
 										PlanModifiers: []planmodifier.String{
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
-										Description: `The visibility of the resource regarding the portal. must be one of ["PUBLIC", "PRIVATE"]`,
+										Description: `The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]`,
 										Validators: []validator.String{
 											stringvalidator.OneOf(
 												"PUBLIC",
@@ -3025,10 +3026,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						"visibility": schema.StringAttribute{
 							Computed: true,
 							Optional: true,
+							Default:  stringdefault.StaticString(`PUBLIC`),
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `The visibility of the resource regarding the portal. must be one of ["PUBLIC", "PRIVATE"]`,
+							Description: `The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]`,
 							Validators: []validator.String{
 								stringvalidator.OneOf(
 									"PUBLIC",
@@ -3845,13 +3847,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 						},
-						"order": schema.Int64Attribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Int64{
-								speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
-							},
-						},
 						"security": schema.SingleNestedAttribute{
 							Computed: true,
 							Optional: true,
@@ -4261,10 +4256,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"visibility": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
+				Default:  stringdefault.StaticString(`PUBLIC`),
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `The visibility of the resource regarding the portal. must be one of ["PUBLIC", "PRIVATE"]`,
+				Description: `The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"PUBLIC",
