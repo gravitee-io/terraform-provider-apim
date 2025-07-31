@@ -1,4 +1,4 @@
-package provider_test
+package conformance_test
 
 import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider"

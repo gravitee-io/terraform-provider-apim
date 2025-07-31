@@ -1,4 +1,4 @@
-package provider_test
+package conformance_test
 
 import (
 	"encoding/json"
@@ -11,14 +11,14 @@ import (
 )
 
 // Verifies the create, read, import, and delete lifecycle of the
-// `apim_shared_policy_group` resource.
-func TestSharedPolicyGroupResource_lifecycle(t *testing.T) {
+// `apim_subscription` resource.
+func TestSubscriptionResource_lifecycle(t *testing.T) {
 	t.Parallel()
 
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
 	randomId := "test-" + acctest.RandString(10)
-	resourceAddress := "apim_shared_policy_group.test"
+	resourceAddress := "apim_subscription.test"
 
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories: testProviders(),
@@ -56,20 +56,23 @@ func TestSharedPolicyGroupResource_lifecycle(t *testing.T) {
 					return string(importIDBytes), err
 				},
 				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{
+					"starting_at",
+				},
 			},
 			// Testing framework implicitly verifies resource delete.
 		},
 	})
 }
 
-// Verifies the update of the name attribute of the `gravitee_shared_policy_group` resource.
-func TestSharedPolicyGroupResource_name(t *testing.T) {
+// Verifies the update ending_at of the name attribute of the `apim_subscription` resource.
+func TestSubscriptionResource_ending_at(t *testing.T) {
 	t.Parallel()
 
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
 	randomId := "test-" + acctest.RandString(10)
-	resourceAddress := "apim_shared_policy_group.test"
+	resourceAddress := "apim_subscription.test"
 
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories: testProviders(),
@@ -80,7 +83,7 @@ func TestSharedPolicyGroupResource_name(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
-					"name":            config.StringVariable(randomId + "-original"),
+					"ending_at":       config.StringVariable("2040-12-25T10:12:28+01:00"),
 					"organization_id": config.StringVariable(organizationId),
 				},
 			},
@@ -90,7 +93,7 @@ func TestSharedPolicyGroupResource_name(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
-					"name":            config.StringVariable(randomId + "-original"),
+					"ending_at":       config.StringVariable("2040-12-25T10:12:28+01:00"),
 					"organization_id": config.StringVariable(organizationId),
 				},
 				ResourceName: resourceAddress,
@@ -109,6 +112,9 @@ func TestSharedPolicyGroupResource_name(t *testing.T) {
 					return string(importIDBytes), err
 				},
 				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{
+					"starting_at",
+				},
 			},
 			// Verifies resource update.
 			{
@@ -116,7 +122,7 @@ func TestSharedPolicyGroupResource_name(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
-					"name":            config.StringVariable(randomId + "-updated"),
+					"ending_at":       config.StringVariable("2042-12-25T10:12:28+01:00"),
 					"organization_id": config.StringVariable(organizationId),
 				},
 			},

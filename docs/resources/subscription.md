@@ -21,7 +21,6 @@ resource "apim_subscription" "my_subscription" {
   hrid             = "my_demo_api"
   organization_id  = "...my_organization_id..."
   plan_hrid        = "demo-plan"
-  starting_at      = "2040-12-25T09:12:28Z"
 }
 ```
 
@@ -40,11 +39,11 @@ resource "apim_subscription" "my_subscription" {
 - `ending_at` (String)
 - `environment_id` (String) environment ID. Default: "DEFAULT"
 - `organization_id` (String) organization ID. Default: "DEFAULT"
-- `starting_at` (String)
 
 ### Read-Only
 
 - `id` (String) Subscription's uuid.
+- `starting_at` (String)
 
 ## Import
 

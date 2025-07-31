@@ -25,7 +25,7 @@ sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-mana
 
 .PHONY: acceptance-tests
 acceptance-tests: ## Run acceptance tests against a running environment
-	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD=${APIM_PASSWORD} APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -v ./internal/provider
+	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD=${APIM_PASSWORD} APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -v ./tests/conformance
 
 
 .PHONY: help

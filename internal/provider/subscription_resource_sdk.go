@@ -24,6 +24,7 @@ func (r *SubscriptionResourceModel) RefreshFromSharedSubscriptionState(ctx conte
 		r.ID = types.StringPointerValue(resp.ID)
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.PlanHrid = types.StringValue(resp.PlanHrid)
+		r.StartingAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.StartingAt))
 	}
 
 	return diags
@@ -129,12 +130,6 @@ func (r *SubscriptionResourceModel) ToSharedSubscriptionSpec(ctx context.Context
 	var planHrid string
 	planHrid = r.PlanHrid.ValueString()
 
-	startingAt := new(time.Time)
-	if !r.StartingAt.IsUnknown() && !r.StartingAt.IsNull() {
-		*startingAt, _ = time.Parse(time.RFC3339Nano, r.StartingAt.ValueString())
-	} else {
-		startingAt = nil
-	}
 	endingAt := new(time.Time)
 	if !r.EndingAt.IsUnknown() && !r.EndingAt.IsNull() {
 		*endingAt, _ = time.Parse(time.RFC3339Nano, r.EndingAt.ValueString())
@@ -146,7 +141,6 @@ func (r *SubscriptionResourceModel) ToSharedSubscriptionSpec(ctx context.Context
 		ApplicationHrid: applicationHrid,
 		APIHrid:         apiHrid,
 		PlanHrid:        planHrid,
-		StartingAt:      startingAt,
 		EndingAt:        endingAt,
 	}
 

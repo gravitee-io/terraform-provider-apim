@@ -16,9 +16,8 @@ type SubscriptionSpec struct {
 	// The API's Hrid that you want to subscribe to.
 	APIHrid string `json:"apiHrid"`
 	// API plan's Hrid
-	PlanHrid   string     `json:"planHrid"`
-	StartingAt *time.Time `json:"startingAt,omitempty"`
-	EndingAt   *time.Time `json:"endingAt,omitempty"`
+	PlanHrid string     `json:"planHrid"`
+	EndingAt *time.Time `json:"endingAt,omitempty"`
 }
 
 func (s SubscriptionSpec) MarshalJSON() ([]byte, error) {
@@ -58,13 +57,6 @@ func (o *SubscriptionSpec) GetPlanHrid() string {
 		return ""
 	}
 	return o.PlanHrid
-}
-
-func (o *SubscriptionSpec) GetStartingAt() *time.Time {
-	if o == nil {
-		return nil
-	}
-	return o.StartingAt
 }
 
 func (o *SubscriptionSpec) GetEndingAt() *time.Time {

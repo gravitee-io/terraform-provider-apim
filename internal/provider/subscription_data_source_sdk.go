@@ -23,6 +23,7 @@ func (r *SubscriptionDataSourceModel) RefreshFromSharedSubscriptionState(ctx con
 		r.ID = types.StringPointerValue(resp.ID)
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.PlanHrid = types.StringValue(resp.PlanHrid)
+		r.StartingAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.StartingAt))
 	}
 
 	return diags

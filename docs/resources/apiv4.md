@@ -567,7 +567,7 @@ Default: true
 - `services` (Attributes) Api services (see [below for nested schema](#nestedatt--services))
 - `state` (String) The state of the API regarding the gateway(s). must be one of ["CLOSED", "INITIALIZED", "STARTED", "STOPPED", "STOPPING"]
 - `tags` (List of String) The list of sharding tags associated with this API.
-- `visibility` (String) The visibility of the resource regarding the portal. must be one of ["PUBLIC", "PRIVATE"]
+- `visibility` (String) The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]
 
 ### Read-Only
 
@@ -1110,7 +1110,7 @@ Optional:
 - `translations` (Attributes List) List of page translations. (see [below for nested schema](#nestedatt--pages--translations))
 - `type` (String) The type of the page. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]
 - `updated_at` (String) Page's last update date.
-- `visibility` (String) The visibility of the resource regarding the portal. must be one of ["PUBLIC", "PRIVATE"]
+- `visibility` (String) The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]
 
 Read-Only:
 
@@ -1179,7 +1179,7 @@ Optional:
 - `source` (Attributes) Page source (see [below for nested schema](#nestedatt--pages--translations--source))
 - `type` (String) The type of the page. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]
 - `updated_at` (String) Page's last update date.
-- `visibility` (String) The visibility of the resource regarding the portal. must be one of ["PUBLIC", "PRIVATE"]
+- `visibility` (String) The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]
 
 Read-Only:
 

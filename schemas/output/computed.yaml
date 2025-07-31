@@ -745,8 +745,7 @@ components:
           type: string
           format: date-time
           example: "2040-12-25T09:12:28Z"
-          writeOnly: true
-          x-speakeasy-param-suppress-computed-diff: true
+          readOnly: true
         endingAt:
           type: string
           format: date-time
@@ -776,6 +775,7 @@ components:
             organizationId:
               description: The organization ID of the Subscription.
               type: string
+          x-speakeasy-param-suppress-computed-diff: true
     SharedPolicyGroupState:
       description: State of Shared Policy Groups that has been created/updated
       allOf:

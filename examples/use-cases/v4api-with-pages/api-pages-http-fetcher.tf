@@ -67,8 +67,8 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
       parent = "docs-folder"
       source = {
         configuration = jsonencode({
-          fetchCron = "*/10 * * * * *"
-          url       = "https://petstore.swagger.io/v2/swagger.json"
+          fetchCron      = "*/10 * * * * *"
+          url            = "https://petstore.swagger.io/v2/swagger.json"
           autoFetch      = false
           useSystemProxy = false
         })

@@ -1,4 +1,4 @@
-package provider_test
+package conformance_test
 
 import (
 	"encoding/json"
@@ -11,14 +11,14 @@ import (
 )
 
 // Verifies the create, read, import, and delete lifecycle of the
-// `apim_apiv4` resource.
-func TestAPIV4Resource_lifecycle(t *testing.T) {
+// `apim_application` resource.
+func TestApplicationResource_lifecycle(t *testing.T) {
 	t.Parallel()
 
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
 	randomId := "test-" + acctest.RandString(10)
-	resourceAddress := "apim_apiv4.test"
+	resourceAddress := "apim_application.test"
 
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories: testProviders(),
@@ -58,7 +58,6 @@ func TestAPIV4Resource_lifecycle(t *testing.T) {
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
-					"version",
 				},
 			},
 			// Testing framework implicitly verifies resource delete.
@@ -66,14 +65,14 @@ func TestAPIV4Resource_lifecycle(t *testing.T) {
 	})
 }
 
-// Verifies the update of the name attribute of the `gravitee_apiv4` resource.
-func TestAPIV4Resource_name(t *testing.T) {
+// Verifies the update of the name attribute of the `apim_application` resource.
+func TestApplicationResource_name(t *testing.T) {
 	t.Parallel()
 
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
 	randomId := "test-" + acctest.RandString(10)
-	resourceAddress := "apim_apiv4.test"
+	resourceAddress := "apim_application.test"
 
 	resource.Test(t, resource.TestCase{
 		ProtoV6ProviderFactories: testProviders(),
@@ -115,7 +114,6 @@ func TestAPIV4Resource_name(t *testing.T) {
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
-					"version",
 				},
 			},
 			// Verifies resource update.

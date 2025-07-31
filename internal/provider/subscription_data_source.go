@@ -45,6 +45,7 @@ type SubscriptionDataSourceModel struct {
 	ID              types.String `tfsdk:"id"`
 	OrganizationID  types.String `tfsdk:"organization_id"`
 	PlanHrid        types.String `tfsdk:"plan_hrid"`
+	StartingAt      types.String `tfsdk:"starting_at"`
 }
 
 // Metadata returns the data source type name.
@@ -93,6 +94,9 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 			"plan_hrid": schema.StringAttribute{
 				Computed:    true,
 				Description: `API plan's Hrid`,
+			},
+			"starting_at": schema.StringAttribute{
+				Computed: true,
 			},
 		},
 	}

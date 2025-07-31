@@ -25,30 +25,22 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.Members = []tfTypes.Member{}
-		if len(r.Members) > len(resp.Members) {
-			r.Members = r.Members[:len(resp.Members)]
-		}
-		for membersCount, membersItem := range resp.Members {
+
+		for _, membersItem := range resp.Members {
 			var members tfTypes.Member
+
 			members.ID = types.StringPointerValue(membersItem.ID)
 			members.Role = types.StringPointerValue(membersItem.Role)
 			members.Source = types.StringPointerValue(membersItem.Source)
 			members.SourceID = types.StringPointerValue(membersItem.SourceID)
-			if membersCount+1 > len(r.Members) {
-				r.Members = append(r.Members, members)
-			} else {
-				r.Members[membersCount].ID = members.ID
-				r.Members[membersCount].Role = members.Role
-				r.Members[membersCount].Source = members.Source
-				r.Members[membersCount].SourceID = members.SourceID
-			}
+
+			r.Members = append(r.Members, members)
 		}
 		r.Metadata = []tfTypes.Metadata{}
-		if len(r.Metadata) > len(resp.Metadata) {
-			r.Metadata = r.Metadata[:len(resp.Metadata)]
-		}
-		for metadataCount, metadataItem := range resp.Metadata {
+
+		for _, metadataItem := range resp.Metadata {
 			var metadata tfTypes.Metadata
+
 			metadata.DefaultValue = types.StringPointerValue(metadataItem.DefaultValue)
 			if metadataItem.Format != nil {
 				metadata.Format = types.StringValue(string(*metadataItem.Format))
@@ -59,16 +51,8 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 			metadata.Key = types.StringPointerValue(metadataItem.Key)
 			metadata.Name = types.StringPointerValue(metadataItem.Name)
 			metadata.Value = types.StringPointerValue(metadataItem.Value)
-			if metadataCount+1 > len(r.Metadata) {
-				r.Metadata = append(r.Metadata, metadata)
-			} else {
-				r.Metadata[metadataCount].DefaultValue = metadata.DefaultValue
-				r.Metadata[metadataCount].Format = metadata.Format
-				r.Metadata[metadataCount].Hidden = metadata.Hidden
-				r.Metadata[metadataCount].Key = metadata.Key
-				r.Metadata[metadataCount].Name = metadata.Name
-				r.Metadata[metadataCount].Value = metadata.Value
-			}
+
+			r.Metadata = append(r.Metadata, metadata)
 		}
 		r.Name = types.StringValue(resp.Name)
 		r.PictureURL = types.StringPointerValue(resp.PictureURL)
