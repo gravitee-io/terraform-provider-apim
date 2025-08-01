@@ -16,4 +16,9 @@ resource "apim_application" "test" {
   hrid            = var.hrid
   name            = "terraform example"
   description     = "Conformance tests application"
+  settings = {
+    app = {
+      client_id = "client-id-${var.hrid}"
+    }
+  }
 }

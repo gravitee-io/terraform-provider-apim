@@ -1236,13 +1236,13 @@ Optional:
 - `general_conditions` (String)
 - `hrid` (String) A unique human readable id identifying this resource. Not Null
 - `mode` (String) The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan). Not Null; must be one of ["STANDARD", "PUSH"]
-- `name` (String)
-- `security` (Attributes) API plan security (see [below for nested schema](#nestedatt--plans--security))
+- `name` (String) Not Null
+- `security` (Attributes) API plan security. Not Null (see [below for nested schema](#nestedatt--plans--security))
 - `selection_rule` (String)
 - `status` (String) Plan status. Not Null; must be one of ["STAGING", "PUBLISHED", "DEPRECATED", "CLOSED"]
 - `tags` (List of String)
 - `type` (String) Plan type. Not Null; must be one of ["API", "CATALOG"]
-- `validation` (String) Plan validation type. must be one of ["AUTO", "MANUAL"]
+- `validation` (String) Plan validation type. Not Null; must be one of ["AUTO", "MANUAL"]
 
 <a id="nestedatt--plans--flows"></a>
 ### Nested Schema for `plans.flows`

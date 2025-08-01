@@ -4,7 +4,7 @@ resource "apim_application" "simple-app" {
   description = "Demonstrate applications can be created with Terraform"
   settings = {
     app = {
-      client_id = "foo"
+      client_id = "admin"
     }
   }
 }

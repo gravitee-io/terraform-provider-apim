@@ -661,6 +661,14 @@ components:
             $ref: '#/components/schemas/Member'
           uniqueItems: true
           x-speakeasy-param-suppress-computed-diff: true
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - ARCHIVED
+          default: ACTIVE
+          examples:
+            - ARCHIVED
       required:
         - hrid
         - name
@@ -764,12 +772,6 @@ components:
             id:
               type: string
               description: Subscription's uuid.
-            environmentId:
-              description: The environment ID of the Subscription.
-              type: string
-            organizationId:
-              description: The organization ID of the Subscription.
-              type: string
             startingAt:
               type: string
               format: date-time

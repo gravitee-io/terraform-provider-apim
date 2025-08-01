@@ -93,8 +93,7 @@ resource "apim_apiv4" "simple-api-with-spg" {
       request = [
         {
           enabled = true
-          # Known limitation, this name should the same as SPG to avoid terraform plan to remain inconsistent
-          name   = "[Terraform] Curated headers"
+          name   = "Curated headers"
           policy = "shared-policy-group-policy",
           # Configuration is JSON as the schema depends on the policy used
           configuration = jsonencode({

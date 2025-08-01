@@ -68,6 +68,7 @@ type ApplicationResourceModel struct {
 	PictureURL     types.String                 `tfsdk:"picture_url"`
 	PrimaryOwner   *tfTypes.PrimaryOwner        `tfsdk:"primary_owner"`
 	Settings       *tfTypes.ApplicationSettings `tfsdk:"settings"`
+	Status         types.String                 `tfsdk:"status"`
 }
 
 func (r *ApplicationResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -446,6 +447,21 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					},
 				},
 				Description: `Application settings`,
+			},
+			"status": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+				Default:  stringdefault.StaticString(`ACTIVE`),
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Default: "ACTIVE"; must be one of ["ACTIVE", "ARCHIVED"]`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"ACTIVE",
+						"ARCHIVED",
+					),
+				},
 			},
 		},
 	}

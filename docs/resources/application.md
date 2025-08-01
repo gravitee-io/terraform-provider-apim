@@ -68,6 +68,7 @@ resource "apim_application" "my_application" {
       client_certificate = "...my_client_certificate..."
     }
   }
+  status = "ARCHIVED"
 }
 ```
 
@@ -96,6 +97,7 @@ Default: false
 - `picture_url` (String) Application's picture Url.
 - `primary_owner` (Attributes) Primary owner (see [below for nested schema](#nestedatt--primary_owner))
 - `settings` (Attributes) Application settings (see [below for nested schema](#nestedatt--settings))
+- `status` (String) Default: "ACTIVE"; must be one of ["ACTIVE", "ARCHIVED"]
 
 ### Read-Only
 

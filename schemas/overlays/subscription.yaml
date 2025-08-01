@@ -19,7 +19,15 @@ actions:
     update:
       x-speakeasy-entity: Subscription
 
-  ### API State
+  # Removed fields
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.environmentId].properties.environmentId
+    description: Not returned by the API, so prevent null values during refresh
+    remove: true
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.organizationId].properties.organizationId
+    description: Not returned by the API, so prevent null values during refresh
+    remove: true
+
+  # Diff removal API State
   - target: $.components.schemas.SubscriptionState.allOf[?@.properties.id]
     description: Not returned by the API, so prevent null values during refresh
     update:
@@ -28,7 +36,7 @@ actions:
     description: Not returned by the API, so prevent null values during refresh
     update:
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.SubscriptionSpec.startingAt
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.startingAt]
     description: Not returned by the API, so prevent null values during refresh
     update:
       x-speakeasy-param-suppress-computed-diff: true

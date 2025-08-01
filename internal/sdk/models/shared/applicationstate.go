@@ -2,6 +2,38 @@
 
 package shared
 
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
+type ApplicationStateStatus string
+
+const (
+	ApplicationStateStatusActive   ApplicationStateStatus = "ACTIVE"
+	ApplicationStateStatusArchived ApplicationStateStatus = "ARCHIVED"
+)
+
+func (e ApplicationStateStatus) ToPointer() *ApplicationStateStatus {
+	return &e
+}
+func (e *ApplicationStateStatus) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "ACTIVE":
+		fallthrough
+	case "ARCHIVED":
+		*e = ApplicationStateStatus(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ApplicationStateStatus: %v", v)
+	}
+}
+
 // ApplicationState - Application state that has been created/updated
 type ApplicationState struct {
 	// A unique human readable id identifying this resource
@@ -26,11 +58,23 @@ type ApplicationState struct {
 	// The list of Application's metadata.
 	Metadata []Metadata `json:"metadata,omitempty"`
 	// Set of members associated with the application
-	Members []Member `json:"members,omitempty"`
+	Members []Member                `json:"members,omitempty"`
+	Status  *ApplicationStateStatus `default:"ACTIVE" json:"status"`
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during admission
 	Errors *Errors `json:"errors,omitempty"`
 	// Application's uuid.
 	ID *string `json:"id,omitempty"`
+}
+
+func (a ApplicationState) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *ApplicationState) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *ApplicationState) GetHrid() string {
@@ -108,6 +152,13 @@ func (o *ApplicationState) GetMembers() []Member {
 		return nil
 	}
 	return o.Members
+}
+
+func (o *ApplicationState) GetStatus() *ApplicationStateStatus {
+	if o == nil {
+		return nil
+	}
+	return o.Status
 }
 
 func (o *ApplicationState) GetErrors() *Errors {

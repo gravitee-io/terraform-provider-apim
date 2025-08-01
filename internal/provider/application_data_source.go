@@ -52,6 +52,7 @@ type ApplicationDataSourceModel struct {
 	PictureURL     types.String                 `tfsdk:"picture_url"`
 	PrimaryOwner   *tfTypes.PrimaryOwner        `tfsdk:"primary_owner"`
 	Settings       *tfTypes.ApplicationSettings `tfsdk:"settings"`
+	Status         types.String                 `tfsdk:"status"`
 }
 
 // Metadata returns the data source type name.
@@ -235,6 +236,9 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 					},
 				},
 				Description: `Application settings`,
+			},
+			"status": schema.StringAttribute{
+				Computed: true,
 			},
 		},
 	}

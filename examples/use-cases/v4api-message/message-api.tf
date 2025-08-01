@@ -78,8 +78,8 @@ resource "apim_apiv4" "message-api" {
   }
   plans = [
     {
-      hrid        = "KeyLess"
-      name        = "KeyLess"
+      hrid        = "key-less"
+      name        = "No security"
       type        = "API"
       mode        = "STANDARD"
       validation  = "AUTO"

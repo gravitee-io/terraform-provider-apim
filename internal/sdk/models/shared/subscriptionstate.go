@@ -21,12 +21,8 @@ type SubscriptionState struct {
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during admission
 	Errors *Errors `json:"errors,omitempty"`
 	// Subscription's uuid.
-	ID *string `json:"id,omitempty"`
-	// The environment ID of the Subscription.
-	EnvironmentID *string `json:"environmentId,omitempty"`
-	// The organization ID of the Subscription.
-	OrganizationID *string    `json:"organizationId,omitempty"`
-	StartingAt     *time.Time `json:"startingAt,omitempty"`
+	ID         *string    `json:"id,omitempty"`
+	StartingAt *time.Time `json:"startingAt,omitempty"`
 }
 
 func (s SubscriptionState) MarshalJSON() ([]byte, error) {
@@ -87,20 +83,6 @@ func (o *SubscriptionState) GetID() *string {
 		return nil
 	}
 	return o.ID
-}
-
-func (o *SubscriptionState) GetEnvironmentID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.EnvironmentID
-}
-
-func (o *SubscriptionState) GetOrganizationID() *string {
-	if o == nil {
-		return nil
-	}
-	return o.OrganizationID
 }
 
 func (o *SubscriptionState) GetStartingAt() *time.Time {

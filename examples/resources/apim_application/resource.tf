@@ -53,4 +53,5 @@ resource "apim_application" "my_application" {
       client_certificate = "...my_client_certificate..."
     }
   }
+  status = "ARCHIVED"
 }

@@ -5,7 +5,7 @@ resource "apim_apiv4" "simple-api-subscribed" {
   description     = "A simple API with JWT meant to subscribed using Terraform"
   version         = "1.0"
   type            = "PROXY"
-  state           = "STOPPED"
+  state           = "STARTED"
   visibility      = "PUBLIC"
   lifecycle_state = "PUBLISHED"
   listeners = [
@@ -82,4 +82,26 @@ resource "apim_apiv4" "simple-api-subscribed" {
   ]
 }
 
+
+resource "apim_application" "simple-app-subscribed" {
+  # should match the resource name
+  hrid        = "simple-app-subscribed"
+  name        = "[Terraform] Application with client_id"
+  description = "Subscription tests application"
+  settings = {
+    app = {
+      #
+      client_id = "guest"
+    }
+  }
+}
+
+resource "apim_subscription" "simple-subscription" {
+  # should match the resource name
+  hrid             = "simple-subscription"
+  api_hrid         = apim_apiv4.simple-api-subscribed.hrid
+  plan_hrid        = apim_apiv4.simple-api-subscribed.plans[0].hrid
+  application_hrid = apim_application.simple-app-subscribed.hrid
+  ending_at        = "2042-12-25T10:12:28+01:00"
+}
 

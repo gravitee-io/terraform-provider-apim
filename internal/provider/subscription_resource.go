@@ -95,12 +95,9 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"environment_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				Default:  stringdefault.StaticString(`DEFAULT`),
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
+				Default:     stringdefault.StaticString(`DEFAULT`),
 				Description: `environment ID. Default: "DEFAULT"`,
 			},
 			"hrid": schema.StringAttribute{
@@ -122,12 +119,9 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `Subscription's uuid.`,
 			},
 			"organization_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				Default:  stringdefault.StaticString(`DEFAULT`),
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
+				Default:     stringdefault.StaticString(`DEFAULT`),
 				Description: `organization ID. Default: "DEFAULT"`,
 			},
 			"plan_hrid": schema.StringAttribute{

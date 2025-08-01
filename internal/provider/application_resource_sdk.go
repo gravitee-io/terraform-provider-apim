@@ -101,6 +101,11 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 				r.Settings.TLS.ClientCertificate = types.StringPointerValue(resp.Settings.TLS.ClientCertificate)
 			}
 		}
+		if resp.Status != nil {
+			r.Status = types.StringValue(string(*resp.Status))
+		} else {
+			r.Status = types.StringNull()
+		}
 	}
 
 	return diags
@@ -405,6 +410,12 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 			Role:     role,
 		})
 	}
+	status := new(shared.ApplicationSpecStatus)
+	if !r.Status.IsUnknown() && !r.Status.IsNull() {
+		*status = shared.ApplicationSpecStatus(r.Status.ValueString())
+	} else {
+		status = nil
+	}
 	out := shared.ApplicationSpec{
 		Hrid:          hrid,
 		Name:          name,
@@ -418,6 +429,7 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		Settings:      settings,
 		Metadata:      metadata,
 		Members:       members,
+		Status:        status,
 	}
 
 	return &out, diags

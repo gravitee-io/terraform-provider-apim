@@ -3,8 +3,36 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
+
+type ApplicationSpecStatus string
+
+const (
+	ApplicationSpecStatusActive   ApplicationSpecStatus = "ACTIVE"
+	ApplicationSpecStatusArchived ApplicationSpecStatus = "ARCHIVED"
+)
+
+func (e ApplicationSpecStatus) ToPointer() *ApplicationSpecStatus {
+	return &e
+}
+func (e *ApplicationSpecStatus) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "ACTIVE":
+		fallthrough
+	case "ARCHIVED":
+		*e = ApplicationSpecStatus(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ApplicationSpecStatus: %v", v)
+	}
+}
 
 // ApplicationSpec defines the desired state of Application.
 type ApplicationSpec struct {
@@ -33,7 +61,8 @@ type ApplicationSpec struct {
 	// The list of Application's metadata.
 	Metadata []Metadata `json:"metadata,omitempty"`
 	// Set of members associated with the application
-	Members []Member `json:"members,omitempty"`
+	Members []Member               `json:"members,omitempty"`
+	Status  *ApplicationSpecStatus `default:"ACTIVE" json:"status"`
 }
 
 func (a ApplicationSpec) MarshalJSON() ([]byte, error) {
@@ -129,4 +158,11 @@ func (o *ApplicationSpec) GetMembers() []Member {
 		return nil
 	}
 	return o.Members
+}
+
+func (o *ApplicationSpec) GetStatus() *ApplicationSpecStatus {
+	if o == nil {
+		return nil
+	}
+	return o.Status
 }
