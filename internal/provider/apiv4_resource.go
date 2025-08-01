@@ -3846,6 +3846,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
+							Description: `Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
 						},
 						"security": schema.SingleNestedAttribute{
 							Computed: true,
@@ -3884,7 +3888,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
-							Description: `API plan security`,
+							Description: `API plan security. Not Null`,
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
+							},
 						},
 						"selection_rule": schema.StringAttribute{
 							Computed: true,
@@ -3939,8 +3946,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Plan validation type. must be one of ["AUTO", "MANUAL"]`,
+							Description: `Plan validation type. Not Null; must be one of ["AUTO", "MANUAL"]`,
 							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
 								stringvalidator.OneOf(
 									"AUTO",
 									"MANUAL",

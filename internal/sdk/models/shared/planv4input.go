@@ -6,23 +6,23 @@ package shared
 type PlanV4Input struct {
 	// A unique human readable id identifying this resource
 	Hrid        string  `json:"hrid"`
-	Name        *string `json:"name,omitempty"`
+	Name        string  `json:"name"`
 	Description *string `json:"description,omitempty"`
 	// API plan security
-	Security          *PlanSecurity `json:"security,omitempty"`
-	Characteristics   []string      `json:"characteristics,omitempty"`
-	ExcludedGroups    []string      `json:"excludedGroups,omitempty"`
-	GeneralConditions *string       `json:"generalConditions,omitempty"`
-	Order             *int64        `json:"order,omitempty"`
-	SelectionRule     *string       `json:"selectionRule,omitempty"`
+	Security          PlanSecurity `json:"security"`
+	Characteristics   []string     `json:"characteristics,omitempty"`
+	ExcludedGroups    []string     `json:"excludedGroups,omitempty"`
+	GeneralConditions *string      `json:"generalConditions,omitempty"`
+	Order             *int64       `json:"order,omitempty"`
+	SelectionRule     *string      `json:"selectionRule,omitempty"`
 	// Plan status.
 	Status PlanStatus `json:"status"`
 	Tags   []string   `json:"tags,omitempty"`
 	// Plan type.
 	Type PlanType `json:"type"`
 	// Plan validation type.
-	Validation *PlanValidation `json:"validation,omitempty"`
-	Flows      []FlowV4Input   `json:"flows,omitempty"`
+	Validation PlanValidation `json:"validation"`
+	Flows      []FlowV4Input  `json:"flows,omitempty"`
 	// The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan).
 	Mode PlanMode `json:"mode"`
 }
@@ -34,9 +34,9 @@ func (o *PlanV4Input) GetHrid() string {
 	return o.Hrid
 }
 
-func (o *PlanV4Input) GetName() *string {
+func (o *PlanV4Input) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
@@ -48,9 +48,9 @@ func (o *PlanV4Input) GetDescription() *string {
 	return o.Description
 }
 
-func (o *PlanV4Input) GetSecurity() *PlanSecurity {
+func (o *PlanV4Input) GetSecurity() PlanSecurity {
 	if o == nil {
-		return nil
+		return PlanSecurity{}
 	}
 	return o.Security
 }
@@ -111,9 +111,9 @@ func (o *PlanV4Input) GetType() PlanType {
 	return o.Type
 }
 
-func (o *PlanV4Input) GetValidation() *PlanValidation {
+func (o *PlanV4Input) GetValidation() PlanValidation {
 	if o == nil {
-		return nil
+		return PlanValidation("")
 	}
 	return o.Validation
 }

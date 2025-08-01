@@ -974,19 +974,14 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			plans.GeneralConditions = types.StringPointerValue(plansItem.GeneralConditions)
 			plans.Hrid = types.StringValue(plansItem.Hrid)
 			plans.Mode = types.StringValue(string(plansItem.Mode))
-			plans.Name = types.StringPointerValue(plansItem.Name)
-			if plansItem.Security == nil {
-				plans.Security = nil
+			plans.Name = types.StringValue(plansItem.Name)
+			if plansItem.Security.Configuration == nil {
+				plans.Security.Configuration = types.StringNull()
 			} else {
-				plans.Security = &tfTypes.PlanSecurity{}
-				if plansItem.Security.Configuration == nil {
-					plans.Security.Configuration = types.StringNull()
-				} else {
-					configurationResult22, _ := json.Marshal(plansItem.Security.Configuration)
-					plans.Security.Configuration = types.StringValue(string(configurationResult22))
-				}
-				plans.Security.Type = types.StringValue(string(plansItem.Security.Type))
+				configurationResult22, _ := json.Marshal(plansItem.Security.Configuration)
+				plans.Security.Configuration = types.StringValue(string(configurationResult22))
 			}
+			plans.Security.Type = types.StringValue(string(plansItem.Security.Type))
 			plans.SelectionRule = types.StringPointerValue(plansItem.SelectionRule)
 			plans.Status = types.StringValue(string(plansItem.Status))
 			plans.Tags = make([]types.String, 0, len(plansItem.Tags))
@@ -994,11 +989,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				plans.Tags = append(plans.Tags, types.StringValue(v))
 			}
 			plans.Type = types.StringValue(string(plansItem.Type))
-			if plansItem.Validation != nil {
-				plans.Validation = types.StringValue(string(*plansItem.Validation))
-			} else {
-				plans.Validation = types.StringNull()
-			}
+			plans.Validation = types.StringValue(string(plansItem.Validation))
 
 			r.Plans = append(r.Plans, plans)
 		}

@@ -975,19 +975,14 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			plans.GeneralConditions = types.StringPointerValue(plansItem.GeneralConditions)
 			plans.Hrid = types.StringValue(plansItem.Hrid)
 			plans.Mode = types.StringValue(string(plansItem.Mode))
-			plans.Name = types.StringPointerValue(plansItem.Name)
-			if plansItem.Security == nil {
-				plans.Security = nil
+			plans.Name = types.StringValue(plansItem.Name)
+			if plansItem.Security.Configuration == nil {
+				plans.Security.Configuration = types.StringNull()
 			} else {
-				plans.Security = &tfTypes.PlanSecurity{}
-				if plansItem.Security.Configuration == nil {
-					plans.Security.Configuration = types.StringNull()
-				} else {
-					configurationResult22, _ := json.Marshal(plansItem.Security.Configuration)
-					plans.Security.Configuration = types.StringValue(string(configurationResult22))
-				}
-				plans.Security.Type = types.StringValue(string(plansItem.Security.Type))
+				configurationResult22, _ := json.Marshal(plansItem.Security.Configuration)
+				plans.Security.Configuration = types.StringValue(string(configurationResult22))
 			}
+			plans.Security.Type = types.StringValue(string(plansItem.Security.Type))
 			plans.SelectionRule = types.StringPointerValue(plansItem.SelectionRule)
 			plans.Status = types.StringValue(string(plansItem.Status))
 			plans.Tags = make([]types.String, 0, len(plansItem.Tags))
@@ -995,11 +990,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				plans.Tags = append(plans.Tags, types.StringValue(v))
 			}
 			plans.Type = types.StringValue(string(plansItem.Type))
-			if plansItem.Validation != nil {
-				plans.Validation = types.StringValue(string(*plansItem.Validation))
-			} else {
-				plans.Validation = types.StringNull()
-			}
+			plans.Validation = types.StringValue(string(plansItem.Validation))
 
 			r.Plans = append(r.Plans, plans)
 		}
@@ -1969,29 +1960,23 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		var hrid1 string
 		hrid1 = plansItem.Hrid.ValueString()
 
-		name4 := new(string)
-		if !plansItem.Name.IsUnknown() && !plansItem.Name.IsNull() {
-			*name4 = plansItem.Name.ValueString()
-		} else {
-			name4 = nil
-		}
+		var name4 string
+		name4 = plansItem.Name.ValueString()
+
 		description1 := new(string)
 		if !plansItem.Description.IsUnknown() && !plansItem.Description.IsNull() {
 			*description1 = plansItem.Description.ValueString()
 		} else {
 			description1 = nil
 		}
-		var security *shared.PlanSecurity
-		if plansItem.Security != nil {
-			typeVar10 := shared.PlanSecurityType(plansItem.Security.Type.ValueString())
-			var configuration9 interface{}
-			if !plansItem.Security.Configuration.IsUnknown() && !plansItem.Security.Configuration.IsNull() {
-				_ = json.Unmarshal([]byte(plansItem.Security.Configuration.ValueString()), &configuration9)
-			}
-			security = &shared.PlanSecurity{
-				Type:          typeVar10,
-				Configuration: configuration9,
-			}
+		typeVar10 := shared.PlanSecurityType(plansItem.Security.Type.ValueString())
+		var configuration9 interface{}
+		if !plansItem.Security.Configuration.IsUnknown() && !plansItem.Security.Configuration.IsNull() {
+			_ = json.Unmarshal([]byte(plansItem.Security.Configuration.ValueString()), &configuration9)
+		}
+		security := shared.PlanSecurity{
+			Type:          typeVar10,
+			Configuration: configuration9,
 		}
 		characteristics := make([]string, 0, len(plansItem.Characteristics))
 		for _, characteristicsItem := range plansItem.Characteristics {
@@ -2019,12 +2004,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			tags1 = append(tags1, tagsItem1.ValueString())
 		}
 		type8 := shared.PlanType(plansItem.Type.ValueString())
-		validation := new(shared.PlanValidation)
-		if !plansItem.Validation.IsUnknown() && !plansItem.Validation.IsNull() {
-			*validation = shared.PlanValidation(plansItem.Validation.ValueString())
-		} else {
-			validation = nil
-		}
+		validation := shared.PlanValidation(plansItem.Validation.ValueString())
 		flows := make([]shared.FlowV4Input, 0, len(plansItem.Flows))
 		for _, flowsItem := range plansItem.Flows {
 			name5 := new(string)

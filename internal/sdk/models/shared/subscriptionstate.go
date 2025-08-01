@@ -16,9 +16,8 @@ type SubscriptionState struct {
 	// The API's Hrid that you want to subscribe to.
 	APIHrid string `json:"apiHrid"`
 	// API plan's Hrid
-	PlanHrid   string     `json:"planHrid"`
-	StartingAt *time.Time `json:"startingAt,omitempty"`
-	EndingAt   *time.Time `json:"endingAt,omitempty"`
+	PlanHrid string     `json:"planHrid"`
+	EndingAt *time.Time `json:"endingAt,omitempty"`
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during admission
 	Errors *Errors `json:"errors,omitempty"`
 	// Subscription's uuid.
@@ -26,7 +25,8 @@ type SubscriptionState struct {
 	// The environment ID of the Subscription.
 	EnvironmentID *string `json:"environmentId,omitempty"`
 	// The organization ID of the Subscription.
-	OrganizationID *string `json:"organizationId,omitempty"`
+	OrganizationID *string    `json:"organizationId,omitempty"`
+	StartingAt     *time.Time `json:"startingAt,omitempty"`
 }
 
 func (s SubscriptionState) MarshalJSON() ([]byte, error) {
@@ -68,13 +68,6 @@ func (o *SubscriptionState) GetPlanHrid() string {
 	return o.PlanHrid
 }
 
-func (o *SubscriptionState) GetStartingAt() *time.Time {
-	if o == nil {
-		return nil
-	}
-	return o.StartingAt
-}
-
 func (o *SubscriptionState) GetEndingAt() *time.Time {
 	if o == nil {
 		return nil
@@ -108,4 +101,11 @@ func (o *SubscriptionState) GetOrganizationID() *string {
 		return nil
 	}
 	return o.OrganizationID
+}
+
+func (o *SubscriptionState) GetStartingAt() *time.Time {
+	if o == nil {
+		return nil
+	}
+	return o.StartingAt
 }

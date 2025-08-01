@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 441ce08ee92a69ed461008a0890a1c76
+  docChecksum: 240240b9625bc8273222df5d2a016cdb
   docVersion: 1.0.0
-  speakeasyVersion: 1.594.0
-  generationVersion: 2.670.1
+  speakeasyVersion: 1.595.1
+  generationVersion: 2.670.3
   releaseVersion: 0.3.2
   configChecksum: ba3cbbe8d6bc807681a3bdf3df9ca420
 features:
@@ -381,7 +381,7 @@ examples:
         application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "apiHrid": "demo-api", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z"}
       responses:
         "200":
-          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "apiHrid": "demo-api", "planHrid": "demo-plan", "startingAt": "2040-12-25T09:12:28Z", "endingAt": "2040-12-25T09:12:28Z"}
+          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "apiHrid": "demo-api", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "startingAt": "2040-12-25T09:12:28+01:00"}
         "400":
           application/json: {"httpStatus": 200, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:
@@ -395,7 +395,7 @@ examples:
           hrid: "<id>"
       responses:
         "200":
-          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "apiHrid": "demo-api", "planHrid": "demo-plan", "startingAt": "2040-12-25T09:12:28Z", "endingAt": "2040-12-25T09:12:28Z"}
+          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "apiHrid": "demo-api", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "startingAt": "2040-12-25T09:12:28+01:00"}
         "401":
           application/json: {"httpStatus": 200, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:

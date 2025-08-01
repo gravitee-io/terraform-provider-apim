@@ -741,11 +741,6 @@ components:
           type: string
           description: API plan's Hrid
           example: demo-plan
-        startingAt:
-          type: string
-          format: date-time
-          example: "2040-12-25T09:12:28Z"
-          readOnly: true
         endingAt:
           type: string
           format: date-time
@@ -775,6 +770,10 @@ components:
             organizationId:
               description: The organization ID of the Subscription.
               type: string
+            startingAt:
+              type: string
+              format: date-time
+              example: "2040-12-25T09:12:28+01:00"
           x-speakeasy-param-suppress-computed-diff: true
     SharedPolicyGroupState:
       description: State of Shared Policy Groups that has been created/updated
@@ -926,9 +925,12 @@ components:
           $ref: '#/components/schemas/PlanMode'
       required:
         - hrid
+        - name
         - status
         - type
         - mode
+        - validation
+        - security
     Member:
       description: Member
       type: object

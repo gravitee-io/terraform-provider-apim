@@ -1,12 +1,13 @@
 resource "apim_apiv4" "simple-api-subscribed" {
   # should match the resource name
   hrid            = "simple-api-subscribed"
-  lifecycle_state = "UNPUBLISHED"
-  name            = "terraform_example"
-  state           = "STARTED"
+  name            = "[Terraform] Simple PROXY API With JWT Plan"
+  description     = "A simple API with JWT meant to subscribed using Terraform"
+  version         = "1.0"
   type            = "PROXY"
-  version         = "1"
-  visibility      = "PRIVATE"
+  state           = "STARTED"
+  visibility      = "PUBLIC"
+  lifecycle_state = "PUBLISHED"
   listeners = [
     {
       http = {
@@ -45,12 +46,12 @@ resource "apim_apiv4" "simple-api-subscribed" {
   }
   plans = [
     {
-      hrid = "jwt"
-      name = "Jwt Plan"
-      type= "API"
-       mode        = "STANDARD"
-       validation  = "AUTO"
-      status      = "PUBLISHED"
+      hrid       = "jwt"
+      name       = "Jwt Plan"
+      type       = "API"
+      mode       = "STANDARD"
+      validation = "AUTO"
+      status     = "PUBLISHED"
       description : "A JWT plan"
       security = {
         type = "JWT"
@@ -81,7 +82,6 @@ resource "apim_apiv4" "simple-api-subscribed" {
   ]
 }
 
-
 resource "apim_application" "simple-app-subscribed" {
   # should match the resource name
   hrid        = "simple-app-subscribed"
@@ -100,5 +100,5 @@ resource "apim_subscription" "simple-subscription" {
   api_hrid         = apim_apiv4.simple-api-subscribed.hrid
   plan_hrid        = apim_apiv4.simple-api-subscribed.plans[0].hrid
   application_hrid = apim_application.simple-app-subscribed.hrid
-  ending_at        = "2042-12-25T10:12:28+01:00"
+  ending_at        = "2030-12-25T10:12:28+01:00"
 }
