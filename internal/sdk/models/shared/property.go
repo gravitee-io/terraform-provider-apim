@@ -2,12 +2,18 @@
 
 package shared
 
+// Property - Api property
 type Property struct {
-	Key         string `json:"key"`
-	Value       string `json:"value"`
-	Encrypted   *bool  `json:"encrypted,omitempty"`
-	Dynamic     *bool  `json:"dynamic,omitempty"`
-	Encryptable *bool  `json:"encryptable,omitempty"`
+	// property key
+	Key string `json:"key"`
+	// property value
+	Value string `json:"value"`
+	// is property encrypted or not?
+	Encrypted *bool `json:"encrypted,omitempty"`
+	// is a dynamic property or not?
+	Dynamic *bool `json:"dynamic,omitempty"`
+	// is property encryptable?
+	Encryptable *bool `json:"encryptable,omitempty"`
 }
 
 func (o *Property) GetKey() string {

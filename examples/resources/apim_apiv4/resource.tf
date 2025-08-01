@@ -32,9 +32,6 @@ resource "apim_apiv4" "my_apiv4" {
   categories = [
     "..."
   ]
-  definition_context = {
-    # ...
-  }
   description = "I can use many characters to describe this API."
   endpoint_groups = [
     {
@@ -188,7 +185,7 @@ resource "apim_apiv4" "my_apiv4" {
   groups = [
     "..."
   ]
-  hrid = "...my_hrid..."
+  hrid = "my_demo_api"
   labels = [
     "..."
   ]
@@ -253,6 +250,7 @@ resource "apim_apiv4" "my_apiv4" {
     {
       default_value = "...my_default_value..."
       format        = "DATE"
+      hidden        = true
       key           = "...my_key..."
       name          = "...my_name..."
       value         = "...my_value..."
@@ -261,8 +259,102 @@ resource "apim_apiv4" "my_apiv4" {
   name            = "My Api"
   notify_members  = false
   organization_id = "...my_organization_id..."
-  plans = {
-    key = {
+  pages = [
+    {
+      access_controls = [
+        {
+          reference_id   = "00f8c9e7-78fc-4907-b8c9-e778fc790750"
+          reference_type = "GROUP"
+        }
+      ]
+      attached_media = [
+        {
+          attached_at = "2018-01-01T00:00:00Z"
+          hash        = "00f8c9e7-78fc-4907-b8c9-e778fc790750"
+          name        = "My Media"
+        }
+      ]
+      configuration = {
+        key = "value"
+      }
+      content = "My Page content"
+      content_revision = {
+        id       = "00f8c9e7-78fc-4907-b8c9-e778fc790750"
+        revision = 1
+      }
+      content_type             = "application/json"
+      excluded_access_controls = true
+      general_conditions       = true
+      hidden                   = true
+      homepage                 = true
+      hrid                     = "my_demo_api"
+      last_contributor         = "00f8c9e7-78fc-4907-b8c9-e778fc790750"
+      metadata = {
+        key = "value"
+      }
+      name        = "My Page"
+      order       = 1
+      parent_id   = "00f8c9e7-78fc-4907-b8c9-e778fc790750"
+      parent_path = "/parent"
+      published   = true
+      source = {
+        configuration = "{ \"see\": \"documentation\" }"
+        type          = "http-fetcher"
+      }
+      translations = [
+        {
+          access_controls = [
+            {
+              reference_id   = "00f8c9e7-78fc-4907-b8c9-e778fc790750"
+              reference_type = "GROUP"
+            }
+          ]
+          attached_media = [
+            {
+              attached_at = "2018-01-01T00:00:00Z"
+              hash        = "00f8c9e7-78fc-4907-b8c9-e778fc790750"
+              name        = "My Media"
+            }
+          ]
+          configuration = {
+            key = "value"
+          }
+          content = "My Page content"
+          content_revision = {
+            id       = "00f8c9e7-78fc-4907-b8c9-e778fc790750"
+            revision = 1
+          }
+          content_type             = "application/json"
+          excluded_access_controls = false
+          general_conditions       = false
+          hidden                   = true
+          homepage                 = true
+          hrid                     = "my_demo_api"
+          last_contributor         = "00f8c9e7-78fc-4907-b8c9-e778fc790750"
+          metadata = {
+            key = "value"
+          }
+          name        = "My Page"
+          order       = 1
+          parent_id   = "00f8c9e7-78fc-4907-b8c9-e778fc790750"
+          parent_path = "/parent"
+          published   = true
+          source = {
+            configuration = "{ \"see\": \"documentation\" }"
+            type          = "http-fetcher"
+          }
+          type       = "MARKDOWN"
+          updated_at = "2018-01-01T00:00:00Z"
+          visibility = "PUBLIC"
+        }
+      ]
+      type       = "MARKDOWN"
+      updated_at = "2018-01-01T00:00:00Z"
+      visibility = "PUBLIC"
+    }
+  ]
+  plans = [
+    {
       characteristics = [
         "..."
       ]
@@ -358,6 +450,7 @@ resource "apim_apiv4" "my_apiv4" {
         }
       ]
       general_conditions = "...my_general_conditions..."
+      hrid               = "my_demo_api"
       mode               = "STANDARD"
       name               = "...my_name..."
       security = {
@@ -372,7 +465,7 @@ resource "apim_apiv4" "my_apiv4" {
       type       = "API"
       validation = "AUTO"
     }
-  }
+  ]
   primary_owner = {
     display_name = "John Doe"
     email        = "...my_email..."

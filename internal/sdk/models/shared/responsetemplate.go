@@ -6,11 +6,15 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// ResponseTemplate - API response template
 type ResponseTemplate struct {
-	Status                  *int64            `json:"status,omitempty"`
-	Headers                 map[string]string `json:"headers,omitempty"`
-	Body                    *string           `json:"body,omitempty"`
-	PropagateErrorKeyToLogs *bool             `default:"false" json:"propagateErrorKeyToLogs"`
+	// API response template status
+	Status *int64 `json:"status,omitempty"`
+	// API response template headers
+	Headers map[string]string `json:"headers,omitempty"`
+	// API response template body
+	Body                    *string `json:"body,omitempty"`
+	PropagateErrorKeyToLogs *bool   `default:"false" json:"propagateErrorKeyToLogs"`
 }
 
 func (r ResponseTemplate) MarshalJSON() ([]byte, error) {

@@ -2,6 +2,7 @@
 
 package shared
 
+// TCPListener - TCP listener
 type TCPListener struct {
 	// Listener type.
 	Type        ListenerType `json:"type"`

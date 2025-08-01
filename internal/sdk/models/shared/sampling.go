@@ -37,6 +37,7 @@ func (e *SamplingType) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// Sampling - API analytics sampling
 type Sampling struct {
 	// The type of the sampling
 	Type SamplingType `json:"type"`

@@ -93,8 +93,7 @@ resource "apim_apiv4" "simple-api-with-spg" {
       request = [
         {
           enabled = true
-          # Known limitation, this name should the same as SPG to avoid terraform plan to remain inconsistent
-          name   = "[Terraform] Curated headers"
+          name   = "Curated headers"
           policy = "shared-policy-group-policy",
           # Configuration is JSON as the schema depends on the policy used
           configuration = jsonencode({
@@ -107,13 +106,9 @@ resource "apim_apiv4" "simple-api-with-spg" {
   analytics = {
     enabled = false
   }
-  # known limitation, some default value is returned by default which appears to be remove during plan
-  metadata=[{}]
-  # known limitation: will dispear in next version
-  definition_context = {}
-  plans = {
-    # known limitation, key have to match name to avoid terraform plan to remain inconsistent
-    KeyLess = {
+  plans = [
+    {
+      hrid        = "keyLess"
       name        = "KeyLess"
       type        = "API"
       mode        = "STANDARD"
@@ -124,5 +119,5 @@ resource "apim_apiv4" "simple-api-with-spg" {
         type = "KEY_LESS"
       }
     }
-  }
+  ]
 }

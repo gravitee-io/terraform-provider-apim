@@ -18,6 +18,7 @@ const (
 	ListenerUnionTypeKafka        ListenerUnionType = "KAFKA"
 )
 
+// Listener
 type Listener struct {
 	HTTPListener         *HTTPListener         `queryParam:"inline"`
 	SubscriptionListener *SubscriptionListener `queryParam:"inline"`

@@ -74,11 +74,9 @@ resource "apim_apiv4" "simple-api-response-template" {
   analytics = {
     enabled = false
   }
-  # known limitation: will dispear in next version
-  definition_context = {}
-  plans = {
-    # known limitation, key have to match name to avoid terraform plan to remain inconsistent
-    KeyLess = {
+  plans = [
+    {
+      hrid        = "KeyLess"
       name        = "KeyLess"
       type        = "API"
       mode        = "STANDARD"
@@ -89,5 +87,5 @@ resource "apim_apiv4" "simple-api-response-template" {
         type = "KEY_LESS"
       }
     }
-  }
+  ]
 }

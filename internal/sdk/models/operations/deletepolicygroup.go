@@ -9,9 +9,9 @@ import (
 )
 
 type DeletePolicyGroupGlobals struct {
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 }
 
@@ -41,9 +41,9 @@ func (o *DeletePolicyGroupGlobals) GetEnvironmentID() *string {
 }
 
 type DeletePolicyGroupRequest struct {
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Human-readable ID of a spec
 	Hrid string `pathParam:"style=simple,explode=false,name=hrid"`
@@ -99,7 +99,9 @@ type DeletePolicyGroupResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Validation error
+	// Unauthenticated
+	HTTPError *shared.HTTPError
+	// Default error
 	Error *shared.Error
 }
 
@@ -122,6 +124,13 @@ func (o *DeletePolicyGroupResponse) GetRawResponse() *http.Response {
 		return nil
 	}
 	return o.RawResponse
+}
+
+func (o *DeletePolicyGroupResponse) GetHTTPError() *shared.HTTPError {
+	if o == nil {
+		return nil
+	}
+	return o.HTTPError
 }
 
 func (o *DeletePolicyGroupResponse) GetError() *shared.Error {

@@ -7,9 +7,9 @@ import (
 )
 
 type Globals struct {
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 }
 

@@ -2,6 +2,7 @@
 
 package shared
 
+// PlanSecurity - API plan security
 type PlanSecurity struct {
 	// Plan security type.
 	Type          PlanSecurityType `json:"type"`

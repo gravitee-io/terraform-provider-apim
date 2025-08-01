@@ -2,6 +2,7 @@
 
 package shared
 
+// KafkaListener - Kafka listener
 type KafkaListener struct {
 	// Listener type.
 	Type        ListenerType `json:"type"`

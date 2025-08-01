@@ -2,12 +2,16 @@
 
 package shared
 
+// LoggingV4 - API logging configuration
 type LoggingV4 struct {
-	Condition        *string           `json:"condition,omitempty"`
-	MessageCondition *string           `json:"messageCondition,omitempty"`
-	Content          *LoggingContentV4 `json:"content,omitempty"`
-	Phase            *LoggingPhase     `json:"phase,omitempty"`
-	Mode             *LoggingModeV4    `json:"mode,omitempty"`
+	Condition        *string `json:"condition,omitempty"`
+	MessageCondition *string `json:"messageCondition,omitempty"`
+	// API logging content
+	Content *LoggingContentV4 `json:"content,omitempty"`
+	// Logging phase
+	Phase *LoggingPhase `json:"phase,omitempty"`
+	// API logging mode
+	Mode *LoggingModeV4 `json:"mode,omitempty"`
 }
 
 func (o *LoggingV4) GetCondition() *string {

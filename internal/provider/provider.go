@@ -56,11 +56,11 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				Sensitive: true,
 			},
 			"environment_id": schema.StringAttribute{
-				Description: `Id of an environment.`,
+				Description: `environment ID`,
 				Optional:    true,
 			},
 			"organization_id": schema.StringAttribute{
-				Description: `Id of an organization.`,
+				Description: `organization ID`,
 				Optional:    true,
 			},
 			"password": schema.StringAttribute{
@@ -78,7 +78,9 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 		},
 		MarkdownDescription: `Gravitee: APIM Terraform Provider (alpha)` + "\n" +
 			`` + "\n" +
-			`Manage APIs and Shared Policy Groups with Terraform`,
+			`Manage APIs and Shared Policy Groups with Terraform` + "\n" +
+			`` + "\n" +
+			`Compatible with APIM 4.8 and above`,
 	}
 }
 
@@ -176,14 +178,18 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewApiv4Resource,
+		NewApplicationResource,
 		NewSharedPolicyGroupResource,
+		NewSubscriptionResource,
 	}
 }
 
 func (p *ApimProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewApiv4DataSource,
+		NewApplicationDataSource,
 		NewSharedPolicyGroupDataSource,
+		NewSubscriptionDataSource,
 	}
 }
 

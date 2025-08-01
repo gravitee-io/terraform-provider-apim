@@ -76,19 +76,18 @@ resource "apim_apiv4" "message-api" {
       value = 10
     }
   }
-  definition_context = {}
-  plans = {
-    # known limitation, key have to match name to avoid terraform plan to remain inconsistent
-    KeyLess = {
-      name       = "KeyLess"
-      type       = "API"
-      mode       = "STANDARD"
-      validation = "AUTO"
-      status     = "PUBLISHED"
+  plans = [
+    {
+      hrid        = "key-less"
+      name        = "No security"
+      type        = "API"
+      mode        = "STANDARD"
+      validation  = "AUTO"
+      status      = "PUBLISHED"
       description = "This plan does not require any authentication"
       security = {
         type = "KEY_LESS"
       }
     }
-  }
+  ]
 }

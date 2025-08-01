@@ -6,12 +6,16 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// Analytics - API analytics
 type Analytics struct {
 	// Whether or not analytics is enabled.
-	Enabled  *bool      `default:"true" json:"enabled"`
-	Sampling *Sampling  `json:"sampling,omitempty"`
-	Logging  *LoggingV4 `json:"logging,omitempty"`
-	Tracing  *TracingV4 `json:"tracing,omitempty"`
+	Enabled *bool `default:"true" json:"enabled"`
+	// API analytics sampling
+	Sampling *Sampling `json:"sampling,omitempty"`
+	// API logging configuration
+	Logging *LoggingV4 `json:"logging,omitempty"`
+	// API analytic tracing
+	Tracing *TracingV4 `json:"tracing,omitempty"`
 }
 
 func (a Analytics) MarshalJSON() ([]byte, error) {

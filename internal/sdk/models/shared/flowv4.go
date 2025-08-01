@@ -6,6 +6,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// FlowV4 - API or PLan Flow
 type FlowV4 struct {
 	// Flow's uuid.
 	ID *string `json:"id,omitempty"`
@@ -14,17 +15,17 @@ type FlowV4 struct {
 	// Is the flow enabled.
 	Enabled   *bool      `default:"true" json:"enabled"`
 	Selectors []Selector `json:"selectors,omitempty"`
-	// Flow step used for PROXY and MESSAGE APIs
+	// Request flow steps used for PROXY and MESSAGE APIs
 	Request []StepV4 `json:"request,omitempty"`
-	// Flow step used for PROXY and MESSAGE APIs
+	// Response flow steps used for PROXY and MESSAGE APIs
 	Response []StepV4 `json:"response,omitempty"`
-	// Flow step used for MESSAGE and NATIVE APIs
+	// Subscribe flow steps used for MESSAGE and NATIVE APIs
 	Subscribe []StepV4 `json:"subscribe,omitempty"`
-	// Flow step used for MESSAGE and NATIVE APIs
+	// Publish flow steps used for MESSAGE and NATIVE APIs
 	Publish []StepV4 `json:"publish,omitempty"`
-	// Flow step used for NATIVE APIs
+	// Connect flow steps used for NATIVE APIs
 	Connect []StepV4 `json:"connect,omitempty"`
-	// Flow step used for NATIVE APIs
+	// Interact flow steps used for NATIVE APIs
 	Interact []StepV4 `json:"interact,omitempty"`
 	// Flow's tags.
 	Tags []string `json:"tags,omitempty"`
