@@ -76,7 +76,6 @@ resource "apim_apiv4" "message-api" {
       value = 10
     }
   }
-  definition_context = {}
   plans = [
     {
       hrid        = "KeyLess"

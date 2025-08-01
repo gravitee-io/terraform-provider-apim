@@ -66,8 +66,6 @@ resource "apim_apiv4" "kafka_native_api" {
       ]
     },
   ]
-  # known limitation, some default value is returned by default which appears to be remove during plan
-  metadata = [{}]
   plans = [
     {
       hrid       = "KeyLess"
