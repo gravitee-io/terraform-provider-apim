@@ -28,4 +28,6 @@ jobs:
           APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL_MASTER }}
           APIM_USERNAME: ${{ secrets.TEST_USER }}
           APIM_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          APIM_API1_USERNAME: ${{ secrets.TEST_USER2 }}
+          APIM_API1_PASSWORD: ${{ secrets.TEST_USER2_PASSWORD }}
         run: make acceptance-tests examples-tests
