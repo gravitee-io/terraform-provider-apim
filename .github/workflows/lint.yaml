@@ -1,4 +1,4 @@
-name: Lint OAS
+name: Lint OAS & Terraform resources
 on:
   pull_request:
 #    paths:
@@ -21,6 +21,9 @@ jobs:
         run: |
           mkdir -p ~/.speakeasy
           echo 'speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}' > ~/.speakeasy/config.yaml
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_wrapper: false
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
