@@ -3,18 +3,26 @@
 page_title: "apim Provider"
 subcategory: ""
 description: |-
-  Gravitee: APIM Terraform Provider (alpha)
-  Manage APIs and Shared Policy Groups with Terraform
-  Compatible with APIM 4.8 and above
+  Gravitee: Gravitee API Management Terraform Provider (beta)
+  You can manage with Terraform the following:
+  APIsShared Policy GroupsApplicationsSubscriptions
+  Go to our documentation web site for more about configuration, capabilities and examples https://documentation.gravitee.io/apim/terraform
+  Compatible with APIM 4.9 and above
 ---
 
 # apim Provider
 
-Gravitee: APIM Terraform Provider (alpha)
+Gravitee: Gravitee API Management Terraform Provider (beta)
 
-Manage APIs and Shared Policy Groups with Terraform
+You can manage with Terraform the following:
+* APIs
+* Shared Policy Groups
+* Applications
+* Subscriptions
 
-Compatible with APIM 4.8 and above
+[Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform) 
+
+Compatible with APIM 4.9 and above
 
 ## Example Usage
 
@@ -23,7 +31,7 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "0.3.2"
+      version = "0.3.0"
     }
   }
 }
@@ -39,8 +47,9 @@ provider "apim" {
 ### Optional
 
 - `bearer_auth` (String, Sensitive)
+- `cloud_auth` (String, Sensitive)
 - `environment_id` (String) environment ID
 - `organization_id` (String) organization ID
 - `password` (String, Sensitive)
-- `server_url` (String) Server URL (defaults to https://apim-master-api.team-apim.gravitee.dev/automation)
+- `server_url` (String) Server URL (defaults to https://eu.cloudgate.gravitee.io/apim/automation)
 - `username` (String, Sensitive)

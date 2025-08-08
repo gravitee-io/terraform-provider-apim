@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 3c1c12f2e406a72cc70df7add57d6dfb
+  docChecksum: 7dac7546a030c3a1b508102799f1ebc1
   docVersion: 1.0.0
   speakeasyVersion: 1.599.0
   generationVersion: 2.675.0
-  releaseVersion: 0.3.2
-  configChecksum: ba3cbbe8d6bc807681a3bdf3df9ca420
+  releaseVersion: 0.3.0
+  configChecksum: 46047f5b540d2cc85a4d36dd35c8074a
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -19,6 +19,7 @@ features:
     ignores: 2.81.1
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.3
+    retries: 2.81.4
     typeOverrides: 2.81.1
     unions: 2.81.17
 generatedFiles:
@@ -141,6 +142,7 @@ generatedFiles:
   - internal/sdk/.gitattributes
   - internal/sdk/apis.go
   - internal/sdk/applications.go
+  - internal/sdk/docs/models/operations/option.md
   - internal/sdk/graviteeapim.go
   - internal/sdk/internal/config/sdkconfiguration.go
   - internal/sdk/internal/globals/globals.go

@@ -97,7 +97,7 @@ Default: false
 - `organization_id` (String) organization ID. Default: "DEFAULT"
 - `picture_url` (String) Application's picture Url.
 - `primary_owner` (Attributes) Primary owner, the creator of the application. Can perform all possible API actions. (see [below for nested schema](#nestedatt--primary_owner))
-- `settings` (Attributes) Application settings defines the configuration of consumers authentication. Depending on the control plane configuration some applications types may be restricted. `app`, `oauth` and `tls` are mutualy exclusive. If none is set is fallback to `app` without any property set. (see [below for nested schema](#nestedatt--settings))
+- `settings` (Attributes) Application settings defines the configuration of consumers authentication. Depending on the control plane configuration some applications types may be restricted. `app` and `oauth` are mutually exclusive. If none is set it fallbacks to `app` without any property set. (see [below for nested schema](#nestedatt--settings))
 - `status` (String) Application are either ACTIVE or ARCHIVED never actually deleted. Default: "ACTIVE"; must be one of ["ACTIVE", "ARCHIVED"]
 
 ### Read-Only
@@ -173,8 +173,8 @@ Optional:
 Not Null; must be one of ["browser", "web", "native", "backend_to_backend"]
 - `grant_types` (List of String) OAuth client grant types. `authorization_code` is mandatory except when application type is `backend_to_backend`.
 `refresh_token` can be used only application type is `web` and `browser`.
-`password` (Resource Owner Password) only with applicationType `native`
-`client_credentials`
+`password` (Resource Owner Password) only with applicationType `native`.
+`client_credentials` only works  when application type is `backend_to_backend`
 Not Null
 - `redirect_uris` (List of String) OAuth client redirect Uris. Not Null
 

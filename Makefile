@@ -1,5 +1,7 @@
 APIM_USERNAME ?= admin
 APIM_PASSWORD ?= admin
+APIM_API1_USERNAME ?= api1
+APIM_API1_PASSWORD ?= api1
 APIM_SERVER_URL ?= http://localhost:30083/automation
 
 .PHONY: speakeasy
@@ -22,14 +24,32 @@ lint-fix: ## Fix issues that can be found
 sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-management
 	@cp ../gravitee-api-management/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml schemas/automation-api-oas.yaml
 
+PRE_TEST_DIR = "$(shell pwd)/examples/use-cases/application-simple"
+
+define run_terraform
+	@cd $(PRE_TEST_DIR) && rm -rf terraform.state terraform.state.backup .terraform && \
+	APIM_USERNAME=$(1) \
+	APIM_PASSWORD=$(2) \
+	APIM_SERVER_URL=${APIM_SERVER_URL} \
+	terraform $(3) -auto-approve  2>&1 > /tmp/tf.log || \
+    (echo "Can do terraform $(if $(3),destroy,apply) with user $(1)" && cat /tmp/tf.log && exit 1)
+endef
+
+.PHONY: pre-test
+pre-test:
+	@echo "Creating users: ${APIM_USERNAME} and ${APIM_API1_USERNAME}"
+	$(call run_terraform,${APIM_USERNAME},${APIM_PASSWORD},apply)
+	$(call run_terraform,${APIM_USERNAME},${APIM_PASSWORD},destroy)
+	$(call run_terraform,${APIM_API1_USERNAME},${APIM_API1_PASSWORD},apply)
+	$(call run_terraform,${APIM_API1_USERNAME},${APIM_API1_PASSWORD},destroy)
 
 .PHONY: acceptance-tests
-acceptance-tests: ## Run acceptance tests
+acceptance-tests: pre-test ## Run acceptance tests
 	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD=${APIM_PASSWORD} APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -v ./tests/acceptance
 
 
 .PHONY: examples-tests
-examples-tests: ## Run acceptance tests using examples
+examples-tests: pre-test ## Run acceptance tests using examples
 	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD=${APIM_PASSWORD} APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -v ./tests/examples
 
 

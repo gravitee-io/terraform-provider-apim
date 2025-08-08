@@ -26,8 +26,9 @@ info:
 security:
   - BearerAuth: []
   - BasicAuth: []
+  - CloudAuth: []
 servers:
-  - url: "https://apim-master-api.team-apim.gravitee.dev/automation"
+  - url: "https://eu.cloudgate.gravitee.io/apim/automation"
 tags:
   - name: APIs
     description: Everything about APIs
@@ -2308,7 +2309,12 @@ components:
       type: http
       scheme: basic
     BearerAuth:
-      description: Bearer authentication
+      description: service account authentication
       type: http
       scheme: bearer
-      bearerFormat: Gravitee service account ID
+      bearerFormat: APIM service account token
+    CloudAuth:
+      description: Gravitee Cloud Token authentication
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -4,20 +4,20 @@ info:
   title: Root terraform overlay
   version: 0.0.1
 actions:
-#  - target: $
-#    description: |
-#      Setup SDK retries
-#    update:
-#      x-speakeasy-retries:
-#        strategy: backoff
-#        backoff:
-#          initialInterval: 500 # 500 milliseconds
-#          maxInterval: 30000 # 30 seconds
-#          maxElapsedTime: 60000 # 1 minute
-#          exponent: 1.5
-#        statusCodes:
-#          - 5XX
-#        retryConnectionErrors: true
+  - target: $
+    description: |
+      Setup SDK retries
+    update:
+      x-speakeasy-retries:
+        strategy: backoff
+        backoff:
+          initialInterval: 500 # 500 milliseconds
+          maxInterval: 30000 # 30 seconds
+          maxElapsedTime: 60000 # 1 minute
+          exponent: 1.5
+        statusCodes:
+          - 5XX
+        retryConnectionErrors: true
   - target: $
     description: |
       Promote environment_id and organization_id parameters to optional
@@ -35,19 +35,14 @@ actions:
     description: Update description so it feat to Terraform
     update:
       description: |
-        APIM Terraform Provider (alpha)
+        Gravitee API Management Terraform Provider (beta)
         
-        Manage APIs and Shared Policy Groups with Terraform
+        You can manage with Terraform the following:
+        * APIs
+        * Shared Policy Groups
+        * Applications
+        * Subscriptions
         
-        Compatible with APIM 4.8 and above
-#  - target: $.security
-#    description: Add cloud auth security scheme
-#    update:
-#      - CloudAuth: [ ]
-#  - target: $.components.securitySchemes
-#    description: Add cloud auth security scheme definition
-#    update:
-#      CloudAuth:
-#        type: http
-#        scheme: bearer
-#        bearerFormat: JWT
+        [Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform) 
+        
+        Compatible with APIM 4.9 and above

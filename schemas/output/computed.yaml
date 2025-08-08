@@ -14,12 +14,7 @@
 openapi: 3.1.0
 info:
   title: Gravitee
-  description: |
-    APIM Terraform Provider (alpha)
-
-    Manage APIs and Shared Policy Groups with Terraform
-
-    Compatible with APIM 4.8 and above
+  description: "Gravitee API Management Terraform Provider (beta)\n\nYou can manage with Terraform the following:\n* APIs\n* Shared Policy Groups\n* Applications\n* Subscriptions\n\n[Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform) \n\nCompatible with APIM 4.9 and above"
   contact:
     name: DevEx team
     email: team-gko@graviteesource.com
@@ -31,8 +26,9 @@ info:
 security:
   - BearerAuth: []
   - BasicAuth: []
+  - CloudAuth: []
 servers:
-  - url: "https://apim-master-api.team-apim.gravitee.dev/automation"
+  - url: "https://eu.cloudgate.gravitee.io/apim/automation"
 tags:
   - name: APIs
     description: Everything about APIs
@@ -2312,10 +2308,25 @@ components:
       type: http
       scheme: basic
     BearerAuth:
-      description: Bearer authentication
+      description: service account authentication
       type: http
       scheme: bearer
-      bearerFormat: Gravitee service account ID
+      bearerFormat: APIM service account token
+    CloudAuth:
+      description: Gravitee Cloud Token authentication
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-speakeasy-retries:
+  strategy: backoff
+  backoff:
+    initialInterval: 500 # 500 milliseconds
+    maxInterval: 30000 # 30 seconds
+    maxElapsedTime: 60000 # 1 minute
+    exponent: 1.5
+  statusCodes:
+    - 5XX
+  retryConnectionErrors: true
 x-speakeasy-globals:
   parameters:
     - $ref: '#/components/parameters/envIdParam'

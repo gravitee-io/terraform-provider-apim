@@ -8,13 +8,6 @@ resource "apim_application" "simple" {
       client_id = "admin"
     }
   }
-  members = [
-    {
-      role      = "USER"
-      source    = "memory"
-      source_id = "api1"
-    }
-  ]
   metadata = [{
     name   = "hello"
     format = "STRING"

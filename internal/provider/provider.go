@@ -36,6 +36,7 @@ type ApimProviderConfigureData struct {
 // ApimProviderModel describes the provider data model.
 type ApimProviderModel struct {
 	BearerAuth     types.String `tfsdk:"bearer_auth"`
+	CloudAuth      types.String `tfsdk:"cloud_auth"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	OrganizationID types.String `tfsdk:"organization_id"`
 	Password       types.String `tfsdk:"password"`
@@ -55,6 +56,10 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				Optional:  true,
 				Sensitive: true,
 			},
+			"cloud_auth": schema.StringAttribute{
+				Optional:  true,
+				Sensitive: true,
+			},
 			"environment_id": schema.StringAttribute{
 				Description: `environment ID`,
 				Optional:    true,
@@ -68,7 +73,7 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				Sensitive: true,
 			},
 			"server_url": schema.StringAttribute{
-				Description: `Server URL (defaults to https://apim-master-api.team-apim.gravitee.dev/automation)`,
+				Description: `Server URL (defaults to https://eu.cloudgate.gravitee.io/apim/automation)`,
 				Optional:    true,
 			},
 			"username": schema.StringAttribute{
@@ -76,11 +81,17 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				Sensitive: true,
 			},
 		},
-		MarkdownDescription: `Gravitee: APIM Terraform Provider (alpha)` + "\n" +
+		MarkdownDescription: `Gravitee: Gravitee API Management Terraform Provider (beta)` + "\n" +
 			`` + "\n" +
-			`Manage APIs and Shared Policy Groups with Terraform` + "\n" +
+			`You can manage with Terraform the following:` + "\n" +
+			`* APIs` + "\n" +
+			`* Shared Policy Groups` + "\n" +
+			`* Applications` + "\n" +
+			`* Subscriptions` + "\n" +
 			`` + "\n" +
-			`Compatible with APIM 4.8 and above`,
+			`[Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform) ` + "\n" +
+			`` + "\n" +
+			`Compatible with APIM 4.9 and above`,
 	}
 }
 
@@ -100,7 +111,7 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	}
 
 	if serverUrl == "" {
-		serverUrl = "https://apim-master-api.team-apim.gravitee.dev/automation"
+		serverUrl = "https://eu.cloudgate.gravitee.io/apim/automation"
 	}
 
 	if environmentIDEnvVar, ok := os.LookupEnv("APIM_ENV_ID"); ok && data.EnvironmentID.IsNull() {
@@ -140,6 +151,14 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 
 	if basicAuth.Username != "" || basicAuth.Password != "" {
 		security.BasicAuth = basicAuth
+	}
+
+	if !data.CloudAuth.IsUnknown() {
+		security.CloudAuth = data.CloudAuth.ValueStringPointer()
+	}
+
+	if cloudAuthEnvVar := os.Getenv("APIM_CLOUD_TOKEN"); security.CloudAuth == nil && cloudAuthEnvVar != "" {
+		security.CloudAuth = &cloudAuthEnvVar
 	}
 
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
