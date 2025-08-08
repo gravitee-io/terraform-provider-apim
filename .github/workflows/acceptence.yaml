@@ -27,7 +27,7 @@ jobs:
         run: ./tests/examples/setup-local-provider.sh
       - name: Build provider
         run: go build
-      - name: Run Acceptance tests
+      - name: Run Acceptance & Example using ${{ vars.TEST_SERVER_URL_MASTER }}
         env:
           APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL_MASTER }}
           APIM_USERNAME: ${{ secrets.TEST_USER }}
