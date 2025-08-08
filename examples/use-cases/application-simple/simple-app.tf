@@ -5,7 +5,7 @@ resource "apim_application" "simple" {
   description = "Demonstrate applications can be created with Terraform"
   settings = {
     app = {
-      client_id = "admin"
+      type = "test"
     }
   }
   metadata = [{
