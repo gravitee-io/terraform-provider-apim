@@ -23,6 +23,10 @@ jobs:
         with:
           terraform_version: ${{ matrix.terraform-version }}
           terraform_wrapper: false
+      - name: Setup local TF Provider
+        run: ./tests/examples/setup-local-provider.sh
+      - name: Build provider
+        run: go build
       - name: Run Acceptance tests
         env:
           APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL_MASTER }}
