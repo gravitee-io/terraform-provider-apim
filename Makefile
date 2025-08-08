@@ -26,22 +26,38 @@ sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-mana
 
 PRE_TEST_DIR = "$(shell pwd)/examples/use-cases/application-simple"
 
-define run_terraform
-	@cd $(PRE_TEST_DIR) && rm -rf terraform.state terraform.state.backup .terraform && \
-	APIM_USERNAME=$(1) \
-	APIM_PASSWORD=$(2) \
-	APIM_SERVER_URL=${APIM_SERVER_URL} \
-	terraform $(3) -auto-approve  2>&1 > /tmp/tf.log || \
-    (echo "Can do terraform $(if $(3),destroy,apply) with user $(1)" && cat /tmp/tf.log && exit 1)
-endef
-
 .PHONY: pre-test
 pre-test:
 	@echo "Creating users: ${APIM_USERNAME} and ${APIM_API1_USERNAME}"
-	$(call run_terraform,${APIM_USERNAME},${APIM_PASSWORD},apply)
-	$(call run_terraform,${APIM_USERNAME},${APIM_PASSWORD},destroy)
-	$(call run_terraform,${APIM_API1_USERNAME},${APIM_API1_PASSWORD},apply)
-	$(call run_terraform,${APIM_API1_USERNAME},${APIM_API1_PASSWORD},destroy)
+# First user (APIM_USERNAME)
+	@cd $(PRE_TEST_DIR) && rm -rf terraform.state terraform.state.backup .terraform && \
+	APIM_USERNAME=${APIM_USERNAME} \
+	APIM_PASSWORD=${APIM_PASSWORD} \
+	APIM_SERVER_URL=${APIM_SERVER_URL} \
+	terraform apply -auto-approve 2>&1 > /tmp/tf.log || \
+    (echo "Can't do terraform apply $APIM_USERNAME" && cat /tmp/tf.log && exit 1)
+
+	@cd $(PRE_TEST_DIR) && \
+	APIM_USERNAME=${APIM_USERNAME} \
+	APIM_PASSWORD=${APIM_PASSWORD} \
+	APIM_SERVER_URL=${APIM_SERVER_URL} \
+	terraform apply -auto-approve -destroy 2>&1 > /tmp/tf.log || \
+    (echo "Can't do terraform destroy $APIM_USERNAME" && cat /tmp/tf.log && exit 1)
+
+# Second user (APIM_API1_USERNAME)
+	@cd $(PRE_TEST_DIR) && rm -rf terraform.state terraform.state.backup .terraform && \
+	APIM_USERNAME=${APIM_API1_USERNAME} \
+	APIM_PASSWORD=${APIM_API1_PASSWORD} \
+	APIM_SERVER_URL=${APIM_SERVER_URL} \
+	terraform apply -auto-approve 2>&1 > /tmp/tf.log || \
+    (echo "Can't do terraform apply $APIM_USERNAME" && cat /tmp/tf.log && exit 1)
+
+	@cd $(PRE_TEST_DIR) && \
+	APIM_USERNAME=${APIM_API1_USERNAME} \
+	APIM_PASSWORD=${APIM_API1_PASSWORD} \
+	APIM_SERVER_URL=${APIM_SERVER_URL} \
+	terraform apply -auto-approve -destroy 2>&1 > /tmp/tf.log || \
+    (echo "Can't do terraform destroy $APIM_USERNAME" && cat /tmp/tf.log && exit 1)
 
 .PHONY: acceptance-tests
 acceptance-tests: pre-test ## Run acceptance tests
