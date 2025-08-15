@@ -3,12 +3,13 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type Entrypoint struct {
-	Configuration types.String `tfsdk:"configuration"`
-	Dlq           *Dlq         `tfsdk:"dlq"`
-	Qos           types.String `tfsdk:"qos"`
-	Type          types.String `tfsdk:"type"`
+	Configuration jsontypes.Normalized `tfsdk:"configuration"`
+	Dlq           *Dlq                 `tfsdk:"dlq"`
+	Qos           types.String         `tfsdk:"qos"`
+	Type          types.String         `tfsdk:"type"`
 }

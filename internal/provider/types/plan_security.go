@@ -3,10 +3,11 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type PlanSecurity struct {
-	Configuration types.String `tfsdk:"configuration"`
-	Type          types.String `tfsdk:"type"`
+	Configuration jsontypes.Normalized `tfsdk:"configuration"`
+	Type          types.String         `tfsdk:"type"`
 }

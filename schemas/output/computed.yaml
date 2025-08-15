@@ -820,6 +820,11 @@ components:
           type: string
           format: date-time
           example: "2040-12-25T09:12:28Z"
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes
+            schemaType: "timetypes.RFC3339Type{}"
+            valueType: timetypes.RFC3339
       required:
         - hrid
         - applicationHrid
@@ -843,6 +848,11 @@ components:
               type: string
               format: date-time
               example: "2040-12-25T09:12:28+01:00"
+              x-speakeasy-terraform-custom-type:
+                imports:
+                  - github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes
+                schemaType: "timetypes.RFC3339Type{}"
+                valueType: timetypes.RFC3339
           x-speakeasy-param-suppress-computed-diff: true
     SharedPolicyGroupState:
       description: State of Shared Policy Groups that has been created/updated

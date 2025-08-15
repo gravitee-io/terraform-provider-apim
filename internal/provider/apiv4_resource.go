@@ -20,6 +20,7 @@ import (
 	speakeasy_listvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int32validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
@@ -354,15 +355,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"configuration": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: jsontypes.NormalizedType{},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.String{
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"inherit_configuration": schema.BoolAttribute{
 										Computed: true,
@@ -405,15 +404,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												Attributes: map[string]schema.Attribute{
 													"configuration": schema.StringAttribute{
-														Computed: true,
-														Optional: true,
+														CustomType: jsontypes.NormalizedType{},
+														Computed:   true,
+														Optional:   true,
 														PlanModifiers: []planmodifier.String{
 															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 														},
 														Description: `The configuration of the service. Parsed as JSON.`,
-														Validators: []validator.String{
-															validators.IsValidJSON(),
-														},
 													},
 													"enabled": schema.BoolAttribute{
 														Computed: true,
@@ -447,15 +444,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `API Endpoint Services`,
 									},
 									"shared_configuration_override": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: jsontypes.NormalizedType{},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.String{
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"tenants": schema.ListAttribute{
 										Computed: true,
@@ -539,15 +534,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
-											Computed: true,
-											Optional: true,
+											CustomType: jsontypes.NormalizedType{},
+											Computed:   true,
+											Optional:   true,
 											PlanModifiers: []planmodifier.String{
 												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 											},
 											Description: `The configuration of the service. Parsed as JSON.`,
-											Validators: []validator.String{
-												validators.IsValidJSON(),
-											},
 										},
 										"enabled": schema.BoolAttribute{
 											Computed: true,
@@ -585,15 +578,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
-											Computed: true,
-											Optional: true,
+											CustomType: jsontypes.NormalizedType{},
+											Computed:   true,
+											Optional:   true,
 											PlanModifiers: []planmodifier.String{
 												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 											},
 											Description: `The configuration of the service. Parsed as JSON.`,
-											Validators: []validator.String{
-												validators.IsValidJSON(),
-											},
 										},
 										"enabled": schema.BoolAttribute{
 											Computed: true,
@@ -627,15 +618,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `API Endpoint Group Services`,
 						},
 						"shared_configuration": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
+							CustomType: jsontypes.NormalizedType{},
+							Computed:   true,
+							Optional:   true,
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 							Description: `Parsed as JSON.`,
-							Validators: []validator.String{
-								validators.IsValidJSON(),
-							},
 						},
 						"type": schema.StringAttribute{
 							Computed: true,
@@ -804,15 +793,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: jsontypes.NormalizedType{},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.String{
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `The configuration of the step. Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"description": schema.StringAttribute{
 										Computed: true,
@@ -899,15 +886,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: jsontypes.NormalizedType{},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.String{
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `The configuration of the step. Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"description": schema.StringAttribute{
 										Computed: true,
@@ -985,15 +970,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: jsontypes.NormalizedType{},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.String{
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `The configuration of the step. Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"description": schema.StringAttribute{
 										Computed: true,
@@ -1063,15 +1046,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: jsontypes.NormalizedType{},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.String{
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `The configuration of the step. Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"description": schema.StringAttribute{
 										Computed: true,
@@ -1141,15 +1122,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: jsontypes.NormalizedType{},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.String{
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `The configuration of the step. Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"description": schema.StringAttribute{
 										Computed: true,
@@ -1425,15 +1404,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
+										CustomType: jsontypes.NormalizedType{},
+										Computed:   true,
+										Optional:   true,
 										PlanModifiers: []planmodifier.String{
 											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 										},
 										Description: `The configuration of the step. Parsed as JSON.`,
-										Validators: []validator.String{
-											validators.IsValidJSON(),
-										},
 									},
 									"description": schema.StringAttribute{
 										Computed: true,
@@ -1670,15 +1647,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
+												CustomType: jsontypes.NormalizedType{},
+												Computed:   true,
+												Optional:   true,
 												PlanModifiers: []planmodifier.String{
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Parsed as JSON.`,
-												Validators: []validator.String{
-													validators.IsValidJSON(),
-												},
 											},
 											"dlq": schema.SingleNestedAttribute{
 												Computed: true,
@@ -1842,15 +1817,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
+												CustomType: jsontypes.NormalizedType{},
+												Computed:   true,
+												Optional:   true,
 												PlanModifiers: []planmodifier.String{
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Parsed as JSON.`,
-												Validators: []validator.String{
-													validators.IsValidJSON(),
-												},
 											},
 											"dlq": schema.SingleNestedAttribute{
 												Computed: true,
@@ -1980,15 +1953,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
+												CustomType: jsontypes.NormalizedType{},
+												Computed:   true,
+												Optional:   true,
 												PlanModifiers: []planmodifier.String{
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Parsed as JSON.`,
-												Validators: []validator.String{
-													validators.IsValidJSON(),
-												},
 											},
 											"dlq": schema.SingleNestedAttribute{
 												Computed: true,
@@ -2099,15 +2070,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
+												CustomType: jsontypes.NormalizedType{},
+												Computed:   true,
+												Optional:   true,
 												PlanModifiers: []planmodifier.String{
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Parsed as JSON.`,
-												Validators: []validator.String{
-													validators.IsValidJSON(),
-												},
 											},
 											"dlq": schema.SingleNestedAttribute{
 												Computed: true,
@@ -2642,15 +2611,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
+									CustomType: jsontypes.NormalizedType{},
+									Computed:   true,
+									Optional:   true,
 									PlanModifiers: []planmodifier.String{
 										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 									},
 									Description: `Page source's configuration. Parsed as JSON.`,
-									Validators: []validator.String{
-										validators.IsValidJSON(),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -2923,15 +2890,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
-												Computed: true,
-												Optional: true,
+												CustomType: jsontypes.NormalizedType{},
+												Computed:   true,
+												Optional:   true,
 												PlanModifiers: []planmodifier.String{
 													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 												},
 												Description: `Page source's configuration. Parsed as JSON.`,
-												Validators: []validator.String{
-													validators.IsValidJSON(),
-												},
 											},
 											"type": schema.StringAttribute{
 												Computed: true,
@@ -3124,15 +3089,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
+													CustomType: jsontypes.NormalizedType{},
+													Computed:   true,
+													Optional:   true,
 													PlanModifiers: []planmodifier.String{
 														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `The configuration of the step. Parsed as JSON.`,
-													Validators: []validator.String{
-														validators.IsValidJSON(),
-													},
 												},
 												"description": schema.StringAttribute{
 													Computed: true,
@@ -3219,15 +3182,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
+													CustomType: jsontypes.NormalizedType{},
+													Computed:   true,
+													Optional:   true,
 													PlanModifiers: []planmodifier.String{
 														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `The configuration of the step. Parsed as JSON.`,
-													Validators: []validator.String{
-														validators.IsValidJSON(),
-													},
 												},
 												"description": schema.StringAttribute{
 													Computed: true,
@@ -3305,15 +3266,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
+													CustomType: jsontypes.NormalizedType{},
+													Computed:   true,
+													Optional:   true,
 													PlanModifiers: []planmodifier.String{
 														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `The configuration of the step. Parsed as JSON.`,
-													Validators: []validator.String{
-														validators.IsValidJSON(),
-													},
 												},
 												"description": schema.StringAttribute{
 													Computed: true,
@@ -3383,15 +3342,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
+													CustomType: jsontypes.NormalizedType{},
+													Computed:   true,
+													Optional:   true,
 													PlanModifiers: []planmodifier.String{
 														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `The configuration of the step. Parsed as JSON.`,
-													Validators: []validator.String{
-														validators.IsValidJSON(),
-													},
 												},
 												"description": schema.StringAttribute{
 													Computed: true,
@@ -3461,15 +3418,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
+													CustomType: jsontypes.NormalizedType{},
+													Computed:   true,
+													Optional:   true,
 													PlanModifiers: []planmodifier.String{
 														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `The configuration of the step. Parsed as JSON.`,
-													Validators: []validator.String{
-														validators.IsValidJSON(),
-													},
 												},
 												"description": schema.StringAttribute{
 													Computed: true,
@@ -3745,15 +3700,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
+													CustomType: jsontypes.NormalizedType{},
+													Computed:   true,
+													Optional:   true,
 													PlanModifiers: []planmodifier.String{
 														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 													},
 													Description: `The configuration of the step. Parsed as JSON.`,
-													Validators: []validator.String{
-														validators.IsValidJSON(),
-													},
 												},
 												"description": schema.StringAttribute{
 													Computed: true,
@@ -3868,15 +3821,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
+									CustomType: jsontypes.NormalizedType{},
+									Computed:   true,
+									Optional:   true,
 									PlanModifiers: []planmodifier.String{
 										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 									},
 									Description: `Parsed as JSON.`,
-									Validators: []validator.String{
-										validators.IsValidJSON(),
-									},
 								},
 								"type": schema.StringAttribute{
 									Computed: true,
@@ -4097,15 +4048,15 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"configuration": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
+							CustomType: jsontypes.NormalizedType{},
+							Computed:   true,
+							Optional:   true,
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 							Description: `Resource configuration. Not Null; Parsed as JSON.`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
-								validators.IsValidJSON(),
 							},
 						},
 						"enabled": schema.BoolAttribute{
@@ -4176,15 +4127,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						Attributes: map[string]schema.Attribute{
 							"configuration": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								CustomType: jsontypes.NormalizedType{},
+								Computed:   true,
+								Optional:   true,
 								PlanModifiers: []planmodifier.String{
 									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},
 								Description: `The configuration of the service. Parsed as JSON.`,
-								Validators: []validator.String{
-									validators.IsValidJSON(),
-								},
 							},
 							"enabled": schema.BoolAttribute{
 								Computed: true,

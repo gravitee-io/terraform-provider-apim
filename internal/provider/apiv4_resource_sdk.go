@@ -9,6 +9,7 @@ import (
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"time"
@@ -86,10 +87,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				var endpoints tfTypes.EndpointV4
 
 				if endpointsItem.Configuration == nil {
-					endpoints.Configuration = types.StringNull()
+					endpoints.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult, _ := json.Marshal(endpointsItem.Configuration)
-					endpoints.Configuration = types.StringValue(string(configurationResult))
+					endpoints.Configuration = jsontypes.NewNormalizedValue(string(configurationResult))
 				}
 				endpoints.InheritConfiguration = types.BoolPointerValue(endpointsItem.InheritConfiguration)
 				endpoints.Name = types.StringPointerValue(endpointsItem.Name)
@@ -103,10 +104,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					} else {
 						endpoints.Services.HealthCheck = &tfTypes.ServiceV4{}
 						if endpointsItem.Services.HealthCheck.Configuration == nil {
-							endpoints.Services.HealthCheck.Configuration = types.StringNull()
+							endpoints.Services.HealthCheck.Configuration = jsontypes.NewNormalizedNull()
 						} else {
 							configurationResult1, _ := json.Marshal(endpointsItem.Services.HealthCheck.Configuration)
-							endpoints.Services.HealthCheck.Configuration = types.StringValue(string(configurationResult1))
+							endpoints.Services.HealthCheck.Configuration = jsontypes.NewNormalizedValue(string(configurationResult1))
 						}
 						endpoints.Services.HealthCheck.Enabled = types.BoolPointerValue(endpointsItem.Services.HealthCheck.Enabled)
 						endpoints.Services.HealthCheck.OverrideConfiguration = types.BoolPointerValue(endpointsItem.Services.HealthCheck.OverrideConfiguration)
@@ -114,10 +115,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					}
 				}
 				if endpointsItem.SharedConfigurationOverride == nil {
-					endpoints.SharedConfigurationOverride = types.StringNull()
+					endpoints.SharedConfigurationOverride = jsontypes.NewNormalizedNull()
 				} else {
 					sharedConfigurationOverrideResult, _ := json.Marshal(endpointsItem.SharedConfigurationOverride)
-					endpoints.SharedConfigurationOverride = types.StringValue(string(sharedConfigurationOverrideResult))
+					endpoints.SharedConfigurationOverride = jsontypes.NewNormalizedValue(string(sharedConfigurationOverrideResult))
 				}
 				endpoints.Tenants = make([]types.String, 0, len(endpointsItem.Tenants))
 				for _, v := range endpointsItem.Tenants {
@@ -148,10 +149,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				} else {
 					endpointGroups.Services.Discovery = &tfTypes.ServiceV4{}
 					if endpointGroupsItem.Services.Discovery.Configuration == nil {
-						endpointGroups.Services.Discovery.Configuration = types.StringNull()
+						endpointGroups.Services.Discovery.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult2, _ := json.Marshal(endpointGroupsItem.Services.Discovery.Configuration)
-						endpointGroups.Services.Discovery.Configuration = types.StringValue(string(configurationResult2))
+						endpointGroups.Services.Discovery.Configuration = jsontypes.NewNormalizedValue(string(configurationResult2))
 					}
 					endpointGroups.Services.Discovery.Enabled = types.BoolPointerValue(endpointGroupsItem.Services.Discovery.Enabled)
 					endpointGroups.Services.Discovery.OverrideConfiguration = types.BoolPointerValue(endpointGroupsItem.Services.Discovery.OverrideConfiguration)
@@ -162,10 +163,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				} else {
 					endpointGroups.Services.HealthCheck = &tfTypes.ServiceV4{}
 					if endpointGroupsItem.Services.HealthCheck.Configuration == nil {
-						endpointGroups.Services.HealthCheck.Configuration = types.StringNull()
+						endpointGroups.Services.HealthCheck.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult3, _ := json.Marshal(endpointGroupsItem.Services.HealthCheck.Configuration)
-						endpointGroups.Services.HealthCheck.Configuration = types.StringValue(string(configurationResult3))
+						endpointGroups.Services.HealthCheck.Configuration = jsontypes.NewNormalizedValue(string(configurationResult3))
 					}
 					endpointGroups.Services.HealthCheck.Enabled = types.BoolPointerValue(endpointGroupsItem.Services.HealthCheck.Enabled)
 					endpointGroups.Services.HealthCheck.OverrideConfiguration = types.BoolPointerValue(endpointGroupsItem.Services.HealthCheck.OverrideConfiguration)
@@ -173,10 +174,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				}
 			}
 			if endpointGroupsItem.SharedConfiguration == nil {
-				endpointGroups.SharedConfiguration = types.StringNull()
+				endpointGroups.SharedConfiguration = jsontypes.NewNormalizedNull()
 			} else {
 				sharedConfigurationResult, _ := json.Marshal(endpointGroupsItem.SharedConfiguration)
-				endpointGroups.SharedConfiguration = types.StringValue(string(sharedConfigurationResult))
+				endpointGroups.SharedConfiguration = jsontypes.NewNormalizedValue(string(sharedConfigurationResult))
 			}
 			endpointGroups.Type = types.StringValue(endpointGroupsItem.Type)
 
@@ -216,10 +217,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 				connect.Condition = types.StringPointerValue(connectItem.Condition)
 				if connectItem.Configuration == nil {
-					connect.Configuration = types.StringNull()
+					connect.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult4, _ := json.Marshal(connectItem.Configuration)
-					connect.Configuration = types.StringValue(string(configurationResult4))
+					connect.Configuration = jsontypes.NewNormalizedValue(string(configurationResult4))
 				}
 				connect.Description = types.StringPointerValue(connectItem.Description)
 				connect.Enabled = types.BoolPointerValue(connectItem.Enabled)
@@ -238,10 +239,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 				interact.Condition = types.StringPointerValue(interactItem.Condition)
 				if interactItem.Configuration == nil {
-					interact.Configuration = types.StringNull()
+					interact.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult5, _ := json.Marshal(interactItem.Configuration)
-					interact.Configuration = types.StringValue(string(configurationResult5))
+					interact.Configuration = jsontypes.NewNormalizedValue(string(configurationResult5))
 				}
 				interact.Description = types.StringPointerValue(interactItem.Description)
 				interact.Enabled = types.BoolPointerValue(interactItem.Enabled)
@@ -259,10 +260,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 				publish.Condition = types.StringPointerValue(publishItem.Condition)
 				if publishItem.Configuration == nil {
-					publish.Configuration = types.StringNull()
+					publish.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult6, _ := json.Marshal(publishItem.Configuration)
-					publish.Configuration = types.StringValue(string(configurationResult6))
+					publish.Configuration = jsontypes.NewNormalizedValue(string(configurationResult6))
 				}
 				publish.Description = types.StringPointerValue(publishItem.Description)
 				publish.Enabled = types.BoolPointerValue(publishItem.Enabled)
@@ -279,10 +280,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 				request.Condition = types.StringPointerValue(requestItem.Condition)
 				if requestItem.Configuration == nil {
-					request.Configuration = types.StringNull()
+					request.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult7, _ := json.Marshal(requestItem.Configuration)
-					request.Configuration = types.StringValue(string(configurationResult7))
+					request.Configuration = jsontypes.NewNormalizedValue(string(configurationResult7))
 				}
 				request.Description = types.StringPointerValue(requestItem.Description)
 				request.Enabled = types.BoolPointerValue(requestItem.Enabled)
@@ -299,10 +300,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 				response.Condition = types.StringPointerValue(responseItem.Condition)
 				if responseItem.Configuration == nil {
-					response.Configuration = types.StringNull()
+					response.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult8, _ := json.Marshal(responseItem.Configuration)
-					response.Configuration = types.StringValue(string(configurationResult8))
+					response.Configuration = jsontypes.NewNormalizedValue(string(configurationResult8))
 				}
 				response.Description = types.StringPointerValue(responseItem.Description)
 				response.Enabled = types.BoolPointerValue(responseItem.Enabled)
@@ -364,10 +365,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 				subscribe.Condition = types.StringPointerValue(subscribeItem.Condition)
 				if subscribeItem.Configuration == nil {
-					subscribe.Configuration = types.StringNull()
+					subscribe.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult9, _ := json.Marshal(subscribeItem.Configuration)
-					subscribe.Configuration = types.StringValue(string(configurationResult9))
+					subscribe.Configuration = jsontypes.NewNormalizedValue(string(configurationResult9))
 				}
 				subscribe.Description = types.StringPointerValue(subscribeItem.Description)
 				subscribe.Enabled = types.BoolPointerValue(subscribeItem.Enabled)
@@ -433,10 +434,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					var entrypoints tfTypes.Entrypoint
 
 					if entrypointsItem.Configuration == nil {
-						entrypoints.Configuration = types.StringNull()
+						entrypoints.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult10, _ := json.Marshal(entrypointsItem.Configuration)
-						entrypoints.Configuration = types.StringValue(string(configurationResult10))
+						entrypoints.Configuration = jsontypes.NewNormalizedValue(string(configurationResult10))
 					}
 					if entrypointsItem.Dlq == nil {
 						entrypoints.Dlq = nil
@@ -482,10 +483,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					var entrypoints1 tfTypes.Entrypoint
 
 					if entrypointsItem1.Configuration == nil {
-						entrypoints1.Configuration = types.StringNull()
+						entrypoints1.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult11, _ := json.Marshal(entrypointsItem1.Configuration)
-						entrypoints1.Configuration = types.StringValue(string(configurationResult11))
+						entrypoints1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult11))
 					}
 					if entrypointsItem1.Dlq == nil {
 						entrypoints1.Dlq = nil
@@ -518,10 +519,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					var entrypoints2 tfTypes.Entrypoint
 
 					if entrypointsItem2.Configuration == nil {
-						entrypoints2.Configuration = types.StringNull()
+						entrypoints2.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult12, _ := json.Marshal(entrypointsItem2.Configuration)
-						entrypoints2.Configuration = types.StringValue(string(configurationResult12))
+						entrypoints2.Configuration = jsontypes.NewNormalizedValue(string(configurationResult12))
 					}
 					if entrypointsItem2.Dlq == nil {
 						entrypoints2.Dlq = nil
@@ -552,10 +553,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					var entrypoints3 tfTypes.Entrypoint
 
 					if entrypointsItem3.Configuration == nil {
-						entrypoints3.Configuration = types.StringNull()
+						entrypoints3.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult13, _ := json.Marshal(entrypointsItem3.Configuration)
-						entrypoints3.Configuration = types.StringValue(string(configurationResult13))
+						entrypoints3.Configuration = jsontypes.NewNormalizedValue(string(configurationResult13))
 					}
 					if entrypointsItem3.Dlq == nil {
 						entrypoints3.Dlq = nil
@@ -675,10 +676,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			} else {
 				pages.Source = &tfTypes.PageSource{}
 				if pagesItem.Source.Configuration == nil {
-					pages.Source.Configuration = types.StringNull()
+					pages.Source.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult14, _ := json.Marshal(pagesItem.Source.Configuration)
-					pages.Source.Configuration = types.StringValue(string(configurationResult14))
+					pages.Source.Configuration = jsontypes.NewNormalizedValue(string(configurationResult14))
 				}
 				pages.Source.Type = types.StringPointerValue(pagesItem.Source.Type)
 			}
@@ -746,10 +747,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				} else {
 					translations.Source = &tfTypes.PageSource{}
 					if translationsItem.Source.Configuration == nil {
-						translations.Source.Configuration = types.StringNull()
+						translations.Source.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult15, _ := json.Marshal(translationsItem.Source.Configuration)
-						translations.Source.Configuration = types.StringValue(string(configurationResult15))
+						translations.Source.Configuration = jsontypes.NewNormalizedValue(string(configurationResult15))
 					}
 					translations.Source.Type = types.StringPointerValue(translationsItem.Source.Type)
 				}
@@ -799,10 +800,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 					connect1.Condition = types.StringPointerValue(connectItem1.Condition)
 					if connectItem1.Configuration == nil {
-						connect1.Configuration = types.StringNull()
+						connect1.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult16, _ := json.Marshal(connectItem1.Configuration)
-						connect1.Configuration = types.StringValue(string(configurationResult16))
+						connect1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult16))
 					}
 					connect1.Description = types.StringPointerValue(connectItem1.Description)
 					connect1.Enabled = types.BoolPointerValue(connectItem1.Enabled)
@@ -821,10 +822,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 					interact1.Condition = types.StringPointerValue(interactItem1.Condition)
 					if interactItem1.Configuration == nil {
-						interact1.Configuration = types.StringNull()
+						interact1.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult17, _ := json.Marshal(interactItem1.Configuration)
-						interact1.Configuration = types.StringValue(string(configurationResult17))
+						interact1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult17))
 					}
 					interact1.Description = types.StringPointerValue(interactItem1.Description)
 					interact1.Enabled = types.BoolPointerValue(interactItem1.Enabled)
@@ -842,10 +843,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 					publish1.Condition = types.StringPointerValue(publishItem1.Condition)
 					if publishItem1.Configuration == nil {
-						publish1.Configuration = types.StringNull()
+						publish1.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult18, _ := json.Marshal(publishItem1.Configuration)
-						publish1.Configuration = types.StringValue(string(configurationResult18))
+						publish1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult18))
 					}
 					publish1.Description = types.StringPointerValue(publishItem1.Description)
 					publish1.Enabled = types.BoolPointerValue(publishItem1.Enabled)
@@ -862,10 +863,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 					request1.Condition = types.StringPointerValue(requestItem1.Condition)
 					if requestItem1.Configuration == nil {
-						request1.Configuration = types.StringNull()
+						request1.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult19, _ := json.Marshal(requestItem1.Configuration)
-						request1.Configuration = types.StringValue(string(configurationResult19))
+						request1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult19))
 					}
 					request1.Description = types.StringPointerValue(requestItem1.Description)
 					request1.Enabled = types.BoolPointerValue(requestItem1.Enabled)
@@ -882,10 +883,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 					response1.Condition = types.StringPointerValue(responseItem1.Condition)
 					if responseItem1.Configuration == nil {
-						response1.Configuration = types.StringNull()
+						response1.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult20, _ := json.Marshal(responseItem1.Configuration)
-						response1.Configuration = types.StringValue(string(configurationResult20))
+						response1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult20))
 					}
 					response1.Description = types.StringPointerValue(responseItem1.Description)
 					response1.Enabled = types.BoolPointerValue(responseItem1.Enabled)
@@ -947,10 +948,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 					subscribe1.Condition = types.StringPointerValue(subscribeItem1.Condition)
 					if subscribeItem1.Configuration == nil {
-						subscribe1.Configuration = types.StringNull()
+						subscribe1.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult21, _ := json.Marshal(subscribeItem1.Configuration)
-						subscribe1.Configuration = types.StringValue(string(configurationResult21))
+						subscribe1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult21))
 					}
 					subscribe1.Description = types.StringPointerValue(subscribeItem1.Description)
 					subscribe1.Enabled = types.BoolPointerValue(subscribeItem1.Enabled)
@@ -972,10 +973,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			plans.Mode = types.StringValue(string(plansItem.Mode))
 			plans.Name = types.StringValue(plansItem.Name)
 			if plansItem.Security.Configuration == nil {
-				plans.Security.Configuration = types.StringNull()
+				plans.Security.Configuration = jsontypes.NewNormalizedNull()
 			} else {
 				configurationResult22, _ := json.Marshal(plansItem.Security.Configuration)
-				plans.Security.Configuration = types.StringValue(string(configurationResult22))
+				plans.Security.Configuration = jsontypes.NewNormalizedValue(string(configurationResult22))
 			}
 			plans.Security.Type = types.StringValue(string(plansItem.Security.Type))
 			plans.SelectionRule = types.StringPointerValue(plansItem.SelectionRule)
@@ -1022,7 +1023,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			var resources tfTypes.Resource
 
 			configurationResult23, _ := json.Marshal(resourcesItem.Configuration)
-			resources.Configuration = types.StringValue(string(configurationResult23))
+			resources.Configuration = jsontypes.NewNormalizedValue(string(configurationResult23))
 			resources.Enabled = types.BoolPointerValue(resourcesItem.Enabled)
 			resources.Name = types.StringValue(resourcesItem.Name)
 			resources.Type = types.StringValue(resourcesItem.Type)
@@ -1063,10 +1064,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			} else {
 				r.Services.DynamicProperty = &tfTypes.ServiceV4{}
 				if resp.Services.DynamicProperty.Configuration == nil {
-					r.Services.DynamicProperty.Configuration = types.StringNull()
+					r.Services.DynamicProperty.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult24, _ := json.Marshal(resp.Services.DynamicProperty.Configuration)
-					r.Services.DynamicProperty.Configuration = types.StringValue(string(configurationResult24))
+					r.Services.DynamicProperty.Configuration = jsontypes.NewNormalizedValue(string(configurationResult24))
 				}
 				r.Services.DynamicProperty.Enabled = types.BoolPointerValue(resp.Services.DynamicProperty.Enabled)
 				r.Services.DynamicProperty.OverrideConfiguration = types.BoolPointerValue(resp.Services.DynamicProperty.OverrideConfiguration)

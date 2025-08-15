@@ -10,6 +10,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	"github.com/gravitee-io/terraform-provider-apim/internal/validators"
+	"github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -45,15 +46,15 @@ type SubscriptionResource struct {
 
 // SubscriptionResourceModel describes the resource data model.
 type SubscriptionResourceModel struct {
-	APIHrid         types.String `tfsdk:"api_hrid"`
-	ApplicationHrid types.String `tfsdk:"application_hrid"`
-	EndingAt        types.String `tfsdk:"ending_at"`
-	EnvironmentID   types.String `tfsdk:"environment_id"`
-	Hrid            types.String `tfsdk:"hrid"`
-	ID              types.String `tfsdk:"id"`
-	OrganizationID  types.String `tfsdk:"organization_id"`
-	PlanHrid        types.String `tfsdk:"plan_hrid"`
-	StartingAt      types.String `tfsdk:"starting_at"`
+	APIHrid         types.String      `tfsdk:"api_hrid"`
+	ApplicationHrid types.String      `tfsdk:"application_hrid"`
+	EndingAt        timetypes.RFC3339 `tfsdk:"ending_at"`
+	EnvironmentID   types.String      `tfsdk:"environment_id"`
+	Hrid            types.String      `tfsdk:"hrid"`
+	ID              types.String      `tfsdk:"id"`
+	OrganizationID  types.String      `tfsdk:"organization_id"`
+	PlanHrid        types.String      `tfsdk:"plan_hrid"`
+	StartingAt      timetypes.RFC3339 `tfsdk:"starting_at"`
 }
 
 func (r *SubscriptionResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,8 +86,9 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"ending_at": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
+				CustomType: timetypes.RFC3339Type{},
+				Computed:   true,
+				Optional:   true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
@@ -132,7 +134,8 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `API plan's Hrid`,
 			},
 			"starting_at": schema.StringAttribute{
-				Computed: true,
+				CustomType: timetypes.RFC3339Type{},
+				Computed:   true,
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
