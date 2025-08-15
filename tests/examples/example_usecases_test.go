@@ -2,15 +2,15 @@ package examples_test
 
 import (
 	"fmt"
-	"github.com/gravitee-io/terraform-provider-apim/internal/provider"
-	"github.com/hashicorp/terraform-plugin-framework/providerserver"
-	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
-	"github.com/hashicorp/terraform-plugin-testing/config"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
+	"github.com/gravitee-io/terraform-provider-apim/internal/provider"
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
+	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
+	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -147,7 +147,7 @@ func createTestCases(t *testing.T, directories []string) []testcase {
 		importIgnore := []string{}
 		if typeAndId[0] == "subscription" {
 			updateField = "ending_at"
-			updateValue = "2050-12-25T10:12:28+01:00"
+			updateValue = "2050-12-25T09:12:28Z"
 			importIgnore = []string{"starting_at"}
 		}
 
