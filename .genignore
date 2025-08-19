@@ -1,1 +1,2 @@
 examples/provider/provider.tf
+examples/resources/apim_apiv4/resource.tf
