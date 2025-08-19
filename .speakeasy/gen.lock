@@ -30,7 +30,6 @@ generatedFiles:
   - examples/data-sources/apim_application/data-source.tf
   - examples/data-sources/apim_shared_policy_group/data-source.tf
   - examples/data-sources/apim_subscription/data-source.tf
-  - examples/provider/provider.tf
   - examples/resources/apim_apiv4/import.sh
   - examples/resources/apim_apiv4/resource.tf
   - examples/resources/apim_application/import.sh
