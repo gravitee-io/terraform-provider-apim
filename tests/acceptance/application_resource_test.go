@@ -10,8 +10,6 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"math/big"
-	"net"
-	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -98,30 +96,6 @@ wg/HcAJWY60xZTJDFN+Qfx8ZQvBEin6c2/h+zZi5IVY=
 	}
 
 	return testPrivateKey
-}
-
-func mustParseURI(t *testing.T, s string) *url.URL {
-	uri, err := url.Parse(s)
-	if err != nil {
-		t.Fatalf("Failed to parse URI %q: %s", s, err)
-	}
-	return uri
-}
-
-func mustNewOIDFromInts(t *testing.T, ints []uint64) x509.OID {
-	oid, err := x509.OIDFromInts(ints)
-	if err != nil {
-		t.Fatalf("OIDFromInts(%v) unexpected error: %v", ints, err)
-	}
-	return oid
-}
-
-func mustParseCIDR(t *testing.T, s string) *net.IPNet {
-	_, net, err := net.ParseCIDR(s)
-	if err != nil {
-		t.Fatalf("Failed to parse CIDR %q: %s", s, err)
-	}
-	return net
 }
 
 func getClientTLSCert(t *testing.T) string {
