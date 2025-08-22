@@ -1,7 +1,10 @@
+provider "apim" {
+  organization_id = "DEFAULT"
+}
+
 variable "hrid" {
   type = string
 }
-
 
 resource "apim_application" "test" {
   hrid        = var.hrid
