@@ -1,5 +1,5 @@
 provider "apim" {
-  organization_id = "DEFAULT"
+  organization_id = "e60e2468-c42d-45f5-aab7-0052a3d0251b"
 }
 
 variable "hrid" {
