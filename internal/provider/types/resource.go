@@ -3,12 +3,13 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type Resource struct {
-	Configuration types.String `tfsdk:"configuration"`
-	Enabled       types.Bool   `tfsdk:"enabled"`
-	Name          types.String `tfsdk:"name"`
-	Type          types.String `tfsdk:"type"`
+	Configuration jsontypes.Normalized `tfsdk:"configuration"`
+	Enabled       types.Bool           `tfsdk:"enabled"`
+	Name          types.String         `tfsdk:"name"`
+	Type          types.String         `tfsdk:"type"`
 }
