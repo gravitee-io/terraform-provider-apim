@@ -13,26 +13,31 @@
 # limitations under the License.
 openapi: 3.1.0
 info:
-  title: Gravitee.io GKO - Automation API
-  description: |-
-    The APIM automation API. 
-
+  title: Gravitee.io - Automation API
+  description: The APIM automation API.
   contact:
+    name: DevEx team
     email: team-gko@graviteesource.com
+    url: https://www.gravitee.io/
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.2.0
+  version: 1.0.0
 security:
   - BearerAuth: []
   - BasicAuth: []
+  - CloudAuth: []
 servers:
-  - url: "https://apim-master-api.team-apim.gravitee.dev/automation"
+  - url: "https://eu.cloudgate.gravitee.io/apim/automation"
 tags:
   - name: APIs
     description: Everything about APIs
+  - name: Applications
+    description: Everything about Applications
   - name: Shared Policy Group
     description: Everything about Shared Policy Groups
+  - name: Subscriptions
+    description: Everything about subscriptions
 paths:
   # APIs
   /organizations/{orgId}/environments/{envId}/apis:
@@ -40,13 +45,14 @@ paths:
       operationId: createOrUpdateApis
       tags:
         - APIs
-      summary: Create or update APIs from API Spec
-      description: Create or update APIs from API Spec
+      summary: Create or update APIs from APISpec
+      description: Create/update APIs from API Spec
       parameters:
         - $ref: "#/components/parameters/orgIdParam"
         - $ref: "#/components/parameters/envIdParam"
         - $ref: "#/components/parameters/dryRunQueryParam"
       requestBody:
+        description: API Specification
         content:
           "application/json":
             schema:
@@ -54,19 +60,19 @@ paths:
         required: true
       responses:
         "200":
-          description: State of the successfully created API
+          description: State of the successfully created/updated API
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiV4State"
         "400":
-          $ref: "#/components/responses/Error"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          description: No credential provided
+          $ref: "#/components/responses/Unauthenticated"
         "403":
-          description: Wrong credentials
-        "500":
-          description: Internal server error
+          $ref: "#/components/responses/Unauthorized"
+        default:
+          $ref: "#/components/responses/Error"
   /organizations/{orgId}/environments/{envId}/apis/{hrid}:
     parameters:
       - $ref: "#/components/parameters/orgIdParam"
@@ -77,30 +83,32 @@ paths:
       tags:
         - APIs
       summary: Get one API
-      description: Get one API
+      description: Get an API using HRID
       parameters:
         - $ref: "#/components/parameters/orgIdParam"
         - $ref: "#/components/parameters/envIdParam"
         - $ref: "#/components/parameters/hridParam"
       responses:
         "200":
-          description: Successful retrieval
+          description: API successfully retrieved
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiV4State"
         "401":
-          description: No credential provided
+          $ref: "#/components/responses/Unauthenticated"
         "403":
-          description: Wrong credentials
-        "500":
-          description: Internal server error
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
     delete:
       operationId: deleteApi
       tags:
         - APIs
       summary: Delete one API
-      description: Delete one API
+      description: Delete an API using it's HRID
       parameters:
         - $ref: "#/components/parameters/orgIdParam"
         - $ref: "#/components/parameters/envIdParam"
@@ -108,6 +116,186 @@ paths:
       responses:
         "204":
           description: API successfully deleted
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+
+  # Applications
+  /organizations/{orgId}/environments/{envId}/applications:
+    put:
+      operationId: createOrUpdateApplications
+      tags:
+        - Applications
+      summary: Create or update Applications from ApplicationSpec
+      description: Create/update Applications from Application Spec
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/dryRunQueryParam"
+      requestBody:
+        description: Application specification
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/ApplicationSpec"
+        required: true
+      responses:
+        "200":
+          description: State of the successfully created/updated Applications
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicationState"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+  /organizations/{orgId}/environments/{envId}/applications/{hrid}:
+    parameters:
+      - $ref: "#/components/parameters/orgIdParam"
+      - $ref: "#/components/parameters/envIdParam"
+      - $ref: "#/components/parameters/hridParam"
+    get:
+      operationId: getApplication
+      tags:
+        - Applications
+      summary: Get one Application
+      description: Get an Application using HRID
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/hridParam"
+      responses:
+        "200":
+          description: Application successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicationState"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+    delete:
+      operationId: deleteApplication
+      tags:
+        - Applications
+      summary: Delete one Application
+      description: Delete an Application using HRID
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/hridParam"
+      responses:
+        "204":
+          description: Application successfully deleted
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+
+  # Subscription
+  /organizations/{orgId}/environments/{envId}/subscriptions:
+    put:
+      operationId: createOrUpdateSubscriptions
+      tags:
+        - Subscriptions
+      summary: Create or update Subscriptions from SubscriptionSpec
+      description: Create/update Subscription from Subscription Spec
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+      requestBody:
+        description: Subscription specification
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/SubscriptionSpec"
+        required: true
+      responses:
+        "200":
+          description: State of the successfully created Subscription
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionState"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /organizations/{orgId}/environments/{envId}/subscriptions/{hrid}:
+    parameters:
+      - $ref: "#/components/parameters/orgIdParam"
+      - $ref: "#/components/parameters/envIdParam"
+      - $ref: "#/components/parameters/hridParam"
+    get:
+      operationId: getSubscription
+      tags:
+        - Subscriptions
+      summary: Get one Subscription
+      description: Get a Subscription using HRID
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/hridParam"
+      responses:
+        "200":
+          description: Subscription successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionState"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+    delete:
+      operationId: deleteSubscription
+      tags:
+        - Subscriptions
+      summary: Delete one Subscription
+      description: Delete a Subscription using HRID
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/hridParam"
+      responses:
+        "204":
+          description: Subscription successfully deleted
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
         default:
           $ref: "#/components/responses/Error"
 
@@ -122,31 +310,39 @@ paths:
       tags:
         - Shared Policy Group
       summary: Get one policy group
-      description: Get one policy group
+      description: Get a policy group using HRID
       responses:
         "200":
-          description: Successful retrieval
+          description: Shared policy group successfully retrieved
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SharedPolicyGroupState"
         "401":
-          description: No credential provided
+          $ref: "#/components/responses/Unauthenticated"
         "403":
-          description: Wrong credentials
-        "500":
-          description: Internal server error
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
     delete:
       operationId: deletePolicyGroup
       tags:
         - Shared Policy Group
       summary: Delete one policy group
-      description: Delete one shared policy group
+      description: Delete a shared policy group using HRID
       parameters:
         - $ref: "#/components/parameters/dryRunQueryParam"
       responses:
         "204":
           description: Shared Policy Group successfully deleted
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
         default:
           $ref: "#/components/responses/Error"
   /organizations/{orgId}/environments/{envId}/shared-policy-groups:
@@ -154,13 +350,14 @@ paths:
       operationId: createOrUpdatePolicyGroup
       tags:
         - Shared Policy Group
-      summary: Create or update Shared Policy Group from spec
-      description: Create or update Shared Policy Group from spec
+      summary: Create or update Shared Policy Group from SharedPolicyGroupSpec
+      description: Create/update Shared Policy Group from Shared Policy Group Spec
       parameters:
         - $ref: "#/components/parameters/orgIdParam"
         - $ref: "#/components/parameters/envIdParam"
         - $ref: "#/components/parameters/dryRunQueryParam"
       requestBody:
+        description: Shared Policy Group Specification
         content:
           "application/json":
             schema:
@@ -174,30 +371,34 @@ paths:
               schema:
                 $ref: "#/components/schemas/SharedPolicyGroupState"
         "400":
-          $ref: "#/components/responses/Error"
+          $ref: "#/components/responses/BadRequest"
         "401":
-          description: No credential provided
+          $ref: "#/components/responses/Unauthenticated"
         "403":
-          description: Wrong credentials
-        "500":
-          description: Internal server error
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
 
 components:
   schemas:
     Hrid:
       type: string
       pattern: '^[a-zA-Z][a-zA-Z0-9_-]{2,}$'
-      description: A unique human readable id identifying this object
+      description: A unique human readable id identifying this resource
+      examples:
+        - my_demo_api
+        - simple_demo_app
+        - keyless_demo_plan
+        - demo_subscription
+        - demo_shared_policy_groups
     ApiV4Spec:
       description: ApiV4DefinitionSpec defines the desired state of ApiDefinition.
       type: object
       properties:
         hrid:
           $ref: "#/components/schemas/Hrid"
-          examples:
-            - echo_api
-        definitionContext:
-          $ref: "#/components/schemas/DefinitionContext"
         name:
           type: string
           description: API's name. Duplicate names can exists.
@@ -221,8 +422,7 @@ components:
           type: array
           description: The list of sharding tags associated with this API.
           examples:
-            - public
-            - private
+            - ["public"]
           items:
             type: string
           uniqueItems: true
@@ -250,7 +450,11 @@ components:
           items:
             $ref: "#/components/schemas/Resource"
         plans:
-          $ref: '#/components/schemas/PlansMap'
+          default: []
+          description: List of Plans for the API
+          items:
+            $ref: '#/components/schemas/PlanV4'
+          type: array
         flowExecution:
           $ref: "#/components/schemas/FlowExecution"
         flows:
@@ -304,8 +508,7 @@ components:
           type: array
           description: The list of category keys associated with this API.
           examples:
-            - health
-            - media
+            - [health, media]
           items:
             type: string
         members:
@@ -322,7 +525,11 @@ components:
           type: boolean
           writeOnly: true
         pages:
-          $ref: '#/components/schemas/PagesMap'
+          default: []
+          description: List of Pages for the API
+          items:
+            $ref: '#/components/schemas/PageV4'
+          type: array
         consoleNotificationConfiguration:
           $ref: '#/components/schemas/PortalNotificationConfig'
       required:
@@ -332,9 +539,9 @@ components:
         - listeners
         - endpointGroups
         - version
-        - definitionContext
         - lifecycleState
     ApiV4State:
+      description: API state
       allOf:
         - $ref: "#/components/schemas/ApiV4Spec"
         - type: object
@@ -360,33 +567,285 @@ components:
               description:
                 The organization ID of the API.
               type: string
-    Errors:
-      description: >-
-        When a resource has been created regardless of errors, this field
-        is used to persist the error message encountered during
-        admission
-      properties:
-        severe:
-          description: >-
-            severe errors do not pass admission and will block
-            reconcile hence, this field should always be populated during the admission
-            phase and is very unlikely to be persisted in the status
-          items:
-            type: string
-          type: array
-        warning:
-          description: >-
-            warning errors do not block object reconciliation,
-
-            most of the time because the value is ignored or
-            defaulted
-
-            when the resource gets synced with APIM
-          items:
-            type: string
-          type: array
+    ApplicationSpec:
+      description: |
+        Defines the desired state of Application. 
+        It represents an API consumer. 
+        Applications act on behalf of users to request tokens, provide user identity information, and access protected resources from APIs. 
+        They can be of different types, such as Simple, Web, SPA, Native, or Backend-to-backend, each with specific configuration requirements. 
+        Applications are also used to manage API keys, analytics, and subscriptions.
       type: object
+      properties:
+        hrid:
+          $ref: "#/components/schemas/Hrid"
+        name:
+          type: string
+          description: Application's name. Duplicate names can exists.
+          examples:
+            - Example Application
+          minLength: 1
+        description:
+          type: string
+          description: Application's description.
+          examples:
+            - This is the documentation explaining purpose of this Application  .
+          minLength: 1
+        domain:
+          type: string
+          description: Application's domain.
+          examples:
+           - examples.com
+        groups:
+          default: []
+          description: >-
+            List of groups associated with the Application.
+
+            This groups are id or name references to existing groups in
+            APIM.
+          items:
+            type: string
+          type: array
+          example: ["developers"]
+        pictureUrl:
+          type: string
+          description: Application's picture Url.
+          examples:
+            - "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png"
+        notifyMembers:
+          default: false
+          description: |-
+            If true, new members added to the Application spec will
+            be notified when the Application is synced with APIM.
+          type: boolean
+        background:
+          type: string
+          description: Application's background url
+          examples:
+            - "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png"
+        primaryOwner:
+          $ref: "#/components/schemas/PrimaryOwner"
+          readOnly: true
+        settings:
+          $ref: "#/components/schemas/ApplicationSettings"
+        metadata:
+          type: array
+          description: The list of Application's metadata.
+          items:
+            $ref: "#/components/schemas/Metadata"
+        members:
+          type: array
+          description: Set of members associated with the application
+          items:
+            $ref: '#/components/schemas/Member'
+          uniqueItems: true
+        status:
+          type: string
+          description: Application are either ACTIVE or ARCHIVED never actually deleted.
+          enum:
+            - ACTIVE
+            - ARCHIVED
+          default: ACTIVE
+          examples:
+            - ACTIVE
+      required:
+        - hrid
+        - name
+        - description
+    ApplicationSettings:
+      description: Application settings defines the configuration of consumers authentication.
+        Depending on the control plane configuration some applications types may be restricted.
+        `app` and `oauth` are mutually exclusive. If none is set it fallbacks to `app` without any property set.
+      properties:
+        app:
+          $ref: '#/components/schemas/SimpleApplicationSettings'
+        oauth:
+          $ref: '#/components/schemas/ApplicationOAuthClientSettings'
+        tls:
+          $ref: '#/components/schemas/ApplicationTLSSettings'
+
+    SimpleApplicationSettings:
+      description: Simple application settings
+      properties:
+        type:
+          type: string
+          description: Simple application type, for information
+          examples:
+           - web
+        clientId:
+          type: string
+          description: Simple application client ID
+          examples:
+            - example-client-id
+    ApplicationOAuthClientSettings:
+      description: Application OAuth client settings
+      properties:
+        applicationType:
+          type: string
+          description: |
+            OAuth client application type: 
+            `browser` for single page apps (SPA),
+            `web` for regular web apps,
+            `native` for smartphone apps,
+            `backend_to_backend` for backend to backend.
+          enum:
+            - browser
+            - web
+            - native
+            - backend_to_backend
+          examples:
+            - browser
+        grantTypes:
+          type: array
+          description: |
+            OAuth client grant types. `authorization_code` is mandatory except when application type is `backend_to_backend`.
+            `refresh_token` can be used only application type is `web` and `browser`.
+            `password` (Resource Owner Password) only with applicationType `native`.
+            `client_credentials` only works  when application type is `backend_to_backend`
+          items:
+            type: string
+            enum:
+              - authorization_code
+              - implicit
+              - refresh_token
+              - password
+              - client_credentials
+          minItems: 1
+          uniqueItems: true
+          examples:
+            - authorization_code
+        redirectUris:
+          description: OAuth client redirect Uris
+          items:
+            type: string
+          type: array
+          example: ["https://myapp.example.com/oauth/callback"]
+        additionalClientMetadata:
+          type: object
+          additionalProperties:
+            type: string
+      required:
+       - applicationType
+       - redirectUris
+       - grantTypes
+    ApplicationTLSSettings:
+      description: Application TLS settings
+      properties:
+        clientCertificate:
+          type: string
+          description: Application TLS client certificate
+          examples:
+           - |
+            -----BEGIN CERTIFICATE-----
+            MIIDfjCCAmagAwIBAgIUfHj3mygGaOfd1u1Uj09L6vY5stcwDQYJKoZIhvcNAQEL
+            BQAwRTELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoM
+            GEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDAeFw0yNTA4MDUxNTUyMTBaFw0yNjA4
+            MDUxNTUyMTBaMGkxCzAJBgNVBAYTAlVTMQ4wDAYDVQQIDAVTdGF0ZTENMAsGA1UE
+            BwwEQ2l0eTEVMBMGA1UECgwMT3JnYW5pemF0aW9uMRMwEQYDVQQLDApEZXBhcnRt
+            ZW50MQ8wDQYDVQQDDAZjbGllbnQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+            AoIBAQDW862KHvjkq0EtwZJO/xw+QoTnRB0qm4E5+1wspC1er6tOm3hTJqCzfKwQ
+            gZQKoP1Eq1PhM8GzceeqGjh8VZJaDmWwiJZdk5fprrZ1Lvwwl010lnh4MEhtN0Dw
+            lwHSZCQ/vSvEDWJXugiE4F1OvAgi2+lIR5uYfyy2U6YbhlcVPdGAboBAFSQnxECF
+            1gDpc3dFarPXfO/X3yf/BzAHys6IyMyqvBbur3K2UTO4gJL+59/DEyAwx7ofwukj
+            TWpgGNDXlNFYwKk9qTSTbxdcofAVCjrBCEDTdoPkvrr5SxI7dV/ha5y33iOI4VPV
+            o6vN/58RJz+ZMI0mbOBeluqBW+xBAgMBAAGjQjBAMB0GA1UdDgQWBBTjpQ+KfcmK
+            w4hCptY8iK/LX9BOhzAfBgNVHSMEGDAWgBQYdcUWurMS8FEEMzcJlFm2d4Dk3DAN
+            BgkqhkiG9w0BAQsFAAOCAQEAoyv0RhgEbRNmyFF6WoTeH4durjmZRe3SCtum0Mnv
+            4TOGT4sstPdz0l24psroL33z3jtsY8IrbqnSfTXWbziSCanDXnMHOewLykgN0ld0
+            PHa2i5naU5tMeGdWeM80ZTXU7GMiiCkgrRai/V7GkXNKYTIdBontiLpbxUaGLpjY
+            aMYoCmHIEizazQP9xaAtm40CkYub1o40kgyQULyrwftqrlRtKshfYmHB6yxYVz60
+            pikgTVupVbhYcNMLOVXO7Q31UEYfC7fxMGqzybXg67EhvzoykXhhYo3YqAjho2yh
+            um2oEO8b5eQVAwRaooVLh0uqjZCpfN2ozscPpiTM9Pj3xQ==
+            -----END CERTIFICATE-----
+      required:
+        - clientCertificate
+
+    ApplicationState:
+      description: Application state that has been created/updated
+      allOf:
+        - $ref: "#/components/schemas/ApplicationSpec"
+        - type: object
+          properties:
+            errors:
+              $ref: "#/components/schemas/Errors"
+        - type: object
+          properties:
+            id:
+              type: string
+              description: Application's uuid.
+              examples:
+               - 550e8400-e29b-41d4-a716-446655440000
+            environmentId:
+              description: The environment ID of the Application.
+              type: string
+              default: DEFAULT
+              examples:
+                - DEFAULT
+            organizationId:
+              description: The organization ID of the Application.
+              type: string
+              default: DEFAULT
+              examples:
+               - DEFAULT
+
+    # Subscription
+    SubscriptionSpec:
+      description: SubscriptionSpec defines the desired state of Subscription.
+      type: object
+      properties:
+        hrid:
+          $ref: "#/components/schemas/Hrid"
+        applicationHrid:
+          type: string
+          description: Application's Hrid that needs to subscribe to the API.
+          example: demo-app
+          minLength: 1
+        apiHrid:
+          type: string
+          description: The API's Hrid that you want to subscribe to.
+          example: demo-api
+          minLength: 1
+        planHrid:
+          type: string
+          description: API plan's Hrid
+          example: demo-plan
+        endingAt:
+          type: string
+          format: date-time
+          example: "2040-12-25T09:12:28Z"
+      required:
+        - hrid
+        - applicationHrid
+        - apiHrid
+        - planHrid
+
+    SubscriptionState:
+      description: State of subscription that has been created/update
+      allOf:
+        - $ref: "#/components/schemas/SubscriptionSpec"
+        - type: object
+          properties:
+            errors:
+              $ref: "#/components/schemas/Errors"
+        - type: object
+          properties:
+            id:
+              type: string
+              description: Subscription's uuid.
+            environmentId:
+              description:
+                The environment ID of the Subscription.
+              type: string
+            organizationId:
+              description:
+                The organization ID of the Subscription.
+              type: string
+            startingAt:
+              type: string
+              format: date-time
+              example: "2040-12-25T09:12:28+01:00"
+
     SharedPolicyGroupState:
+      description: State of Shared Policy Groups that has been created/updated
       allOf:
         - $ref: "#/components/schemas/SharedPolicyGroupSpec"
         - type: object
@@ -418,8 +877,6 @@ components:
       properties:
         hrid:
           $ref: "#/components/schemas/Hrid"
-          examples:
-            - partner_config
         apiType:
           $ref: "#/components/schemas/ApiType"
         description:
@@ -463,6 +920,7 @@ components:
         - PUBLISH
         - SUBSCRIBE
     FlowStep:
+      description: API Flow step
       type: object
       properties:
         condition:
@@ -491,22 +949,12 @@ components:
       required:
         - enabled
 
-    PlansMap:
-      type: object
-      description: Map of plan IDs to Plan objects
-      additionalProperties:
-        $ref: '#/components/schemas/Plan'
-    Plan:
+    PlanV4:
+      description: API Plan
       type: object
       properties:
-        id:
-          type: string
-          description: Unique identifier for the plan
-          readOnly: true
-        crossId:
-          type: string
-          description: Cross-reference ID
-          readOnly: true
+        hrid:
+          $ref: "#/components/schemas/Hrid"
         name:
           type: string
         description:
@@ -544,22 +992,43 @@ components:
         mode:
           $ref: '#/components/schemas/PlanMode'
       required:
+        - hrid
+        - name
         - status
         - type
         - mode
+        - validation
+        - security
 
     Member:
+      description: Users that can manage an object (API, Application, etc.)
       type: object
       properties:
         id:
           type: string
+          description: "User UUID of the memeber"
+          readOnly: true
         source:
           type: string
+          description: Where the memeber was created (system, idp, etc.)
+          examples:
+           - system
         sourceId:
+          description: Id of the user in the source
           type: string
+          examples:
+            - "john.doe@example.com"
         role:
+          description: The role of the user in regards of the managed oject (API, Application, etc.)
+          examples:
+           - REVIEWER
           type: string
+      required:
+        - source
+        - sourceId
+        - role
     PortalNotificationConfig:
+      description: Portal notification config
       type: object
       properties:
         config_type:
@@ -588,6 +1057,7 @@ components:
         - name
 
     Analytics:
+      description: API analytics
       type: object
       properties:
         enabled:
@@ -614,6 +1084,7 @@ components:
         - UNPUBLISHED
       default: CREATED
     ApiServices:
+      description: Api services
       type: object
       properties:
         dynamicProperty:
@@ -630,13 +1101,14 @@ components:
     Visibility:
       type: string
       description: The visibility of the resource regarding the portal.
+      default: PUBLIC
       examples:
         - PUBLIC
       enum:
         - PUBLIC
         - PRIVATE
-
     ChannelSelector:
+      description: Channel selector
       type: object
       title: "ChannelSelector"
       required:
@@ -671,6 +1143,7 @@ components:
                 type: string
               uniqueItems: true
     ConditionSelector:
+      description: Condition selector
       type: object
       title: "ConditionSelector"
       required:
@@ -686,6 +1159,7 @@ components:
               examples:
                 - ${#jsonPath(payload, '$.myField') == 'myValue'}
     Cors:
+      description: Http listener Cross-Origin Resource Sharing
       type: object
       properties:
         allowCredentials:
@@ -719,50 +1193,14 @@ components:
         runPolicies:
           type: boolean
     Dlq:
+      description: DLQ
       type: object
       properties:
         endpoint:
           type: string
           description: The endpoint of the DLQ.
-    DefinitionContext:
-      deprecated: true
-      type: object
-      description: the context where the api definition was created.
-      properties:
-        origin:
-          type: string
-          description: The origin of the API.
-          const: KUBERNETES
-          enum:
-            - MANAGEMENT
-            - KUBERNETES
-        mode:
-          deprecated: true
-          type: string
-          description: |-
-            The mode of the API.
-            fully_managed: Mode indicating the api is fully managed by the origin and so, only the origin should be able to manage the api.
-            api_definition_only: Mode indicating the api is partially managed by the origin and so, only the origin should be able to manage the api definition part of the api. This includes everything regarding the definition of the apis (plans, flows, metadata, ...)
-          examples:
-            - FULLY_MANAGED
-          enum:
-            - FULLY_MANAGED
-            - API_DEFINITION_ONLY
-          const: FULLY_MANAGED
-        syncFrom:
-          type: string
-          description: |-
-            syncFrom stands for where the Gateway should source the API definition from. 
-            If the value is KUBERNETES, then the gateway will sync the definition by listening to changes
-            issued on a kubernetes config map. If the value is MANAGEMENT, then the gateway will sync
-            the definition using the same datastore as APIM. 
-            Defining MANAGEMENT as source for sync is useful e.g. when a single operator should operate
-            on gateways deployed on multiple kubernetes clusters.
-          const: MANAGEMENT
-          enum:
-            - MANAGEMENT
-            - KUBERNETES
     EndpointV4:
+      description: API endpoint
       type: object
       properties:
         name:
@@ -802,6 +1240,7 @@ components:
       required:
         - type
     EndpointGroupV4:
+      description: API Endpoint Group
       type: object
       properties:
         name:
@@ -827,6 +1266,7 @@ components:
       required:
         - type
     EndpointGroupServices:
+      description: API Endpoint Group Services
       type: object
       properties:
         discovery:
@@ -834,11 +1274,13 @@ components:
         healthCheck:
           $ref: "#/components/schemas/ServiceV4"
     EndpointServices:
+      description: API Endpoint Services
       type: object
       properties:
         healthCheck:
           $ref: "#/components/schemas/ServiceV4"
     Entrypoint:
+      description: API Endpoint
       type: object
       required:
         - type
@@ -854,7 +1296,9 @@ components:
           $ref: "#/components/schemas/Dlq"
         configuration:
           type: object
+
     FlowV4:
+      description: API or PLan Flow
       type: object
       properties:
         id:
@@ -862,7 +1306,6 @@ components:
           description: Flow's uuid.
           examples:
             - 4e6abbd2-c0c6-462d-be9e-6371209af34b
-          readOnly: true
         name:
           type: string
           description: Flow's name.
@@ -878,32 +1321,32 @@ components:
             $ref: "#/components/schemas/Selector"
         request:
           type: array
-          description: Flow step used for PROXY and MESSAGE APIs
+          description: Request flow steps used for PROXY and MESSAGE APIs
           items:
             $ref: "#/components/schemas/StepV4"
         response:
           type: array
-          description: Flow step used for PROXY and MESSAGE APIs
+          description: Response flow steps used for PROXY and MESSAGE APIs
           items:
             $ref: "#/components/schemas/StepV4"
         subscribe:
           type: array
-          description: Flow step used for MESSAGE and NATIVE APIs
+          description: Subscribe flow steps used for MESSAGE and NATIVE APIs
           items:
             $ref: "#/components/schemas/StepV4"
         publish:
           type: array
-          description: Flow step used for MESSAGE and NATIVE APIs
+          description: Publish flow steps used for MESSAGE and NATIVE APIs
           items:
             $ref: "#/components/schemas/StepV4"
         connect:
           type: array
-          description: Flow step used for NATIVE APIs
+          description: Connect flow steps used for NATIVE APIs
           items:
             $ref: "#/components/schemas/StepV4"
         interact:
           type: array
-          description: Flow step used for NATIVE APIs
+          description: Interact flow steps used for NATIVE APIs
           items:
             $ref: "#/components/schemas/StepV4"
         tags:
@@ -912,10 +1355,10 @@ components:
             type: string
           description: Flow's tags.
           examples:
-            - tag1
-            - tag2
+            - [tag1, tag2]
           uniqueItems: true
     FlowExecution:
+      description: Flow execution
       type: object
       properties:
         mode:
@@ -934,6 +1377,7 @@ components:
         - BEST_MATCH
         - DEFAULT
     HttpListener:
+      description: HTTP Listener
       type: object
       title: "HttpListener"
       required:
@@ -970,6 +1414,7 @@ components:
         - TRACE
         - OTHER
     HttpSelector:
+      description: HTTP selector
       type: object
       title: "HttpSelector"
       required:
@@ -995,6 +1440,7 @@ components:
               uniqueItems: true
 
     Listener:
+      description: Listener
       oneOf:
         - $ref: "#/components/schemas/HttpListener"
         - $ref: "#/components/schemas/SubscriptionListener"
@@ -1008,6 +1454,7 @@ components:
           SUBSCRIPTION: "#/components/schemas/SubscriptionListener"
           KAFKA: "#/components/schemas/KafkaListener"
     BaseListener:
+      description: Base listener
       type: object
       required:
         - type
@@ -1041,6 +1488,7 @@ components:
         - TCP
         - KAFKA
     LoadBalancer:
+      description: Load Balancer
       type: object
       properties:
         type:
@@ -1055,6 +1503,7 @@ components:
             - WEIGHTED_RANDOM
             - WEIGHTED_ROUND_ROBIN
     LoggingV4:
+      description: API logging configuration
       type: object
       properties:
         condition:
@@ -1068,6 +1517,7 @@ components:
         mode:
           $ref: "#/components/schemas/LoggingModeV4"
     LoggingContentV4:
+      description: API logging content
       type: object
       properties:
         headers:
@@ -1081,6 +1531,7 @@ components:
         messageMetadata:
           type: boolean
     LoggingModeV4:
+      description: API logging mode
       type: object
       properties:
         endpoint:
@@ -1088,6 +1539,7 @@ components:
         entrypoint:
           type: boolean
     LoggingPhase:
+      description: Logging phase
       type: object
       properties:
         request:
@@ -1095,6 +1547,7 @@ components:
         response:
           type: boolean
     TracingV4:
+      description: API analytic tracing
       type: object
       properties:
         enabled:
@@ -1112,28 +1565,31 @@ components:
       enum:
         - EQUALS
         - STARTS_WITH
-    PagesMap:
-      type: object
-      description: >-
-        A map of pages objects.
-        
-        Keys uniquely identify pages and are used to keep them in
-        sync with APIM when using a management context.
-        
-        Renaming a key is the equivalent of deleting the page and
-        recreating it holding a new ID in APIM.
-      additionalProperties:
-        $ref: '#/components/schemas/Page'
-    Page:
+
+    PageV4:
       description: Documentation page. Can be of multiple formats.
       type: object
+      allOf:
+        - $ref: "#/components/schemas/BasePageV4"
       properties:
-        id:
-          type: string
-          description: Page's uuid.
-          examples:
-            - 00f8c9e7-78fc-4907-b8c9-e778fc790750
-          readOnly: true
+        translations:
+          type: array
+          description: List of page translations.
+          items:
+            $ref: "#/components/schemas/PageV4Translation"
+
+    PageV4Translation:
+      description: Documentation page translation. Can be of multiple formats.
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/BasePageV4"
+
+    BasePageV4:
+      description: Documentation page.
+      type: object
+      properties:
+        hrid:
+          $ref: "#/components/schemas/Hrid"
         crossId:
           type: string
           description: Page's cross uuid.
@@ -1173,8 +1629,7 @@ components:
           type: string
           format: date-time
           description: Page's last update date.
-          examples:
-            - 2018-01-01T00:00:00.000Z
+          example: 2018-01-01T00:00:00.000Z
         contentType:
           type: string
           description: Page's content type.
@@ -1220,11 +1675,6 @@ components:
           description: Page's metadata.
           additionalProperties:
             type: string
-        translations:
-          type: array
-          description: List of page translations.
-          items:
-            $ref: "#/components/schemas/Page"
         contentRevision:
           $ref: "#/components/schemas/Revision"
         hidden:
@@ -1233,6 +1683,10 @@ components:
         generalConditions:
           type: boolean
           description: If page is used as General Conditions of an active plan.
+      required:
+        - hrid
+        - type
+
     PageType:
       type: string
       description: The type of the page.
@@ -1252,6 +1706,7 @@ components:
 
     # Documentation pages
     AccessControl:
+      description: Document access control
       type: object
       properties:
         referenceId:
@@ -1266,6 +1721,7 @@ components:
             - GROUP
             - ROLE
     PageSource:
+      description: Page source
       type: object
       properties:
         type:
@@ -1281,6 +1737,7 @@ components:
           type: object
           description: Page source's configuration.
     PageMedia:
+      description: Page media
       type: object
       properties:
         name:
@@ -1297,9 +1754,9 @@ components:
           type: string
           format: date-time
           description: Media's attachment date.
-          examples:
-            - 2018-01-01T00:00:00.000Z
+          example: 2018-01-01T00:00:00.000Z
     Revision:
+      description: Page revision
       type: object
       properties:
         id:
@@ -1312,7 +1769,9 @@ components:
           description: Revision number.
           examples:
             - 1
+
     PathV4:
+      description: API Path
       type: object
       properties:
         host:
@@ -1325,6 +1784,7 @@ components:
           default: false
 
     PlanSecurity:
+      description: API plan security
       type: object
       properties:
         type:
@@ -1380,6 +1840,7 @@ components:
         - PUSH
 
     PrimaryOwner:
+      description: Primary owner, the creator of the application. Can perform all possible API actions.
       type: object
       properties:
         id:
@@ -1390,6 +1851,8 @@ components:
         email:
           type: string
           description: Owner's email. Can be null if owner is a group.
+          examples:
+            - "john.doe@example.com"
         displayName:
           type: string
           description: Owner's name.
@@ -1399,20 +1862,26 @@ components:
         type:
           $ref: "#/components/schemas/MembershipMemberType"
     Property:
+      description: Api property
       type: object
       required:
         - key
         - value
       properties:
         key:
+          description: property key
           type: string
         value:
+          description: property value
           type: string
         encrypted:
+          description: is property encrypted or not?
           type: boolean
         dynamic:
+          description: is a dynamic property or not?
           type: boolean
         encryptable:
+          description: is property encryptable?
           type: boolean
           writeOnly: true
     Qos:
@@ -1427,6 +1896,7 @@ components:
         - AT_MOST_ONCE
         - AT_LEAST_ONCE
     Resource:
+      description: API resource
       type: object
       required:
         - name
@@ -1434,27 +1904,36 @@ components:
         - configuration
       properties:
         name:
+          description: Resource name
           type: string
         type:
+          description: Resource type
           type: string
         configuration:
+          description: Resource configuration
           type: object
         enabled:
+          description: API resource is enabled or not?
           type: boolean
     ResponseTemplate:
+      description: API response template
       type: object
       properties:
         status:
+          description: API response template status
           type: integer
         headers:
+          description: API response template headers
           type: object
           additionalProperties:
             type: string
         body:
+          description: API response template body
           type: string
         propagateErrorKeyToLogs:
           type: boolean
     Sampling:
+      description: API analytics sampling
       type: object
       properties:
         type:
@@ -1475,7 +1954,10 @@ components:
       enum:
         - USER
         - GROUP
+      examples:
+        - USER
     Selector:
+      description: Flow selector
       oneOf:
         - $ref: "#/components/schemas/HttpSelector"
         - $ref: "#/components/schemas/ChannelSelector"
@@ -1487,6 +1969,7 @@ components:
           CHANNEL: "#/components/schemas/ChannelSelector"
           CONDITION: "#/components/schemas/ConditionSelector"
     BaseSelector:
+      description: Base selector
       properties:
         type:
           type: string
@@ -1506,6 +1989,7 @@ components:
       required:
         - type
     ServiceV4:
+      description: Service
       type: object
       properties:
         overrideConfiguration:
@@ -1522,6 +2006,7 @@ components:
         type:
           type: string
     BaseStep:
+      description: Base step
       type: object
       properties:
         name:
@@ -1544,6 +2029,7 @@ components:
           type: string
           description: The condition of the step
     StepV4:
+      description: Flow step
       allOf:
         - $ref: "#/components/schemas/BaseStep"
         - properties:
@@ -1551,12 +2037,14 @@ components:
               type: string
               description: The message condition of the step
     SubscriptionListener:
+      description: Subscription listener
       title: "SubscriptionListener"
       required:
         - type
       allOf:
         - $ref: "#/components/schemas/BaseListener"
     TcpListener:
+      description: TCP listener
       title: "TcpListener"
       required:
         - type
@@ -1576,6 +2064,7 @@ components:
           required:
             - "hosts"
     KafkaListener:
+      description: Kafka listener
       title: "KafkaListener"
       required:
         - type
@@ -1594,8 +2083,10 @@ components:
                 - 8080
           required:
             - "host"
+
     # Failover v4
     FailoverV4:
+      description: API Failover
       type: object
       properties:
         enabled:
@@ -1633,11 +2124,12 @@ components:
 
     # Metadata Page
     Metadata:
+      description: Metadata is a generic data structure used internally
       type: object
       properties:
         key:
           type: string
-          description: The key of the metadata.
+          description: The key of the metadata if different from sanitized name (lowercase + hyphens).
           minLength: 1
         name:
           type: string
@@ -1650,12 +2142,15 @@ components:
           minLength: 1
         defaultValue:
           type: string
-          description: The default value of the metadata.
+          description: The default value of the metadata if the value is not set.
+      required:
+        - name
+        - format
     MetadataFormat:
       type: string
       description: The format of the metadata.
       examples:
-        - DATE
+        - STRING
       enum:
         - STRING
         - NUMERIC
@@ -1663,6 +2158,7 @@ components:
         - DATE
         - MAIL
         - URL
+
     LifecycleState:
       type: string
       description: The state of the API regarding the gateway(s).
@@ -1674,61 +2170,112 @@ components:
         - STARTED
         - STOPPED
         - STOPPING
-
-  responses:
-    Error:
-      description: Validation error
-      content:
-        application/json:
-          schema:
+    HttpError:
+      description: Error
+      type: object
+      properties:
+        httpStatus:
+          type: integer
+          format: int32
+          description: Error code
+          examples:
+            - 400
+        message:
+          type: string
+          description: Error message
+          examples:
+            - Bad request
+        technicalCode:
+          type: string
+          description: A technical code to identify the error
+          examples:
+            - invalid.import.definition
+        parameters:
+          type: object
+          description: A map of parameters to be used in the error message
+          additionalProperties:
+            type: string
+        details:
+          type: array
+          description: A list of details about the error
+          items:
             type: object
             properties:
-              httpStatus:
-                type: integer
-                format: int32
-                description: The error code
-                examples:
-                  - "400"
               message:
                 type: string
                 description: The error message
                 examples:
                   - Bad request
-              technicalCode:
+              location:
                 type: string
-                description: A technical code to identify the error
+                description: The json path of the field in error.
                 examples:
-                  - invalid.import.definition
-              parameters:
-                type: object
-                description: A map of parameters to be used in the error message
-                additionalProperties:
-                  type: string
-              details:
-                type: array
-                description: A list of details about the error
-                items:
-                  type: object
-                  properties:
-                    message:
-                      type: string
-                      description: The error message
-                      examples:
-                        - Bad request
-                    location:
-                      type: string
-                      description: The json path of the field in error.
-                      examples:
-                        - updateApi.properties[0].key
-                    invalidValue:
-                      type: string
-                      description: The invalid value.
+                  - updateApi.properties[0].key
+              invalidValue:
+                type: string
+                description: The invalid value.
+
+    Errors:
+      description: >-
+        When a resource has been created regardless of errors, this field
+        is used to persist the error message encountered during validation
+      properties:
+        severe:
+          description: >-
+            Severe errors do not pass validation and will block
+            creation/update/delete hence, this field should always be populated during the validation
+            phase and is very unlikely to be persisted client side.
+          items:
+            type: string
+          type: array
+        warning:
+          description: >-
+            Warning errors do not block object creation/update/delete,
+            most of the time because the value is ignored or defaulted.
+          items:
+            type: string
+          type: array
+      type: object
+
+  responses:
+    NotFound:
+        description: Resource not found
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HttpError"
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/HttpError"
+    Unauthenticated:
+      description: Unauthenticated
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/HttpError"
+    BadRequest:
+      description: Request is invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/HttpError"
+    Error:
+      description: Default error
+      content:
+        application/json:
+          schema:
+            type: object
+            allOf:
+              - $ref: "#/components/schemas/HttpError"
   parameters:
     envIdParam:
       name: envId
       in: path
       required: true
-      description: Id of an environment.
+      description: environment ID
       schema:
         type: string
         default: DEFAULT
@@ -1736,7 +2283,7 @@ components:
       name: orgId
       in: path
       required: true
-      description: Id of an organization.
+      description: organization ID
       schema:
         type: string
         default: DEFAULT
@@ -1758,9 +2305,16 @@ components:
         type: string
   securitySchemes:
     BasicAuth:
+      description: Basic authentication
       type: http
       scheme: basic
     BearerAuth:
+      description: service account authentication
       type: http
       scheme: bearer
-      bearerFormat: Gravitee service account ID
+      bearerFormat: APIM service account token
+    CloudAuth:
+      description: Gravitee Cloud Token authentication
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

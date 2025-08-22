@@ -9,9 +9,9 @@ import (
 )
 
 type CreateOrUpdateApisGlobals struct {
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 }
 
@@ -41,14 +41,15 @@ func (o *CreateOrUpdateApisGlobals) GetEnvironmentID() *string {
 }
 
 type CreateOrUpdateApisRequest struct {
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting
 	// the state of the underlying spec.
 	//
-	DryRun    *bool            `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
+	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
+	// API Specification
 	APIV4Spec shared.APIV4Spec `request:"mediaType=application/json"`
 }
 
@@ -98,9 +99,11 @@ type CreateOrUpdateApisResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// State of the successfully created API
+	// State of the successfully created/updated API
 	APIV4State *shared.APIV4State
-	// Validation error
+	// Request is invalid
+	HTTPError *shared.HTTPError
+	// Default error
 	Error *shared.Error
 }
 
@@ -130,6 +133,13 @@ func (o *CreateOrUpdateApisResponse) GetAPIV4State() *shared.APIV4State {
 		return nil
 	}
 	return o.APIV4State
+}
+
+func (o *CreateOrUpdateApisResponse) GetHTTPError() *shared.HTTPError {
+	if o == nil {
+		return nil
+	}
+	return o.HTTPError
 }
 
 func (o *CreateOrUpdateApisResponse) GetError() *shared.Error {

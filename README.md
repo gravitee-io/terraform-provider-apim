@@ -9,9 +9,17 @@
 <!-- Start Summary [summary] -->
 ## Summary
 
-Gravitee: APIM Terraform Provider (alpha)
+Gravitee: Gravitee API Management Terraform Provider (beta)
 
-Manage APIs and Shared Policy Groups with Terraform
+You can manage with Terraform the following:
+* APIs
+* Shared Policy Groups
+* Applications
+* Subscriptions
+
+[Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform) 
+
+Compatible with APIM 4.9 and above
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
@@ -33,7 +41,7 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "0.2.11"
+      version = "0.3.0"
     }
   }
 }
@@ -50,11 +58,15 @@ provider "apim" {
 ### Resources
 
 * [apim_apiv4](docs/resources/apiv4.md)
+* [apim_application](docs/resources/application.md)
 * [apim_shared_policy_group](docs/resources/shared_policy_group.md)
+* [apim_subscription](docs/resources/subscription.md)
 ### Data Sources
 
 * [apim_apiv4](docs/data-sources/apiv4.md)
+* [apim_application](docs/data-sources/application.md)
 * [apim_shared_policy_group](docs/data-sources/shared_policy_group.md)
+* [apim_subscription](docs/data-sources/subscription.md)
 <!-- End Available Resources and Data Sources [operations] -->
 
 <!-- No End Testing the provider locally [usage] -->

@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 0.2.0 and generator version 2.664.0
+// Generated from OpenAPI doc version 1.0.0 and generator version 2.687.1
 
 import (
 	"context"
@@ -19,7 +19,7 @@ import (
 
 // ServerList contains the list of servers available to the SDK
 var ServerList = []string{
-	"https://apim-master-api.team-apim.gravitee.dev/automation",
+	"https://eu.cloudgate.gravitee.io/apim/automation",
 }
 
 // HTTPClient provides an interface for supplying the SDK with a custom HTTP client
@@ -48,12 +48,24 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// GraviteeApim - Gravitee: APIM Terraform Provider (alpha)
+// GraviteeApim - Gravitee: Gravitee API Management Terraform Provider (beta)
 //
-// Manage APIs and Shared Policy Groups with Terraform
+// You can manage with Terraform the following:
+// * APIs
+// * Shared Policy Groups
+// * Applications
+// * Subscriptions
+//
+// [Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform)
+//
+// Compatible with APIM 4.9 and above
 type GraviteeApim struct {
-	SDKVersion         string
-	Apis               *Apis
+	SDKVersion string
+	Apis       *Apis
+	// Everything about Applications
+	Applications *Applications
+	// Everything about subscriptions
+	Subscriptions      *Subscriptions
 	SharedPolicyGroups *SharedPolicyGroups
 
 	sdkConfiguration config.SDKConfiguration
@@ -144,9 +156,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *GraviteeApim {
 	sdk := &GraviteeApim{
-		SDKVersion: "0.2.11",
+		SDKVersion: "0.3.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.2.11 2.664.0 0.2.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.3.0 2.687.1 1.0.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
 			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},
@@ -169,6 +181,8 @@ func New(opts ...SDKOption) *GraviteeApim {
 	}
 
 	sdk.Apis = newApis(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Applications = newApplications(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Subscriptions = newSubscriptions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.SharedPolicyGroups = newSharedPolicyGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk

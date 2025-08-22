@@ -2,6 +2,7 @@
 
 package shared
 
+// SubscriptionListener - Subscription listener
 type SubscriptionListener struct {
 	// Listener type.
 	Type        ListenerType `json:"type"`

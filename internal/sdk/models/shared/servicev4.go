@@ -6,6 +6,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// ServiceV4 - Service
 type ServiceV4 struct {
 	// Override the configuration of the service
 	OverrideConfiguration *bool `default:"false" json:"overrideConfiguration"`

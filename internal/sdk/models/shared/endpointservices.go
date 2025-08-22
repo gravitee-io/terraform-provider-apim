@@ -2,7 +2,9 @@
 
 package shared
 
+// EndpointServices - API Endpoint Services
 type EndpointServices struct {
+	// Service
 	HealthCheck *ServiceV4 `json:"healthCheck,omitempty"`
 }
 

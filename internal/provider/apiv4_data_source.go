@@ -7,6 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -30,10 +31,10 @@ type Apiv4DataSource struct {
 	// Provider configured SDK client.
 	client *sdk.GraviteeApim
 
-	// Id of an environment.
+	// environment ID
 	EnvironmentID types.String `tfsdk:"environment_id"`
 
-	// Id of an organization.
+	// organization ID
 	OrganizationID types.String `tfsdk:"organization_id"`
 }
 
@@ -42,7 +43,6 @@ type Apiv4DataSourceModel struct {
 	Analytics         *tfTypes.Analytics                             `tfsdk:"analytics"`
 	Categories        []types.String                                 `tfsdk:"categories"`
 	CrossID           types.String                                   `tfsdk:"cross_id"`
-	DefinitionContext tfTypes.DefinitionContext                      `tfsdk:"definition_context"`
 	Description       types.String                                   `tfsdk:"description"`
 	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
 	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
@@ -59,7 +59,8 @@ type Apiv4DataSourceModel struct {
 	Metadata          []tfTypes.Metadata                             `tfsdk:"metadata"`
 	Name              types.String                                   `tfsdk:"name"`
 	OrganizationID    types.String                                   `tfsdk:"organization_id"`
-	Plans             map[string]tfTypes.Plan                        `tfsdk:"plans"`
+	Pages             []tfTypes.PageV4                               `tfsdk:"pages"`
+	Plans             []tfTypes.PlanV4                               `tfsdk:"plans"`
 	PrimaryOwner      *tfTypes.PrimaryOwner                          `tfsdk:"primary_owner"`
 	Properties        []tfTypes.Property1                            `tfsdk:"properties"`
 	Resources         []tfTypes.Resource                             `tfsdk:"resources"`
@@ -115,6 +116,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Computed: true,
 									},
 								},
+								Description: `API logging content`,
 							},
 							"message_condition": schema.StringAttribute{
 								Computed: true,
@@ -129,6 +131,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Computed: true,
 									},
 								},
+								Description: `API logging mode`,
 							},
 							"phase": schema.SingleNestedAttribute{
 								Computed: true,
@@ -140,8 +143,10 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Computed: true,
 									},
 								},
+								Description: `Logging phase`,
 							},
 						},
+						Description: `API logging configuration`,
 					},
 					"sampling": schema.SingleNestedAttribute{
 						Computed: true,
@@ -155,6 +160,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								Description: `The value of the sampling`,
 							},
 						},
+						Description: `API analytics sampling`,
 					},
 					"tracing": schema.SingleNestedAttribute{
 						Computed: true,
@@ -168,8 +174,10 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								Description: `Enable technical tracing to get more details on request execution. Be careful this settings would generate more noise and would impact performance.`,
 							},
 						},
+						Description: `API analytic tracing`,
 					},
 				},
+				Description: `API analytics`,
 			},
 			"categories": schema.ListAttribute{
 				Computed:    true,
@@ -179,11 +187,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"cross_id": schema.StringAttribute{
 				Computed:    true,
 				Description: `When promoting an API from one environment to the other, this ID identifies the API across those different environments.`,
-			},
-			"definition_context": schema.SingleNestedAttribute{
-				Computed:           true,
-				DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-				Description:        `the context where the api definition was created.`,
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,
@@ -198,6 +201,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
 									},
@@ -220,6 +224,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												Computed: true,
 												Attributes: map[string]schema.Attribute{
 													"configuration": schema.StringAttribute{
+														CustomType:  jsontypes.NormalizedType{},
 														Computed:    true,
 														Description: `The configuration of the service. Parsed as JSON.`,
 													},
@@ -235,10 +240,13 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 														Computed: true,
 													},
 												},
+												Description: `Service`,
 											},
 										},
+										Description: `API Endpoint Services`,
 									},
 									"shared_configuration_override": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
 									},
@@ -266,6 +274,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Description: `Load balancer type.`,
 								},
 							},
+							Description: `Load Balancer`,
 						},
 						"name": schema.StringAttribute{
 							Computed:    true,
@@ -278,6 +287,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
 											Description: `The configuration of the service. Parsed as JSON.`,
 										},
@@ -293,11 +303,13 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											Computed: true,
 										},
 									},
+									Description: `Service`,
 								},
 								"health_check": schema.SingleNestedAttribute{
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
 											Description: `The configuration of the service. Parsed as JSON.`,
 										},
@@ -313,10 +325,13 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											Computed: true,
 										},
 									},
+									Description: `Service`,
 								},
 							},
+							Description: `API Endpoint Group Services`,
 						},
 						"shared_configuration": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
 							Computed:    true,
 							Description: `Parsed as JSON.`,
 						},
@@ -330,7 +345,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Id of an environment.`,
+				Description: `environment ID`,
 			},
 			"failover": schema.SingleNestedAttribute{
 				Computed: true,
@@ -360,6 +375,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						Description: `The duration in milliseconds to consider a request as slow.`,
 					},
 				},
+				Description: `API Failover`,
 			},
 			"flow_execution": schema.SingleNestedAttribute{
 				Computed: true,
@@ -373,6 +389,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						Description: `API's flow mode.`,
 					},
 				},
+				Description: `Flow execution`,
 			},
 			"flows": schema.ListNestedAttribute{
 				Computed: true,
@@ -387,6 +404,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `The configuration of the step. Parsed as JSON.`,
 									},
@@ -412,7 +430,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 								},
 							},
-							Description: `Flow step used for NATIVE APIs`,
+							Description: `Connect flow steps used for NATIVE APIs`,
 						},
 						"enabled": schema.BoolAttribute{
 							Computed:    true,
@@ -431,6 +449,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `The configuration of the step. Parsed as JSON.`,
 									},
@@ -456,7 +475,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 								},
 							},
-							Description: `Flow step used for NATIVE APIs`,
+							Description: `Interact flow steps used for NATIVE APIs`,
 						},
 						"name": schema.StringAttribute{
 							Computed:    true,
@@ -471,6 +490,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `The configuration of the step. Parsed as JSON.`,
 									},
@@ -496,7 +516,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 								},
 							},
-							Description: `Flow step used for MESSAGE and NATIVE APIs`,
+							Description: `Publish flow steps used for MESSAGE and NATIVE APIs`,
 						},
 						"request": schema.ListNestedAttribute{
 							Computed: true,
@@ -507,6 +527,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `The configuration of the step. Parsed as JSON.`,
 									},
@@ -532,7 +553,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 								},
 							},
-							Description: `Flow step used for PROXY and MESSAGE APIs`,
+							Description: `Request flow steps used for PROXY and MESSAGE APIs`,
 						},
 						"response": schema.ListNestedAttribute{
 							Computed: true,
@@ -543,6 +564,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `The configuration of the step. Parsed as JSON.`,
 									},
@@ -568,7 +590,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 								},
 							},
-							Description: `Flow step used for PROXY and MESSAGE APIs`,
+							Description: `Response flow steps used for PROXY and MESSAGE APIs`,
 						},
 						"selectors": schema.ListNestedAttribute{
 							Computed: true,
@@ -599,6 +621,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												Description: `Selector type.`,
 											},
 										},
+										Description: `Channel selector`,
 									},
 									"condition": schema.SingleNestedAttribute{
 										Computed: true,
@@ -612,6 +635,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												Description: `Selector type.`,
 											},
 										},
+										Description: `Condition selector`,
 									},
 									"http": schema.SingleNestedAttribute{
 										Computed: true,
@@ -633,6 +657,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												Description: `Selector type.`,
 											},
 										},
+										Description: `HTTP selector`,
 									},
 								},
 							},
@@ -646,6 +671,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `The configuration of the step. Parsed as JSON.`,
 									},
@@ -671,7 +697,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 								},
 							},
-							Description: `Flow step used for MESSAGE and NATIVE APIs`,
+							Description: `Subscribe flow steps used for MESSAGE and NATIVE APIs`,
 						},
 						"tags": schema.ListAttribute{
 							Computed:    true,
@@ -747,12 +773,14 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											Computed: true,
 										},
 									},
+									Description: `Http listener Cross-Origin Resource Sharing`,
 								},
 								"entrypoints": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
 												Description: `Parsed as JSON.`,
 											},
@@ -764,6 +792,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 														Description: `The endpoint of the DLQ.`,
 													},
 												},
+												Description: `DLQ`,
 											},
 											"qos": schema.StringAttribute{
 												Computed:    true,
@@ -805,6 +834,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Description: `Listener type.`,
 								},
 							},
+							Description: `HTTP Listener`,
 						},
 						"kafka": schema.SingleNestedAttribute{
 							Computed: true,
@@ -814,6 +844,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
 												Description: `Parsed as JSON.`,
 											},
@@ -825,6 +856,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 														Description: `The endpoint of the DLQ.`,
 													},
 												},
+												Description: `DLQ`,
 											},
 											"qos": schema.StringAttribute{
 												Computed:    true,
@@ -854,6 +886,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Description: `Listener type.`,
 								},
 							},
+							Description: `Kafka listener`,
 						},
 						"subscription": schema.SingleNestedAttribute{
 							Computed: true,
@@ -863,6 +896,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
 												Description: `Parsed as JSON.`,
 											},
@@ -874,6 +908,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 														Description: `The endpoint of the DLQ.`,
 													},
 												},
+												Description: `DLQ`,
 											},
 											"qos": schema.StringAttribute{
 												Computed:    true,
@@ -895,6 +930,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Description: `Listener type.`,
 								},
 							},
+							Description: `Subscription listener`,
 						},
 						"tcp": schema.SingleNestedAttribute{
 							Computed: true,
@@ -904,6 +940,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
 												Description: `Parsed as JSON.`,
 											},
@@ -915,6 +952,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 														Description: `The endpoint of the DLQ.`,
 													},
 												},
+												Description: `DLQ`,
 											},
 											"qos": schema.StringAttribute{
 												Computed:    true,
@@ -941,6 +979,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Description: `Listener type.`,
 								},
 							},
+							Description: `TCP listener`,
 						},
 					},
 				},
@@ -951,16 +990,20 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"id": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `User UUID of the memeber`,
 						},
 						"role": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `The role of the user in regards of the managed oject (API, Application, etc.)`,
 						},
 						"source": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Where the memeber was created (system, idp, etc.)`,
 						},
 						"source_id": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Id of the user in the source`,
 						},
 					},
 				},
@@ -972,7 +1015,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 					Attributes: map[string]schema.Attribute{
 						"default_value": schema.StringAttribute{
 							Computed:    true,
-							Description: `The default value of the metadata.`,
+							Description: `The default value of the metadata if the value is not set.`,
 						},
 						"format": schema.StringAttribute{
 							Computed:    true,
@@ -980,7 +1023,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 						"key": schema.StringAttribute{
 							Computed:    true,
-							Description: `The key of the metadata.`,
+							Description: `The key of the metadata if different from sanitized name (lowercase + hyphens).`,
 						},
 						"name": schema.StringAttribute{
 							Computed:    true,
@@ -1001,19 +1044,317 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `Id of an organization.`,
+				Description: `organization ID`,
 			},
-			"plans": schema.MapNestedAttribute{
+			"pages": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"access_controls": schema.ListNestedAttribute{
+							Computed: true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"reference_id": schema.StringAttribute{
+										Computed:    true,
+										Description: `The id of the resource used to check the access control`,
+									},
+									"reference_type": schema.StringAttribute{
+										Computed:    true,
+										Description: `The type of the resource used to check the access control`,
+									},
+								},
+							},
+							Description: `List of access controls.`,
+						},
+						"attached_media": schema.ListNestedAttribute{
+							Computed: true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"attached_at": schema.StringAttribute{
+										Computed:    true,
+										Description: `Media's attachment date.`,
+									},
+									"hash": schema.StringAttribute{
+										Computed:    true,
+										Description: `Media's hash.`,
+									},
+									"name": schema.StringAttribute{
+										Computed:    true,
+										Description: `Media's name.`,
+									},
+								},
+							},
+							Description: `List of attached media.`,
+						},
+						"configuration": schema.MapAttribute{
+							Computed:    true,
+							ElementType: types.StringType,
+							Description: `Page's configuration.`,
+						},
+						"content": schema.StringAttribute{
+							Computed:    true,
+							Description: `Page's content.`,
+						},
+						"content_revision": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Id of the page used to fill the content attributes.`,
+								},
+								"revision": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Revision number.`,
+								},
+							},
+							Description: `Page revision`,
+						},
+						"content_type": schema.StringAttribute{
+							Computed:    true,
+							Description: `Page's content type.`,
+						},
+						"cross_id": schema.StringAttribute{
+							Computed:    true,
+							Description: `Page's cross uuid.`,
+						},
+						"excluded_access_controls": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag to restrict access to user matching the restrictions.`,
+						},
+						"general_conditions": schema.BoolAttribute{
+							Computed:    true,
+							Description: `If page is used as General Conditions of an active plan.`,
+						},
+						"hidden": schema.BoolAttribute{
+							Computed:    true,
+							Description: `If folder is published but not shown in Portal.`,
+						},
+						"homepage": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Page's homepage status.`,
+						},
+						"hrid": schema.StringAttribute{
+							Computed:    true,
+							Description: `A unique human readable id identifying this resource`,
+						},
+						"last_contributor": schema.StringAttribute{
+							Computed:    true,
+							Description: `Page's last contributor. Id of a user.`,
+						},
+						"metadata": schema.MapAttribute{
+							Computed:    true,
+							ElementType: types.StringType,
+							Description: `Page's metadata.`,
+						},
+						"name": schema.StringAttribute{
+							Computed:    true,
+							Description: `Page's name.`,
+						},
+						"order": schema.Int64Attribute{
+							Computed:    true,
+							Description: `Page's order.`,
+						},
+						"parent_id": schema.StringAttribute{
+							Computed:    true,
+							Description: `Page's parent id.`,
+						},
+						"parent_path": schema.StringAttribute{
+							Computed:    true,
+							Description: `Page's parent path.`,
+						},
+						"published": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Page's published status.`,
+						},
+						"source": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"configuration": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
+									Computed:    true,
+									Description: `Page source's configuration. Parsed as JSON.`,
+								},
+								"type": schema.StringAttribute{
+									Computed:    true,
+									Description: `The type of the page source (=fetcher type).`,
+								},
+							},
+							Description: `Page source`,
+						},
+						"translations": schema.ListNestedAttribute{
+							Computed: true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"access_controls": schema.ListNestedAttribute{
+										Computed: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"reference_id": schema.StringAttribute{
+													Computed:    true,
+													Description: `The id of the resource used to check the access control`,
+												},
+												"reference_type": schema.StringAttribute{
+													Computed:    true,
+													Description: `The type of the resource used to check the access control`,
+												},
+											},
+										},
+										Description: `List of access controls.`,
+									},
+									"attached_media": schema.ListNestedAttribute{
+										Computed: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"attached_at": schema.StringAttribute{
+													Computed:    true,
+													Description: `Media's attachment date.`,
+												},
+												"hash": schema.StringAttribute{
+													Computed:    true,
+													Description: `Media's hash.`,
+												},
+												"name": schema.StringAttribute{
+													Computed:    true,
+													Description: `Media's name.`,
+												},
+											},
+										},
+										Description: `List of attached media.`,
+									},
+									"configuration": schema.MapAttribute{
+										Computed:    true,
+										ElementType: types.StringType,
+										Description: `Page's configuration.`,
+									},
+									"content": schema.StringAttribute{
+										Computed:    true,
+										Description: `Page's content.`,
+									},
+									"content_revision": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Id of the page used to fill the content attributes.`,
+											},
+											"revision": schema.Int64Attribute{
+												Computed:    true,
+												Description: `Revision number.`,
+											},
+										},
+										Description: `Page revision`,
+									},
+									"content_type": schema.StringAttribute{
+										Computed:    true,
+										Description: `Page's content type.`,
+									},
+									"cross_id": schema.StringAttribute{
+										Computed:    true,
+										Description: `Page's cross uuid.`,
+									},
+									"excluded_access_controls": schema.BoolAttribute{
+										Computed:    true,
+										Description: `Flag to restrict access to user matching the restrictions.`,
+									},
+									"general_conditions": schema.BoolAttribute{
+										Computed:    true,
+										Description: `If page is used as General Conditions of an active plan.`,
+									},
+									"hidden": schema.BoolAttribute{
+										Computed:    true,
+										Description: `If folder is published but not shown in Portal.`,
+									},
+									"homepage": schema.BoolAttribute{
+										Computed:    true,
+										Description: `Page's homepage status.`,
+									},
+									"hrid": schema.StringAttribute{
+										Computed:    true,
+										Description: `A unique human readable id identifying this resource`,
+									},
+									"last_contributor": schema.StringAttribute{
+										Computed:    true,
+										Description: `Page's last contributor. Id of a user.`,
+									},
+									"metadata": schema.MapAttribute{
+										Computed:    true,
+										ElementType: types.StringType,
+										Description: `Page's metadata.`,
+									},
+									"name": schema.StringAttribute{
+										Computed:    true,
+										Description: `Page's name.`,
+									},
+									"order": schema.Int64Attribute{
+										Computed:    true,
+										Description: `Page's order.`,
+									},
+									"parent_id": schema.StringAttribute{
+										Computed:    true,
+										Description: `Page's parent id.`,
+									},
+									"parent_path": schema.StringAttribute{
+										Computed:    true,
+										Description: `Page's parent path.`,
+									},
+									"published": schema.BoolAttribute{
+										Computed:    true,
+										Description: `Page's published status.`,
+									},
+									"source": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"configuration": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
+												Computed:    true,
+												Description: `Page source's configuration. Parsed as JSON.`,
+											},
+											"type": schema.StringAttribute{
+												Computed:    true,
+												Description: `The type of the page source (=fetcher type).`,
+											},
+										},
+										Description: `Page source`,
+									},
+									"type": schema.StringAttribute{
+										Computed:    true,
+										Description: `The type of the page.`,
+									},
+									"updated_at": schema.StringAttribute{
+										Computed:    true,
+										Description: `Page's last update date.`,
+									},
+									"visibility": schema.StringAttribute{
+										Computed:    true,
+										Description: `The visibility of the resource regarding the portal.`,
+									},
+								},
+							},
+							Description: `List of page translations.`,
+						},
+						"type": schema.StringAttribute{
+							Computed:    true,
+							Description: `The type of the page.`,
+						},
+						"updated_at": schema.StringAttribute{
+							Computed:    true,
+							Description: `Page's last update date.`,
+						},
+						"visibility": schema.StringAttribute{
+							Computed:    true,
+							Description: `The visibility of the resource regarding the portal.`,
+						},
+					},
+				},
+				Description: `List of Pages for the API`,
+			},
+			"plans": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"characteristics": schema.ListAttribute{
 							Computed:    true,
 							ElementType: types.StringType,
-						},
-						"cross_id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Cross-reference ID`,
 						},
 						"description": schema.StringAttribute{
 							Computed: true,
@@ -1035,6 +1376,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
+													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
 													Description: `The configuration of the step. Parsed as JSON.`,
 												},
@@ -1060,7 +1402,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 											},
 										},
-										Description: `Flow step used for NATIVE APIs`,
+										Description: `Connect flow steps used for NATIVE APIs`,
 									},
 									"enabled": schema.BoolAttribute{
 										Computed:    true,
@@ -1079,6 +1421,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
+													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
 													Description: `The configuration of the step. Parsed as JSON.`,
 												},
@@ -1104,7 +1447,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 											},
 										},
-										Description: `Flow step used for NATIVE APIs`,
+										Description: `Interact flow steps used for NATIVE APIs`,
 									},
 									"name": schema.StringAttribute{
 										Computed:    true,
@@ -1119,6 +1462,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
+													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
 													Description: `The configuration of the step. Parsed as JSON.`,
 												},
@@ -1144,7 +1488,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 											},
 										},
-										Description: `Flow step used for MESSAGE and NATIVE APIs`,
+										Description: `Publish flow steps used for MESSAGE and NATIVE APIs`,
 									},
 									"request": schema.ListNestedAttribute{
 										Computed: true,
@@ -1155,6 +1499,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
+													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
 													Description: `The configuration of the step. Parsed as JSON.`,
 												},
@@ -1180,7 +1525,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 											},
 										},
-										Description: `Flow step used for PROXY and MESSAGE APIs`,
+										Description: `Request flow steps used for PROXY and MESSAGE APIs`,
 									},
 									"response": schema.ListNestedAttribute{
 										Computed: true,
@@ -1191,6 +1536,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
+													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
 													Description: `The configuration of the step. Parsed as JSON.`,
 												},
@@ -1216,7 +1562,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 											},
 										},
-										Description: `Flow step used for PROXY and MESSAGE APIs`,
+										Description: `Response flow steps used for PROXY and MESSAGE APIs`,
 									},
 									"selectors": schema.ListNestedAttribute{
 										Computed: true,
@@ -1247,6 +1593,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 															Description: `Selector type.`,
 														},
 													},
+													Description: `Channel selector`,
 												},
 												"condition": schema.SingleNestedAttribute{
 													Computed: true,
@@ -1260,6 +1607,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 															Description: `Selector type.`,
 														},
 													},
+													Description: `Condition selector`,
 												},
 												"http": schema.SingleNestedAttribute{
 													Computed: true,
@@ -1281,6 +1629,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 															Description: `Selector type.`,
 														},
 													},
+													Description: `HTTP selector`,
 												},
 											},
 										},
@@ -1294,6 +1643,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
+													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
 													Description: `The configuration of the step. Parsed as JSON.`,
 												},
@@ -1319,7 +1669,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 											},
 										},
-										Description: `Flow step used for MESSAGE and NATIVE APIs`,
+										Description: `Subscribe flow steps used for MESSAGE and NATIVE APIs`,
 									},
 									"tags": schema.ListAttribute{
 										Computed:    true,
@@ -1332,9 +1682,9 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"general_conditions": schema.StringAttribute{
 							Computed: true,
 						},
-						"id": schema.StringAttribute{
+						"hrid": schema.StringAttribute{
 							Computed:    true,
-							Description: `Unique identifier for the plan`,
+							Description: `A unique human readable id identifying this resource`,
 						},
 						"mode": schema.StringAttribute{
 							Computed:    true,
@@ -1347,6 +1697,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Description: `Parsed as JSON.`,
 								},
@@ -1355,6 +1706,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Description: `Plan security type.`,
 								},
 							},
+							Description: `API plan security`,
 						},
 						"selection_rule": schema.StringAttribute{
 							Computed: true,
@@ -1377,7 +1729,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 					},
 				},
-				Description: `Map of plan IDs to Plan objects`,
+				Description: `List of Plans for the API`,
 			},
 			"primary_owner": schema.SingleNestedAttribute{
 				Computed: true,
@@ -1399,22 +1751,27 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						Description: `The type of membership`,
 					},
 				},
+				Description: `Primary owner, the creator of the application. Can perform all possible API actions.`,
 			},
 			"properties": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"dynamic": schema.BoolAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `is a dynamic property or not?`,
 						},
 						"encrypted": schema.BoolAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `is property encrypted or not?`,
 						},
 						"key": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `property key`,
 						},
 						"value": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `property value`,
 						},
 					},
 				},
@@ -1424,17 +1781,21 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"configuration": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
 							Computed:    true,
-							Description: `Parsed as JSON.`,
+							Description: `Resource configuration. Parsed as JSON.`,
 						},
 						"enabled": schema.BoolAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `API resource is enabled or not?`,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Resource name`,
 						},
 						"type": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Resource type`,
 						},
 					},
 				},
@@ -1462,6 +1823,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"configuration": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Computed:    true,
 								Description: `The configuration of the service. Parsed as JSON.`,
 							},
@@ -1477,8 +1839,10 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								Computed: true,
 							},
 						},
+						Description: `Service`,
 					},
 				},
+				Description: `Api services`,
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,

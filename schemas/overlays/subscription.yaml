@@ -1,0 +1,60 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Subscription Terraform overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/subscriptions"].put
+    update:
+      x-speakeasy-entity-operation: Subscription#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/subscriptions/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: Subscription#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/subscriptions/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: Subscription#delete
+  - target: $.components.schemas.SubscriptionSpec
+    update:
+      x-speakeasy-entity: Subscription
+
+  # Removed fields
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.environmentId].properties.environmentId
+    description: Not returned by the API, so prevent null values during refresh
+    remove: true
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.organizationId].properties.organizationId
+    description: Not returned by the API, so prevent null values during refresh
+    remove: true
+
+  # Diff removal API State
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.id]
+    description: Not returned by the API, so prevent null values during refresh
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.crossId]
+    description: Not returned by the API, so prevent null values during refresh
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.startingAt]
+    description: Not returned by the API, so prevent null values during refresh
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+# Custom types
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.startingAt].properties.startingAt
+    description: x
+    update:
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes
+        schemaType: "timetypes.RFC3339Type{}"
+        valueType: timetypes.RFC3339
+  - target: $.components.schemas.SubscriptionSpec.properties.endingAt
+    description: x
+    update:
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes
+        schemaType: "timetypes.RFC3339Type{}"
+        valueType: timetypes.RFC3339

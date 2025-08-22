@@ -28,39 +28,39 @@ actions:
 
   ### API Spec
   - target: $.components.schemas.ApiV4Spec.properties.categories
-    description: Prevent unknown values in plans if unconfigured
+    description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApiV4Spec.properties.description
-    description: Prevent unknown values in plans if unconfigured
+    description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApiV4Spec.properties.endpointGroups
-    description: Prevent unknown values in plans if unconfigured
+    description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApiV4Spec.properties.flows
-    description: Prevent unknown values in plans if unconfigured
+    description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApiV4Spec.properties.listeners
-    description: Prevent unknown values in plans if unconfigured
+    description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApiV4Spec.properties.properties
-    description: Prevent unknown values in plans if unconfigured
+    description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApiV4Spec.properties.resources
-    description: Prevent unknown values in plans if unconfigured
+    description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApiV4Spec.properties.members
-    description: Prevent unknown values in plans if unconfigured
+    description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApiV4Spec.properties.tags
-    description: Prevent unknown values in plans if unconfigured
+    description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
 
@@ -104,7 +104,7 @@ actions:
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.PagesMap
+  - target: $.components.schemas.PagesV4
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
@@ -113,10 +113,6 @@ actions:
     update:
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.PortalNotificationConfig
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.PrimaryOwner
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
@@ -141,6 +137,10 @@ actions:
     description: Add required fields
     update:
       - status
+  - target: $.components.schemas.PageSource.properties.configuration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
 
   ## Field removal
   - target: $.components.schemas.ApiV4State.allOf[?@.properties.environmentId].properties.environmentId
@@ -199,10 +199,6 @@ actions:
       type: string
 
   ## SDK Ignored
-  - target: $.components.schemas.PagesMap
-    description: Remove recursive schema to prevent generation error
-    update:
-      x-speakeasy-ignore: true
   - target: $.components.schemas.PortalNotificationConfig
     description: Remove unsupported feature as not returned by the API
     update:
@@ -213,7 +209,7 @@ actions:
     description: Intentionally ignored for Terraform state
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.Plan.properties.order
+  - target: $.components.schemas.PlanV4.properties.order
     description: |
       May not be immediately populated, which can cause import testing errors:
 

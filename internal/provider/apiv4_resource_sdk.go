@@ -9,8 +9,10 @@ import (
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"time"
 )
 
 func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, resp *shared.APIV4State) diag.Diagnostics {
@@ -75,19 +77,20 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		r.CrossID = types.StringPointerValue(resp.CrossID)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.EndpointGroups = []tfTypes.EndpointGroupV4{}
-		if len(r.EndpointGroups) > len(resp.EndpointGroups) {
-			r.EndpointGroups = r.EndpointGroups[:len(resp.EndpointGroups)]
-		}
-		for endpointGroupsCount, endpointGroupsItem := range resp.EndpointGroups {
+
+		for _, endpointGroupsItem := range resp.EndpointGroups {
 			var endpointGroups tfTypes.EndpointGroupV4
+
 			endpointGroups.Endpoints = []tfTypes.EndpointV4{}
-			for endpointsCount, endpointsItem := range endpointGroupsItem.Endpoints {
+
+			for _, endpointsItem := range endpointGroupsItem.Endpoints {
 				var endpoints tfTypes.EndpointV4
+
 				if endpointsItem.Configuration == nil {
-					endpoints.Configuration = types.StringNull()
+					endpoints.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult, _ := json.Marshal(endpointsItem.Configuration)
-					endpoints.Configuration = types.StringValue(string(configurationResult))
+					endpoints.Configuration = jsontypes.NewNormalizedValue(string(configurationResult))
 				}
 				endpoints.InheritConfiguration = types.BoolPointerValue(endpointsItem.InheritConfiguration)
 				endpoints.Name = types.StringPointerValue(endpointsItem.Name)
@@ -101,10 +104,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					} else {
 						endpoints.Services.HealthCheck = &tfTypes.ServiceV4{}
 						if endpointsItem.Services.HealthCheck.Configuration == nil {
-							endpoints.Services.HealthCheck.Configuration = types.StringNull()
+							endpoints.Services.HealthCheck.Configuration = jsontypes.NewNormalizedNull()
 						} else {
 							configurationResult1, _ := json.Marshal(endpointsItem.Services.HealthCheck.Configuration)
-							endpoints.Services.HealthCheck.Configuration = types.StringValue(string(configurationResult1))
+							endpoints.Services.HealthCheck.Configuration = jsontypes.NewNormalizedValue(string(configurationResult1))
 						}
 						endpoints.Services.HealthCheck.Enabled = types.BoolPointerValue(endpointsItem.Services.HealthCheck.Enabled)
 						endpoints.Services.HealthCheck.OverrideConfiguration = types.BoolPointerValue(endpointsItem.Services.HealthCheck.OverrideConfiguration)
@@ -112,10 +115,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					}
 				}
 				if endpointsItem.SharedConfigurationOverride == nil {
-					endpoints.SharedConfigurationOverride = types.StringNull()
+					endpoints.SharedConfigurationOverride = jsontypes.NewNormalizedNull()
 				} else {
 					sharedConfigurationOverrideResult, _ := json.Marshal(endpointsItem.SharedConfigurationOverride)
-					endpoints.SharedConfigurationOverride = types.StringValue(string(sharedConfigurationOverrideResult))
+					endpoints.SharedConfigurationOverride = jsontypes.NewNormalizedValue(string(sharedConfigurationOverrideResult))
 				}
 				endpoints.Tenants = make([]types.String, 0, len(endpointsItem.Tenants))
 				for _, v := range endpointsItem.Tenants {
@@ -123,19 +126,8 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				}
 				endpoints.Type = types.StringValue(endpointsItem.Type)
 				endpoints.Weight = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(endpointsItem.Weight))
-				if endpointsCount+1 > len(endpointGroups.Endpoints) {
-					endpointGroups.Endpoints = append(endpointGroups.Endpoints, endpoints)
-				} else {
-					endpointGroups.Endpoints[endpointsCount].Configuration = endpoints.Configuration
-					endpointGroups.Endpoints[endpointsCount].InheritConfiguration = endpoints.InheritConfiguration
-					endpointGroups.Endpoints[endpointsCount].Name = endpoints.Name
-					endpointGroups.Endpoints[endpointsCount].Secondary = endpoints.Secondary
-					endpointGroups.Endpoints[endpointsCount].Services = endpoints.Services
-					endpointGroups.Endpoints[endpointsCount].SharedConfigurationOverride = endpoints.SharedConfigurationOverride
-					endpointGroups.Endpoints[endpointsCount].Tenants = endpoints.Tenants
-					endpointGroups.Endpoints[endpointsCount].Type = endpoints.Type
-					endpointGroups.Endpoints[endpointsCount].Weight = endpoints.Weight
-				}
+
+				endpointGroups.Endpoints = append(endpointGroups.Endpoints, endpoints)
 			}
 			if endpointGroupsItem.LoadBalancer == nil {
 				endpointGroups.LoadBalancer = nil
@@ -157,10 +149,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				} else {
 					endpointGroups.Services.Discovery = &tfTypes.ServiceV4{}
 					if endpointGroupsItem.Services.Discovery.Configuration == nil {
-						endpointGroups.Services.Discovery.Configuration = types.StringNull()
+						endpointGroups.Services.Discovery.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult2, _ := json.Marshal(endpointGroupsItem.Services.Discovery.Configuration)
-						endpointGroups.Services.Discovery.Configuration = types.StringValue(string(configurationResult2))
+						endpointGroups.Services.Discovery.Configuration = jsontypes.NewNormalizedValue(string(configurationResult2))
 					}
 					endpointGroups.Services.Discovery.Enabled = types.BoolPointerValue(endpointGroupsItem.Services.Discovery.Enabled)
 					endpointGroups.Services.Discovery.OverrideConfiguration = types.BoolPointerValue(endpointGroupsItem.Services.Discovery.OverrideConfiguration)
@@ -171,10 +163,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				} else {
 					endpointGroups.Services.HealthCheck = &tfTypes.ServiceV4{}
 					if endpointGroupsItem.Services.HealthCheck.Configuration == nil {
-						endpointGroups.Services.HealthCheck.Configuration = types.StringNull()
+						endpointGroups.Services.HealthCheck.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult3, _ := json.Marshal(endpointGroupsItem.Services.HealthCheck.Configuration)
-						endpointGroups.Services.HealthCheck.Configuration = types.StringValue(string(configurationResult3))
+						endpointGroups.Services.HealthCheck.Configuration = jsontypes.NewNormalizedValue(string(configurationResult3))
 					}
 					endpointGroups.Services.HealthCheck.Enabled = types.BoolPointerValue(endpointGroupsItem.Services.HealthCheck.Enabled)
 					endpointGroups.Services.HealthCheck.OverrideConfiguration = types.BoolPointerValue(endpointGroupsItem.Services.HealthCheck.OverrideConfiguration)
@@ -182,22 +174,14 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				}
 			}
 			if endpointGroupsItem.SharedConfiguration == nil {
-				endpointGroups.SharedConfiguration = types.StringNull()
+				endpointGroups.SharedConfiguration = jsontypes.NewNormalizedNull()
 			} else {
 				sharedConfigurationResult, _ := json.Marshal(endpointGroupsItem.SharedConfiguration)
-				endpointGroups.SharedConfiguration = types.StringValue(string(sharedConfigurationResult))
+				endpointGroups.SharedConfiguration = jsontypes.NewNormalizedValue(string(sharedConfigurationResult))
 			}
 			endpointGroups.Type = types.StringValue(endpointGroupsItem.Type)
-			if endpointGroupsCount+1 > len(r.EndpointGroups) {
-				r.EndpointGroups = append(r.EndpointGroups, endpointGroups)
-			} else {
-				r.EndpointGroups[endpointGroupsCount].Endpoints = endpointGroups.Endpoints
-				r.EndpointGroups[endpointGroupsCount].LoadBalancer = endpointGroups.LoadBalancer
-				r.EndpointGroups[endpointGroupsCount].Name = endpointGroups.Name
-				r.EndpointGroups[endpointGroupsCount].Services = endpointGroups.Services
-				r.EndpointGroups[endpointGroupsCount].SharedConfiguration = endpointGroups.SharedConfiguration
-				r.EndpointGroups[endpointGroupsCount].Type = endpointGroups.Type
-			}
+
+			r.EndpointGroups = append(r.EndpointGroups, endpointGroups)
 		}
 		if resp.Failover == nil {
 			r.Failover = nil
@@ -222,152 +206,118 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			}
 		}
 		r.Flows = []tfTypes.FlowV4{}
-		if len(r.Flows) > len(resp.Flows) {
-			r.Flows = r.Flows[:len(resp.Flows)]
-		}
-		for flowsCount, flowsItem := range resp.Flows {
+
+		for _, flowsItem := range resp.Flows {
 			var flows tfTypes.FlowV4
+
 			flows.Connect = []tfTypes.StepV4{}
-			for connectCount, connectItem := range flowsItem.Connect {
+
+			for _, connectItem := range flowsItem.Connect {
 				var connect tfTypes.StepV4
+
 				connect.Condition = types.StringPointerValue(connectItem.Condition)
 				if connectItem.Configuration == nil {
-					connect.Configuration = types.StringNull()
+					connect.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult4, _ := json.Marshal(connectItem.Configuration)
-					connect.Configuration = types.StringValue(string(configurationResult4))
+					connect.Configuration = jsontypes.NewNormalizedValue(string(configurationResult4))
 				}
 				connect.Description = types.StringPointerValue(connectItem.Description)
 				connect.Enabled = types.BoolPointerValue(connectItem.Enabled)
 				connect.MessageCondition = types.StringPointerValue(connectItem.MessageCondition)
 				connect.Name = types.StringPointerValue(connectItem.Name)
 				connect.Policy = types.StringPointerValue(connectItem.Policy)
-				if connectCount+1 > len(flows.Connect) {
-					flows.Connect = append(flows.Connect, connect)
-				} else {
-					flows.Connect[connectCount].Condition = connect.Condition
-					flows.Connect[connectCount].Configuration = connect.Configuration
-					flows.Connect[connectCount].Description = connect.Description
-					flows.Connect[connectCount].Enabled = connect.Enabled
-					flows.Connect[connectCount].MessageCondition = connect.MessageCondition
-					flows.Connect[connectCount].Name = connect.Name
-					flows.Connect[connectCount].Policy = connect.Policy
-				}
+
+				flows.Connect = append(flows.Connect, connect)
 			}
 			flows.Enabled = types.BoolPointerValue(flowsItem.Enabled)
 			flows.ID = types.StringPointerValue(flowsItem.ID)
 			flows.Interact = []tfTypes.StepV4{}
-			for interactCount, interactItem := range flowsItem.Interact {
+
+			for _, interactItem := range flowsItem.Interact {
 				var interact tfTypes.StepV4
+
 				interact.Condition = types.StringPointerValue(interactItem.Condition)
 				if interactItem.Configuration == nil {
-					interact.Configuration = types.StringNull()
+					interact.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult5, _ := json.Marshal(interactItem.Configuration)
-					interact.Configuration = types.StringValue(string(configurationResult5))
+					interact.Configuration = jsontypes.NewNormalizedValue(string(configurationResult5))
 				}
 				interact.Description = types.StringPointerValue(interactItem.Description)
 				interact.Enabled = types.BoolPointerValue(interactItem.Enabled)
 				interact.MessageCondition = types.StringPointerValue(interactItem.MessageCondition)
 				interact.Name = types.StringPointerValue(interactItem.Name)
 				interact.Policy = types.StringPointerValue(interactItem.Policy)
-				if interactCount+1 > len(flows.Interact) {
-					flows.Interact = append(flows.Interact, interact)
-				} else {
-					flows.Interact[interactCount].Condition = interact.Condition
-					flows.Interact[interactCount].Configuration = interact.Configuration
-					flows.Interact[interactCount].Description = interact.Description
-					flows.Interact[interactCount].Enabled = interact.Enabled
-					flows.Interact[interactCount].MessageCondition = interact.MessageCondition
-					flows.Interact[interactCount].Name = interact.Name
-					flows.Interact[interactCount].Policy = interact.Policy
-				}
+
+				flows.Interact = append(flows.Interact, interact)
 			}
 			flows.Name = types.StringPointerValue(flowsItem.Name)
 			flows.Publish = []tfTypes.StepV4{}
-			for publishCount, publishItem := range flowsItem.Publish {
+
+			for _, publishItem := range flowsItem.Publish {
 				var publish tfTypes.StepV4
+
 				publish.Condition = types.StringPointerValue(publishItem.Condition)
 				if publishItem.Configuration == nil {
-					publish.Configuration = types.StringNull()
+					publish.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult6, _ := json.Marshal(publishItem.Configuration)
-					publish.Configuration = types.StringValue(string(configurationResult6))
+					publish.Configuration = jsontypes.NewNormalizedValue(string(configurationResult6))
 				}
 				publish.Description = types.StringPointerValue(publishItem.Description)
 				publish.Enabled = types.BoolPointerValue(publishItem.Enabled)
 				publish.MessageCondition = types.StringPointerValue(publishItem.MessageCondition)
 				publish.Name = types.StringPointerValue(publishItem.Name)
 				publish.Policy = types.StringPointerValue(publishItem.Policy)
-				if publishCount+1 > len(flows.Publish) {
-					flows.Publish = append(flows.Publish, publish)
-				} else {
-					flows.Publish[publishCount].Condition = publish.Condition
-					flows.Publish[publishCount].Configuration = publish.Configuration
-					flows.Publish[publishCount].Description = publish.Description
-					flows.Publish[publishCount].Enabled = publish.Enabled
-					flows.Publish[publishCount].MessageCondition = publish.MessageCondition
-					flows.Publish[publishCount].Name = publish.Name
-					flows.Publish[publishCount].Policy = publish.Policy
-				}
+
+				flows.Publish = append(flows.Publish, publish)
 			}
 			flows.Request = []tfTypes.StepV4{}
-			for requestCount, requestItem := range flowsItem.Request {
+
+			for _, requestItem := range flowsItem.Request {
 				var request tfTypes.StepV4
+
 				request.Condition = types.StringPointerValue(requestItem.Condition)
 				if requestItem.Configuration == nil {
-					request.Configuration = types.StringNull()
+					request.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult7, _ := json.Marshal(requestItem.Configuration)
-					request.Configuration = types.StringValue(string(configurationResult7))
+					request.Configuration = jsontypes.NewNormalizedValue(string(configurationResult7))
 				}
 				request.Description = types.StringPointerValue(requestItem.Description)
 				request.Enabled = types.BoolPointerValue(requestItem.Enabled)
 				request.MessageCondition = types.StringPointerValue(requestItem.MessageCondition)
 				request.Name = types.StringPointerValue(requestItem.Name)
 				request.Policy = types.StringPointerValue(requestItem.Policy)
-				if requestCount+1 > len(flows.Request) {
-					flows.Request = append(flows.Request, request)
-				} else {
-					flows.Request[requestCount].Condition = request.Condition
-					flows.Request[requestCount].Configuration = request.Configuration
-					flows.Request[requestCount].Description = request.Description
-					flows.Request[requestCount].Enabled = request.Enabled
-					flows.Request[requestCount].MessageCondition = request.MessageCondition
-					flows.Request[requestCount].Name = request.Name
-					flows.Request[requestCount].Policy = request.Policy
-				}
+
+				flows.Request = append(flows.Request, request)
 			}
 			flows.Response = []tfTypes.StepV4{}
-			for responseCount, responseItem := range flowsItem.Response {
+
+			for _, responseItem := range flowsItem.Response {
 				var response tfTypes.StepV4
+
 				response.Condition = types.StringPointerValue(responseItem.Condition)
 				if responseItem.Configuration == nil {
-					response.Configuration = types.StringNull()
+					response.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult8, _ := json.Marshal(responseItem.Configuration)
-					response.Configuration = types.StringValue(string(configurationResult8))
+					response.Configuration = jsontypes.NewNormalizedValue(string(configurationResult8))
 				}
 				response.Description = types.StringPointerValue(responseItem.Description)
 				response.Enabled = types.BoolPointerValue(responseItem.Enabled)
 				response.MessageCondition = types.StringPointerValue(responseItem.MessageCondition)
 				response.Name = types.StringPointerValue(responseItem.Name)
 				response.Policy = types.StringPointerValue(responseItem.Policy)
-				if responseCount+1 > len(flows.Response) {
-					flows.Response = append(flows.Response, response)
-				} else {
-					flows.Response[responseCount].Condition = response.Condition
-					flows.Response[responseCount].Configuration = response.Configuration
-					flows.Response[responseCount].Description = response.Description
-					flows.Response[responseCount].Enabled = response.Enabled
-					flows.Response[responseCount].MessageCondition = response.MessageCondition
-					flows.Response[responseCount].Name = response.Name
-					flows.Response[responseCount].Policy = response.Policy
-				}
+
+				flows.Response = append(flows.Response, response)
 			}
 			flows.Selectors = []tfTypes.Selector{}
-			for selectorsCount, selectorsItem := range flowsItem.Selectors {
+
+			for _, selectorsItem := range flowsItem.Selectors {
 				var selectors tfTypes.Selector
+
 				if selectorsItem.ChannelSelector != nil {
 					selectors.Channel = &tfTypes.ChannelSelector{}
 					selectors.Channel.Channel = types.StringPointerValue(selectorsItem.ChannelSelector.Channel)
@@ -405,60 +355,35 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					}
 					selectors.HTTP.Type = types.StringValue(string(selectorsItem.HTTPSelector.Type))
 				}
-				if selectorsCount+1 > len(flows.Selectors) {
-					flows.Selectors = append(flows.Selectors, selectors)
-				} else {
-					flows.Selectors[selectorsCount].Channel = selectors.Channel
-					flows.Selectors[selectorsCount].Condition = selectors.Condition
-					flows.Selectors[selectorsCount].HTTP = selectors.HTTP
-				}
+
+				flows.Selectors = append(flows.Selectors, selectors)
 			}
 			flows.Subscribe = []tfTypes.StepV4{}
-			for subscribeCount, subscribeItem := range flowsItem.Subscribe {
+
+			for _, subscribeItem := range flowsItem.Subscribe {
 				var subscribe tfTypes.StepV4
+
 				subscribe.Condition = types.StringPointerValue(subscribeItem.Condition)
 				if subscribeItem.Configuration == nil {
-					subscribe.Configuration = types.StringNull()
+					subscribe.Configuration = jsontypes.NewNormalizedNull()
 				} else {
 					configurationResult9, _ := json.Marshal(subscribeItem.Configuration)
-					subscribe.Configuration = types.StringValue(string(configurationResult9))
+					subscribe.Configuration = jsontypes.NewNormalizedValue(string(configurationResult9))
 				}
 				subscribe.Description = types.StringPointerValue(subscribeItem.Description)
 				subscribe.Enabled = types.BoolPointerValue(subscribeItem.Enabled)
 				subscribe.MessageCondition = types.StringPointerValue(subscribeItem.MessageCondition)
 				subscribe.Name = types.StringPointerValue(subscribeItem.Name)
 				subscribe.Policy = types.StringPointerValue(subscribeItem.Policy)
-				if subscribeCount+1 > len(flows.Subscribe) {
-					flows.Subscribe = append(flows.Subscribe, subscribe)
-				} else {
-					flows.Subscribe[subscribeCount].Condition = subscribe.Condition
-					flows.Subscribe[subscribeCount].Configuration = subscribe.Configuration
-					flows.Subscribe[subscribeCount].Description = subscribe.Description
-					flows.Subscribe[subscribeCount].Enabled = subscribe.Enabled
-					flows.Subscribe[subscribeCount].MessageCondition = subscribe.MessageCondition
-					flows.Subscribe[subscribeCount].Name = subscribe.Name
-					flows.Subscribe[subscribeCount].Policy = subscribe.Policy
-				}
+
+				flows.Subscribe = append(flows.Subscribe, subscribe)
 			}
 			flows.Tags = make([]types.String, 0, len(flowsItem.Tags))
 			for _, v := range flowsItem.Tags {
 				flows.Tags = append(flows.Tags, types.StringValue(v))
 			}
-			if flowsCount+1 > len(r.Flows) {
-				r.Flows = append(r.Flows, flows)
-			} else {
-				r.Flows[flowsCount].Connect = flows.Connect
-				r.Flows[flowsCount].Enabled = flows.Enabled
-				r.Flows[flowsCount].ID = flows.ID
-				r.Flows[flowsCount].Interact = flows.Interact
-				r.Flows[flowsCount].Name = flows.Name
-				r.Flows[flowsCount].Publish = flows.Publish
-				r.Flows[flowsCount].Request = flows.Request
-				r.Flows[flowsCount].Response = flows.Response
-				r.Flows[flowsCount].Selectors = flows.Selectors
-				r.Flows[flowsCount].Subscribe = flows.Subscribe
-				r.Flows[flowsCount].Tags = flows.Tags
-			}
+
+			r.Flows = append(r.Flows, flows)
 		}
 		r.Groups = make([]types.String, 0, len(resp.Groups))
 		for _, v := range resp.Groups {
@@ -472,11 +397,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		}
 		r.LifecycleState = types.StringValue(string(resp.LifecycleState))
 		r.Listeners = []tfTypes.Listener{}
-		if len(r.Listeners) > len(resp.Listeners) {
-			r.Listeners = r.Listeners[:len(resp.Listeners)]
-		}
-		for listenersCount, listenersItem := range resp.Listeners {
+
+		for _, listenersItem := range resp.Listeners {
 			var listeners tfTypes.Listener
+
 			if listenersItem.HTTPListener != nil {
 				listeners.HTTP = &tfTypes.HTTPListener{}
 				if listenersItem.HTTPListener.Cors == nil {
@@ -505,13 +429,15 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					listeners.HTTP.Cors.RunPolicies = types.BoolPointerValue(listenersItem.HTTPListener.Cors.RunPolicies)
 				}
 				listeners.HTTP.Entrypoints = []tfTypes.Entrypoint{}
-				for entrypointsCount, entrypointsItem := range listenersItem.HTTPListener.Entrypoints {
+
+				for _, entrypointsItem := range listenersItem.HTTPListener.Entrypoints {
 					var entrypoints tfTypes.Entrypoint
+
 					if entrypointsItem.Configuration == nil {
-						entrypoints.Configuration = types.StringNull()
+						entrypoints.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult10, _ := json.Marshal(entrypointsItem.Configuration)
-						entrypoints.Configuration = types.StringValue(string(configurationResult10))
+						entrypoints.Configuration = jsontypes.NewNormalizedValue(string(configurationResult10))
 					}
 					if entrypointsItem.Dlq == nil {
 						entrypoints.Dlq = nil
@@ -525,32 +451,23 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 						entrypoints.Qos = types.StringNull()
 					}
 					entrypoints.Type = types.StringValue(entrypointsItem.Type)
-					if entrypointsCount+1 > len(listeners.HTTP.Entrypoints) {
-						listeners.HTTP.Entrypoints = append(listeners.HTTP.Entrypoints, entrypoints)
-					} else {
-						listeners.HTTP.Entrypoints[entrypointsCount].Configuration = entrypoints.Configuration
-						listeners.HTTP.Entrypoints[entrypointsCount].Dlq = entrypoints.Dlq
-						listeners.HTTP.Entrypoints[entrypointsCount].Qos = entrypoints.Qos
-						listeners.HTTP.Entrypoints[entrypointsCount].Type = entrypoints.Type
-					}
+
+					listeners.HTTP.Entrypoints = append(listeners.HTTP.Entrypoints, entrypoints)
 				}
 				listeners.HTTP.PathMappings = make([]types.String, 0, len(listenersItem.HTTPListener.PathMappings))
 				for _, v := range listenersItem.HTTPListener.PathMappings {
 					listeners.HTTP.PathMappings = append(listeners.HTTP.PathMappings, types.StringValue(v))
 				}
 				listeners.HTTP.Paths = []tfTypes.PathV4{}
-				for pathsCount, pathsItem := range listenersItem.HTTPListener.Paths {
+
+				for _, pathsItem := range listenersItem.HTTPListener.Paths {
 					var paths tfTypes.PathV4
+
 					paths.Host = types.StringPointerValue(pathsItem.Host)
 					paths.OverrideAccess = types.BoolPointerValue(pathsItem.OverrideAccess)
 					paths.Path = types.StringPointerValue(pathsItem.Path)
-					if pathsCount+1 > len(listeners.HTTP.Paths) {
-						listeners.HTTP.Paths = append(listeners.HTTP.Paths, paths)
-					} else {
-						listeners.HTTP.Paths[pathsCount].Host = paths.Host
-						listeners.HTTP.Paths[pathsCount].OverrideAccess = paths.OverrideAccess
-						listeners.HTTP.Paths[pathsCount].Path = paths.Path
-					}
+
+					listeners.HTTP.Paths = append(listeners.HTTP.Paths, paths)
 				}
 				listeners.HTTP.Servers = make([]types.String, 0, len(listenersItem.HTTPListener.Servers))
 				for _, v := range listenersItem.HTTPListener.Servers {
@@ -561,13 +478,15 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			if listenersItem.KafkaListener != nil {
 				listeners.Kafka = &tfTypes.KafkaListener{}
 				listeners.Kafka.Entrypoints = []tfTypes.Entrypoint{}
-				for entrypointsCount1, entrypointsItem1 := range listenersItem.KafkaListener.Entrypoints {
+
+				for _, entrypointsItem1 := range listenersItem.KafkaListener.Entrypoints {
 					var entrypoints1 tfTypes.Entrypoint
+
 					if entrypointsItem1.Configuration == nil {
-						entrypoints1.Configuration = types.StringNull()
+						entrypoints1.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult11, _ := json.Marshal(entrypointsItem1.Configuration)
-						entrypoints1.Configuration = types.StringValue(string(configurationResult11))
+						entrypoints1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult11))
 					}
 					if entrypointsItem1.Dlq == nil {
 						entrypoints1.Dlq = nil
@@ -581,14 +500,8 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 						entrypoints1.Qos = types.StringNull()
 					}
 					entrypoints1.Type = types.StringValue(entrypointsItem1.Type)
-					if entrypointsCount1+1 > len(listeners.Kafka.Entrypoints) {
-						listeners.Kafka.Entrypoints = append(listeners.Kafka.Entrypoints, entrypoints1)
-					} else {
-						listeners.Kafka.Entrypoints[entrypointsCount1].Configuration = entrypoints1.Configuration
-						listeners.Kafka.Entrypoints[entrypointsCount1].Dlq = entrypoints1.Dlq
-						listeners.Kafka.Entrypoints[entrypointsCount1].Qos = entrypoints1.Qos
-						listeners.Kafka.Entrypoints[entrypointsCount1].Type = entrypoints1.Type
-					}
+
+					listeners.Kafka.Entrypoints = append(listeners.Kafka.Entrypoints, entrypoints1)
 				}
 				listeners.Kafka.Host = types.StringValue(listenersItem.KafkaListener.Host)
 				listeners.Kafka.Port = types.Int64PointerValue(listenersItem.KafkaListener.Port)
@@ -601,13 +514,15 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			if listenersItem.SubscriptionListener != nil {
 				listeners.Subscription = &tfTypes.SubscriptionListener{}
 				listeners.Subscription.Entrypoints = []tfTypes.Entrypoint{}
-				for entrypointsCount2, entrypointsItem2 := range listenersItem.SubscriptionListener.Entrypoints {
+
+				for _, entrypointsItem2 := range listenersItem.SubscriptionListener.Entrypoints {
 					var entrypoints2 tfTypes.Entrypoint
+
 					if entrypointsItem2.Configuration == nil {
-						entrypoints2.Configuration = types.StringNull()
+						entrypoints2.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult12, _ := json.Marshal(entrypointsItem2.Configuration)
-						entrypoints2.Configuration = types.StringValue(string(configurationResult12))
+						entrypoints2.Configuration = jsontypes.NewNormalizedValue(string(configurationResult12))
 					}
 					if entrypointsItem2.Dlq == nil {
 						entrypoints2.Dlq = nil
@@ -621,14 +536,8 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 						entrypoints2.Qos = types.StringNull()
 					}
 					entrypoints2.Type = types.StringValue(entrypointsItem2.Type)
-					if entrypointsCount2+1 > len(listeners.Subscription.Entrypoints) {
-						listeners.Subscription.Entrypoints = append(listeners.Subscription.Entrypoints, entrypoints2)
-					} else {
-						listeners.Subscription.Entrypoints[entrypointsCount2].Configuration = entrypoints2.Configuration
-						listeners.Subscription.Entrypoints[entrypointsCount2].Dlq = entrypoints2.Dlq
-						listeners.Subscription.Entrypoints[entrypointsCount2].Qos = entrypoints2.Qos
-						listeners.Subscription.Entrypoints[entrypointsCount2].Type = entrypoints2.Type
-					}
+
+					listeners.Subscription.Entrypoints = append(listeners.Subscription.Entrypoints, entrypoints2)
 				}
 				listeners.Subscription.Servers = make([]types.String, 0, len(listenersItem.SubscriptionListener.Servers))
 				for _, v := range listenersItem.SubscriptionListener.Servers {
@@ -639,13 +548,15 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			if listenersItem.TCPListener != nil {
 				listeners.TCP = &tfTypes.TCPListener{}
 				listeners.TCP.Entrypoints = []tfTypes.Entrypoint{}
-				for entrypointsCount3, entrypointsItem3 := range listenersItem.TCPListener.Entrypoints {
+
+				for _, entrypointsItem3 := range listenersItem.TCPListener.Entrypoints {
 					var entrypoints3 tfTypes.Entrypoint
+
 					if entrypointsItem3.Configuration == nil {
-						entrypoints3.Configuration = types.StringNull()
+						entrypoints3.Configuration = jsontypes.NewNormalizedNull()
 					} else {
 						configurationResult13, _ := json.Marshal(entrypointsItem3.Configuration)
-						entrypoints3.Configuration = types.StringValue(string(configurationResult13))
+						entrypoints3.Configuration = jsontypes.NewNormalizedValue(string(configurationResult13))
 					}
 					if entrypointsItem3.Dlq == nil {
 						entrypoints3.Dlq = nil
@@ -659,14 +570,8 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 						entrypoints3.Qos = types.StringNull()
 					}
 					entrypoints3.Type = types.StringValue(entrypointsItem3.Type)
-					if entrypointsCount3+1 > len(listeners.TCP.Entrypoints) {
-						listeners.TCP.Entrypoints = append(listeners.TCP.Entrypoints, entrypoints3)
-					} else {
-						listeners.TCP.Entrypoints[entrypointsCount3].Configuration = entrypoints3.Configuration
-						listeners.TCP.Entrypoints[entrypointsCount3].Dlq = entrypoints3.Dlq
-						listeners.TCP.Entrypoints[entrypointsCount3].Qos = entrypoints3.Qos
-						listeners.TCP.Entrypoints[entrypointsCount3].Type = entrypoints3.Type
-					}
+
+					listeners.TCP.Entrypoints = append(listeners.TCP.Entrypoints, entrypoints3)
 				}
 				listeners.TCP.Hosts = make([]types.String, 0, len(listenersItem.TCPListener.Hosts))
 				for _, v := range listenersItem.TCPListener.Hosts {
@@ -678,341 +583,412 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				}
 				listeners.TCP.Type = types.StringValue(string(listenersItem.TCPListener.Type))
 			}
-			if listenersCount+1 > len(r.Listeners) {
-				r.Listeners = append(r.Listeners, listeners)
-			} else {
-				r.Listeners[listenersCount].HTTP = listeners.HTTP
-				r.Listeners[listenersCount].Kafka = listeners.Kafka
-				r.Listeners[listenersCount].Subscription = listeners.Subscription
-				r.Listeners[listenersCount].TCP = listeners.TCP
-			}
+
+			r.Listeners = append(r.Listeners, listeners)
 		}
 		r.Members = []tfTypes.Member{}
-		if len(r.Members) > len(resp.Members) {
-			r.Members = r.Members[:len(resp.Members)]
-		}
-		for membersCount, membersItem := range resp.Members {
+
+		for _, membersItem := range resp.Members {
 			var members tfTypes.Member
+
 			members.ID = types.StringPointerValue(membersItem.ID)
-			members.Role = types.StringPointerValue(membersItem.Role)
-			members.Source = types.StringPointerValue(membersItem.Source)
-			members.SourceID = types.StringPointerValue(membersItem.SourceID)
-			if membersCount+1 > len(r.Members) {
-				r.Members = append(r.Members, members)
-			} else {
-				r.Members[membersCount].ID = members.ID
-				r.Members[membersCount].Role = members.Role
-				r.Members[membersCount].Source = members.Source
-				r.Members[membersCount].SourceID = members.SourceID
-			}
+			members.Role = types.StringValue(membersItem.Role)
+			members.Source = types.StringValue(membersItem.Source)
+			members.SourceID = types.StringValue(membersItem.SourceID)
+
+			r.Members = append(r.Members, members)
 		}
 		r.Metadata = []tfTypes.Metadata{}
-		if len(r.Metadata) > len(resp.Metadata) {
-			r.Metadata = r.Metadata[:len(resp.Metadata)]
-		}
-		for metadataCount, metadataItem := range resp.Metadata {
+
+		for _, metadataItem := range resp.Metadata {
 			var metadata tfTypes.Metadata
+
 			metadata.DefaultValue = types.StringPointerValue(metadataItem.DefaultValue)
-			if metadataItem.Format != nil {
-				metadata.Format = types.StringValue(string(*metadataItem.Format))
-			} else {
-				metadata.Format = types.StringNull()
-			}
+			metadata.Format = types.StringValue(string(metadataItem.Format))
 			metadata.Key = types.StringPointerValue(metadataItem.Key)
-			metadata.Name = types.StringPointerValue(metadataItem.Name)
+			metadata.Name = types.StringValue(metadataItem.Name)
 			metadata.Value = types.StringPointerValue(metadataItem.Value)
-			if metadataCount+1 > len(r.Metadata) {
-				r.Metadata = append(r.Metadata, metadata)
-			} else {
-				r.Metadata[metadataCount].DefaultValue = metadata.DefaultValue
-				r.Metadata[metadataCount].Format = metadata.Format
-				r.Metadata[metadataCount].Key = metadata.Key
-				r.Metadata[metadataCount].Name = metadata.Name
-				r.Metadata[metadataCount].Value = metadata.Value
-			}
+
+			r.Metadata = append(r.Metadata, metadata)
 		}
 		r.Name = types.StringValue(resp.Name)
-		if len(resp.Plans) > 0 {
-			r.Plans = make(map[string]tfTypes.Plan, len(resp.Plans))
-			for planKey, planValue := range resp.Plans {
-				var planResult tfTypes.Plan
-				planResult.Characteristics = make([]types.String, 0, len(planValue.Characteristics))
-				for _, v := range planValue.Characteristics {
-					planResult.Characteristics = append(planResult.Characteristics, types.StringValue(v))
+		r.Pages = []tfTypes.PageV4{}
+
+		for _, pagesItem := range resp.Pages {
+			var pages tfTypes.PageV4
+
+			pages.AccessControls = []tfTypes.AccessControl{}
+
+			for _, accessControlsItem := range pagesItem.AccessControls {
+				var accessControls tfTypes.AccessControl
+
+				accessControls.ReferenceID = types.StringPointerValue(accessControlsItem.ReferenceID)
+				accessControls.ReferenceType = types.StringPointerValue(accessControlsItem.ReferenceType)
+
+				pages.AccessControls = append(pages.AccessControls, accessControls)
+			}
+			pages.AttachedMedia = []tfTypes.PageMedia{}
+
+			for _, attachedMediaItem := range pagesItem.AttachedMedia {
+				var attachedMedia tfTypes.PageMedia
+
+				attachedMedia.AttachedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(attachedMediaItem.AttachedAt))
+				attachedMedia.Hash = types.StringPointerValue(attachedMediaItem.Hash)
+				attachedMedia.Name = types.StringPointerValue(attachedMediaItem.Name)
+
+				pages.AttachedMedia = append(pages.AttachedMedia, attachedMedia)
+			}
+			if len(pagesItem.Configuration) > 0 {
+				pages.Configuration = make(map[string]types.String, len(pagesItem.Configuration))
+				for key, value := range pagesItem.Configuration {
+					pages.Configuration[key] = types.StringValue(value)
 				}
-				planResult.CrossID = types.StringPointerValue(planValue.CrossID)
-				planResult.Description = types.StringPointerValue(planValue.Description)
-				planResult.ExcludedGroups = make([]types.String, 0, len(planValue.ExcludedGroups))
-				for _, v := range planValue.ExcludedGroups {
-					planResult.ExcludedGroups = append(planResult.ExcludedGroups, types.StringValue(v))
+			}
+			pages.Content = types.StringPointerValue(pagesItem.Content)
+			if pagesItem.ContentRevision == nil {
+				pages.ContentRevision = nil
+			} else {
+				pages.ContentRevision = &tfTypes.Revision{}
+				pages.ContentRevision.ID = types.StringPointerValue(pagesItem.ContentRevision.ID)
+				pages.ContentRevision.Revision = types.Int64PointerValue(pagesItem.ContentRevision.Revision)
+			}
+			pages.ContentType = types.StringPointerValue(pagesItem.ContentType)
+			pages.CrossID = types.StringPointerValue(pagesItem.CrossID)
+			pages.ExcludedAccessControls = types.BoolPointerValue(pagesItem.ExcludedAccessControls)
+			pages.GeneralConditions = types.BoolPointerValue(pagesItem.GeneralConditions)
+			pages.Hidden = types.BoolPointerValue(pagesItem.Hidden)
+			pages.Homepage = types.BoolPointerValue(pagesItem.Homepage)
+			pages.Hrid = types.StringValue(pagesItem.Hrid)
+			pages.LastContributor = types.StringPointerValue(pagesItem.LastContributor)
+			if len(pagesItem.Metadata) > 0 {
+				pages.Metadata = make(map[string]types.String, len(pagesItem.Metadata))
+				for key1, value1 := range pagesItem.Metadata {
+					pages.Metadata[key1] = types.StringValue(value1)
 				}
-				planResult.Flows = []tfTypes.FlowV4{}
-				for flowsCount1, flowsItem1 := range planValue.Flows {
-					var flows1 tfTypes.FlowV4
-					flows1.Connect = []tfTypes.StepV4{}
-					for connectCount1, connectItem1 := range flowsItem1.Connect {
-						var connect1 tfTypes.StepV4
-						connect1.Condition = types.StringPointerValue(connectItem1.Condition)
-						if connectItem1.Configuration == nil {
-							connect1.Configuration = types.StringNull()
-						} else {
-							configurationResult14, _ := json.Marshal(connectItem1.Configuration)
-							connect1.Configuration = types.StringValue(string(configurationResult14))
-						}
-						connect1.Description = types.StringPointerValue(connectItem1.Description)
-						connect1.Enabled = types.BoolPointerValue(connectItem1.Enabled)
-						connect1.MessageCondition = types.StringPointerValue(connectItem1.MessageCondition)
-						connect1.Name = types.StringPointerValue(connectItem1.Name)
-						connect1.Policy = types.StringPointerValue(connectItem1.Policy)
-						if connectCount1+1 > len(flows1.Connect) {
-							flows1.Connect = append(flows1.Connect, connect1)
-						} else {
-							flows1.Connect[connectCount1].Condition = connect1.Condition
-							flows1.Connect[connectCount1].Configuration = connect1.Configuration
-							flows1.Connect[connectCount1].Description = connect1.Description
-							flows1.Connect[connectCount1].Enabled = connect1.Enabled
-							flows1.Connect[connectCount1].MessageCondition = connect1.MessageCondition
-							flows1.Connect[connectCount1].Name = connect1.Name
-							flows1.Connect[connectCount1].Policy = connect1.Policy
-						}
-					}
-					flows1.Enabled = types.BoolPointerValue(flowsItem1.Enabled)
-					flows1.ID = types.StringPointerValue(flowsItem1.ID)
-					flows1.Interact = []tfTypes.StepV4{}
-					for interactCount1, interactItem1 := range flowsItem1.Interact {
-						var interact1 tfTypes.StepV4
-						interact1.Condition = types.StringPointerValue(interactItem1.Condition)
-						if interactItem1.Configuration == nil {
-							interact1.Configuration = types.StringNull()
-						} else {
-							configurationResult15, _ := json.Marshal(interactItem1.Configuration)
-							interact1.Configuration = types.StringValue(string(configurationResult15))
-						}
-						interact1.Description = types.StringPointerValue(interactItem1.Description)
-						interact1.Enabled = types.BoolPointerValue(interactItem1.Enabled)
-						interact1.MessageCondition = types.StringPointerValue(interactItem1.MessageCondition)
-						interact1.Name = types.StringPointerValue(interactItem1.Name)
-						interact1.Policy = types.StringPointerValue(interactItem1.Policy)
-						if interactCount1+1 > len(flows1.Interact) {
-							flows1.Interact = append(flows1.Interact, interact1)
-						} else {
-							flows1.Interact[interactCount1].Condition = interact1.Condition
-							flows1.Interact[interactCount1].Configuration = interact1.Configuration
-							flows1.Interact[interactCount1].Description = interact1.Description
-							flows1.Interact[interactCount1].Enabled = interact1.Enabled
-							flows1.Interact[interactCount1].MessageCondition = interact1.MessageCondition
-							flows1.Interact[interactCount1].Name = interact1.Name
-							flows1.Interact[interactCount1].Policy = interact1.Policy
-						}
-					}
-					flows1.Name = types.StringPointerValue(flowsItem1.Name)
-					flows1.Publish = []tfTypes.StepV4{}
-					for publishCount1, publishItem1 := range flowsItem1.Publish {
-						var publish1 tfTypes.StepV4
-						publish1.Condition = types.StringPointerValue(publishItem1.Condition)
-						if publishItem1.Configuration == nil {
-							publish1.Configuration = types.StringNull()
-						} else {
-							configurationResult16, _ := json.Marshal(publishItem1.Configuration)
-							publish1.Configuration = types.StringValue(string(configurationResult16))
-						}
-						publish1.Description = types.StringPointerValue(publishItem1.Description)
-						publish1.Enabled = types.BoolPointerValue(publishItem1.Enabled)
-						publish1.MessageCondition = types.StringPointerValue(publishItem1.MessageCondition)
-						publish1.Name = types.StringPointerValue(publishItem1.Name)
-						publish1.Policy = types.StringPointerValue(publishItem1.Policy)
-						if publishCount1+1 > len(flows1.Publish) {
-							flows1.Publish = append(flows1.Publish, publish1)
-						} else {
-							flows1.Publish[publishCount1].Condition = publish1.Condition
-							flows1.Publish[publishCount1].Configuration = publish1.Configuration
-							flows1.Publish[publishCount1].Description = publish1.Description
-							flows1.Publish[publishCount1].Enabled = publish1.Enabled
-							flows1.Publish[publishCount1].MessageCondition = publish1.MessageCondition
-							flows1.Publish[publishCount1].Name = publish1.Name
-							flows1.Publish[publishCount1].Policy = publish1.Policy
-						}
-					}
-					flows1.Request = []tfTypes.StepV4{}
-					for requestCount1, requestItem1 := range flowsItem1.Request {
-						var request1 tfTypes.StepV4
-						request1.Condition = types.StringPointerValue(requestItem1.Condition)
-						if requestItem1.Configuration == nil {
-							request1.Configuration = types.StringNull()
-						} else {
-							configurationResult17, _ := json.Marshal(requestItem1.Configuration)
-							request1.Configuration = types.StringValue(string(configurationResult17))
-						}
-						request1.Description = types.StringPointerValue(requestItem1.Description)
-						request1.Enabled = types.BoolPointerValue(requestItem1.Enabled)
-						request1.MessageCondition = types.StringPointerValue(requestItem1.MessageCondition)
-						request1.Name = types.StringPointerValue(requestItem1.Name)
-						request1.Policy = types.StringPointerValue(requestItem1.Policy)
-						if requestCount1+1 > len(flows1.Request) {
-							flows1.Request = append(flows1.Request, request1)
-						} else {
-							flows1.Request[requestCount1].Condition = request1.Condition
-							flows1.Request[requestCount1].Configuration = request1.Configuration
-							flows1.Request[requestCount1].Description = request1.Description
-							flows1.Request[requestCount1].Enabled = request1.Enabled
-							flows1.Request[requestCount1].MessageCondition = request1.MessageCondition
-							flows1.Request[requestCount1].Name = request1.Name
-							flows1.Request[requestCount1].Policy = request1.Policy
-						}
-					}
-					flows1.Response = []tfTypes.StepV4{}
-					for responseCount1, responseItem1 := range flowsItem1.Response {
-						var response1 tfTypes.StepV4
-						response1.Condition = types.StringPointerValue(responseItem1.Condition)
-						if responseItem1.Configuration == nil {
-							response1.Configuration = types.StringNull()
-						} else {
-							configurationResult18, _ := json.Marshal(responseItem1.Configuration)
-							response1.Configuration = types.StringValue(string(configurationResult18))
-						}
-						response1.Description = types.StringPointerValue(responseItem1.Description)
-						response1.Enabled = types.BoolPointerValue(responseItem1.Enabled)
-						response1.MessageCondition = types.StringPointerValue(responseItem1.MessageCondition)
-						response1.Name = types.StringPointerValue(responseItem1.Name)
-						response1.Policy = types.StringPointerValue(responseItem1.Policy)
-						if responseCount1+1 > len(flows1.Response) {
-							flows1.Response = append(flows1.Response, response1)
-						} else {
-							flows1.Response[responseCount1].Condition = response1.Condition
-							flows1.Response[responseCount1].Configuration = response1.Configuration
-							flows1.Response[responseCount1].Description = response1.Description
-							flows1.Response[responseCount1].Enabled = response1.Enabled
-							flows1.Response[responseCount1].MessageCondition = response1.MessageCondition
-							flows1.Response[responseCount1].Name = response1.Name
-							flows1.Response[responseCount1].Policy = response1.Policy
-						}
-					}
-					flows1.Selectors = []tfTypes.Selector{}
-					for selectorsCount1, selectorsItem1 := range flowsItem1.Selectors {
-						var selectors1 tfTypes.Selector
-						if selectorsItem1.ChannelSelector != nil {
-							selectors1.Channel = &tfTypes.ChannelSelector{}
-							selectors1.Channel.Channel = types.StringPointerValue(selectorsItem1.ChannelSelector.Channel)
-							if selectorsItem1.ChannelSelector.ChannelOperator != nil {
-								selectors1.Channel.ChannelOperator = types.StringValue(string(*selectorsItem1.ChannelSelector.ChannelOperator))
-							} else {
-								selectors1.Channel.ChannelOperator = types.StringNull()
-							}
-							selectors1.Channel.Entrypoints = make([]types.String, 0, len(selectorsItem1.ChannelSelector.Entrypoints))
-							for _, v := range selectorsItem1.ChannelSelector.Entrypoints {
-								selectors1.Channel.Entrypoints = append(selectors1.Channel.Entrypoints, types.StringValue(v))
-							}
-							selectors1.Channel.Operations = make([]types.String, 0, len(selectorsItem1.ChannelSelector.Operations))
-							for _, v := range selectorsItem1.ChannelSelector.Operations {
-								selectors1.Channel.Operations = append(selectors1.Channel.Operations, types.StringValue(string(v)))
-							}
-							selectors1.Channel.Type = types.StringValue(string(selectorsItem1.ChannelSelector.Type))
-						}
-						if selectorsItem1.ConditionSelector != nil {
-							selectors1.Condition = &tfTypes.ConditionSelector{}
-							selectors1.Condition.Condition = types.StringValue(selectorsItem1.ConditionSelector.Condition)
-							selectors1.Condition.Type = types.StringValue(string(selectorsItem1.ConditionSelector.Type))
-						}
-						if selectorsItem1.HTTPSelector != nil {
-							selectors1.HTTP = &tfTypes.HTTPSelector{}
-							selectors1.HTTP.Methods = make([]types.String, 0, len(selectorsItem1.HTTPSelector.Methods))
-							for _, v := range selectorsItem1.HTTPSelector.Methods {
-								selectors1.HTTP.Methods = append(selectors1.HTTP.Methods, types.StringValue(string(v)))
-							}
-							selectors1.HTTP.Path = types.StringPointerValue(selectorsItem1.HTTPSelector.Path)
-							if selectorsItem1.HTTPSelector.PathOperator != nil {
-								selectors1.HTTP.PathOperator = types.StringValue(string(*selectorsItem1.HTTPSelector.PathOperator))
-							} else {
-								selectors1.HTTP.PathOperator = types.StringNull()
-							}
-							selectors1.HTTP.Type = types.StringValue(string(selectorsItem1.HTTPSelector.Type))
-						}
-						if selectorsCount1+1 > len(flows1.Selectors) {
-							flows1.Selectors = append(flows1.Selectors, selectors1)
-						} else {
-							flows1.Selectors[selectorsCount1].Channel = selectors1.Channel
-							flows1.Selectors[selectorsCount1].Condition = selectors1.Condition
-							flows1.Selectors[selectorsCount1].HTTP = selectors1.HTTP
-						}
-					}
-					flows1.Subscribe = []tfTypes.StepV4{}
-					for subscribeCount1, subscribeItem1 := range flowsItem1.Subscribe {
-						var subscribe1 tfTypes.StepV4
-						subscribe1.Condition = types.StringPointerValue(subscribeItem1.Condition)
-						if subscribeItem1.Configuration == nil {
-							subscribe1.Configuration = types.StringNull()
-						} else {
-							configurationResult19, _ := json.Marshal(subscribeItem1.Configuration)
-							subscribe1.Configuration = types.StringValue(string(configurationResult19))
-						}
-						subscribe1.Description = types.StringPointerValue(subscribeItem1.Description)
-						subscribe1.Enabled = types.BoolPointerValue(subscribeItem1.Enabled)
-						subscribe1.MessageCondition = types.StringPointerValue(subscribeItem1.MessageCondition)
-						subscribe1.Name = types.StringPointerValue(subscribeItem1.Name)
-						subscribe1.Policy = types.StringPointerValue(subscribeItem1.Policy)
-						if subscribeCount1+1 > len(flows1.Subscribe) {
-							flows1.Subscribe = append(flows1.Subscribe, subscribe1)
-						} else {
-							flows1.Subscribe[subscribeCount1].Condition = subscribe1.Condition
-							flows1.Subscribe[subscribeCount1].Configuration = subscribe1.Configuration
-							flows1.Subscribe[subscribeCount1].Description = subscribe1.Description
-							flows1.Subscribe[subscribeCount1].Enabled = subscribe1.Enabled
-							flows1.Subscribe[subscribeCount1].MessageCondition = subscribe1.MessageCondition
-							flows1.Subscribe[subscribeCount1].Name = subscribe1.Name
-							flows1.Subscribe[subscribeCount1].Policy = subscribe1.Policy
-						}
-					}
-					flows1.Tags = make([]types.String, 0, len(flowsItem1.Tags))
-					for _, v := range flowsItem1.Tags {
-						flows1.Tags = append(flows1.Tags, types.StringValue(v))
-					}
-					if flowsCount1+1 > len(planResult.Flows) {
-						planResult.Flows = append(planResult.Flows, flows1)
-					} else {
-						planResult.Flows[flowsCount1].Connect = flows1.Connect
-						planResult.Flows[flowsCount1].Enabled = flows1.Enabled
-						planResult.Flows[flowsCount1].ID = flows1.ID
-						planResult.Flows[flowsCount1].Interact = flows1.Interact
-						planResult.Flows[flowsCount1].Name = flows1.Name
-						planResult.Flows[flowsCount1].Publish = flows1.Publish
-						planResult.Flows[flowsCount1].Request = flows1.Request
-						planResult.Flows[flowsCount1].Response = flows1.Response
-						planResult.Flows[flowsCount1].Selectors = flows1.Selectors
-						planResult.Flows[flowsCount1].Subscribe = flows1.Subscribe
-						planResult.Flows[flowsCount1].Tags = flows1.Tags
-					}
-				}
-				planResult.GeneralConditions = types.StringPointerValue(planValue.GeneralConditions)
-				planResult.ID = types.StringPointerValue(planValue.ID)
-				planResult.Mode = types.StringValue(string(planValue.Mode))
-				planResult.Name = types.StringPointerValue(planValue.Name)
-				if planValue.Security == nil {
-					planResult.Security = nil
+			}
+			pages.Name = types.StringPointerValue(pagesItem.Name)
+			pages.Order = types.Int64PointerValue(pagesItem.Order)
+			pages.ParentID = types.StringPointerValue(pagesItem.ParentID)
+			pages.ParentPath = types.StringPointerValue(pagesItem.ParentPath)
+			pages.Published = types.BoolPointerValue(pagesItem.Published)
+			if pagesItem.Source == nil {
+				pages.Source = nil
+			} else {
+				pages.Source = &tfTypes.PageSource{}
+				if pagesItem.Source.Configuration == nil {
+					pages.Source.Configuration = jsontypes.NewNormalizedNull()
 				} else {
-					planResult.Security = &tfTypes.PlanSecurity{}
-					if planValue.Security.Configuration == nil {
-						planResult.Security.Configuration = types.StringNull()
-					} else {
-						configurationResult20, _ := json.Marshal(planValue.Security.Configuration)
-						planResult.Security.Configuration = types.StringValue(string(configurationResult20))
+					configurationResult14, _ := json.Marshal(pagesItem.Source.Configuration)
+					pages.Source.Configuration = jsontypes.NewNormalizedValue(string(configurationResult14))
+				}
+				pages.Source.Type = types.StringPointerValue(pagesItem.Source.Type)
+			}
+			pages.Translations = []tfTypes.PageV4Translation{}
+
+			for _, translationsItem := range pagesItem.Translations {
+				var translations tfTypes.PageV4Translation
+
+				translations.AccessControls = []tfTypes.AccessControl{}
+
+				for _, accessControlsItem1 := range translationsItem.AccessControls {
+					var accessControls1 tfTypes.AccessControl
+
+					accessControls1.ReferenceID = types.StringPointerValue(accessControlsItem1.ReferenceID)
+					accessControls1.ReferenceType = types.StringPointerValue(accessControlsItem1.ReferenceType)
+
+					translations.AccessControls = append(translations.AccessControls, accessControls1)
+				}
+				translations.AttachedMedia = []tfTypes.PageMedia{}
+
+				for _, attachedMediaItem1 := range translationsItem.AttachedMedia {
+					var attachedMedia1 tfTypes.PageMedia
+
+					attachedMedia1.AttachedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(attachedMediaItem1.AttachedAt))
+					attachedMedia1.Hash = types.StringPointerValue(attachedMediaItem1.Hash)
+					attachedMedia1.Name = types.StringPointerValue(attachedMediaItem1.Name)
+
+					translations.AttachedMedia = append(translations.AttachedMedia, attachedMedia1)
+				}
+				if len(translationsItem.Configuration) > 0 {
+					translations.Configuration = make(map[string]types.String, len(translationsItem.Configuration))
+					for key2, value2 := range translationsItem.Configuration {
+						translations.Configuration[key2] = types.StringValue(value2)
 					}
-					planResult.Security.Type = types.StringValue(string(planValue.Security.Type))
 				}
-				planResult.SelectionRule = types.StringPointerValue(planValue.SelectionRule)
-				planResult.Status = types.StringValue(string(planValue.Status))
-				planResult.Tags = make([]types.String, 0, len(planValue.Tags))
-				for _, v := range planValue.Tags {
-					planResult.Tags = append(planResult.Tags, types.StringValue(v))
-				}
-				planResult.Type = types.StringValue(string(planValue.Type))
-				if planValue.Validation != nil {
-					planResult.Validation = types.StringValue(string(*planValue.Validation))
+				translations.Content = types.StringPointerValue(translationsItem.Content)
+				if translationsItem.ContentRevision == nil {
+					translations.ContentRevision = nil
 				} else {
-					planResult.Validation = types.StringNull()
+					translations.ContentRevision = &tfTypes.Revision{}
+					translations.ContentRevision.ID = types.StringPointerValue(translationsItem.ContentRevision.ID)
+					translations.ContentRevision.Revision = types.Int64PointerValue(translationsItem.ContentRevision.Revision)
+				}
+				translations.ContentType = types.StringPointerValue(translationsItem.ContentType)
+				translations.CrossID = types.StringPointerValue(translationsItem.CrossID)
+				translations.ExcludedAccessControls = types.BoolPointerValue(translationsItem.ExcludedAccessControls)
+				translations.GeneralConditions = types.BoolPointerValue(translationsItem.GeneralConditions)
+				translations.Hidden = types.BoolPointerValue(translationsItem.Hidden)
+				translations.Homepage = types.BoolPointerValue(translationsItem.Homepage)
+				translations.Hrid = types.StringValue(translationsItem.Hrid)
+				translations.LastContributor = types.StringPointerValue(translationsItem.LastContributor)
+				if len(translationsItem.Metadata) > 0 {
+					translations.Metadata = make(map[string]types.String, len(translationsItem.Metadata))
+					for key3, value3 := range translationsItem.Metadata {
+						translations.Metadata[key3] = types.StringValue(value3)
+					}
+				}
+				translations.Name = types.StringPointerValue(translationsItem.Name)
+				translations.Order = types.Int64PointerValue(translationsItem.Order)
+				translations.ParentID = types.StringPointerValue(translationsItem.ParentID)
+				translations.ParentPath = types.StringPointerValue(translationsItem.ParentPath)
+				translations.Published = types.BoolPointerValue(translationsItem.Published)
+				if translationsItem.Source == nil {
+					translations.Source = nil
+				} else {
+					translations.Source = &tfTypes.PageSource{}
+					if translationsItem.Source.Configuration == nil {
+						translations.Source.Configuration = jsontypes.NewNormalizedNull()
+					} else {
+						configurationResult15, _ := json.Marshal(translationsItem.Source.Configuration)
+						translations.Source.Configuration = jsontypes.NewNormalizedValue(string(configurationResult15))
+					}
+					translations.Source.Type = types.StringPointerValue(translationsItem.Source.Type)
+				}
+				translations.Type = types.StringValue(string(translationsItem.Type))
+				translations.UpdatedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(translationsItem.UpdatedAt))
+				if translationsItem.Visibility != nil {
+					translations.Visibility = types.StringValue(string(*translationsItem.Visibility))
+				} else {
+					translations.Visibility = types.StringNull()
 				}
 
-				r.Plans[planKey] = planResult
+				pages.Translations = append(pages.Translations, translations)
 			}
+			pages.Type = types.StringValue(string(pagesItem.Type))
+			pages.UpdatedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(pagesItem.UpdatedAt))
+			if pagesItem.Visibility != nil {
+				pages.Visibility = types.StringValue(string(*pagesItem.Visibility))
+			} else {
+				pages.Visibility = types.StringNull()
+			}
+
+			r.Pages = append(r.Pages, pages)
+		}
+		r.Plans = []tfTypes.PlanV4{}
+
+		for _, plansItem := range resp.Plans {
+			var plans tfTypes.PlanV4
+
+			plans.Characteristics = make([]types.String, 0, len(plansItem.Characteristics))
+			for _, v := range plansItem.Characteristics {
+				plans.Characteristics = append(plans.Characteristics, types.StringValue(v))
+			}
+			plans.Description = types.StringPointerValue(plansItem.Description)
+			plans.ExcludedGroups = make([]types.String, 0, len(plansItem.ExcludedGroups))
+			for _, v := range plansItem.ExcludedGroups {
+				plans.ExcludedGroups = append(plans.ExcludedGroups, types.StringValue(v))
+			}
+			plans.Flows = []tfTypes.FlowV4{}
+
+			for _, flowsItem1 := range plansItem.Flows {
+				var flows1 tfTypes.FlowV4
+
+				flows1.Connect = []tfTypes.StepV4{}
+
+				for _, connectItem1 := range flowsItem1.Connect {
+					var connect1 tfTypes.StepV4
+
+					connect1.Condition = types.StringPointerValue(connectItem1.Condition)
+					if connectItem1.Configuration == nil {
+						connect1.Configuration = jsontypes.NewNormalizedNull()
+					} else {
+						configurationResult16, _ := json.Marshal(connectItem1.Configuration)
+						connect1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult16))
+					}
+					connect1.Description = types.StringPointerValue(connectItem1.Description)
+					connect1.Enabled = types.BoolPointerValue(connectItem1.Enabled)
+					connect1.MessageCondition = types.StringPointerValue(connectItem1.MessageCondition)
+					connect1.Name = types.StringPointerValue(connectItem1.Name)
+					connect1.Policy = types.StringPointerValue(connectItem1.Policy)
+
+					flows1.Connect = append(flows1.Connect, connect1)
+				}
+				flows1.Enabled = types.BoolPointerValue(flowsItem1.Enabled)
+				flows1.ID = types.StringPointerValue(flowsItem1.ID)
+				flows1.Interact = []tfTypes.StepV4{}
+
+				for _, interactItem1 := range flowsItem1.Interact {
+					var interact1 tfTypes.StepV4
+
+					interact1.Condition = types.StringPointerValue(interactItem1.Condition)
+					if interactItem1.Configuration == nil {
+						interact1.Configuration = jsontypes.NewNormalizedNull()
+					} else {
+						configurationResult17, _ := json.Marshal(interactItem1.Configuration)
+						interact1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult17))
+					}
+					interact1.Description = types.StringPointerValue(interactItem1.Description)
+					interact1.Enabled = types.BoolPointerValue(interactItem1.Enabled)
+					interact1.MessageCondition = types.StringPointerValue(interactItem1.MessageCondition)
+					interact1.Name = types.StringPointerValue(interactItem1.Name)
+					interact1.Policy = types.StringPointerValue(interactItem1.Policy)
+
+					flows1.Interact = append(flows1.Interact, interact1)
+				}
+				flows1.Name = types.StringPointerValue(flowsItem1.Name)
+				flows1.Publish = []tfTypes.StepV4{}
+
+				for _, publishItem1 := range flowsItem1.Publish {
+					var publish1 tfTypes.StepV4
+
+					publish1.Condition = types.StringPointerValue(publishItem1.Condition)
+					if publishItem1.Configuration == nil {
+						publish1.Configuration = jsontypes.NewNormalizedNull()
+					} else {
+						configurationResult18, _ := json.Marshal(publishItem1.Configuration)
+						publish1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult18))
+					}
+					publish1.Description = types.StringPointerValue(publishItem1.Description)
+					publish1.Enabled = types.BoolPointerValue(publishItem1.Enabled)
+					publish1.MessageCondition = types.StringPointerValue(publishItem1.MessageCondition)
+					publish1.Name = types.StringPointerValue(publishItem1.Name)
+					publish1.Policy = types.StringPointerValue(publishItem1.Policy)
+
+					flows1.Publish = append(flows1.Publish, publish1)
+				}
+				flows1.Request = []tfTypes.StepV4{}
+
+				for _, requestItem1 := range flowsItem1.Request {
+					var request1 tfTypes.StepV4
+
+					request1.Condition = types.StringPointerValue(requestItem1.Condition)
+					if requestItem1.Configuration == nil {
+						request1.Configuration = jsontypes.NewNormalizedNull()
+					} else {
+						configurationResult19, _ := json.Marshal(requestItem1.Configuration)
+						request1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult19))
+					}
+					request1.Description = types.StringPointerValue(requestItem1.Description)
+					request1.Enabled = types.BoolPointerValue(requestItem1.Enabled)
+					request1.MessageCondition = types.StringPointerValue(requestItem1.MessageCondition)
+					request1.Name = types.StringPointerValue(requestItem1.Name)
+					request1.Policy = types.StringPointerValue(requestItem1.Policy)
+
+					flows1.Request = append(flows1.Request, request1)
+				}
+				flows1.Response = []tfTypes.StepV4{}
+
+				for _, responseItem1 := range flowsItem1.Response {
+					var response1 tfTypes.StepV4
+
+					response1.Condition = types.StringPointerValue(responseItem1.Condition)
+					if responseItem1.Configuration == nil {
+						response1.Configuration = jsontypes.NewNormalizedNull()
+					} else {
+						configurationResult20, _ := json.Marshal(responseItem1.Configuration)
+						response1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult20))
+					}
+					response1.Description = types.StringPointerValue(responseItem1.Description)
+					response1.Enabled = types.BoolPointerValue(responseItem1.Enabled)
+					response1.MessageCondition = types.StringPointerValue(responseItem1.MessageCondition)
+					response1.Name = types.StringPointerValue(responseItem1.Name)
+					response1.Policy = types.StringPointerValue(responseItem1.Policy)
+
+					flows1.Response = append(flows1.Response, response1)
+				}
+				flows1.Selectors = []tfTypes.Selector{}
+
+				for _, selectorsItem1 := range flowsItem1.Selectors {
+					var selectors1 tfTypes.Selector
+
+					if selectorsItem1.ChannelSelector != nil {
+						selectors1.Channel = &tfTypes.ChannelSelector{}
+						selectors1.Channel.Channel = types.StringPointerValue(selectorsItem1.ChannelSelector.Channel)
+						if selectorsItem1.ChannelSelector.ChannelOperator != nil {
+							selectors1.Channel.ChannelOperator = types.StringValue(string(*selectorsItem1.ChannelSelector.ChannelOperator))
+						} else {
+							selectors1.Channel.ChannelOperator = types.StringNull()
+						}
+						selectors1.Channel.Entrypoints = make([]types.String, 0, len(selectorsItem1.ChannelSelector.Entrypoints))
+						for _, v := range selectorsItem1.ChannelSelector.Entrypoints {
+							selectors1.Channel.Entrypoints = append(selectors1.Channel.Entrypoints, types.StringValue(v))
+						}
+						selectors1.Channel.Operations = make([]types.String, 0, len(selectorsItem1.ChannelSelector.Operations))
+						for _, v := range selectorsItem1.ChannelSelector.Operations {
+							selectors1.Channel.Operations = append(selectors1.Channel.Operations, types.StringValue(string(v)))
+						}
+						selectors1.Channel.Type = types.StringValue(string(selectorsItem1.ChannelSelector.Type))
+					}
+					if selectorsItem1.ConditionSelector != nil {
+						selectors1.Condition = &tfTypes.ConditionSelector{}
+						selectors1.Condition.Condition = types.StringValue(selectorsItem1.ConditionSelector.Condition)
+						selectors1.Condition.Type = types.StringValue(string(selectorsItem1.ConditionSelector.Type))
+					}
+					if selectorsItem1.HTTPSelector != nil {
+						selectors1.HTTP = &tfTypes.HTTPSelector{}
+						selectors1.HTTP.Methods = make([]types.String, 0, len(selectorsItem1.HTTPSelector.Methods))
+						for _, v := range selectorsItem1.HTTPSelector.Methods {
+							selectors1.HTTP.Methods = append(selectors1.HTTP.Methods, types.StringValue(string(v)))
+						}
+						selectors1.HTTP.Path = types.StringPointerValue(selectorsItem1.HTTPSelector.Path)
+						if selectorsItem1.HTTPSelector.PathOperator != nil {
+							selectors1.HTTP.PathOperator = types.StringValue(string(*selectorsItem1.HTTPSelector.PathOperator))
+						} else {
+							selectors1.HTTP.PathOperator = types.StringNull()
+						}
+						selectors1.HTTP.Type = types.StringValue(string(selectorsItem1.HTTPSelector.Type))
+					}
+
+					flows1.Selectors = append(flows1.Selectors, selectors1)
+				}
+				flows1.Subscribe = []tfTypes.StepV4{}
+
+				for _, subscribeItem1 := range flowsItem1.Subscribe {
+					var subscribe1 tfTypes.StepV4
+
+					subscribe1.Condition = types.StringPointerValue(subscribeItem1.Condition)
+					if subscribeItem1.Configuration == nil {
+						subscribe1.Configuration = jsontypes.NewNormalizedNull()
+					} else {
+						configurationResult21, _ := json.Marshal(subscribeItem1.Configuration)
+						subscribe1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult21))
+					}
+					subscribe1.Description = types.StringPointerValue(subscribeItem1.Description)
+					subscribe1.Enabled = types.BoolPointerValue(subscribeItem1.Enabled)
+					subscribe1.MessageCondition = types.StringPointerValue(subscribeItem1.MessageCondition)
+					subscribe1.Name = types.StringPointerValue(subscribeItem1.Name)
+					subscribe1.Policy = types.StringPointerValue(subscribeItem1.Policy)
+
+					flows1.Subscribe = append(flows1.Subscribe, subscribe1)
+				}
+				flows1.Tags = make([]types.String, 0, len(flowsItem1.Tags))
+				for _, v := range flowsItem1.Tags {
+					flows1.Tags = append(flows1.Tags, types.StringValue(v))
+				}
+
+				plans.Flows = append(plans.Flows, flows1)
+			}
+			plans.GeneralConditions = types.StringPointerValue(plansItem.GeneralConditions)
+			plans.Hrid = types.StringValue(plansItem.Hrid)
+			plans.Mode = types.StringValue(string(plansItem.Mode))
+			plans.Name = types.StringValue(plansItem.Name)
+			if plansItem.Security.Configuration == nil {
+				plans.Security.Configuration = jsontypes.NewNormalizedNull()
+			} else {
+				configurationResult22, _ := json.Marshal(plansItem.Security.Configuration)
+				plans.Security.Configuration = jsontypes.NewNormalizedValue(string(configurationResult22))
+			}
+			plans.Security.Type = types.StringValue(string(plansItem.Security.Type))
+			plans.SelectionRule = types.StringPointerValue(plansItem.SelectionRule)
+			plans.Status = types.StringValue(string(plansItem.Status))
+			plans.Tags = make([]types.String, 0, len(plansItem.Tags))
+			for _, v := range plansItem.Tags {
+				plans.Tags = append(plans.Tags, types.StringValue(v))
+			}
+			plans.Type = types.StringValue(string(plansItem.Type))
+			plans.Validation = types.StringValue(string(plansItem.Validation))
+
+			r.Plans = append(r.Plans, plans)
 		}
 		if resp.PrimaryOwner == nil {
 			r.PrimaryOwner = nil
@@ -1028,45 +1004,31 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			}
 		}
 		r.Properties = []tfTypes.Property{}
-		if len(r.Properties) > len(resp.Properties) {
-			r.Properties = r.Properties[:len(resp.Properties)]
-		}
-		for propertiesCount, propertiesItem := range resp.Properties {
+
+		for _, propertiesItem := range resp.Properties {
 			var properties tfTypes.Property
+
 			propertiesPriorData := properties
 			properties.Dynamic = types.BoolPointerValue(propertiesItem.Dynamic)
 			properties.Encryptable = propertiesPriorData.Encryptable
 			properties.Encrypted = types.BoolPointerValue(propertiesItem.Encrypted)
 			properties.Key = types.StringValue(propertiesItem.Key)
 			properties.Value = types.StringValue(propertiesItem.Value)
-			if propertiesCount+1 > len(r.Properties) {
-				r.Properties = append(r.Properties, properties)
-			} else {
-				r.Properties[propertiesCount].Dynamic = properties.Dynamic
-				r.Properties[propertiesCount].Encrypted = properties.Encrypted
-				r.Properties[propertiesCount].Key = properties.Key
-				r.Properties[propertiesCount].Value = properties.Value
-			}
+
+			r.Properties = append(r.Properties, properties)
 		}
 		r.Resources = []tfTypes.Resource{}
-		if len(r.Resources) > len(resp.Resources) {
-			r.Resources = r.Resources[:len(resp.Resources)]
-		}
-		for resourcesCount, resourcesItem := range resp.Resources {
+
+		for _, resourcesItem := range resp.Resources {
 			var resources tfTypes.Resource
-			configurationResult21, _ := json.Marshal(resourcesItem.Configuration)
-			resources.Configuration = types.StringValue(string(configurationResult21))
+
+			configurationResult23, _ := json.Marshal(resourcesItem.Configuration)
+			resources.Configuration = jsontypes.NewNormalizedValue(string(configurationResult23))
 			resources.Enabled = types.BoolPointerValue(resourcesItem.Enabled)
 			resources.Name = types.StringValue(resourcesItem.Name)
 			resources.Type = types.StringValue(resourcesItem.Type)
-			if resourcesCount+1 > len(r.Resources) {
-				r.Resources = append(r.Resources, resources)
-			} else {
-				r.Resources[resourcesCount].Configuration = resources.Configuration
-				r.Resources[resourcesCount].Enabled = resources.Enabled
-				r.Resources[resourcesCount].Name = resources.Name
-				r.Resources[resourcesCount].Type = resources.Type
-			}
+
+			r.Resources = append(r.Resources, resources)
 		}
 		if len(resp.ResponseTemplates) > 0 {
 			r.ResponseTemplates = make(map[string]map[string]tfTypes.ResponseTemplate, len(resp.ResponseTemplates))
@@ -1079,8 +1041,8 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 						responseTemplateResult.Body = types.StringPointerValue(responseTemplateValue.Body)
 						if len(responseTemplateValue.Headers) > 0 {
 							responseTemplateResult.Headers = make(map[string]types.String, len(responseTemplateValue.Headers))
-							for key, value := range responseTemplateValue.Headers {
-								responseTemplateResult.Headers[key] = types.StringValue(value)
+							for key4, value4 := range responseTemplateValue.Headers {
+								responseTemplateResult.Headers[key4] = types.StringValue(value4)
 							}
 						}
 						responseTemplateResult.PropagateErrorKeyToLogs = types.BoolPointerValue(responseTemplateValue.PropagateErrorKeyToLogs)
@@ -1102,10 +1064,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			} else {
 				r.Services.DynamicProperty = &tfTypes.ServiceV4{}
 				if resp.Services.DynamicProperty.Configuration == nil {
-					r.Services.DynamicProperty.Configuration = types.StringNull()
+					r.Services.DynamicProperty.Configuration = jsontypes.NewNormalizedNull()
 				} else {
-					configurationResult22, _ := json.Marshal(resp.Services.DynamicProperty.Configuration)
-					r.Services.DynamicProperty.Configuration = types.StringValue(string(configurationResult22))
+					configurationResult24, _ := json.Marshal(resp.Services.DynamicProperty.Configuration)
+					r.Services.DynamicProperty.Configuration = jsontypes.NewNormalizedValue(string(configurationResult24))
 				}
 				r.Services.DynamicProperty.Enabled = types.BoolPointerValue(resp.Services.DynamicProperty.Enabled)
 				r.Services.DynamicProperty.OverrideConfiguration = types.BoolPointerValue(resp.Services.DynamicProperty.OverrideConfiguration)
@@ -1224,7 +1186,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
-	definitionContext := shared.DefinitionContext{}
 	var name string
 	name = r.Name.ValueString()
 
@@ -1990,66 +1951,64 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Enabled:       enabled7,
 		})
 	}
-	plans := make(map[string]shared.PlanInput)
-	for plansKey, plansValue := range r.Plans {
-		name4 := new(string)
-		if !plansValue.Name.IsUnknown() && !plansValue.Name.IsNull() {
-			*name4 = plansValue.Name.ValueString()
-		} else {
-			name4 = nil
-		}
+	plans := make([]shared.PlanV4, 0, len(r.Plans))
+	for _, plansItem := range r.Plans {
+		var hrid1 string
+		hrid1 = plansItem.Hrid.ValueString()
+
+		var name4 string
+		name4 = plansItem.Name.ValueString()
+
 		description1 := new(string)
-		if !plansValue.Description.IsUnknown() && !plansValue.Description.IsNull() {
-			*description1 = plansValue.Description.ValueString()
+		if !plansItem.Description.IsUnknown() && !plansItem.Description.IsNull() {
+			*description1 = plansItem.Description.ValueString()
 		} else {
 			description1 = nil
 		}
-		var security *shared.PlanSecurity
-		if plansValue.Security != nil {
-			typeVar10 := shared.PlanSecurityType(plansValue.Security.Type.ValueString())
-			var configuration9 interface{}
-			if !plansValue.Security.Configuration.IsUnknown() && !plansValue.Security.Configuration.IsNull() {
-				_ = json.Unmarshal([]byte(plansValue.Security.Configuration.ValueString()), &configuration9)
-			}
-			security = &shared.PlanSecurity{
-				Type:          typeVar10,
-				Configuration: configuration9,
-			}
+		typeVar10 := shared.PlanSecurityType(plansItem.Security.Type.ValueString())
+		var configuration9 interface{}
+		if !plansItem.Security.Configuration.IsUnknown() && !plansItem.Security.Configuration.IsNull() {
+			_ = json.Unmarshal([]byte(plansItem.Security.Configuration.ValueString()), &configuration9)
 		}
-		characteristics := make([]string, 0, len(plansValue.Characteristics))
-		for _, characteristicsItem := range plansValue.Characteristics {
+		security := shared.PlanSecurity{
+			Type:          typeVar10,
+			Configuration: configuration9,
+		}
+		characteristics := make([]string, 0, len(plansItem.Characteristics))
+		for _, characteristicsItem := range plansItem.Characteristics {
 			characteristics = append(characteristics, characteristicsItem.ValueString())
 		}
-		excludedGroups := make([]string, 0, len(plansValue.ExcludedGroups))
-		for _, excludedGroupsItem := range plansValue.ExcludedGroups {
+		excludedGroups := make([]string, 0, len(plansItem.ExcludedGroups))
+		for _, excludedGroupsItem := range plansItem.ExcludedGroups {
 			excludedGroups = append(excludedGroups, excludedGroupsItem.ValueString())
 		}
 		generalConditions := new(string)
-		if !plansValue.GeneralConditions.IsUnknown() && !plansValue.GeneralConditions.IsNull() {
-			*generalConditions = plansValue.GeneralConditions.ValueString()
+		if !plansItem.GeneralConditions.IsUnknown() && !plansItem.GeneralConditions.IsNull() {
+			*generalConditions = plansItem.GeneralConditions.ValueString()
 		} else {
 			generalConditions = nil
 		}
 		selectionRule := new(string)
-		if !plansValue.SelectionRule.IsUnknown() && !plansValue.SelectionRule.IsNull() {
-			*selectionRule = plansValue.SelectionRule.ValueString()
+		if !plansItem.SelectionRule.IsUnknown() && !plansItem.SelectionRule.IsNull() {
+			*selectionRule = plansItem.SelectionRule.ValueString()
 		} else {
 			selectionRule = nil
 		}
-		status := shared.PlanStatus(plansValue.Status.ValueString())
-		tags1 := make([]string, 0, len(plansValue.Tags))
-		for _, tagsItem1 := range plansValue.Tags {
+		status := shared.PlanStatus(plansItem.Status.ValueString())
+		tags1 := make([]string, 0, len(plansItem.Tags))
+		for _, tagsItem1 := range plansItem.Tags {
 			tags1 = append(tags1, tagsItem1.ValueString())
 		}
-		typeVar11 := shared.PlanType(plansValue.Type.ValueString())
-		validation := new(shared.PlanValidation)
-		if !plansValue.Validation.IsUnknown() && !plansValue.Validation.IsNull() {
-			*validation = shared.PlanValidation(plansValue.Validation.ValueString())
-		} else {
-			validation = nil
-		}
-		flows := make([]shared.FlowV4Input, 0, len(plansValue.Flows))
-		for _, flowsItem := range plansValue.Flows {
+		type8 := shared.PlanType(plansItem.Type.ValueString())
+		validation := shared.PlanValidation(plansItem.Validation.ValueString())
+		flows := make([]shared.FlowV4, 0, len(plansItem.Flows))
+		for _, flowsItem := range plansItem.Flows {
+			id := new(string)
+			if !flowsItem.ID.IsUnknown() && !flowsItem.ID.IsNull() {
+				*id = flowsItem.ID.ValueString()
+			} else {
+				id = nil
+			}
 			name5 := new(string)
 			if !flowsItem.Name.IsUnknown() && !flowsItem.Name.IsNull() {
 				*name5 = flowsItem.Name.ValueString()
@@ -2065,7 +2024,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			selectors := make([]shared.Selector, 0, len(flowsItem.Selectors))
 			for _, selectorsItem := range flowsItem.Selectors {
 				if selectorsItem.HTTP != nil {
-					typeVar12 := shared.HTTPSelectorType(selectorsItem.HTTP.Type.ValueString())
+					typeVar11 := shared.HTTPSelectorType(selectorsItem.HTTP.Type.ValueString())
 					path1 := new(string)
 					if !selectorsItem.HTTP.Path.IsUnknown() && !selectorsItem.HTTP.Path.IsNull() {
 						*path1 = selectorsItem.HTTP.Path.ValueString()
@@ -2083,7 +2042,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 						methods = append(methods, shared.HTTPMethod(methodsItem.ValueString()))
 					}
 					httpSelector := shared.HTTPSelector{
-						Type:         typeVar12,
+						Type:         typeVar11,
 						Path:         path1,
 						PathOperator: pathOperator,
 						Methods:      methods,
@@ -2093,7 +2052,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					})
 				}
 				if selectorsItem.Channel != nil {
-					typeVar13 := shared.ChannelSelectorType(selectorsItem.Channel.Type.ValueString())
+					typeVar12 := shared.ChannelSelectorType(selectorsItem.Channel.Type.ValueString())
 					operationsVar := make([]shared.Operation, 0, len(selectorsItem.Channel.Operations))
 					for _, operationsItem := range selectorsItem.Channel.Operations {
 						operationsVar = append(operationsVar, shared.Operation(operationsItem.ValueString()))
@@ -2115,7 +2074,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 						entrypoints4 = append(entrypoints4, entrypointsItem4.ValueString())
 					}
 					channelSelector := shared.ChannelSelector{
-						Type:            typeVar13,
+						Type:            typeVar12,
 						Operations:      operationsVar,
 						Channel:         channel,
 						ChannelOperator: channelOperator,
@@ -2126,12 +2085,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					})
 				}
 				if selectorsItem.Condition != nil {
-					typeVar14 := shared.ConditionSelectorType(selectorsItem.Condition.Type.ValueString())
+					typeVar13 := shared.ConditionSelectorType(selectorsItem.Condition.Type.ValueString())
 					var condition1 string
 					condition1 = selectorsItem.Condition.Condition.ValueString()
 
 					conditionSelector := shared.ConditionSelector{
-						Type:      typeVar14,
+						Type:      typeVar13,
 						Condition: condition1,
 					}
 					selectors = append(selectors, shared.Selector{
@@ -2455,7 +2414,8 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			for _, tagsItem2 := range flowsItem.Tags {
 				tags2 = append(tags2, tagsItem2.ValueString())
 			}
-			flows = append(flows, shared.FlowV4Input{
+			flows = append(flows, shared.FlowV4{
+				ID:        id,
 				Name:      name5,
 				Enabled:   enabled8,
 				Selectors: selectors,
@@ -2468,8 +2428,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				Tags:      tags2,
 			})
 		}
-		mode1 := shared.PlanMode(plansValue.Mode.ValueString())
-		plansInst := shared.PlanInput{
+		mode1 := shared.PlanMode(plansItem.Mode.ValueString())
+		plans = append(plans, shared.PlanV4{
+			Hrid:              hrid1,
 			Name:              name4,
 			Description:       description1,
 			Security:          security,
@@ -2479,12 +2440,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			SelectionRule:     selectionRule,
 			Status:            status,
 			Tags:              tags1,
-			Type:              typeVar11,
+			Type:              type8,
 			Validation:        validation,
 			Flows:             flows,
 			Mode:              mode1,
-		}
-		plans[plansKey] = plansInst
+		})
 	}
 	var flowExecution *shared.FlowExecution
 	if r.FlowExecution != nil {
@@ -2505,8 +2465,14 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			MatchRequired: matchRequired,
 		}
 	}
-	flows1 := make([]shared.FlowV4Input, 0, len(r.Flows))
+	flows1 := make([]shared.FlowV4, 0, len(r.Flows))
 	for _, flowsItem1 := range r.Flows {
+		id1 := new(string)
+		if !flowsItem1.ID.IsUnknown() && !flowsItem1.ID.IsNull() {
+			*id1 = flowsItem1.ID.ValueString()
+		} else {
+			id1 = nil
+		}
 		name12 := new(string)
 		if !flowsItem1.Name.IsUnknown() && !flowsItem1.Name.IsNull() {
 			*name12 = flowsItem1.Name.ValueString()
@@ -2522,7 +2488,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		selectors1 := make([]shared.Selector, 0, len(flowsItem1.Selectors))
 		for _, selectorsItem1 := range flowsItem1.Selectors {
 			if selectorsItem1.HTTP != nil {
-				typeVar15 := shared.HTTPSelectorType(selectorsItem1.HTTP.Type.ValueString())
+				typeVar14 := shared.HTTPSelectorType(selectorsItem1.HTTP.Type.ValueString())
 				path2 := new(string)
 				if !selectorsItem1.HTTP.Path.IsUnknown() && !selectorsItem1.HTTP.Path.IsNull() {
 					*path2 = selectorsItem1.HTTP.Path.ValueString()
@@ -2540,7 +2506,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					methods1 = append(methods1, shared.HTTPMethod(methodsItem1.ValueString()))
 				}
 				httpSelector1 := shared.HTTPSelector{
-					Type:         typeVar15,
+					Type:         typeVar14,
 					Path:         path2,
 					PathOperator: pathOperator1,
 					Methods:      methods1,
@@ -2550,7 +2516,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				})
 			}
 			if selectorsItem1.Channel != nil {
-				typeVar16 := shared.ChannelSelectorType(selectorsItem1.Channel.Type.ValueString())
+				typeVar15 := shared.ChannelSelectorType(selectorsItem1.Channel.Type.ValueString())
 				operationsVar1 := make([]shared.Operation, 0, len(selectorsItem1.Channel.Operations))
 				for _, operationsItem1 := range selectorsItem1.Channel.Operations {
 					operationsVar1 = append(operationsVar1, shared.Operation(operationsItem1.ValueString()))
@@ -2572,7 +2538,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					entrypoints5 = append(entrypoints5, entrypointsItem5.ValueString())
 				}
 				channelSelector1 := shared.ChannelSelector{
-					Type:            typeVar16,
+					Type:            typeVar15,
 					Operations:      operationsVar1,
 					Channel:         channel1,
 					ChannelOperator: channelOperator1,
@@ -2583,12 +2549,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				})
 			}
 			if selectorsItem1.Condition != nil {
-				typeVar17 := shared.ConditionSelectorType(selectorsItem1.Condition.Type.ValueString())
+				typeVar16 := shared.ConditionSelectorType(selectorsItem1.Condition.Type.ValueString())
 				var condition8 string
 				condition8 = selectorsItem1.Condition.Condition.ValueString()
 
 				conditionSelector1 := shared.ConditionSelector{
-					Type:      typeVar17,
+					Type:      typeVar16,
 					Condition: condition8,
 				}
 				selectors1 = append(selectors1, shared.Selector{
@@ -2912,7 +2878,8 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		for _, tagsItem3 := range flowsItem1.Tags {
 			tags3 = append(tags3, tagsItem3.ValueString())
 		}
-		flows1 = append(flows1, shared.FlowV4Input{
+		flows1 = append(flows1, shared.FlowV4{
+			ID:        id1,
 			Name:      name12,
 			Enabled:   enabled15,
 			Selectors: selectors1,
@@ -2984,17 +2951,17 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				enabled22 = nil
 			}
-			typeVar18 := new(string)
+			typeVar17 := new(string)
 			if !r.Services.DynamicProperty.Type.IsUnknown() && !r.Services.DynamicProperty.Type.IsNull() {
-				*typeVar18 = r.Services.DynamicProperty.Type.ValueString()
+				*typeVar17 = r.Services.DynamicProperty.Type.ValueString()
 			} else {
-				typeVar18 = nil
+				typeVar17 = nil
 			}
 			dynamicProperty = &shared.ServiceV4{
 				OverrideConfiguration: overrideConfiguration3,
 				Configuration:         configuration22,
 				Enabled:               enabled22,
-				Type:                  typeVar18,
+				Type:                  typeVar17,
 			}
 		}
 		services2 = &shared.APIServices{
@@ -3019,11 +2986,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	}
 	var primaryOwner *shared.PrimaryOwner
 	if r.PrimaryOwner != nil {
-		id := new(string)
+		id2 := new(string)
 		if !r.PrimaryOwner.ID.IsUnknown() && !r.PrimaryOwner.ID.IsNull() {
-			*id = r.PrimaryOwner.ID.ValueString()
+			*id2 = r.PrimaryOwner.ID.ValueString()
 		} else {
-			id = nil
+			id2 = nil
 		}
 		email := new(string)
 		if !r.PrimaryOwner.Email.IsUnknown() && !r.PrimaryOwner.Email.IsNull() {
@@ -3037,17 +3004,17 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			displayName = nil
 		}
-		typeVar19 := new(shared.MembershipMemberType)
+		typeVar18 := new(shared.MembershipMemberType)
 		if !r.PrimaryOwner.Type.IsUnknown() && !r.PrimaryOwner.Type.IsNull() {
-			*typeVar19 = shared.MembershipMemberType(r.PrimaryOwner.Type.ValueString())
+			*typeVar18 = shared.MembershipMemberType(r.PrimaryOwner.Type.ValueString())
 		} else {
-			typeVar19 = nil
+			typeVar18 = nil
 		}
 		primaryOwner = &shared.PrimaryOwner{
-			ID:          id,
+			ID:          id2,
 			Email:       email,
 			DisplayName: displayName,
-			Type:        typeVar19,
+			Type:        typeVar18,
 		}
 	}
 	labels := make([]string, 0, len(r.Labels))
@@ -3062,18 +3029,10 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			key2 = nil
 		}
-		name19 := new(string)
-		if !metadataItem.Name.IsUnknown() && !metadataItem.Name.IsNull() {
-			*name19 = metadataItem.Name.ValueString()
-		} else {
-			name19 = nil
-		}
-		format := new(shared.MetadataFormat)
-		if !metadataItem.Format.IsUnknown() && !metadataItem.Format.IsNull() {
-			*format = shared.MetadataFormat(metadataItem.Format.ValueString())
-		} else {
-			format = nil
-		}
+		var name19 string
+		name19 = metadataItem.Name.ValueString()
+
+		format := shared.MetadataFormat(metadataItem.Format.ValueString())
 		value3 := new(string)
 		if !metadataItem.Value.IsUnknown() && !metadataItem.Value.IsNull() {
 			*value3 = metadataItem.Value.ValueString()
@@ -3099,34 +3058,18 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	for _, categoriesItem := range r.Categories {
 		categories = append(categories, categoriesItem.ValueString())
 	}
-	members := make([]shared.Member, 0, len(r.Members))
+	members := make([]shared.MemberInput, 0, len(r.Members))
 	for _, membersItem := range r.Members {
-		id1 := new(string)
-		if !membersItem.ID.IsUnknown() && !membersItem.ID.IsNull() {
-			*id1 = membersItem.ID.ValueString()
-		} else {
-			id1 = nil
-		}
-		source := new(string)
-		if !membersItem.Source.IsUnknown() && !membersItem.Source.IsNull() {
-			*source = membersItem.Source.ValueString()
-		} else {
-			source = nil
-		}
-		sourceID := new(string)
-		if !membersItem.SourceID.IsUnknown() && !membersItem.SourceID.IsNull() {
-			*sourceID = membersItem.SourceID.ValueString()
-		} else {
-			sourceID = nil
-		}
-		role := new(string)
-		if !membersItem.Role.IsUnknown() && !membersItem.Role.IsNull() {
-			*role = membersItem.Role.ValueString()
-		} else {
-			role = nil
-		}
-		members = append(members, shared.Member{
-			ID:       id1,
+		var source string
+		source = membersItem.Source.ValueString()
+
+		var sourceID string
+		sourceID = membersItem.SourceID.ValueString()
+
+		var role string
+		role = membersItem.Role.ValueString()
+
+		members = append(members, shared.MemberInput{
 			Source:   source,
 			SourceID: sourceID,
 			Role:     role,
@@ -3138,9 +3081,429 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	} else {
 		notifyMembers = nil
 	}
+	pages := make([]shared.PageV4Input, 0, len(r.Pages))
+	for _, pagesItem := range r.Pages {
+		var hrid2 string
+		hrid2 = pagesItem.Hrid.ValueString()
+
+		name20 := new(string)
+		if !pagesItem.Name.IsUnknown() && !pagesItem.Name.IsNull() {
+			*name20 = pagesItem.Name.ValueString()
+		} else {
+			name20 = nil
+		}
+		type9 := shared.PageType(pagesItem.Type.ValueString())
+		content1 := new(string)
+		if !pagesItem.Content.IsUnknown() && !pagesItem.Content.IsNull() {
+			*content1 = pagesItem.Content.ValueString()
+		} else {
+			content1 = nil
+		}
+		order := new(int64)
+		if !pagesItem.Order.IsUnknown() && !pagesItem.Order.IsNull() {
+			*order = pagesItem.Order.ValueInt64()
+		} else {
+			order = nil
+		}
+		lastContributor := new(string)
+		if !pagesItem.LastContributor.IsUnknown() && !pagesItem.LastContributor.IsNull() {
+			*lastContributor = pagesItem.LastContributor.ValueString()
+		} else {
+			lastContributor = nil
+		}
+		published := new(bool)
+		if !pagesItem.Published.IsUnknown() && !pagesItem.Published.IsNull() {
+			*published = pagesItem.Published.ValueBool()
+		} else {
+			published = nil
+		}
+		visibility1 := new(shared.Visibility)
+		if !pagesItem.Visibility.IsUnknown() && !pagesItem.Visibility.IsNull() {
+			*visibility1 = shared.Visibility(pagesItem.Visibility.ValueString())
+		} else {
+			visibility1 = nil
+		}
+		updatedAt := new(time.Time)
+		if !pagesItem.UpdatedAt.IsUnknown() && !pagesItem.UpdatedAt.IsNull() {
+			*updatedAt, _ = time.Parse(time.RFC3339Nano, pagesItem.UpdatedAt.ValueString())
+		} else {
+			updatedAt = nil
+		}
+		contentType := new(string)
+		if !pagesItem.ContentType.IsUnknown() && !pagesItem.ContentType.IsNull() {
+			*contentType = pagesItem.ContentType.ValueString()
+		} else {
+			contentType = nil
+		}
+		var source1 *shared.PageSource
+		if pagesItem.Source != nil {
+			typeVar19 := new(string)
+			if !pagesItem.Source.Type.IsUnknown() && !pagesItem.Source.Type.IsNull() {
+				*typeVar19 = pagesItem.Source.Type.ValueString()
+			} else {
+				typeVar19 = nil
+			}
+			var configuration23 interface{}
+			if !pagesItem.Source.Configuration.IsUnknown() && !pagesItem.Source.Configuration.IsNull() {
+				_ = json.Unmarshal([]byte(pagesItem.Source.Configuration.ValueString()), &configuration23)
+			}
+			source1 = &shared.PageSource{
+				Type:          typeVar19,
+				Configuration: configuration23,
+			}
+		}
+		configuration24 := make(map[string]string)
+		for configurationKey, configurationValue := range pagesItem.Configuration {
+			var configurationInst string
+			configurationInst = configurationValue.ValueString()
+
+			configuration24[configurationKey] = configurationInst
+		}
+		homepage := new(bool)
+		if !pagesItem.Homepage.IsUnknown() && !pagesItem.Homepage.IsNull() {
+			*homepage = pagesItem.Homepage.ValueBool()
+		} else {
+			homepage = nil
+		}
+		parentID := new(string)
+		if !pagesItem.ParentID.IsUnknown() && !pagesItem.ParentID.IsNull() {
+			*parentID = pagesItem.ParentID.ValueString()
+		} else {
+			parentID = nil
+		}
+		parentPath := new(string)
+		if !pagesItem.ParentPath.IsUnknown() && !pagesItem.ParentPath.IsNull() {
+			*parentPath = pagesItem.ParentPath.ValueString()
+		} else {
+			parentPath = nil
+		}
+		excludedAccessControls := new(bool)
+		if !pagesItem.ExcludedAccessControls.IsUnknown() && !pagesItem.ExcludedAccessControls.IsNull() {
+			*excludedAccessControls = pagesItem.ExcludedAccessControls.ValueBool()
+		} else {
+			excludedAccessControls = nil
+		}
+		accessControls := make([]shared.AccessControl, 0, len(pagesItem.AccessControls))
+		for _, accessControlsItem := range pagesItem.AccessControls {
+			referenceID := new(string)
+			if !accessControlsItem.ReferenceID.IsUnknown() && !accessControlsItem.ReferenceID.IsNull() {
+				*referenceID = accessControlsItem.ReferenceID.ValueString()
+			} else {
+				referenceID = nil
+			}
+			referenceType := new(string)
+			if !accessControlsItem.ReferenceType.IsUnknown() && !accessControlsItem.ReferenceType.IsNull() {
+				*referenceType = accessControlsItem.ReferenceType.ValueString()
+			} else {
+				referenceType = nil
+			}
+			accessControls = append(accessControls, shared.AccessControl{
+				ReferenceID:   referenceID,
+				ReferenceType: referenceType,
+			})
+		}
+		attachedMedia := make([]shared.PageMedia, 0, len(pagesItem.AttachedMedia))
+		for _, attachedMediaItem := range pagesItem.AttachedMedia {
+			name21 := new(string)
+			if !attachedMediaItem.Name.IsUnknown() && !attachedMediaItem.Name.IsNull() {
+				*name21 = attachedMediaItem.Name.ValueString()
+			} else {
+				name21 = nil
+			}
+			hash := new(string)
+			if !attachedMediaItem.Hash.IsUnknown() && !attachedMediaItem.Hash.IsNull() {
+				*hash = attachedMediaItem.Hash.ValueString()
+			} else {
+				hash = nil
+			}
+			attachedAt := new(time.Time)
+			if !attachedMediaItem.AttachedAt.IsUnknown() && !attachedMediaItem.AttachedAt.IsNull() {
+				*attachedAt, _ = time.Parse(time.RFC3339Nano, attachedMediaItem.AttachedAt.ValueString())
+			} else {
+				attachedAt = nil
+			}
+			attachedMedia = append(attachedMedia, shared.PageMedia{
+				Name:       name21,
+				Hash:       hash,
+				AttachedAt: attachedAt,
+			})
+		}
+		metadata1 := make(map[string]string)
+		for metadataKey, metadataValue := range pagesItem.Metadata {
+			var metadataInst string
+			metadataInst = metadataValue.ValueString()
+
+			metadata1[metadataKey] = metadataInst
+		}
+		var contentRevision *shared.Revision
+		if pagesItem.ContentRevision != nil {
+			id3 := new(string)
+			if !pagesItem.ContentRevision.ID.IsUnknown() && !pagesItem.ContentRevision.ID.IsNull() {
+				*id3 = pagesItem.ContentRevision.ID.ValueString()
+			} else {
+				id3 = nil
+			}
+			revision := new(int64)
+			if !pagesItem.ContentRevision.Revision.IsUnknown() && !pagesItem.ContentRevision.Revision.IsNull() {
+				*revision = pagesItem.ContentRevision.Revision.ValueInt64()
+			} else {
+				revision = nil
+			}
+			contentRevision = &shared.Revision{
+				ID:       id3,
+				Revision: revision,
+			}
+		}
+		hidden := new(bool)
+		if !pagesItem.Hidden.IsUnknown() && !pagesItem.Hidden.IsNull() {
+			*hidden = pagesItem.Hidden.ValueBool()
+		} else {
+			hidden = nil
+		}
+		generalConditions1 := new(bool)
+		if !pagesItem.GeneralConditions.IsUnknown() && !pagesItem.GeneralConditions.IsNull() {
+			*generalConditions1 = pagesItem.GeneralConditions.ValueBool()
+		} else {
+			generalConditions1 = nil
+		}
+		translations := make([]shared.PageV4TranslationInput, 0, len(pagesItem.Translations))
+		for _, translationsItem := range pagesItem.Translations {
+			var hrid3 string
+			hrid3 = translationsItem.Hrid.ValueString()
+
+			name22 := new(string)
+			if !translationsItem.Name.IsUnknown() && !translationsItem.Name.IsNull() {
+				*name22 = translationsItem.Name.ValueString()
+			} else {
+				name22 = nil
+			}
+			type10 := shared.PageType(translationsItem.Type.ValueString())
+			content2 := new(string)
+			if !translationsItem.Content.IsUnknown() && !translationsItem.Content.IsNull() {
+				*content2 = translationsItem.Content.ValueString()
+			} else {
+				content2 = nil
+			}
+			order1 := new(int64)
+			if !translationsItem.Order.IsUnknown() && !translationsItem.Order.IsNull() {
+				*order1 = translationsItem.Order.ValueInt64()
+			} else {
+				order1 = nil
+			}
+			lastContributor1 := new(string)
+			if !translationsItem.LastContributor.IsUnknown() && !translationsItem.LastContributor.IsNull() {
+				*lastContributor1 = translationsItem.LastContributor.ValueString()
+			} else {
+				lastContributor1 = nil
+			}
+			published1 := new(bool)
+			if !translationsItem.Published.IsUnknown() && !translationsItem.Published.IsNull() {
+				*published1 = translationsItem.Published.ValueBool()
+			} else {
+				published1 = nil
+			}
+			visibility2 := new(shared.Visibility)
+			if !translationsItem.Visibility.IsUnknown() && !translationsItem.Visibility.IsNull() {
+				*visibility2 = shared.Visibility(translationsItem.Visibility.ValueString())
+			} else {
+				visibility2 = nil
+			}
+			updatedAt1 := new(time.Time)
+			if !translationsItem.UpdatedAt.IsUnknown() && !translationsItem.UpdatedAt.IsNull() {
+				*updatedAt1, _ = time.Parse(time.RFC3339Nano, translationsItem.UpdatedAt.ValueString())
+			} else {
+				updatedAt1 = nil
+			}
+			contentType1 := new(string)
+			if !translationsItem.ContentType.IsUnknown() && !translationsItem.ContentType.IsNull() {
+				*contentType1 = translationsItem.ContentType.ValueString()
+			} else {
+				contentType1 = nil
+			}
+			var source2 *shared.PageSource
+			if translationsItem.Source != nil {
+				typeVar20 := new(string)
+				if !translationsItem.Source.Type.IsUnknown() && !translationsItem.Source.Type.IsNull() {
+					*typeVar20 = translationsItem.Source.Type.ValueString()
+				} else {
+					typeVar20 = nil
+				}
+				var configuration25 interface{}
+				if !translationsItem.Source.Configuration.IsUnknown() && !translationsItem.Source.Configuration.IsNull() {
+					_ = json.Unmarshal([]byte(translationsItem.Source.Configuration.ValueString()), &configuration25)
+				}
+				source2 = &shared.PageSource{
+					Type:          typeVar20,
+					Configuration: configuration25,
+				}
+			}
+			configuration26 := make(map[string]string)
+			for configurationKey1, configurationValue1 := range translationsItem.Configuration {
+				var configurationInst1 string
+				configurationInst1 = configurationValue1.ValueString()
+
+				configuration26[configurationKey1] = configurationInst1
+			}
+			homepage1 := new(bool)
+			if !translationsItem.Homepage.IsUnknown() && !translationsItem.Homepage.IsNull() {
+				*homepage1 = translationsItem.Homepage.ValueBool()
+			} else {
+				homepage1 = nil
+			}
+			parentId1 := new(string)
+			if !translationsItem.ParentID.IsUnknown() && !translationsItem.ParentID.IsNull() {
+				*parentId1 = translationsItem.ParentID.ValueString()
+			} else {
+				parentId1 = nil
+			}
+			parentPath1 := new(string)
+			if !translationsItem.ParentPath.IsUnknown() && !translationsItem.ParentPath.IsNull() {
+				*parentPath1 = translationsItem.ParentPath.ValueString()
+			} else {
+				parentPath1 = nil
+			}
+			excludedAccessControls1 := new(bool)
+			if !translationsItem.ExcludedAccessControls.IsUnknown() && !translationsItem.ExcludedAccessControls.IsNull() {
+				*excludedAccessControls1 = translationsItem.ExcludedAccessControls.ValueBool()
+			} else {
+				excludedAccessControls1 = nil
+			}
+			accessControls1 := make([]shared.AccessControl, 0, len(translationsItem.AccessControls))
+			for _, accessControlsItem1 := range translationsItem.AccessControls {
+				referenceId1 := new(string)
+				if !accessControlsItem1.ReferenceID.IsUnknown() && !accessControlsItem1.ReferenceID.IsNull() {
+					*referenceId1 = accessControlsItem1.ReferenceID.ValueString()
+				} else {
+					referenceId1 = nil
+				}
+				referenceType1 := new(string)
+				if !accessControlsItem1.ReferenceType.IsUnknown() && !accessControlsItem1.ReferenceType.IsNull() {
+					*referenceType1 = accessControlsItem1.ReferenceType.ValueString()
+				} else {
+					referenceType1 = nil
+				}
+				accessControls1 = append(accessControls1, shared.AccessControl{
+					ReferenceID:   referenceId1,
+					ReferenceType: referenceType1,
+				})
+			}
+			attachedMedia1 := make([]shared.PageMedia, 0, len(translationsItem.AttachedMedia))
+			for _, attachedMediaItem1 := range translationsItem.AttachedMedia {
+				name23 := new(string)
+				if !attachedMediaItem1.Name.IsUnknown() && !attachedMediaItem1.Name.IsNull() {
+					*name23 = attachedMediaItem1.Name.ValueString()
+				} else {
+					name23 = nil
+				}
+				hash1 := new(string)
+				if !attachedMediaItem1.Hash.IsUnknown() && !attachedMediaItem1.Hash.IsNull() {
+					*hash1 = attachedMediaItem1.Hash.ValueString()
+				} else {
+					hash1 = nil
+				}
+				attachedAt1 := new(time.Time)
+				if !attachedMediaItem1.AttachedAt.IsUnknown() && !attachedMediaItem1.AttachedAt.IsNull() {
+					*attachedAt1, _ = time.Parse(time.RFC3339Nano, attachedMediaItem1.AttachedAt.ValueString())
+				} else {
+					attachedAt1 = nil
+				}
+				attachedMedia1 = append(attachedMedia1, shared.PageMedia{
+					Name:       name23,
+					Hash:       hash1,
+					AttachedAt: attachedAt1,
+				})
+			}
+			metadata2 := make(map[string]string)
+			for metadataKey1, metadataValue1 := range translationsItem.Metadata {
+				var metadataInst1 string
+				metadataInst1 = metadataValue1.ValueString()
+
+				metadata2[metadataKey1] = metadataInst1
+			}
+			var contentRevision1 *shared.Revision
+			if translationsItem.ContentRevision != nil {
+				id4 := new(string)
+				if !translationsItem.ContentRevision.ID.IsUnknown() && !translationsItem.ContentRevision.ID.IsNull() {
+					*id4 = translationsItem.ContentRevision.ID.ValueString()
+				} else {
+					id4 = nil
+				}
+				revision1 := new(int64)
+				if !translationsItem.ContentRevision.Revision.IsUnknown() && !translationsItem.ContentRevision.Revision.IsNull() {
+					*revision1 = translationsItem.ContentRevision.Revision.ValueInt64()
+				} else {
+					revision1 = nil
+				}
+				contentRevision1 = &shared.Revision{
+					ID:       id4,
+					Revision: revision1,
+				}
+			}
+			hidden1 := new(bool)
+			if !translationsItem.Hidden.IsUnknown() && !translationsItem.Hidden.IsNull() {
+				*hidden1 = translationsItem.Hidden.ValueBool()
+			} else {
+				hidden1 = nil
+			}
+			generalConditions2 := new(bool)
+			if !translationsItem.GeneralConditions.IsUnknown() && !translationsItem.GeneralConditions.IsNull() {
+				*generalConditions2 = translationsItem.GeneralConditions.ValueBool()
+			} else {
+				generalConditions2 = nil
+			}
+			translations = append(translations, shared.PageV4TranslationInput{
+				Hrid:                   hrid3,
+				Name:                   name22,
+				Type:                   type10,
+				Content:                content2,
+				Order:                  order1,
+				LastContributor:        lastContributor1,
+				Published:              published1,
+				Visibility:             visibility2,
+				UpdatedAt:              updatedAt1,
+				ContentType:            contentType1,
+				Source:                 source2,
+				Configuration:          configuration26,
+				Homepage:               homepage1,
+				ParentID:               parentId1,
+				ParentPath:             parentPath1,
+				ExcludedAccessControls: excludedAccessControls1,
+				AccessControls:         accessControls1,
+				AttachedMedia:          attachedMedia1,
+				Metadata:               metadata2,
+				ContentRevision:        contentRevision1,
+				Hidden:                 hidden1,
+				GeneralConditions:      generalConditions2,
+			})
+		}
+		pages = append(pages, shared.PageV4Input{
+			Hrid:                   hrid2,
+			Name:                   name20,
+			Type:                   type9,
+			Content:                content1,
+			Order:                  order,
+			LastContributor:        lastContributor,
+			Published:              published,
+			Visibility:             visibility1,
+			UpdatedAt:              updatedAt,
+			ContentType:            contentType,
+			Source:                 source1,
+			Configuration:          configuration24,
+			Homepage:               homepage,
+			ParentID:               parentID,
+			ParentPath:             parentPath,
+			ExcludedAccessControls: excludedAccessControls,
+			AccessControls:         accessControls,
+			AttachedMedia:          attachedMedia,
+			Metadata:               metadata1,
+			ContentRevision:        contentRevision,
+			Hidden:                 hidden,
+			GeneralConditions:      generalConditions1,
+			Translations:           translations,
+		})
+	}
 	out := shared.APIV4Spec{
 		Hrid:              hrid,
-		DefinitionContext: definitionContext,
 		Name:              name,
 		Version:           version,
 		Type:              typeVar,
@@ -3167,6 +3530,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		Categories:        categories,
 		Members:           members,
 		NotifyMembers:     notifyMembers,
+		Pages:             pages,
 	}
 
 	return &out, diags

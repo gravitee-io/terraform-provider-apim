@@ -3,15 +3,16 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type StepV4 struct {
-	Condition        types.String `tfsdk:"condition"`
-	Configuration    types.String `tfsdk:"configuration"`
-	Description      types.String `tfsdk:"description"`
-	Enabled          types.Bool   `tfsdk:"enabled"`
-	MessageCondition types.String `tfsdk:"message_condition"`
-	Name             types.String `tfsdk:"name"`
-	Policy           types.String `tfsdk:"policy"`
+	Condition        types.String         `tfsdk:"condition"`
+	Configuration    jsontypes.Normalized `tfsdk:"configuration"`
+	Description      types.String         `tfsdk:"description"`
+	Enabled          types.Bool           `tfsdk:"enabled"`
+	MessageCondition types.String         `tfsdk:"message_condition"`
+	Name             types.String         `tfsdk:"name"`
+	Policy           types.String         `tfsdk:"policy"`
 }

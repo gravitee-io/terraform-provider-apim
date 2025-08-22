@@ -3,6 +3,7 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -11,6 +12,6 @@ type EndpointGroupV4 struct {
 	LoadBalancer        *LoadBalancer          `tfsdk:"load_balancer"`
 	Name                types.String           `tfsdk:"name"`
 	Services            *EndpointGroupServices `tfsdk:"services"`
-	SharedConfiguration types.String           `tfsdk:"shared_configuration"`
+	SharedConfiguration jsontypes.Normalized   `tfsdk:"shared_configuration"`
 	Type                types.String           `tfsdk:"type"`
 }

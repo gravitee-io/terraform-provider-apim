@@ -2,8 +2,11 @@
 
 package shared
 
+// EndpointGroupServices - API Endpoint Group Services
 type EndpointGroupServices struct {
-	Discovery   *ServiceV4 `json:"discovery,omitempty"`
+	// Service
+	Discovery *ServiceV4 `json:"discovery,omitempty"`
+	// Service
 	HealthCheck *ServiceV4 `json:"healthCheck,omitempty"`
 }
 

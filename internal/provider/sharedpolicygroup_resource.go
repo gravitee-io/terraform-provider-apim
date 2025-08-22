@@ -41,10 +41,10 @@ type SharedPolicyGroupResource struct {
 	// Provider configured SDK client.
 	client *sdk.GraviteeApim
 
-	// Id of an environment.
+	// environment ID
 	EnvironmentID types.String `tfsdk:"environment_id"`
 
-	// Id of an organization.
+	// organization ID
 	OrganizationID types.String `tfsdk:"organization_id"`
 }
 
@@ -110,7 +110,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Id of an environment. Default: "DEFAULT"`,
+				Description: `environment ID. Default: "DEFAULT"`,
 			},
 			"hrid": schema.StringAttribute{
 				Required: true,
@@ -118,7 +118,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `A unique human readable id identifying this object. Requires replacement if changed.`,
+				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
 				},
@@ -147,7 +147,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Id of an organization. Default: "DEFAULT"`,
+				Description: `organization ID. Default: "DEFAULT"`,
 			},
 			"phase": schema.StringAttribute{
 				Required: true,
@@ -603,7 +603,7 @@ func (r *SharedPolicyGroupResource) ImportState(ctx context.Context, req resourc
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"environment_id": "", "hrid": "", "organization_id": ""}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"environment_id": "...", "hrid": "...", "organization_id": "..."}': `+err.Error())
 		return
 	}
 

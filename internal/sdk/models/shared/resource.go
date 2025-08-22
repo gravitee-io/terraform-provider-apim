@@ -2,11 +2,16 @@
 
 package shared
 
+// Resource - API resource
 type Resource struct {
-	Name          string `json:"name"`
-	Type          string `json:"type"`
-	Configuration any    `json:"configuration"`
-	Enabled       *bool  `json:"enabled,omitempty"`
+	// Resource name
+	Name string `json:"name"`
+	// Resource type
+	Type string `json:"type"`
+	// Resource configuration
+	Configuration any `json:"configuration"`
+	// API resource is enabled or not?
+	Enabled *bool `json:"enabled,omitempty"`
 }
 
 func (o *Resource) GetName() string {

@@ -9,9 +9,9 @@ import (
 )
 
 type DeleteAPIGlobals struct {
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 }
 
@@ -41,9 +41,9 @@ func (o *DeleteAPIGlobals) GetEnvironmentID() *string {
 }
 
 type DeleteAPIRequest struct {
-	// Id of an organization.
+	// organization ID
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
-	// Id of an environment.
+	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Human-readable ID of a spec
 	Hrid string `pathParam:"style=simple,explode=false,name=hrid"`
@@ -88,7 +88,9 @@ type DeleteAPIResponse struct {
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Validation error
+	// Unauthenticated
+	HTTPError *shared.HTTPError
+	// Default error
 	Error *shared.Error
 }
 
@@ -111,6 +113,13 @@ func (o *DeleteAPIResponse) GetRawResponse() *http.Response {
 		return nil
 	}
 	return o.RawResponse
+}
+
+func (o *DeleteAPIResponse) GetHTTPError() *shared.HTTPError {
+	if o == nil {
+		return nil
+	}
+	return o.HTTPError
 }
 
 func (o *DeleteAPIResponse) GetError() *shared.Error {

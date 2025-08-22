@@ -2,6 +2,7 @@
 
 package shared
 
+// TracingV4 - API analytic tracing
 type TracingV4 struct {
 	// Enable OpenTelemetry tracing
 	Enabled *bool `json:"enabled,omitempty"`

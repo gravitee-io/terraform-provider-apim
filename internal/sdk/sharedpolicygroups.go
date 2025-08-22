@@ -31,7 +31,7 @@ func newSharedPolicyGroups(rootSDK *GraviteeApim, sdkConfig config.SDKConfigurat
 }
 
 // Get one policy group
-// Get one policy group
+// Get a policy group using HRID
 func (s *SharedPolicyGroups) Get(ctx context.Context, request operations.GetPolicyGroupRequest, opts ...operations.Option) (*operations.GetPolicyGroupResponse, error) {
 	globals := operations.GetPolicyGroupGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -106,9 +106,9 @@ func (s *SharedPolicyGroups) Get(ctx context.Context, request operations.GetPoli
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
 					InitialInterval: 500,
-					MaxInterval:     60000,
+					MaxInterval:     30000,
 					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					MaxElapsedTime:  60000,
 				},
 				RetryConnectionErrors: true,
 			}
@@ -225,13 +225,49 @@ func (s *SharedPolicyGroups) Get(ctx context.Context, request operations.GetPoli
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:
-	case httpRes.StatusCode == 500:
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
+		fallthrough
+	case httpRes.StatusCode == 404:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.HTTPError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.HTTPError = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
+	default:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.Error
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.Error = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	}
 
 	return res, nil
@@ -239,7 +275,7 @@ func (s *SharedPolicyGroups) Get(ctx context.Context, request operations.GetPoli
 }
 
 // Delete one policy group
-// Delete one shared policy group
+// Delete a shared policy group using HRID
 func (s *SharedPolicyGroups) Delete(ctx context.Context, request operations.DeletePolicyGroupRequest, opts ...operations.Option) (*operations.DeletePolicyGroupResponse, error) {
 	globals := operations.DeletePolicyGroupGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -318,9 +354,9 @@ func (s *SharedPolicyGroups) Delete(ctx context.Context, request operations.Dele
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
 					InitialInterval: 500,
-					MaxInterval:     60000,
+					MaxInterval:     30000,
 					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					MaxElapsedTime:  60000,
 				},
 				RetryConnectionErrors: true,
 			}
@@ -414,6 +450,31 @@ func (s *SharedPolicyGroups) Delete(ctx context.Context, request operations.Dele
 
 	switch {
 	case httpRes.StatusCode == 204:
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
+	case httpRes.StatusCode == 404:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.HTTPError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.HTTPError = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
 	default:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
@@ -441,8 +502,8 @@ func (s *SharedPolicyGroups) Delete(ctx context.Context, request operations.Dele
 
 }
 
-// CreateOrUpdate - Create or update Shared Policy Group from spec
-// Create or update Shared Policy Group from spec
+// CreateOrUpdate - Create or update Shared Policy Group from SharedPolicyGroupSpec
+// Create/update Shared Policy Group from Shared Policy Group Spec
 func (s *SharedPolicyGroups) CreateOrUpdate(ctx context.Context, request operations.CreateOrUpdatePolicyGroupRequest, opts ...operations.Option) (*operations.CreateOrUpdatePolicyGroupResponse, error) {
 	globals := operations.CreateOrUpdatePolicyGroupGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
@@ -528,9 +589,9 @@ func (s *SharedPolicyGroups) CreateOrUpdate(ctx context.Context, request operati
 			retryConfig = &retry.Config{
 				Strategy: "backoff", Backoff: &retry.BackoffStrategy{
 					InitialInterval: 500,
-					MaxInterval:     60000,
+					MaxInterval:     30000,
 					Exponent:        1.5,
-					MaxElapsedTime:  3600000,
+					MaxElapsedTime:  60000,
 				},
 				RetryConnectionErrors: true,
 			}
@@ -645,6 +706,33 @@ func (s *SharedPolicyGroups) CreateOrUpdate(ctx context.Context, request operati
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
 	case httpRes.StatusCode == 400:
+		fallthrough
+	case httpRes.StatusCode == 401:
+		fallthrough
+	case httpRes.StatusCode == 403:
+		fallthrough
+	case httpRes.StatusCode == 404:
+		switch {
+		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+
+			var out shared.HTTPError
+			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
+				return nil, err
+			}
+
+			res.HTTPError = &out
+		default:
+			rawBody, err := utils.ConsumeRawBody(httpRes)
+			if err != nil {
+				return nil, err
+			}
+			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
+		}
+	default:
 		switch {
 		case utils.MatchContentType(httpRes.Header.Get("Content-Type"), `application/json`):
 			rawBody, err := utils.ConsumeRawBody(httpRes)
@@ -665,16 +753,6 @@ func (s *SharedPolicyGroups) CreateOrUpdate(ctx context.Context, request operati
 			}
 			return nil, errors.NewAPIError(fmt.Sprintf("unknown content-type received: %s", httpRes.Header.Get("Content-Type")), httpRes.StatusCode, string(rawBody), httpRes)
 		}
-	case httpRes.StatusCode == 401:
-		fallthrough
-	case httpRes.StatusCode == 403:
-	case httpRes.StatusCode == 500:
-	default:
-		rawBody, err := utils.ConsumeRawBody(httpRes)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errors.NewAPIError("unknown status code returned", httpRes.StatusCode, string(rawBody), httpRes)
 	}
 
 	return res, nil

@@ -2,7 +2,7 @@
 
 package shared
 
-type Detail struct {
+type DetailResponse struct {
 	// The error message
 	Message *string `json:"message,omitempty"`
 	// The json path of the field in error.
@@ -11,39 +11,39 @@ type Detail struct {
 	InvalidValue *string `json:"invalidValue,omitempty"`
 }
 
-func (o *Detail) GetMessage() *string {
+func (o *DetailResponse) GetMessage() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Message
 }
 
-func (o *Detail) GetLocation() *string {
+func (o *DetailResponse) GetLocation() *string {
 	if o == nil {
 		return nil
 	}
 	return o.Location
 }
 
-func (o *Detail) GetInvalidValue() *string {
+func (o *DetailResponse) GetInvalidValue() *string {
 	if o == nil {
 		return nil
 	}
 	return o.InvalidValue
 }
 
-// Error - Validation error
+// Error
 type Error struct {
-	// The error code
+	// Error code
 	HTTPStatus *int `json:"httpStatus,omitempty"`
-	// The error message
+	// Error message
 	Message *string `json:"message,omitempty"`
 	// A technical code to identify the error
 	TechnicalCode *string `json:"technicalCode,omitempty"`
 	// A map of parameters to be used in the error message
 	Parameters map[string]string `json:"parameters,omitempty"`
 	// A list of details about the error
-	Details []Detail `json:"details,omitempty"`
+	Details []DetailResponse `json:"details,omitempty"`
 }
 
 func (o *Error) GetHTTPStatus() *int {
@@ -74,7 +74,7 @@ func (o *Error) GetParameters() map[string]string {
 	return o.Parameters
 }
 
-func (o *Error) GetDetails() []Detail {
+func (o *Error) GetDetails() []DetailResponse {
 	if o == nil {
 		return nil
 	}

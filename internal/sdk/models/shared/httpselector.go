@@ -38,6 +38,7 @@ func (e *HTTPSelectorType) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// HTTPSelector - HTTP selector
 type HTTPSelector struct {
 	// Selector type.
 	Type HTTPSelectorType `json:"type"`

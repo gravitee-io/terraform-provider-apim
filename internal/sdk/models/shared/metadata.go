@@ -2,16 +2,17 @@
 
 package shared
 
+// Metadata is a generic data structure used internally
 type Metadata struct {
-	// The key of the metadata.
+	// The key of the metadata if different from sanitized name (lowercase + hyphens).
 	Key *string `json:"key,omitempty"`
 	// The name of the metadata.
-	Name *string `json:"name,omitempty"`
+	Name string `json:"name"`
 	// The format of the metadata.
-	Format *MetadataFormat `json:"format,omitempty"`
+	Format MetadataFormat `json:"format"`
 	// The value of the metadata.
 	Value *string `json:"value,omitempty"`
-	// The default value of the metadata.
+	// The default value of the metadata if the value is not set.
 	DefaultValue *string `json:"defaultValue,omitempty"`
 }
 
@@ -22,16 +23,16 @@ func (o *Metadata) GetKey() *string {
 	return o.Key
 }
 
-func (o *Metadata) GetName() *string {
+func (o *Metadata) GetName() string {
 	if o == nil {
-		return nil
+		return ""
 	}
 	return o.Name
 }
 
-func (o *Metadata) GetFormat() *MetadataFormat {
+func (o *Metadata) GetFormat() MetadataFormat {
 	if o == nil {
-		return nil
+		return MetadataFormat("")
 	}
 	return o.Format
 }

@@ -65,6 +65,7 @@ func (e *Operation) UnmarshalJSON(data []byte) error {
 	}
 }
 
+// ChannelSelector - Channel selector
 type ChannelSelector struct {
 	// Selector type.
 	Type ChannelSelectorType `json:"type"`

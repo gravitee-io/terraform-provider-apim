@@ -8,12 +8,8 @@ import (
 
 // APIV4Spec - ApiV4DefinitionSpec defines the desired state of ApiDefinition.
 type APIV4Spec struct {
-	// A unique human readable id identifying this object
+	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
-	// the context where the api definition was created.
-	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	DefinitionContext DefinitionContext `json:"definitionContext"`
 	// API's name. Duplicate names can exists.
 	Name string `json:"name"`
 	// API's version. It's a simple string only used in the portal.
@@ -27,26 +23,31 @@ type APIV4Spec struct {
 	// The list of listeners associated with this API.
 	Listeners      []Listener        `json:"listeners"`
 	EndpointGroups []EndpointGroupV4 `json:"endpointGroups"`
-	Analytics      *Analytics        `json:"analytics,omitempty"`
-	Failover       *FailoverV4       `json:"failover,omitempty"`
-	Properties     []Property        `json:"properties,omitempty"`
-	Resources      []Resource        `json:"resources,omitempty"`
-	// Map of plan IDs to Plan objects
-	Plans         map[string]PlanInput `json:"plans,omitempty"`
-	FlowExecution *FlowExecution       `json:"flowExecution,omitempty"`
+	// API analytics
+	Analytics *Analytics `json:"analytics,omitempty"`
+	// API Failover
+	Failover   *FailoverV4 `json:"failover,omitempty"`
+	Properties []Property  `json:"properties,omitempty"`
+	Resources  []Resource  `json:"resources,omitempty"`
+	// List of Plans for the API
+	Plans []PlanV4 `json:"plans,omitempty"`
+	// Flow execution
+	FlowExecution *FlowExecution `json:"flowExecution,omitempty"`
 	// List of flows for the API
-	Flows []FlowV4Input `json:"flows,omitempty"`
+	Flows []FlowV4 `json:"flows,omitempty"`
 	// A list of Response Templates for the API (Not applicable for Native API)
 	ResponseTemplates map[string]map[string]ResponseTemplate `json:"responseTemplates,omitempty"`
-	Services          *APIServices                           `json:"services,omitempty"`
+	// Api services
+	Services *APIServices `json:"services,omitempty"`
 	// List of groups associated with the API.
 	// This groups are id or name references to existing groups in APIM.
 	Groups []string `json:"groups,omitempty"`
 	// The visibility of the resource regarding the portal.
-	Visibility *Visibility `json:"visibility,omitempty"`
+	Visibility *Visibility `default:"PUBLIC" json:"visibility"`
 	// The state of the API regarding the gateway(s).
-	State        *LifecycleState `json:"state,omitempty"`
-	PrimaryOwner *PrimaryOwner   `json:"primaryOwner,omitempty"`
+	State *LifecycleState `json:"state,omitempty"`
+	// Primary owner, the creator of the application. Can perform all possible API actions.
+	PrimaryOwner *PrimaryOwner `json:"primaryOwner,omitempty"`
 	// List of labels of the API
 	Labels []string `json:"labels,omitempty"`
 	// The list of API's metadata.
@@ -56,10 +57,12 @@ type APIV4Spec struct {
 	// The list of category keys associated with this API.
 	Categories []string `json:"categories,omitempty"`
 	// Set of members associated with the plan
-	Members []Member `json:"members,omitempty"`
+	Members []MemberInput `json:"members,omitempty"`
 	// If true, new members added to the API spec will
 	// be notified when the API is synced with APIM.
 	NotifyMembers *bool `default:"true" json:"notifyMembers"`
+	// List of Pages for the API
+	Pages []PageV4Input `json:"pages,omitempty"`
 }
 
 func (a APIV4Spec) MarshalJSON() ([]byte, error) {
@@ -78,13 +81,6 @@ func (o *APIV4Spec) GetHrid() string {
 		return ""
 	}
 	return o.Hrid
-}
-
-func (o *APIV4Spec) GetDefinitionContext() DefinitionContext {
-	if o == nil {
-		return DefinitionContext{}
-	}
-	return o.DefinitionContext
 }
 
 func (o *APIV4Spec) GetName() string {
@@ -164,7 +160,7 @@ func (o *APIV4Spec) GetResources() []Resource {
 	return o.Resources
 }
 
-func (o *APIV4Spec) GetPlans() map[string]PlanInput {
+func (o *APIV4Spec) GetPlans() []PlanV4 {
 	if o == nil {
 		return nil
 	}
@@ -178,7 +174,7 @@ func (o *APIV4Spec) GetFlowExecution() *FlowExecution {
 	return o.FlowExecution
 }
 
-func (o *APIV4Spec) GetFlows() []FlowV4Input {
+func (o *APIV4Spec) GetFlows() []FlowV4 {
 	if o == nil {
 		return nil
 	}
@@ -255,7 +251,7 @@ func (o *APIV4Spec) GetCategories() []string {
 	return o.Categories
 }
 
-func (o *APIV4Spec) GetMembers() []Member {
+func (o *APIV4Spec) GetMembers() []MemberInput {
 	if o == nil {
 		return nil
 	}
@@ -267,4 +263,11 @@ func (o *APIV4Spec) GetNotifyMembers() *bool {
 		return nil
 	}
 	return o.NotifyMembers
+}
+
+func (o *APIV4Spec) GetPages() []PageV4Input {
+	if o == nil {
+		return nil
+	}
+	return o.Pages
 }

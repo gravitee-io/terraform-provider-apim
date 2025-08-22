@@ -2,13 +2,11 @@
 
 package shared
 
-// Errors - When a resource has been created regardless of errors, this field is used to persist the error message encountered during admission
+// Errors - When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
 type Errors struct {
-	// severe errors do not pass admission and will block reconcile hence, this field should always be populated during the admission phase and is very unlikely to be persisted in the status
+	// Severe errors do not pass validation and will block creation/update/delete hence, this field should always be populated during the validation phase and is very unlikely to be persisted client side.
 	Severe []string `json:"severe,omitempty"`
-	// warning errors do not block object reconciliation,
-	// most of the time because the value is ignored or defaulted
-	// when the resource gets synced with APIM
+	// Warning errors do not block object creation/update/delete, most of the time because the value is ignored or defaulted.
 	Warning []string `json:"warning,omitempty"`
 }
 

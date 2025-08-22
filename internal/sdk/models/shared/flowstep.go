@@ -6,6 +6,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// FlowStep - API Flow step
 type FlowStep struct {
 	// FlowStep condition
 	Condition *string `json:"condition,omitempty"`

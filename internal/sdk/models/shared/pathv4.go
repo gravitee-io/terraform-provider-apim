@@ -6,6 +6,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// PathV4 - API Path
 type PathV4 struct {
 	Host           *string `json:"host,omitempty"`
 	Path           *string `default:"/" json:"path"`
