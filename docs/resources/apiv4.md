@@ -45,7 +45,8 @@ resource "apim_apiv4" "my_apiv4" {
     }
   }
   categories = [
-    "..."
+    "health",
+    "media",
   ]
   description = "I can use many characters to describe this API."
   endpoint_groups = [
@@ -194,7 +195,8 @@ resource "apim_apiv4" "my_apiv4" {
         }
       ]
       tags = [
-        "..."
+        "tag1",
+        "tag2",
       ]
     }
   ]
@@ -460,7 +462,8 @@ resource "apim_apiv4" "my_apiv4" {
             }
           ]
           tags = [
-            "..."
+            "tag1",
+            "tag2",
           ]
         }
       ]
@@ -519,7 +522,7 @@ resource "apim_apiv4" "my_apiv4" {
   }
   state = "STARTED"
   tags = [
-    "..."
+    "public",
   ]
   type       = "MESSAGE"
   version    = "1.0.0"
@@ -1452,6 +1455,21 @@ Optional:
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = apim_apiv4.my_apim_apiv4
+  id = jsonencode({
+    environment_id = "..."
+    hrid = "..."
+    organization_id = "..."
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
-terraform import apim_apiv4.my_apim_apiv4 '{"environment_id": "", "hrid": "", "organization_id": ""}'
+terraform import apim_apiv4.my_apim_apiv4 '{"environment_id": "...", "hrid": "...", "organization_id": "..."}'
 ```

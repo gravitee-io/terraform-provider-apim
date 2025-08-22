@@ -1,4 +1,4 @@
-speakeasyVersion: 1.604.1
+speakeasyVersion: 1.606.3
 sources:
     Gravitee.io - Automation API:
         sourceNamespace: gravitee-io-gko---automation-api

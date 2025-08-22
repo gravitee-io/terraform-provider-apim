@@ -3,8 +3,8 @@ id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
   docChecksum: 692f3018f402f28138d69e8b3e742055
   docVersion: 1.0.0
-  speakeasyVersion: 1.604.1
-  generationVersion: 2.683.1
+  speakeasyVersion: 1.606.3
+  generationVersion: 2.687.1
   releaseVersion: 0.3.0
   configChecksum: 46047f5b540d2cc85a4d36dd35c8074a
 features:
@@ -30,12 +30,16 @@ generatedFiles:
   - examples/data-sources/apim_application/data-source.tf
   - examples/data-sources/apim_shared_policy_group/data-source.tf
   - examples/data-sources/apim_subscription/data-source.tf
+  - examples/resources/apim_apiv4/import-by-string-id.tf
   - examples/resources/apim_apiv4/import.sh
   - examples/resources/apim_apiv4/resource.tf
+  - examples/resources/apim_application/import-by-string-id.tf
   - examples/resources/apim_application/import.sh
   - examples/resources/apim_application/resource.tf
+  - examples/resources/apim_shared_policy_group/import-by-string-id.tf
   - examples/resources/apim_shared_policy_group/import.sh
   - examples/resources/apim_shared_policy_group/resource.tf
+  - examples/resources/apim_subscription/import-by-string-id.tf
   - examples/resources/apim_subscription/import.sh
   - examples/resources/apim_subscription/resource.tf
   - go.mod
