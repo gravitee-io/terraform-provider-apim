@@ -16,6 +16,9 @@ actions:
     description: Align parameter naming with property naming so orgId is not a separate attribute
     update:
       x-speakeasy-name-override: organizationId
+  - target: $.components.parameters.orgIdParam.schema.default
+    description: Delete parameter default since that block provider-defined settings to be applied to resources.
+    remove: true
   - target: $.components.schemas.Selector.discriminator.mapping
     description: |
       Prevent validation error: discriminator mapping ref ConditionSelector
