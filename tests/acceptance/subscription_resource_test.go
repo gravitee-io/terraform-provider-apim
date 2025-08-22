@@ -83,7 +83,7 @@ func TestSubscriptionResource_update(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
-					"ending_at":       config.StringVariable("2040-12-25T10:12:28+01:00"),
+					"ending_at":       config.StringVariable("2040-12-25T09:12:28Z"),
 					"organization_id": config.StringVariable(organizationId),
 				},
 			},
@@ -93,7 +93,7 @@ func TestSubscriptionResource_update(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
-					"ending_at":       config.StringVariable("2040-12-25T10:12:28+01:00"),
+					"ending_at":       config.StringVariable("2040-12-25T09:12:28Z"),
 					"organization_id": config.StringVariable(organizationId),
 				},
 				ResourceName: resourceAddress,
@@ -122,7 +122,7 @@ func TestSubscriptionResource_update(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
-					"ending_at":       config.StringVariable("2042-12-25T10:12:28+01:00"),
+					"ending_at":       config.StringVariable("2042-12-25T09:12:28Z"),
 					"organization_id": config.StringVariable(organizationId),
 				},
 			},
