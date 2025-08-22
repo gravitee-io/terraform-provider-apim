@@ -28,36 +28,39 @@ PRE_TEST_DIR = "$(shell pwd)/examples/use-cases/application-simple"
 
 .PHONY: pre-test
 pre-test:
-	@echo "Creating users: ${APIM_USERNAME} and ${APIM_API1_USERNAME}"
 # First user (APIM_USERNAME)
+	@echo "Validating resource creation with user ${APIM_USERNAME}"
 	@cd $(PRE_TEST_DIR) && rm -rf terraform.state terraform.state.backup .terraform && \
 	APIM_USERNAME=${APIM_USERNAME} \
 	APIM_PASSWORD=${APIM_PASSWORD} \
 	APIM_SERVER_URL=${APIM_SERVER_URL} \
 	terraform apply -auto-approve 2>&1 > /tmp/tf.log || \
-    (echo "Can't do terraform apply $APIM_USERNAME" && cat /tmp/tf.log && exit 1)
+    (echo "Can't do terraform apply with ${APIM_USERNAME}" && cat /tmp/tf.log && exit 1)
 
+	@echo "Validating resource destruction with user ${APIM_USERNAME}"
 	@cd $(PRE_TEST_DIR) && \
 	APIM_USERNAME=${APIM_USERNAME} \
 	APIM_PASSWORD=${APIM_PASSWORD} \
 	APIM_SERVER_URL=${APIM_SERVER_URL} \
 	terraform apply -auto-approve -destroy 2>&1 > /tmp/tf.log || \
-    (echo "Can't do terraform destroy $APIM_USERNAME" && cat /tmp/tf.log && exit 1)
+    (echo "Can't do terraform destroy with ${APIM_USERNAME}" && cat /tmp/tf.log && exit 1)
 
 # Second user (APIM_API1_USERNAME)
+	@echo "Validating resource creation with user ${APIM_API1_USERNAME}"
 	@cd $(PRE_TEST_DIR) && rm -rf terraform.state terraform.state.backup .terraform && \
 	APIM_USERNAME=${APIM_API1_USERNAME} \
 	APIM_PASSWORD=${APIM_API1_PASSWORD} \
 	APIM_SERVER_URL=${APIM_SERVER_URL} \
 	terraform apply -auto-approve 2>&1 > /tmp/tf.log || \
-    (echo "Can't do terraform apply $APIM_USERNAME" && cat /tmp/tf.log && exit 1)
+    (echo "Can't do terraform apply with ${APIM_API1_USERNAME}" && cat /tmp/tf.log && exit 1)
 
+	@echo "Validating resource destruction with user ${APIM_API1_USERNAME}"
 	@cd $(PRE_TEST_DIR) && \
 	APIM_USERNAME=${APIM_API1_USERNAME} \
 	APIM_PASSWORD=${APIM_API1_PASSWORD} \
 	APIM_SERVER_URL=${APIM_SERVER_URL} \
 	terraform apply -auto-approve -destroy 2>&1 > /tmp/tf.log || \
-    (echo "Can't do terraform destroy $APIM_USERNAME" && cat /tmp/tf.log && exit 1)
+    (echo "Can't do terraform destroy with ${APIM_API1_USERNAME}" && cat /tmp/tf.log && exit 1)
 
 .PHONY: acceptance-tests
 acceptance-tests: pre-test ## Run acceptance tests
