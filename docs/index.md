@@ -37,7 +37,7 @@ terraform {
 }
 
 provider "apim" {
-  # Configuration options
+  bearer_auth = "access-token"
 }
 ```
 
