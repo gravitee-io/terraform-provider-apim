@@ -19,7 +19,7 @@ resource "apim_application" "my_application" {
   domain         = "examples.com"
   environment_id = "...my_environment_id..."
   groups = [
-    "..."
+    "developers",
   ]
   hrid = "my_demo_api"
   members = [
@@ -62,7 +62,7 @@ resource "apim_application" "my_application" {
         "implicit"
       ]
       redirect_uris = [
-        "..."
+        "https://myapp.example.com/oauth/callback",
       ]
     }
     tls = {
@@ -190,6 +190,21 @@ Optional:
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = apim_application.my_apim_application
+  id = jsonencode({
+    environment_id = "..."
+    hrid = "..."
+    organization_id = "..."
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
-terraform import apim_application.my_apim_application '{"environment_id": "", "hrid": "", "organization_id": ""}'
+terraform import apim_application.my_apim_application '{"environment_id": "...", "hrid": "...", "organization_id": "..."}'
 ```

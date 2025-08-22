@@ -4,7 +4,7 @@ resource "apim_application" "my_application" {
   domain         = "examples.com"
   environment_id = "...my_environment_id..."
   groups = [
-    "..."
+    "developers",
   ]
   hrid = "my_demo_api"
   members = [
@@ -47,7 +47,7 @@ resource "apim_application" "my_application" {
         "implicit"
       ]
       redirect_uris = [
-        "..."
+        "https://myapp.example.com/oauth/callback",
       ]
     }
     tls = {

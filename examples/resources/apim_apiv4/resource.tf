@@ -30,7 +30,8 @@ resource "apim_apiv4" "my_apiv4" {
     }
   }
   categories = [
-    "..."
+    "health",
+    "media",
   ]
   description = "I can use many characters to describe this API."
   endpoint_groups = [
@@ -179,7 +180,8 @@ resource "apim_apiv4" "my_apiv4" {
         }
       ]
       tags = [
-        "..."
+        "tag1",
+        "tag2",
       ]
     }
   ]
@@ -445,7 +447,8 @@ resource "apim_apiv4" "my_apiv4" {
             }
           ]
           tags = [
-            "..."
+            "tag1",
+            "tag2",
           ]
         }
       ]
@@ -504,7 +507,7 @@ resource "apim_apiv4" "my_apiv4" {
   }
   state = "STARTED"
   tags = [
-    "..."
+    "public",
   ]
   type       = "MESSAGE"
   version    = "1.0.0"
