@@ -50,7 +50,7 @@ resource "apim_shared_policy_group" "my_sharedpolicygroup" {
 
 - `description` (String) The description of the shared policy group
 - `environment_id` (String) environment ID. Default: "DEFAULT"
-- `organization_id` (String) organization ID. Default: "DEFAULT"
+- `organization_id` (String) organization ID
 - `prerequisite_message` (String) The prerequisite message of the shared policy group. This message is displayed to the user to help understand the prerequisite to use the shared policy group.
 - `steps` (Attributes List) SharedPolicyGroup Steps (see [below for nested schema](#nestedatt--steps))
 

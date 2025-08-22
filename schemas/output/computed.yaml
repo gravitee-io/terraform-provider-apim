@@ -2294,7 +2294,6 @@ components:
       description: organization ID
       schema:
         type: string
-        default: DEFAULT
       x-speakeasy-name-override: organizationId
     dryRunQueryParam:
       name: dryRun

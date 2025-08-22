@@ -10,7 +10,7 @@ import (
 
 type CreateOrUpdateSubscriptionsGlobals struct {
 	// organization ID
-	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
 	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 }
@@ -42,7 +42,7 @@ func (o *CreateOrUpdateSubscriptionsGlobals) GetEnvironmentID() *string {
 
 type CreateOrUpdateSubscriptionsRequest struct {
 	// organization ID
-	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
 	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Subscription specification
