@@ -306,8 +306,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Default:     stringdefault.StaticString(`DEFAULT`),
-				Description: `organization ID. Default: "DEFAULT"`,
+				Description: `organization ID`,
 			},
 			"picture_url": schema.StringAttribute{
 				Computed: true,

@@ -1,3 +1,7 @@
+provider "apim" {
+  organization_id = "DEFAULT"
+}
+
 variable "hrid" {
   type = string
 }

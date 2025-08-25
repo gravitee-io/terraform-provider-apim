@@ -75,11 +75,11 @@ func TestSubscriptionResource_update(t *testing.T) {
 	resourceAddress := "apim_subscription.test"
 
 	resource.Test(t, resource.TestCase{
-		ProtoV6ProviderFactories: testProviders(),
 		Steps: []resource.TestStep{
 			// Verifies resource create and read.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
@@ -89,7 +89,8 @@ func TestSubscriptionResource_update(t *testing.T) {
 			},
 			// Verifies resource import.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
@@ -118,7 +119,8 @@ func TestSubscriptionResource_update(t *testing.T) {
 			},
 			// Verifies resource update.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),

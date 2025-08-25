@@ -2348,8 +2348,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Default:     stringdefault.StaticString(`DEFAULT`),
-				Description: `organization ID. Default: "DEFAULT"`,
+				Description: `organization ID`,
 			},
 			"pages": schema.ListNestedAttribute{
 				Computed: true,

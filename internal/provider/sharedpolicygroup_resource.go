@@ -143,11 +143,10 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 			"organization_id": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
-				Default:  stringdefault.StaticString(`DEFAULT`),
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `organization ID. Default: "DEFAULT"`,
+				Description: `organization ID`,
 			},
 			"phase": schema.StringAttribute{
 				Required: true,

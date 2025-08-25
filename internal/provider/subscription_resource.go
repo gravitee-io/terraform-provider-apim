@@ -123,8 +123,7 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Default:     stringdefault.StaticString(`DEFAULT`),
-				Description: `organization ID. Default: "DEFAULT"`,
+				Description: `organization ID`,
 			},
 			"plan_hrid": schema.StringAttribute{
 				Required: true,
