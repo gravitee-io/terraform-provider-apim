@@ -45,10 +45,10 @@ provider "apim" {
 
 ### Optional
 
-- `bearer_auth` (String, Sensitive)
-- `cloud_auth` (String, Sensitive)
+- `bearer_auth` (String, Sensitive) Service account authentication. Configurable via environment variable `APIM_SA_TOKEN`.
+- `cloud_auth` (String, Sensitive) Gravitee Cloud Token authentication. Configurable via environment variable `APIM_CLOUD_TOKEN`.
 - `environment_id` (String) environment ID
 - `organization_id` (String) organization ID
-- `password` (String, Sensitive)
+- `password` (String, Sensitive) Basic authentication password. Configurable via environment variable `APIM_PASSWORD`.
 - `server_url` (String) Server URL (defaults to https://eu.cloudgate.gravitee.io/apim/automation)
-- `username` (String, Sensitive)
+- `username` (String, Sensitive) Basic authentication username. Configurable via environment variable `APIM_USERNAME`.

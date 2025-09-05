@@ -10,7 +10,7 @@ resource "apim_shared_policy_group" "my_sharedpolicygroup" {
   steps = [
     {
       condition         = "...my_condition..."
-      configuration     = "...my_configuration..."
+      configuration     = "{ \"see\": \"documentation\" }"
       description       = "...my_description..."
       enabled           = true
       message_condition = "...my_message_condition..."

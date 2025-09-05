@@ -73,7 +73,7 @@ func (a APIV4State) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIV4State) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"hrid", "name", "version", "type", "listeners", "endpointGroups", "lifecycleState"}); err != nil {
 		return err
 	}
 	return nil

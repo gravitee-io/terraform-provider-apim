@@ -64,7 +64,7 @@ func (p PageV4) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PageV4) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"hrid", "type"}); err != nil {
 		return err
 	}
 	return nil

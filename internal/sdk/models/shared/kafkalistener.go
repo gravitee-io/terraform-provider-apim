@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // KafkaListener - Kafka listener
 type KafkaListener struct {
 	// Listener type.
@@ -12,6 +16,17 @@ type KafkaListener struct {
 	Host string `json:"host"`
 	// The port of the listener
 	Port *int64 `json:"port,omitempty"`
+}
+
+func (k KafkaListener) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(k, "", false)
+}
+
+func (k *KafkaListener) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &k, "", false, []string{"type", "host"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *KafkaListener) GetType() ListenerType {

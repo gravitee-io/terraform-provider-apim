@@ -2,6 +2,7 @@
 
 package shared
 
+// SchemeBasicAuth - Basic authentication
 type SchemeBasicAuth struct {
 	Username string `security:"name=username"`
 	Password string `security:"name=password"`

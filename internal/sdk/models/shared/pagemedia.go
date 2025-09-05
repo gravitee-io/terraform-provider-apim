@@ -22,7 +22,7 @@ func (p PageMedia) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PageMedia) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil

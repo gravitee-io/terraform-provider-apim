@@ -20,7 +20,7 @@ func (g GetSubscriptionGlobals) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetSubscriptionGlobals) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -54,7 +54,7 @@ func (g GetSubscriptionRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetSubscriptionRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"hrid"}); err != nil {
 		return err
 	}
 	return nil

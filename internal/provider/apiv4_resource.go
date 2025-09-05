@@ -4278,11 +4278,11 @@ func (r *Apiv4Resource) Create(ctx context.Context, req resource.CreateRequest, 
 		return
 	}
 
-	if data.EnvironmentID.IsNull() {
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
 		data.EnvironmentID = r.EnvironmentID
 	}
 
-	if data.OrganizationID.IsNull() {
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
 
@@ -4437,11 +4437,11 @@ func (r *Apiv4Resource) Update(ctx context.Context, req resource.UpdateRequest, 
 		return
 	}
 
-	if data.EnvironmentID.IsNull() {
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
 		data.EnvironmentID = r.EnvironmentID
 	}
 
-	if data.OrganizationID.IsNull() {
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
 
@@ -4542,11 +4542,11 @@ func (r *Apiv4Resource) Delete(ctx context.Context, req resource.DeleteRequest, 
 		return
 	}
 
-	if data.EnvironmentID.IsNull() {
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
 		data.EnvironmentID = r.EnvironmentID
 	}
 
-	if data.OrganizationID.IsNull() {
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
 

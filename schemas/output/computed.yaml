@@ -16,7 +16,7 @@ info:
   title: Gravitee
   description: "Gravitee API Management Terraform Provider (beta)\n\nYou can manage with Terraform the following:\n* APIs\n* Shared Policy Groups\n* Applications\n* Subscriptions\n\n[Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform) \n\nCompatible with APIM 4.9 and above"
   contact:
-    name: DevEx team
+    name: DevX team
     email: team-gko@graviteesource.com
     url: https://www.gravitee.io/
   license:
@@ -820,11 +820,6 @@ components:
           type: string
           format: date-time
           example: "2040-12-25T09:12:28Z"
-          x-speakeasy-terraform-custom-type:
-            imports:
-              - github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes
-            schemaType: "timetypes.RFC3339Type{}"
-            valueType: timetypes.RFC3339
       required:
         - hrid
         - applicationHrid
@@ -848,11 +843,6 @@ components:
               type: string
               format: date-time
               example: "2040-12-25T09:12:28+01:00"
-              x-speakeasy-terraform-custom-type:
-                imports:
-                  - github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes
-                schemaType: "timetypes.RFC3339Type{}"
-                valueType: timetypes.RFC3339
           x-speakeasy-param-suppress-computed-diff: true
     SharedPolicyGroupState:
       description: State of Shared Policy Groups that has been created/updated
@@ -909,7 +899,7 @@ components:
         steps:
           description: SharedPolicyGroup Steps
           items:
-            $ref: "#/components/schemas/FlowStep"
+            $ref: "#/components/schemas/StepV4"
           type: array
       required:
         - hrid
@@ -927,38 +917,6 @@ components:
         - CONNECT
         - PUBLISH
         - SUBSCRIBE
-    FlowStep:
-      description: API Flow step
-      type: object
-      properties:
-        condition:
-          description: FlowStep condition
-          type: string
-          x-speakeasy-param-suppress-computed-diff: true
-        configuration:
-          description: FlowStep configuration is a map of arbitrary key-values
-          type: string
-          x-kubernetes-preserve-unknown-fields: true
-        description:
-          description: FlowStep description
-          type: string
-          x-speakeasy-param-suppress-computed-diff: true
-        enabled:
-          default: true
-          description: Indicate if this FlowStep is enabled or not
-          type: boolean
-        messageCondition:
-          description: The message condition (supports EL expressions)
-          type: string
-          x-speakeasy-param-suppress-computed-diff: true
-        name:
-          description: FlowStep name
-          type: string
-        policy:
-          description: FlowStep policy
-          type: string
-      required:
-        - enabled
     PlanV4:
       description: API Plan
       type: object
@@ -1869,7 +1827,6 @@ components:
           minLength: 1
         type:
           $ref: "#/components/schemas/MembershipMemberType"
-      x-speakeasy-param-suppress-computed-diff: true
     Property:
       description: Api property
       type: object
@@ -2318,7 +2275,7 @@ components:
       type: http
       scheme: basic
     BearerAuth:
-      description: service account authentication
+      description: Service account authentication
       type: http
       scheme: bearer
       bearerFormat: APIM service account token
