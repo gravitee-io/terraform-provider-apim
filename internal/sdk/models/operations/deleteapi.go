@@ -20,7 +20,7 @@ func (d DeleteAPIGlobals) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteAPIGlobals) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -54,7 +54,7 @@ func (d DeleteAPIRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteAPIRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"hrid"}); err != nil {
 		return err
 	}
 	return nil

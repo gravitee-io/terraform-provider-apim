@@ -40,21 +40,3 @@ actions:
     description: Not returned by the API, so prevent null values during refresh
     update:
       x-speakeasy-param-suppress-computed-diff: true
-
-# Custom types
-  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.startingAt].properties.startingAt
-    description: x
-    update:
-      x-speakeasy-terraform-custom-type:
-        imports:
-          - github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes
-        schemaType: "timetypes.RFC3339Type{}"
-        valueType: timetypes.RFC3339
-  - target: $.components.schemas.SubscriptionSpec.properties.endingAt
-    description: x
-    update:
-      x-speakeasy-terraform-custom-type:
-        imports:
-          - github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes
-        schemaType: "timetypes.RFC3339Type{}"
-        valueType: timetypes.RFC3339

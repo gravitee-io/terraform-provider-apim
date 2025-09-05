@@ -17,4 +17,23 @@ resource "apim_shared_policy_group" "test" {
   name            = "terraform_example"
   organization_id = var.organization_id
   phase           = "REQUEST"
+  steps = [
+    {
+      enabled     = true
+      description = "Limit traffic to 10 request per minute"
+      name        = "Rate Limit 10"
+      policy      = "rate-limit"
+      configuration = jsonencode({
+        addHeaders = true
+        async      = false
+        rate = {
+          key            = "rl"
+          limit          = 10
+          periodTime     = 1
+          periodTimeUnit = "MINUTES"
+          useKeyOnly     = false
+        }
+      })
+    },
+  ]
 }

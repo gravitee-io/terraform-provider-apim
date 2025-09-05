@@ -7,6 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -38,17 +39,17 @@ type SharedPolicyGroupDataSource struct {
 
 // SharedPolicyGroupDataSourceModel describes the data model.
 type SharedPolicyGroupDataSourceModel struct {
-	APIType             types.String       `tfsdk:"api_type"`
-	CrossID             types.String       `tfsdk:"cross_id"`
-	Description         types.String       `tfsdk:"description"`
-	EnvironmentID       types.String       `tfsdk:"environment_id"`
-	Hrid                types.String       `tfsdk:"hrid"`
-	ID                  types.String       `tfsdk:"id"`
-	Name                types.String       `tfsdk:"name"`
-	OrganizationID      types.String       `tfsdk:"organization_id"`
-	Phase               types.String       `tfsdk:"phase"`
-	PrerequisiteMessage types.String       `tfsdk:"prerequisite_message"`
-	Steps               []tfTypes.FlowStep `tfsdk:"steps"`
+	APIType             types.String     `tfsdk:"api_type"`
+	CrossID             types.String     `tfsdk:"cross_id"`
+	Description         types.String     `tfsdk:"description"`
+	EnvironmentID       types.String     `tfsdk:"environment_id"`
+	Hrid                types.String     `tfsdk:"hrid"`
+	ID                  types.String     `tfsdk:"id"`
+	Name                types.String     `tfsdk:"name"`
+	OrganizationID      types.String     `tfsdk:"organization_id"`
+	Phase               types.String     `tfsdk:"phase"`
+	PrerequisiteMessage types.String     `tfsdk:"prerequisite_message"`
+	Steps               []tfTypes.StepV4 `tfsdk:"steps"`
 }
 
 // Metadata returns the data source type name.
@@ -113,31 +114,32 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 					Attributes: map[string]schema.Attribute{
 						"condition": schema.StringAttribute{
 							Computed:    true,
-							Description: `FlowStep condition`,
+							Description: `The condition of the step`,
 						},
 						"configuration": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
 							Computed:    true,
-							Description: `FlowStep configuration is a map of arbitrary key-values`,
+							Description: `The configuration of the step. Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
 							Computed:    true,
-							Description: `FlowStep description`,
+							Description: `The description of the step`,
 						},
 						"enabled": schema.BoolAttribute{
 							Computed:    true,
-							Description: `Indicate if this FlowStep is enabled or not`,
+							Description: `Is the step enabled or not.`,
 						},
 						"message_condition": schema.StringAttribute{
 							Computed:    true,
-							Description: `The message condition (supports EL expressions)`,
+							Description: `The message condition of the step`,
 						},
 						"name": schema.StringAttribute{
 							Computed:    true,
-							Description: `FlowStep name`,
+							Description: `The name of the step`,
 						},
 						"policy": schema.StringAttribute{
 							Computed:    true,
-							Description: `FlowStep policy`,
+							Description: `The policy of the step`,
 						},
 					},
 				},
@@ -187,11 +189,11 @@ func (r *SharedPolicyGroupDataSource) Read(ctx context.Context, req datasource.R
 		return
 	}
 
-	if data.EnvironmentID.IsNull() {
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
 		data.EnvironmentID = r.EnvironmentID
 	}
 
-	if data.OrganizationID.IsNull() {
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
 

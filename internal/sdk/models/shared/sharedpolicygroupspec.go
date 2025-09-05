@@ -17,7 +17,7 @@ type SharedPolicyGroupSpec struct {
 	// The execution phase of a policy.
 	Phase FlowPhase `json:"phase"`
 	// SharedPolicyGroup Steps
-	Steps []FlowStep `json:"steps,omitempty"`
+	Steps []StepV4 `json:"steps,omitempty"`
 }
 
 func (o *SharedPolicyGroupSpec) GetHrid() string {
@@ -62,7 +62,7 @@ func (o *SharedPolicyGroupSpec) GetPhase() FlowPhase {
 	return o.Phase
 }
 
-func (o *SharedPolicyGroupSpec) GetSteps() []FlowStep {
+func (o *SharedPolicyGroupSpec) GetSteps() []StepV4 {
 	if o == nil {
 		return nil
 	}

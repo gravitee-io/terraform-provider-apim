@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // TCPListener - TCP listener
 type TCPListener struct {
 	// Listener type.
@@ -10,6 +14,17 @@ type TCPListener struct {
 	Servers     []string     `json:"servers,omitempty"`
 	// A list of hostnames for which the API will match against SNI.  This must be unique for all TCP listener for a given server id. See 'servers' attribute
 	Hosts []string `json:"hosts"`
+}
+
+func (t TCPListener) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(t, "", false)
+}
+
+func (t *TCPListener) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"type", "hosts"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *TCPListener) GetType() ListenerType {

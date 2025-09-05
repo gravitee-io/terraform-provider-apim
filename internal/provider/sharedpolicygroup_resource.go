@@ -14,6 +14,7 @@ import (
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -50,17 +51,17 @@ type SharedPolicyGroupResource struct {
 
 // SharedPolicyGroupResourceModel describes the resource data model.
 type SharedPolicyGroupResourceModel struct {
-	APIType             types.String       `tfsdk:"api_type"`
-	CrossID             types.String       `tfsdk:"cross_id"`
-	Description         types.String       `tfsdk:"description"`
-	EnvironmentID       types.String       `tfsdk:"environment_id"`
-	Hrid                types.String       `tfsdk:"hrid"`
-	ID                  types.String       `tfsdk:"id"`
-	Name                types.String       `tfsdk:"name"`
-	OrganizationID      types.String       `tfsdk:"organization_id"`
-	Phase               types.String       `tfsdk:"phase"`
-	PrerequisiteMessage types.String       `tfsdk:"prerequisite_message"`
-	Steps               []tfTypes.FlowStep `tfsdk:"steps"`
+	APIType             types.String     `tfsdk:"api_type"`
+	CrossID             types.String     `tfsdk:"cross_id"`
+	Description         types.String     `tfsdk:"description"`
+	EnvironmentID       types.String     `tfsdk:"environment_id"`
+	Hrid                types.String     `tfsdk:"hrid"`
+	ID                  types.String     `tfsdk:"id"`
+	Name                types.String     `tfsdk:"name"`
+	OrganizationID      types.String     `tfsdk:"organization_id"`
+	Phase               types.String     `tfsdk:"phase"`
+	PrerequisiteMessage types.String     `tfsdk:"prerequisite_message"`
+	Steps               []tfTypes.StepV4 `tfsdk:"steps"`
 }
 
 func (r *SharedPolicyGroupResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -197,15 +198,16 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `FlowStep condition`,
+							Description: `The condition of the step`,
 						},
 						"configuration": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
+							CustomType: jsontypes.NormalizedType{},
+							Computed:   true,
+							Optional:   true,
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `FlowStep configuration is a map of arbitrary key-values`,
+							Description: `The configuration of the step. Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
 							Computed: true,
@@ -213,7 +215,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `FlowStep description`,
+							Description: `The description of the step`,
 						},
 						"enabled": schema.BoolAttribute{
 							Computed: true,
@@ -222,7 +224,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							PlanModifiers: []planmodifier.Bool{
 								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 							},
-							Description: `Indicate if this FlowStep is enabled or not. Default: true`,
+							Description: `Is the step enabled or not. Default: true`,
 						},
 						"message_condition": schema.StringAttribute{
 							Computed: true,
@@ -230,7 +232,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `The message condition (supports EL expressions)`,
+							Description: `The message condition of the step`,
 						},
 						"name": schema.StringAttribute{
 							Computed: true,
@@ -238,7 +240,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `FlowStep name`,
+							Description: `The name of the step`,
 						},
 						"policy": schema.StringAttribute{
 							Computed: true,
@@ -246,7 +248,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `FlowStep policy`,
+							Description: `The policy of the step`,
 						},
 					},
 				},
@@ -296,11 +298,11 @@ func (r *SharedPolicyGroupResource) Create(ctx context.Context, req resource.Cre
 		return
 	}
 
-	if data.EnvironmentID.IsNull() {
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
 		data.EnvironmentID = r.EnvironmentID
 	}
 
-	if data.OrganizationID.IsNull() {
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
 
@@ -455,11 +457,11 @@ func (r *SharedPolicyGroupResource) Update(ctx context.Context, req resource.Upd
 		return
 	}
 
-	if data.EnvironmentID.IsNull() {
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
 		data.EnvironmentID = r.EnvironmentID
 	}
 
-	if data.OrganizationID.IsNull() {
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
 
@@ -560,11 +562,11 @@ func (r *SharedPolicyGroupResource) Delete(ctx context.Context, req resource.Del
 		return
 	}
 
-	if data.EnvironmentID.IsNull() {
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
 		data.EnvironmentID = r.EnvironmentID
 	}
 
-	if data.OrganizationID.IsNull() {
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
 

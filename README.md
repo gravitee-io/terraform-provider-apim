@@ -27,6 +27,7 @@ Compatible with APIM 4.9 and above
 <!-- $toc-max-depth=2 -->
 * [Gravitee - APIM Terraform Provider](#gravitee-apim-terraform-provider)
   * [Installation](#installation)
+  * [Authentication](#authentication)
   * [Available Resources and Data Sources](#available-resources-and-data-sources)
 
 <!-- End Table of Contents [toc] -->
@@ -51,6 +52,26 @@ provider "apim" {
 }
 ```
 <!-- End Installation [installation] -->
+
+<!-- Start Authentication [security] -->
+## Authentication
+
+This provider supports authentication configuration via environment variables and provider configuration.
+
+The configuration precedence is:
+
+- Provider configuration
+- Environment variables
+
+Available configuration:
+
+| Provider Attribute | Description |
+|---|---|
+| `bearer_auth` | Service account authentication. Configurable via environment variable `APIM_SA_TOKEN`. |
+| `cloud_auth` | Gravitee Cloud Token authentication. Configurable via environment variable `APIM_CLOUD_TOKEN`. |
+| `password` | Basic authentication password. Configurable via environment variable `APIM_PASSWORD`. |
+| `username` | Basic authentication username. Configurable via environment variable `APIM_USERNAME`. |
+<!-- End Authentication [security] -->
 
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources

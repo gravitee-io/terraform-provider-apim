@@ -151,10 +151,6 @@ actions:
     remove: true
 
   ## Schemaless config
-  - target: $.components.schemas.BaseStep.properties.configuration
-    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
-    update:
-      x-speakeasy-type-override: any
   - target: $.components.schemas.EndpointGroupV4.properties.sharedConfiguration
     description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
     update:

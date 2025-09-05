@@ -9,7 +9,8 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 	speakeasy run --output console --minimal --skip-versioning
 	@go mod tidy
 	@rm -rf examples/data-sources docs/data-sources examples/README.md USAGE.md > /dev/null
-	go build
+	@terraform fmt -recursive > /dev/null
+	@go build
 
 .PHONY: lint
 lint: ## Run speakeasy lint check run terraform resource formatting

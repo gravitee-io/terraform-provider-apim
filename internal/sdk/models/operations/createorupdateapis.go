@@ -20,7 +20,7 @@ func (c CreateOrUpdateApisGlobals) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateOrUpdateApisGlobals) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -58,7 +58,7 @@ func (c CreateOrUpdateApisRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateOrUpdateApisRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ApiV4Spec"}); err != nil {
 		return err
 	}
 	return nil

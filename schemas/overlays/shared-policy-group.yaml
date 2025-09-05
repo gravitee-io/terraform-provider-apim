@@ -33,10 +33,6 @@ actions:
     description: Not required for Terraform
     update:
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.SharedPolicyGroupState.allOf[?@.properties.steps.items.properties.configuration]
-    description: Not required for Terraform
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.SharedPolicyGroupSpec.properties.prerequisiteMessage
     description: Prevent unknown values in plans if unconfigured
     update:

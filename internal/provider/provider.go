@@ -53,12 +53,14 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"bearer_auth": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `Service account authentication. Configurable via environment variable ` + "`" + `APIM_SA_TOKEN` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 			"cloud_auth": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `Gravitee Cloud Token authentication. Configurable via environment variable ` + "`" + `APIM_CLOUD_TOKEN` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 			"environment_id": schema.StringAttribute{
 				Description: `environment ID`,
@@ -69,16 +71,18 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				Optional:    true,
 			},
 			"password": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `Basic authentication password. Configurable via environment variable ` + "`" + `APIM_PASSWORD` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 			"server_url": schema.StringAttribute{
 				Description: `Server URL (defaults to https://eu.cloudgate.gravitee.io/apim/automation)`,
 				Optional:    true,
 			},
 			"username": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `Basic authentication username. Configurable via environment variable ` + "`" + `APIM_USERNAME` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 		},
 		MarkdownDescription: `Gravitee: Gravitee API Management Terraform Provider (beta)` + "\n" +
@@ -118,8 +122,16 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		data.EnvironmentID = types.StringValue(environmentIDEnvVar)
 	}
 
+	if data.EnvironmentID.IsNull() {
+		data.EnvironmentID = types.StringValue(`DEFAULT`)
+	}
+
 	if organizationIDEnvVar, ok := os.LookupEnv("APIM_ORG_ID"); ok && data.OrganizationID.IsNull() {
 		data.OrganizationID = types.StringValue(organizationIDEnvVar)
+	}
+
+	if data.OrganizationID.IsNull() {
+		data.OrganizationID = types.StringValue(`DEFAULT`)
 	}
 	security := shared.Security{}
 

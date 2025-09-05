@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -38,15 +37,15 @@ type SubscriptionDataSource struct {
 
 // SubscriptionDataSourceModel describes the data model.
 type SubscriptionDataSourceModel struct {
-	APIHrid         types.String      `tfsdk:"api_hrid"`
-	ApplicationHrid types.String      `tfsdk:"application_hrid"`
-	EndingAt        timetypes.RFC3339 `tfsdk:"ending_at"`
-	EnvironmentID   types.String      `tfsdk:"environment_id"`
-	Hrid            types.String      `tfsdk:"hrid"`
-	ID              types.String      `tfsdk:"id"`
-	OrganizationID  types.String      `tfsdk:"organization_id"`
-	PlanHrid        types.String      `tfsdk:"plan_hrid"`
-	StartingAt      timetypes.RFC3339 `tfsdk:"starting_at"`
+	APIHrid         types.String `tfsdk:"api_hrid"`
+	ApplicationHrid types.String `tfsdk:"application_hrid"`
+	EndingAt        types.String `tfsdk:"ending_at"`
+	EnvironmentID   types.String `tfsdk:"environment_id"`
+	Hrid            types.String `tfsdk:"hrid"`
+	ID              types.String `tfsdk:"id"`
+	OrganizationID  types.String `tfsdk:"organization_id"`
+	PlanHrid        types.String `tfsdk:"plan_hrid"`
+	StartingAt      types.String `tfsdk:"starting_at"`
 }
 
 // Metadata returns the data source type name.
@@ -69,8 +68,7 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 				Description: `Application's Hrid that needs to subscribe to the API.`,
 			},
 			"ending_at": schema.StringAttribute{
-				CustomType: timetypes.RFC3339Type{},
-				Computed:   true,
+				Computed: true,
 			},
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
@@ -98,8 +96,7 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 				Description: `API plan's Hrid`,
 			},
 			"starting_at": schema.StringAttribute{
-				CustomType: timetypes.RFC3339Type{},
-				Computed:   true,
+				Computed: true,
 			},
 		},
 	}
@@ -145,11 +142,11 @@ func (r *SubscriptionDataSource) Read(ctx context.Context, req datasource.ReadRe
 		return
 	}
 
-	if data.EnvironmentID.IsNull() {
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
 		data.EnvironmentID = r.EnvironmentID
 	}
 
-	if data.OrganizationID.IsNull() {
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
 

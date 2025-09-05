@@ -18,7 +18,7 @@ func (p PathV4) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PathV4) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil

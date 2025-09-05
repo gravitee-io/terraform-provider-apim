@@ -5,6 +5,7 @@ package shared
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
 // ConditionSelectorType - Selector type.
@@ -43,6 +44,17 @@ type ConditionSelector struct {
 	Type ConditionSelectorType `json:"type"`
 	// The condition of the selector
 	Condition string `json:"condition"`
+}
+
+func (c ConditionSelector) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(c, "", false)
+}
+
+func (c *ConditionSelector) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"type", "condition"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *ConditionSelector) GetType() ConditionSelectorType {
