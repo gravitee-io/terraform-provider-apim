@@ -4,9 +4,11 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -25,13 +27,18 @@ func (r *SharedPolicyGroupResourceModel) RefreshFromSharedSharedPolicyGroupState
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.Phase = types.StringValue(string(resp.Phase))
 		r.PrerequisiteMessage = types.StringPointerValue(resp.PrerequisiteMessage)
-		r.Steps = []tfTypes.FlowStep{}
+		r.Steps = []tfTypes.StepV4{}
 
 		for _, stepsItem := range resp.Steps {
-			var steps tfTypes.FlowStep
+			var steps tfTypes.StepV4
 
 			steps.Condition = types.StringPointerValue(stepsItem.Condition)
-			steps.Configuration = types.StringPointerValue(stepsItem.Configuration)
+			if stepsItem.Configuration == nil {
+				steps.Configuration = jsontypes.NewNormalizedNull()
+			} else {
+				configurationResult, _ := json.Marshal(stepsItem.Configuration)
+				steps.Configuration = jsontypes.NewNormalizedValue(string(configurationResult))
+			}
 			steps.Description = types.StringPointerValue(stepsItem.Description)
 			steps.Enabled = types.BoolPointerValue(stepsItem.Enabled)
 			steps.MessageCondition = types.StringPointerValue(stepsItem.MessageCondition)
@@ -153,19 +160,13 @@ func (r *SharedPolicyGroupResourceModel) ToSharedSharedPolicyGroupSpec(ctx conte
 	name = r.Name.ValueString()
 
 	phase := shared.FlowPhase(r.Phase.ValueString())
-	steps := make([]shared.FlowStep, 0, len(r.Steps))
+	steps := make([]shared.StepV4, 0, len(r.Steps))
 	for _, stepsItem := range r.Steps {
-		condition := new(string)
-		if !stepsItem.Condition.IsUnknown() && !stepsItem.Condition.IsNull() {
-			*condition = stepsItem.Condition.ValueString()
+		name1 := new(string)
+		if !stepsItem.Name.IsUnknown() && !stepsItem.Name.IsNull() {
+			*name1 = stepsItem.Name.ValueString()
 		} else {
-			condition = nil
-		}
-		configuration := new(string)
-		if !stepsItem.Configuration.IsUnknown() && !stepsItem.Configuration.IsNull() {
-			*configuration = stepsItem.Configuration.ValueString()
-		} else {
-			configuration = nil
+			name1 = nil
 		}
 		description1 := new(string)
 		if !stepsItem.Description.IsUnknown() && !stepsItem.Description.IsNull() {
@@ -179,32 +180,36 @@ func (r *SharedPolicyGroupResourceModel) ToSharedSharedPolicyGroupSpec(ctx conte
 		} else {
 			enabled = nil
 		}
-		messageCondition := new(string)
-		if !stepsItem.MessageCondition.IsUnknown() && !stepsItem.MessageCondition.IsNull() {
-			*messageCondition = stepsItem.MessageCondition.ValueString()
-		} else {
-			messageCondition = nil
-		}
-		name1 := new(string)
-		if !stepsItem.Name.IsUnknown() && !stepsItem.Name.IsNull() {
-			*name1 = stepsItem.Name.ValueString()
-		} else {
-			name1 = nil
-		}
 		policy := new(string)
 		if !stepsItem.Policy.IsUnknown() && !stepsItem.Policy.IsNull() {
 			*policy = stepsItem.Policy.ValueString()
 		} else {
 			policy = nil
 		}
-		steps = append(steps, shared.FlowStep{
-			Condition:        condition,
-			Configuration:    configuration,
+		var configuration interface{}
+		if !stepsItem.Configuration.IsUnknown() && !stepsItem.Configuration.IsNull() {
+			_ = json.Unmarshal([]byte(stepsItem.Configuration.ValueString()), &configuration)
+		}
+		condition := new(string)
+		if !stepsItem.Condition.IsUnknown() && !stepsItem.Condition.IsNull() {
+			*condition = stepsItem.Condition.ValueString()
+		} else {
+			condition = nil
+		}
+		messageCondition := new(string)
+		if !stepsItem.MessageCondition.IsUnknown() && !stepsItem.MessageCondition.IsNull() {
+			*messageCondition = stepsItem.MessageCondition.ValueString()
+		} else {
+			messageCondition = nil
+		}
+		steps = append(steps, shared.StepV4{
+			Name:             name1,
 			Description:      description1,
 			Enabled:          enabled,
-			MessageCondition: messageCondition,
-			Name:             name1,
 			Policy:           policy,
+			Configuration:    configuration,
+			Condition:        condition,
+			MessageCondition: messageCondition,
 		})
 	}
 	out := shared.SharedPolicyGroupSpec{

@@ -23,7 +23,7 @@ func (a Analytics) MarshalJSON() ([]byte, error) {
 }
 
 func (a *Analytics) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -54,7 +54,7 @@ func (h HTTPSelector) MarshalJSON() ([]byte, error) {
 }
 
 func (h *HTTPSelector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &h, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &h, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil

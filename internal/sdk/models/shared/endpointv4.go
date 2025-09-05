@@ -31,7 +31,7 @@ func (e EndpointV4) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EndpointV4) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil

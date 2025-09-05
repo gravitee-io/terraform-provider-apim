@@ -4,9 +4,11 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -25,13 +27,18 @@ func (r *SharedPolicyGroupDataSourceModel) RefreshFromSharedSharedPolicyGroupSta
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.Phase = types.StringValue(string(resp.Phase))
 		r.PrerequisiteMessage = types.StringPointerValue(resp.PrerequisiteMessage)
-		r.Steps = []tfTypes.FlowStep{}
+		r.Steps = []tfTypes.StepV4{}
 
 		for _, stepsItem := range resp.Steps {
-			var steps tfTypes.FlowStep
+			var steps tfTypes.StepV4
 
 			steps.Condition = types.StringPointerValue(stepsItem.Condition)
-			steps.Configuration = types.StringPointerValue(stepsItem.Configuration)
+			if stepsItem.Configuration == nil {
+				steps.Configuration = jsontypes.NewNormalizedNull()
+			} else {
+				configurationResult, _ := json.Marshal(stepsItem.Configuration)
+				steps.Configuration = jsontypes.NewNormalizedValue(string(configurationResult))
+			}
 			steps.Description = types.StringPointerValue(stepsItem.Description)
 			steps.Enabled = types.BoolPointerValue(stepsItem.Enabled)
 			steps.MessageCondition = types.StringPointerValue(stepsItem.MessageCondition)

@@ -17,7 +17,7 @@ type SharedPolicyGroupState struct {
 	// The execution phase of a policy.
 	Phase FlowPhase `json:"phase"`
 	// SharedPolicyGroup Steps
-	Steps []FlowStep `json:"steps,omitempty"`
+	Steps []StepV4 `json:"steps,omitempty"`
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
 	Errors *Errors `json:"errors,omitempty"`
 	// The id of the shared policy group.
@@ -72,7 +72,7 @@ func (o *SharedPolicyGroupState) GetPhase() FlowPhase {
 	return o.Phase
 }
 
-func (o *SharedPolicyGroupState) GetSteps() []FlowStep {
+func (o *SharedPolicyGroupState) GetSteps() []StepV4 {
 	if o == nil {
 		return nil
 	}

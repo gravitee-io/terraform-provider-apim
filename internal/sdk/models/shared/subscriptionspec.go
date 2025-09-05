@@ -25,7 +25,7 @@ func (s SubscriptionSpec) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SubscriptionSpec) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"hrid", "applicationHrid", "apiHrid", "planHrid"}); err != nil {
 		return err
 	}
 	return nil

@@ -7,7 +7,6 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/typeconvert"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
-	"github.com/hashicorp/terraform-plugin-framework-timetypes/timetypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -18,15 +17,11 @@ func (r *SubscriptionDataSourceModel) RefreshFromSharedSubscriptionState(ctx con
 	if resp != nil {
 		r.APIHrid = types.StringValue(resp.APIHrid)
 		r.ApplicationHrid = types.StringValue(resp.ApplicationHrid)
-		endingAtValuable, endingAtDiags := timetypes.RFC3339Type{}.ValueFromString(ctx, types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.EndingAt)))
-		diags.Append(endingAtDiags...)
-		r.EndingAt = endingAtValuable.(timetypes.RFC3339)
+		r.EndingAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.EndingAt))
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.PlanHrid = types.StringValue(resp.PlanHrid)
-		startingAtValuable, startingAtDiags := timetypes.RFC3339Type{}.ValueFromString(ctx, types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.StartingAt)))
-		diags.Append(startingAtDiags...)
-		r.StartingAt = startingAtValuable.(timetypes.RFC3339)
+		r.StartingAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.StartingAt))
 	}
 
 	return diags

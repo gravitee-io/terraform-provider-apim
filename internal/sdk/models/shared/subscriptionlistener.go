@@ -2,12 +2,27 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // SubscriptionListener - Subscription listener
 type SubscriptionListener struct {
 	// Listener type.
 	Type        ListenerType `json:"type"`
 	Entrypoints []Entrypoint `json:"entrypoints,omitempty"`
 	Servers     []string     `json:"servers,omitempty"`
+}
+
+func (s SubscriptionListener) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(s, "", false)
+}
+
+func (s *SubscriptionListener) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"type"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *SubscriptionListener) GetType() ListenerType {

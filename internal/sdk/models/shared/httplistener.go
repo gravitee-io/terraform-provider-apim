@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // HTTPListener - HTTP Listener
 type HTTPListener struct {
 	// Listener type.
@@ -12,6 +16,17 @@ type HTTPListener struct {
 	PathMappings []string     `json:"pathMappings,omitempty"`
 	// Http listener Cross-Origin Resource Sharing
 	Cors *Cors `json:"cors,omitempty"`
+}
+
+func (h HTTPListener) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(h, "", false)
+}
+
+func (h *HTTPListener) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &h, "", false, []string{"type"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (o *HTTPListener) GetType() ListenerType {

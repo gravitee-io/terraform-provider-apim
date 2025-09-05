@@ -20,7 +20,7 @@ func (d DeletePolicyGroupGlobals) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeletePolicyGroupGlobals) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
@@ -58,7 +58,7 @@ func (d DeletePolicyGroupRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeletePolicyGroupRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"hrid"}); err != nil {
 		return err
 	}
 	return nil

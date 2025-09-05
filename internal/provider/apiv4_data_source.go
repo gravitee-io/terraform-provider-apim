@@ -1909,11 +1909,11 @@ func (r *Apiv4DataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		return
 	}
 
-	if data.EnvironmentID.IsNull() {
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
 		data.EnvironmentID = r.EnvironmentID
 	}
 
-	if data.OrganizationID.IsNull() {
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
 

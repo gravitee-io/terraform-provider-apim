@@ -5,26 +5,12 @@ info:
   version: 0.0.1
 actions:
 
-  # Suppress diff
-  - target: $.components.schemas.FlowStep.properties.condition
-    description: Prevent unknown values in plans if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.FlowStep.properties.messageCondition
-    description: Prevent unknown values in plans if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.FlowStep.properties.description
-    description: Prevent unknown values in plans if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.PrimaryOwner
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-
   # Terraform ignored
   - target: $.components.schemas.Errors
     description: Intentionally ignored for Terraform state
     update:
       x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.BaseStep.properties.configuration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
