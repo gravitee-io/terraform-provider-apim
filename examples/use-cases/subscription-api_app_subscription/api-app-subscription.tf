@@ -102,6 +102,6 @@ resource "apim_subscription" "api_app_subscription" {
   api_hrid         = apim_apiv4.api_app_subscription-api.hrid
   plan_hrid        = apim_apiv4.api_app_subscription-api.plans[0].hrid
   application_hrid = apim_application.api_app_subscription-app.hrid
-  ending_at        = "2042-12-25T10:12:28+01:00"
+  ending_at        = "2042-12-25T10:12:28+02:00"
 }
 
