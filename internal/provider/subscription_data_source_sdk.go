@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/typeconvert"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
@@ -17,7 +18,9 @@ func (r *SubscriptionDataSourceModel) RefreshFromSharedSubscriptionState(ctx con
 	if resp != nil {
 		r.APIHrid = types.StringValue(resp.APIHrid)
 		r.ApplicationHrid = types.StringValue(resp.ApplicationHrid)
-		r.EndingAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.EndingAt))
+		endingAtValuable, endingAtDiags := customtypes.RFC3339Type{}.ValueFromString(ctx, types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.EndingAt)))
+		diags.Append(endingAtDiags...)
+		r.EndingAt = endingAtValuable.(customtypes.RFC3339)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.PlanHrid = types.StringValue(resp.PlanHrid)

@@ -40,3 +40,11 @@ actions:
     description: Not returned by the API, so prevent null values during refresh
     update:
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.SubscriptionSpec.properties.endingAt
+    description: Using RFC3339 to make sure dates semantics equal
+    update:
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+        schemaType: customtypes.RFC3339Type{}
+        valueType: customtypes.RFC3339

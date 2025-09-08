@@ -820,6 +820,11 @@ components:
           type: string
           format: date-time
           example: "2040-12-25T09:12:28Z"
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+            schemaType: customtypes.RFC3339Type{}
+            valueType: customtypes.RFC3339
       required:
         - hrid
         - applicationHrid
