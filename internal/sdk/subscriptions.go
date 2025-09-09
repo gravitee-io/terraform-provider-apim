@@ -31,9 +31,9 @@ func newSubscriptions(rootSDK *GraviteeApim, sdkConfig config.SDKConfiguration, 
 	}
 }
 
-// CreateOrUpdate - Create or update Subscriptions from SubscriptionSpec
+// Update - Create or update Subscriptions from SubscriptionSpec
 // Create/update Subscription from Subscription Spec
-func (s *Subscriptions) CreateOrUpdate(ctx context.Context, request operations.CreateOrUpdateSubscriptionsRequest, opts ...operations.Option) (*operations.CreateOrUpdateSubscriptionsResponse, error) {
+func (s *Subscriptions) Update(ctx context.Context, request operations.CreateOrUpdateSubscriptionsRequest, opts ...operations.Option) (*operations.CreateOrUpdateSubscriptionsResponse, error) {
 	globals := operations.CreateOrUpdateSubscriptionsGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -57,7 +57,7 @@ func (s *Subscriptions) CreateOrUpdate(ctx context.Context, request operations.C
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/subscriptions", request, globals)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -308,7 +308,7 @@ func (s *Subscriptions) Get(ctx context.Context, request operations.GetSubscript
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/subscriptions/{hrid}", request, globals)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions/{hrid}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}
@@ -552,7 +552,7 @@ func (s *Subscriptions) Delete(ctx context.Context, request operations.DeleteSub
 	} else {
 		baseURL = *o.ServerURL
 	}
-	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/subscriptions/{hrid}", request, globals)
+	opURL, err := utils.GenerateURL(ctx, baseURL, "/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions/{hrid}", request, globals)
 	if err != nil {
 		return nil, fmt.Errorf("error generating URL: %w", err)
 	}

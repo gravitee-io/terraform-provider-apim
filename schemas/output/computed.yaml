@@ -227,7 +227,7 @@ paths:
       x-speakeasy-entity-operation: Application#delete
       x-speakeasy-name-override: delete
   # Subscription
-  /organizations/{orgId}/environments/{envId}/subscriptions:
+  /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions:
     put:
       operationId: createOrUpdateSubscriptions
       tags:
@@ -237,6 +237,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/orgIdParam"
         - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/apiHrid"
       requestBody:
         description: Subscription specification
         content:
@@ -260,11 +261,12 @@ paths:
         default:
           $ref: "#/components/responses/Error"
       x-speakeasy-entity-operation: Subscription#create,update
-      x-speakeasy-name-override: createOrUpdate
-  /organizations/{orgId}/environments/{envId}/subscriptions/{hrid}:
+      x-speakeasy-name-override: update
+  /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions/{hrid}:
     parameters:
       - $ref: "#/components/parameters/orgIdParam"
       - $ref: "#/components/parameters/envIdParam"
+      - $ref: "#/components/parameters/apiHrid"
       - $ref: "#/components/parameters/hridParam"
     get:
       operationId: getSubscription
@@ -807,11 +809,6 @@ components:
           description: Application's Hrid that needs to subscribe to the API.
           example: demo-app
           minLength: 1
-        apiHrid:
-          type: string
-          description: The API's Hrid that you want to subscribe to.
-          example: demo-api
-          minLength: 1
         planHrid:
           type: string
           description: API plan's Hrid
@@ -844,6 +841,10 @@ components:
             id:
               type: string
               description: Subscription's uuid.
+            apiHrid:
+              type: string
+              description: The API's Hrid.
+              example: demo-api
             startingAt:
               type: string
               format: date-time
@@ -2249,6 +2250,13 @@ components:
         type: string
         default: DEFAULT
       x-speakeasy-name-override: environmentId
+    apiHrid:
+      name: apiHrid
+      in: path
+      required: true
+      description: API ID for subscriptions
+      schema:
+        type: string
     orgIdParam:
       name: orgId
       in: path

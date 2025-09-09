@@ -61,8 +61,8 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 
 		Attributes: map[string]schema.Attribute{
 			"api_hrid": schema.StringAttribute{
-				Computed:    true,
-				Description: `The API's Hrid that you want to subscribe to.`,
+				Required:    true,
+				Description: `API ID for subscriptions`,
 			},
 			"application_hrid": schema.StringAttribute{
 				Computed:    true,

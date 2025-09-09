@@ -69,10 +69,7 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `The API's Hrid that you want to subscribe to.`,
-				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtLeast(1),
-				},
+				Description: `API ID for subscriptions`,
 			},
 			"application_hrid": schema.StringAttribute{
 				Required: true,
@@ -197,7 +194,7 @@ func (r *SubscriptionResource) Create(ctx context.Context, req resource.CreateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Subscriptions.CreateOrUpdate(ctx, *request)
+	res, err := r.client.Subscriptions.Update(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -319,7 +316,7 @@ func (r *SubscriptionResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Subscriptions.CreateOrUpdate(ctx, *request)
+	res, err := r.client.Subscriptions.Update(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -410,16 +407,22 @@ func (r *SubscriptionResource) ImportState(ctx context.Context, req resource.Imp
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
+		APIHrid        string  `json:"api_hrid"`
 		EnvironmentID  *string `json:"environment_id"`
 		Hrid           string  `json:"hrid"`
 		OrganizationID *string `json:"organization_id"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"environment_id": "...", "hrid": "...", "organization_id": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"api_hrid": "...", "environment_id": "...", "hrid": "...", "organization_id": "..."}': `+err.Error())
 		return
 	}
 
+	if len(data.APIHrid) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field api_hrid is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("api_hrid"), data.APIHrid)...)
 	if data.EnvironmentID == nil {
 		if !r.EnvironmentID.IsUnknown() {
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()

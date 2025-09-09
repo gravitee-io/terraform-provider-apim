@@ -33,6 +33,9 @@ func (r *SubscriptionDataSourceModel) RefreshFromSharedSubscriptionState(ctx con
 func (r *SubscriptionDataSourceModel) ToOperationsGetSubscriptionRequest(ctx context.Context) (*operations.GetSubscriptionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	var apiHrid string
+	apiHrid = r.APIHrid.ValueString()
+
 	organizationID := new(string)
 	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
 		*organizationID = r.OrganizationID.ValueString()
@@ -49,6 +52,7 @@ func (r *SubscriptionDataSourceModel) ToOperationsGetSubscriptionRequest(ctx con
 	hrid = r.Hrid.ValueString()
 
 	out := operations.GetSubscriptionRequest{
+		APIHrid:        apiHrid,
 		OrganizationID: organizationID,
 		EnvironmentID:  environmentID,
 		Hrid:           hrid,

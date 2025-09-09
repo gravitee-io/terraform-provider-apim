@@ -45,6 +45,8 @@ type CreateOrUpdateSubscriptionsRequest struct {
 	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
 	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+	// API ID for subscriptions
+	APIHrid string `pathParam:"style=simple,explode=false,name=apiHrid"`
 	// Subscription specification
 	SubscriptionSpec shared.SubscriptionSpec `request:"mediaType=application/json"`
 }
@@ -54,7 +56,7 @@ func (c CreateOrUpdateSubscriptionsRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateOrUpdateSubscriptionsRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"SubscriptionSpec"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"apiHrid", "SubscriptionSpec"}); err != nil {
 		return err
 	}
 	return nil
@@ -72,6 +74,13 @@ func (o *CreateOrUpdateSubscriptionsRequest) GetEnvironmentID() *string {
 		return nil
 	}
 	return o.EnvironmentID
+}
+
+func (o *CreateOrUpdateSubscriptionsRequest) GetAPIHrid() string {
+	if o == nil {
+		return ""
+	}
+	return o.APIHrid
 }
 
 func (o *CreateOrUpdateSubscriptionsRequest) GetSubscriptionSpec() shared.SubscriptionSpec {

@@ -6,13 +6,13 @@ info:
 actions:
 
   # Entity management
-  - target: $.paths["/organizations/{orgId}/environments/{envId}/subscriptions"].put
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions"].put
     update:
       x-speakeasy-entity-operation: Subscription#create,update
-  - target: $.paths["/organizations/{orgId}/environments/{envId}/subscriptions/{hrid}"].get
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions/{hrid}"].get
     update:
       x-speakeasy-entity-operation: Subscription#read
-  - target: $.paths["/organizations/{orgId}/environments/{envId}/subscriptions/{hrid}"].delete
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions/{hrid}"].delete
     update:
       x-speakeasy-entity-operation: Subscription#delete
   - target: $.components.schemas.SubscriptionSpec
