@@ -3,8 +3,8 @@ id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
   docChecksum: 6e9e84cc2f16d120a9a3b94054faacc6
   docVersion: 1.0.0
-  speakeasyVersion: 1.611.1
-  generationVersion: 2.694.1
+  speakeasyVersion: 1.614.0
+  generationVersion: 2.697.3
   releaseVersion: 0.3.0
   configChecksum: 46047f5b540d2cc85a4d36dd35c8074a
 features:
@@ -14,7 +14,7 @@ features:
     core: 3.44.1
     globalSecurity: 2.82.0
     globalServerURLs: 2.83.0
-    globals: 3.0.2
+    globals: 3.0.3
     groups: 2.81.2
     ignores: 2.81.1
     inputOutputModels: 2.83.0

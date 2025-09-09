@@ -86,7 +86,7 @@ resource "apim_application" "my_application" {
 
 - `background` (String) Application's background url
 - `domain` (String) Application's domain.
-- `environment_id` (String) environment ID. Default: "DEFAULT"
+- `environment_id` (String) environment ID
 - `groups` (List of String) List of groups associated with the Application.
 This groups are id or name references to existing groups in APIM.
 - `members` (Attributes List) Set of members associated with the application (see [below for nested schema](#nestedatt--members))
@@ -94,7 +94,7 @@ This groups are id or name references to existing groups in APIM.
 - `notify_members` (Boolean) If true, new members added to the Application spec will
 be notified when the Application is synced with APIM.
 Default: false
-- `organization_id` (String) organization ID. Default: "DEFAULT"
+- `organization_id` (String) organization ID
 - `picture_url` (String) Application's picture Url.
 - `primary_owner` (Attributes) Primary owner, the creator of the application. Can perform all possible API actions. (see [below for nested schema](#nestedatt--primary_owner))
 - `settings` (Attributes) Application settings defines the configuration of consumers authentication. Depending on the control plane configuration some applications types may be restricted. `app` and `oauth` are mutually exclusive. If none is set it fallbacks to `app` without any property set. (see [below for nested schema](#nestedatt--settings))
