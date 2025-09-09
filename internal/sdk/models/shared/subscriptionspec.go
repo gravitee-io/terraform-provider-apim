@@ -13,8 +13,6 @@ type SubscriptionSpec struct {
 	Hrid string `json:"hrid"`
 	// Application's Hrid that needs to subscribe to the API.
 	ApplicationHrid string `json:"applicationHrid"`
-	// The API's Hrid that you want to subscribe to.
-	APIHrid string `json:"apiHrid"`
 	// API plan's Hrid
 	PlanHrid string     `json:"planHrid"`
 	EndingAt *time.Time `json:"endingAt,omitempty"`
@@ -25,7 +23,7 @@ func (s SubscriptionSpec) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SubscriptionSpec) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"hrid", "applicationHrid", "apiHrid", "planHrid"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"hrid", "applicationHrid", "planHrid"}); err != nil {
 		return err
 	}
 	return nil
@@ -43,13 +41,6 @@ func (o *SubscriptionSpec) GetApplicationHrid() string {
 		return ""
 	}
 	return o.ApplicationHrid
-}
-
-func (o *SubscriptionSpec) GetAPIHrid() string {
-	if o == nil {
-		return ""
-	}
-	return o.APIHrid
 }
 
 func (o *SubscriptionSpec) GetPlanHrid() string {

@@ -2,7 +2,7 @@ overlay: 1.0.0
 x-speakeasy-jsonpath: rfc9535
 info:
   title: Speakeasy Modifications
-  version: 0.0.4
+  version: 0.0.5
   x-speakeasy-metadata:
     after: ""
     before: ""
@@ -95,30 +95,27 @@ actions:
       created_at: 1753782701609
       reviewed_at: 1753782706973
       type: method-name
-  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/subscriptions"]["put"]
-    update:
-      x-speakeasy-name-override: createOrUpdate
-    x-speakeasy-metadata:
-      after: sdk.subscriptions.createOrUpdate()
-      before: sdk.Subscriptions.createOrUpdateSubscriptions()
-      created_at: 1753782701609
-      reviewed_at: 1753782706973
-      type: method-name
-  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/subscriptions/{hrid}"]["get"]
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions/{hrid}"]["get"]
     update:
       x-speakeasy-name-override: get
     x-speakeasy-metadata:
       after: sdk.subscriptions.get()
       before: sdk.Subscriptions.getSubscription()
-      created_at: 1753782701609
-      reviewed_at: 1753782706973
+      created_at: 1757432498236
       type: method-name
-  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/subscriptions/{hrid}"]["delete"]
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions/{hrid}"]["delete"]
     update:
       x-speakeasy-name-override: delete
     x-speakeasy-metadata:
       after: sdk.subscriptions.delete()
       before: sdk.Subscriptions.deleteSubscription()
-      created_at: 1753782701609
-      reviewed_at: 1753782706973
+      created_at: 1757432498236
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions"]["put"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.subscriptions.update()
+      before: sdk.Subscriptions.createOrUpdateSubscriptions()
+      created_at: 1757432498236
       type: method-name

@@ -376,11 +376,12 @@ examples:
         path:
           orgId: "DEFAULT"
           envId: "DEFAULT"
+          apiHrid: "<id>"
       requestBody:
-        application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "apiHrid": "demo-api", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z"}
+        application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z"}
       responses:
         "200":
-          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "apiHrid": "demo-api", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "startingAt": "2040-12-25T09:12:28+01:00"}
+          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "apiHrid": "demo-api", "startingAt": "2040-12-25T09:12:28+01:00"}
         "400":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:
@@ -392,9 +393,10 @@ examples:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           hrid: "<id>"
+          apiHrid: "<id>"
       responses:
         "200":
-          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "apiHrid": "demo-api", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "startingAt": "2040-12-25T09:12:28+01:00"}
+          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "apiHrid": "demo-api", "startingAt": "2040-12-25T09:12:28+01:00"}
         "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:
@@ -406,6 +408,7 @@ examples:
           orgId: "DEFAULT"
           envId: "DEFAULT"
           hrid: "<id>"
+          apiHrid: "<id>"
       responses:
         default:
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}

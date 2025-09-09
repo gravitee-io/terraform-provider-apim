@@ -41,6 +41,8 @@ func (o *DeleteSubscriptionGlobals) GetEnvironmentID() *string {
 }
 
 type DeleteSubscriptionRequest struct {
+	// API ID for subscriptions
+	APIHrid string `pathParam:"style=simple,explode=false,name=apiHrid"`
 	// organization ID
 	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
 	// environment ID
@@ -54,10 +56,17 @@ func (d DeleteSubscriptionRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteSubscriptionRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"hrid"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"apiHrid", "hrid"}); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (o *DeleteSubscriptionRequest) GetAPIHrid() string {
+	if o == nil {
+		return ""
+	}
+	return o.APIHrid
 }
 
 func (o *DeleteSubscriptionRequest) GetOrganizationID() *string {

@@ -214,7 +214,7 @@ paths:
           $ref: "#/components/responses/Error"
 
   # Subscription
-  /organizations/{orgId}/environments/{envId}/subscriptions:
+  /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions:
     put:
       operationId: createOrUpdateSubscriptions
       tags:
@@ -224,6 +224,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/orgIdParam"
         - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/apiHrid"
       requestBody:
         description: Subscription specification
         content:
@@ -247,10 +248,11 @@ paths:
         default:
           $ref: "#/components/responses/Error"
 
-  /organizations/{orgId}/environments/{envId}/subscriptions/{hrid}:
+  /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions/{hrid}:
     parameters:
       - $ref: "#/components/parameters/orgIdParam"
       - $ref: "#/components/parameters/envIdParam"
+      - $ref: "#/components/parameters/apiHrid"
       - $ref: "#/components/parameters/hridParam"
     get:
       operationId: getSubscription
@@ -799,11 +801,6 @@ components:
           description: Application's Hrid that needs to subscribe to the API.
           example: demo-app
           minLength: 1
-        apiHrid:
-          type: string
-          description: The API's Hrid that you want to subscribe to.
-          example: demo-api
-          minLength: 1
         planHrid:
           type: string
           description: API plan's Hrid
@@ -831,6 +828,10 @@ components:
             id:
               type: string
               description: Subscription's uuid.
+            apiHrid:
+              type: string
+              description: The API's Hrid.
+              example: demo-api
             environmentId:
               description:
                 The environment ID of the Subscription.
@@ -2249,6 +2250,13 @@ components:
       schema:
         type: string
         default: DEFAULT
+    apiHrid:
+      name: apiHrid
+      in: path
+      required: true
+      description: API ID for subscriptions
+      schema:
+        type: string
     orgIdParam:
       name: orgId
       in: path

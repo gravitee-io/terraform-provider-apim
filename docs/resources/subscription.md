@@ -29,7 +29,7 @@ resource "apim_subscription" "my_subscription" {
 
 ### Required
 
-- `api_hrid` (String) The API's Hrid that you want to subscribe to.
+- `api_hrid` (String) API ID for subscriptions
 - `application_hrid` (String) Application's Hrid that needs to subscribe to the API.
 - `hrid` (String) A unique human readable id identifying this resource. Requires replacement if changed.
 - `plan_hrid` (String) API plan's Hrid
@@ -55,6 +55,7 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 import {
   to = apim_subscription.my_apim_subscription
   id = jsonencode({
+    api_hrid = "..."
     environment_id = "..."
     hrid = "..."
     organization_id = "..."
@@ -65,5 +66,5 @@ import {
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import apim_subscription.my_apim_subscription '{"environment_id": "...", "hrid": "...", "organization_id": "..."}'
+terraform import apim_subscription.my_apim_subscription '{"api_hrid": "...", "environment_id": "...", "hrid": "...", "organization_id": "..."}'
 ```

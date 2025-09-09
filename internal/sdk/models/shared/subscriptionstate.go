@@ -13,15 +13,15 @@ type SubscriptionState struct {
 	Hrid string `json:"hrid"`
 	// Application's Hrid that needs to subscribe to the API.
 	ApplicationHrid string `json:"applicationHrid"`
-	// The API's Hrid that you want to subscribe to.
-	APIHrid string `json:"apiHrid"`
 	// API plan's Hrid
 	PlanHrid string     `json:"planHrid"`
 	EndingAt *time.Time `json:"endingAt,omitempty"`
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
 	Errors *Errors `json:"errors,omitempty"`
 	// Subscription's uuid.
-	ID         *string    `json:"id,omitempty"`
+	ID *string `json:"id,omitempty"`
+	// The API's Hrid.
+	APIHrid    string     `json:"apiHrid"`
 	StartingAt *time.Time `json:"startingAt,omitempty"`
 }
 
@@ -30,7 +30,7 @@ func (s SubscriptionState) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SubscriptionState) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"hrid", "applicationHrid", "apiHrid", "planHrid"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"hrid", "applicationHrid", "planHrid", "apiHrid"}); err != nil {
 		return err
 	}
 	return nil
@@ -48,13 +48,6 @@ func (o *SubscriptionState) GetApplicationHrid() string {
 		return ""
 	}
 	return o.ApplicationHrid
-}
-
-func (o *SubscriptionState) GetAPIHrid() string {
-	if o == nil {
-		return ""
-	}
-	return o.APIHrid
 }
 
 func (o *SubscriptionState) GetPlanHrid() string {
@@ -83,6 +76,13 @@ func (o *SubscriptionState) GetID() *string {
 		return nil
 	}
 	return o.ID
+}
+
+func (o *SubscriptionState) GetAPIHrid() string {
+	if o == nil {
+		return ""
+	}
+	return o.APIHrid
 }
 
 func (o *SubscriptionState) GetStartingAt() *time.Time {

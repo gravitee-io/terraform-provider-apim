@@ -41,6 +41,8 @@ func (o *GetSubscriptionGlobals) GetEnvironmentID() *string {
 }
 
 type GetSubscriptionRequest struct {
+	// API ID for subscriptions
+	APIHrid string `pathParam:"style=simple,explode=false,name=apiHrid"`
 	// organization ID
 	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
 	// environment ID
@@ -54,10 +56,17 @@ func (g GetSubscriptionRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetSubscriptionRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"hrid"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"apiHrid", "hrid"}); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (o *GetSubscriptionRequest) GetAPIHrid() string {
+	if o == nil {
+		return ""
+	}
+	return o.APIHrid
 }
 
 func (o *GetSubscriptionRequest) GetOrganizationID() *string {
