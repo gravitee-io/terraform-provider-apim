@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"math/big"
+	"regexp"
 	"strings"
 	"testing"
 	"time"
@@ -31,18 +32,19 @@ func TestApplicationResource_minimal(t *testing.T) {
 	resourceAddress := "apim_application.test"
 
 	resource.Test(t, resource.TestCase{
-		ProtoV6ProviderFactories: testProviders(),
 		Steps: []resource.TestStep{
 			// Verifies resource create and read.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"hrid": config.StringVariable(randomId),
 				},
 			},
 			// Verifies resource import.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
@@ -151,6 +153,67 @@ func getClientTLSCert(t *testing.T) string {
 	return strings.TrimSpace(certData.String())
 }
 
+func TestApplicationResource_withOrgIdFromProvider(t *testing.T) {
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid": config.StringVariable(randomId),
+				},
+				ProtoV6ProviderFactories: testProviders(),
+				// TODO: We only have one provider in the test environment. This test should be updated once we create more.
+				ExpectError: regexp.MustCompile(`Invalid organization or environment`),
+			},
+		},
+	})
+}
+
+func TestApplicationResource_withEnvIdFromProvider(t *testing.T) {
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid": config.StringVariable(randomId),
+				},
+				ProtoV6ProviderFactories: testProviders(),
+				// TODO: We only have one provider in the test environment. This test should be updated once we create more.
+				ExpectError: regexp.MustCompile(`Invalid organization or environment`),
+			},
+		},
+	})
+}
+
+func TestApplicationResource_overrideOrgIdAndEnvIdFromProvider(t *testing.T) {
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ConfigDirectory: config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid": config.StringVariable(randomId),
+				},
+				ProtoV6ProviderFactories: testProviders(),
+			},
+		},
+	})
+}
+
 // Verifies the create, read, import, and delete lifecycle of the
 // `apim_application` resource with as many fields as possible
 func TestApplicationResource_all(t *testing.T) {
@@ -162,11 +225,11 @@ func TestApplicationResource_all(t *testing.T) {
 	cert := getClientTLSCert(t)
 
 	resource.Test(t, resource.TestCase{
-		ProtoV6ProviderFactories: testProviders(),
 		Steps: []resource.TestStep{
 			// Verifies resource create and read.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":     config.StringVariable(environmentId),
 					"hrid":               config.StringVariable(randomId),
@@ -188,11 +251,11 @@ func TestApplicationResource_update(t *testing.T) {
 	resourceAddress := "apim_application.test"
 
 	resource.Test(t, resource.TestCase{
-		ProtoV6ProviderFactories: testProviders(),
 		Steps: []resource.TestStep{
 			// Verifies resource create and read.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"hrid": config.StringVariable(randomId),
 					"name": config.StringVariable(randomId + "-original"),
@@ -200,7 +263,8 @@ func TestApplicationResource_update(t *testing.T) {
 			},
 			// Verifies resource import.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
@@ -226,7 +290,8 @@ func TestApplicationResource_update(t *testing.T) {
 			},
 			// Verifies resource update.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),

@@ -2,11 +2,12 @@ package acceptance_test
 
 import (
 	"encoding/json"
+	"testing"
+
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
-	"testing"
 )
 
 // Verifies the create, read, import, and delete lifecycle of the
@@ -20,11 +21,11 @@ func TestSubscriptionResource_minimal(t *testing.T) {
 	resourceAddress := "apim_subscription.test"
 
 	resource.Test(t, resource.TestCase{
-		ProtoV6ProviderFactories: testProviders(),
 		Steps: []resource.TestStep{
 			// Verifies resource create and read.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
@@ -33,7 +34,8 @@ func TestSubscriptionResource_minimal(t *testing.T) {
 			},
 			// Verifies resource import.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
@@ -73,11 +75,11 @@ func TestSubscriptionResource_update(t *testing.T) {
 	randomId := "test-" + acctest.RandString(10)
 
 	resource.Test(t, resource.TestCase{
-		ProtoV6ProviderFactories: testProviders(),
 		Steps: []resource.TestStep{
 			// Verifies resource create and read.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
@@ -87,7 +89,8 @@ func TestSubscriptionResource_update(t *testing.T) {
 			},
 			// Verifies resource update.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
@@ -97,7 +100,8 @@ func TestSubscriptionResource_update(t *testing.T) {
 			},
 			// Verifies resource update using an ending_at in a different format.
 			{
-				ConfigDirectory: config.TestNameDirectory(),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
