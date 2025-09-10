@@ -107,7 +107,7 @@ resource "apim_apiv4" "quick-start-api" {
 - `analytics` (Attributes) API analytics (see [below for nested schema](#nestedatt--analytics))
 - `categories` (List of String) The list of category keys associated with this API.
 - `description` (String) API's description. A short description of your API.
-- `environment_id` (String) environment ID. Default: "DEFAULT"
+- `environment_id` (String) environment ID
 - `failover` (Attributes) API Failover (see [below for nested schema](#nestedatt--failover))
 - `flow_execution` (Attributes) Flow execution (see [below for nested schema](#nestedatt--flow_execution))
 - `flows` (Attributes List) List of flows for the API (see [below for nested schema](#nestedatt--flows))
@@ -119,7 +119,7 @@ This groups are id or name references to existing groups in APIM.
 - `notify_members` (Boolean) If true, new members added to the API spec will
 be notified when the API is synced with APIM.
 Default: true
-- `organization_id` (String) organization ID. Default: "DEFAULT"
+- `organization_id` (String) organization ID
 - `pages` (Attributes List) List of Pages for the API (see [below for nested schema](#nestedatt--pages))
 - `plans` (Attributes List) List of Plans for the API (see [below for nested schema](#nestedatt--plans))
 - `primary_owner` (Attributes) Primary owner, the creator of the application. Can perform all possible API actions. (see [below for nested schema](#nestedatt--primary_owner))

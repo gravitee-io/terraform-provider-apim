@@ -16,7 +16,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -99,8 +98,7 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Default:     stringdefault.StaticString(`DEFAULT`),
-				Description: `environment ID. Default: "DEFAULT"`,
+				Description: `environment ID`,
 			},
 			"hrid": schema.StringAttribute{
 				Required: true,
@@ -123,8 +121,7 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Default:     stringdefault.StaticString(`DEFAULT`),
-				Description: `organization ID. Default: "DEFAULT"`,
+				Description: `organization ID`,
 			},
 			"plan_hrid": schema.StringAttribute{
 				Required: true,

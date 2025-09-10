@@ -37,8 +37,8 @@ resource "apim_subscription" "my_subscription" {
 ### Optional
 
 - `ending_at` (String)
-- `environment_id` (String) environment ID. Default: "DEFAULT"
-- `organization_id` (String) organization ID. Default: "DEFAULT"
+- `environment_id` (String) environment ID
+- `organization_id` (String) organization ID
 
 ### Read-Only
 
