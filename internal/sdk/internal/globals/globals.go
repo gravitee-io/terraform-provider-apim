@@ -10,7 +10,7 @@ type Globals struct {
 	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// organization ID
-	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
 }
 
 func (g Globals) MarshalJSON() ([]byte, error) {

@@ -12,7 +12,7 @@ provider "apim" {
   # Can be overriden with APIM_SA_TOKEN environment variable
   # bearer_auth = "xxx" # your account personal token
   # Basic auth is also supported but discourage for security reason and should only be used for tests.
-  organization_id = "foo"
-  environment_id  = "bar"
+  organization_id = "DEFAULT"
+  environment_id  = "DEFAULT"
 
 }

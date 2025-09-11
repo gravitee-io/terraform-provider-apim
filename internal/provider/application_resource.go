@@ -111,8 +111,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Default:     stringdefault.StaticString(`DEFAULT`),
-				Description: `environment ID. Default: "DEFAULT"`,
+				Description: `environment ID`,
 			},
 			"groups": schema.ListAttribute{
 				Computed: true,
@@ -306,8 +305,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Default:     stringdefault.StaticString(`DEFAULT`),
-				Description: `organization ID. Default: "DEFAULT"`,
+				Description: `organization ID`,
 			},
 			"picture_url": schema.StringAttribute{
 				Computed: true,
