@@ -29,7 +29,7 @@ resource "apim_subscription" "my_subscription" {
 
 ### Required
 
-- `api_hrid` (String) API ID for subscriptions
+- `api_hrid` (String) Human-readable ID of api
 - `application_hrid` (String) Application's Hrid that needs to subscribe to the API.
 - `hrid` (String) A unique human readable id identifying this resource. Requires replacement if changed.
 - `plan_hrid` (String) API plan's Hrid

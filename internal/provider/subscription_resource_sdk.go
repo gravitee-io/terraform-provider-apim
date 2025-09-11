@@ -31,7 +31,7 @@ func (r *SubscriptionResourceModel) RefreshFromSharedSubscriptionState(ctx conte
 	return diags
 }
 
-func (r *SubscriptionResourceModel) ToOperationsCreateOrUpdateSubscriptionsRequest(ctx context.Context) (*operations.CreateOrUpdateSubscriptionsRequest, diag.Diagnostics) {
+func (r *SubscriptionResourceModel) ToOperationsCreateOrUpdateAPISubscriptionsRequest(ctx context.Context) (*operations.CreateOrUpdateAPISubscriptionsRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	organizationID := new(string)
@@ -56,7 +56,7 @@ func (r *SubscriptionResourceModel) ToOperationsCreateOrUpdateSubscriptionsReque
 		return nil, diags
 	}
 
-	out := operations.CreateOrUpdateSubscriptionsRequest{
+	out := operations.CreateOrUpdateAPISubscriptionsRequest{
 		OrganizationID:   organizationID,
 		EnvironmentID:    environmentID,
 		APIHrid:          apiHrid,
@@ -66,11 +66,8 @@ func (r *SubscriptionResourceModel) ToOperationsCreateOrUpdateSubscriptionsReque
 	return &out, diags
 }
 
-func (r *SubscriptionResourceModel) ToOperationsDeleteSubscriptionRequest(ctx context.Context) (*operations.DeleteSubscriptionRequest, diag.Diagnostics) {
+func (r *SubscriptionResourceModel) ToOperationsDeleteAPISubscriptionRequest(ctx context.Context) (*operations.DeleteAPISubscriptionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
-
-	var apiHrid string
-	apiHrid = r.APIHrid.ValueString()
 
 	organizationID := new(string)
 	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
@@ -84,24 +81,24 @@ func (r *SubscriptionResourceModel) ToOperationsDeleteSubscriptionRequest(ctx co
 	} else {
 		environmentID = nil
 	}
+	var apiHrid string
+	apiHrid = r.APIHrid.ValueString()
+
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
-	out := operations.DeleteSubscriptionRequest{
-		APIHrid:        apiHrid,
+	out := operations.DeleteAPISubscriptionRequest{
 		OrganizationID: organizationID,
 		EnvironmentID:  environmentID,
+		APIHrid:        apiHrid,
 		Hrid:           hrid,
 	}
 
 	return &out, diags
 }
 
-func (r *SubscriptionResourceModel) ToOperationsGetSubscriptionRequest(ctx context.Context) (*operations.GetSubscriptionRequest, diag.Diagnostics) {
+func (r *SubscriptionResourceModel) ToOperationsGetAPISubscriptionRequest(ctx context.Context) (*operations.GetAPISubscriptionRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
-
-	var apiHrid string
-	apiHrid = r.APIHrid.ValueString()
 
 	organizationID := new(string)
 	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
@@ -115,13 +112,16 @@ func (r *SubscriptionResourceModel) ToOperationsGetSubscriptionRequest(ctx conte
 	} else {
 		environmentID = nil
 	}
+	var apiHrid string
+	apiHrid = r.APIHrid.ValueString()
+
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
-	out := operations.GetSubscriptionRequest{
-		APIHrid:        apiHrid,
+	out := operations.GetAPISubscriptionRequest{
 		OrganizationID: organizationID,
 		EnvironmentID:  environmentID,
+		APIHrid:        apiHrid,
 		Hrid:           hrid,
 	}
 

@@ -226,18 +226,18 @@ paths:
           $ref: "#/components/responses/Error"
       x-speakeasy-entity-operation: Application#delete
       x-speakeasy-name-override: delete
-  # Subscription
+  # API Subscription
   /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions:
     put:
-      operationId: createOrUpdateSubscriptions
+      operationId: createOrUpdateApiSubscriptions
       tags:
         - Subscriptions
-      summary: Create or update Subscriptions from SubscriptionSpec
-      description: Create/update Subscription from Subscription Spec
+      summary: Create or update API Subscriptions from Subscription Spec
+      description: Create/update API Subscription from Subscription Spec
       parameters:
         - $ref: "#/components/parameters/orgIdParam"
         - $ref: "#/components/parameters/envIdParam"
-        - $ref: "#/components/parameters/apiHrid"
+        - $ref: "#/components/parameters/apiHridParam"
       requestBody:
         description: Subscription specification
         content:
@@ -266,21 +266,22 @@ paths:
     parameters:
       - $ref: "#/components/parameters/orgIdParam"
       - $ref: "#/components/parameters/envIdParam"
-      - $ref: "#/components/parameters/apiHrid"
+      - $ref: "#/components/parameters/apiHridParam"
       - $ref: "#/components/parameters/hridParam"
     get:
-      operationId: getSubscription
+      operationId: getApiSubscription
       tags:
         - Subscriptions
-      summary: Get one Subscription
-      description: Get a Subscription using HRID
+      summary: Get one API subscription
+      description: Get an API subscription using HRID
       parameters:
         - $ref: "#/components/parameters/orgIdParam"
         - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/apiHridParam"
         - $ref: "#/components/parameters/hridParam"
       responses:
         "200":
-          description: Subscription successfully retrieved
+          description: API subscription successfully retrieved
           content:
             application/json:
               schema:
@@ -296,14 +297,15 @@ paths:
       x-speakeasy-entity-operation: Subscription#read
       x-speakeasy-name-override: get
     delete:
-      operationId: deleteSubscription
+      operationId: deleteApiSubscription
       tags:
         - Subscriptions
-      summary: Delete one Subscription
-      description: Delete a Subscription using HRID
+      summary: Delete an API subscription
+      description: Delete an API subscription using HRID
       parameters:
         - $ref: "#/components/parameters/orgIdParam"
         - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/apiHridParam"
         - $ref: "#/components/parameters/hridParam"
       responses:
         "204":
@@ -2250,13 +2252,6 @@ components:
         type: string
         default: DEFAULT
       x-speakeasy-name-override: environmentId
-    apiHrid:
-      name: apiHrid
-      in: path
-      required: true
-      description: API ID for subscriptions
-      schema:
-        type: string
     orgIdParam:
       name: orgId
       in: path
@@ -2281,6 +2276,13 @@ components:
       schema:
         type: string
       x-speakeasy-param-force-new: true
+    apiHridParam:
+      name: apiHrid
+      in: path
+      required: true
+      description: Human-readable ID of api
+      schema:
+        type: string
   securitySchemes:
     BasicAuth:
       description: Basic authentication
