@@ -8,96 +8,96 @@ import (
 	"net/http"
 )
 
-type GetSubscriptionGlobals struct {
+type GetAPISubscriptionGlobals struct {
 	// organization ID
 	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
 	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 }
 
-func (g GetSubscriptionGlobals) MarshalJSON() ([]byte, error) {
+func (g GetAPISubscriptionGlobals) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(g, "", false)
 }
 
-func (g *GetSubscriptionGlobals) UnmarshalJSON(data []byte) error {
+func (g *GetAPISubscriptionGlobals) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *GetSubscriptionGlobals) GetOrganizationID() *string {
+func (o *GetAPISubscriptionGlobals) GetOrganizationID() *string {
 	if o == nil {
 		return nil
 	}
 	return o.OrganizationID
 }
 
-func (o *GetSubscriptionGlobals) GetEnvironmentID() *string {
+func (o *GetAPISubscriptionGlobals) GetEnvironmentID() *string {
 	if o == nil {
 		return nil
 	}
 	return o.EnvironmentID
 }
 
-type GetSubscriptionRequest struct {
-	// API ID for subscriptions
-	APIHrid string `pathParam:"style=simple,explode=false,name=apiHrid"`
+type GetAPISubscriptionRequest struct {
 	// organization ID
 	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
 	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
+	// Human-readable ID of api
+	APIHrid string `pathParam:"style=simple,explode=false,name=apiHrid"`
 	// Human-readable ID of a spec
 	Hrid string `pathParam:"style=simple,explode=false,name=hrid"`
 }
 
-func (g GetSubscriptionRequest) MarshalJSON() ([]byte, error) {
+func (g GetAPISubscriptionRequest) MarshalJSON() ([]byte, error) {
 	return utils.MarshalJSON(g, "", false)
 }
 
-func (g *GetSubscriptionRequest) UnmarshalJSON(data []byte) error {
+func (g *GetAPISubscriptionRequest) UnmarshalJSON(data []byte) error {
 	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"apiHrid", "hrid"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *GetSubscriptionRequest) GetAPIHrid() string {
-	if o == nil {
-		return ""
-	}
-	return o.APIHrid
-}
-
-func (o *GetSubscriptionRequest) GetOrganizationID() *string {
+func (o *GetAPISubscriptionRequest) GetOrganizationID() *string {
 	if o == nil {
 		return nil
 	}
 	return o.OrganizationID
 }
 
-func (o *GetSubscriptionRequest) GetEnvironmentID() *string {
+func (o *GetAPISubscriptionRequest) GetEnvironmentID() *string {
 	if o == nil {
 		return nil
 	}
 	return o.EnvironmentID
 }
 
-func (o *GetSubscriptionRequest) GetHrid() string {
+func (o *GetAPISubscriptionRequest) GetAPIHrid() string {
+	if o == nil {
+		return ""
+	}
+	return o.APIHrid
+}
+
+func (o *GetAPISubscriptionRequest) GetHrid() string {
 	if o == nil {
 		return ""
 	}
 	return o.Hrid
 }
 
-type GetSubscriptionResponse struct {
+type GetAPISubscriptionResponse struct {
 	// HTTP response content type for this operation
 	ContentType string
 	// HTTP response status code for this operation
 	StatusCode int
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
-	// Subscription successfully retrieved
+	// API subscription successfully retrieved
 	SubscriptionState *shared.SubscriptionState
 	// Unauthenticated
 	HTTPError *shared.HTTPError
@@ -105,42 +105,42 @@ type GetSubscriptionResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetSubscriptionResponse) GetContentType() string {
+func (o *GetAPISubscriptionResponse) GetContentType() string {
 	if o == nil {
 		return ""
 	}
 	return o.ContentType
 }
 
-func (o *GetSubscriptionResponse) GetStatusCode() int {
+func (o *GetAPISubscriptionResponse) GetStatusCode() int {
 	if o == nil {
 		return 0
 	}
 	return o.StatusCode
 }
 
-func (o *GetSubscriptionResponse) GetRawResponse() *http.Response {
+func (o *GetAPISubscriptionResponse) GetRawResponse() *http.Response {
 	if o == nil {
 		return nil
 	}
 	return o.RawResponse
 }
 
-func (o *GetSubscriptionResponse) GetSubscriptionState() *shared.SubscriptionState {
+func (o *GetAPISubscriptionResponse) GetSubscriptionState() *shared.SubscriptionState {
 	if o == nil {
 		return nil
 	}
 	return o.SubscriptionState
 }
 
-func (o *GetSubscriptionResponse) GetHTTPError() *shared.HTTPError {
+func (o *GetAPISubscriptionResponse) GetHTTPError() *shared.HTTPError {
 	if o == nil {
 		return nil
 	}
 	return o.HTTPError
 }
 
-func (o *GetSubscriptionResponse) GetError() *shared.Error {
+func (o *GetAPISubscriptionResponse) GetError() *shared.Error {
 	if o == nil {
 		return nil
 	}

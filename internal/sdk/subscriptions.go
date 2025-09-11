@@ -31,10 +31,10 @@ func newSubscriptions(rootSDK *GraviteeApim, sdkConfig config.SDKConfiguration, 
 	}
 }
 
-// Update - Create or update Subscriptions from SubscriptionSpec
-// Create/update Subscription from Subscription Spec
-func (s *Subscriptions) Update(ctx context.Context, request operations.CreateOrUpdateSubscriptionsRequest, opts ...operations.Option) (*operations.CreateOrUpdateSubscriptionsResponse, error) {
-	globals := operations.CreateOrUpdateSubscriptionsGlobals{
+// Update - Create or update API Subscriptions from Subscription Spec
+// Create/update API Subscription from Subscription Spec
+func (s *Subscriptions) Update(ctx context.Context, request operations.CreateOrUpdateAPISubscriptionsRequest, opts ...operations.Option) (*operations.CreateOrUpdateAPISubscriptionsResponse, error) {
+	globals := operations.CreateOrUpdateAPISubscriptionsGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
 	}
@@ -67,7 +67,7 @@ func (s *Subscriptions) Update(ctx context.Context, request operations.CreateOrU
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "createOrUpdateSubscriptions",
+		OperationID:      "createOrUpdateApiSubscriptions",
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -202,7 +202,7 @@ func (s *Subscriptions) Update(ctx context.Context, request operations.CreateOrU
 		}
 	}
 
-	res := &operations.CreateOrUpdateSubscriptionsResponse{
+	res := &operations.CreateOrUpdateAPISubscriptionsResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -282,10 +282,10 @@ func (s *Subscriptions) Update(ctx context.Context, request operations.CreateOrU
 
 }
 
-// Get one Subscription
-// Get a Subscription using HRID
-func (s *Subscriptions) Get(ctx context.Context, request operations.GetSubscriptionRequest, opts ...operations.Option) (*operations.GetSubscriptionResponse, error) {
-	globals := operations.GetSubscriptionGlobals{
+// Get one API subscription
+// Get an API subscription using HRID
+func (s *Subscriptions) Get(ctx context.Context, request operations.GetAPISubscriptionRequest, opts ...operations.Option) (*operations.GetAPISubscriptionResponse, error) {
+	globals := operations.GetAPISubscriptionGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
 	}
@@ -318,7 +318,7 @@ func (s *Subscriptions) Get(ctx context.Context, request operations.GetSubscript
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "getSubscription",
+		OperationID:      "getApiSubscription",
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -446,7 +446,7 @@ func (s *Subscriptions) Get(ctx context.Context, request operations.GetSubscript
 		}
 	}
 
-	res := &operations.GetSubscriptionResponse{
+	res := &operations.GetAPISubscriptionResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,
@@ -526,10 +526,10 @@ func (s *Subscriptions) Get(ctx context.Context, request operations.GetSubscript
 
 }
 
-// Delete one Subscription
-// Delete a Subscription using HRID
-func (s *Subscriptions) Delete(ctx context.Context, request operations.DeleteSubscriptionRequest, opts ...operations.Option) (*operations.DeleteSubscriptionResponse, error) {
-	globals := operations.DeleteSubscriptionGlobals{
+// Delete an API subscription
+// Delete an API subscription using HRID
+func (s *Subscriptions) Delete(ctx context.Context, request operations.DeleteAPISubscriptionRequest, opts ...operations.Option) (*operations.DeleteAPISubscriptionResponse, error) {
+	globals := operations.DeleteAPISubscriptionGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
 	}
@@ -562,7 +562,7 @@ func (s *Subscriptions) Delete(ctx context.Context, request operations.DeleteSub
 		SDKConfiguration: s.sdkConfiguration,
 		BaseURL:          baseURL,
 		Context:          ctx,
-		OperationID:      "deleteSubscription",
+		OperationID:      "deleteApiSubscription",
 		OAuth2Scopes:     []string{},
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
@@ -690,7 +690,7 @@ func (s *Subscriptions) Delete(ctx context.Context, request operations.DeleteSub
 		}
 	}
 
-	res := &operations.DeleteSubscriptionResponse{
+	res := &operations.DeleteAPISubscriptionResponse{
 		StatusCode:  httpRes.StatusCode,
 		ContentType: httpRes.Header.Get("Content-Type"),
 		RawResponse: httpRes,

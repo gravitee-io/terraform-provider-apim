@@ -111,7 +111,7 @@ resource "apim_application" "test" {
 resource "apim_subscription" "test" {
   environment_id   = var.environment_id
   organization_id  = var.organization_id
-  hrid             = var.hrid
+  hrid             = "test"
   api_hrid         = apim_apiv4.test.hrid
   plan_hrid        = apim_apiv4.test.plans[0].hrid
   application_hrid = apim_application.test.hrid

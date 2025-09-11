@@ -62,7 +62,7 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 		Attributes: map[string]schema.Attribute{
 			"api_hrid": schema.StringAttribute{
 				Required:    true,
-				Description: `API ID for subscriptions`,
+				Description: `Human-readable ID of api`,
 			},
 			"application_hrid": schema.StringAttribute{
 				Computed:    true,
@@ -152,7 +152,7 @@ func (r *SubscriptionDataSource) Read(ctx context.Context, req datasource.ReadRe
 		data.OrganizationID = r.OrganizationID
 	}
 
-	request, requestDiags := data.ToOperationsGetSubscriptionRequest(ctx)
+	request, requestDiags := data.ToOperationsGetAPISubscriptionRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {

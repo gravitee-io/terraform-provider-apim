@@ -69,7 +69,7 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `API ID for subscriptions`,
+				Description: `Human-readable ID of api`,
 			},
 			"application_hrid": schema.StringAttribute{
 				Required: true,
@@ -188,7 +188,7 @@ func (r *SubscriptionResource) Create(ctx context.Context, req resource.CreateRe
 		data.OrganizationID = r.OrganizationID
 	}
 
-	request, requestDiags := data.ToOperationsCreateOrUpdateSubscriptionsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateOrUpdateAPISubscriptionsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -248,7 +248,7 @@ func (r *SubscriptionResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetSubscriptionRequest(ctx)
+	request, requestDiags := data.ToOperationsGetAPISubscriptionRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -310,7 +310,7 @@ func (r *SubscriptionResource) Update(ctx context.Context, req resource.UpdateRe
 		data.OrganizationID = r.OrganizationID
 	}
 
-	request, requestDiags := data.ToOperationsCreateOrUpdateSubscriptionsRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateOrUpdateAPISubscriptionsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -378,7 +378,7 @@ func (r *SubscriptionResource) Delete(ctx context.Context, req resource.DeleteRe
 		data.OrganizationID = r.OrganizationID
 	}
 
-	request, requestDiags := data.ToOperationsDeleteSubscriptionRequest(ctx)
+	request, requestDiags := data.ToOperationsDeleteAPISubscriptionRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
