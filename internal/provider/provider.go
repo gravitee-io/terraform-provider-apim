@@ -129,6 +129,10 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	if organizationIDEnvVar, ok := os.LookupEnv("APIM_ORG_ID"); ok && data.OrganizationID.IsNull() {
 		data.OrganizationID = types.StringValue(organizationIDEnvVar)
 	}
+
+	if data.OrganizationID.IsNull() {
+		data.OrganizationID = types.StringValue(`DEFAULT`)
+	}
 	security := shared.Security{}
 
 	if !data.BearerAuth.IsUnknown() {

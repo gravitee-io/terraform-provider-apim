@@ -1,18 +1,18 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: a02e5d5c441f1401a5177193bd02f2f9
+  docChecksum: d87fc47df99b82cc4e168a86f1a63021
   docVersion: 1.0.0
-  speakeasyVersion: 1.615.0
-  generationVersion: 2.698.0
+  speakeasyVersion: 1.615.2
+  generationVersion: 2.698.4
   releaseVersion: 0.3.0
-  configChecksum: 46047f5b540d2cc85a4d36dd35c8074a
+  configChecksum: 35299afd03d9b81afa312b515f8fa84d
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.2.1
     core: 3.44.1
-    globalSecurity: 2.82.0
+    globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
     globals: 3.0.3
     groups: 2.81.2
@@ -161,17 +161,17 @@ generatedFiles:
   - internal/sdk/internal/utils/utils.go
   - internal/sdk/models/errors/apierror.go
   - internal/sdk/models/operations/createorupdateapis.go
+  - internal/sdk/models/operations/createorupdateapisubscriptions.go
   - internal/sdk/models/operations/createorupdateapplications.go
   - internal/sdk/models/operations/createorupdatepolicygroup.go
-  - internal/sdk/models/operations/createorupdatesubscriptions.go
   - internal/sdk/models/operations/deleteapi.go
+  - internal/sdk/models/operations/deleteapisubscription.go
   - internal/sdk/models/operations/deleteapplication.go
   - internal/sdk/models/operations/deletepolicygroup.go
-  - internal/sdk/models/operations/deletesubscription.go
   - internal/sdk/models/operations/getapi.go
+  - internal/sdk/models/operations/getapisubscription.go
   - internal/sdk/models/operations/getapplication.go
   - internal/sdk/models/operations/getpolicygroup.go
-  - internal/sdk/models/operations/getsubscription.go
   - internal/sdk/models/operations/options.go
   - internal/sdk/models/shared/accesscontrol.go
   - internal/sdk/models/shared/analytics.go
@@ -456,6 +456,50 @@ examples:
         "200":
           application/json: {"hrid": "my_demo_api", "apiType": "MESSAGE", "description": "this is a shared policy group", "prerequisiteMessage": "the resource cache \"my-cache\" is required", "name": "My Shared Policy Group", "phase": "INTERACT"}
         "400":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+  createOrUpdateApiSubscriptions:
+    speakeasy-default-create-or-update-api-subscriptions:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          apiHrid: "<id>"
+      requestBody:
+        application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z"}
+      responses:
+        "200":
+          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "apiHrid": "demo-api", "startingAt": "2040-12-25T09:12:28+01:00"}
+        "400":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+  getApiSubscription:
+    speakeasy-default-get-api-subscription:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          apiHrid: "<id>"
+          hrid: "<id>"
+      responses:
+        "200":
+          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "apiHrid": "demo-api", "startingAt": "2040-12-25T09:12:28+01:00"}
+        "401":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
+  deleteApiSubscription:
+    speakeasy-default-delete-api-subscription:
+      parameters:
+        path:
+          orgId: "DEFAULT"
+          envId: "DEFAULT"
+          apiHrid: "<id>"
+          hrid: "<id>"
+      responses:
+        "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
