@@ -1775,7 +1775,6 @@ components:
         - KEY_LESS
       enum:
         - KEY_LESS
-        - API_KEY
         - OAUTH2
         - JWT
         - MTLS

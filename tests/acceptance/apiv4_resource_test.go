@@ -2,6 +2,7 @@ package acceptance_test
 
 import (
 	"encoding/json"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/config"
@@ -134,4 +135,30 @@ func TestAPIV4Resource_name(t *testing.T) {
 			// Testing framework implicitly verifies resource delete.
 		},
 	})
+}
+
+func TestAPIV4Resource_apikey(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"name":            config.StringVariable(randomId + "-original"),
+					"organization_id": config.StringVariable(organizationId),
+				},
+				ExpectError: regexp.MustCompile("got: \"API_KEY\""),
+			},
+		},
+	})
+
 }
