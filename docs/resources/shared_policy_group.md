@@ -64,13 +64,13 @@ resource "apim_shared_policy_group" "my_sharedpolicygroup" {
 
 Optional:
 
-- `condition` (String) FlowStep condition
-- `configuration` (String) FlowStep configuration is a map of arbitrary key-values
-- `description` (String) FlowStep description
-- `enabled` (Boolean) Indicate if this FlowStep is enabled or not. Default: true
-- `message_condition` (String) The message condition (supports EL expressions)
-- `name` (String) FlowStep name
-- `policy` (String) FlowStep policy
+- `condition` (String) The condition of the step
+- `configuration` (String) The configuration of the step. Parsed as JSON.
+- `description` (String) The description of the step
+- `enabled` (Boolean) Is the step enabled or not. Default: true
+- `message_condition` (String) The message condition of the step
+- `name` (String) The name of the step
+- `policy` (String) The policy of the step
 
 ## Import
 

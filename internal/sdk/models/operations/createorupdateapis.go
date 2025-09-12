@@ -10,7 +10,7 @@ import (
 
 type CreateOrUpdateApisGlobals struct {
 	// organization ID
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 }
@@ -42,7 +42,7 @@ func (o *CreateOrUpdateApisGlobals) GetEnvironmentID() *string {
 
 type CreateOrUpdateApisRequest struct {
 	// organization ID
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting

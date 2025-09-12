@@ -10,7 +10,7 @@ import (
 
 type DeleteApplicationGlobals struct {
 	// organization ID
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 }
@@ -42,7 +42,7 @@ func (o *DeleteApplicationGlobals) GetEnvironmentID() *string {
 
 type DeleteApplicationRequest struct {
 	// organization ID
-	OrganizationID *string `pathParam:"style=simple,explode=false,name=orgId"`
+	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Human-readable ID of a spec

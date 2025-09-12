@@ -45,7 +45,7 @@ provider "apim" {
 
 ### Optional
 
-- `bearer_auth` (String, Sensitive) service account authentication. Configurable via environment variable `APIM_SA_TOKEN`.
+- `bearer_auth` (String, Sensitive) Service account authentication. Configurable via environment variable `APIM_SA_TOKEN`.
 - `cloud_auth` (String, Sensitive) Gravitee Cloud Token authentication. Configurable via environment variable `APIM_CLOUD_TOKEN`.
 - `environment_id` (String) environment ID
 - `organization_id` (String) organization ID
