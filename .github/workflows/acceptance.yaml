@@ -25,9 +25,8 @@ jobs:
     if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.event.pull_request == null)
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b # v5.4.0
-        with:
-          go-version-file: "go.mod"
+      - name: Setup go
+        uses: ./.github/actions/setup-go
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
           terraform_version: ${{ matrix.terraform-version }}
