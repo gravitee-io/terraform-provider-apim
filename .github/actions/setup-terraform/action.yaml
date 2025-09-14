@@ -1,0 +1,20 @@
+name: configure-terraform
+description: Install Terraform and and configure the APIM provider
+inputs:
+  terraform_version:
+    description: 'Terraform version to use'
+    required: true
+    default: '1.12.*'
+runs:
+  using: 'composite'
+  steps:
+    - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+      with:
+        terraform_version: '${{ inputs.terraform_version }}'
+        terraform_wrapper: false
+    - name: Setup local TF Provider
+      shell: bash
+      run: ./tests/examples/setup-local-provider.sh
+    - name: Build provider
+      shell: bash
+      run: go build
