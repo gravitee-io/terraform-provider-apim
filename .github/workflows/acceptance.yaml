@@ -45,7 +45,6 @@ jobs:
       contents: "read"
     strategy:
       fail-fast: false
-      max-parallel: 1
       matrix:
         terraform-version:
           - "1.10.*"
@@ -63,6 +62,6 @@ jobs:
           terraform_version: ${{ matrix.terraform-version }}
       - name: Run Acceptance & Example using ${{ env.APIM_SERVER_URL }}
         env:
-          APIM_USERNAME: ${{ secrets.TEST_USER }}
-          APIM_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          APIM_USERNAME: ${{ vars.APIM_ADMIN_USERNAME }}
+          APIM_PASSWORD: ${{ secrets.APIM_ADMIN_PASSWORD }}
         run: make acceptance-tests examples-tests
