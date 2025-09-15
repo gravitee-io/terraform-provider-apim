@@ -3833,12 +3833,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									PlanModifiers: []planmodifier.String{
 										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 									},
-									Description: `Plan security type. Not Null; must be one of ["KEY_LESS", "API_KEY", "OAUTH2", "JWT", "MTLS"]`,
+									Description: `Plan security type. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS"]`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 										stringvalidator.OneOf(
 											"KEY_LESS",
-											"API_KEY",
 											"OAUTH2",
 											"JWT",
 											"MTLS",

@@ -41,9 +41,6 @@ func TestApplicationResource_Examples(t *testing.T) {
 
 	cleanupTerraformStateFiles(directories)
 
-	environmentId := "DEFAULT"
-	organizationId := "DEFAULT"
-
 	providers := testProviders()
 
 	for _, tc := range cases {
@@ -92,10 +89,8 @@ func TestApplicationResource_Examples(t *testing.T) {
 						ProtoV6ProviderFactories: providers,
 						ConfigDirectory:          tc.directory.get,
 						ConfigVariables: config.Variables{
-							"environment_id":  config.StringVariable(environmentId),
-							"hrid":            config.StringVariable(tc.hrid),
-							tc.updateField:    config.StringVariable(tc.updateValue),
-							"organization_id": config.StringVariable(organizationId),
+							"hrid":         config.StringVariable(tc.hrid),
+							tc.updateField: config.StringVariable(tc.updateValue),
 						},
 					},
 				},
