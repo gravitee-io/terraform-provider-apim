@@ -955,7 +955,7 @@ Optional:
 Optional:
 
 - `configuration` (String) Parsed as JSON.
-- `type` (String) Plan security type. Not Null; must be one of ["KEY_LESS", "API_KEY", "OAUTH2", "JWT", "MTLS"]
+- `type` (String) Plan security type. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS"]
 
 
 
