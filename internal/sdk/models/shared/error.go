@@ -11,25 +11,25 @@ type Detail struct {
 	InvalidValue *string `json:"invalidValue,omitempty"`
 }
 
-func (o *Detail) GetMessage() *string {
-	if o == nil {
+func (d *Detail) GetMessage() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Message
+	return d.Message
 }
 
-func (o *Detail) GetLocation() *string {
-	if o == nil {
+func (d *Detail) GetLocation() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Location
+	return d.Location
 }
 
-func (o *Detail) GetInvalidValue() *string {
-	if o == nil {
+func (d *Detail) GetInvalidValue() *string {
+	if d == nil {
 		return nil
 	}
-	return o.InvalidValue
+	return d.InvalidValue
 }
 
 // Error - Validation error
@@ -46,37 +46,37 @@ type Error struct {
 	Details []Detail `json:"details,omitempty"`
 }
 
-func (o *Error) GetHTTPStatus() *int {
-	if o == nil {
+func (e *Error) GetHTTPStatus() *int {
+	if e == nil {
 		return nil
 	}
-	return o.HTTPStatus
+	return e.HTTPStatus
 }
 
-func (o *Error) GetMessage() *string {
-	if o == nil {
+func (e *Error) GetMessage() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Message
+	return e.Message
 }
 
-func (o *Error) GetTechnicalCode() *string {
-	if o == nil {
+func (e *Error) GetTechnicalCode() *string {
+	if e == nil {
 		return nil
 	}
-	return o.TechnicalCode
+	return e.TechnicalCode
 }
 
-func (o *Error) GetParameters() map[string]string {
-	if o == nil {
+func (e *Error) GetParameters() map[string]string {
+	if e == nil {
 		return nil
 	}
-	return o.Parameters
+	return e.Parameters
 }
 
-func (o *Error) GetDetails() []Detail {
-	if o == nil {
+func (e *Error) GetDetails() []Detail {
+	if e == nil {
 		return nil
 	}
-	return o.Details
+	return e.Details
 }

@@ -9,30 +9,30 @@ type PropertyOutput struct {
 	Dynamic   *bool  `json:"dynamic,omitempty"`
 }
 
-func (o *PropertyOutput) GetKey() string {
-	if o == nil {
+func (p *PropertyOutput) GetKey() string {
+	if p == nil {
 		return ""
 	}
-	return o.Key
+	return p.Key
 }
 
-func (o *PropertyOutput) GetValue() string {
-	if o == nil {
+func (p *PropertyOutput) GetValue() string {
+	if p == nil {
 		return ""
 	}
-	return o.Value
+	return p.Value
 }
 
-func (o *PropertyOutput) GetEncrypted() *bool {
-	if o == nil {
+func (p *PropertyOutput) GetEncrypted() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Encrypted
+	return p.Encrypted
 }
 
-func (o *PropertyOutput) GetDynamic() *bool {
-	if o == nil {
+func (p *PropertyOutput) GetDynamic() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Dynamic
+	return p.Dynamic
 }

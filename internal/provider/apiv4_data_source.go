@@ -7,6 +7,7 @@ import (
 	"fmt"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -198,6 +199,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
 									},
@@ -220,6 +222,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												Computed: true,
 												Attributes: map[string]schema.Attribute{
 													"configuration": schema.StringAttribute{
+														CustomType:  jsontypes.NormalizedType{},
 														Computed:    true,
 														Description: `The configuration of the service. Parsed as JSON.`,
 													},
@@ -239,6 +242,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										},
 									},
 									"shared_configuration_override": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `Parsed as JSON.`,
 									},
@@ -278,6 +282,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
 											Description: `The configuration of the service. Parsed as JSON.`,
 										},
@@ -298,6 +303,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
+											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
 											Description: `The configuration of the service. Parsed as JSON.`,
 										},
@@ -317,6 +323,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							},
 						},
 						"shared_configuration": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
 							Computed:    true,
 							Description: `Parsed as JSON.`,
 						},
@@ -387,6 +394,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `The configuration of the step. Parsed as JSON.`,
 									},
@@ -431,6 +439,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `The configuration of the step. Parsed as JSON.`,
 									},
@@ -471,6 +480,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `The configuration of the step. Parsed as JSON.`,
 									},
@@ -507,6 +517,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `The configuration of the step. Parsed as JSON.`,
 									},
@@ -543,6 +554,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `The configuration of the step. Parsed as JSON.`,
 									},
@@ -646,6 +658,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `The condition of the step`,
 									},
 									"configuration": schema.StringAttribute{
+										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
 										Description: `The configuration of the step. Parsed as JSON.`,
 									},
@@ -753,6 +766,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
 												Description: `Parsed as JSON.`,
 											},
@@ -814,6 +828,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
 												Description: `Parsed as JSON.`,
 											},
@@ -863,6 +878,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
 												Description: `Parsed as JSON.`,
 											},
@@ -904,6 +920,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
+												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
 												Description: `Parsed as JSON.`,
 											},
@@ -1035,6 +1052,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
+													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
 													Description: `The configuration of the step. Parsed as JSON.`,
 												},
@@ -1079,6 +1097,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
+													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
 													Description: `The configuration of the step. Parsed as JSON.`,
 												},
@@ -1119,6 +1138,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
+													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
 													Description: `The configuration of the step. Parsed as JSON.`,
 												},
@@ -1155,6 +1175,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
+													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
 													Description: `The configuration of the step. Parsed as JSON.`,
 												},
@@ -1191,6 +1212,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
+													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
 													Description: `The configuration of the step. Parsed as JSON.`,
 												},
@@ -1294,6 +1316,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Description: `The condition of the step`,
 												},
 												"configuration": schema.StringAttribute{
+													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
 													Description: `The configuration of the step. Parsed as JSON.`,
 												},
@@ -1347,6 +1370,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed: true,
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
+									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
 									Description: `Parsed as JSON.`,
 								},
@@ -1424,6 +1448,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"configuration": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
 							Computed:    true,
 							Description: `Parsed as JSON.`,
 						},
@@ -1462,6 +1487,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"configuration": schema.StringAttribute{
+								CustomType:  jsontypes.NormalizedType{},
 								Computed:    true,
 								Description: `The configuration of the service. Parsed as JSON.`,
 							},
@@ -1545,11 +1571,11 @@ func (r *Apiv4DataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		return
 	}
 
-	if data.EnvironmentID.IsNull() {
+	if (data.EnvironmentID.IsNull() || data.EnvironmentID.IsUnknown()) && !r.EnvironmentID.IsUnknown() {
 		data.EnvironmentID = r.EnvironmentID
 	}
 
-	if data.OrganizationID.IsNull() {
+	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
 

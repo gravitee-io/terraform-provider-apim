@@ -33,78 +33,78 @@ func (f FlowV4Input) MarshalJSON() ([]byte, error) {
 }
 
 func (f *FlowV4Input) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &f, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &f, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *FlowV4Input) GetName() *string {
-	if o == nil {
+func (f *FlowV4Input) GetName() *string {
+	if f == nil {
 		return nil
 	}
-	return o.Name
+	return f.Name
 }
 
-func (o *FlowV4Input) GetEnabled() *bool {
-	if o == nil {
+func (f *FlowV4Input) GetEnabled() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.Enabled
+	return f.Enabled
 }
 
-func (o *FlowV4Input) GetSelectors() []Selector {
-	if o == nil {
+func (f *FlowV4Input) GetSelectors() []Selector {
+	if f == nil {
 		return nil
 	}
-	return o.Selectors
+	return f.Selectors
 }
 
-func (o *FlowV4Input) GetRequest() []StepV4 {
-	if o == nil {
+func (f *FlowV4Input) GetRequest() []StepV4 {
+	if f == nil {
 		return nil
 	}
-	return o.Request
+	return f.Request
 }
 
-func (o *FlowV4Input) GetResponse() []StepV4 {
-	if o == nil {
+func (f *FlowV4Input) GetResponse() []StepV4 {
+	if f == nil {
 		return nil
 	}
-	return o.Response
+	return f.Response
 }
 
-func (o *FlowV4Input) GetSubscribe() []StepV4 {
-	if o == nil {
+func (f *FlowV4Input) GetSubscribe() []StepV4 {
+	if f == nil {
 		return nil
 	}
-	return o.Subscribe
+	return f.Subscribe
 }
 
-func (o *FlowV4Input) GetPublish() []StepV4 {
-	if o == nil {
+func (f *FlowV4Input) GetPublish() []StepV4 {
+	if f == nil {
 		return nil
 	}
-	return o.Publish
+	return f.Publish
 }
 
-func (o *FlowV4Input) GetConnect() []StepV4 {
-	if o == nil {
+func (f *FlowV4Input) GetConnect() []StepV4 {
+	if f == nil {
 		return nil
 	}
-	return o.Connect
+	return f.Connect
 }
 
-func (o *FlowV4Input) GetInteract() []StepV4 {
-	if o == nil {
+func (f *FlowV4Input) GetInteract() []StepV4 {
+	if f == nil {
 		return nil
 	}
-	return o.Interact
+	return f.Interact
 }
 
-func (o *FlowV4Input) GetTags() []string {
-	if o == nil {
+func (f *FlowV4Input) GetTags() []string {
+	if f == nil {
 		return nil
 	}
-	return o.Tags
+	return f.Tags
 }

@@ -30,86 +30,86 @@ type SharedPolicyGroupState struct {
 	OrganizationID *string `json:"organizationId,omitempty"`
 }
 
-func (o *SharedPolicyGroupState) GetHrid() string {
-	if o == nil {
+func (s *SharedPolicyGroupState) GetHrid() string {
+	if s == nil {
 		return ""
 	}
-	return o.Hrid
+	return s.Hrid
 }
 
-func (o *SharedPolicyGroupState) GetAPIType() APIType {
-	if o == nil {
+func (s *SharedPolicyGroupState) GetAPIType() APIType {
+	if s == nil {
 		return APIType("")
 	}
-	return o.APIType
+	return s.APIType
 }
 
-func (o *SharedPolicyGroupState) GetDescription() *string {
-	if o == nil {
+func (s *SharedPolicyGroupState) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *SharedPolicyGroupState) GetPrerequisiteMessage() *string {
-	if o == nil {
+func (s *SharedPolicyGroupState) GetPrerequisiteMessage() *string {
+	if s == nil {
 		return nil
 	}
-	return o.PrerequisiteMessage
+	return s.PrerequisiteMessage
 }
 
-func (o *SharedPolicyGroupState) GetName() string {
-	if o == nil {
+func (s *SharedPolicyGroupState) GetName() string {
+	if s == nil {
 		return ""
 	}
-	return o.Name
+	return s.Name
 }
 
-func (o *SharedPolicyGroupState) GetPhase() FlowPhase {
-	if o == nil {
+func (s *SharedPolicyGroupState) GetPhase() FlowPhase {
+	if s == nil {
 		return FlowPhase("")
 	}
-	return o.Phase
+	return s.Phase
 }
 
-func (o *SharedPolicyGroupState) GetSteps() []FlowStep {
-	if o == nil {
+func (s *SharedPolicyGroupState) GetSteps() []FlowStep {
+	if s == nil {
 		return nil
 	}
-	return o.Steps
+	return s.Steps
 }
 
-func (o *SharedPolicyGroupState) GetErrors() *Errors {
-	if o == nil {
+func (s *SharedPolicyGroupState) GetErrors() *Errors {
+	if s == nil {
 		return nil
 	}
-	return o.Errors
+	return s.Errors
 }
 
-func (o *SharedPolicyGroupState) GetID() *string {
-	if o == nil {
+func (s *SharedPolicyGroupState) GetID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SharedPolicyGroupState) GetCrossID() *string {
-	if o == nil {
+func (s *SharedPolicyGroupState) GetCrossID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CrossID
+	return s.CrossID
 }
 
-func (o *SharedPolicyGroupState) GetEnvironmentID() *string {
-	if o == nil {
+func (s *SharedPolicyGroupState) GetEnvironmentID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return s.EnvironmentID
 }
 
-func (o *SharedPolicyGroupState) GetOrganizationID() *string {
-	if o == nil {
+func (s *SharedPolicyGroupState) GetOrganizationID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return s.OrganizationID
 }

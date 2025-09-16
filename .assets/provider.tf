@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     apim = {
-      source  = "gravitee-io/apim"
+      source = "gravitee-io/apim"
     }
   }
 }

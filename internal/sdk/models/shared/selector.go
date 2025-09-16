@@ -18,9 +18,9 @@ const (
 )
 
 type Selector struct {
-	HTTPSelector      *HTTPSelector      `queryParam:"inline"`
-	ChannelSelector   *ChannelSelector   `queryParam:"inline"`
-	ConditionSelector *ConditionSelector `queryParam:"inline"`
+	HTTPSelector      *HTTPSelector      `queryParam:"inline" name:"Selector"`
+	ChannelSelector   *ChannelSelector   `queryParam:"inline" name:"Selector"`
+	ConditionSelector *ConditionSelector `queryParam:"inline" name:"Selector"`
 
 	Type SelectorType
 }
@@ -75,7 +75,7 @@ func (u *Selector) UnmarshalJSON(data []byte) error {
 	switch dis.Type {
 	case "HTTP":
 		httpSelector := new(HTTPSelector)
-		if err := utils.UnmarshalJSON(data, &httpSelector, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &httpSelector, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == HTTP) type HTTPSelector within Selector: %w", string(data), err)
 		}
 
@@ -84,7 +84,7 @@ func (u *Selector) UnmarshalJSON(data []byte) error {
 		return nil
 	case "CHANNEL":
 		channelSelector := new(ChannelSelector)
-		if err := utils.UnmarshalJSON(data, &channelSelector, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &channelSelector, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == CHANNEL) type ChannelSelector within Selector: %w", string(data), err)
 		}
 
@@ -93,7 +93,7 @@ func (u *Selector) UnmarshalJSON(data []byte) error {
 		return nil
 	case "CONDITION":
 		conditionSelector := new(ConditionSelector)
-		if err := utils.UnmarshalJSON(data, &conditionSelector, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &conditionSelector, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == CONDITION) type ConditionSelector within Selector: %w", string(data), err)
 		}
 

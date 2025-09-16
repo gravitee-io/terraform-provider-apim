@@ -10,37 +10,37 @@ type Property struct {
 	Encryptable *bool  `json:"encryptable,omitempty"`
 }
 
-func (o *Property) GetKey() string {
-	if o == nil {
+func (p *Property) GetKey() string {
+	if p == nil {
 		return ""
 	}
-	return o.Key
+	return p.Key
 }
 
-func (o *Property) GetValue() string {
-	if o == nil {
+func (p *Property) GetValue() string {
+	if p == nil {
 		return ""
 	}
-	return o.Value
+	return p.Value
 }
 
-func (o *Property) GetEncrypted() *bool {
-	if o == nil {
+func (p *Property) GetEncrypted() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Encrypted
+	return p.Encrypted
 }
 
-func (o *Property) GetDynamic() *bool {
-	if o == nil {
+func (p *Property) GetDynamic() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Dynamic
+	return p.Dynamic
 }
 
-func (o *Property) GetEncryptable() *bool {
-	if o == nil {
+func (p *Property) GetEncryptable() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Encryptable
+	return p.Encryptable
 }

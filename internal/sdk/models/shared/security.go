@@ -7,16 +7,16 @@ type Security struct {
 	BasicAuth  *SchemeBasicAuth `security:"scheme,type=http,subtype=basic"`
 }
 
-func (o *Security) GetBearerAuth() *string {
-	if o == nil {
+func (s *Security) GetBearerAuth() *string {
+	if s == nil {
 		return nil
 	}
-	return o.BearerAuth
+	return s.BearerAuth
 }
 
-func (o *Security) GetBasicAuth() *SchemeBasicAuth {
-	if o == nil {
+func (s *Security) GetBasicAuth() *SchemeBasicAuth {
+	if s == nil {
 		return nil
 	}
-	return o.BasicAuth
+	return s.BasicAuth
 }

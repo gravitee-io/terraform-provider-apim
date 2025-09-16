@@ -28,57 +28,57 @@ func (f FlowStep) MarshalJSON() ([]byte, error) {
 }
 
 func (f *FlowStep) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &f, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &f, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *FlowStep) GetCondition() *string {
-	if o == nil {
+func (f *FlowStep) GetCondition() *string {
+	if f == nil {
 		return nil
 	}
-	return o.Condition
+	return f.Condition
 }
 
-func (o *FlowStep) GetConfiguration() *string {
-	if o == nil {
+func (f *FlowStep) GetConfiguration() *string {
+	if f == nil {
 		return nil
 	}
-	return o.Configuration
+	return f.Configuration
 }
 
-func (o *FlowStep) GetDescription() *string {
-	if o == nil {
+func (f *FlowStep) GetDescription() *string {
+	if f == nil {
 		return nil
 	}
-	return o.Description
+	return f.Description
 }
 
-func (o *FlowStep) GetEnabled() *bool {
-	if o == nil {
+func (f *FlowStep) GetEnabled() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.Enabled
+	return f.Enabled
 }
 
-func (o *FlowStep) GetMessageCondition() *string {
-	if o == nil {
+func (f *FlowStep) GetMessageCondition() *string {
+	if f == nil {
 		return nil
 	}
-	return o.MessageCondition
+	return f.MessageCondition
 }
 
-func (o *FlowStep) GetName() *string {
-	if o == nil {
+func (f *FlowStep) GetName() *string {
+	if f == nil {
 		return nil
 	}
-	return o.Name
+	return f.Name
 }
 
-func (o *FlowStep) GetPolicy() *string {
-	if o == nil {
+func (f *FlowStep) GetPolicy() *string {
+	if f == nil {
 		return nil
 	}
-	return o.Policy
+	return f.Policy
 }

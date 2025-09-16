@@ -19,10 +19,10 @@ const (
 )
 
 type Listener struct {
-	HTTPListener         *HTTPListener         `queryParam:"inline"`
-	SubscriptionListener *SubscriptionListener `queryParam:"inline"`
-	TCPListener          *TCPListener          `queryParam:"inline"`
-	KafkaListener        *KafkaListener        `queryParam:"inline"`
+	HTTPListener         *HTTPListener         `queryParam:"inline" name:"Listener"`
+	SubscriptionListener *SubscriptionListener `queryParam:"inline" name:"Listener"`
+	TCPListener          *TCPListener          `queryParam:"inline" name:"Listener"`
+	KafkaListener        *KafkaListener        `queryParam:"inline" name:"Listener"`
 
 	Type ListenerUnionType
 }
@@ -89,7 +89,7 @@ func (u *Listener) UnmarshalJSON(data []byte) error {
 	switch dis.Type {
 	case "HTTP":
 		httpListener := new(HTTPListener)
-		if err := utils.UnmarshalJSON(data, &httpListener, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &httpListener, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == HTTP) type HTTPListener within Listener: %w", string(data), err)
 		}
 
@@ -98,7 +98,7 @@ func (u *Listener) UnmarshalJSON(data []byte) error {
 		return nil
 	case "TCP":
 		tcpListener := new(TCPListener)
-		if err := utils.UnmarshalJSON(data, &tcpListener, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &tcpListener, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == TCP) type TCPListener within Listener: %w", string(data), err)
 		}
 
@@ -107,7 +107,7 @@ func (u *Listener) UnmarshalJSON(data []byte) error {
 		return nil
 	case "SUBSCRIPTION":
 		subscriptionListener := new(SubscriptionListener)
-		if err := utils.UnmarshalJSON(data, &subscriptionListener, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &subscriptionListener, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == SUBSCRIPTION) type SubscriptionListener within Listener: %w", string(data), err)
 		}
 
@@ -116,7 +116,7 @@ func (u *Listener) UnmarshalJSON(data []byte) error {
 		return nil
 	case "KAFKA":
 		kafkaListener := new(KafkaListener)
-		if err := utils.UnmarshalJSON(data, &kafkaListener, "", true, false); err != nil {
+		if err := utils.UnmarshalJSON(data, &kafkaListener, "", true, nil); err != nil {
 			return fmt.Errorf("could not unmarshal `%s` into expected (Type == KAFKA) type KafkaListener within Listener: %w", string(data), err)
 		}
 

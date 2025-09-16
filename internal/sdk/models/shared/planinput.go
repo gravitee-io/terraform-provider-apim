@@ -23,100 +23,100 @@ type PlanInput struct {
 	Mode PlanMode `json:"mode"`
 }
 
-func (o *PlanInput) GetName() *string {
-	if o == nil {
+func (p *PlanInput) GetName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *PlanInput) GetDescription() *string {
-	if o == nil {
+func (p *PlanInput) GetDescription() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *PlanInput) GetSecurity() *PlanSecurity {
-	if o == nil {
+func (p *PlanInput) GetSecurity() *PlanSecurity {
+	if p == nil {
 		return nil
 	}
-	return o.Security
+	return p.Security
 }
 
-func (o *PlanInput) GetCharacteristics() []string {
-	if o == nil {
+func (p *PlanInput) GetCharacteristics() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Characteristics
+	return p.Characteristics
 }
 
-func (o *PlanInput) GetExcludedGroups() []string {
-	if o == nil {
+func (p *PlanInput) GetExcludedGroups() []string {
+	if p == nil {
 		return nil
 	}
-	return o.ExcludedGroups
+	return p.ExcludedGroups
 }
 
-func (o *PlanInput) GetGeneralConditions() *string {
-	if o == nil {
+func (p *PlanInput) GetGeneralConditions() *string {
+	if p == nil {
 		return nil
 	}
-	return o.GeneralConditions
+	return p.GeneralConditions
 }
 
-func (o *PlanInput) GetOrder() *int64 {
-	if o == nil {
+func (p *PlanInput) GetOrder() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.Order
+	return p.Order
 }
 
-func (o *PlanInput) GetSelectionRule() *string {
-	if o == nil {
+func (p *PlanInput) GetSelectionRule() *string {
+	if p == nil {
 		return nil
 	}
-	return o.SelectionRule
+	return p.SelectionRule
 }
 
-func (o *PlanInput) GetStatus() PlanStatus {
-	if o == nil {
+func (p *PlanInput) GetStatus() PlanStatus {
+	if p == nil {
 		return PlanStatus("")
 	}
-	return o.Status
+	return p.Status
 }
 
-func (o *PlanInput) GetTags() []string {
-	if o == nil {
+func (p *PlanInput) GetTags() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Tags
+	return p.Tags
 }
 
-func (o *PlanInput) GetType() PlanType {
-	if o == nil {
+func (p *PlanInput) GetType() PlanType {
+	if p == nil {
 		return PlanType("")
 	}
-	return o.Type
+	return p.Type
 }
 
-func (o *PlanInput) GetValidation() *PlanValidation {
-	if o == nil {
+func (p *PlanInput) GetValidation() *PlanValidation {
+	if p == nil {
 		return nil
 	}
-	return o.Validation
+	return p.Validation
 }
 
-func (o *PlanInput) GetFlows() []FlowV4Input {
-	if o == nil {
+func (p *PlanInput) GetFlows() []FlowV4Input {
+	if p == nil {
 		return nil
 	}
-	return o.Flows
+	return p.Flows
 }
 
-func (o *PlanInput) GetMode() PlanMode {
-	if o == nil {
+func (p *PlanInput) GetMode() PlanMode {
+	if p == nil {
 		return PlanMode("")
 	}
-	return o.Mode
+	return p.Mode
 }

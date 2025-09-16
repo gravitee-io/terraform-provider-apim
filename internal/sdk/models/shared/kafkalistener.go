@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 type KafkaListener struct {
 	// Listener type.
 	Type        ListenerType `json:"type"`
@@ -13,37 +17,48 @@ type KafkaListener struct {
 	Port *int64 `json:"port,omitempty"`
 }
 
-func (o *KafkaListener) GetType() ListenerType {
-	if o == nil {
+func (k KafkaListener) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(k, "", false)
+}
+
+func (k *KafkaListener) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &k, "", false, []string{"type", "host"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (k *KafkaListener) GetType() ListenerType {
+	if k == nil {
 		return ListenerType("")
 	}
-	return o.Type
+	return k.Type
 }
 
-func (o *KafkaListener) GetEntrypoints() []Entrypoint {
-	if o == nil {
+func (k *KafkaListener) GetEntrypoints() []Entrypoint {
+	if k == nil {
 		return nil
 	}
-	return o.Entrypoints
+	return k.Entrypoints
 }
 
-func (o *KafkaListener) GetServers() []string {
-	if o == nil {
+func (k *KafkaListener) GetServers() []string {
+	if k == nil {
 		return nil
 	}
-	return o.Servers
+	return k.Servers
 }
 
-func (o *KafkaListener) GetHost() string {
-	if o == nil {
+func (k *KafkaListener) GetHost() string {
+	if k == nil {
 		return ""
 	}
-	return o.Host
+	return k.Host
 }
 
-func (o *KafkaListener) GetPort() *int64 {
-	if o == nil {
+func (k *KafkaListener) GetPort() *int64 {
+	if k == nil {
 		return nil
 	}
-	return o.Port
+	return k.Port
 }

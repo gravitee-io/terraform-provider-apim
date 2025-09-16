@@ -19,36 +19,36 @@ func (a Analytics) MarshalJSON() ([]byte, error) {
 }
 
 func (a *Analytics) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *Analytics) GetEnabled() *bool {
-	if o == nil {
+func (a *Analytics) GetEnabled() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.Enabled
+	return a.Enabled
 }
 
-func (o *Analytics) GetSampling() *Sampling {
-	if o == nil {
+func (a *Analytics) GetSampling() *Sampling {
+	if a == nil {
 		return nil
 	}
-	return o.Sampling
+	return a.Sampling
 }
 
-func (o *Analytics) GetLogging() *LoggingV4 {
-	if o == nil {
+func (a *Analytics) GetLogging() *LoggingV4 {
+	if a == nil {
 		return nil
 	}
-	return o.Logging
+	return a.Logging
 }
 
-func (o *Analytics) GetTracing() *TracingV4 {
-	if o == nil {
+func (a *Analytics) GetTracing() *TracingV4 {
+	if a == nil {
 		return nil
 	}
-	return o.Tracing
+	return a.Tracing
 }

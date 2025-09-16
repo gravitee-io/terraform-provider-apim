@@ -61,212 +61,212 @@ type APIV4State struct {
 	CrossID *string `json:"crossId,omitempty"`
 }
 
-func (o *APIV4State) GetHrid() string {
-	if o == nil {
+func (a *APIV4State) GetHrid() string {
+	if a == nil {
 		return ""
 	}
-	return o.Hrid
+	return a.Hrid
 }
 
-func (o *APIV4State) GetDefinitionContext() DefinitionContext {
-	if o == nil {
+func (a *APIV4State) GetDefinitionContext() DefinitionContext {
+	if a == nil {
 		return DefinitionContext{}
 	}
-	return o.DefinitionContext
+	return a.DefinitionContext
 }
 
-func (o *APIV4State) GetName() string {
-	if o == nil {
+func (a *APIV4State) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *APIV4State) GetVersion() string {
-	if o == nil {
+func (a *APIV4State) GetVersion() string {
+	if a == nil {
 		return ""
 	}
-	return o.Version
+	return a.Version
 }
 
-func (o *APIV4State) GetType() APIType {
-	if o == nil {
+func (a *APIV4State) GetType() APIType {
+	if a == nil {
 		return APIType("")
 	}
-	return o.Type
+	return a.Type
 }
 
-func (o *APIV4State) GetDescription() *string {
-	if o == nil {
+func (a *APIV4State) GetDescription() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *APIV4State) GetTags() []string {
-	if o == nil {
+func (a *APIV4State) GetTags() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Tags
+	return a.Tags
 }
 
-func (o *APIV4State) GetListeners() []Listener {
-	if o == nil {
+func (a *APIV4State) GetListeners() []Listener {
+	if a == nil {
 		return []Listener{}
 	}
-	return o.Listeners
+	return a.Listeners
 }
 
-func (o *APIV4State) GetEndpointGroups() []EndpointGroupV4 {
-	if o == nil {
+func (a *APIV4State) GetEndpointGroups() []EndpointGroupV4 {
+	if a == nil {
 		return []EndpointGroupV4{}
 	}
-	return o.EndpointGroups
+	return a.EndpointGroups
 }
 
-func (o *APIV4State) GetAnalytics() *Analytics {
-	if o == nil {
+func (a *APIV4State) GetAnalytics() *Analytics {
+	if a == nil {
 		return nil
 	}
-	return o.Analytics
+	return a.Analytics
 }
 
-func (o *APIV4State) GetFailover() *FailoverV4 {
-	if o == nil {
+func (a *APIV4State) GetFailover() *FailoverV4 {
+	if a == nil {
 		return nil
 	}
-	return o.Failover
+	return a.Failover
 }
 
-func (o *APIV4State) GetProperties() []PropertyOutput {
-	if o == nil {
+func (a *APIV4State) GetProperties() []PropertyOutput {
+	if a == nil {
 		return nil
 	}
-	return o.Properties
+	return a.Properties
 }
 
-func (o *APIV4State) GetResources() []Resource {
-	if o == nil {
+func (a *APIV4State) GetResources() []Resource {
+	if a == nil {
 		return nil
 	}
-	return o.Resources
+	return a.Resources
 }
 
-func (o *APIV4State) GetPlans() map[string]Plan {
-	if o == nil {
+func (a *APIV4State) GetPlans() map[string]Plan {
+	if a == nil {
 		return nil
 	}
-	return o.Plans
+	return a.Plans
 }
 
-func (o *APIV4State) GetFlowExecution() *FlowExecution {
-	if o == nil {
+func (a *APIV4State) GetFlowExecution() *FlowExecution {
+	if a == nil {
 		return nil
 	}
-	return o.FlowExecution
+	return a.FlowExecution
 }
 
-func (o *APIV4State) GetFlows() []FlowV4 {
-	if o == nil {
+func (a *APIV4State) GetFlows() []FlowV4 {
+	if a == nil {
 		return nil
 	}
-	return o.Flows
+	return a.Flows
 }
 
-func (o *APIV4State) GetResponseTemplates() map[string]map[string]ResponseTemplate {
-	if o == nil {
+func (a *APIV4State) GetResponseTemplates() map[string]map[string]ResponseTemplate {
+	if a == nil {
 		return nil
 	}
-	return o.ResponseTemplates
+	return a.ResponseTemplates
 }
 
-func (o *APIV4State) GetServices() *APIServices {
-	if o == nil {
+func (a *APIV4State) GetServices() *APIServices {
+	if a == nil {
 		return nil
 	}
-	return o.Services
+	return a.Services
 }
 
-func (o *APIV4State) GetGroups() []string {
-	if o == nil {
+func (a *APIV4State) GetGroups() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Groups
+	return a.Groups
 }
 
-func (o *APIV4State) GetVisibility() *Visibility {
-	if o == nil {
+func (a *APIV4State) GetVisibility() *Visibility {
+	if a == nil {
 		return nil
 	}
-	return o.Visibility
+	return a.Visibility
 }
 
-func (o *APIV4State) GetState() *LifecycleState {
-	if o == nil {
+func (a *APIV4State) GetState() *LifecycleState {
+	if a == nil {
 		return nil
 	}
-	return o.State
+	return a.State
 }
 
-func (o *APIV4State) GetPrimaryOwner() *PrimaryOwner {
-	if o == nil {
+func (a *APIV4State) GetPrimaryOwner() *PrimaryOwner {
+	if a == nil {
 		return nil
 	}
-	return o.PrimaryOwner
+	return a.PrimaryOwner
 }
 
-func (o *APIV4State) GetLabels() []string {
-	if o == nil {
+func (a *APIV4State) GetLabels() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Labels
+	return a.Labels
 }
 
-func (o *APIV4State) GetMetadata() []Metadata {
-	if o == nil {
+func (a *APIV4State) GetMetadata() []Metadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *APIV4State) GetLifecycleState() APILifecycleState {
-	if o == nil {
+func (a *APIV4State) GetLifecycleState() APILifecycleState {
+	if a == nil {
 		return APILifecycleState("")
 	}
-	return o.LifecycleState
+	return a.LifecycleState
 }
 
-func (o *APIV4State) GetCategories() []string {
-	if o == nil {
+func (a *APIV4State) GetCategories() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Categories
+	return a.Categories
 }
 
-func (o *APIV4State) GetMembers() []Member {
-	if o == nil {
+func (a *APIV4State) GetMembers() []Member {
+	if a == nil {
 		return nil
 	}
-	return o.Members
+	return a.Members
 }
 
-func (o *APIV4State) GetErrors() *Errors {
-	if o == nil {
+func (a *APIV4State) GetErrors() *Errors {
+	if a == nil {
 		return nil
 	}
-	return o.Errors
+	return a.Errors
 }
 
-func (o *APIV4State) GetID() *string {
-	if o == nil {
+func (a *APIV4State) GetID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ID
+	return a.ID
 }
 
-func (o *APIV4State) GetCrossID() *string {
-	if o == nil {
+func (a *APIV4State) GetCrossID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.CrossID
+	return a.CrossID
 }

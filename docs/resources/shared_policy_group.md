@@ -49,8 +49,8 @@ resource "apim_shared_policy_group" "my_sharedpolicygroup" {
 ### Optional
 
 - `description` (String) The description of the shared policy group
-- `environment_id` (String) Id of an environment. Default: "DEFAULT"
-- `organization_id` (String) Id of an organization. Default: "DEFAULT"
+- `environment_id` (String) Id of an environment.
+- `organization_id` (String) Id of an organization.
 - `prerequisite_message` (String) The prerequisite message of the shared policy group. This message is displayed to the user to help understand the prerequisite to use the shared policy group.
 - `steps` (Attributes List) SharedPolicyGroup Steps (see [below for nested schema](#nestedatt--steps))
 
@@ -76,6 +76,21 @@ Optional:
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = apim_shared_policy_group.my_apim_shared_policy_group
+  id = jsonencode({
+    environment_id = "..."
+    hrid = "..."
+    organization_id = "..."
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
-terraform import apim_shared_policy_group.my_apim_shared_policy_group '{"environment_id": "", "hrid": "", "organization_id": ""}'
+terraform import apim_shared_policy_group.my_apim_shared_policy_group '{"environment_id": "...", "hrid": "...", "organization_id": "..."}'
 ```

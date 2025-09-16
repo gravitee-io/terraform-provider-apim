@@ -1,17 +1,36 @@
-resource "apim_apiv4" "api-with-pages-inline" {
+---
+page_title: "Simple HTTP Proxy"
+subcategory: "V4 API"
+---
+
+# Create a V4 HTTP proxy API with CORS support and custom response templates
+
+The following example configures the V4 HTTP proxy API with CORS.
+If the pre-flight phase fails, it will return a 412 status code whatever all content type with bespoke body.
+
+```HCL
+resource "apim_apiv4" "simple-api-response-template" {
   # should match the resource name
-  hrid            = "api-with-pages-inline"
-  name            = "Terraform: Simple PROXY API, Page with inlined Markdown"
-  description     = "Simple proxy API containing an inline documentation written in Markdown"
-  version         = "1"
+  hrid            = "simple-api-response-template"
+  name            = "[Terraform] Simple PROXY API Response template"
+  description     = "A simple API with CORS and a custom response template for pre-flight errors"
+  version         = "1.0"
   type            = "PROXY"
   state           = "STARTED"
-  visibility      = "PRIVATE"
+  visibility      = "PUBLIC"
   lifecycle_state = "PUBLISHED"
   listeners = [
     {
       http = {
         type = "HTTP"
+        cors = {
+          enabled           = true
+          allow_credentials = true
+          allow_headers     = ["x-gravitee-test"]
+          allow_methods     = ["POST", "GET"]
+          allow_origin      = ["https://mydomain.com"]
+          run_policies      = true
+        }
         entrypoints = [
           {
             type = "http-proxy"
@@ -19,7 +38,7 @@ resource "apim_apiv4" "api-with-pages-inline" {
         ]
         paths = [
           {
-            path = "/api-with-pages-inline"
+            path = "/simple-api-response-template/"
           }
         ]
       }
@@ -51,24 +70,20 @@ resource "apim_apiv4" "api-with-pages-inline" {
     match_required = false
   }
   flows = []
+  response_templates = {
+    CORS_PREFLIGHT_FAILED : {
+      "*/*" : {
+        status = 412
+        headers = {
+          X-Error = "Cors preflight"
+        }
+        body                        = "Custom CORS error message"
+        propagate_error_key_to_logs = false
+      }
+    }
+  }
   analytics = {
     enabled = false
-  }
-  pages = {
-    markdown = {
-      content = <<-EOT
-          Hello world!
-          --
-          This is markdown.
-          EOT
-      name    = "hello-markdown"
-      parent  = "markdowns-folder"
-      type    = "MARKDOWN"
-    }
-    markdowns-folder = {
-      name = "markdowns"
-      type = "FOLDER"
-    }
   }
   # known limitation: will dispear in next version
   definition_context = {}
@@ -87,3 +102,5 @@ resource "apim_apiv4" "api-with-pages-inline" {
     }
   }
 }
+
+```

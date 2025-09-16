@@ -9,30 +9,30 @@ type Member struct {
 	Role     *string `json:"role,omitempty"`
 }
 
-func (o *Member) GetID() *string {
-	if o == nil {
+func (m *Member) GetID() *string {
+	if m == nil {
 		return nil
 	}
-	return o.ID
+	return m.ID
 }
 
-func (o *Member) GetSource() *string {
-	if o == nil {
+func (m *Member) GetSource() *string {
+	if m == nil {
 		return nil
 	}
-	return o.Source
+	return m.Source
 }
 
-func (o *Member) GetSourceID() *string {
-	if o == nil {
+func (m *Member) GetSourceID() *string {
+	if m == nil {
 		return nil
 	}
-	return o.SourceID
+	return m.SourceID
 }
 
-func (o *Member) GetRole() *string {
-	if o == nil {
+func (m *Member) GetRole() *string {
+	if m == nil {
 		return nil
 	}
-	return o.Role
+	return m.Role
 }

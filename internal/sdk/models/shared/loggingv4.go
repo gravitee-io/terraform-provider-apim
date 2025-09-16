@@ -10,37 +10,37 @@ type LoggingV4 struct {
 	Mode             *LoggingModeV4    `json:"mode,omitempty"`
 }
 
-func (o *LoggingV4) GetCondition() *string {
-	if o == nil {
+func (l *LoggingV4) GetCondition() *string {
+	if l == nil {
 		return nil
 	}
-	return o.Condition
+	return l.Condition
 }
 
-func (o *LoggingV4) GetMessageCondition() *string {
-	if o == nil {
+func (l *LoggingV4) GetMessageCondition() *string {
+	if l == nil {
 		return nil
 	}
-	return o.MessageCondition
+	return l.MessageCondition
 }
 
-func (o *LoggingV4) GetContent() *LoggingContentV4 {
-	if o == nil {
+func (l *LoggingV4) GetContent() *LoggingContentV4 {
+	if l == nil {
 		return nil
 	}
-	return o.Content
+	return l.Content
 }
 
-func (o *LoggingV4) GetPhase() *LoggingPhase {
-	if o == nil {
+func (l *LoggingV4) GetPhase() *LoggingPhase {
+	if l == nil {
 		return nil
 	}
-	return o.Phase
+	return l.Phase
 }
 
-func (o *LoggingV4) GetMode() *LoggingModeV4 {
-	if o == nil {
+func (l *LoggingV4) GetMode() *LoggingModeV4 {
+	if l == nil {
 		return nil
 	}
-	return o.Mode
+	return l.Mode
 }

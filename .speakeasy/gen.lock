@@ -1,37 +1,38 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: cf1d7c3bc1b50df6a5f1e3af8d05fceb
+  docChecksum: a8868f87f242c1de9ef7140f80bd43b7
   docVersion: 0.2.0
-  speakeasyVersion: 1.592.0
-  generationVersion: 2.667.0
-  releaseVersion: 0.2.14
-  configChecksum: 26e7e82ab645bc4c003d196e2d9a42dc
+  speakeasyVersion: 1.618.1
+  generationVersion: 2.702.0
+  releaseVersion: 0.3.3
+  configChecksum: e1a0b727c667f9534a1422b5f3fef0df
 features:
   terraform:
     additionalDependencies: 0.1.0
-    constsAndDefaults: 0.2.1
-    core: 3.43.1
+    constsAndDefaults: 0.3.0
+    core: 3.44.3
     deprecations: 2.82.0
-    globalSecurity: 2.81.12
-    globalServerURLs: 2.82.2
-    globals: 3.0.0
+    globalSecurity: 2.82.1
+    globalServerURLs: 2.83.0
+    globals: 3.0.3
     groups: 2.81.2
     ignores: 2.81.1
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.3
-    retries: 2.81.3
+    retries: 2.81.4
     typeOverrides: 2.81.1
     unions: 2.81.17
 generatedFiles:
   - .gitattributes
   - USAGE.md
-  - examples/README.md
   - examples/data-sources/apim_apiv4/data-source.tf
   - examples/data-sources/apim_shared_policy_group/data-source.tf
   - examples/provider/provider.tf
+  - examples/resources/apim_apiv4/import-by-string-id.tf
   - examples/resources/apim_apiv4/import.sh
   - examples/resources/apim_apiv4/resource.tf
+  - examples/resources/apim_shared_policy_group/import-by-string-id.tf
   - examples/resources/apim_shared_policy_group/import.sh
   - examples/resources/apim_shared_policy_group/resource.tf
   - go.mod
@@ -212,6 +213,8 @@ generatedFiles:
   - internal/sdk/models/shared/tcplistener.go
   - internal/sdk/models/shared/tracingv4.go
   - internal/sdk/models/shared/visibility.go
+  - internal/sdk/optionalnullable/optionalnullable.go
+  - internal/sdk/optionalnullable/optionalnullable_test.go
   - internal/sdk/retry/config.go
   - internal/sdk/sharedpolicygroups.go
   - internal/sdk/types/bigint.go

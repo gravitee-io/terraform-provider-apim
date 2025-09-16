@@ -7,16 +7,26 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 	speakeasy run --output console --minimal
 	@go mod tidy
 	@rm -rf examples/data-sources docs/data-sources examples/README.md USAGE.md > /dev/null
-	go build
+	@go build
+	@git restore docs/guides
 
 .PHONY: lint
 lint: ## Run speakeasy lint accepting no error or warning
 	@speakeasy lint openapi --schema schemas/automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
+	@git diff --quiet HEAD docs/guides || { \
+		echo "Error: Documentation generation produced changes. Please run 'make doc-gen' and commit the updated documentation."; \
+		exit 1; \
+	}
+
 
 .PHONY: acceptance-tests
 acceptance-tests: ## Run acceptance tests against a running environment
 	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD=${APIM_PASSWORD} APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -v ./internal/provider
 
+
+.PHONY: doc-gen
+doc-gen: ## Generate Terraform examples docs
+	@docker run --rm -v ./.docgen/config:/config -v ./:/plugin graviteeio/doc-gen
 
 .PHONY: help
 help: ## Display this help.

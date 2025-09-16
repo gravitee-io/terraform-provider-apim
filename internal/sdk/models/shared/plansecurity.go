@@ -8,16 +8,16 @@ type PlanSecurity struct {
 	Configuration any              `json:"configuration,omitempty"`
 }
 
-func (o *PlanSecurity) GetType() PlanSecurityType {
-	if o == nil {
+func (p *PlanSecurity) GetType() PlanSecurityType {
+	if p == nil {
 		return PlanSecurityType("")
 	}
-	return o.Type
+	return p.Type
 }
 
-func (o *PlanSecurity) GetConfiguration() any {
-	if o == nil {
+func (p *PlanSecurity) GetConfiguration() any {
+	if p == nil {
 		return nil
 	}
-	return o.Configuration
+	return p.Configuration
 }

@@ -1,0 +1,15 @@
+---
+page_title: "API & Shared Policy Group"
+subcategory: "Shared Policy Group"
+---
+
+# Use a Shared Policy Group to curate the headers of a v4 HTTP proxy API
+
+The following example configures the Shared Policy Group resource to use the Gravitee
+[Transform Headers policy](https://documentation.gravitee.io/apim/create-and-configure-apis/apply-policies/policy-reference/transform-headers)
+on the Request phase of a v4 HTTP proxy API.
+The resource removes the header "User-Agent" and adds a header named "X-Content-Path" that contains the API's context path.
+
+```HCL
+{{ .SPGAndAPI.Content }}
+```

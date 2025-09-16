@@ -20,24 +20,24 @@ func (c CreateOrUpdateApisGlobals) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateOrUpdateApisGlobals) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *CreateOrUpdateApisGlobals) GetOrganizationID() *string {
-	if o == nil {
+func (c *CreateOrUpdateApisGlobals) GetOrganizationID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return c.OrganizationID
 }
 
-func (o *CreateOrUpdateApisGlobals) GetEnvironmentID() *string {
-	if o == nil {
+func (c *CreateOrUpdateApisGlobals) GetEnvironmentID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return c.EnvironmentID
 }
 
 type CreateOrUpdateApisRequest struct {
@@ -57,38 +57,38 @@ func (c CreateOrUpdateApisRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateOrUpdateApisRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ApiV4Spec"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *CreateOrUpdateApisRequest) GetOrganizationID() *string {
-	if o == nil {
+func (c *CreateOrUpdateApisRequest) GetOrganizationID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return c.OrganizationID
 }
 
-func (o *CreateOrUpdateApisRequest) GetEnvironmentID() *string {
-	if o == nil {
+func (c *CreateOrUpdateApisRequest) GetEnvironmentID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return c.EnvironmentID
 }
 
-func (o *CreateOrUpdateApisRequest) GetDryRun() *bool {
-	if o == nil {
+func (c *CreateOrUpdateApisRequest) GetDryRun() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.DryRun
+	return c.DryRun
 }
 
-func (o *CreateOrUpdateApisRequest) GetAPIV4Spec() shared.APIV4Spec {
-	if o == nil {
+func (c *CreateOrUpdateApisRequest) GetAPIV4Spec() shared.APIV4Spec {
+	if c == nil {
 		return shared.APIV4Spec{}
 	}
-	return o.APIV4Spec
+	return c.APIV4Spec
 }
 
 type CreateOrUpdateApisResponse struct {
@@ -104,37 +104,37 @@ type CreateOrUpdateApisResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateOrUpdateApisResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateOrUpdateApisResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateOrUpdateApisResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateOrUpdateApisResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateOrUpdateApisResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateOrUpdateApisResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateOrUpdateApisResponse) GetAPIV4State() *shared.APIV4State {
-	if o == nil {
+func (c *CreateOrUpdateApisResponse) GetAPIV4State() *shared.APIV4State {
+	if c == nil {
 		return nil
 	}
-	return o.APIV4State
+	return c.APIV4State
 }
 
-func (o *CreateOrUpdateApisResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateOrUpdateApisResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

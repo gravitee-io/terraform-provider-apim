@@ -20,24 +20,24 @@ func (d DeletePolicyGroupGlobals) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeletePolicyGroupGlobals) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *DeletePolicyGroupGlobals) GetOrganizationID() *string {
-	if o == nil {
+func (d *DeletePolicyGroupGlobals) GetOrganizationID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return d.OrganizationID
 }
 
-func (o *DeletePolicyGroupGlobals) GetEnvironmentID() *string {
-	if o == nil {
+func (d *DeletePolicyGroupGlobals) GetEnvironmentID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return d.EnvironmentID
 }
 
 type DeletePolicyGroupRequest struct {
@@ -58,38 +58,38 @@ func (d DeletePolicyGroupRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeletePolicyGroupRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"hrid"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *DeletePolicyGroupRequest) GetOrganizationID() *string {
-	if o == nil {
+func (d *DeletePolicyGroupRequest) GetOrganizationID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return d.OrganizationID
 }
 
-func (o *DeletePolicyGroupRequest) GetEnvironmentID() *string {
-	if o == nil {
+func (d *DeletePolicyGroupRequest) GetEnvironmentID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return d.EnvironmentID
 }
 
-func (o *DeletePolicyGroupRequest) GetHrid() string {
-	if o == nil {
+func (d *DeletePolicyGroupRequest) GetHrid() string {
+	if d == nil {
 		return ""
 	}
-	return o.Hrid
+	return d.Hrid
 }
 
-func (o *DeletePolicyGroupRequest) GetDryRun() *bool {
-	if o == nil {
+func (d *DeletePolicyGroupRequest) GetDryRun() *bool {
+	if d == nil {
 		return nil
 	}
-	return o.DryRun
+	return d.DryRun
 }
 
 type DeletePolicyGroupResponse struct {
@@ -103,30 +103,30 @@ type DeletePolicyGroupResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeletePolicyGroupResponse) GetContentType() string {
-	if o == nil {
+func (d *DeletePolicyGroupResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeletePolicyGroupResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeletePolicyGroupResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeletePolicyGroupResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeletePolicyGroupResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeletePolicyGroupResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeletePolicyGroupResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }
