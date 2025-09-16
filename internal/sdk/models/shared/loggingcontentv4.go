@@ -11,37 +11,37 @@ type LoggingContentV4 struct {
 	MessageMetadata *bool `json:"messageMetadata,omitempty"`
 }
 
-func (o *LoggingContentV4) GetHeaders() *bool {
-	if o == nil {
+func (l *LoggingContentV4) GetHeaders() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Headers
+	return l.Headers
 }
 
-func (o *LoggingContentV4) GetMessageHeaders() *bool {
-	if o == nil {
+func (l *LoggingContentV4) GetMessageHeaders() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.MessageHeaders
+	return l.MessageHeaders
 }
 
-func (o *LoggingContentV4) GetPayload() *bool {
-	if o == nil {
+func (l *LoggingContentV4) GetPayload() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Payload
+	return l.Payload
 }
 
-func (o *LoggingContentV4) GetMessagePayload() *bool {
-	if o == nil {
+func (l *LoggingContentV4) GetMessagePayload() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.MessagePayload
+	return l.MessagePayload
 }
 
-func (o *LoggingContentV4) GetMessageMetadata() *bool {
-	if o == nil {
+func (l *LoggingContentV4) GetMessageMetadata() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.MessageMetadata
+	return l.MessageMetadata
 }

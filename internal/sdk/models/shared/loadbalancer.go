@@ -58,9 +58,9 @@ func (l *LoadBalancer) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *LoadBalancer) GetType() *LoadBalancerType {
-	if o == nil {
+func (l *LoadBalancer) GetType() *LoadBalancerType {
+	if l == nil {
 		return nil
 	}
-	return o.Type
+	return l.Type
 }

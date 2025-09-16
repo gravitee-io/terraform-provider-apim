@@ -57,16 +57,16 @@ func (c *ConditionSelector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ConditionSelector) GetType() ConditionSelectorType {
-	if o == nil {
+func (c *ConditionSelector) GetType() ConditionSelectorType {
+	if c == nil {
 		return ConditionSelectorType("")
 	}
-	return o.Type
+	return c.Type
 }
 
-func (o *ConditionSelector) GetCondition() string {
-	if o == nil {
+func (c *ConditionSelector) GetCondition() string {
+	if c == nil {
 		return ""
 	}
-	return o.Condition
+	return c.Condition
 }

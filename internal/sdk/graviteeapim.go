@@ -2,7 +2,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.0.0 and generator version 2.698.4
+// Generated from OpenAPI doc version 1.0.0 and generator version 2.706.0
 
 import (
 	"context"
@@ -58,7 +58,9 @@ func Pointer[T any](v T) *T { return &v }
 //
 // [Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform)
 //
-// Compatible with APIM 4.9 and above
+// # Compatible with APIM 4.9 and above
+//
+// Checkout other sections to configure, authenticate and start working with Gravitee resources
 type GraviteeApim struct {
 	SDKVersion string
 	Apis       *Apis
@@ -158,7 +160,7 @@ func New(opts ...SDKOption) *GraviteeApim {
 	sdk := &GraviteeApim{
 		SDKVersion: "0.3.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.3.0 2.698.4 1.0.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.3.0 2.706.0 1.0.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
 			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},

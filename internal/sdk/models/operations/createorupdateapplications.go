@@ -26,18 +26,18 @@ func (c *CreateOrUpdateApplicationsGlobals) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CreateOrUpdateApplicationsGlobals) GetOrganizationID() *string {
-	if o == nil {
+func (c *CreateOrUpdateApplicationsGlobals) GetOrganizationID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return c.OrganizationID
 }
 
-func (o *CreateOrUpdateApplicationsGlobals) GetEnvironmentID() *string {
-	if o == nil {
+func (c *CreateOrUpdateApplicationsGlobals) GetEnvironmentID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return c.EnvironmentID
 }
 
 type CreateOrUpdateApplicationsRequest struct {
@@ -64,32 +64,32 @@ func (c *CreateOrUpdateApplicationsRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *CreateOrUpdateApplicationsRequest) GetOrganizationID() *string {
-	if o == nil {
+func (c *CreateOrUpdateApplicationsRequest) GetOrganizationID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return c.OrganizationID
 }
 
-func (o *CreateOrUpdateApplicationsRequest) GetEnvironmentID() *string {
-	if o == nil {
+func (c *CreateOrUpdateApplicationsRequest) GetEnvironmentID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return c.EnvironmentID
 }
 
-func (o *CreateOrUpdateApplicationsRequest) GetDryRun() *bool {
-	if o == nil {
+func (c *CreateOrUpdateApplicationsRequest) GetDryRun() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.DryRun
+	return c.DryRun
 }
 
-func (o *CreateOrUpdateApplicationsRequest) GetApplicationSpec() shared.ApplicationSpec {
-	if o == nil {
+func (c *CreateOrUpdateApplicationsRequest) GetApplicationSpec() shared.ApplicationSpec {
+	if c == nil {
 		return shared.ApplicationSpec{}
 	}
-	return o.ApplicationSpec
+	return c.ApplicationSpec
 }
 
 type CreateOrUpdateApplicationsResponse struct {
@@ -107,44 +107,44 @@ type CreateOrUpdateApplicationsResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateOrUpdateApplicationsResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateOrUpdateApplicationsResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateOrUpdateApplicationsResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateOrUpdateApplicationsResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateOrUpdateApplicationsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateOrUpdateApplicationsResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateOrUpdateApplicationsResponse) GetApplicationState() *shared.ApplicationState {
-	if o == nil {
+func (c *CreateOrUpdateApplicationsResponse) GetApplicationState() *shared.ApplicationState {
+	if c == nil {
 		return nil
 	}
-	return o.ApplicationState
+	return c.ApplicationState
 }
 
-func (o *CreateOrUpdateApplicationsResponse) GetHTTPError() *shared.HTTPError {
-	if o == nil {
+func (c *CreateOrUpdateApplicationsResponse) GetHTTPError() *shared.HTTPError {
+	if c == nil {
 		return nil
 	}
-	return o.HTTPError
+	return c.HTTPError
 }
 
-func (o *CreateOrUpdateApplicationsResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateOrUpdateApplicationsResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

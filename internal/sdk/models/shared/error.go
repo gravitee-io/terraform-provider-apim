@@ -11,25 +11,25 @@ type DetailResponse struct {
 	InvalidValue *string `json:"invalidValue,omitempty"`
 }
 
-func (o *DetailResponse) GetMessage() *string {
-	if o == nil {
+func (d *DetailResponse) GetMessage() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Message
+	return d.Message
 }
 
-func (o *DetailResponse) GetLocation() *string {
-	if o == nil {
+func (d *DetailResponse) GetLocation() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Location
+	return d.Location
 }
 
-func (o *DetailResponse) GetInvalidValue() *string {
-	if o == nil {
+func (d *DetailResponse) GetInvalidValue() *string {
+	if d == nil {
 		return nil
 	}
-	return o.InvalidValue
+	return d.InvalidValue
 }
 
 // Error
@@ -46,37 +46,37 @@ type Error struct {
 	Details []DetailResponse `json:"details,omitempty"`
 }
 
-func (o *Error) GetHTTPStatus() *int {
-	if o == nil {
+func (e *Error) GetHTTPStatus() *int {
+	if e == nil {
 		return nil
 	}
-	return o.HTTPStatus
+	return e.HTTPStatus
 }
 
-func (o *Error) GetMessage() *string {
-	if o == nil {
+func (e *Error) GetMessage() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Message
+	return e.Message
 }
 
-func (o *Error) GetTechnicalCode() *string {
-	if o == nil {
+func (e *Error) GetTechnicalCode() *string {
+	if e == nil {
 		return nil
 	}
-	return o.TechnicalCode
+	return e.TechnicalCode
 }
 
-func (o *Error) GetParameters() map[string]string {
-	if o == nil {
+func (e *Error) GetParameters() map[string]string {
+	if e == nil {
 		return nil
 	}
-	return o.Parameters
+	return e.Parameters
 }
 
-func (o *Error) GetDetails() []DetailResponse {
-	if o == nil {
+func (e *Error) GetDetails() []DetailResponse {
+	if e == nil {
 		return nil
 	}
-	return o.Details
+	return e.Details
 }

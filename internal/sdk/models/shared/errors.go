@@ -10,16 +10,16 @@ type Errors struct {
 	Warning []string `json:"warning,omitempty"`
 }
 
-func (o *Errors) GetSevere() []string {
-	if o == nil {
+func (e *Errors) GetSevere() []string {
+	if e == nil {
 		return nil
 	}
-	return o.Severe
+	return e.Severe
 }
 
-func (o *Errors) GetWarning() []string {
-	if o == nil {
+func (e *Errors) GetWarning() []string {
+	if e == nil {
 		return nil
 	}
-	return o.Warning
+	return e.Warning
 }

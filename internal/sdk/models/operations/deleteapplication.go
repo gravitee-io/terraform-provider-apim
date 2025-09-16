@@ -26,18 +26,18 @@ func (d *DeleteApplicationGlobals) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DeleteApplicationGlobals) GetOrganizationID() *string {
-	if o == nil {
+func (d *DeleteApplicationGlobals) GetOrganizationID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return d.OrganizationID
 }
 
-func (o *DeleteApplicationGlobals) GetEnvironmentID() *string {
-	if o == nil {
+func (d *DeleteApplicationGlobals) GetEnvironmentID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return d.EnvironmentID
 }
 
 type DeleteApplicationRequest struct {
@@ -60,25 +60,25 @@ func (d *DeleteApplicationRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DeleteApplicationRequest) GetOrganizationID() *string {
-	if o == nil {
+func (d *DeleteApplicationRequest) GetOrganizationID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return d.OrganizationID
 }
 
-func (o *DeleteApplicationRequest) GetEnvironmentID() *string {
-	if o == nil {
+func (d *DeleteApplicationRequest) GetEnvironmentID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return d.EnvironmentID
 }
 
-func (o *DeleteApplicationRequest) GetHrid() string {
-	if o == nil {
+func (d *DeleteApplicationRequest) GetHrid() string {
+	if d == nil {
 		return ""
 	}
-	return o.Hrid
+	return d.Hrid
 }
 
 type DeleteApplicationResponse struct {
@@ -94,37 +94,37 @@ type DeleteApplicationResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteApplicationResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteApplicationResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteApplicationResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteApplicationResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteApplicationResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteApplicationResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteApplicationResponse) GetHTTPError() *shared.HTTPError {
-	if o == nil {
+func (d *DeleteApplicationResponse) GetHTTPError() *shared.HTTPError {
+	if d == nil {
 		return nil
 	}
-	return o.HTTPError
+	return d.HTTPError
 }
 
-func (o *DeleteApplicationResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteApplicationResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

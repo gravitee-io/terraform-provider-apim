@@ -27,107 +27,107 @@ type PlanV4 struct {
 	Mode PlanMode `json:"mode"`
 }
 
-func (o *PlanV4) GetHrid() string {
-	if o == nil {
+func (p *PlanV4) GetHrid() string {
+	if p == nil {
 		return ""
 	}
-	return o.Hrid
+	return p.Hrid
 }
 
-func (o *PlanV4) GetName() string {
-	if o == nil {
+func (p *PlanV4) GetName() string {
+	if p == nil {
 		return ""
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *PlanV4) GetDescription() *string {
-	if o == nil {
+func (p *PlanV4) GetDescription() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Description
+	return p.Description
 }
 
-func (o *PlanV4) GetSecurity() PlanSecurity {
-	if o == nil {
+func (p *PlanV4) GetSecurity() PlanSecurity {
+	if p == nil {
 		return PlanSecurity{}
 	}
-	return o.Security
+	return p.Security
 }
 
-func (o *PlanV4) GetCharacteristics() []string {
-	if o == nil {
+func (p *PlanV4) GetCharacteristics() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Characteristics
+	return p.Characteristics
 }
 
-func (o *PlanV4) GetExcludedGroups() []string {
-	if o == nil {
+func (p *PlanV4) GetExcludedGroups() []string {
+	if p == nil {
 		return nil
 	}
-	return o.ExcludedGroups
+	return p.ExcludedGroups
 }
 
-func (o *PlanV4) GetGeneralConditions() *string {
-	if o == nil {
+func (p *PlanV4) GetGeneralConditions() *string {
+	if p == nil {
 		return nil
 	}
-	return o.GeneralConditions
+	return p.GeneralConditions
 }
 
-func (o *PlanV4) GetOrder() *int64 {
-	if o == nil {
+func (p *PlanV4) GetOrder() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.Order
+	return p.Order
 }
 
-func (o *PlanV4) GetSelectionRule() *string {
-	if o == nil {
+func (p *PlanV4) GetSelectionRule() *string {
+	if p == nil {
 		return nil
 	}
-	return o.SelectionRule
+	return p.SelectionRule
 }
 
-func (o *PlanV4) GetStatus() PlanStatus {
-	if o == nil {
+func (p *PlanV4) GetStatus() PlanStatus {
+	if p == nil {
 		return PlanStatus("")
 	}
-	return o.Status
+	return p.Status
 }
 
-func (o *PlanV4) GetTags() []string {
-	if o == nil {
+func (p *PlanV4) GetTags() []string {
+	if p == nil {
 		return nil
 	}
-	return o.Tags
+	return p.Tags
 }
 
-func (o *PlanV4) GetType() PlanType {
-	if o == nil {
+func (p *PlanV4) GetType() PlanType {
+	if p == nil {
 		return PlanType("")
 	}
-	return o.Type
+	return p.Type
 }
 
-func (o *PlanV4) GetValidation() PlanValidation {
-	if o == nil {
+func (p *PlanV4) GetValidation() PlanValidation {
+	if p == nil {
 		return PlanValidation("")
 	}
-	return o.Validation
+	return p.Validation
 }
 
-func (o *PlanV4) GetFlows() []FlowV4 {
-	if o == nil {
+func (p *PlanV4) GetFlows() []FlowV4 {
+	if p == nil {
 		return nil
 	}
-	return o.Flows
+	return p.Flows
 }
 
-func (o *PlanV4) GetMode() PlanMode {
-	if o == nil {
+func (p *PlanV4) GetMode() PlanMode {
+	if p == nil {
 		return PlanMode("")
 	}
-	return o.Mode
+	return p.Mode
 }

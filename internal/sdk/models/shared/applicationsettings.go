@@ -12,23 +12,23 @@ type ApplicationSettings struct {
 	TLS *ApplicationTLSSettings `json:"tls,omitempty"`
 }
 
-func (o *ApplicationSettings) GetApp() *SimpleApplicationSettings {
-	if o == nil {
+func (a *ApplicationSettings) GetApp() *SimpleApplicationSettings {
+	if a == nil {
 		return nil
 	}
-	return o.App
+	return a.App
 }
 
-func (o *ApplicationSettings) GetOauth() *ApplicationOAuthClientSettings {
-	if o == nil {
+func (a *ApplicationSettings) GetOauth() *ApplicationOAuthClientSettings {
+	if a == nil {
 		return nil
 	}
-	return o.Oauth
+	return a.Oauth
 }
 
-func (o *ApplicationSettings) GetTLS() *ApplicationTLSSettings {
-	if o == nil {
+func (a *ApplicationSettings) GetTLS() *ApplicationTLSSettings {
+	if a == nil {
 		return nil
 	}
-	return o.TLS
+	return a.TLS
 }

@@ -1,17 +1,17 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: e8318543603c4c534f317ce2cae48a1f
+  docChecksum: d07b92ba7f730cda901ad28f92d97727
   docVersion: 1.0.0
-  speakeasyVersion: 1.615.2
-  generationVersion: 2.698.4
+  speakeasyVersion: 1.619.0
+  generationVersion: 2.706.0
   releaseVersion: 0.3.0
   configChecksum: 35299afd03d9b81afa312b515f8fa84d
 features:
   terraform:
     additionalDependencies: 0.1.0
-    constsAndDefaults: 0.2.1
-    core: 3.44.1
+    constsAndDefaults: 0.3.0
+    core: 3.45.0
     globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
     globals: 3.0.3
@@ -25,7 +25,6 @@ features:
 generatedFiles:
   - .gitattributes
   - USAGE.md
-  - examples/README.md
   - examples/data-sources/apim_apiv4/data-source.tf
   - examples/data-sources/apim_application/data-source.tf
   - examples/data-sources/apim_shared_policy_group/data-source.tf
@@ -257,6 +256,8 @@ generatedFiles:
   - internal/sdk/models/shared/tcplistener.go
   - internal/sdk/models/shared/tracingv4.go
   - internal/sdk/models/shared/visibility.go
+  - internal/sdk/optionalnullable/optionalnullable.go
+  - internal/sdk/optionalnullable/optionalnullable_test.go
   - internal/sdk/retry/config.go
   - internal/sdk/sharedpolicygroups.go
   - internal/sdk/subscriptions.go

@@ -24,23 +24,23 @@ func (p *PathV4) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PathV4) GetHost() *string {
-	if o == nil {
+func (p *PathV4) GetHost() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Host
+	return p.Host
 }
 
-func (o *PathV4) GetPath() *string {
-	if o == nil {
+func (p *PathV4) GetPath() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Path
+	return p.Path
 }
 
-func (o *PathV4) GetOverrideAccess() *bool {
-	if o == nil {
+func (p *PathV4) GetOverrideAccess() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.OverrideAccess
+	return p.OverrideAccess
 }

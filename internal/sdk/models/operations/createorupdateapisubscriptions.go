@@ -26,18 +26,18 @@ func (c *CreateOrUpdateAPISubscriptionsGlobals) UnmarshalJSON(data []byte) error
 	return nil
 }
 
-func (o *CreateOrUpdateAPISubscriptionsGlobals) GetOrganizationID() *string {
-	if o == nil {
+func (c *CreateOrUpdateAPISubscriptionsGlobals) GetOrganizationID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return c.OrganizationID
 }
 
-func (o *CreateOrUpdateAPISubscriptionsGlobals) GetEnvironmentID() *string {
-	if o == nil {
+func (c *CreateOrUpdateAPISubscriptionsGlobals) GetEnvironmentID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return c.EnvironmentID
 }
 
 type CreateOrUpdateAPISubscriptionsRequest struct {
@@ -62,32 +62,32 @@ func (c *CreateOrUpdateAPISubscriptionsRequest) UnmarshalJSON(data []byte) error
 	return nil
 }
 
-func (o *CreateOrUpdateAPISubscriptionsRequest) GetOrganizationID() *string {
-	if o == nil {
+func (c *CreateOrUpdateAPISubscriptionsRequest) GetOrganizationID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return c.OrganizationID
 }
 
-func (o *CreateOrUpdateAPISubscriptionsRequest) GetEnvironmentID() *string {
-	if o == nil {
+func (c *CreateOrUpdateAPISubscriptionsRequest) GetEnvironmentID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return c.EnvironmentID
 }
 
-func (o *CreateOrUpdateAPISubscriptionsRequest) GetAPIHrid() string {
-	if o == nil {
+func (c *CreateOrUpdateAPISubscriptionsRequest) GetAPIHrid() string {
+	if c == nil {
 		return ""
 	}
-	return o.APIHrid
+	return c.APIHrid
 }
 
-func (o *CreateOrUpdateAPISubscriptionsRequest) GetSubscriptionSpec() shared.SubscriptionSpec {
-	if o == nil {
+func (c *CreateOrUpdateAPISubscriptionsRequest) GetSubscriptionSpec() shared.SubscriptionSpec {
+	if c == nil {
 		return shared.SubscriptionSpec{}
 	}
-	return o.SubscriptionSpec
+	return c.SubscriptionSpec
 }
 
 type CreateOrUpdateAPISubscriptionsResponse struct {
@@ -105,44 +105,44 @@ type CreateOrUpdateAPISubscriptionsResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateOrUpdateAPISubscriptionsResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateOrUpdateAPISubscriptionsResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateOrUpdateAPISubscriptionsResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateOrUpdateAPISubscriptionsResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateOrUpdateAPISubscriptionsResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateOrUpdateAPISubscriptionsResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateOrUpdateAPISubscriptionsResponse) GetSubscriptionState() *shared.SubscriptionState {
-	if o == nil {
+func (c *CreateOrUpdateAPISubscriptionsResponse) GetSubscriptionState() *shared.SubscriptionState {
+	if c == nil {
 		return nil
 	}
-	return o.SubscriptionState
+	return c.SubscriptionState
 }
 
-func (o *CreateOrUpdateAPISubscriptionsResponse) GetHTTPError() *shared.HTTPError {
-	if o == nil {
+func (c *CreateOrUpdateAPISubscriptionsResponse) GetHTTPError() *shared.HTTPError {
+	if c == nil {
 		return nil
 	}
-	return o.HTTPError
+	return c.HTTPError
 }
 
-func (o *CreateOrUpdateAPISubscriptionsResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateOrUpdateAPISubscriptionsResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

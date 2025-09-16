@@ -36,58 +36,58 @@ func (s *SubscriptionState) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SubscriptionState) GetHrid() string {
-	if o == nil {
+func (s *SubscriptionState) GetHrid() string {
+	if s == nil {
 		return ""
 	}
-	return o.Hrid
+	return s.Hrid
 }
 
-func (o *SubscriptionState) GetApplicationHrid() string {
-	if o == nil {
+func (s *SubscriptionState) GetApplicationHrid() string {
+	if s == nil {
 		return ""
 	}
-	return o.ApplicationHrid
+	return s.ApplicationHrid
 }
 
-func (o *SubscriptionState) GetPlanHrid() string {
-	if o == nil {
+func (s *SubscriptionState) GetPlanHrid() string {
+	if s == nil {
 		return ""
 	}
-	return o.PlanHrid
+	return s.PlanHrid
 }
 
-func (o *SubscriptionState) GetEndingAt() *time.Time {
-	if o == nil {
+func (s *SubscriptionState) GetEndingAt() *time.Time {
+	if s == nil {
 		return nil
 	}
-	return o.EndingAt
+	return s.EndingAt
 }
 
-func (o *SubscriptionState) GetErrors() *Errors {
-	if o == nil {
+func (s *SubscriptionState) GetErrors() *Errors {
+	if s == nil {
 		return nil
 	}
-	return o.Errors
+	return s.Errors
 }
 
-func (o *SubscriptionState) GetID() *string {
-	if o == nil {
+func (s *SubscriptionState) GetID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ID
+	return s.ID
 }
 
-func (o *SubscriptionState) GetAPIHrid() string {
-	if o == nil {
+func (s *SubscriptionState) GetAPIHrid() string {
+	if s == nil {
 		return ""
 	}
-	return o.APIHrid
+	return s.APIHrid
 }
 
-func (o *SubscriptionState) GetStartingAt() *time.Time {
-	if o == nil {
+func (s *SubscriptionState) GetStartingAt() *time.Time {
+	if s == nil {
 		return nil
 	}
-	return o.StartingAt
+	return s.StartingAt
 }

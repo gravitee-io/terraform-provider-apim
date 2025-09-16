@@ -10,16 +10,16 @@ type SimpleApplicationSettings struct {
 	ClientID *string `json:"clientId,omitempty"`
 }
 
-func (o *SimpleApplicationSettings) GetType() *string {
-	if o == nil {
+func (s *SimpleApplicationSettings) GetType() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SimpleApplicationSettings) GetClientID() *string {
-	if o == nil {
+func (s *SimpleApplicationSettings) GetClientID() *string {
+	if s == nil {
 		return nil
 	}
-	return o.ClientID
+	return s.ClientID
 }

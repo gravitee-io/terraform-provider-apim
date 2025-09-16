@@ -33,44 +33,44 @@ func (f *FailoverV4) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *FailoverV4) GetEnabled() *bool {
-	if o == nil {
+func (f *FailoverV4) GetEnabled() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.Enabled
+	return f.Enabled
 }
 
-func (o *FailoverV4) GetMaxRetries() *int {
-	if o == nil {
+func (f *FailoverV4) GetMaxRetries() *int {
+	if f == nil {
 		return nil
 	}
-	return o.MaxRetries
+	return f.MaxRetries
 }
 
-func (o *FailoverV4) GetSlowCallDuration() *int64 {
-	if o == nil {
+func (f *FailoverV4) GetSlowCallDuration() *int64 {
+	if f == nil {
 		return nil
 	}
-	return o.SlowCallDuration
+	return f.SlowCallDuration
 }
 
-func (o *FailoverV4) GetOpenStateDuration() *int64 {
-	if o == nil {
+func (f *FailoverV4) GetOpenStateDuration() *int64 {
+	if f == nil {
 		return nil
 	}
-	return o.OpenStateDuration
+	return f.OpenStateDuration
 }
 
-func (o *FailoverV4) GetMaxFailures() *int {
-	if o == nil {
+func (f *FailoverV4) GetMaxFailures() *int {
+	if f == nil {
 		return nil
 	}
-	return o.MaxFailures
+	return f.MaxFailures
 }
 
-func (o *FailoverV4) GetPerSubscription() *bool {
-	if o == nil {
+func (f *FailoverV4) GetPerSubscription() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.PerSubscription
+	return f.PerSubscription
 }

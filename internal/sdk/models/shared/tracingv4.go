@@ -10,16 +10,16 @@ type TracingV4 struct {
 	Verbose *bool `json:"verbose,omitempty"`
 }
 
-func (o *TracingV4) GetEnabled() *bool {
-	if o == nil {
+func (t *TracingV4) GetEnabled() *bool {
+	if t == nil {
 		return nil
 	}
-	return o.Enabled
+	return t.Enabled
 }
 
-func (o *TracingV4) GetVerbose() *bool {
-	if o == nil {
+func (t *TracingV4) GetVerbose() *bool {
+	if t == nil {
 		return nil
 	}
-	return o.Verbose
+	return t.Verbose
 }

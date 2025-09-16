@@ -94,8 +94,9 @@ resource "apim_apiv4" "quick-start-api" {
 
 ### Required
 
+- `definition_context` (Attributes, Deprecated) the context where the api definition was created. (see [below for nested schema](#nestedatt--definition_context))
 - `endpoint_groups` (Attributes List) (see [below for nested schema](#nestedatt--endpoint_groups))
-- `hrid` (String) A unique human readable id identifying this resource. Requires replacement if changed.
+- `hrid` (String) A unique human readable id identifying this object. Requires replacement if changed.
 - `lifecycle_state` (String) The status of the API regarding the console. must be one of ["ARCHIVED", "CREATED", "DEPRECATED", "PUBLISHED", "UNPUBLISHED"]
 - `listeners` (Attributes List) The list of listeners associated with this API. (see [below for nested schema](#nestedatt--listeners))
 - `name` (String) API's name. Duplicate names can exists.
@@ -104,12 +105,12 @@ resource "apim_apiv4" "quick-start-api" {
 
 ### Optional
 
-- `analytics` (Attributes) API analytics (see [below for nested schema](#nestedatt--analytics))
+- `analytics` (Attributes) (see [below for nested schema](#nestedatt--analytics))
 - `categories` (List of String) The list of category keys associated with this API.
 - `description` (String) API's description. A short description of your API.
-- `environment_id` (String) environment ID
-- `failover` (Attributes) API Failover (see [below for nested schema](#nestedatt--failover))
-- `flow_execution` (Attributes) Flow execution (see [below for nested schema](#nestedatt--flow_execution))
+- `environment_id` (String) Id of an environment.
+- `failover` (Attributes) (see [below for nested schema](#nestedatt--failover))
+- `flow_execution` (Attributes) (see [below for nested schema](#nestedatt--flow_execution))
 - `flows` (Attributes List) List of flows for the API (see [below for nested schema](#nestedatt--flows))
 - `groups` (List of String) List of groups associated with the API.
 This groups are id or name references to existing groups in APIM.
@@ -119,22 +120,25 @@ This groups are id or name references to existing groups in APIM.
 - `notify_members` (Boolean) If true, new members added to the API spec will
 be notified when the API is synced with APIM.
 Default: true
-- `organization_id` (String) organization ID
-- `pages` (Attributes List) List of Pages for the API (see [below for nested schema](#nestedatt--pages))
-- `plans` (Attributes List) List of Plans for the API (see [below for nested schema](#nestedatt--plans))
-- `primary_owner` (Attributes) Primary owner, the creator of the application. Can perform all possible API actions. (see [below for nested schema](#nestedatt--primary_owner))
+- `organization_id` (String) Id of an organization.
+- `plans` (Attributes Map) Map of plan IDs to Plan objects (see [below for nested schema](#nestedatt--plans))
+- `primary_owner` (Attributes) (see [below for nested schema](#nestedatt--primary_owner))
 - `properties` (Attributes List) (see [below for nested schema](#nestedatt--properties))
 - `resources` (Attributes List) (see [below for nested schema](#nestedatt--resources))
 - `response_templates` (Map of Map of Object) A list of Response Templates for the API (Not applicable for Native API)
-- `services` (Attributes) Api services (see [below for nested schema](#nestedatt--services))
+- `services` (Attributes) (see [below for nested schema](#nestedatt--services))
 - `state` (String) The state of the API regarding the gateway(s). must be one of ["CLOSED", "INITIALIZED", "STARTED", "STOPPED", "STOPPING"]
 - `tags` (List of String) The list of sharding tags associated with this API.
-- `visibility` (String) The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]
+- `visibility` (String) The visibility of the resource regarding the portal. must be one of ["PUBLIC", "PRIVATE"]
 
 ### Read-Only
 
 - `cross_id` (String) When promoting an API from one environment to the other, this ID identifies the API across those different environments.
 - `id` (String) API's uuid.
+
+<a id="nestedatt--definition_context"></a>
+### Nested Schema for `definition_context`
+
 
 <a id="nestedatt--endpoint_groups"></a>
 ### Nested Schema for `endpoint_groups`
@@ -142,9 +146,9 @@ Default: true
 Optional:
 
 - `endpoints` (Attributes List) (see [below for nested schema](#nestedatt--endpoint_groups--endpoints))
-- `load_balancer` (Attributes) Load Balancer (see [below for nested schema](#nestedatt--endpoint_groups--load_balancer))
+- `load_balancer` (Attributes) (see [below for nested schema](#nestedatt--endpoint_groups--load_balancer))
 - `name` (String) The name of the endpoint group
-- `services` (Attributes) API Endpoint Group Services (see [below for nested schema](#nestedatt--endpoint_groups--services))
+- `services` (Attributes) (see [below for nested schema](#nestedatt--endpoint_groups--services))
 - `shared_configuration` (String) Parsed as JSON.
 - `type` (String) The type of the endpoint group. Not Null
 
@@ -157,7 +161,7 @@ Optional:
 - `inherit_configuration` (Boolean) Is the configuration of the endpoint inherited from the endpoint group it belongs to. Default: false
 - `name` (String) The name of the endpoint
 - `secondary` (Boolean) Is the endpoint a secondary endpoint. Default: false
-- `services` (Attributes) API Endpoint Services (see [below for nested schema](#nestedatt--endpoint_groups--endpoints--services))
+- `services` (Attributes) (see [below for nested schema](#nestedatt--endpoint_groups--endpoints--services))
 - `shared_configuration_override` (String) Parsed as JSON.
 - `tenants` (List of String) The list of tenants associated to the endpoint.
 - `type` (String) The type of the endpoint. Not Null
@@ -168,7 +172,7 @@ Optional:
 
 Optional:
 
-- `health_check` (Attributes) Service (see [below for nested schema](#nestedatt--endpoint_groups--endpoints--services--health_check))
+- `health_check` (Attributes) (see [below for nested schema](#nestedatt--endpoint_groups--endpoints--services--health_check))
 
 <a id="nestedatt--endpoint_groups--endpoints--services--health_check"></a>
 ### Nested Schema for `endpoint_groups.endpoints.services.health_check`
@@ -196,8 +200,8 @@ Optional:
 
 Optional:
 
-- `discovery` (Attributes) Service (see [below for nested schema](#nestedatt--endpoint_groups--services--discovery))
-- `health_check` (Attributes) Service (see [below for nested schema](#nestedatt--endpoint_groups--services--health_check))
+- `discovery` (Attributes) (see [below for nested schema](#nestedatt--endpoint_groups--services--discovery))
+- `health_check` (Attributes) (see [below for nested schema](#nestedatt--endpoint_groups--services--health_check))
 
 <a id="nestedatt--endpoint_groups--services--discovery"></a>
 ### Nested Schema for `endpoint_groups.services.discovery`
@@ -228,17 +232,17 @@ Optional:
 
 Optional:
 
-- `http` (Attributes) HTTP Listener (see [below for nested schema](#nestedatt--listeners--http))
-- `kafka` (Attributes) Kafka listener (see [below for nested schema](#nestedatt--listeners--kafka))
-- `subscription` (Attributes) Subscription listener (see [below for nested schema](#nestedatt--listeners--subscription))
-- `tcp` (Attributes) TCP listener (see [below for nested schema](#nestedatt--listeners--tcp))
+- `http` (Attributes) (see [below for nested schema](#nestedatt--listeners--http))
+- `kafka` (Attributes) (see [below for nested schema](#nestedatt--listeners--kafka))
+- `subscription` (Attributes) (see [below for nested schema](#nestedatt--listeners--subscription))
+- `tcp` (Attributes) (see [below for nested schema](#nestedatt--listeners--tcp))
 
 <a id="nestedatt--listeners--http"></a>
 ### Nested Schema for `listeners.http`
 
 Optional:
 
-- `cors` (Attributes) Http listener Cross-Origin Resource Sharing (see [below for nested schema](#nestedatt--listeners--http--cors))
+- `cors` (Attributes) (see [below for nested schema](#nestedatt--listeners--http--cors))
 - `entrypoints` (Attributes List) (see [below for nested schema](#nestedatt--listeners--http--entrypoints))
 - `path_mappings` (List of String)
 - `paths` (Attributes List) (see [below for nested schema](#nestedatt--listeners--http--paths))
@@ -266,7 +270,7 @@ Optional:
 Optional:
 
 - `configuration` (String) Parsed as JSON.
-- `dlq` (Attributes) DLQ (see [below for nested schema](#nestedatt--listeners--http--entrypoints--dlq))
+- `dlq` (Attributes) (see [below for nested schema](#nestedatt--listeners--http--entrypoints--dlq))
 - `qos` (String) Type of the quality of service. Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]
 - `type` (String) The type of the entrypoint. Not Null
 
@@ -307,7 +311,7 @@ Optional:
 Optional:
 
 - `configuration` (String) Parsed as JSON.
-- `dlq` (Attributes) DLQ (see [below for nested schema](#nestedatt--listeners--kafka--entrypoints--dlq))
+- `dlq` (Attributes) (see [below for nested schema](#nestedatt--listeners--kafka--entrypoints--dlq))
 - `qos` (String) Type of the quality of service. Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]
 - `type` (String) The type of the entrypoint. Not Null
 
@@ -336,7 +340,7 @@ Optional:
 Optional:
 
 - `configuration` (String) Parsed as JSON.
-- `dlq` (Attributes) DLQ (see [below for nested schema](#nestedatt--listeners--subscription--entrypoints--dlq))
+- `dlq` (Attributes) (see [below for nested schema](#nestedatt--listeners--subscription--entrypoints--dlq))
 - `qos` (String) Type of the quality of service. Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]
 - `type` (String) The type of the entrypoint. Not Null
 
@@ -366,7 +370,7 @@ Optional:
 Optional:
 
 - `configuration` (String) Parsed as JSON.
-- `dlq` (Attributes) DLQ (see [below for nested schema](#nestedatt--listeners--tcp--entrypoints--dlq))
+- `dlq` (Attributes) (see [below for nested schema](#nestedatt--listeners--tcp--entrypoints--dlq))
 - `qos` (String) Type of the quality of service. Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]
 - `type` (String) The type of the entrypoint. Not Null
 
@@ -387,9 +391,9 @@ Optional:
 Optional:
 
 - `enabled` (Boolean) Whether or not analytics is enabled. Default: true
-- `logging` (Attributes) API logging configuration (see [below for nested schema](#nestedatt--analytics--logging))
-- `sampling` (Attributes) API analytics sampling (see [below for nested schema](#nestedatt--analytics--sampling))
-- `tracing` (Attributes) API analytic tracing (see [below for nested schema](#nestedatt--analytics--tracing))
+- `logging` (Attributes) (see [below for nested schema](#nestedatt--analytics--logging))
+- `sampling` (Attributes) (see [below for nested schema](#nestedatt--analytics--sampling))
+- `tracing` (Attributes) (see [below for nested schema](#nestedatt--analytics--tracing))
 
 <a id="nestedatt--analytics--logging"></a>
 ### Nested Schema for `analytics.logging`
@@ -397,10 +401,10 @@ Optional:
 Optional:
 
 - `condition` (String)
-- `content` (Attributes) API logging content (see [below for nested schema](#nestedatt--analytics--logging--content))
+- `content` (Attributes) (see [below for nested schema](#nestedatt--analytics--logging--content))
 - `message_condition` (String)
-- `mode` (Attributes) API logging mode (see [below for nested schema](#nestedatt--analytics--logging--mode))
-- `phase` (Attributes) Logging phase (see [below for nested schema](#nestedatt--analytics--logging--phase))
+- `mode` (Attributes) (see [below for nested schema](#nestedatt--analytics--logging--mode))
+- `phase` (Attributes) (see [below for nested schema](#nestedatt--analytics--logging--phase))
 
 <a id="nestedatt--analytics--logging--content"></a>
 ### Nested Schema for `analytics.logging.content`
@@ -479,17 +483,20 @@ Optional:
 
 Optional:
 
-- `connect` (Attributes List) Connect flow steps used for NATIVE APIs (see [below for nested schema](#nestedatt--flows--connect))
+- `connect` (Attributes List) Flow step used for NATIVE APIs (see [below for nested schema](#nestedatt--flows--connect))
 - `enabled` (Boolean) Is the flow enabled. Default: true
-- `id` (String) Flow's uuid.
-- `interact` (Attributes List) Interact flow steps used for NATIVE APIs (see [below for nested schema](#nestedatt--flows--interact))
+- `interact` (Attributes List) Flow step used for NATIVE APIs (see [below for nested schema](#nestedatt--flows--interact))
 - `name` (String) Flow's name.
-- `publish` (Attributes List) Publish flow steps used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--flows--publish))
-- `request` (Attributes List) Request flow steps used for PROXY and MESSAGE APIs (see [below for nested schema](#nestedatt--flows--request))
-- `response` (Attributes List) Response flow steps used for PROXY and MESSAGE APIs (see [below for nested schema](#nestedatt--flows--response))
+- `publish` (Attributes List) Flow step used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--flows--publish))
+- `request` (Attributes List) Flow step used for PROXY and MESSAGE APIs (see [below for nested schema](#nestedatt--flows--request))
+- `response` (Attributes List) Flow step used for PROXY and MESSAGE APIs (see [below for nested schema](#nestedatt--flows--response))
 - `selectors` (Attributes List) (see [below for nested schema](#nestedatt--flows--selectors))
-- `subscribe` (Attributes List) Subscribe flow steps used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--flows--subscribe))
+- `subscribe` (Attributes List) Flow step used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--flows--subscribe))
 - `tags` (List of String) Flow's tags.
+
+Read-Only:
+
+- `id` (String) Flow's uuid.
 
 <a id="nestedatt--flows--connect"></a>
 ### Nested Schema for `flows.connect`
@@ -566,9 +573,9 @@ Optional:
 
 Optional:
 
-- `channel` (Attributes) Channel selector (see [below for nested schema](#nestedatt--flows--selectors--channel))
-- `condition` (Attributes) Condition selector (see [below for nested schema](#nestedatt--flows--selectors--condition))
-- `http` (Attributes) HTTP selector (see [below for nested schema](#nestedatt--flows--selectors--http))
+- `channel` (Attributes) (see [below for nested schema](#nestedatt--flows--selectors--channel))
+- `condition` (Attributes) (see [below for nested schema](#nestedatt--flows--selectors--condition))
+- `http` (Attributes) (see [below for nested schema](#nestedatt--flows--selectors--http))
 
 <a id="nestedatt--flows--selectors--channel"></a>
 ### Nested Schema for `flows.selectors.channel`
@@ -623,13 +630,10 @@ Optional:
 
 Optional:
 
-- `role` (String) The role of the user in regards of the managed oject (API, Application, etc.). Not Null
-- `source` (String) Where the memeber was created (system, idp, etc.). Not Null
-- `source_id` (String) Id of the user in the source. Not Null
-
-Read-Only:
-
-- `id` (String) User UUID of the memeber
+- `id` (String)
+- `role` (String)
+- `source` (String)
+- `source_id` (String)
 
 
 <a id="nestedatt--metadata"></a>
@@ -637,152 +641,11 @@ Read-Only:
 
 Optional:
 
-- `default_value` (String) The default value of the metadata if the value is not set.
-- `format` (String) The format of the metadata. Not Null; must be one of ["STRING", "NUMERIC", "BOOLEAN", "DATE", "MAIL", "URL"]
-- `key` (String) The key of the metadata if different from sanitized name (lowercase + hyphens).
-- `name` (String) The name of the metadata. Not Null
+- `default_value` (String) The default value of the metadata.
+- `format` (String) The format of the metadata. must be one of ["STRING", "NUMERIC", "BOOLEAN", "DATE", "MAIL", "URL"]
+- `key` (String) The key of the metadata.
+- `name` (String) The name of the metadata.
 - `value` (String) The value of the metadata.
-
-
-<a id="nestedatt--pages"></a>
-### Nested Schema for `pages`
-
-Optional:
-
-- `access_controls` (Attributes List) List of access controls. (see [below for nested schema](#nestedatt--pages--access_controls))
-- `attached_media` (Attributes List) List of attached media. (see [below for nested schema](#nestedatt--pages--attached_media))
-- `configuration` (Map of String) Page's configuration.
-- `content` (String) Page's content.
-- `content_revision` (Attributes) Page revision (see [below for nested schema](#nestedatt--pages--content_revision))
-- `content_type` (String) Page's content type.
-- `excluded_access_controls` (Boolean) Flag to restrict access to user matching the restrictions.
-- `general_conditions` (Boolean) If page is used as General Conditions of an active plan.
-- `hidden` (Boolean) If folder is published but not shown in Portal.
-- `homepage` (Boolean) Page's homepage status.
-- `hrid` (String) A unique human readable id identifying this resource. Not Null
-- `last_contributor` (String) Page's last contributor. Id of a user.
-- `metadata` (Map of String) Page's metadata.
-- `name` (String) Page's name.
-- `order` (Number) Page's order.
-- `parent_id` (String) Page's parent id.
-- `parent_path` (String) Page's parent path.
-- `published` (Boolean) Page's published status.
-- `source` (Attributes) Page source (see [below for nested schema](#nestedatt--pages--source))
-- `translations` (Attributes List) List of page translations. (see [below for nested schema](#nestedatt--pages--translations))
-- `type` (String) The type of the page. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]
-- `updated_at` (String) Page's last update date.
-- `visibility` (String) The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]
-
-Read-Only:
-
-- `cross_id` (String) Page's cross uuid.
-
-<a id="nestedatt--pages--access_controls"></a>
-### Nested Schema for `pages.access_controls`
-
-Optional:
-
-- `reference_id` (String) The id of the resource used to check the access control
-- `reference_type` (String) The type of the resource used to check the access control
-
-
-<a id="nestedatt--pages--attached_media"></a>
-### Nested Schema for `pages.attached_media`
-
-Optional:
-
-- `attached_at` (String) Media's attachment date.
-- `hash` (String) Media's hash.
-- `name` (String) Media's name.
-
-
-<a id="nestedatt--pages--content_revision"></a>
-### Nested Schema for `pages.content_revision`
-
-Optional:
-
-- `id` (String) Id of the page used to fill the content attributes.
-- `revision` (Number) Revision number.
-
-
-<a id="nestedatt--pages--source"></a>
-### Nested Schema for `pages.source`
-
-Optional:
-
-- `configuration` (String) Page source's configuration. Parsed as JSON.
-- `type` (String) The type of the page source (=fetcher type).
-
-
-<a id="nestedatt--pages--translations"></a>
-### Nested Schema for `pages.translations`
-
-Optional:
-
-- `access_controls` (Attributes List) List of access controls. (see [below for nested schema](#nestedatt--pages--translations--access_controls))
-- `attached_media` (Attributes List) List of attached media. (see [below for nested schema](#nestedatt--pages--translations--attached_media))
-- `configuration` (Map of String) Page's configuration.
-- `content` (String) Page's content.
-- `content_revision` (Attributes) Page revision (see [below for nested schema](#nestedatt--pages--translations--content_revision))
-- `content_type` (String) Page's content type.
-- `excluded_access_controls` (Boolean) Flag to restrict access to user matching the restrictions.
-- `general_conditions` (Boolean) If page is used as General Conditions of an active plan.
-- `hidden` (Boolean) If folder is published but not shown in Portal.
-- `homepage` (Boolean) Page's homepage status.
-- `hrid` (String) A unique human readable id identifying this resource. Not Null
-- `last_contributor` (String) Page's last contributor. Id of a user.
-- `metadata` (Map of String) Page's metadata.
-- `name` (String) Page's name.
-- `order` (Number) Page's order.
-- `parent_id` (String) Page's parent id.
-- `parent_path` (String) Page's parent path.
-- `published` (Boolean) Page's published status.
-- `source` (Attributes) Page source (see [below for nested schema](#nestedatt--pages--translations--source))
-- `type` (String) The type of the page. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]
-- `updated_at` (String) Page's last update date.
-- `visibility` (String) The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]
-
-Read-Only:
-
-- `cross_id` (String) Page's cross uuid.
-
-<a id="nestedatt--pages--translations--access_controls"></a>
-### Nested Schema for `pages.translations.access_controls`
-
-Optional:
-
-- `reference_id` (String) The id of the resource used to check the access control
-- `reference_type` (String) The type of the resource used to check the access control
-
-
-<a id="nestedatt--pages--translations--attached_media"></a>
-### Nested Schema for `pages.translations.attached_media`
-
-Optional:
-
-- `attached_at` (String) Media's attachment date.
-- `hash` (String) Media's hash.
-- `name` (String) Media's name.
-
-
-<a id="nestedatt--pages--translations--content_revision"></a>
-### Nested Schema for `pages.translations.content_revision`
-
-Optional:
-
-- `id` (String) Id of the page used to fill the content attributes.
-- `revision` (Number) Revision number.
-
-
-<a id="nestedatt--pages--translations--source"></a>
-### Nested Schema for `pages.translations.source`
-
-Optional:
-
-- `configuration` (String) Page source's configuration. Parsed as JSON.
-- `type` (String) The type of the page source (=fetcher type).
-
-
 
 
 <a id="nestedatt--plans"></a>
@@ -795,32 +658,39 @@ Optional:
 - `excluded_groups` (List of String)
 - `flows` (Attributes List) (see [below for nested schema](#nestedatt--plans--flows))
 - `general_conditions` (String)
-- `hrid` (String) A unique human readable id identifying this resource. Not Null
 - `mode` (String) The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan). Not Null; must be one of ["STANDARD", "PUSH"]
-- `name` (String) Not Null
-- `security` (Attributes) API plan security. Not Null (see [below for nested schema](#nestedatt--plans--security))
+- `name` (String)
+- `security` (Attributes) (see [below for nested schema](#nestedatt--plans--security))
 - `selection_rule` (String)
 - `status` (String) Plan status. Not Null; must be one of ["STAGING", "PUBLISHED", "DEPRECATED", "CLOSED"]
 - `tags` (List of String)
 - `type` (String) Plan type. Not Null; must be one of ["API", "CATALOG"]
-- `validation` (String) Plan validation type. Not Null; must be one of ["AUTO", "MANUAL"]
+- `validation` (String) Plan validation type. must be one of ["AUTO", "MANUAL"]
+
+Read-Only:
+
+- `cross_id` (String) Cross-reference ID
+- `id` (String) Unique identifier for the plan
 
 <a id="nestedatt--plans--flows"></a>
 ### Nested Schema for `plans.flows`
 
 Optional:
 
-- `connect` (Attributes List) Connect flow steps used for NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--connect))
+- `connect` (Attributes List) Flow step used for NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--connect))
 - `enabled` (Boolean) Is the flow enabled. Default: true
-- `id` (String) Flow's uuid.
-- `interact` (Attributes List) Interact flow steps used for NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--interact))
+- `interact` (Attributes List) Flow step used for NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--interact))
 - `name` (String) Flow's name.
-- `publish` (Attributes List) Publish flow steps used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--publish))
-- `request` (Attributes List) Request flow steps used for PROXY and MESSAGE APIs (see [below for nested schema](#nestedatt--plans--flows--request))
-- `response` (Attributes List) Response flow steps used for PROXY and MESSAGE APIs (see [below for nested schema](#nestedatt--plans--flows--response))
+- `publish` (Attributes List) Flow step used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--publish))
+- `request` (Attributes List) Flow step used for PROXY and MESSAGE APIs (see [below for nested schema](#nestedatt--plans--flows--request))
+- `response` (Attributes List) Flow step used for PROXY and MESSAGE APIs (see [below for nested schema](#nestedatt--plans--flows--response))
 - `selectors` (Attributes List) (see [below for nested schema](#nestedatt--plans--flows--selectors))
-- `subscribe` (Attributes List) Subscribe flow steps used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--subscribe))
+- `subscribe` (Attributes List) Flow step used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--subscribe))
 - `tags` (List of String) Flow's tags.
+
+Read-Only:
+
+- `id` (String) Flow's uuid.
 
 <a id="nestedatt--plans--flows--connect"></a>
 ### Nested Schema for `plans.flows.connect`
@@ -897,9 +767,9 @@ Optional:
 
 Optional:
 
-- `channel` (Attributes) Channel selector (see [below for nested schema](#nestedatt--plans--flows--selectors--channel))
-- `condition` (Attributes) Condition selector (see [below for nested schema](#nestedatt--plans--flows--selectors--condition))
-- `http` (Attributes) HTTP selector (see [below for nested schema](#nestedatt--plans--flows--selectors--http))
+- `channel` (Attributes) (see [below for nested schema](#nestedatt--plans--flows--selectors--channel))
+- `condition` (Attributes) (see [below for nested schema](#nestedatt--plans--flows--selectors--condition))
+- `http` (Attributes) (see [below for nested schema](#nestedatt--plans--flows--selectors--http))
 
 <a id="nestedatt--plans--flows--selectors--channel"></a>
 ### Nested Schema for `plans.flows.selectors.channel`
@@ -955,7 +825,7 @@ Optional:
 Optional:
 
 - `configuration` (String) Parsed as JSON.
-- `type` (String) Plan security type. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS"]
+- `type` (String) Plan security type. Not Null; must be one of ["KEY_LESS", "API_KEY", "OAUTH2", "JWT", "MTLS"]
 
 
 
@@ -975,11 +845,11 @@ Optional:
 
 Optional:
 
-- `dynamic` (Boolean) is a dynamic property or not?
-- `encryptable` (Boolean) is property encryptable?
-- `encrypted` (Boolean) is property encrypted or not?
-- `key` (String) property key. Not Null
-- `value` (String) property value. Not Null
+- `dynamic` (Boolean)
+- `encryptable` (Boolean)
+- `encrypted` (Boolean)
+- `key` (String) Not Null
+- `value` (String) Not Null
 
 
 <a id="nestedatt--resources"></a>
@@ -987,10 +857,10 @@ Optional:
 
 Optional:
 
-- `configuration` (String) Resource configuration. Not Null; Parsed as JSON.
-- `enabled` (Boolean) API resource is enabled or not?
-- `name` (String) Resource name. Not Null
-- `type` (String) Resource type. Not Null
+- `configuration` (String) Not Null; Parsed as JSON.
+- `enabled` (Boolean)
+- `name` (String) Not Null
+- `type` (String) Not Null
 
 
 <a id="nestedatt--services"></a>
@@ -998,7 +868,7 @@ Optional:
 
 Optional:
 
-- `dynamic_property` (Attributes) Service (see [below for nested schema](#nestedatt--services--dynamic_property))
+- `dynamic_property` (Attributes) (see [below for nested schema](#nestedatt--services--dynamic_property))
 
 <a id="nestedatt--services--dynamic_property"></a>
 ### Nested Schema for `services.dynamic_property`

@@ -28,30 +28,30 @@ func (r *ResponseTemplate) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ResponseTemplate) GetStatus() *int64 {
-	if o == nil {
+func (r *ResponseTemplate) GetStatus() *int64 {
+	if r == nil {
 		return nil
 	}
-	return o.Status
+	return r.Status
 }
 
-func (o *ResponseTemplate) GetHeaders() map[string]string {
-	if o == nil {
+func (r *ResponseTemplate) GetHeaders() map[string]string {
+	if r == nil {
 		return nil
 	}
-	return o.Headers
+	return r.Headers
 }
 
-func (o *ResponseTemplate) GetBody() *string {
-	if o == nil {
+func (r *ResponseTemplate) GetBody() *string {
+	if r == nil {
 		return nil
 	}
-	return o.Body
+	return r.Body
 }
 
-func (o *ResponseTemplate) GetPropagateErrorKeyToLogs() *bool {
-	if o == nil {
+func (r *ResponseTemplate) GetPropagateErrorKeyToLogs() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.PropagateErrorKeyToLogs
+	return r.PropagateErrorKeyToLogs
 }

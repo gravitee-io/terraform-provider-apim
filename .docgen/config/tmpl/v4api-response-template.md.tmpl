@@ -1,0 +1,13 @@
+---
+page_title: "Simple HTTP Proxy"
+subcategory: "V4 API"
+---
+
+# Create a V4 HTTP proxy API with CORS support and custom response templates
+
+The following example configures the V4 HTTP proxy API with CORS.
+If the pre-flight phase fails, it will return a 412 status code whatever all content type with bespoke body.
+
+```HCL
+{{ .V4ProxyResponseTemplate.Content }}
+```

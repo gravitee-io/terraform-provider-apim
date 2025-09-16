@@ -23,9 +23,9 @@ func (d *Dlq) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Dlq) GetEndpoint() *string {
-	if o == nil {
+func (d *Dlq) GetEndpoint() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Endpoint
+	return d.Endpoint
 }

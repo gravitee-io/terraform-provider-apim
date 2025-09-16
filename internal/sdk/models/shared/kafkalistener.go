@@ -29,37 +29,37 @@ func (k *KafkaListener) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *KafkaListener) GetType() ListenerType {
-	if o == nil {
+func (k *KafkaListener) GetType() ListenerType {
+	if k == nil {
 		return ListenerType("")
 	}
-	return o.Type
+	return k.Type
 }
 
-func (o *KafkaListener) GetEntrypoints() []Entrypoint {
-	if o == nil {
+func (k *KafkaListener) GetEntrypoints() []Entrypoint {
+	if k == nil {
 		return nil
 	}
-	return o.Entrypoints
+	return k.Entrypoints
 }
 
-func (o *KafkaListener) GetServers() []string {
-	if o == nil {
+func (k *KafkaListener) GetServers() []string {
+	if k == nil {
 		return nil
 	}
-	return o.Servers
+	return k.Servers
 }
 
-func (o *KafkaListener) GetHost() string {
-	if o == nil {
+func (k *KafkaListener) GetHost() string {
+	if k == nil {
 		return ""
 	}
-	return o.Host
+	return k.Host
 }
 
-func (o *KafkaListener) GetPort() *int64 {
-	if o == nil {
+func (k *KafkaListener) GetPort() *int64 {
+	if k == nil {
 		return nil
 	}
-	return o.Port
+	return k.Port
 }

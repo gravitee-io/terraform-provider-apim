@@ -29,58 +29,58 @@ func (c *Cors) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Cors) GetAllowCredentials() *bool {
-	if o == nil {
+func (c *Cors) GetAllowCredentials() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.AllowCredentials
+	return c.AllowCredentials
 }
 
-func (o *Cors) GetAllowHeaders() []string {
-	if o == nil {
+func (c *Cors) GetAllowHeaders() []string {
+	if c == nil {
 		return nil
 	}
-	return o.AllowHeaders
+	return c.AllowHeaders
 }
 
-func (o *Cors) GetAllowMethods() []string {
-	if o == nil {
+func (c *Cors) GetAllowMethods() []string {
+	if c == nil {
 		return nil
 	}
-	return o.AllowMethods
+	return c.AllowMethods
 }
 
-func (o *Cors) GetAllowOrigin() []string {
-	if o == nil {
+func (c *Cors) GetAllowOrigin() []string {
+	if c == nil {
 		return nil
 	}
-	return o.AllowOrigin
+	return c.AllowOrigin
 }
 
-func (o *Cors) GetEnabled() *bool {
-	if o == nil {
+func (c *Cors) GetEnabled() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.Enabled
+	return c.Enabled
 }
 
-func (o *Cors) GetExposeHeaders() []string {
-	if o == nil {
+func (c *Cors) GetExposeHeaders() []string {
+	if c == nil {
 		return nil
 	}
-	return o.ExposeHeaders
+	return c.ExposeHeaders
 }
 
-func (o *Cors) GetMaxAge() *int {
-	if o == nil {
+func (c *Cors) GetMaxAge() *int {
+	if c == nil {
 		return nil
 	}
-	return o.MaxAge
+	return c.MaxAge
 }
 
-func (o *Cors) GetRunPolicies() *bool {
-	if o == nil {
+func (c *Cors) GetRunPolicies() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.RunPolicies
+	return c.RunPolicies
 }

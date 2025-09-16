@@ -16,44 +16,44 @@ type EndpointGroupV4 struct {
 	Services *EndpointGroupServices `json:"services,omitempty"`
 }
 
-func (o *EndpointGroupV4) GetName() *string {
-	if o == nil {
+func (e *EndpointGroupV4) GetName() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Name
+	return e.Name
 }
 
-func (o *EndpointGroupV4) GetType() string {
-	if o == nil {
+func (e *EndpointGroupV4) GetType() string {
+	if e == nil {
 		return ""
 	}
-	return o.Type
+	return e.Type
 }
 
-func (o *EndpointGroupV4) GetLoadBalancer() *LoadBalancer {
-	if o == nil {
+func (e *EndpointGroupV4) GetLoadBalancer() *LoadBalancer {
+	if e == nil {
 		return nil
 	}
-	return o.LoadBalancer
+	return e.LoadBalancer
 }
 
-func (o *EndpointGroupV4) GetSharedConfiguration() any {
-	if o == nil {
+func (e *EndpointGroupV4) GetSharedConfiguration() any {
+	if e == nil {
 		return nil
 	}
-	return o.SharedConfiguration
+	return e.SharedConfiguration
 }
 
-func (o *EndpointGroupV4) GetEndpoints() []EndpointV4 {
-	if o == nil {
+func (e *EndpointGroupV4) GetEndpoints() []EndpointV4 {
+	if e == nil {
 		return nil
 	}
-	return o.Endpoints
+	return e.Endpoints
 }
 
-func (o *EndpointGroupV4) GetServices() *EndpointGroupServices {
-	if o == nil {
+func (e *EndpointGroupV4) GetServices() *EndpointGroupServices {
+	if e == nil {
 		return nil
 	}
-	return o.Services
+	return e.Services
 }

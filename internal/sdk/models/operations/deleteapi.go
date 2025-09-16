@@ -26,18 +26,18 @@ func (d *DeleteAPIGlobals) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DeleteAPIGlobals) GetOrganizationID() *string {
-	if o == nil {
+func (d *DeleteAPIGlobals) GetOrganizationID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return d.OrganizationID
 }
 
-func (o *DeleteAPIGlobals) GetEnvironmentID() *string {
-	if o == nil {
+func (d *DeleteAPIGlobals) GetEnvironmentID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return d.EnvironmentID
 }
 
 type DeleteAPIRequest struct {
@@ -60,25 +60,25 @@ func (d *DeleteAPIRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DeleteAPIRequest) GetOrganizationID() *string {
-	if o == nil {
+func (d *DeleteAPIRequest) GetOrganizationID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return d.OrganizationID
 }
 
-func (o *DeleteAPIRequest) GetEnvironmentID() *string {
-	if o == nil {
+func (d *DeleteAPIRequest) GetEnvironmentID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return d.EnvironmentID
 }
 
-func (o *DeleteAPIRequest) GetHrid() string {
-	if o == nil {
+func (d *DeleteAPIRequest) GetHrid() string {
+	if d == nil {
 		return ""
 	}
-	return o.Hrid
+	return d.Hrid
 }
 
 type DeleteAPIResponse struct {
@@ -94,37 +94,37 @@ type DeleteAPIResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteAPIResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteAPIResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteAPIResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteAPIResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteAPIResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteAPIResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteAPIResponse) GetHTTPError() *shared.HTTPError {
-	if o == nil {
+func (d *DeleteAPIResponse) GetHTTPError() *shared.HTTPError {
+	if d == nil {
 		return nil
 	}
-	return o.HTTPError
+	return d.HTTPError
 }
 
-func (o *DeleteAPIResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteAPIResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }
