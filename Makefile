@@ -64,12 +64,12 @@ pre-test:
     (echo "Can't do terraform destroy with ${APIM_API1_USERNAME}" && cat /tmp/tf.log && exit 1)
 
 .PHONY: acceptance-tests
-acceptance-tests: pre-test ## Run acceptance tests
+acceptance-tests: ## Run acceptance tests
 	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD=${APIM_PASSWORD} APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -v ./tests/acceptance
 
 
 .PHONY: examples-tests
-examples-tests: pre-test ## Run acceptance tests using examples
+examples-tests: ## Run acceptance tests using examples
 	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD=${APIM_PASSWORD} APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -v ./tests/examples
 
 
