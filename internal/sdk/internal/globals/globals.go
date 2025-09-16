@@ -18,22 +18,22 @@ func (g Globals) MarshalJSON() ([]byte, error) {
 }
 
 func (g *Globals) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *Globals) GetEnvironmentID() *string {
-	if o == nil {
+func (g *Globals) GetEnvironmentID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return g.EnvironmentID
 }
 
-func (o *Globals) GetOrganizationID() *string {
-	if o == nil {
+func (g *Globals) GetOrganizationID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return g.OrganizationID
 }

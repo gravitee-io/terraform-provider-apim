@@ -453,7 +453,7 @@ resource "apim_apiv4" "my_apiv4" {
 - `analytics` (Attributes) (see [below for nested schema](#nestedatt--analytics))
 - `categories` (List of String) The list of category keys associated with this API.
 - `description` (String) API's description. A short description of your API.
-- `environment_id` (String) Id of an environment. Default: "DEFAULT"
+- `environment_id` (String) Id of an environment.
 - `failover` (Attributes) (see [below for nested schema](#nestedatt--failover))
 - `flow_execution` (Attributes) (see [below for nested schema](#nestedatt--flow_execution))
 - `flows` (Attributes List) List of flows for the API (see [below for nested schema](#nestedatt--flows))
@@ -465,7 +465,7 @@ This groups are id or name references to existing groups in APIM.
 - `notify_members` (Boolean) If true, new members added to the API spec will
 be notified when the API is synced with APIM.
 Default: true
-- `organization_id` (String) Id of an organization. Default: "DEFAULT"
+- `organization_id` (String) Id of an organization.
 - `plans` (Attributes Map) Map of plan IDs to Plan objects (see [below for nested schema](#nestedatt--plans))
 - `primary_owner` (Attributes) (see [below for nested schema](#nestedatt--primary_owner))
 - `properties` (Attributes List) (see [below for nested schema](#nestedatt--properties))
@@ -1229,6 +1229,21 @@ Optional:
 
 Import is supported using the following syntax:
 
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = apim_apiv4.my_apim_apiv4
+  id = jsonencode({
+    environment_id = "..."
+    hrid = "..."
+    organization_id = "..."
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
-terraform import apim_apiv4.my_apim_apiv4 '{"environment_id": "", "hrid": "", "organization_id": ""}'
+terraform import apim_apiv4.my_apim_apiv4 '{"environment_id": "...", "hrid": "...", "organization_id": "..."}'
 ```

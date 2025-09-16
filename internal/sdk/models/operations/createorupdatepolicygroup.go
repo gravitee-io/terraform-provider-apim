@@ -20,24 +20,24 @@ func (c CreateOrUpdatePolicyGroupGlobals) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateOrUpdatePolicyGroupGlobals) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *CreateOrUpdatePolicyGroupGlobals) GetOrganizationID() *string {
-	if o == nil {
+func (c *CreateOrUpdatePolicyGroupGlobals) GetOrganizationID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return c.OrganizationID
 }
 
-func (o *CreateOrUpdatePolicyGroupGlobals) GetEnvironmentID() *string {
-	if o == nil {
+func (c *CreateOrUpdatePolicyGroupGlobals) GetEnvironmentID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return c.EnvironmentID
 }
 
 type CreateOrUpdatePolicyGroupRequest struct {
@@ -57,38 +57,38 @@ func (c CreateOrUpdatePolicyGroupRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateOrUpdatePolicyGroupRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"SharedPolicyGroupSpec"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *CreateOrUpdatePolicyGroupRequest) GetOrganizationID() *string {
-	if o == nil {
+func (c *CreateOrUpdatePolicyGroupRequest) GetOrganizationID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return c.OrganizationID
 }
 
-func (o *CreateOrUpdatePolicyGroupRequest) GetEnvironmentID() *string {
-	if o == nil {
+func (c *CreateOrUpdatePolicyGroupRequest) GetEnvironmentID() *string {
+	if c == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return c.EnvironmentID
 }
 
-func (o *CreateOrUpdatePolicyGroupRequest) GetDryRun() *bool {
-	if o == nil {
+func (c *CreateOrUpdatePolicyGroupRequest) GetDryRun() *bool {
+	if c == nil {
 		return nil
 	}
-	return o.DryRun
+	return c.DryRun
 }
 
-func (o *CreateOrUpdatePolicyGroupRequest) GetSharedPolicyGroupSpec() shared.SharedPolicyGroupSpec {
-	if o == nil {
+func (c *CreateOrUpdatePolicyGroupRequest) GetSharedPolicyGroupSpec() shared.SharedPolicyGroupSpec {
+	if c == nil {
 		return shared.SharedPolicyGroupSpec{}
 	}
-	return o.SharedPolicyGroupSpec
+	return c.SharedPolicyGroupSpec
 }
 
 type CreateOrUpdatePolicyGroupResponse struct {
@@ -104,37 +104,37 @@ type CreateOrUpdatePolicyGroupResponse struct {
 	Error *shared.Error
 }
 
-func (o *CreateOrUpdatePolicyGroupResponse) GetContentType() string {
-	if o == nil {
+func (c *CreateOrUpdatePolicyGroupResponse) GetContentType() string {
+	if c == nil {
 		return ""
 	}
-	return o.ContentType
+	return c.ContentType
 }
 
-func (o *CreateOrUpdatePolicyGroupResponse) GetStatusCode() int {
-	if o == nil {
+func (c *CreateOrUpdatePolicyGroupResponse) GetStatusCode() int {
+	if c == nil {
 		return 0
 	}
-	return o.StatusCode
+	return c.StatusCode
 }
 
-func (o *CreateOrUpdatePolicyGroupResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (c *CreateOrUpdatePolicyGroupResponse) GetRawResponse() *http.Response {
+	if c == nil {
 		return nil
 	}
-	return o.RawResponse
+	return c.RawResponse
 }
 
-func (o *CreateOrUpdatePolicyGroupResponse) GetSharedPolicyGroupState() *shared.SharedPolicyGroupState {
-	if o == nil {
+func (c *CreateOrUpdatePolicyGroupResponse) GetSharedPolicyGroupState() *shared.SharedPolicyGroupState {
+	if c == nil {
 		return nil
 	}
-	return o.SharedPolicyGroupState
+	return c.SharedPolicyGroupState
 }
 
-func (o *CreateOrUpdatePolicyGroupResponse) GetError() *shared.Error {
-	if o == nil {
+func (c *CreateOrUpdatePolicyGroupResponse) GetError() *shared.Error {
+	if c == nil {
 		return nil
 	}
-	return o.Error
+	return c.Error
 }

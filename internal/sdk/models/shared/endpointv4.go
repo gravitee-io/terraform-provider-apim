@@ -29,71 +29,71 @@ func (e EndpointV4) MarshalJSON() ([]byte, error) {
 }
 
 func (e *EndpointV4) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *EndpointV4) GetName() *string {
-	if o == nil {
+func (e *EndpointV4) GetName() *string {
+	if e == nil {
 		return nil
 	}
-	return o.Name
+	return e.Name
 }
 
-func (o *EndpointV4) GetType() string {
-	if o == nil {
+func (e *EndpointV4) GetType() string {
+	if e == nil {
 		return ""
 	}
-	return o.Type
+	return e.Type
 }
 
-func (o *EndpointV4) GetWeight() *int {
-	if o == nil {
+func (e *EndpointV4) GetWeight() *int {
+	if e == nil {
 		return nil
 	}
-	return o.Weight
+	return e.Weight
 }
 
-func (o *EndpointV4) GetInheritConfiguration() *bool {
-	if o == nil {
+func (e *EndpointV4) GetInheritConfiguration() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.InheritConfiguration
+	return e.InheritConfiguration
 }
 
-func (o *EndpointV4) GetConfiguration() any {
-	if o == nil {
+func (e *EndpointV4) GetConfiguration() any {
+	if e == nil {
 		return nil
 	}
-	return o.Configuration
+	return e.Configuration
 }
 
-func (o *EndpointV4) GetSharedConfigurationOverride() any {
-	if o == nil {
+func (e *EndpointV4) GetSharedConfigurationOverride() any {
+	if e == nil {
 		return nil
 	}
-	return o.SharedConfigurationOverride
+	return e.SharedConfigurationOverride
 }
 
-func (o *EndpointV4) GetServices() *EndpointServices {
-	if o == nil {
+func (e *EndpointV4) GetServices() *EndpointServices {
+	if e == nil {
 		return nil
 	}
-	return o.Services
+	return e.Services
 }
 
-func (o *EndpointV4) GetSecondary() *bool {
-	if o == nil {
+func (e *EndpointV4) GetSecondary() *bool {
+	if e == nil {
 		return nil
 	}
-	return o.Secondary
+	return e.Secondary
 }
 
-func (o *EndpointV4) GetTenants() []string {
-	if o == nil {
+func (e *EndpointV4) GetTenants() []string {
+	if e == nil {
 		return nil
 	}
-	return o.Tenants
+	return e.Tenants
 }

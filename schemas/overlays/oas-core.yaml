@@ -41,15 +41,4 @@ actions:
         
         Compatible with APIM 4.8 and above
         
-        [Checkout Gravitee docs for configuration options](https://documentation.gravitee.io/apim/terraform/configure-the-gravitee-provider)
-#  - target: $.security
-#    description: Add cloud auth security scheme
-#    update:
-#      - CloudAuth: [ ]
-#  - target: $.components.securitySchemes
-#    description: Add cloud auth security scheme definition
-#    update:
-#      CloudAuth:
-#        type: http
-#        scheme: bearer
-#        bearerFormat: JWT
+        Checkout other sections to configure, authenticate and start working with Gravitee resources

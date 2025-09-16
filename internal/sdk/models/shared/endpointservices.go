@@ -6,9 +6,9 @@ type EndpointServices struct {
 	HealthCheck *ServiceV4 `json:"healthCheck,omitempty"`
 }
 
-func (o *EndpointServices) GetHealthCheck() *ServiceV4 {
-	if o == nil {
+func (e *EndpointServices) GetHealthCheck() *ServiceV4 {
+	if e == nil {
 		return nil
 	}
-	return o.HealthCheck
+	return e.HealthCheck
 }

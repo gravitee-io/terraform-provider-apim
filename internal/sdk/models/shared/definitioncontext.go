@@ -124,20 +124,20 @@ func (d DefinitionContext) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DefinitionContext) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *DefinitionContext) GetOrigin() *Origin {
+func (d *DefinitionContext) GetOrigin() *Origin {
 	return OriginKubernetes.ToPointer()
 }
 
-func (o *DefinitionContext) GetMode() *Mode {
+func (d *DefinitionContext) GetMode() *Mode {
 	return ModeFullyManaged.ToPointer()
 }
 
-func (o *DefinitionContext) GetSyncFrom() *SyncFrom {
+func (d *DefinitionContext) GetSyncFrom() *SyncFrom {
 	return SyncFromManagement.ToPointer()
 }

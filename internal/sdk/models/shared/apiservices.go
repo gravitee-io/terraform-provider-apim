@@ -6,9 +6,9 @@ type APIServices struct {
 	DynamicProperty *ServiceV4 `json:"dynamicProperty,omitempty"`
 }
 
-func (o *APIServices) GetDynamicProperty() *ServiceV4 {
-	if o == nil {
+func (a *APIServices) GetDynamicProperty() *ServiceV4 {
+	if a == nil {
 		return nil
 	}
-	return o.DynamicProperty
+	return a.DynamicProperty
 }

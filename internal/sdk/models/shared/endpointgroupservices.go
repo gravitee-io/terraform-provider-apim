@@ -7,16 +7,16 @@ type EndpointGroupServices struct {
 	HealthCheck *ServiceV4 `json:"healthCheck,omitempty"`
 }
 
-func (o *EndpointGroupServices) GetDiscovery() *ServiceV4 {
-	if o == nil {
+func (e *EndpointGroupServices) GetDiscovery() *ServiceV4 {
+	if e == nil {
 		return nil
 	}
-	return o.Discovery
+	return e.Discovery
 }
 
-func (o *EndpointGroupServices) GetHealthCheck() *ServiceV4 {
-	if o == nil {
+func (e *EndpointGroupServices) GetHealthCheck() *ServiceV4 {
+	if e == nil {
 		return nil
 	}
-	return o.HealthCheck
+	return e.HealthCheck
 }

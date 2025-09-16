@@ -53,36 +53,36 @@ func (h HTTPSelector) MarshalJSON() ([]byte, error) {
 }
 
 func (h *HTTPSelector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &h, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &h, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *HTTPSelector) GetType() HTTPSelectorType {
-	if o == nil {
+func (h *HTTPSelector) GetType() HTTPSelectorType {
+	if h == nil {
 		return HTTPSelectorType("")
 	}
-	return o.Type
+	return h.Type
 }
 
-func (o *HTTPSelector) GetPath() *string {
-	if o == nil {
+func (h *HTTPSelector) GetPath() *string {
+	if h == nil {
 		return nil
 	}
-	return o.Path
+	return h.Path
 }
 
-func (o *HTTPSelector) GetPathOperator() *Operator {
-	if o == nil {
+func (h *HTTPSelector) GetPathOperator() *Operator {
+	if h == nil {
 		return nil
 	}
-	return o.PathOperator
+	return h.PathOperator
 }
 
-func (o *HTTPSelector) GetMethods() []HTTPMethod {
-	if o == nil {
+func (h *HTTPSelector) GetMethods() []HTTPMethod {
+	if h == nil {
 		return nil
 	}
-	return o.Methods
+	return h.Methods
 }

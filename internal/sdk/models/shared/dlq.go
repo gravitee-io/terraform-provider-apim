@@ -2,14 +2,29 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 type Dlq struct {
 	// The endpoint of the DLQ.
 	Endpoint *string `json:"endpoint,omitempty"`
 }
 
-func (o *Dlq) GetEndpoint() *string {
-	if o == nil {
+func (d Dlq) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *Dlq) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d *Dlq) GetEndpoint() *string {
+	if d == nil {
 		return nil
 	}
-	return o.Endpoint
+	return d.Endpoint
 }

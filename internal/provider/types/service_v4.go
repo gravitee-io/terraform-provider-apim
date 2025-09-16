@@ -3,12 +3,13 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type ServiceV4 struct {
-	Configuration         types.String `tfsdk:"configuration"`
-	Enabled               types.Bool   `tfsdk:"enabled"`
-	OverrideConfiguration types.Bool   `tfsdk:"override_configuration"`
-	Type                  types.String `tfsdk:"type"`
+	Configuration         jsontypes.Normalized `tfsdk:"configuration"`
+	Enabled               types.Bool           `tfsdk:"enabled"`
+	OverrideConfiguration types.Bool           `tfsdk:"override_configuration"`
+	Type                  types.String         `tfsdk:"type"`
 }

@@ -3,17 +3,18 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type EndpointV4 struct {
-	Configuration               types.String      `tfsdk:"configuration"`
-	InheritConfiguration        types.Bool        `tfsdk:"inherit_configuration"`
-	Name                        types.String      `tfsdk:"name"`
-	Secondary                   types.Bool        `tfsdk:"secondary"`
-	Services                    *EndpointServices `tfsdk:"services"`
-	SharedConfigurationOverride types.String      `tfsdk:"shared_configuration_override"`
-	Tenants                     []types.String    `tfsdk:"tenants"`
-	Type                        types.String      `tfsdk:"type"`
-	Weight                      types.Int32       `tfsdk:"weight"`
+	Configuration               jsontypes.Normalized `tfsdk:"configuration"`
+	InheritConfiguration        types.Bool           `tfsdk:"inherit_configuration"`
+	Name                        types.String         `tfsdk:"name"`
+	Secondary                   types.Bool           `tfsdk:"secondary"`
+	Services                    *EndpointServices    `tfsdk:"services"`
+	SharedConfigurationOverride jsontypes.Normalized `tfsdk:"shared_configuration_override"`
+	Tenants                     []types.String       `tfsdk:"tenants"`
+	Type                        types.String         `tfsdk:"type"`
+	Weight                      types.Int32          `tfsdk:"weight"`
 }

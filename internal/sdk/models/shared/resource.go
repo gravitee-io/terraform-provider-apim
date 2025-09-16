@@ -9,30 +9,30 @@ type Resource struct {
 	Enabled       *bool  `json:"enabled,omitempty"`
 }
 
-func (o *Resource) GetName() string {
-	if o == nil {
+func (r *Resource) GetName() string {
+	if r == nil {
 		return ""
 	}
-	return o.Name
+	return r.Name
 }
 
-func (o *Resource) GetType() string {
-	if o == nil {
+func (r *Resource) GetType() string {
+	if r == nil {
 		return ""
 	}
-	return o.Type
+	return r.Type
 }
 
-func (o *Resource) GetConfiguration() any {
-	if o == nil {
+func (r *Resource) GetConfiguration() any {
+	if r == nil {
 		return nil
 	}
-	return o.Configuration
+	return r.Configuration
 }
 
-func (o *Resource) GetEnabled() *bool {
-	if o == nil {
+func (r *Resource) GetEnabled() *bool {
+	if r == nil {
 		return nil
 	}
-	return o.Enabled
+	return r.Enabled
 }

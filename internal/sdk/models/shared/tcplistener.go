@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 type TCPListener struct {
 	// Listener type.
 	Type        ListenerType `json:"type"`
@@ -11,30 +15,41 @@ type TCPListener struct {
 	Hosts []string `json:"hosts"`
 }
 
-func (o *TCPListener) GetType() ListenerType {
-	if o == nil {
+func (t TCPListener) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(t, "", false)
+}
+
+func (t *TCPListener) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"type", "hosts"}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (t *TCPListener) GetType() ListenerType {
+	if t == nil {
 		return ListenerType("")
 	}
-	return o.Type
+	return t.Type
 }
 
-func (o *TCPListener) GetEntrypoints() []Entrypoint {
-	if o == nil {
+func (t *TCPListener) GetEntrypoints() []Entrypoint {
+	if t == nil {
 		return nil
 	}
-	return o.Entrypoints
+	return t.Entrypoints
 }
 
-func (o *TCPListener) GetServers() []string {
-	if o == nil {
+func (t *TCPListener) GetServers() []string {
+	if t == nil {
 		return nil
 	}
-	return o.Servers
+	return t.Servers
 }
 
-func (o *TCPListener) GetHosts() []string {
-	if o == nil {
+func (t *TCPListener) GetHosts() []string {
+	if t == nil {
 		return []string{}
 	}
-	return o.Hosts
+	return t.Hosts
 }

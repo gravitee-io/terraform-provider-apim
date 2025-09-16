@@ -20,24 +20,24 @@ func (g GetPolicyGroupGlobals) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetPolicyGroupGlobals) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *GetPolicyGroupGlobals) GetOrganizationID() *string {
-	if o == nil {
+func (g *GetPolicyGroupGlobals) GetOrganizationID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return g.OrganizationID
 }
 
-func (o *GetPolicyGroupGlobals) GetEnvironmentID() *string {
-	if o == nil {
+func (g *GetPolicyGroupGlobals) GetEnvironmentID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return g.EnvironmentID
 }
 
 type GetPolicyGroupRequest struct {
@@ -54,31 +54,31 @@ func (g GetPolicyGroupRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetPolicyGroupRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"hrid"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *GetPolicyGroupRequest) GetOrganizationID() *string {
-	if o == nil {
+func (g *GetPolicyGroupRequest) GetOrganizationID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return g.OrganizationID
 }
 
-func (o *GetPolicyGroupRequest) GetEnvironmentID() *string {
-	if o == nil {
+func (g *GetPolicyGroupRequest) GetEnvironmentID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return g.EnvironmentID
 }
 
-func (o *GetPolicyGroupRequest) GetHrid() string {
-	if o == nil {
+func (g *GetPolicyGroupRequest) GetHrid() string {
+	if g == nil {
 		return ""
 	}
-	return o.Hrid
+	return g.Hrid
 }
 
 type GetPolicyGroupResponse struct {
@@ -92,30 +92,30 @@ type GetPolicyGroupResponse struct {
 	SharedPolicyGroupState *shared.SharedPolicyGroupState
 }
 
-func (o *GetPolicyGroupResponse) GetContentType() string {
-	if o == nil {
+func (g *GetPolicyGroupResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetPolicyGroupResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetPolicyGroupResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetPolicyGroupResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetPolicyGroupResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetPolicyGroupResponse) GetSharedPolicyGroupState() *shared.SharedPolicyGroupState {
-	if o == nil {
+func (g *GetPolicyGroupResponse) GetSharedPolicyGroupState() *shared.SharedPolicyGroupState {
+	if g == nil {
 		return nil
 	}
-	return o.SharedPolicyGroupState
+	return g.SharedPolicyGroupState
 }

@@ -20,36 +20,36 @@ func (e Entrypoint) MarshalJSON() ([]byte, error) {
 }
 
 func (e *Entrypoint) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &e, "", false, []string{"type"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *Entrypoint) GetType() string {
-	if o == nil {
+func (e *Entrypoint) GetType() string {
+	if e == nil {
 		return ""
 	}
-	return o.Type
+	return e.Type
 }
 
-func (o *Entrypoint) GetQos() *Qos {
-	if o == nil {
+func (e *Entrypoint) GetQos() *Qos {
+	if e == nil {
 		return nil
 	}
-	return o.Qos
+	return e.Qos
 }
 
-func (o *Entrypoint) GetDlq() *Dlq {
-	if o == nil {
+func (e *Entrypoint) GetDlq() *Dlq {
+	if e == nil {
 		return nil
 	}
-	return o.Dlq
+	return e.Dlq
 }
 
-func (o *Entrypoint) GetConfiguration() any {
-	if o == nil {
+func (e *Entrypoint) GetConfiguration() any {
+	if e == nil {
 		return nil
 	}
-	return o.Configuration
+	return e.Configuration
 }

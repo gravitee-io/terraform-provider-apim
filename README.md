@@ -15,7 +15,7 @@ Manage APIs and Shared Policy Groups with Terraform
 
 Compatible with APIM 4.8 and above
 
-[Checkout Gravitee docs for configuration options](https://documentation.gravitee.io/apim/terraform/configure-the-gravitee-provider)
+Checkout other sections to configure, authenticate and start working with Gravitee resources
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
@@ -23,6 +23,7 @@ Compatible with APIM 4.8 and above
 <!-- $toc-max-depth=2 -->
 * [Gravitee - APIM Terraform Provider](#gravitee-apim-terraform-provider)
   * [Installation](#installation)
+  * [Authentication](#authentication)
   * [Available Resources and Data Sources](#available-resources-and-data-sources)
 
 <!-- End Table of Contents [toc] -->
@@ -37,7 +38,7 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "0.2.14"
+      version = "0.3.3"
     }
   }
 }
@@ -49,6 +50,25 @@ provider "apim" {
 <!-- End Installation [installation] -->
 
 [Checkout Gravitee docs for configuration options](https://documentation.gravitee.io/apim/terraform/configure-the-gravitee-provider)
+
+<!-- Start Authentication [security] -->
+## Authentication
+
+This provider supports authentication configuration via environment variables and provider configuration.
+
+The configuration precedence is:
+
+- Provider configuration
+- Environment variables
+
+Available configuration:
+
+| Provider Attribute | Description |
+|---|---|
+| `bearer_auth` | HTTP Bearer. Configurable via environment variable `APIM_SA_TOKEN`. |
+| `password` | HTTP Basic password. Configurable via environment variable `APIM_PASSWORD`. |
+| `username` | HTTP Basic username. Configurable via environment variable `APIM_USERNAME`. |
+<!-- End Authentication [security] -->
 
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources

@@ -21,36 +21,36 @@ func (s ServiceV4) MarshalJSON() ([]byte, error) {
 }
 
 func (s *ServiceV4) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, false); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (o *ServiceV4) GetOverrideConfiguration() *bool {
-	if o == nil {
+func (s *ServiceV4) GetOverrideConfiguration() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.OverrideConfiguration
+	return s.OverrideConfiguration
 }
 
-func (o *ServiceV4) GetConfiguration() any {
-	if o == nil {
+func (s *ServiceV4) GetConfiguration() any {
+	if s == nil {
 		return nil
 	}
-	return o.Configuration
+	return s.Configuration
 }
 
-func (o *ServiceV4) GetEnabled() *bool {
-	if o == nil {
+func (s *ServiceV4) GetEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Enabled
+	return s.Enabled
 }
 
-func (o *ServiceV4) GetType() *string {
-	if o == nil {
+func (s *ServiceV4) GetType() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Type
+	return s.Type
 }

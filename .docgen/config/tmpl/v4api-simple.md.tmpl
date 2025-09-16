@@ -1,0 +1,17 @@
+---
+page_title: "Simple HTTP Proxy"
+subcategory: "V4 API"
+---
+
+# Create a simple V4 HTTP proxy API that transforms headers
+
+The following example configures the v4 HTTP proxy API resource to create a simple v4 HTTP proxy API.
+It uses a Keyless plan and it is published to the Developer Portal as a public API.
+
+This resource uses the Gravitee
+[Transform Headers policy](https://documentation.gravitee.io/apim/create-and-configure-apis/apply-policies/policy-reference/transform-headers)
+on the Request phase to add an extra header called "X-Hello.
+
+```HCL
+{{ .V4ApiSimple.Content }}
+```

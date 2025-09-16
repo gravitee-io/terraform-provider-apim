@@ -52,8 +52,9 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"bearer_auth": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `HTTP Bearer. Configurable via environment variable ` + "`" + `APIM_SA_TOKEN` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 			"environment_id": schema.StringAttribute{
 				Description: `Id of an environment.`,
@@ -64,16 +65,18 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				Optional:    true,
 			},
 			"password": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `HTTP Basic password. Configurable via environment variable ` + "`" + `APIM_PASSWORD` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 			"server_url": schema.StringAttribute{
 				Description: `Server URL (defaults to https://apim-master-api.team-apim.gravitee.dev/automation)`,
 				Optional:    true,
 			},
 			"username": schema.StringAttribute{
-				Optional:  true,
-				Sensitive: true,
+				MarkdownDescription: `HTTP Basic username. Configurable via environment variable ` + "`" + `APIM_USERNAME` + "`" + `.`,
+				Optional:            true,
+				Sensitive:           true,
 			},
 		},
 		MarkdownDescription: `Gravitee: APIM Terraform Provider (alpha)` + "\n" +
@@ -82,7 +85,7 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			`` + "\n" +
 			`Compatible with APIM 4.8 and above` + "\n" +
 			`` + "\n" +
-			`[Checkout Gravitee docs for configuration options](https://documentation.gravitee.io/apim/terraform/configure-the-gravitee-provider)`,
+			`Checkout other sections to configure, authenticate and start working with Gravitee resources`,
 	}
 }
 
@@ -95,21 +98,30 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		return
 	}
 
-	ServerURL := data.ServerURL.ValueString()
+	serverUrl := data.ServerURL.ValueString()
 
-	if ServerURL == "" && len(os.Getenv("APIM_SERVER_URL")) > 0 {
-		ServerURL = os.Getenv("APIM_SERVER_URL")
+	if serverUrl == "" && os.Getenv("APIM_SERVER_URL") != "" {
+		serverUrl = os.Getenv("APIM_SERVER_URL")
 	}
-	if ServerURL == "" {
-		ServerURL = "https://apim-master-api.team-apim.gravitee.dev/automation"
+
+	if serverUrl == "" {
+		serverUrl = "https://apim-master-api.team-apim.gravitee.dev/automation"
 	}
 
 	if environmentIDEnvVar, ok := os.LookupEnv("APIM_ENV_ID"); ok && data.EnvironmentID.IsNull() {
 		data.EnvironmentID = types.StringValue(environmentIDEnvVar)
 	}
 
+	if data.EnvironmentID.IsNull() {
+		data.EnvironmentID = types.StringValue(`DEFAULT`)
+	}
+
 	if organizationIDEnvVar, ok := os.LookupEnv("APIM_ORG_ID"); ok && data.OrganizationID.IsNull() {
 		data.OrganizationID = types.StringValue(organizationIDEnvVar)
+	}
+
+	if data.OrganizationID.IsNull() {
+		data.OrganizationID = types.StringValue(`DEFAULT`)
 	}
 	security := shared.Security{}
 
@@ -152,7 +164,7 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	httpClient.Transport = NewProviderHTTPTransport(providerHTTPTransportOpts)
 
 	opts := []sdk.SDKOption{
-		sdk.WithServerURL(ServerURL),
+		sdk.WithServerURL(serverUrl),
 		sdk.WithSecurity(security),
 		sdk.WithClient(httpClient),
 	}
