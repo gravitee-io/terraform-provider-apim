@@ -11,25 +11,25 @@ type HTTPErrorDetail struct {
 	InvalidValue *string `json:"invalidValue,omitempty"`
 }
 
-func (o *HTTPErrorDetail) GetMessage() *string {
-	if o == nil {
+func (h *HTTPErrorDetail) GetMessage() *string {
+	if h == nil {
 		return nil
 	}
-	return o.Message
+	return h.Message
 }
 
-func (o *HTTPErrorDetail) GetLocation() *string {
-	if o == nil {
+func (h *HTTPErrorDetail) GetLocation() *string {
+	if h == nil {
 		return nil
 	}
-	return o.Location
+	return h.Location
 }
 
-func (o *HTTPErrorDetail) GetInvalidValue() *string {
-	if o == nil {
+func (h *HTTPErrorDetail) GetInvalidValue() *string {
+	if h == nil {
 		return nil
 	}
-	return o.InvalidValue
+	return h.InvalidValue
 }
 
 // HTTPError - Error
@@ -46,37 +46,37 @@ type HTTPError struct {
 	Details []HTTPErrorDetail `json:"details,omitempty"`
 }
 
-func (o *HTTPError) GetHTTPStatus() *int {
-	if o == nil {
+func (h *HTTPError) GetHTTPStatus() *int {
+	if h == nil {
 		return nil
 	}
-	return o.HTTPStatus
+	return h.HTTPStatus
 }
 
-func (o *HTTPError) GetMessage() *string {
-	if o == nil {
+func (h *HTTPError) GetMessage() *string {
+	if h == nil {
 		return nil
 	}
-	return o.Message
+	return h.Message
 }
 
-func (o *HTTPError) GetTechnicalCode() *string {
-	if o == nil {
+func (h *HTTPError) GetTechnicalCode() *string {
+	if h == nil {
 		return nil
 	}
-	return o.TechnicalCode
+	return h.TechnicalCode
 }
 
-func (o *HTTPError) GetParameters() map[string]string {
-	if o == nil {
+func (h *HTTPError) GetParameters() map[string]string {
+	if h == nil {
 		return nil
 	}
-	return o.Parameters
+	return h.Parameters
 }
 
-func (o *HTTPError) GetDetails() []HTTPErrorDetail {
-	if o == nil {
+func (h *HTTPError) GetDetails() []HTTPErrorDetail {
+	if h == nil {
 		return nil
 	}
-	return o.Details
+	return h.Details
 }

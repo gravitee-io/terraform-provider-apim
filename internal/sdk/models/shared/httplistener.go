@@ -29,44 +29,44 @@ func (h *HTTPListener) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *HTTPListener) GetType() ListenerType {
-	if o == nil {
+func (h *HTTPListener) GetType() ListenerType {
+	if h == nil {
 		return ListenerType("")
 	}
-	return o.Type
+	return h.Type
 }
 
-func (o *HTTPListener) GetEntrypoints() []Entrypoint {
-	if o == nil {
+func (h *HTTPListener) GetEntrypoints() []Entrypoint {
+	if h == nil {
 		return nil
 	}
-	return o.Entrypoints
+	return h.Entrypoints
 }
 
-func (o *HTTPListener) GetServers() []string {
-	if o == nil {
+func (h *HTTPListener) GetServers() []string {
+	if h == nil {
 		return nil
 	}
-	return o.Servers
+	return h.Servers
 }
 
-func (o *HTTPListener) GetPaths() []PathV4 {
-	if o == nil {
+func (h *HTTPListener) GetPaths() []PathV4 {
+	if h == nil {
 		return nil
 	}
-	return o.Paths
+	return h.Paths
 }
 
-func (o *HTTPListener) GetPathMappings() []string {
-	if o == nil {
+func (h *HTTPListener) GetPathMappings() []string {
+	if h == nil {
 		return nil
 	}
-	return o.PathMappings
+	return h.PathMappings
 }
 
-func (o *HTTPListener) GetCors() *Cors {
-	if o == nil {
+func (h *HTTPListener) GetCors() *Cors {
+	if h == nil {
 		return nil
 	}
-	return o.Cors
+	return h.Cors
 }

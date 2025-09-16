@@ -1,0 +1,15 @@
+---
+page_title: "Kafka native"
+subcategory: "V4 API"
+---
+
+# Create a v4 Native Kafka proxy API that assigns a custom attribute
+
+The following example configures the v4 Native Kafka proxy API resource to create a Native Kafka proxyAPI with a Keyless plan.
+This resource uses the Gravitee
+[Assign Attributes policy](https://documentation.gravitee.io/apim/create-and-configure-apis/apply-policies/policy-reference/assign-attributes)
+to assign a custom static attribute.
+
+```HCL
+{{ .V4ApiNative.Content }}
+```

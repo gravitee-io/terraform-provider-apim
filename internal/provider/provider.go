@@ -95,7 +95,9 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			`` + "\n" +
 			`[Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform) ` + "\n" +
 			`` + "\n" +
-			`Compatible with APIM 4.9 and above`,
+			`Compatible with APIM 4.9 and above` + "\n" +
+			`` + "\n" +
+			`Checkout other sections to configure, authenticate and start working with Gravitee resources`,
 	}
 }
 

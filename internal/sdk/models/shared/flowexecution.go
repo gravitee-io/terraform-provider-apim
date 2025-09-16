@@ -25,16 +25,16 @@ func (f *FlowExecution) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *FlowExecution) GetMode() *FlowMode {
-	if o == nil {
+func (f *FlowExecution) GetMode() *FlowMode {
+	if f == nil {
 		return nil
 	}
-	return o.Mode
+	return f.Mode
 }
 
-func (o *FlowExecution) GetMatchRequired() *bool {
-	if o == nil {
+func (f *FlowExecution) GetMatchRequired() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.MatchRequired
+	return f.MatchRequired
 }

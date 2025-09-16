@@ -20,51 +20,51 @@ type SharedPolicyGroupSpec struct {
 	Steps []StepV4 `json:"steps,omitempty"`
 }
 
-func (o *SharedPolicyGroupSpec) GetHrid() string {
-	if o == nil {
+func (s *SharedPolicyGroupSpec) GetHrid() string {
+	if s == nil {
 		return ""
 	}
-	return o.Hrid
+	return s.Hrid
 }
 
-func (o *SharedPolicyGroupSpec) GetAPIType() APIType {
-	if o == nil {
+func (s *SharedPolicyGroupSpec) GetAPIType() APIType {
+	if s == nil {
 		return APIType("")
 	}
-	return o.APIType
+	return s.APIType
 }
 
-func (o *SharedPolicyGroupSpec) GetDescription() *string {
-	if o == nil {
+func (s *SharedPolicyGroupSpec) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *SharedPolicyGroupSpec) GetPrerequisiteMessage() *string {
-	if o == nil {
+func (s *SharedPolicyGroupSpec) GetPrerequisiteMessage() *string {
+	if s == nil {
 		return nil
 	}
-	return o.PrerequisiteMessage
+	return s.PrerequisiteMessage
 }
 
-func (o *SharedPolicyGroupSpec) GetName() string {
-	if o == nil {
+func (s *SharedPolicyGroupSpec) GetName() string {
+	if s == nil {
 		return ""
 	}
-	return o.Name
+	return s.Name
 }
 
-func (o *SharedPolicyGroupSpec) GetPhase() FlowPhase {
-	if o == nil {
+func (s *SharedPolicyGroupSpec) GetPhase() FlowPhase {
+	if s == nil {
 		return FlowPhase("")
 	}
-	return o.Phase
+	return s.Phase
 }
 
-func (o *SharedPolicyGroupSpec) GetSteps() []StepV4 {
-	if o == nil {
+func (s *SharedPolicyGroupSpec) GetSteps() []StepV4 {
+	if s == nil {
 		return nil
 	}
-	return o.Steps
+	return s.Steps
 }

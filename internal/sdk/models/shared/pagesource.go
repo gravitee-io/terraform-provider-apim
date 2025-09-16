@@ -10,16 +10,16 @@ type PageSource struct {
 	Configuration any `json:"configuration,omitempty"`
 }
 
-func (o *PageSource) GetType() *string {
-	if o == nil {
+func (p *PageSource) GetType() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Type
+	return p.Type
 }
 
-func (o *PageSource) GetConfiguration() any {
-	if o == nil {
+func (p *PageSource) GetConfiguration() any {
+	if p == nil {
 		return nil
 	}
-	return o.Configuration
+	return p.Configuration
 }

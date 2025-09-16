@@ -8,16 +8,16 @@ type LoggingModeV4 struct {
 	Entrypoint *bool `json:"entrypoint,omitempty"`
 }
 
-func (o *LoggingModeV4) GetEndpoint() *bool {
-	if o == nil {
+func (l *LoggingModeV4) GetEndpoint() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Endpoint
+	return l.Endpoint
 }
 
-func (o *LoggingModeV4) GetEntrypoint() *bool {
-	if o == nil {
+func (l *LoggingModeV4) GetEntrypoint() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Entrypoint
+	return l.Entrypoint
 }

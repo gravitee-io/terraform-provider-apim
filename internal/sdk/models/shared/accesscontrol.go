@@ -10,16 +10,16 @@ type AccessControl struct {
 	ReferenceType *string `json:"referenceType,omitempty"`
 }
 
-func (o *AccessControl) GetReferenceID() *string {
-	if o == nil {
+func (a *AccessControl) GetReferenceID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ReferenceID
+	return a.ReferenceID
 }
 
-func (o *AccessControl) GetReferenceType() *string {
-	if o == nil {
+func (a *AccessControl) GetReferenceType() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ReferenceType
+	return a.ReferenceType
 }

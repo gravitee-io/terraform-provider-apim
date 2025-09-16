@@ -16,37 +16,37 @@ type Metadata struct {
 	DefaultValue *string `json:"defaultValue,omitempty"`
 }
 
-func (o *Metadata) GetKey() *string {
-	if o == nil {
+func (m *Metadata) GetKey() *string {
+	if m == nil {
 		return nil
 	}
-	return o.Key
+	return m.Key
 }
 
-func (o *Metadata) GetName() string {
-	if o == nil {
+func (m *Metadata) GetName() string {
+	if m == nil {
 		return ""
 	}
-	return o.Name
+	return m.Name
 }
 
-func (o *Metadata) GetFormat() MetadataFormat {
-	if o == nil {
+func (m *Metadata) GetFormat() MetadataFormat {
+	if m == nil {
 		return MetadataFormat("")
 	}
-	return o.Format
+	return m.Format
 }
 
-func (o *Metadata) GetValue() *string {
-	if o == nil {
+func (m *Metadata) GetValue() *string {
+	if m == nil {
 		return nil
 	}
-	return o.Value
+	return m.Value
 }
 
-func (o *Metadata) GetDefaultValue() *string {
-	if o == nil {
+func (m *Metadata) GetDefaultValue() *string {
+	if m == nil {
 		return nil
 	}
-	return o.DefaultValue
+	return m.DefaultValue
 }

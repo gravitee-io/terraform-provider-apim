@@ -45,16 +45,16 @@ type Sampling struct {
 	Value *string `json:"value,omitempty"`
 }
 
-func (o *Sampling) GetType() SamplingType {
-	if o == nil {
+func (s *Sampling) GetType() SamplingType {
+	if s == nil {
 		return SamplingType("")
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *Sampling) GetValue() *string {
-	if o == nil {
+func (s *Sampling) GetValue() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Value
+	return s.Value
 }

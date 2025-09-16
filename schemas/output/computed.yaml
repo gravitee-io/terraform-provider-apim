@@ -14,7 +14,7 @@
 openapi: 3.1.0
 info:
   title: Gravitee
-  description: "Gravitee API Management Terraform Provider (beta)\n\nYou can manage with Terraform the following:\n* APIs\n* Shared Policy Groups\n* Applications\n* Subscriptions\n\n[Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform) \n\nCompatible with APIM 4.9 and above"
+  description: "Gravitee API Management Terraform Provider (beta)\n\nYou can manage with Terraform the following:\n* APIs\n* Shared Policy Groups\n* Applications\n* Subscriptions\n\n[Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform) \n\nCompatible with APIM 4.9 and above\n\nCheckout other sections to configure, authenticate and start working with Gravitee resources"
   contact:
     name: DevX team
     email: team-gko@graviteesource.com

@@ -82,93 +82,93 @@ func (a *ApplicationSpec) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ApplicationSpec) GetHrid() string {
-	if o == nil {
+func (a *ApplicationSpec) GetHrid() string {
+	if a == nil {
 		return ""
 	}
-	return o.Hrid
+	return a.Hrid
 }
 
-func (o *ApplicationSpec) GetName() string {
-	if o == nil {
+func (a *ApplicationSpec) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *ApplicationSpec) GetDescription() string {
-	if o == nil {
+func (a *ApplicationSpec) GetDescription() string {
+	if a == nil {
 		return ""
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *ApplicationSpec) GetDomain() *string {
-	if o == nil {
+func (a *ApplicationSpec) GetDomain() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Domain
+	return a.Domain
 }
 
-func (o *ApplicationSpec) GetGroups() []string {
-	if o == nil {
+func (a *ApplicationSpec) GetGroups() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Groups
+	return a.Groups
 }
 
-func (o *ApplicationSpec) GetPictureURL() *string {
-	if o == nil {
+func (a *ApplicationSpec) GetPictureURL() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PictureURL
+	return a.PictureURL
 }
 
-func (o *ApplicationSpec) GetNotifyMembers() *bool {
-	if o == nil {
+func (a *ApplicationSpec) GetNotifyMembers() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.NotifyMembers
+	return a.NotifyMembers
 }
 
-func (o *ApplicationSpec) GetBackground() *string {
-	if o == nil {
+func (a *ApplicationSpec) GetBackground() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Background
+	return a.Background
 }
 
-func (o *ApplicationSpec) GetPrimaryOwner() *PrimaryOwner {
-	if o == nil {
+func (a *ApplicationSpec) GetPrimaryOwner() *PrimaryOwner {
+	if a == nil {
 		return nil
 	}
-	return o.PrimaryOwner
+	return a.PrimaryOwner
 }
 
-func (o *ApplicationSpec) GetSettings() *ApplicationSettings {
-	if o == nil {
+func (a *ApplicationSpec) GetSettings() *ApplicationSettings {
+	if a == nil {
 		return nil
 	}
-	return o.Settings
+	return a.Settings
 }
 
-func (o *ApplicationSpec) GetMetadata() []Metadata {
-	if o == nil {
+func (a *ApplicationSpec) GetMetadata() []Metadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *ApplicationSpec) GetMembers() []MemberInput {
-	if o == nil {
+func (a *ApplicationSpec) GetMembers() []MemberInput {
+	if a == nil {
 		return nil
 	}
-	return o.Members
+	return a.Members
 }
 
-func (o *ApplicationSpec) GetStatus() *ApplicationSpecStatus {
-	if o == nil {
+func (a *ApplicationSpec) GetStatus() *ApplicationSpecStatus {
+	if a == nil {
 		return nil
 	}
-	return o.Status
+	return a.Status
 }

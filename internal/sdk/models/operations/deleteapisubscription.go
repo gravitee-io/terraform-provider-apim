@@ -26,18 +26,18 @@ func (d *DeleteAPISubscriptionGlobals) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DeleteAPISubscriptionGlobals) GetOrganizationID() *string {
-	if o == nil {
+func (d *DeleteAPISubscriptionGlobals) GetOrganizationID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return d.OrganizationID
 }
 
-func (o *DeleteAPISubscriptionGlobals) GetEnvironmentID() *string {
-	if o == nil {
+func (d *DeleteAPISubscriptionGlobals) GetEnvironmentID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return d.EnvironmentID
 }
 
 type DeleteAPISubscriptionRequest struct {
@@ -62,32 +62,32 @@ func (d *DeleteAPISubscriptionRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *DeleteAPISubscriptionRequest) GetOrganizationID() *string {
-	if o == nil {
+func (d *DeleteAPISubscriptionRequest) GetOrganizationID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return d.OrganizationID
 }
 
-func (o *DeleteAPISubscriptionRequest) GetEnvironmentID() *string {
-	if o == nil {
+func (d *DeleteAPISubscriptionRequest) GetEnvironmentID() *string {
+	if d == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return d.EnvironmentID
 }
 
-func (o *DeleteAPISubscriptionRequest) GetAPIHrid() string {
-	if o == nil {
+func (d *DeleteAPISubscriptionRequest) GetAPIHrid() string {
+	if d == nil {
 		return ""
 	}
-	return o.APIHrid
+	return d.APIHrid
 }
 
-func (o *DeleteAPISubscriptionRequest) GetHrid() string {
-	if o == nil {
+func (d *DeleteAPISubscriptionRequest) GetHrid() string {
+	if d == nil {
 		return ""
 	}
-	return o.Hrid
+	return d.Hrid
 }
 
 type DeleteAPISubscriptionResponse struct {
@@ -103,37 +103,37 @@ type DeleteAPISubscriptionResponse struct {
 	Error *shared.Error
 }
 
-func (o *DeleteAPISubscriptionResponse) GetContentType() string {
-	if o == nil {
+func (d *DeleteAPISubscriptionResponse) GetContentType() string {
+	if d == nil {
 		return ""
 	}
-	return o.ContentType
+	return d.ContentType
 }
 
-func (o *DeleteAPISubscriptionResponse) GetStatusCode() int {
-	if o == nil {
+func (d *DeleteAPISubscriptionResponse) GetStatusCode() int {
+	if d == nil {
 		return 0
 	}
-	return o.StatusCode
+	return d.StatusCode
 }
 
-func (o *DeleteAPISubscriptionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (d *DeleteAPISubscriptionResponse) GetRawResponse() *http.Response {
+	if d == nil {
 		return nil
 	}
-	return o.RawResponse
+	return d.RawResponse
 }
 
-func (o *DeleteAPISubscriptionResponse) GetHTTPError() *shared.HTTPError {
-	if o == nil {
+func (d *DeleteAPISubscriptionResponse) GetHTTPError() *shared.HTTPError {
+	if d == nil {
 		return nil
 	}
-	return o.HTTPError
+	return d.HTTPError
 }
 
-func (o *DeleteAPISubscriptionResponse) GetError() *shared.Error {
-	if o == nil {
+func (d *DeleteAPISubscriptionResponse) GetError() *shared.Error {
+	if d == nil {
 		return nil
 	}
-	return o.Error
+	return d.Error
 }

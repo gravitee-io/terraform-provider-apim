@@ -20,6 +20,8 @@ You can manage with Terraform the following:
 [Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform) 
 
 Compatible with APIM 4.9 and above
+
+Checkout other sections to configure, authenticate and start working with Gravitee resources
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->

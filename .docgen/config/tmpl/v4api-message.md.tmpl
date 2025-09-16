@@ -1,0 +1,14 @@
+---
+page_title: "Kafka to Websocket"
+subcategory: "V4 API"
+---
+
+# Create a v4 message API that fetches Kafka messages
+
+The following example configures the v4 message API resource to create a v4 message API with a Keyless plan.
+This API has a WebSocket entrypoint and Kafka endpoint.
+It fetches messages from a Kafka cluster and publishes them to a client's WebSocket connection.
+
+```HCL
+{{ .V4ApiMessage.Content }}
+```

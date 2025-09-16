@@ -26,18 +26,18 @@ func (g *GetAPISubscriptionGlobals) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GetAPISubscriptionGlobals) GetOrganizationID() *string {
-	if o == nil {
+func (g *GetAPISubscriptionGlobals) GetOrganizationID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return g.OrganizationID
 }
 
-func (o *GetAPISubscriptionGlobals) GetEnvironmentID() *string {
-	if o == nil {
+func (g *GetAPISubscriptionGlobals) GetEnvironmentID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return g.EnvironmentID
 }
 
 type GetAPISubscriptionRequest struct {
@@ -62,32 +62,32 @@ func (g *GetAPISubscriptionRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GetAPISubscriptionRequest) GetOrganizationID() *string {
-	if o == nil {
+func (g *GetAPISubscriptionRequest) GetOrganizationID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return g.OrganizationID
 }
 
-func (o *GetAPISubscriptionRequest) GetEnvironmentID() *string {
-	if o == nil {
+func (g *GetAPISubscriptionRequest) GetEnvironmentID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return g.EnvironmentID
 }
 
-func (o *GetAPISubscriptionRequest) GetAPIHrid() string {
-	if o == nil {
+func (g *GetAPISubscriptionRequest) GetAPIHrid() string {
+	if g == nil {
 		return ""
 	}
-	return o.APIHrid
+	return g.APIHrid
 }
 
-func (o *GetAPISubscriptionRequest) GetHrid() string {
-	if o == nil {
+func (g *GetAPISubscriptionRequest) GetHrid() string {
+	if g == nil {
 		return ""
 	}
-	return o.Hrid
+	return g.Hrid
 }
 
 type GetAPISubscriptionResponse struct {
@@ -105,44 +105,44 @@ type GetAPISubscriptionResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetAPISubscriptionResponse) GetContentType() string {
-	if o == nil {
+func (g *GetAPISubscriptionResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetAPISubscriptionResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetAPISubscriptionResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetAPISubscriptionResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetAPISubscriptionResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetAPISubscriptionResponse) GetSubscriptionState() *shared.SubscriptionState {
-	if o == nil {
+func (g *GetAPISubscriptionResponse) GetSubscriptionState() *shared.SubscriptionState {
+	if g == nil {
 		return nil
 	}
-	return o.SubscriptionState
+	return g.SubscriptionState
 }
 
-func (o *GetAPISubscriptionResponse) GetHTTPError() *shared.HTTPError {
-	if o == nil {
+func (g *GetAPISubscriptionResponse) GetHTTPError() *shared.HTTPError {
+	if g == nil {
 		return nil
 	}
-	return o.HTTPError
+	return g.HTTPError
 }
 
-func (o *GetAPISubscriptionResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetAPISubscriptionResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

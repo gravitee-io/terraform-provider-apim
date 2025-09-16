@@ -66,156 +66,156 @@ func (p *PageV4TranslationInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PageV4TranslationInput) GetHrid() string {
-	if o == nil {
+func (p *PageV4TranslationInput) GetHrid() string {
+	if p == nil {
 		return ""
 	}
-	return o.Hrid
+	return p.Hrid
 }
 
-func (o *PageV4TranslationInput) GetName() *string {
-	if o == nil {
+func (p *PageV4TranslationInput) GetName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *PageV4TranslationInput) GetType() PageType {
-	if o == nil {
+func (p *PageV4TranslationInput) GetType() PageType {
+	if p == nil {
 		return PageType("")
 	}
-	return o.Type
+	return p.Type
 }
 
-func (o *PageV4TranslationInput) GetContent() *string {
-	if o == nil {
+func (p *PageV4TranslationInput) GetContent() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Content
+	return p.Content
 }
 
-func (o *PageV4TranslationInput) GetOrder() *int64 {
-	if o == nil {
+func (p *PageV4TranslationInput) GetOrder() *int64 {
+	if p == nil {
 		return nil
 	}
-	return o.Order
+	return p.Order
 }
 
-func (o *PageV4TranslationInput) GetLastContributor() *string {
-	if o == nil {
+func (p *PageV4TranslationInput) GetLastContributor() *string {
+	if p == nil {
 		return nil
 	}
-	return o.LastContributor
+	return p.LastContributor
 }
 
-func (o *PageV4TranslationInput) GetPublished() *bool {
-	if o == nil {
+func (p *PageV4TranslationInput) GetPublished() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Published
+	return p.Published
 }
 
-func (o *PageV4TranslationInput) GetVisibility() *Visibility {
-	if o == nil {
+func (p *PageV4TranslationInput) GetVisibility() *Visibility {
+	if p == nil {
 		return nil
 	}
-	return o.Visibility
+	return p.Visibility
 }
 
-func (o *PageV4TranslationInput) GetUpdatedAt() *time.Time {
-	if o == nil {
+func (p *PageV4TranslationInput) GetUpdatedAt() *time.Time {
+	if p == nil {
 		return nil
 	}
-	return o.UpdatedAt
+	return p.UpdatedAt
 }
 
-func (o *PageV4TranslationInput) GetContentType() *string {
-	if o == nil {
+func (p *PageV4TranslationInput) GetContentType() *string {
+	if p == nil {
 		return nil
 	}
-	return o.ContentType
+	return p.ContentType
 }
 
-func (o *PageV4TranslationInput) GetSource() *PageSource {
-	if o == nil {
+func (p *PageV4TranslationInput) GetSource() *PageSource {
+	if p == nil {
 		return nil
 	}
-	return o.Source
+	return p.Source
 }
 
-func (o *PageV4TranslationInput) GetConfiguration() map[string]string {
-	if o == nil {
+func (p *PageV4TranslationInput) GetConfiguration() map[string]string {
+	if p == nil {
 		return nil
 	}
-	return o.Configuration
+	return p.Configuration
 }
 
-func (o *PageV4TranslationInput) GetHomepage() *bool {
-	if o == nil {
+func (p *PageV4TranslationInput) GetHomepage() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Homepage
+	return p.Homepage
 }
 
-func (o *PageV4TranslationInput) GetParentID() *string {
-	if o == nil {
+func (p *PageV4TranslationInput) GetParentID() *string {
+	if p == nil {
 		return nil
 	}
-	return o.ParentID
+	return p.ParentID
 }
 
-func (o *PageV4TranslationInput) GetParentPath() *string {
-	if o == nil {
+func (p *PageV4TranslationInput) GetParentPath() *string {
+	if p == nil {
 		return nil
 	}
-	return o.ParentPath
+	return p.ParentPath
 }
 
-func (o *PageV4TranslationInput) GetExcludedAccessControls() *bool {
-	if o == nil {
+func (p *PageV4TranslationInput) GetExcludedAccessControls() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.ExcludedAccessControls
+	return p.ExcludedAccessControls
 }
 
-func (o *PageV4TranslationInput) GetAccessControls() []AccessControl {
-	if o == nil {
+func (p *PageV4TranslationInput) GetAccessControls() []AccessControl {
+	if p == nil {
 		return nil
 	}
-	return o.AccessControls
+	return p.AccessControls
 }
 
-func (o *PageV4TranslationInput) GetAttachedMedia() []PageMedia {
-	if o == nil {
+func (p *PageV4TranslationInput) GetAttachedMedia() []PageMedia {
+	if p == nil {
 		return nil
 	}
-	return o.AttachedMedia
+	return p.AttachedMedia
 }
 
-func (o *PageV4TranslationInput) GetMetadata() map[string]string {
-	if o == nil {
+func (p *PageV4TranslationInput) GetMetadata() map[string]string {
+	if p == nil {
 		return nil
 	}
-	return o.Metadata
+	return p.Metadata
 }
 
-func (o *PageV4TranslationInput) GetContentRevision() *Revision {
-	if o == nil {
+func (p *PageV4TranslationInput) GetContentRevision() *Revision {
+	if p == nil {
 		return nil
 	}
-	return o.ContentRevision
+	return p.ContentRevision
 }
 
-func (o *PageV4TranslationInput) GetHidden() *bool {
-	if o == nil {
+func (p *PageV4TranslationInput) GetHidden() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.Hidden
+	return p.Hidden
 }
 
-func (o *PageV4TranslationInput) GetGeneralConditions() *bool {
-	if o == nil {
+func (p *PageV4TranslationInput) GetGeneralConditions() *bool {
+	if p == nil {
 		return nil
 	}
-	return o.GeneralConditions
+	return p.GeneralConditions
 }

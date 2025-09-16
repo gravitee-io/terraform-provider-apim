@@ -25,23 +25,23 @@ func (s *SubscriptionListener) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SubscriptionListener) GetType() ListenerType {
-	if o == nil {
+func (s *SubscriptionListener) GetType() ListenerType {
+	if s == nil {
 		return ListenerType("")
 	}
-	return o.Type
+	return s.Type
 }
 
-func (o *SubscriptionListener) GetEntrypoints() []Entrypoint {
-	if o == nil {
+func (s *SubscriptionListener) GetEntrypoints() []Entrypoint {
+	if s == nil {
 		return nil
 	}
-	return o.Entrypoints
+	return s.Entrypoints
 }
 
-func (o *SubscriptionListener) GetServers() []string {
-	if o == nil {
+func (s *SubscriptionListener) GetServers() []string {
+	if s == nil {
 		return nil
 	}
-	return o.Servers
+	return s.Servers
 }

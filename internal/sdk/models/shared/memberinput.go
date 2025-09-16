@@ -12,23 +12,23 @@ type MemberInput struct {
 	Role string `json:"role"`
 }
 
-func (o *MemberInput) GetSource() string {
-	if o == nil {
+func (m *MemberInput) GetSource() string {
+	if m == nil {
 		return ""
 	}
-	return o.Source
+	return m.Source
 }
 
-func (o *MemberInput) GetSourceID() string {
-	if o == nil {
+func (m *MemberInput) GetSourceID() string {
+	if m == nil {
 		return ""
 	}
-	return o.SourceID
+	return m.SourceID
 }
 
-func (o *MemberInput) GetRole() string {
-	if o == nil {
+func (m *MemberInput) GetRole() string {
+	if m == nil {
 		return ""
 	}
-	return o.Role
+	return m.Role
 }

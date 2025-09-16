@@ -99,30 +99,30 @@ type ApplicationOAuthClientSettings struct {
 	AdditionalClientMetadata map[string]string `json:"additionalClientMetadata,omitempty"`
 }
 
-func (o *ApplicationOAuthClientSettings) GetApplicationType() ApplicationType {
-	if o == nil {
+func (a *ApplicationOAuthClientSettings) GetApplicationType() ApplicationType {
+	if a == nil {
 		return ApplicationType("")
 	}
-	return o.ApplicationType
+	return a.ApplicationType
 }
 
-func (o *ApplicationOAuthClientSettings) GetGrantTypes() []GrantType {
-	if o == nil {
+func (a *ApplicationOAuthClientSettings) GetGrantTypes() []GrantType {
+	if a == nil {
 		return []GrantType{}
 	}
-	return o.GrantTypes
+	return a.GrantTypes
 }
 
-func (o *ApplicationOAuthClientSettings) GetRedirectUris() []string {
-	if o == nil {
+func (a *ApplicationOAuthClientSettings) GetRedirectUris() []string {
+	if a == nil {
 		return []string{}
 	}
-	return o.RedirectUris
+	return a.RedirectUris
 }
 
-func (o *ApplicationOAuthClientSettings) GetAdditionalClientMetadata() map[string]string {
-	if o == nil {
+func (a *ApplicationOAuthClientSettings) GetAdditionalClientMetadata() map[string]string {
+	if a == nil {
 		return nil
 	}
-	return o.AdditionalClientMetadata
+	return a.AdditionalClientMetadata
 }

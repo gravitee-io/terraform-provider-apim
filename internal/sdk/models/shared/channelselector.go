@@ -89,37 +89,37 @@ func (c *ChannelSelector) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ChannelSelector) GetType() ChannelSelectorType {
-	if o == nil {
+func (c *ChannelSelector) GetType() ChannelSelectorType {
+	if c == nil {
 		return ChannelSelectorType("")
 	}
-	return o.Type
+	return c.Type
 }
 
-func (o *ChannelSelector) GetOperations() []Operation {
-	if o == nil {
+func (c *ChannelSelector) GetOperations() []Operation {
+	if c == nil {
 		return nil
 	}
-	return o.Operations
+	return c.Operations
 }
 
-func (o *ChannelSelector) GetChannel() *string {
-	if o == nil {
+func (c *ChannelSelector) GetChannel() *string {
+	if c == nil {
 		return nil
 	}
-	return o.Channel
+	return c.Channel
 }
 
-func (o *ChannelSelector) GetChannelOperator() *Operator {
-	if o == nil {
+func (c *ChannelSelector) GetChannelOperator() *Operator {
+	if c == nil {
 		return nil
 	}
-	return o.ChannelOperator
+	return c.ChannelOperator
 }
 
-func (o *ChannelSelector) GetEntrypoints() []string {
-	if o == nil {
+func (c *ChannelSelector) GetEntrypoints() []string {
+	if c == nil {
 		return nil
 	}
-	return o.Entrypoints
+	return c.Entrypoints
 }

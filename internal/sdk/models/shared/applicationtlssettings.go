@@ -8,9 +8,9 @@ type ApplicationTLSSettings struct {
 	ClientCertificate string `json:"clientCertificate"`
 }
 
-func (o *ApplicationTLSSettings) GetClientCertificate() string {
-	if o == nil {
+func (a *ApplicationTLSSettings) GetClientCertificate() string {
+	if a == nil {
 		return ""
 	}
-	return o.ClientCertificate
+	return a.ClientCertificate
 }

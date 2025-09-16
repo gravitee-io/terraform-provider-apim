@@ -8,23 +8,23 @@ type Security struct {
 	CloudAuth  *string          `security:"scheme,type=http,subtype=bearer,name=Authorization"`
 }
 
-func (o *Security) GetBearerAuth() *string {
-	if o == nil {
+func (s *Security) GetBearerAuth() *string {
+	if s == nil {
 		return nil
 	}
-	return o.BearerAuth
+	return s.BearerAuth
 }
 
-func (o *Security) GetBasicAuth() *SchemeBasicAuth {
-	if o == nil {
+func (s *Security) GetBasicAuth() *SchemeBasicAuth {
+	if s == nil {
 		return nil
 	}
-	return o.BasicAuth
+	return s.BasicAuth
 }
 
-func (o *Security) GetCloudAuth() *string {
-	if o == nil {
+func (s *Security) GetCloudAuth() *string {
+	if s == nil {
 		return nil
 	}
-	return o.CloudAuth
+	return s.CloudAuth
 }

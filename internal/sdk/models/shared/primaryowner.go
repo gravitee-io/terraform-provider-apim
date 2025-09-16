@@ -14,30 +14,30 @@ type PrimaryOwner struct {
 	Type *MembershipMemberType `json:"type,omitempty"`
 }
 
-func (o *PrimaryOwner) GetID() *string {
-	if o == nil {
+func (p *PrimaryOwner) GetID() *string {
+	if p == nil {
 		return nil
 	}
-	return o.ID
+	return p.ID
 }
 
-func (o *PrimaryOwner) GetEmail() *string {
-	if o == nil {
+func (p *PrimaryOwner) GetEmail() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Email
+	return p.Email
 }
 
-func (o *PrimaryOwner) GetDisplayName() *string {
-	if o == nil {
+func (p *PrimaryOwner) GetDisplayName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.DisplayName
+	return p.DisplayName
 }
 
-func (o *PrimaryOwner) GetType() *MembershipMemberType {
-	if o == nil {
+func (p *PrimaryOwner) GetType() *MembershipMemberType {
+	if p == nil {
 		return nil
 	}
-	return o.Type
+	return p.Type
 }

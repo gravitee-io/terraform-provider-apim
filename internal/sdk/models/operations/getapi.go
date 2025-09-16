@@ -26,18 +26,18 @@ func (g *GetAPIGlobals) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GetAPIGlobals) GetOrganizationID() *string {
-	if o == nil {
+func (g *GetAPIGlobals) GetOrganizationID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return g.OrganizationID
 }
 
-func (o *GetAPIGlobals) GetEnvironmentID() *string {
-	if o == nil {
+func (g *GetAPIGlobals) GetEnvironmentID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return g.EnvironmentID
 }
 
 type GetAPIRequest struct {
@@ -60,25 +60,25 @@ func (g *GetAPIRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GetAPIRequest) GetOrganizationID() *string {
-	if o == nil {
+func (g *GetAPIRequest) GetOrganizationID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return g.OrganizationID
 }
 
-func (o *GetAPIRequest) GetEnvironmentID() *string {
-	if o == nil {
+func (g *GetAPIRequest) GetEnvironmentID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return g.EnvironmentID
 }
 
-func (o *GetAPIRequest) GetHrid() string {
-	if o == nil {
+func (g *GetAPIRequest) GetHrid() string {
+	if g == nil {
 		return ""
 	}
-	return o.Hrid
+	return g.Hrid
 }
 
 type GetAPIResponse struct {
@@ -96,44 +96,44 @@ type GetAPIResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetAPIResponse) GetContentType() string {
-	if o == nil {
+func (g *GetAPIResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetAPIResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetAPIResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetAPIResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetAPIResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetAPIResponse) GetAPIV4State() *shared.APIV4State {
-	if o == nil {
+func (g *GetAPIResponse) GetAPIV4State() *shared.APIV4State {
+	if g == nil {
 		return nil
 	}
-	return o.APIV4State
+	return g.APIV4State
 }
 
-func (o *GetAPIResponse) GetHTTPError() *shared.HTTPError {
-	if o == nil {
+func (g *GetAPIResponse) GetHTTPError() *shared.HTTPError {
+	if g == nil {
 		return nil
 	}
-	return o.HTTPError
+	return g.HTTPError
 }
 
-func (o *GetAPIResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetAPIResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

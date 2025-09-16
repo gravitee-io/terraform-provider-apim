@@ -8,16 +8,16 @@ type LoggingPhase struct {
 	Response *bool `json:"response,omitempty"`
 }
 
-func (o *LoggingPhase) GetRequest() *bool {
-	if o == nil {
+func (l *LoggingPhase) GetRequest() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Request
+	return l.Request
 }
 
-func (o *LoggingPhase) GetResponse() *bool {
-	if o == nil {
+func (l *LoggingPhase) GetResponse() *bool {
+	if l == nil {
 		return nil
 	}
-	return o.Response
+	return l.Response
 }

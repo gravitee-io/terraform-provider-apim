@@ -28,23 +28,23 @@ func (p *PageMedia) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *PageMedia) GetName() *string {
-	if o == nil {
+func (p *PageMedia) GetName() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Name
+	return p.Name
 }
 
-func (o *PageMedia) GetHash() *string {
-	if o == nil {
+func (p *PageMedia) GetHash() *string {
+	if p == nil {
 		return nil
 	}
-	return o.Hash
+	return p.Hash
 }
 
-func (o *PageMedia) GetAttachedAt() *time.Time {
-	if o == nil {
+func (p *PageMedia) GetAttachedAt() *time.Time {
+	if p == nil {
 		return nil
 	}
-	return o.AttachedAt
+	return p.AttachedAt
 }

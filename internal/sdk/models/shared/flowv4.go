@@ -42,79 +42,79 @@ func (f *FlowV4) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *FlowV4) GetID() *string {
-	if o == nil {
+func (f *FlowV4) GetID() *string {
+	if f == nil {
 		return nil
 	}
-	return o.ID
+	return f.ID
 }
 
-func (o *FlowV4) GetName() *string {
-	if o == nil {
+func (f *FlowV4) GetName() *string {
+	if f == nil {
 		return nil
 	}
-	return o.Name
+	return f.Name
 }
 
-func (o *FlowV4) GetEnabled() *bool {
-	if o == nil {
+func (f *FlowV4) GetEnabled() *bool {
+	if f == nil {
 		return nil
 	}
-	return o.Enabled
+	return f.Enabled
 }
 
-func (o *FlowV4) GetSelectors() []Selector {
-	if o == nil {
+func (f *FlowV4) GetSelectors() []Selector {
+	if f == nil {
 		return nil
 	}
-	return o.Selectors
+	return f.Selectors
 }
 
-func (o *FlowV4) GetRequest() []StepV4 {
-	if o == nil {
+func (f *FlowV4) GetRequest() []StepV4 {
+	if f == nil {
 		return nil
 	}
-	return o.Request
+	return f.Request
 }
 
-func (o *FlowV4) GetResponse() []StepV4 {
-	if o == nil {
+func (f *FlowV4) GetResponse() []StepV4 {
+	if f == nil {
 		return nil
 	}
-	return o.Response
+	return f.Response
 }
 
-func (o *FlowV4) GetSubscribe() []StepV4 {
-	if o == nil {
+func (f *FlowV4) GetSubscribe() []StepV4 {
+	if f == nil {
 		return nil
 	}
-	return o.Subscribe
+	return f.Subscribe
 }
 
-func (o *FlowV4) GetPublish() []StepV4 {
-	if o == nil {
+func (f *FlowV4) GetPublish() []StepV4 {
+	if f == nil {
 		return nil
 	}
-	return o.Publish
+	return f.Publish
 }
 
-func (o *FlowV4) GetConnect() []StepV4 {
-	if o == nil {
+func (f *FlowV4) GetConnect() []StepV4 {
+	if f == nil {
 		return nil
 	}
-	return o.Connect
+	return f.Connect
 }
 
-func (o *FlowV4) GetInteract() []StepV4 {
-	if o == nil {
+func (f *FlowV4) GetInteract() []StepV4 {
+	if f == nil {
 		return nil
 	}
-	return o.Interact
+	return f.Interact
 }
 
-func (o *FlowV4) GetTags() []string {
-	if o == nil {
+func (f *FlowV4) GetTags() []string {
+	if f == nil {
 		return nil
 	}
-	return o.Tags
+	return f.Tags
 }

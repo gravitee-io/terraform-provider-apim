@@ -10,16 +10,16 @@ type Revision struct {
 	Revision *int64 `json:"revision,omitempty"`
 }
 
-func (o *Revision) GetID() *string {
-	if o == nil {
+func (r *Revision) GetID() *string {
+	if r == nil {
 		return nil
 	}
-	return o.ID
+	return r.ID
 }
 
-func (o *Revision) GetRevision() *int64 {
-	if o == nil {
+func (r *Revision) GetRevision() *int64 {
+	if r == nil {
 		return nil
 	}
-	return o.Revision
+	return r.Revision
 }

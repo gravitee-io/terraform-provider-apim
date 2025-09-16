@@ -26,18 +26,18 @@ func (g *GetApplicationGlobals) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GetApplicationGlobals) GetOrganizationID() *string {
-	if o == nil {
+func (g *GetApplicationGlobals) GetOrganizationID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return g.OrganizationID
 }
 
-func (o *GetApplicationGlobals) GetEnvironmentID() *string {
-	if o == nil {
+func (g *GetApplicationGlobals) GetEnvironmentID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return g.EnvironmentID
 }
 
 type GetApplicationRequest struct {
@@ -60,25 +60,25 @@ func (g *GetApplicationRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *GetApplicationRequest) GetOrganizationID() *string {
-	if o == nil {
+func (g *GetApplicationRequest) GetOrganizationID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return g.OrganizationID
 }
 
-func (o *GetApplicationRequest) GetEnvironmentID() *string {
-	if o == nil {
+func (g *GetApplicationRequest) GetEnvironmentID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return g.EnvironmentID
 }
 
-func (o *GetApplicationRequest) GetHrid() string {
-	if o == nil {
+func (g *GetApplicationRequest) GetHrid() string {
+	if g == nil {
 		return ""
 	}
-	return o.Hrid
+	return g.Hrid
 }
 
 type GetApplicationResponse struct {
@@ -96,44 +96,44 @@ type GetApplicationResponse struct {
 	Error *shared.Error
 }
 
-func (o *GetApplicationResponse) GetContentType() string {
-	if o == nil {
+func (g *GetApplicationResponse) GetContentType() string {
+	if g == nil {
 		return ""
 	}
-	return o.ContentType
+	return g.ContentType
 }
 
-func (o *GetApplicationResponse) GetStatusCode() int {
-	if o == nil {
+func (g *GetApplicationResponse) GetStatusCode() int {
+	if g == nil {
 		return 0
 	}
-	return o.StatusCode
+	return g.StatusCode
 }
 
-func (o *GetApplicationResponse) GetRawResponse() *http.Response {
-	if o == nil {
+func (g *GetApplicationResponse) GetRawResponse() *http.Response {
+	if g == nil {
 		return nil
 	}
-	return o.RawResponse
+	return g.RawResponse
 }
 
-func (o *GetApplicationResponse) GetApplicationState() *shared.ApplicationState {
-	if o == nil {
+func (g *GetApplicationResponse) GetApplicationState() *shared.ApplicationState {
+	if g == nil {
 		return nil
 	}
-	return o.ApplicationState
+	return g.ApplicationState
 }
 
-func (o *GetApplicationResponse) GetHTTPError() *shared.HTTPError {
-	if o == nil {
+func (g *GetApplicationResponse) GetHTTPError() *shared.HTTPError {
+	if g == nil {
 		return nil
 	}
-	return o.HTTPError
+	return g.HTTPError
 }
 
-func (o *GetApplicationResponse) GetError() *shared.Error {
-	if o == nil {
+func (g *GetApplicationResponse) GetError() *shared.Error {
+	if g == nil {
 		return nil
 	}
-	return o.Error
+	return g.Error
 }

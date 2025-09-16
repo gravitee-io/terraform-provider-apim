@@ -29,30 +29,30 @@ func (s *SubscriptionSpec) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *SubscriptionSpec) GetHrid() string {
-	if o == nil {
+func (s *SubscriptionSpec) GetHrid() string {
+	if s == nil {
 		return ""
 	}
-	return o.Hrid
+	return s.Hrid
 }
 
-func (o *SubscriptionSpec) GetApplicationHrid() string {
-	if o == nil {
+func (s *SubscriptionSpec) GetApplicationHrid() string {
+	if s == nil {
 		return ""
 	}
-	return o.ApplicationHrid
+	return s.ApplicationHrid
 }
 
-func (o *SubscriptionSpec) GetPlanHrid() string {
-	if o == nil {
+func (s *SubscriptionSpec) GetPlanHrid() string {
+	if s == nil {
 		return ""
 	}
-	return o.PlanHrid
+	return s.PlanHrid
 }
 
-func (o *SubscriptionSpec) GetEndingAt() *time.Time {
-	if o == nil {
+func (s *SubscriptionSpec) GetEndingAt() *time.Time {
+	if s == nil {
 		return nil
 	}
-	return o.EndingAt
+	return s.EndingAt
 }

@@ -82,107 +82,107 @@ func (a *ApplicationState) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *ApplicationState) GetHrid() string {
-	if o == nil {
+func (a *ApplicationState) GetHrid() string {
+	if a == nil {
 		return ""
 	}
-	return o.Hrid
+	return a.Hrid
 }
 
-func (o *ApplicationState) GetName() string {
-	if o == nil {
+func (a *ApplicationState) GetName() string {
+	if a == nil {
 		return ""
 	}
-	return o.Name
+	return a.Name
 }
 
-func (o *ApplicationState) GetDescription() string {
-	if o == nil {
+func (a *ApplicationState) GetDescription() string {
+	if a == nil {
 		return ""
 	}
-	return o.Description
+	return a.Description
 }
 
-func (o *ApplicationState) GetDomain() *string {
-	if o == nil {
+func (a *ApplicationState) GetDomain() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Domain
+	return a.Domain
 }
 
-func (o *ApplicationState) GetGroups() []string {
-	if o == nil {
+func (a *ApplicationState) GetGroups() []string {
+	if a == nil {
 		return nil
 	}
-	return o.Groups
+	return a.Groups
 }
 
-func (o *ApplicationState) GetPictureURL() *string {
-	if o == nil {
+func (a *ApplicationState) GetPictureURL() *string {
+	if a == nil {
 		return nil
 	}
-	return o.PictureURL
+	return a.PictureURL
 }
 
-func (o *ApplicationState) GetNotifyMembers() *bool {
-	if o == nil {
+func (a *ApplicationState) GetNotifyMembers() *bool {
+	if a == nil {
 		return nil
 	}
-	return o.NotifyMembers
+	return a.NotifyMembers
 }
 
-func (o *ApplicationState) GetBackground() *string {
-	if o == nil {
+func (a *ApplicationState) GetBackground() *string {
+	if a == nil {
 		return nil
 	}
-	return o.Background
+	return a.Background
 }
 
-func (o *ApplicationState) GetPrimaryOwner() *PrimaryOwner {
-	if o == nil {
+func (a *ApplicationState) GetPrimaryOwner() *PrimaryOwner {
+	if a == nil {
 		return nil
 	}
-	return o.PrimaryOwner
+	return a.PrimaryOwner
 }
 
-func (o *ApplicationState) GetSettings() *ApplicationSettings {
-	if o == nil {
+func (a *ApplicationState) GetSettings() *ApplicationSettings {
+	if a == nil {
 		return nil
 	}
-	return o.Settings
+	return a.Settings
 }
 
-func (o *ApplicationState) GetMetadata() []Metadata {
-	if o == nil {
+func (a *ApplicationState) GetMetadata() []Metadata {
+	if a == nil {
 		return nil
 	}
-	return o.Metadata
+	return a.Metadata
 }
 
-func (o *ApplicationState) GetMembers() []Member {
-	if o == nil {
+func (a *ApplicationState) GetMembers() []Member {
+	if a == nil {
 		return nil
 	}
-	return o.Members
+	return a.Members
 }
 
-func (o *ApplicationState) GetStatus() *ApplicationStateStatus {
-	if o == nil {
+func (a *ApplicationState) GetStatus() *ApplicationStateStatus {
+	if a == nil {
 		return nil
 	}
-	return o.Status
+	return a.Status
 }
 
-func (o *ApplicationState) GetErrors() *Errors {
-	if o == nil {
+func (a *ApplicationState) GetErrors() *Errors {
+	if a == nil {
 		return nil
 	}
-	return o.Errors
+	return a.Errors
 }
 
-func (o *ApplicationState) GetID() *string {
-	if o == nil {
+func (a *ApplicationState) GetID() *string {
+	if a == nil {
 		return nil
 	}
-	return o.ID
+	return a.ID
 }

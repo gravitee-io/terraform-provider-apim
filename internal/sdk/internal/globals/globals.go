@@ -24,16 +24,16 @@ func (g *Globals) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Globals) GetEnvironmentID() *string {
-	if o == nil {
+func (g *Globals) GetEnvironmentID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.EnvironmentID
+	return g.EnvironmentID
 }
 
-func (o *Globals) GetOrganizationID() *string {
-	if o == nil {
+func (g *Globals) GetOrganizationID() *string {
+	if g == nil {
 		return nil
 	}
-	return o.OrganizationID
+	return g.OrganizationID
 }

@@ -35,51 +35,51 @@ func (s *StepV4) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *StepV4) GetName() *string {
-	if o == nil {
+func (s *StepV4) GetName() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Name
+	return s.Name
 }
 
-func (o *StepV4) GetDescription() *string {
-	if o == nil {
+func (s *StepV4) GetDescription() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Description
+	return s.Description
 }
 
-func (o *StepV4) GetEnabled() *bool {
-	if o == nil {
+func (s *StepV4) GetEnabled() *bool {
+	if s == nil {
 		return nil
 	}
-	return o.Enabled
+	return s.Enabled
 }
 
-func (o *StepV4) GetPolicy() *string {
-	if o == nil {
+func (s *StepV4) GetPolicy() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Policy
+	return s.Policy
 }
 
-func (o *StepV4) GetConfiguration() any {
-	if o == nil {
+func (s *StepV4) GetConfiguration() any {
+	if s == nil {
 		return nil
 	}
-	return o.Configuration
+	return s.Configuration
 }
 
-func (o *StepV4) GetCondition() *string {
-	if o == nil {
+func (s *StepV4) GetCondition() *string {
+	if s == nil {
 		return nil
 	}
-	return o.Condition
+	return s.Condition
 }
 
-func (o *StepV4) GetMessageCondition() *string {
-	if o == nil {
+func (s *StepV4) GetMessageCondition() *string {
+	if s == nil {
 		return nil
 	}
-	return o.MessageCondition
+	return s.MessageCondition
 }
