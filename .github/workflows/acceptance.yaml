@@ -6,6 +6,9 @@ on:
     branches-ignore:
       - master
 
+env:
+  APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL_MASTER }}
+
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
@@ -25,15 +28,13 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           terraform_version: "1.12.*"
-      - name: Run pre-tests using ${{ vars.TEST_SERVER_URL_MASTER }}
+      - name: Run pre-tests using ${{ env.APIM_SERVER_URL }}
         env:
-          APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL_MASTER }}
           APIM_USERNAME: ${{ secrets.TEST_USER }}
           APIM_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
         run: make pre-test
-      - name: Run pre-tests using ${{ vars.TEST_SERVER_URL_MASTER }}
+      - name: Run pre-tests using ${{ env.APIM_SERVER_URL }}
         env:
-          APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL_MASTER }}
           APIM_USERNAME: ${{ secrets.TEST_USER2 }}
           APIM_PASSWORD: ${{ secrets.TEST_USER2_PASSWORD }}
         run: make pre-test
