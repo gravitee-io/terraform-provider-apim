@@ -1,7 +1,6 @@
 name: Terraform Provider Tests
 
 on:
-  pull_request:
   push:
     branches-ignore:
       - master
@@ -28,13 +27,15 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           terraform_version: "1.12.*"
-      - name: Run pre-tests using ${{ vars.TEST_SERVER_URL_MASTER }}
+      - name: Run pre-tests using ${{ env.APIM_SERVER_URL }} - user ${{ vars.APIM_ADMIN_USERNAME }}
         env:
-          APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL_MASTER }}
-          APIM_USERNAME: ${{ secrets.TEST_USER }}
-          APIM_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
-          APIM_API1_USERNAME: ${{ secrets.TEST_USER2 }}
-          APIM_API1_PASSWORD: ${{ secrets.TEST_USER2_PASSWORD }}
+          APIM_USERNAME: ${{ vars.APIM_ADMIN_USERNAME }}
+          APIM_PASSWORD: ${{ secrets.APIM_ADMIN_PASSWORD }}
+        run: make pre-test
+      - name: Run pre-tests using ${{ env.APIM_SERVER_URL }} - user ${{ vars.APIM_API1_USERNAME }}
+        env:
+          APIM_USERNAME: ${{ vars.APIM_API1_USERNAME }}
+          APIM_PASSWORD: ${{ secrets.APIM_API1_PASSWORD }}
         run: make pre-test
   examples:
     name: Run Terraform examples
@@ -71,7 +72,6 @@ jobs:
           - "1.10.*"
           - "1.11.*"
           - "1.12.*"
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.event.pull_request == null)
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
