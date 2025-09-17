@@ -1,7 +1,6 @@
 name: Terraform Provider Tests
 
 on:
-  pull_request:
   push:
     branches-ignore:
       - master
@@ -53,7 +52,6 @@ jobs:
           - "1.10.*"
           - "1.11.*"
           - "1.12.*"
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.event.pull_request == null)
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
