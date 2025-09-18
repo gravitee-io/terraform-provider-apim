@@ -1,5 +1,5 @@
 ---
-page_title: "Setup"
+page_title: "APIM Provider Setup"
 ---
 
 # Setup
