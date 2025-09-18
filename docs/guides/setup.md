@@ -27,7 +27,7 @@ provider "apim" {
 }
 ```
 
-In that case organization and environment IDs will be set to "`DEFAULT`".
+In that case organization and environment IDs will be set to `DEFAULT`.
 
 ## Multi-tenant instance with a service account
 
