@@ -19,3 +19,4 @@ If you use only environment variables to configure your provider, then your conf
 provider "apim" {
   # Hooray, nothing is hardcoded!
 }
+```
