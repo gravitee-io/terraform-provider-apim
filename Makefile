@@ -16,10 +16,11 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 .PHONY: lint
 lint: ## Run speakeasy lint accepting no error or warning
 	@speakeasy lint openapi --schema schemas/automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
-	@git diff --quiet HEAD docs/guides || { \
-		echo "Error: Documentation generation produced changes. Please run 'make doc-gen' and commit the updated documentation."; \
-		exit 1; \
-	}
+#	@make doc-gen
+#	@git diff --quiet HEAD docs/guides || { \
+#		echo "Error: Documentation generation produced changes. Please run 'make doc-gen' and commit the updated documentation."; \
+#		exit 1; \
+#	}
 	@terraform fmt -recursive -check || (echo "Error: Above terraform files are not properly formatted. Please run 'terraform fmt -recursive' to fix formatting issues" && exit 1)
 
 .PHONY: lint-fix

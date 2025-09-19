@@ -22,7 +22,7 @@ resource "apim_shared_policy_group" "curate_headers" {
     {
       enabled = true
       name    = "Curate headers"
-      policy = "transform-headers"
+      policy  = "transform-headers"
       # Configuration is JSON as the schema depends on the policy used
       configuration = jsonencode({
         scope = "REQUEST"
@@ -38,7 +38,7 @@ resource "apim_shared_policy_group" "curate_headers" {
   ]
 }
 
-resource "apim_apiv4" "simple-api-with-spg" {
+resource "apim_apiv4" "shared_policy_group" {
   # should match the resource name
   hrid            = "simple-api-with-spg"
   name            = "[Terraform] Simple PROXY API With Shared Policy Group"
@@ -74,9 +74,9 @@ resource "apim_apiv4" "simple-api-with-spg" {
       }
       endpoints = [
         {
-          name   = "Default HTTP proxy"
-          type   = "http-proxy"
-          weight = 1
+          name                  = "Default HTTP proxy"
+          type                  = "http-proxy"
+          weight                = 1
           inherit_configuration = false
           # Configuration is JSON as is depends on the type schema
           configuration = jsonencode({
@@ -99,16 +99,15 @@ resource "apim_apiv4" "simple-api-with-spg" {
             type         = "HTTP"
             path         = "/"
             pathOperator = "STARTS_WITH"
-            methods = []
+            methods      = []
           }
         }
       ]
       request = [
         {
           enabled = true
-          # Known limitation, this name should the same as SPG to avoid terraform plan to remain inconsistent
-          name   = "[Terraform] Curated headers"
-          policy = "shared-policy-group-policy",
+          name    = "Curated headers"
+          policy  = "shared-policy-group-policy",
           # Configuration is JSON as the schema depends on the policy used
           configuration = jsonencode({
             hrid = apim_shared_policy_group.curate_headers.hrid
@@ -120,13 +119,9 @@ resource "apim_apiv4" "simple-api-with-spg" {
   analytics = {
     enabled = false
   }
-  # known limitation, some default value is returned by default which appears to be remove during plan
-  metadata=[{}]
-  # known limitation: will dispear in next version
-  definition_context = {}
-  plans = {
-    # known limitation, key have to match name to avoid terraform plan to remain inconsistent
-    KeyLess = {
+  plans = [
+    {
+      hrid        = "keyLess"
       name        = "KeyLess"
       type        = "API"
       mode        = "STANDARD"
@@ -137,7 +132,7 @@ resource "apim_apiv4" "simple-api-with-spg" {
         type = "KEY_LESS"
       }
     }
-  }
+  ]
 }
 
 ```
