@@ -69,6 +69,10 @@ type ApplicationState struct {
 	Errors *Errors `json:"errors,omitempty"`
 	// Application's uuid.
 	ID *string `json:"id,omitempty"`
+	// The environment ID of the Application.
+	EnvironmentID *string `default:"DEFAULT" json:"environmentId"`
+	// The organization ID of the Application.
+	OrganizationID *string `default:"DEFAULT" json:"organizationId"`
 }
 
 func (a ApplicationState) MarshalJSON() ([]byte, error) {
@@ -185,4 +189,18 @@ func (a *ApplicationState) GetID() *string {
 		return nil
 	}
 	return a.ID
+}
+
+func (a *ApplicationState) GetEnvironmentID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EnvironmentID
+}
+
+func (a *ApplicationState) GetOrganizationID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.OrganizationID
 }

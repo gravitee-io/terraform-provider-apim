@@ -18,6 +18,7 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 		r.Background = types.StringPointerValue(resp.Background)
 		r.Description = types.StringValue(resp.Description)
 		r.Domain = types.StringPointerValue(resp.Domain)
+		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Groups = make([]types.String, 0, len(resp.Groups))
 		for _, v := range resp.Groups {
 			r.Groups = append(r.Groups, types.StringValue(v))
@@ -51,6 +52,7 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 		}
 		r.Name = types.StringValue(resp.Name)
 		r.NotifyMembers = types.BoolPointerValue(resp.NotifyMembers)
+		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.PictureURL = types.StringPointerValue(resp.PictureURL)
 		if resp.PrimaryOwner == nil {
 			r.PrimaryOwner = nil
