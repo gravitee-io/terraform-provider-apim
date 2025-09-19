@@ -8,10 +8,10 @@ resource "apim_application" "spa" {
     oauth = {
       application_type = "browser"
       redirect_uris = [
-        -"https://example.com/callback"
+        "https://example.com/callback"
       ]
       grant_types = [
-        -"authorization_code"
+        "authorization_code"
       ]
     }
   }

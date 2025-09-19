@@ -798,6 +798,18 @@ components:
               description: Application's uuid.
               examples:
                 - 550e8400-e29b-41d4-a716-446655440000
+            environmentId:
+              description: The environment ID of the Application.
+              type: string
+              default: DEFAULT
+              examples:
+                - DEFAULT
+            organizationId:
+              description: The organization ID of the Application.
+              type: string
+              default: DEFAULT
+              examples:
+                - DEFAULT
           x-speakeasy-param-suppress-computed-diff: true
     # Subscription
     SubscriptionSpec:

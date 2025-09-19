@@ -72,15 +72,12 @@ actions:
 
 
   ## Field removal
-  - target: $.components.schemas.ApplicationState.allOf[?@.properties.environmentId].properties.environmentId
-    description: Not returned by the API, so prevent null values during refresh
-    remove: true
-  - target: $.components.schemas.ApplicationState.allOf[?@.properties.organizationId].properties.organizationId
-    description: Not returned by the API, so prevent null values during refresh
-    remove: true
-  - target: $.components.schemas.ApplicationSpec.settings.oauth
-    description: Not supported anymore but comm
-    remove: true
+#  - target: $.components.schemas.ApplicationState.allOf[?@.properties.environmentId].properties.environmentId
+#    description: Not returned by the API, so prevent null values during refresh
+#    remove: true
+#  - target: $.components.schemas.ApplicationState.allOf[?@.properties.organizationId].properties.organizationId
+#    description: Not returned by the API, so prevent null values during refresh
+#    remove: true
 
   ## XOR for app settings
   - target: $.components.schemas.ApplicationSettings.properties.app

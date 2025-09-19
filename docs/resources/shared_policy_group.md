@@ -42,15 +42,15 @@ resource "apim_shared_policy_group" "my_sharedpolicygroup" {
 ### Required
 
 - `api_type` (String) API's type. must be one of ["MESSAGE", "PROXY", "NATIVE"]
-- `hrid` (String) A unique human readable id identifying this object. Requires replacement if changed.
+- `hrid` (String) A unique human readable id identifying this resource. Requires replacement if changed.
 - `name` (String) The name of the shared policy group
 - `phase` (String) The execution phase of a policy. must be one of ["REQUEST", "RESPONSE", "INTERACT", "CONNECT", "PUBLISH", "SUBSCRIBE"]
 
 ### Optional
 
 - `description` (String) The description of the shared policy group
-- `environment_id` (String) Id of an environment.
-- `organization_id` (String) Id of an organization.
+- `environment_id` (String) environment ID
+- `organization_id` (String) organization ID
 - `prerequisite_message` (String) The prerequisite message of the shared policy group. This message is displayed to the user to help understand the prerequisite to use the shared policy group.
 - `steps` (Attributes List) SharedPolicyGroup Steps (see [below for nested schema](#nestedatt--steps))
 
@@ -64,13 +64,13 @@ resource "apim_shared_policy_group" "my_sharedpolicygroup" {
 
 Optional:
 
-- `condition` (String) FlowStep condition
-- `configuration` (String) FlowStep configuration is a map of arbitrary key-values
-- `description` (String) FlowStep description
-- `enabled` (Boolean) Indicate if this FlowStep is enabled or not. Default: true
-- `message_condition` (String) The message condition (supports EL expressions)
-- `name` (String) FlowStep name
-- `policy` (String) FlowStep policy
+- `condition` (String) The condition of the step
+- `configuration` (String) The configuration of the step. Parsed as JSON.
+- `description` (String) The description of the step
+- `enabled` (Boolean) Is the step enabled or not. Default: true
+- `message_condition` (String) The message condition of the step
+- `name` (String) The name of the step
+- `policy` (String) The policy of the step
 
 ## Import
 

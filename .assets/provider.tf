@@ -28,7 +28,7 @@ provider "apim" {
   # Basic auth is also supported but discourage for security reason and should only be used for tests.
 
   # organization_id and environment_id are set to "DEFAULT" by default. To use a different value, override them here.
-  # organization_id = "foo"
-  # environment_id  = "bar"
+  #organization_id = "DEFAULT"
+  #environment_id  = "DEFAULT"
 
 }

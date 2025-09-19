@@ -1,6 +1,6 @@
-resource "apim_apiv4" "kafka_native_api" {
+resource "apim_apiv4" "kafka_native" {
   # should match the resource name
-  hrid            = "kafka_native_api"
+  hrid            = "kafka_native"
   name            = "[Terraform] Kafka Native proxy API"
   description     = "Connect to a local kafka cluster with a simple flow"
   version         = "1,0"
@@ -55,6 +55,7 @@ resource "apim_apiv4" "kafka_native_api" {
           name    = "Assign custom static attribute as an example"
           policy  = "policy-assign-attributes"
           configuration = jsonencode({
+            scope = "REQUEST"
             attributes = [
               {
                 name  = "my.attribute"
@@ -66,12 +67,9 @@ resource "apim_apiv4" "kafka_native_api" {
       ]
     },
   ]
-  # known limitation, some default value is returned by default which appears to be remove during plan
-  metadata           = [{}]
-  definition_context = {}
-  plans = {
-    # known limitation, key have to match name to avoid terraform plan to remain inconsistent
-    KeyLess = {
+  plans = [
+    {
+      hrid       = "KeyLess"
       name       = "KeyLess"
       type       = "API"
       mode       = "STANDARD"
@@ -81,5 +79,5 @@ resource "apim_apiv4" "kafka_native_api" {
         type = "KEY_LESS"
       }
     }
-  }
+  ]
 }

@@ -2,7 +2,7 @@ resource "apim_application" "my_application" {
   background     = "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png"
   description    = "This is the documentation explaining purpose of this Application  ."
   domain         = "examples.com"
-  environment_id = "...my_environment_id..."
+  environment_id = "DEFAULT"
   groups = [
     "developers",
   ]
@@ -25,7 +25,7 @@ resource "apim_application" "my_application" {
   ]
   name            = "Example Application"
   notify_members  = false
-  organization_id = "...my_organization_id..."
+  organization_id = "DEFAULT"
   picture_url     = "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png"
   primary_owner = {
     display_name = "John Doe"
