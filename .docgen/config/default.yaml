@@ -25,6 +25,12 @@ outputs:
    target: docs/guides/spg-api.md
  - template: {{ .RootDir }}/tmpl/spg-ratelimit.md.tmpl
    target: docs/guides/spg-ratelimit.md
+ - template: {{ .RootDir }}/tmpl/application-simple.md.tmpl
+   target: docs/guides/application-simple.md
+ - template: {{ .RootDir }}/tmpl/application-m2m.md.tmpl
+   target: docs/guides/application-m2m.md
+ - template: {{ .RootDir }}/tmpl/application-spa.md.tmpl
+   target: docs/guides/application-spa.md
 
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
@@ -44,4 +50,13 @@ chunks:
     required: true
   - template: examples/use-cases/v4api-shared_policy_group/proxy-api-spg.tf
     exportedAs: SPGAndAPI
+    required: true
+  - template: examples/use-cases/application-simple/simple-app.tf
+    exportedAs: ApplicationSimple
+    required: true
+  - template: examples/use-cases/application-backend_to_backend/m2m-app.tf
+    exportedAs: ApplicationM2M
+    required: true
+  - template: examples/use-cases/application-spa/spa-app.tf
+    exportedAs: ApplicationSPA
     required: true
