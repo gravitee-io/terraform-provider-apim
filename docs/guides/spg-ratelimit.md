@@ -10,9 +10,9 @@ The following example configures the Shared Policy Group resource to use the Gra
 It applies rate limiting on the Request phase to limit traffic to 10 requests per minute.
 
 ```HCL
-resource "apim_shared_policy_group" "ratelimit-policy" {
+resource "apim_shared_policy_group" "simple" {
   # should match the resource name
-  hrid        = "ratelimit-policy"
+  hrid        = "simple"
   name        = "[Terraform] Rate limit shared policy"
   api_type    = "PROXY"
   description = "Single step rate limiting policy group"
@@ -27,7 +27,7 @@ resource "apim_shared_policy_group" "ratelimit-policy" {
         addHeaders = true
         async      = false
         rate = {
-          key            = ""
+          key            = "rl"
           limit          = 10
           periodTime     = 1
           periodTimeUnit = "MINUTES"
