@@ -25,6 +25,8 @@ outputs:
    target: docs/guides/spg-api.md
  - template: {{ .RootDir }}/tmpl/spg-ratelimit.md.tmpl
    target: docs/guides/spg-ratelimit.md
+ - template: {{ .RootDir }}/tmpl/application-simple.md.tmpl
+   target: docs/guides/application-simple.md
 
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
@@ -44,4 +46,7 @@ chunks:
     required: true
   - template: examples/use-cases/v4api-shared_policy_group/proxy-api-spg.tf
     exportedAs: SPGAndAPI
+    required: true
+  - template: examples/use-cases/application-simple/simple-app.tf
+    exportedAs: ApplicationSimple
     required: true
