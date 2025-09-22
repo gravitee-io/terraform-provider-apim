@@ -43,7 +43,7 @@ func (r *SharedPolicyGroupDataSourceModel) RefreshFromSharedSharedPolicyGroupSta
 			steps.Enabled = types.BoolPointerValue(stepsItem.Enabled)
 			steps.MessageCondition = types.StringPointerValue(stepsItem.MessageCondition)
 			steps.Name = types.StringPointerValue(stepsItem.Name)
-			steps.Policy = types.StringPointerValue(stepsItem.Policy)
+			steps.Policy = types.StringValue(stepsItem.Policy)
 
 			r.Steps = append(r.Steps, steps)
 		}

@@ -15,7 +15,7 @@ type StepV4 struct {
 	// Is the step enabled or not.
 	Enabled *bool `default:"true" json:"enabled"`
 	// The policy of the step
-	Policy *string `json:"policy,omitempty"`
+	Policy string `json:"policy"`
 	// The configuration of the step
 	Configuration any `json:"configuration,omitempty"`
 	// The condition of the step
@@ -29,7 +29,7 @@ func (s StepV4) MarshalJSON() ([]byte, error) {
 }
 
 func (s *StepV4) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"policy"}); err != nil {
 		return err
 	}
 	return nil
@@ -56,9 +56,9 @@ func (s *StepV4) GetEnabled() *bool {
 	return s.Enabled
 }
 
-func (s *StepV4) GetPolicy() *string {
+func (s *StepV4) GetPolicy() string {
 	if s == nil {
-		return nil
+		return ""
 	}
 	return s.Policy
 }

@@ -65,13 +65,13 @@ resource "apim_apiv4" "api-with-pages-inline" {
       name    = "hello-markdown"
       parent  = "markdowns-folder"
       type    = "MARKDOWN"
-      //visibility = "PRIVATE"
+      order   = 0
     },
     {
-      hrid = "markdowns-folder"
-      name = "markdowns"
-      type = "FOLDER"
-      //visibility = "PRIVATE"
+      hrid  = "markdowns-folder"
+      name  = "markdowns"
+      type  = "FOLDER"
+      order = 1
     }
   ]
   plans = [

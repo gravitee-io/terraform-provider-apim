@@ -11,48 +11,42 @@ import (
 type PageV4TranslationInput struct {
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
-	// Page's name.
-	Name *string `json:"name,omitempty"`
-	// The type of the page.
+	// This is the display name of the page in APIM and on the portal.
+	// This field can be edited safely if you want to rename a page.
+	//
+	Name string `json:"name"`
+	// The type of the documentation page or folder.
 	Type PageType `json:"type"`
-	// Page's content.
+	// The content of the page, if any.
 	Content *string `json:"content,omitempty"`
-	// Page's order.
-	Order *int64 `json:"order,omitempty"`
-	// Page's last contributor. Id of a user.
-	LastContributor *string `json:"lastContributor,omitempty"`
-	// Page's published status.
-	Published *bool `json:"published,omitempty"`
+	// The order used to display the page in APIM and on the portal.
+	Order int64 `json:"order"`
+	// If true, the page will be accessible from the portal (default is false)
+	Published *bool `default:"false" json:"published"`
 	// The visibility of the resource regarding the portal.
 	Visibility *Visibility `default:"PUBLIC" json:"visibility"`
 	// Page's last update date.
 	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 	// Page's content type.
 	ContentType *string `json:"contentType,omitempty"`
-	// Page source
+	// Allow you to fetch pages from various external sources,
+	// overriding page content each time the source is fetched.
+	//
 	Source *PageSource `json:"source,omitempty"`
-	// Page's configuration.
+	// Key/value page configuration (Configure swagger UI or or use Redoc instead)
 	Configuration map[string]string `json:"configuration,omitempty"`
-	// Page's homepage status.
+	// If true, this page will be displayed as the homepage of your API documentation.
 	Homepage *bool `json:"homepage,omitempty"`
-	// Page's parent id.
-	ParentID *string `json:"parentId,omitempty"`
-	// Page's parent path.
-	ParentPath *string `json:"parentPath,omitempty"`
-	// Flag to restrict access to user matching the restrictions.
-	ExcludedAccessControls *bool `json:"excludedAccessControls,omitempty"`
+	// If your page contains a folder, setting this field to the map key associated to the
+	// folder entry will be reflected into APIM by making the page a child of this folder.
+	//
+	Parent *string `json:"parent,omitempty"`
 	// List of access controls.
 	AccessControls []AccessControl `json:"accessControls,omitempty"`
-	// List of attached media.
-	AttachedMedia []PageMedia `json:"attachedMedia,omitempty"`
 	// Page's metadata.
 	Metadata map[string]string `json:"metadata,omitempty"`
-	// Page revision
-	ContentRevision *Revision `json:"contentRevision,omitempty"`
 	// If folder is published but not shown in Portal.
 	Hidden *bool `json:"hidden,omitempty"`
-	// If page is used as General Conditions of an active plan.
-	GeneralConditions *bool `json:"generalConditions,omitempty"`
 }
 
 func (p PageV4TranslationInput) MarshalJSON() ([]byte, error) {
@@ -60,7 +54,7 @@ func (p PageV4TranslationInput) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PageV4TranslationInput) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"hrid", "type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"hrid", "name", "type", "order"}); err != nil {
 		return err
 	}
 	return nil
@@ -73,9 +67,9 @@ func (p *PageV4TranslationInput) GetHrid() string {
 	return p.Hrid
 }
 
-func (p *PageV4TranslationInput) GetName() *string {
+func (p *PageV4TranslationInput) GetName() string {
 	if p == nil {
-		return nil
+		return ""
 	}
 	return p.Name
 }
@@ -94,18 +88,11 @@ func (p *PageV4TranslationInput) GetContent() *string {
 	return p.Content
 }
 
-func (p *PageV4TranslationInput) GetOrder() *int64 {
+func (p *PageV4TranslationInput) GetOrder() int64 {
 	if p == nil {
-		return nil
+		return 0
 	}
 	return p.Order
-}
-
-func (p *PageV4TranslationInput) GetLastContributor() *string {
-	if p == nil {
-		return nil
-	}
-	return p.LastContributor
 }
 
 func (p *PageV4TranslationInput) GetPublished() *bool {
@@ -157,25 +144,11 @@ func (p *PageV4TranslationInput) GetHomepage() *bool {
 	return p.Homepage
 }
 
-func (p *PageV4TranslationInput) GetParentID() *string {
+func (p *PageV4TranslationInput) GetParent() *string {
 	if p == nil {
 		return nil
 	}
-	return p.ParentID
-}
-
-func (p *PageV4TranslationInput) GetParentPath() *string {
-	if p == nil {
-		return nil
-	}
-	return p.ParentPath
-}
-
-func (p *PageV4TranslationInput) GetExcludedAccessControls() *bool {
-	if p == nil {
-		return nil
-	}
-	return p.ExcludedAccessControls
+	return p.Parent
 }
 
 func (p *PageV4TranslationInput) GetAccessControls() []AccessControl {
@@ -185,13 +158,6 @@ func (p *PageV4TranslationInput) GetAccessControls() []AccessControl {
 	return p.AccessControls
 }
 
-func (p *PageV4TranslationInput) GetAttachedMedia() []PageMedia {
-	if p == nil {
-		return nil
-	}
-	return p.AttachedMedia
-}
-
 func (p *PageV4TranslationInput) GetMetadata() map[string]string {
 	if p == nil {
 		return nil
@@ -199,23 +165,9 @@ func (p *PageV4TranslationInput) GetMetadata() map[string]string {
 	return p.Metadata
 }
 
-func (p *PageV4TranslationInput) GetContentRevision() *Revision {
-	if p == nil {
-		return nil
-	}
-	return p.ContentRevision
-}
-
 func (p *PageV4TranslationInput) GetHidden() *bool {
 	if p == nil {
 		return nil
 	}
 	return p.Hidden
-}
-
-func (p *PageV4TranslationInput) GetGeneralConditions() *bool {
-	if p == nil {
-		return nil
-	}
-	return p.GeneralConditions
 }

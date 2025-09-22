@@ -43,7 +43,7 @@ func (r *SharedPolicyGroupResourceModel) RefreshFromSharedSharedPolicyGroupState
 			steps.Enabled = types.BoolPointerValue(stepsItem.Enabled)
 			steps.MessageCondition = types.StringPointerValue(stepsItem.MessageCondition)
 			steps.Name = types.StringPointerValue(stepsItem.Name)
-			steps.Policy = types.StringPointerValue(stepsItem.Policy)
+			steps.Policy = types.StringValue(stepsItem.Policy)
 
 			r.Steps = append(r.Steps, steps)
 		}
@@ -180,12 +180,9 @@ func (r *SharedPolicyGroupResourceModel) ToSharedSharedPolicyGroupSpec(ctx conte
 		} else {
 			enabled = nil
 		}
-		policy := new(string)
-		if !stepsItem.Policy.IsUnknown() && !stepsItem.Policy.IsNull() {
-			*policy = stepsItem.Policy.ValueString()
-		} else {
-			policy = nil
-		}
+		var policy string
+		policy = stepsItem.Policy.ValueString()
+
 		var configuration interface{}
 		if !stepsItem.Configuration.IsUnknown() && !stepsItem.Configuration.IsNull() {
 			_ = json.Unmarshal([]byte(stepsItem.Configuration.ValueString()), &configuration)

@@ -56,10 +56,10 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
   }
   pages = [
     {
-      hrid = "docs-folder"
-      name = "specifications"
-      type = "FOLDER"
-      //visibility = "PRIVATE"
+      hrid  = "docs-folder"
+      name  = "specifications"
+      type  = "FOLDER"
+      order = 0
     },
     {
       hrid   = "swagger"
@@ -74,8 +74,8 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
         })
         type = "http-fetcher"
       }
-      type = "SWAGGER"
-      //visibility = "PRIVATE"
+      type  = "SWAGGER"
+      order = 1
     }
   ]
 

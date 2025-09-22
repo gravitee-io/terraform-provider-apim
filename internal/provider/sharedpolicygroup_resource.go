@@ -14,6 +14,7 @@ import (
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
+	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -119,6 +120,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				},
 				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
 				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
 				},
 			},
@@ -196,6 +198,9 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 							Description: `The condition of the step`,
+							Validators: []validator.String{
+								stringvalidator.UTF8LengthAtMost(1024),
+							},
 						},
 						"configuration": schema.StringAttribute{
 							CustomType: jsontypes.NormalizedType{},
@@ -213,6 +218,9 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 							Description: `The description of the step`,
+							Validators: []validator.String{
+								stringvalidator.UTF8LengthAtMost(256),
+							},
 						},
 						"enabled": schema.BoolAttribute{
 							Computed: true,
@@ -230,6 +238,9 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 							Description: `The message condition of the step`,
+							Validators: []validator.String{
+								stringvalidator.UTF8LengthAtMost(256),
+							},
 						},
 						"name": schema.StringAttribute{
 							Computed: true,
@@ -238,6 +249,9 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
 							Description: `The name of the step`,
+							Validators: []validator.String{
+								stringvalidator.UTF8LengthAtMost(64),
+							},
 						},
 						"policy": schema.StringAttribute{
 							Computed: true,
@@ -245,7 +259,11 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `The policy of the step`,
+							Description: `The policy of the step. Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+								stringvalidator.UTF8LengthAtMost(64),
+							},
 						},
 					},
 				},

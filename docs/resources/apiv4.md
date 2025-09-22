@@ -502,7 +502,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 
 <a id="nestedatt--flows--interact"></a>
@@ -516,7 +516,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 
 <a id="nestedatt--flows--publish"></a>
@@ -530,7 +530,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 
 <a id="nestedatt--flows--request"></a>
@@ -544,7 +544,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 
 <a id="nestedatt--flows--response"></a>
@@ -558,7 +558,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 
 <a id="nestedatt--flows--selectors"></a>
@@ -614,7 +614,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 
 
@@ -650,26 +650,24 @@ Optional:
 Optional:
 
 - `access_controls` (Attributes List) List of access controls. (see [below for nested schema](#nestedatt--pages--access_controls))
-- `attached_media` (Attributes List) List of attached media. (see [below for nested schema](#nestedatt--pages--attached_media))
-- `configuration` (Map of String) Page's configuration.
-- `content` (String) Page's content.
-- `content_revision` (Attributes) Page revision (see [below for nested schema](#nestedatt--pages--content_revision))
+- `configuration` (Map of String) Key/value page configuration (Configure swagger UI or or use Redoc instead)
+- `content` (String) The content of the page, if any.
 - `content_type` (String) Page's content type.
-- `excluded_access_controls` (Boolean) Flag to restrict access to user matching the restrictions.
-- `general_conditions` (Boolean) If page is used as General Conditions of an active plan.
 - `hidden` (Boolean) If folder is published but not shown in Portal.
-- `homepage` (Boolean) Page's homepage status.
+- `homepage` (Boolean) If true, this page will be displayed as the homepage of your API documentation.
 - `hrid` (String) A unique human readable id identifying this resource. Not Null
-- `last_contributor` (String) Page's last contributor. Id of a user.
 - `metadata` (Map of String) Page's metadata.
-- `name` (String) Page's name.
-- `order` (Number) Page's order.
-- `parent_id` (String) Page's parent id.
-- `parent_path` (String) Page's parent path.
-- `published` (Boolean) Page's published status.
-- `source` (Attributes) Page source (see [below for nested schema](#nestedatt--pages--source))
+- `name` (String) This is the display name of the page in APIM and on the portal.
+This field can be edited safely if you want to rename a page.
+Not Null
+- `order` (Number) The order used to display the page in APIM and on the portal. Not Null
+- `parent` (String) If your page contains a folder, setting this field to the map key associated to the
+folder entry will be reflected into APIM by making the page a child of this folder.
+- `published` (Boolean) If true, the page will be accessible from the portal (default is false). Default: false
+- `source` (Attributes) Allow you to fetch pages from various external sources, 
+overriding page content each time the source is fetched. (see [below for nested schema](#nestedatt--pages--source))
 - `translations` (Attributes List) List of page translations. (see [below for nested schema](#nestedatt--pages--translations))
-- `type` (String) The type of the page. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]
+- `type` (String) The type of the documentation page or folder. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]
 - `updated_at` (String) Page's last update date.
 - `visibility` (String) The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]
 
@@ -684,25 +682,6 @@ Optional:
 
 - `reference_id` (String) The id of the resource used to check the access control
 - `reference_type` (String) The type of the resource used to check the access control
-
-
-<a id="nestedatt--pages--attached_media"></a>
-### Nested Schema for `pages.attached_media`
-
-Optional:
-
-- `attached_at` (String) Media's attachment date.
-- `hash` (String) Media's hash.
-- `name` (String) Media's name.
-
-
-<a id="nestedatt--pages--content_revision"></a>
-### Nested Schema for `pages.content_revision`
-
-Optional:
-
-- `id` (String) Id of the page used to fill the content attributes.
-- `revision` (Number) Revision number.
 
 
 <a id="nestedatt--pages--source"></a>
@@ -720,25 +699,23 @@ Optional:
 Optional:
 
 - `access_controls` (Attributes List) List of access controls. (see [below for nested schema](#nestedatt--pages--translations--access_controls))
-- `attached_media` (Attributes List) List of attached media. (see [below for nested schema](#nestedatt--pages--translations--attached_media))
-- `configuration` (Map of String) Page's configuration.
-- `content` (String) Page's content.
-- `content_revision` (Attributes) Page revision (see [below for nested schema](#nestedatt--pages--translations--content_revision))
+- `configuration` (Map of String) Key/value page configuration (Configure swagger UI or or use Redoc instead)
+- `content` (String) The content of the page, if any.
 - `content_type` (String) Page's content type.
-- `excluded_access_controls` (Boolean) Flag to restrict access to user matching the restrictions.
-- `general_conditions` (Boolean) If page is used as General Conditions of an active plan.
 - `hidden` (Boolean) If folder is published but not shown in Portal.
-- `homepage` (Boolean) Page's homepage status.
+- `homepage` (Boolean) If true, this page will be displayed as the homepage of your API documentation.
 - `hrid` (String) A unique human readable id identifying this resource. Not Null
-- `last_contributor` (String) Page's last contributor. Id of a user.
 - `metadata` (Map of String) Page's metadata.
-- `name` (String) Page's name.
-- `order` (Number) Page's order.
-- `parent_id` (String) Page's parent id.
-- `parent_path` (String) Page's parent path.
-- `published` (Boolean) Page's published status.
-- `source` (Attributes) Page source (see [below for nested schema](#nestedatt--pages--translations--source))
-- `type` (String) The type of the page. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]
+- `name` (String) This is the display name of the page in APIM and on the portal.
+This field can be edited safely if you want to rename a page.
+Not Null
+- `order` (Number) The order used to display the page in APIM and on the portal. Not Null
+- `parent` (String) If your page contains a folder, setting this field to the map key associated to the
+folder entry will be reflected into APIM by making the page a child of this folder.
+- `published` (Boolean) If true, the page will be accessible from the portal (default is false). Default: false
+- `source` (Attributes) Allow you to fetch pages from various external sources, 
+overriding page content each time the source is fetched. (see [below for nested schema](#nestedatt--pages--translations--source))
+- `type` (String) The type of the documentation page or folder. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]
 - `updated_at` (String) Page's last update date.
 - `visibility` (String) The visibility of the resource regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]
 
@@ -753,25 +730,6 @@ Optional:
 
 - `reference_id` (String) The id of the resource used to check the access control
 - `reference_type` (String) The type of the resource used to check the access control
-
-
-<a id="nestedatt--pages--translations--attached_media"></a>
-### Nested Schema for `pages.translations.attached_media`
-
-Optional:
-
-- `attached_at` (String) Media's attachment date.
-- `hash` (String) Media's hash.
-- `name` (String) Media's name.
-
-
-<a id="nestedatt--pages--translations--content_revision"></a>
-### Nested Schema for `pages.translations.content_revision`
-
-Optional:
-
-- `id` (String) Id of the page used to fill the content attributes.
-- `revision` (Number) Revision number.
 
 
 <a id="nestedatt--pages--translations--source"></a>
@@ -798,6 +756,7 @@ Optional:
 - `hrid` (String) A unique human readable id identifying this resource. Not Null
 - `mode` (String) The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan). Not Null; must be one of ["STANDARD", "PUSH"]
 - `name` (String) Not Null
+- `order` (Number)
 - `security` (Attributes) API plan security. Not Null (see [below for nested schema](#nestedatt--plans--security))
 - `selection_rule` (String)
 - `status` (String) Plan status. Not Null; must be one of ["STAGING", "PUBLISHED", "DEPRECATED", "CLOSED"]
@@ -833,7 +792,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 
 <a id="nestedatt--plans--flows--interact"></a>
@@ -847,7 +806,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 
 <a id="nestedatt--plans--flows--publish"></a>
@@ -861,7 +820,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 
 <a id="nestedatt--plans--flows--request"></a>
@@ -875,7 +834,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 
 <a id="nestedatt--plans--flows--response"></a>
@@ -889,7 +848,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 
 <a id="nestedatt--plans--flows--selectors"></a>
@@ -945,7 +904,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 
 

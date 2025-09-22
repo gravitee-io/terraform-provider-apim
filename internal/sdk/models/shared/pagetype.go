@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// PageType - The type of the page.
+// PageType - The type of the documentation page or folder.
 type PageType string
 
 const (

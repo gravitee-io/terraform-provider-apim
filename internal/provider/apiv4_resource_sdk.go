@@ -226,7 +226,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				connect.Enabled = types.BoolPointerValue(connectItem.Enabled)
 				connect.MessageCondition = types.StringPointerValue(connectItem.MessageCondition)
 				connect.Name = types.StringPointerValue(connectItem.Name)
-				connect.Policy = types.StringPointerValue(connectItem.Policy)
+				connect.Policy = types.StringValue(connectItem.Policy)
 
 				flows.Connect = append(flows.Connect, connect)
 			}
@@ -248,7 +248,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				interact.Enabled = types.BoolPointerValue(interactItem.Enabled)
 				interact.MessageCondition = types.StringPointerValue(interactItem.MessageCondition)
 				interact.Name = types.StringPointerValue(interactItem.Name)
-				interact.Policy = types.StringPointerValue(interactItem.Policy)
+				interact.Policy = types.StringValue(interactItem.Policy)
 
 				flows.Interact = append(flows.Interact, interact)
 			}
@@ -269,7 +269,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				publish.Enabled = types.BoolPointerValue(publishItem.Enabled)
 				publish.MessageCondition = types.StringPointerValue(publishItem.MessageCondition)
 				publish.Name = types.StringPointerValue(publishItem.Name)
-				publish.Policy = types.StringPointerValue(publishItem.Policy)
+				publish.Policy = types.StringValue(publishItem.Policy)
 
 				flows.Publish = append(flows.Publish, publish)
 			}
@@ -289,7 +289,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				request.Enabled = types.BoolPointerValue(requestItem.Enabled)
 				request.MessageCondition = types.StringPointerValue(requestItem.MessageCondition)
 				request.Name = types.StringPointerValue(requestItem.Name)
-				request.Policy = types.StringPointerValue(requestItem.Policy)
+				request.Policy = types.StringValue(requestItem.Policy)
 
 				flows.Request = append(flows.Request, request)
 			}
@@ -309,7 +309,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				response.Enabled = types.BoolPointerValue(responseItem.Enabled)
 				response.MessageCondition = types.StringPointerValue(responseItem.MessageCondition)
 				response.Name = types.StringPointerValue(responseItem.Name)
-				response.Policy = types.StringPointerValue(responseItem.Policy)
+				response.Policy = types.StringValue(responseItem.Policy)
 
 				flows.Response = append(flows.Response, response)
 			}
@@ -374,7 +374,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				subscribe.Enabled = types.BoolPointerValue(subscribeItem.Enabled)
 				subscribe.MessageCondition = types.StringPointerValue(subscribeItem.MessageCondition)
 				subscribe.Name = types.StringPointerValue(subscribeItem.Name)
-				subscribe.Policy = types.StringPointerValue(subscribeItem.Policy)
+				subscribe.Policy = types.StringValue(subscribeItem.Policy)
 
 				flows.Subscribe = append(flows.Subscribe, subscribe)
 			}
@@ -627,17 +627,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 				pages.AccessControls = append(pages.AccessControls, accessControls)
 			}
-			pages.AttachedMedia = []tfTypes.PageMedia{}
-
-			for _, attachedMediaItem := range pagesItem.AttachedMedia {
-				var attachedMedia tfTypes.PageMedia
-
-				attachedMedia.AttachedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(attachedMediaItem.AttachedAt))
-				attachedMedia.Hash = types.StringPointerValue(attachedMediaItem.Hash)
-				attachedMedia.Name = types.StringPointerValue(attachedMediaItem.Name)
-
-				pages.AttachedMedia = append(pages.AttachedMedia, attachedMedia)
-			}
 			if len(pagesItem.Configuration) > 0 {
 				pages.Configuration = make(map[string]types.String, len(pagesItem.Configuration))
 				for key, value := range pagesItem.Configuration {
@@ -645,31 +634,20 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				}
 			}
 			pages.Content = types.StringPointerValue(pagesItem.Content)
-			if pagesItem.ContentRevision == nil {
-				pages.ContentRevision = nil
-			} else {
-				pages.ContentRevision = &tfTypes.Revision{}
-				pages.ContentRevision.ID = types.StringPointerValue(pagesItem.ContentRevision.ID)
-				pages.ContentRevision.Revision = types.Int64PointerValue(pagesItem.ContentRevision.Revision)
-			}
 			pages.ContentType = types.StringPointerValue(pagesItem.ContentType)
 			pages.CrossID = types.StringPointerValue(pagesItem.CrossID)
-			pages.ExcludedAccessControls = types.BoolPointerValue(pagesItem.ExcludedAccessControls)
-			pages.GeneralConditions = types.BoolPointerValue(pagesItem.GeneralConditions)
 			pages.Hidden = types.BoolPointerValue(pagesItem.Hidden)
 			pages.Homepage = types.BoolPointerValue(pagesItem.Homepage)
 			pages.Hrid = types.StringValue(pagesItem.Hrid)
-			pages.LastContributor = types.StringPointerValue(pagesItem.LastContributor)
 			if len(pagesItem.Metadata) > 0 {
 				pages.Metadata = make(map[string]types.String, len(pagesItem.Metadata))
 				for key1, value1 := range pagesItem.Metadata {
 					pages.Metadata[key1] = types.StringValue(value1)
 				}
 			}
-			pages.Name = types.StringPointerValue(pagesItem.Name)
-			pages.Order = types.Int64PointerValue(pagesItem.Order)
-			pages.ParentID = types.StringPointerValue(pagesItem.ParentID)
-			pages.ParentPath = types.StringPointerValue(pagesItem.ParentPath)
+			pages.Name = types.StringValue(pagesItem.Name)
+			pages.Order = types.Int64Value(pagesItem.Order)
+			pages.Parent = types.StringPointerValue(pagesItem.Parent)
 			pages.Published = types.BoolPointerValue(pagesItem.Published)
 			if pagesItem.Source == nil {
 				pages.Source = nil
@@ -698,17 +676,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 					translations.AccessControls = append(translations.AccessControls, accessControls1)
 				}
-				translations.AttachedMedia = []tfTypes.PageMedia{}
-
-				for _, attachedMediaItem1 := range translationsItem.AttachedMedia {
-					var attachedMedia1 tfTypes.PageMedia
-
-					attachedMedia1.AttachedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(attachedMediaItem1.AttachedAt))
-					attachedMedia1.Hash = types.StringPointerValue(attachedMediaItem1.Hash)
-					attachedMedia1.Name = types.StringPointerValue(attachedMediaItem1.Name)
-
-					translations.AttachedMedia = append(translations.AttachedMedia, attachedMedia1)
-				}
 				if len(translationsItem.Configuration) > 0 {
 					translations.Configuration = make(map[string]types.String, len(translationsItem.Configuration))
 					for key2, value2 := range translationsItem.Configuration {
@@ -716,31 +683,20 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					}
 				}
 				translations.Content = types.StringPointerValue(translationsItem.Content)
-				if translationsItem.ContentRevision == nil {
-					translations.ContentRevision = nil
-				} else {
-					translations.ContentRevision = &tfTypes.Revision{}
-					translations.ContentRevision.ID = types.StringPointerValue(translationsItem.ContentRevision.ID)
-					translations.ContentRevision.Revision = types.Int64PointerValue(translationsItem.ContentRevision.Revision)
-				}
 				translations.ContentType = types.StringPointerValue(translationsItem.ContentType)
 				translations.CrossID = types.StringPointerValue(translationsItem.CrossID)
-				translations.ExcludedAccessControls = types.BoolPointerValue(translationsItem.ExcludedAccessControls)
-				translations.GeneralConditions = types.BoolPointerValue(translationsItem.GeneralConditions)
 				translations.Hidden = types.BoolPointerValue(translationsItem.Hidden)
 				translations.Homepage = types.BoolPointerValue(translationsItem.Homepage)
 				translations.Hrid = types.StringValue(translationsItem.Hrid)
-				translations.LastContributor = types.StringPointerValue(translationsItem.LastContributor)
 				if len(translationsItem.Metadata) > 0 {
 					translations.Metadata = make(map[string]types.String, len(translationsItem.Metadata))
 					for key3, value3 := range translationsItem.Metadata {
 						translations.Metadata[key3] = types.StringValue(value3)
 					}
 				}
-				translations.Name = types.StringPointerValue(translationsItem.Name)
-				translations.Order = types.Int64PointerValue(translationsItem.Order)
-				translations.ParentID = types.StringPointerValue(translationsItem.ParentID)
-				translations.ParentPath = types.StringPointerValue(translationsItem.ParentPath)
+				translations.Name = types.StringValue(translationsItem.Name)
+				translations.Order = types.Int64Value(translationsItem.Order)
+				translations.Parent = types.StringPointerValue(translationsItem.Parent)
 				translations.Published = types.BoolPointerValue(translationsItem.Published)
 				if translationsItem.Source == nil {
 					translations.Source = nil
@@ -809,7 +765,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					connect1.Enabled = types.BoolPointerValue(connectItem1.Enabled)
 					connect1.MessageCondition = types.StringPointerValue(connectItem1.MessageCondition)
 					connect1.Name = types.StringPointerValue(connectItem1.Name)
-					connect1.Policy = types.StringPointerValue(connectItem1.Policy)
+					connect1.Policy = types.StringValue(connectItem1.Policy)
 
 					flows1.Connect = append(flows1.Connect, connect1)
 				}
@@ -831,7 +787,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					interact1.Enabled = types.BoolPointerValue(interactItem1.Enabled)
 					interact1.MessageCondition = types.StringPointerValue(interactItem1.MessageCondition)
 					interact1.Name = types.StringPointerValue(interactItem1.Name)
-					interact1.Policy = types.StringPointerValue(interactItem1.Policy)
+					interact1.Policy = types.StringValue(interactItem1.Policy)
 
 					flows1.Interact = append(flows1.Interact, interact1)
 				}
@@ -852,7 +808,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					publish1.Enabled = types.BoolPointerValue(publishItem1.Enabled)
 					publish1.MessageCondition = types.StringPointerValue(publishItem1.MessageCondition)
 					publish1.Name = types.StringPointerValue(publishItem1.Name)
-					publish1.Policy = types.StringPointerValue(publishItem1.Policy)
+					publish1.Policy = types.StringValue(publishItem1.Policy)
 
 					flows1.Publish = append(flows1.Publish, publish1)
 				}
@@ -872,7 +828,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					request1.Enabled = types.BoolPointerValue(requestItem1.Enabled)
 					request1.MessageCondition = types.StringPointerValue(requestItem1.MessageCondition)
 					request1.Name = types.StringPointerValue(requestItem1.Name)
-					request1.Policy = types.StringPointerValue(requestItem1.Policy)
+					request1.Policy = types.StringValue(requestItem1.Policy)
 
 					flows1.Request = append(flows1.Request, request1)
 				}
@@ -892,7 +848,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					response1.Enabled = types.BoolPointerValue(responseItem1.Enabled)
 					response1.MessageCondition = types.StringPointerValue(responseItem1.MessageCondition)
 					response1.Name = types.StringPointerValue(responseItem1.Name)
-					response1.Policy = types.StringPointerValue(responseItem1.Policy)
+					response1.Policy = types.StringValue(responseItem1.Policy)
 
 					flows1.Response = append(flows1.Response, response1)
 				}
@@ -957,7 +913,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					subscribe1.Enabled = types.BoolPointerValue(subscribeItem1.Enabled)
 					subscribe1.MessageCondition = types.StringPointerValue(subscribeItem1.MessageCondition)
 					subscribe1.Name = types.StringPointerValue(subscribeItem1.Name)
-					subscribe1.Policy = types.StringPointerValue(subscribeItem1.Policy)
+					subscribe1.Policy = types.StringValue(subscribeItem1.Policy)
 
 					flows1.Subscribe = append(flows1.Subscribe, subscribe1)
 				}
@@ -1046,7 +1002,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 							}
 						}
 						responseTemplateResult.PropagateErrorKeyToLogs = types.BoolPointerValue(responseTemplateValue.PropagateErrorKeyToLogs)
-						responseTemplateResult.Status = types.Int64PointerValue(responseTemplateValue.Status)
+						responseTemplateResult.Status = types.Int64Value(responseTemplateValue.Status)
 
 						responseTemplatesResult[responseTemplateKey] = responseTemplateResult
 					}
@@ -2118,12 +2074,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					enabled9 = nil
 				}
-				policy := new(string)
-				if !requestItem.Policy.IsUnknown() && !requestItem.Policy.IsNull() {
-					*policy = requestItem.Policy.ValueString()
-				} else {
-					policy = nil
-				}
+				var policy string
+				policy = requestItem.Policy.ValueString()
+
 				var configuration10 interface{}
 				if !requestItem.Configuration.IsUnknown() && !requestItem.Configuration.IsNull() {
 					_ = json.Unmarshal([]byte(requestItem.Configuration.ValueString()), &configuration10)
@@ -2170,12 +2123,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					enabled10 = nil
 				}
-				policy1 := new(string)
-				if !responseItem.Policy.IsUnknown() && !responseItem.Policy.IsNull() {
-					*policy1 = responseItem.Policy.ValueString()
-				} else {
-					policy1 = nil
-				}
+				var policy1 string
+				policy1 = responseItem.Policy.ValueString()
+
 				var configuration11 interface{}
 				if !responseItem.Configuration.IsUnknown() && !responseItem.Configuration.IsNull() {
 					_ = json.Unmarshal([]byte(responseItem.Configuration.ValueString()), &configuration11)
@@ -2222,12 +2172,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					enabled11 = nil
 				}
-				policy2 := new(string)
-				if !subscribeItem.Policy.IsUnknown() && !subscribeItem.Policy.IsNull() {
-					*policy2 = subscribeItem.Policy.ValueString()
-				} else {
-					policy2 = nil
-				}
+				var policy2 string
+				policy2 = subscribeItem.Policy.ValueString()
+
 				var configuration12 interface{}
 				if !subscribeItem.Configuration.IsUnknown() && !subscribeItem.Configuration.IsNull() {
 					_ = json.Unmarshal([]byte(subscribeItem.Configuration.ValueString()), &configuration12)
@@ -2274,12 +2221,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					enabled12 = nil
 				}
-				policy3 := new(string)
-				if !publishItem.Policy.IsUnknown() && !publishItem.Policy.IsNull() {
-					*policy3 = publishItem.Policy.ValueString()
-				} else {
-					policy3 = nil
-				}
+				var policy3 string
+				policy3 = publishItem.Policy.ValueString()
+
 				var configuration13 interface{}
 				if !publishItem.Configuration.IsUnknown() && !publishItem.Configuration.IsNull() {
 					_ = json.Unmarshal([]byte(publishItem.Configuration.ValueString()), &configuration13)
@@ -2326,12 +2270,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					enabled13 = nil
 				}
-				policy4 := new(string)
-				if !connectItem.Policy.IsUnknown() && !connectItem.Policy.IsNull() {
-					*policy4 = connectItem.Policy.ValueString()
-				} else {
-					policy4 = nil
-				}
+				var policy4 string
+				policy4 = connectItem.Policy.ValueString()
+
 				var configuration14 interface{}
 				if !connectItem.Configuration.IsUnknown() && !connectItem.Configuration.IsNull() {
 					_ = json.Unmarshal([]byte(connectItem.Configuration.ValueString()), &configuration14)
@@ -2378,12 +2319,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					enabled14 = nil
 				}
-				policy5 := new(string)
-				if !interactItem.Policy.IsUnknown() && !interactItem.Policy.IsNull() {
-					*policy5 = interactItem.Policy.ValueString()
-				} else {
-					policy5 = nil
-				}
+				var policy5 string
+				policy5 = interactItem.Policy.ValueString()
+
 				var configuration15 interface{}
 				if !interactItem.Configuration.IsUnknown() && !interactItem.Configuration.IsNull() {
 					_ = json.Unmarshal([]byte(interactItem.Configuration.ValueString()), &configuration15)
@@ -2582,12 +2520,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				enabled16 = nil
 			}
-			policy6 := new(string)
-			if !requestItem1.Policy.IsUnknown() && !requestItem1.Policy.IsNull() {
-				*policy6 = requestItem1.Policy.ValueString()
-			} else {
-				policy6 = nil
-			}
+			var policy6 string
+			policy6 = requestItem1.Policy.ValueString()
+
 			var configuration16 interface{}
 			if !requestItem1.Configuration.IsUnknown() && !requestItem1.Configuration.IsNull() {
 				_ = json.Unmarshal([]byte(requestItem1.Configuration.ValueString()), &configuration16)
@@ -2634,12 +2569,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				enabled17 = nil
 			}
-			policy7 := new(string)
-			if !responseItem1.Policy.IsUnknown() && !responseItem1.Policy.IsNull() {
-				*policy7 = responseItem1.Policy.ValueString()
-			} else {
-				policy7 = nil
-			}
+			var policy7 string
+			policy7 = responseItem1.Policy.ValueString()
+
 			var configuration17 interface{}
 			if !responseItem1.Configuration.IsUnknown() && !responseItem1.Configuration.IsNull() {
 				_ = json.Unmarshal([]byte(responseItem1.Configuration.ValueString()), &configuration17)
@@ -2686,12 +2618,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				enabled18 = nil
 			}
-			policy8 := new(string)
-			if !subscribeItem1.Policy.IsUnknown() && !subscribeItem1.Policy.IsNull() {
-				*policy8 = subscribeItem1.Policy.ValueString()
-			} else {
-				policy8 = nil
-			}
+			var policy8 string
+			policy8 = subscribeItem1.Policy.ValueString()
+
 			var configuration18 interface{}
 			if !subscribeItem1.Configuration.IsUnknown() && !subscribeItem1.Configuration.IsNull() {
 				_ = json.Unmarshal([]byte(subscribeItem1.Configuration.ValueString()), &configuration18)
@@ -2738,12 +2667,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				enabled19 = nil
 			}
-			policy9 := new(string)
-			if !publishItem1.Policy.IsUnknown() && !publishItem1.Policy.IsNull() {
-				*policy9 = publishItem1.Policy.ValueString()
-			} else {
-				policy9 = nil
-			}
+			var policy9 string
+			policy9 = publishItem1.Policy.ValueString()
+
 			var configuration19 interface{}
 			if !publishItem1.Configuration.IsUnknown() && !publishItem1.Configuration.IsNull() {
 				_ = json.Unmarshal([]byte(publishItem1.Configuration.ValueString()), &configuration19)
@@ -2790,12 +2716,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				enabled20 = nil
 			}
-			policy10 := new(string)
-			if !connectItem1.Policy.IsUnknown() && !connectItem1.Policy.IsNull() {
-				*policy10 = connectItem1.Policy.ValueString()
-			} else {
-				policy10 = nil
-			}
+			var policy10 string
+			policy10 = connectItem1.Policy.ValueString()
+
 			var configuration20 interface{}
 			if !connectItem1.Configuration.IsUnknown() && !connectItem1.Configuration.IsNull() {
 				_ = json.Unmarshal([]byte(connectItem1.Configuration.ValueString()), &configuration20)
@@ -2842,12 +2765,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				enabled21 = nil
 			}
-			policy11 := new(string)
-			if !interactItem1.Policy.IsUnknown() && !interactItem1.Policy.IsNull() {
-				*policy11 = interactItem1.Policy.ValueString()
-			} else {
-				policy11 = nil
-			}
+			var policy11 string
+			policy11 = interactItem1.Policy.ValueString()
+
 			var configuration21 interface{}
 			if !interactItem1.Configuration.IsUnknown() && !interactItem1.Configuration.IsNull() {
 				_ = json.Unmarshal([]byte(interactItem1.Configuration.ValueString()), &configuration21)
@@ -2896,12 +2816,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	for responseTemplatesKey, responseTemplatesValue := range r.ResponseTemplates {
 		responseTemplatesInst := make(map[string]shared.ResponseTemplate)
 		for key1, value2 := range responseTemplatesValue {
-			status1 := new(int64)
-			if !value2.Status.IsUnknown() && !value2.Status.IsNull() {
-				*status1 = value2.Status.ValueInt64()
-			} else {
-				status1 = nil
-			}
+			var status1 int64
+			status1 = value2.Status.ValueInt64()
+
 			headers1 := make(map[string]string)
 			for headersKey, headersValue := range value2.Headers {
 				var headersInst string
@@ -3086,12 +3003,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		var hrid2 string
 		hrid2 = pagesItem.Hrid.ValueString()
 
-		name20 := new(string)
-		if !pagesItem.Name.IsUnknown() && !pagesItem.Name.IsNull() {
-			*name20 = pagesItem.Name.ValueString()
-		} else {
-			name20 = nil
-		}
+		var name20 string
+		name20 = pagesItem.Name.ValueString()
+
 		type9 := shared.PageType(pagesItem.Type.ValueString())
 		content1 := new(string)
 		if !pagesItem.Content.IsUnknown() && !pagesItem.Content.IsNull() {
@@ -3099,18 +3013,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			content1 = nil
 		}
-		order := new(int64)
-		if !pagesItem.Order.IsUnknown() && !pagesItem.Order.IsNull() {
-			*order = pagesItem.Order.ValueInt64()
-		} else {
-			order = nil
-		}
-		lastContributor := new(string)
-		if !pagesItem.LastContributor.IsUnknown() && !pagesItem.LastContributor.IsNull() {
-			*lastContributor = pagesItem.LastContributor.ValueString()
-		} else {
-			lastContributor = nil
-		}
+		var order int64
+		order = pagesItem.Order.ValueInt64()
+
 		published := new(bool)
 		if !pagesItem.Published.IsUnknown() && !pagesItem.Published.IsNull() {
 			*published = pagesItem.Published.ValueBool()
@@ -3165,23 +3070,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			homepage = nil
 		}
-		parentID := new(string)
-		if !pagesItem.ParentID.IsUnknown() && !pagesItem.ParentID.IsNull() {
-			*parentID = pagesItem.ParentID.ValueString()
+		parent := new(string)
+		if !pagesItem.Parent.IsUnknown() && !pagesItem.Parent.IsNull() {
+			*parent = pagesItem.Parent.ValueString()
 		} else {
-			parentID = nil
-		}
-		parentPath := new(string)
-		if !pagesItem.ParentPath.IsUnknown() && !pagesItem.ParentPath.IsNull() {
-			*parentPath = pagesItem.ParentPath.ValueString()
-		} else {
-			parentPath = nil
-		}
-		excludedAccessControls := new(bool)
-		if !pagesItem.ExcludedAccessControls.IsUnknown() && !pagesItem.ExcludedAccessControls.IsNull() {
-			*excludedAccessControls = pagesItem.ExcludedAccessControls.ValueBool()
-		} else {
-			excludedAccessControls = nil
+			parent = nil
 		}
 		accessControls := make([]shared.AccessControl, 0, len(pagesItem.AccessControls))
 		for _, accessControlsItem := range pagesItem.AccessControls {
@@ -3202,32 +3095,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				ReferenceType: referenceType,
 			})
 		}
-		attachedMedia := make([]shared.PageMedia, 0, len(pagesItem.AttachedMedia))
-		for _, attachedMediaItem := range pagesItem.AttachedMedia {
-			name21 := new(string)
-			if !attachedMediaItem.Name.IsUnknown() && !attachedMediaItem.Name.IsNull() {
-				*name21 = attachedMediaItem.Name.ValueString()
-			} else {
-				name21 = nil
-			}
-			hash := new(string)
-			if !attachedMediaItem.Hash.IsUnknown() && !attachedMediaItem.Hash.IsNull() {
-				*hash = attachedMediaItem.Hash.ValueString()
-			} else {
-				hash = nil
-			}
-			attachedAt := new(time.Time)
-			if !attachedMediaItem.AttachedAt.IsUnknown() && !attachedMediaItem.AttachedAt.IsNull() {
-				*attachedAt, _ = time.Parse(time.RFC3339Nano, attachedMediaItem.AttachedAt.ValueString())
-			} else {
-				attachedAt = nil
-			}
-			attachedMedia = append(attachedMedia, shared.PageMedia{
-				Name:       name21,
-				Hash:       hash,
-				AttachedAt: attachedAt,
-			})
-		}
 		metadata1 := make(map[string]string)
 		for metadataKey, metadataValue := range pagesItem.Metadata {
 			var metadataInst string
@@ -3235,48 +3102,20 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 
 			metadata1[metadataKey] = metadataInst
 		}
-		var contentRevision *shared.Revision
-		if pagesItem.ContentRevision != nil {
-			id3 := new(string)
-			if !pagesItem.ContentRevision.ID.IsUnknown() && !pagesItem.ContentRevision.ID.IsNull() {
-				*id3 = pagesItem.ContentRevision.ID.ValueString()
-			} else {
-				id3 = nil
-			}
-			revision := new(int64)
-			if !pagesItem.ContentRevision.Revision.IsUnknown() && !pagesItem.ContentRevision.Revision.IsNull() {
-				*revision = pagesItem.ContentRevision.Revision.ValueInt64()
-			} else {
-				revision = nil
-			}
-			contentRevision = &shared.Revision{
-				ID:       id3,
-				Revision: revision,
-			}
-		}
 		hidden := new(bool)
 		if !pagesItem.Hidden.IsUnknown() && !pagesItem.Hidden.IsNull() {
 			*hidden = pagesItem.Hidden.ValueBool()
 		} else {
 			hidden = nil
 		}
-		generalConditions1 := new(bool)
-		if !pagesItem.GeneralConditions.IsUnknown() && !pagesItem.GeneralConditions.IsNull() {
-			*generalConditions1 = pagesItem.GeneralConditions.ValueBool()
-		} else {
-			generalConditions1 = nil
-		}
 		translations := make([]shared.PageV4TranslationInput, 0, len(pagesItem.Translations))
 		for _, translationsItem := range pagesItem.Translations {
 			var hrid3 string
 			hrid3 = translationsItem.Hrid.ValueString()
 
-			name22 := new(string)
-			if !translationsItem.Name.IsUnknown() && !translationsItem.Name.IsNull() {
-				*name22 = translationsItem.Name.ValueString()
-			} else {
-				name22 = nil
-			}
+			var name21 string
+			name21 = translationsItem.Name.ValueString()
+
 			type10 := shared.PageType(translationsItem.Type.ValueString())
 			content2 := new(string)
 			if !translationsItem.Content.IsUnknown() && !translationsItem.Content.IsNull() {
@@ -3284,18 +3123,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				content2 = nil
 			}
-			order1 := new(int64)
-			if !translationsItem.Order.IsUnknown() && !translationsItem.Order.IsNull() {
-				*order1 = translationsItem.Order.ValueInt64()
-			} else {
-				order1 = nil
-			}
-			lastContributor1 := new(string)
-			if !translationsItem.LastContributor.IsUnknown() && !translationsItem.LastContributor.IsNull() {
-				*lastContributor1 = translationsItem.LastContributor.ValueString()
-			} else {
-				lastContributor1 = nil
-			}
+			var order1 int64
+			order1 = translationsItem.Order.ValueInt64()
+
 			published1 := new(bool)
 			if !translationsItem.Published.IsUnknown() && !translationsItem.Published.IsNull() {
 				*published1 = translationsItem.Published.ValueBool()
@@ -3350,23 +3180,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				homepage1 = nil
 			}
-			parentId1 := new(string)
-			if !translationsItem.ParentID.IsUnknown() && !translationsItem.ParentID.IsNull() {
-				*parentId1 = translationsItem.ParentID.ValueString()
+			parent1 := new(string)
+			if !translationsItem.Parent.IsUnknown() && !translationsItem.Parent.IsNull() {
+				*parent1 = translationsItem.Parent.ValueString()
 			} else {
-				parentId1 = nil
-			}
-			parentPath1 := new(string)
-			if !translationsItem.ParentPath.IsUnknown() && !translationsItem.ParentPath.IsNull() {
-				*parentPath1 = translationsItem.ParentPath.ValueString()
-			} else {
-				parentPath1 = nil
-			}
-			excludedAccessControls1 := new(bool)
-			if !translationsItem.ExcludedAccessControls.IsUnknown() && !translationsItem.ExcludedAccessControls.IsNull() {
-				*excludedAccessControls1 = translationsItem.ExcludedAccessControls.ValueBool()
-			} else {
-				excludedAccessControls1 = nil
+				parent1 = nil
 			}
 			accessControls1 := make([]shared.AccessControl, 0, len(translationsItem.AccessControls))
 			for _, accessControlsItem1 := range translationsItem.AccessControls {
@@ -3387,32 +3205,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					ReferenceType: referenceType1,
 				})
 			}
-			attachedMedia1 := make([]shared.PageMedia, 0, len(translationsItem.AttachedMedia))
-			for _, attachedMediaItem1 := range translationsItem.AttachedMedia {
-				name23 := new(string)
-				if !attachedMediaItem1.Name.IsUnknown() && !attachedMediaItem1.Name.IsNull() {
-					*name23 = attachedMediaItem1.Name.ValueString()
-				} else {
-					name23 = nil
-				}
-				hash1 := new(string)
-				if !attachedMediaItem1.Hash.IsUnknown() && !attachedMediaItem1.Hash.IsNull() {
-					*hash1 = attachedMediaItem1.Hash.ValueString()
-				} else {
-					hash1 = nil
-				}
-				attachedAt1 := new(time.Time)
-				if !attachedMediaItem1.AttachedAt.IsUnknown() && !attachedMediaItem1.AttachedAt.IsNull() {
-					*attachedAt1, _ = time.Parse(time.RFC3339Nano, attachedMediaItem1.AttachedAt.ValueString())
-				} else {
-					attachedAt1 = nil
-				}
-				attachedMedia1 = append(attachedMedia1, shared.PageMedia{
-					Name:       name23,
-					Hash:       hash1,
-					AttachedAt: attachedAt1,
-				})
-			}
 			metadata2 := make(map[string]string)
 			for metadataKey1, metadataValue1 := range translationsItem.Metadata {
 				var metadataInst1 string
@@ -3420,86 +3212,49 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 
 				metadata2[metadataKey1] = metadataInst1
 			}
-			var contentRevision1 *shared.Revision
-			if translationsItem.ContentRevision != nil {
-				id4 := new(string)
-				if !translationsItem.ContentRevision.ID.IsUnknown() && !translationsItem.ContentRevision.ID.IsNull() {
-					*id4 = translationsItem.ContentRevision.ID.ValueString()
-				} else {
-					id4 = nil
-				}
-				revision1 := new(int64)
-				if !translationsItem.ContentRevision.Revision.IsUnknown() && !translationsItem.ContentRevision.Revision.IsNull() {
-					*revision1 = translationsItem.ContentRevision.Revision.ValueInt64()
-				} else {
-					revision1 = nil
-				}
-				contentRevision1 = &shared.Revision{
-					ID:       id4,
-					Revision: revision1,
-				}
-			}
 			hidden1 := new(bool)
 			if !translationsItem.Hidden.IsUnknown() && !translationsItem.Hidden.IsNull() {
 				*hidden1 = translationsItem.Hidden.ValueBool()
 			} else {
 				hidden1 = nil
 			}
-			generalConditions2 := new(bool)
-			if !translationsItem.GeneralConditions.IsUnknown() && !translationsItem.GeneralConditions.IsNull() {
-				*generalConditions2 = translationsItem.GeneralConditions.ValueBool()
-			} else {
-				generalConditions2 = nil
-			}
 			translations = append(translations, shared.PageV4TranslationInput{
-				Hrid:                   hrid3,
-				Name:                   name22,
-				Type:                   type10,
-				Content:                content2,
-				Order:                  order1,
-				LastContributor:        lastContributor1,
-				Published:              published1,
-				Visibility:             visibility2,
-				UpdatedAt:              updatedAt1,
-				ContentType:            contentType1,
-				Source:                 source2,
-				Configuration:          configuration26,
-				Homepage:               homepage1,
-				ParentID:               parentId1,
-				ParentPath:             parentPath1,
-				ExcludedAccessControls: excludedAccessControls1,
-				AccessControls:         accessControls1,
-				AttachedMedia:          attachedMedia1,
-				Metadata:               metadata2,
-				ContentRevision:        contentRevision1,
-				Hidden:                 hidden1,
-				GeneralConditions:      generalConditions2,
+				Hrid:           hrid3,
+				Name:           name21,
+				Type:           type10,
+				Content:        content2,
+				Order:          order1,
+				Published:      published1,
+				Visibility:     visibility2,
+				UpdatedAt:      updatedAt1,
+				ContentType:    contentType1,
+				Source:         source2,
+				Configuration:  configuration26,
+				Homepage:       homepage1,
+				Parent:         parent1,
+				AccessControls: accessControls1,
+				Metadata:       metadata2,
+				Hidden:         hidden1,
 			})
 		}
 		pages = append(pages, shared.PageV4Input{
-			Hrid:                   hrid2,
-			Name:                   name20,
-			Type:                   type9,
-			Content:                content1,
-			Order:                  order,
-			LastContributor:        lastContributor,
-			Published:              published,
-			Visibility:             visibility1,
-			UpdatedAt:              updatedAt,
-			ContentType:            contentType,
-			Source:                 source1,
-			Configuration:          configuration24,
-			Homepage:               homepage,
-			ParentID:               parentID,
-			ParentPath:             parentPath,
-			ExcludedAccessControls: excludedAccessControls,
-			AccessControls:         accessControls,
-			AttachedMedia:          attachedMedia,
-			Metadata:               metadata1,
-			ContentRevision:        contentRevision,
-			Hidden:                 hidden,
-			GeneralConditions:      generalConditions1,
-			Translations:           translations,
+			Hrid:           hrid2,
+			Name:           name20,
+			Type:           type9,
+			Content:        content1,
+			Order:          order,
+			Published:      published,
+			Visibility:     visibility1,
+			UpdatedAt:      updatedAt,
+			ContentType:    contentType,
+			Source:         source1,
+			Configuration:  configuration24,
+			Homepage:       homepage,
+			Parent:         parent,
+			AccessControls: accessControls,
+			Metadata:       metadata1,
+			Hidden:         hidden,
+			Translations:   translations,
 		})
 	}
 	out := shared.APIV4Spec{

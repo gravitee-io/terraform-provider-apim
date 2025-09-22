@@ -2,7 +2,8 @@
 
 package shared
 
-// PageSource - Page source
+// PageSource - Allow you to fetch pages from various external sources,
+// overriding page content each time the source is fetched.
 type PageSource struct {
 	// The type of the page source (=fetcher type).
 	Type *string `json:"type,omitempty"`
