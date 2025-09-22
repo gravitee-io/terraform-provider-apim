@@ -33,6 +33,8 @@ outputs:
    target: docs/guides/application-spa.md
  - template: {{ .RootDir }}/tmpl/subscription.md.tmpl
    target: docs/guides/subscription.md
+ - template: {{ .RootDir }}/tmpl/shared-policy-group.md.tmpl
+   target: docs/guides/shared-policy-group.md
 
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
@@ -64,4 +66,7 @@ chunks:
     required: true
   - template: examples/use-cases/subscription-api_app_subscription/api-app-subscription.tf
     exportedAs: Subscription
+    required: true
+  - template: examples/use-cases/shared_policy_group-simple/simple-shared-policy-group.tf
+    exportedAs: SharedPolicyGroup
     required: true
