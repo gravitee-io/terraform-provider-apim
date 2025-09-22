@@ -1,3 +1,13 @@
+---
+page_title: "Subscription to an API with a JWT Plan"
+subcategory: ""
+---
+
+# Subscription to an API with a JWT Plan
+
+This example demonstrates how to create an API with a JWT plan, set up an application, and configure a subscription that grants the application access to the API.
+
+```HCL
 resource "apim_apiv4" "api_app_subscription-api" {
   # should match the resource name
   hrid            = "simple-api-subscribed"
@@ -104,3 +114,4 @@ resource "apim_subscription" "api_app_subscription" {
   application_hrid = apim_application.api_app_subscription-app.hrid
   ending_at        = "2042-12-25T10:12:28+02:00"
 }
+```

@@ -31,6 +31,8 @@ outputs:
    target: docs/guides/application-m2m.md
  - template: {{ .RootDir }}/tmpl/application-spa.md.tmpl
    target: docs/guides/application-spa.md
+ - template: {{ .RootDir }}/tmpl/subscription.md.tmpl
+   target: docs/guides/subscription.md
 
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
@@ -59,4 +61,7 @@ chunks:
     required: true
   - template: examples/use-cases/application-spa/spa-app.tf
     exportedAs: ApplicationSPA
+    required: true
+  - template: examples/use-cases/subscription-api_app_subscription/api-app-subscription.tf
+    exportedAs: Subscription
     required: true
