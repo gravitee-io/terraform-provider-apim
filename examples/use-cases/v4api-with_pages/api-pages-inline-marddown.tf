@@ -56,21 +56,21 @@ resource "apim_apiv4" "api-with-pages-inline" {
   }
   pages = [
     {
-      hrid    = "markdown"
-      content = <<-EOT
+      hrid       = "markdown"
+      content    = <<-EOT
           Hello world!
           --
           This is markdown.
           EOT
-      name    = "hello-markdown"
-      parent  = "markdowns-folder"
-      type    = "MARKDOWN"
+      name       = "Hello Markdown"
+      parent_hrid = "markdowns-folder"
+      type       = "MARKDOWN"
       order   = 0
     },
     {
-      hrid  = "markdowns-folder"
-      name  = "markdowns"
-      type  = "FOLDER"
+      hrid = "markdowns-folder"
+      name = "Markdowns"
+      type = "FOLDER"
       order = 1
     }
   ]

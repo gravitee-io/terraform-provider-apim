@@ -56,15 +56,15 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
   }
   pages = [
     {
-      hrid  = "docs-folder"
-      name  = "specifications"
-      type  = "FOLDER"
+      hrid = "docs-folder"
+      name = "Specifications"
+      type = "FOLDER"
       order = 0
     },
     {
-      hrid   = "swagger"
-      name   = "pet-store"
-      parent = "docs-folder"
+      hrid       = "swagger"
+      name       = "Pet Store"
+      parent_hrid = "docs-folder"
       source = {
         configuration = jsonencode({
           fetchCron      = "*/10 * * * * *"
