@@ -56,15 +56,25 @@ resource "apim_apiv4" "api-with-pages-inline" {
   }
   pages = [
     {
-      hrid       = "markdown"
-      content    = <<-EOT
+      hrid     = "markdown"
+      content  = <<-EOT
+          # Homepage
+          Go to the "Markdowns" folder to find some content.
+          EOT
+      name     = "Home"
+      homepage = true
+      type     = "MARKDOWN"
+    },
+    {
+      hrid        = "markdown"
+      content     = <<-EOT
           Hello world!
           --
           This is markdown.
           EOT
-      name       = "Hello Markdown"
+      name        = "Hello Markdown"
       parent_hrid = "markdowns-folder"
-      type       = "MARKDOWN"
+      type        = "MARKDOWN"
       order   = 0
     },
     {

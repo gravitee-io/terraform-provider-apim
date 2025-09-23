@@ -9,6 +9,7 @@ terraform {
   }
 }
 
+# Using "local" datasource to read the file.
 data "local_file" "api-resource-basic-auth" {
   filename = "basic-auth-config.json"
 }
