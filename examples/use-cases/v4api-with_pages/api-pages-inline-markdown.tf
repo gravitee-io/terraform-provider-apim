@@ -56,7 +56,7 @@ resource "apim_apiv4" "api-with-pages-inline" {
   }
   pages = [
     {
-      hrid     = "markdown"
+      hrid     = "homepage"
       content  = <<-EOT
           # Homepage
           Go to the "Markdowns" folder to find some content.
