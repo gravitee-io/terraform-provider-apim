@@ -70,7 +70,7 @@ Optional:
 - `enabled` (Boolean) Is the step enabled or not. Default: true
 - `message_condition` (String) The message condition of the step
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step. Not Null
+- `policy` (String) The policy of the step
 
 ## Import
 
