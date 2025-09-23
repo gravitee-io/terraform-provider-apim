@@ -718,7 +718,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Required:    true,
 				Description: `Human-readable ID of a spec`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
 				},
 			},
@@ -1067,14 +1066,48 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							},
 							Description: `List of access controls.`,
 						},
+						"attached_media": schema.ListNestedAttribute{
+							Computed: true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"attached_at": schema.StringAttribute{
+										Computed:    true,
+										Description: `Media's attachment date.`,
+									},
+									"hash": schema.StringAttribute{
+										Computed:    true,
+										Description: `Media's hash.`,
+									},
+									"name": schema.StringAttribute{
+										Computed:    true,
+										Description: `Media's name.`,
+									},
+								},
+							},
+							Description: `List of attached media.`,
+						},
 						"configuration": schema.MapAttribute{
 							Computed:    true,
 							ElementType: types.StringType,
-							Description: `Key/value page configuration (Configure swagger UI or or use Redoc instead)`,
+							Description: `Page's configuration.`,
 						},
 						"content": schema.StringAttribute{
 							Computed:    true,
-							Description: `The content of the page, if any.`,
+							Description: `Page's content.`,
+						},
+						"content_revision": schema.SingleNestedAttribute{
+							Computed: true,
+							Attributes: map[string]schema.Attribute{
+								"id": schema.StringAttribute{
+									Computed:    true,
+									Description: `Id of the page used to fill the content attributes.`,
+								},
+								"revision": schema.Int64Attribute{
+									Computed:    true,
+									Description: `Revision number.`,
+								},
+							},
+							Description: `Page revision`,
 						},
 						"content_type": schema.StringAttribute{
 							Computed:    true,
@@ -1084,17 +1117,29 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed:    true,
 							Description: `Page's cross uuid.`,
 						},
+						"excluded_access_controls": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Flag to restrict access to user matching the restrictions.`,
+						},
+						"general_conditions": schema.BoolAttribute{
+							Computed:    true,
+							Description: `If page is used as General Conditions of an active plan.`,
+						},
 						"hidden": schema.BoolAttribute{
 							Computed:    true,
 							Description: `If folder is published but not shown in Portal.`,
 						},
 						"homepage": schema.BoolAttribute{
 							Computed:    true,
-							Description: `If true, this page will be displayed as the homepage of your API documentation.`,
+							Description: `Page's homepage status.`,
 						},
 						"hrid": schema.StringAttribute{
 							Computed:    true,
 							Description: `A unique human readable id identifying this resource`,
+						},
+						"last_contributor": schema.StringAttribute{
+							Computed:    true,
+							Description: `Page's last contributor. Id of a user.`,
 						},
 						"metadata": schema.MapAttribute{
 							Computed:    true,
@@ -1102,22 +1147,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Description: `Page's metadata.`,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
-							MarkdownDescription: `This is the display name of the page in APIM and on the portal.` + "\n" +
-								`This field can be edited safely if you want to rename a page.`,
+							Computed:    true,
+							Description: `Page's name.`,
 						},
 						"order": schema.Int64Attribute{
 							Computed:    true,
-							Description: `The order used to display the page in APIM and on the portal.`,
+							Description: `Page's order.`,
 						},
-						"parent": schema.StringAttribute{
-							Computed: true,
-							MarkdownDescription: `If your page contains a folder, setting this field to the map key associated to the` + "\n" +
-								`folder entry will be reflected into APIM by making the page a child of this folder.`,
+						"parent_hrid": schema.StringAttribute{
+							Computed:    true,
+							Description: `Page's parent path.`,
+						},
+						"parent_id": schema.StringAttribute{
+							Computed:    true,
+							Description: `Page's parent id.`,
 						},
 						"published": schema.BoolAttribute{
 							Computed:    true,
-							Description: `If true, the page will be accessible from the portal (default is false)`,
+							Description: `Page's published status.`,
 						},
 						"source": schema.SingleNestedAttribute{
 							Computed: true,
@@ -1132,8 +1179,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Description: `The type of the page source (=fetcher type).`,
 								},
 							},
-							MarkdownDescription: `Allow you to fetch pages from various external sources, ` + "\n" +
-								`overriding page content each time the source is fetched.`,
+							Description: `Page source`,
 						},
 						"translations": schema.ListNestedAttribute{
 							Computed: true,
@@ -1155,14 +1201,48 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										},
 										Description: `List of access controls.`,
 									},
+									"attached_media": schema.ListNestedAttribute{
+										Computed: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"attached_at": schema.StringAttribute{
+													Computed:    true,
+													Description: `Media's attachment date.`,
+												},
+												"hash": schema.StringAttribute{
+													Computed:    true,
+													Description: `Media's hash.`,
+												},
+												"name": schema.StringAttribute{
+													Computed:    true,
+													Description: `Media's name.`,
+												},
+											},
+										},
+										Description: `List of attached media.`,
+									},
 									"configuration": schema.MapAttribute{
 										Computed:    true,
 										ElementType: types.StringType,
-										Description: `Key/value page configuration (Configure swagger UI or or use Redoc instead)`,
+										Description: `Page's configuration.`,
 									},
 									"content": schema.StringAttribute{
 										Computed:    true,
-										Description: `The content of the page, if any.`,
+										Description: `Page's content.`,
+									},
+									"content_revision": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"id": schema.StringAttribute{
+												Computed:    true,
+												Description: `Id of the page used to fill the content attributes.`,
+											},
+											"revision": schema.Int64Attribute{
+												Computed:    true,
+												Description: `Revision number.`,
+											},
+										},
+										Description: `Page revision`,
 									},
 									"content_type": schema.StringAttribute{
 										Computed:    true,
@@ -1172,17 +1252,29 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Computed:    true,
 										Description: `Page's cross uuid.`,
 									},
+									"excluded_access_controls": schema.BoolAttribute{
+										Computed:    true,
+										Description: `Flag to restrict access to user matching the restrictions.`,
+									},
+									"general_conditions": schema.BoolAttribute{
+										Computed:    true,
+										Description: `If page is used as General Conditions of an active plan.`,
+									},
 									"hidden": schema.BoolAttribute{
 										Computed:    true,
 										Description: `If folder is published but not shown in Portal.`,
 									},
 									"homepage": schema.BoolAttribute{
 										Computed:    true,
-										Description: `If true, this page will be displayed as the homepage of your API documentation.`,
+										Description: `Page's homepage status.`,
 									},
 									"hrid": schema.StringAttribute{
 										Computed:    true,
 										Description: `A unique human readable id identifying this resource`,
+									},
+									"last_contributor": schema.StringAttribute{
+										Computed:    true,
+										Description: `Page's last contributor. Id of a user.`,
 									},
 									"metadata": schema.MapAttribute{
 										Computed:    true,
@@ -1190,22 +1282,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Description: `Page's metadata.`,
 									},
 									"name": schema.StringAttribute{
-										Computed: true,
-										MarkdownDescription: `This is the display name of the page in APIM and on the portal.` + "\n" +
-											`This field can be edited safely if you want to rename a page.`,
+										Computed:    true,
+										Description: `Page's name.`,
 									},
 									"order": schema.Int64Attribute{
 										Computed:    true,
-										Description: `The order used to display the page in APIM and on the portal.`,
+										Description: `Page's order.`,
 									},
-									"parent": schema.StringAttribute{
-										Computed: true,
-										MarkdownDescription: `If your page contains a folder, setting this field to the map key associated to the` + "\n" +
-											`folder entry will be reflected into APIM by making the page a child of this folder.`,
+									"parent_hrid": schema.StringAttribute{
+										Computed:    true,
+										Description: `Page's parent path.`,
+									},
+									"parent_id": schema.StringAttribute{
+										Computed:    true,
+										Description: `Page's parent id.`,
 									},
 									"published": schema.BoolAttribute{
 										Computed:    true,
-										Description: `If true, the page will be accessible from the portal (default is false)`,
+										Description: `Page's published status.`,
 									},
 									"source": schema.SingleNestedAttribute{
 										Computed: true,
@@ -1220,12 +1314,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												Description: `The type of the page source (=fetcher type).`,
 											},
 										},
-										MarkdownDescription: `Allow you to fetch pages from various external sources, ` + "\n" +
-											`overriding page content each time the source is fetched.`,
+										Description: `Page source`,
 									},
 									"type": schema.StringAttribute{
 										Computed:    true,
-										Description: `The type of the documentation page or folder.`,
+										Description: `The type of the page.`,
 									},
 									"updated_at": schema.StringAttribute{
 										Computed:    true,
@@ -1241,7 +1334,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 						"type": schema.StringAttribute{
 							Computed:    true,
-							Description: `The type of the documentation page or folder.`,
+							Description: `The type of the page.`,
 						},
 						"updated_at": schema.StringAttribute{
 							Computed:    true,

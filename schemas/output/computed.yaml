@@ -422,7 +422,6 @@ components:
         - keyless_demo_plan
         - demo_subscription
         - demo_shared_policy_groups
-      maxLength: 256
     ApiV4Spec:
       description: ApiV4DefinitionSpec defines the desired state of ApiDefinition.
       type: object
@@ -435,14 +434,12 @@ components:
           examples:
             - My Api
           minLength: 1
-          maxLength: 512
         version:
           type: string
           description: API's version. It's a simple string only used in the portal.
           examples:
             - 1.0.0
           minLength: 1
-          maxLength: 64
         type:
           $ref: "#/components/schemas/ApiType"
         description:
@@ -450,7 +447,6 @@ components:
           description: API's description. A short description of your API.
           examples:
             - I can use many characters to describe this API.
-          maxLength: 4000
           x-speakeasy-param-suppress-computed-diff: true
         tags:
           type: array
@@ -459,7 +455,6 @@ components:
             - ["public"]
           items:
             type: string
-            maxLength: 64
           uniqueItems: true
           x-speakeasy-param-suppress-computed-diff: true
         listeners:
@@ -533,9 +528,7 @@ components:
           description: List of labels of the API
           items:
             type: string
-            maxLength: 64
           type: array
-          uniqueItems: true
         metadata:
           type: array
           description: The list of API's metadata.
@@ -572,6 +565,8 @@ components:
           items:
             $ref: '#/components/schemas/PageV4'
           type: array
+        consoleNotificationConfiguration:
+          $ref: '#/components/schemas/PortalNotificationConfig'
       required:
         - hrid
         - name
@@ -611,20 +606,17 @@ components:
           examples:
             - Example Application
           minLength: 1
-          maxLength: 512
         description:
           type: string
           description: Application's description.
           examples:
             - This is the documentation explaining purpose of this Application  .
           minLength: 1
-          maxLength: 4000
         domain:
           type: string
           description: Application's domain.
           examples:
             - examples.com
-          maxLength: 256
           x-speakeasy-param-suppress-computed-diff: true
         groups:
           default: []
@@ -712,7 +704,6 @@ components:
         clientId:
           type: string
           description: Simple application client ID
-          maxLength: 300
           examples:
             - example-client-id
     ApplicationOAuthClientSettings:
@@ -954,7 +945,6 @@ components:
           $ref: "#/components/schemas/Hrid"
         name:
           type: string
-          maxLength: 64
         description:
           type: string
         security:
@@ -963,28 +953,23 @@ components:
           type: array
           items:
             type: string
-            maxLength: 64
         excludedGroups:
           type: array
           items:
             type: string
         generalConditions:
           type: string
-          maxLength: 64
         order:
           type: integer
           x-speakeasy-terraform-ignore: true
         selectionRule:
           type: string
-          maxLength: 256
         status:
           $ref: '#/components/schemas/PlanStatus'
         tags:
           type: array
           items:
             type: string
-            maxLength: 64
-          uniqueItems: true
         type:
           $ref: '#/components/schemas/PlanType'
         validation:
@@ -1030,6 +1015,36 @@ components:
         - source
         - sourceId
         - role
+    PortalNotificationConfig:
+      description: Portal notification config
+      type: object
+      properties:
+        config_type:
+          type: string
+          enum:
+            - PORTAL
+            - GENERIC
+        name:
+          type: string
+        referenceType:
+          type: string
+        referenceId:
+          type: string
+        user:
+          type: string
+        hooks:
+          type: array
+          items:
+            type: string
+        groups:
+          type: array
+          items:
+            type: string
+      required:
+        - config_type
+        - name
+      x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-ignore: true
     Analytics:
       description: API analytics
       type: object
@@ -1115,7 +1130,6 @@ components:
               type: array
               items:
                 type: string
-                maxLength: 32
               uniqueItems: true
     ConditionSelector:
       description: Condition selector
@@ -1289,7 +1303,6 @@ components:
           description: Flow's name.
           examples:
             - My Flow
-          maxLength: 256
         enabled:
           type: boolean
           description: Is the flow enabled.
@@ -1332,13 +1345,10 @@ components:
           type: array
           items:
             type: string
-            maxLength: 32
           description: Flow's tags.
           examples:
             - [tag1, tag2]
           uniqueItems: true
-      required:
-        - enabled
     FlowExecution:
       description: Flow execution
       type: object
@@ -1414,7 +1424,6 @@ components:
               examples:
                 - /my/path
               default: /
-              maxLength: 256
             pathOperator:
               $ref: "#/components/schemas/Operator"
             methods:
@@ -1578,30 +1587,31 @@ components:
           readOnly: true
         name:
           type: string
-          description: |
-            This is the display name of the page in APIM and on the portal.
-            This field can be edited safely if you want to rename a page.
+          description: Page's name.
           examples:
             - My Page
-          maxLength: 64
         type:
           $ref: "#/components/schemas/PageType"
         content:
           type: string
-          description: The content of the page, if any.
+          description: Page's content.
           examples:
             - My Page content
         order:
           type: integer
-          description: The order used to display the page in APIM and on the portal.
+          description: Page's order.
           examples:
             - 1
+        lastContributor:
+          type: string
+          description: Page's last contributor. Id of a user.
+          examples:
+            - 00f8c9e7-78fc-4907-b8c9-e778fc790750
         published:
           type: boolean
-          description: If true, the page will be accessible from the portal (default is false)
+          description: Page's published status.
           examples:
             - true
-          default: false
         visibility:
           $ref: "#/components/schemas/Visibility"
         updatedAt:
@@ -1618,47 +1628,56 @@ components:
           $ref: "#/components/schemas/PageSource"
         configuration:
           type: object
-          description: Key/value page configuration (Configure swagger UI or or use Redoc instead)
+          description: Page's configuration.
           additionalProperties:
             type: string
-            maxLength: 200
-          examples:
-            - viewer: Redoc
         homepage:
           type: boolean
-          description: If true, this page will be displayed as the homepage of your API documentation.
+          description: Page's homepage status.
           examples:
             - true
-        parent:
+        parentId:
           type: string
-          description: |
-            If your page contains a folder, setting this field to the map key associated to the
-            folder entry will be reflected into APIM by making the page a child of this folder.
+          description: Page's parent id.
           examples:
-            - /parent
+            - 00f8c9e7-78fc-4907-b8c9-e778fc790750
+        parentHrid:
+          type: string
+          description: Page's parent path.
+          examples:
+            - guides
+        excludedAccessControls:
+          type: boolean
+          description: Flag to restrict access to user matching the restrictions.
         accessControls:
           type: array
           description: List of access controls.
           items:
             $ref: "#/components/schemas/AccessControl"
+        attachedMedia:
+          type: array
+          description: List of attached media.
+          items:
+            $ref: "#/components/schemas/PageMedia"
         metadata:
           type: object
           description: Page's metadata.
           additionalProperties:
             type: string
-            maxLength: 200
+        contentRevision:
+          $ref: "#/components/schemas/Revision"
         hidden:
           type: boolean
           description: If folder is published but not shown in Portal.
+        generalConditions:
+          type: boolean
+          description: If page is used as General Conditions of an active plan.
       required:
         - hrid
-        - name
         - type
-        - visibility
-        - order
     PageType:
       type: string
-      description: The type of the documentation page or folder.
+      description: The type of the page.
       examples:
         - MARKDOWN
       enum:
@@ -1689,7 +1708,7 @@ components:
             - GROUP
             - ROLE
     PageSource:
-      description: "Allow you to fetch pages from various external sources, \noverriding page content each time the source is fetched.\n"
+      description: Page source
       type: object
       properties:
         type:
@@ -1701,12 +1720,43 @@ components:
             - gitlab-fetcher
             - github-fetcher
             - bitbucket-fetcher
-          maxLength: 64
         configuration:
           type: object
           description: Page source's configuration.
-          maxLength: 512
           x-speakeasy-type-override: any
+    PageMedia:
+      description: Page media
+      type: object
+      properties:
+        name:
+          type: string
+          description: Media's name.
+          examples:
+            - My Media
+        hash:
+          type: string
+          description: Media's hash.
+          examples:
+            - 00f8c9e7-78fc-4907-b8c9-e778fc790750
+        attachedAt:
+          type: string
+          format: date-time
+          description: Media's attachment date.
+          example: 2018-01-01T00:00:00.000Z
+    Revision:
+      description: Page revision
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the page used to fill the content attributes.
+          examples:
+            - 00f8c9e7-78fc-4907-b8c9-e778fc790750
+        revision:
+          type: integer
+          description: Revision number.
+          examples:
+            - 1
     PathV4:
       description: API Path
       type: object
@@ -1869,8 +1919,6 @@ components:
         propagateErrorKeyToLogs:
           type: boolean
           default: false
-      required:
-        - status
       x-speakeasy-param-suppress-computed-diff: true
     Sampling:
       description: API analytics sampling
@@ -1953,11 +2001,9 @@ components:
         name:
           type: string
           description: The name of the step
-          maxLength: 64
         description:
           type: string
           description: The description of the step
-          maxLength: 256
         enabled:
           type: boolean
           description: Is the step enabled or not.
@@ -1965,7 +2011,6 @@ components:
         policy:
           type: string
           description: The policy of the step
-          maxLength: 64
         configuration:
           type: object
           description: The configuration of the step
@@ -1973,10 +2018,6 @@ components:
         condition:
           type: string
           description: The condition of the step
-          maxLength: 1024
-      required:
-        - enabled
-        - policy
     StepV4:
       description: Flow step
       allOf:
@@ -1985,7 +2026,6 @@ components:
             messageCondition:
               type: string
               description: The message condition of the step
-              maxLength: 256
     SubscriptionListener:
       description: Subscription listener
       title: "SubscriptionListener"
