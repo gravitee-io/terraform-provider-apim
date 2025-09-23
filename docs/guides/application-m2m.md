@@ -1,3 +1,13 @@
+---
+page_title: "Machine-to-Machine Application"
+subcategory: "Application"
+---
+
+# Machine-to-machine application
+
+The following example creates an OAuth application that uses a certificate for authentication.
+
+```HCL
 resource "apim_application" "backend-to-backend" {
   # should match the resource name
   hrid        = "test-b2b-app"
@@ -51,3 +61,4 @@ resource "apim_application" "backend-to-backend" {
     }
   }
 }
+```
