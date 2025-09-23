@@ -8,18 +8,14 @@ import (
 
 type PageV4 struct {
 	AccessControls         []AccessControl         `tfsdk:"access_controls"`
-	AttachedMedia          []PageMedia             `tfsdk:"attached_media"`
 	Configuration          map[string]types.String `tfsdk:"configuration"`
 	Content                types.String            `tfsdk:"content"`
-	ContentRevision        *Revision               `tfsdk:"content_revision"`
 	ContentType            types.String            `tfsdk:"content_type"`
 	CrossID                types.String            `tfsdk:"cross_id"`
 	ExcludedAccessControls types.Bool              `tfsdk:"excluded_access_controls"`
-	GeneralConditions      types.Bool              `tfsdk:"general_conditions"`
 	Hidden                 types.Bool              `tfsdk:"hidden"`
 	Homepage               types.Bool              `tfsdk:"homepage"`
 	Hrid                   types.String            `tfsdk:"hrid"`
-	LastContributor        types.String            `tfsdk:"last_contributor"`
 	Metadata               map[string]types.String `tfsdk:"metadata"`
 	Name                   types.String            `tfsdk:"name"`
 	Order                  types.Int64             `tfsdk:"order"`

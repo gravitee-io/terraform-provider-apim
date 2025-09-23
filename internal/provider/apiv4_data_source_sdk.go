@@ -225,7 +225,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				connect.Enabled = types.BoolPointerValue(connectItem.Enabled)
 				connect.MessageCondition = types.StringPointerValue(connectItem.MessageCondition)
 				connect.Name = types.StringPointerValue(connectItem.Name)
-				connect.Policy = types.StringPointerValue(connectItem.Policy)
+				connect.Policy = types.StringValue(connectItem.Policy)
 
 				flows.Connect = append(flows.Connect, connect)
 			}
@@ -247,7 +247,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				interact.Enabled = types.BoolPointerValue(interactItem.Enabled)
 				interact.MessageCondition = types.StringPointerValue(interactItem.MessageCondition)
 				interact.Name = types.StringPointerValue(interactItem.Name)
-				interact.Policy = types.StringPointerValue(interactItem.Policy)
+				interact.Policy = types.StringValue(interactItem.Policy)
 
 				flows.Interact = append(flows.Interact, interact)
 			}
@@ -268,7 +268,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				publish.Enabled = types.BoolPointerValue(publishItem.Enabled)
 				publish.MessageCondition = types.StringPointerValue(publishItem.MessageCondition)
 				publish.Name = types.StringPointerValue(publishItem.Name)
-				publish.Policy = types.StringPointerValue(publishItem.Policy)
+				publish.Policy = types.StringValue(publishItem.Policy)
 
 				flows.Publish = append(flows.Publish, publish)
 			}
@@ -288,7 +288,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				request.Enabled = types.BoolPointerValue(requestItem.Enabled)
 				request.MessageCondition = types.StringPointerValue(requestItem.MessageCondition)
 				request.Name = types.StringPointerValue(requestItem.Name)
-				request.Policy = types.StringPointerValue(requestItem.Policy)
+				request.Policy = types.StringValue(requestItem.Policy)
 
 				flows.Request = append(flows.Request, request)
 			}
@@ -308,7 +308,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				response.Enabled = types.BoolPointerValue(responseItem.Enabled)
 				response.MessageCondition = types.StringPointerValue(responseItem.MessageCondition)
 				response.Name = types.StringPointerValue(responseItem.Name)
-				response.Policy = types.StringPointerValue(responseItem.Policy)
+				response.Policy = types.StringValue(responseItem.Policy)
 
 				flows.Response = append(flows.Response, response)
 			}
@@ -373,7 +373,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				subscribe.Enabled = types.BoolPointerValue(subscribeItem.Enabled)
 				subscribe.MessageCondition = types.StringPointerValue(subscribeItem.MessageCondition)
 				subscribe.Name = types.StringPointerValue(subscribeItem.Name)
-				subscribe.Policy = types.StringPointerValue(subscribeItem.Policy)
+				subscribe.Policy = types.StringValue(subscribeItem.Policy)
 
 				flows.Subscribe = append(flows.Subscribe, subscribe)
 			}
@@ -626,17 +626,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 
 				pages.AccessControls = append(pages.AccessControls, accessControls)
 			}
-			pages.AttachedMedia = []tfTypes.PageMedia{}
-
-			for _, attachedMediaItem := range pagesItem.AttachedMedia {
-				var attachedMedia tfTypes.PageMedia
-
-				attachedMedia.AttachedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(attachedMediaItem.AttachedAt))
-				attachedMedia.Hash = types.StringPointerValue(attachedMediaItem.Hash)
-				attachedMedia.Name = types.StringPointerValue(attachedMediaItem.Name)
-
-				pages.AttachedMedia = append(pages.AttachedMedia, attachedMedia)
-			}
 			if len(pagesItem.Configuration) > 0 {
 				pages.Configuration = make(map[string]types.String, len(pagesItem.Configuration))
 				for key, value := range pagesItem.Configuration {
@@ -644,29 +633,20 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				}
 			}
 			pages.Content = types.StringPointerValue(pagesItem.Content)
-			if pagesItem.ContentRevision == nil {
-				pages.ContentRevision = nil
-			} else {
-				pages.ContentRevision = &tfTypes.Revision{}
-				pages.ContentRevision.ID = types.StringPointerValue(pagesItem.ContentRevision.ID)
-				pages.ContentRevision.Revision = types.Int64PointerValue(pagesItem.ContentRevision.Revision)
-			}
 			pages.ContentType = types.StringPointerValue(pagesItem.ContentType)
 			pages.CrossID = types.StringPointerValue(pagesItem.CrossID)
 			pages.ExcludedAccessControls = types.BoolPointerValue(pagesItem.ExcludedAccessControls)
-			pages.GeneralConditions = types.BoolPointerValue(pagesItem.GeneralConditions)
 			pages.Hidden = types.BoolPointerValue(pagesItem.Hidden)
 			pages.Homepage = types.BoolPointerValue(pagesItem.Homepage)
 			pages.Hrid = types.StringValue(pagesItem.Hrid)
-			pages.LastContributor = types.StringPointerValue(pagesItem.LastContributor)
 			if len(pagesItem.Metadata) > 0 {
 				pages.Metadata = make(map[string]types.String, len(pagesItem.Metadata))
 				for key1, value1 := range pagesItem.Metadata {
 					pages.Metadata[key1] = types.StringValue(value1)
 				}
 			}
-			pages.Name = types.StringPointerValue(pagesItem.Name)
-			pages.Order = types.Int64PointerValue(pagesItem.Order)
+			pages.Name = types.StringValue(pagesItem.Name)
+			pages.Order = types.Int64Value(pagesItem.Order)
 			pages.ParentHrid = types.StringPointerValue(pagesItem.ParentHrid)
 			pages.ParentID = types.StringPointerValue(pagesItem.ParentID)
 			pages.Published = types.BoolPointerValue(pagesItem.Published)
@@ -697,17 +677,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 
 					translations.AccessControls = append(translations.AccessControls, accessControls1)
 				}
-				translations.AttachedMedia = []tfTypes.PageMedia{}
-
-				for _, attachedMediaItem1 := range translationsItem.AttachedMedia {
-					var attachedMedia1 tfTypes.PageMedia
-
-					attachedMedia1.AttachedAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(attachedMediaItem1.AttachedAt))
-					attachedMedia1.Hash = types.StringPointerValue(attachedMediaItem1.Hash)
-					attachedMedia1.Name = types.StringPointerValue(attachedMediaItem1.Name)
-
-					translations.AttachedMedia = append(translations.AttachedMedia, attachedMedia1)
-				}
 				if len(translationsItem.Configuration) > 0 {
 					translations.Configuration = make(map[string]types.String, len(translationsItem.Configuration))
 					for key2, value2 := range translationsItem.Configuration {
@@ -715,29 +684,20 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					}
 				}
 				translations.Content = types.StringPointerValue(translationsItem.Content)
-				if translationsItem.ContentRevision == nil {
-					translations.ContentRevision = nil
-				} else {
-					translations.ContentRevision = &tfTypes.Revision{}
-					translations.ContentRevision.ID = types.StringPointerValue(translationsItem.ContentRevision.ID)
-					translations.ContentRevision.Revision = types.Int64PointerValue(translationsItem.ContentRevision.Revision)
-				}
 				translations.ContentType = types.StringPointerValue(translationsItem.ContentType)
 				translations.CrossID = types.StringPointerValue(translationsItem.CrossID)
 				translations.ExcludedAccessControls = types.BoolPointerValue(translationsItem.ExcludedAccessControls)
-				translations.GeneralConditions = types.BoolPointerValue(translationsItem.GeneralConditions)
 				translations.Hidden = types.BoolPointerValue(translationsItem.Hidden)
 				translations.Homepage = types.BoolPointerValue(translationsItem.Homepage)
 				translations.Hrid = types.StringValue(translationsItem.Hrid)
-				translations.LastContributor = types.StringPointerValue(translationsItem.LastContributor)
 				if len(translationsItem.Metadata) > 0 {
 					translations.Metadata = make(map[string]types.String, len(translationsItem.Metadata))
 					for key3, value3 := range translationsItem.Metadata {
 						translations.Metadata[key3] = types.StringValue(value3)
 					}
 				}
-				translations.Name = types.StringPointerValue(translationsItem.Name)
-				translations.Order = types.Int64PointerValue(translationsItem.Order)
+				translations.Name = types.StringValue(translationsItem.Name)
+				translations.Order = types.Int64Value(translationsItem.Order)
 				translations.ParentHrid = types.StringPointerValue(translationsItem.ParentHrid)
 				translations.ParentID = types.StringPointerValue(translationsItem.ParentID)
 				translations.Published = types.BoolPointerValue(translationsItem.Published)
@@ -808,7 +768,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					connect1.Enabled = types.BoolPointerValue(connectItem1.Enabled)
 					connect1.MessageCondition = types.StringPointerValue(connectItem1.MessageCondition)
 					connect1.Name = types.StringPointerValue(connectItem1.Name)
-					connect1.Policy = types.StringPointerValue(connectItem1.Policy)
+					connect1.Policy = types.StringValue(connectItem1.Policy)
 
 					flows1.Connect = append(flows1.Connect, connect1)
 				}
@@ -830,7 +790,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					interact1.Enabled = types.BoolPointerValue(interactItem1.Enabled)
 					interact1.MessageCondition = types.StringPointerValue(interactItem1.MessageCondition)
 					interact1.Name = types.StringPointerValue(interactItem1.Name)
-					interact1.Policy = types.StringPointerValue(interactItem1.Policy)
+					interact1.Policy = types.StringValue(interactItem1.Policy)
 
 					flows1.Interact = append(flows1.Interact, interact1)
 				}
@@ -851,7 +811,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					publish1.Enabled = types.BoolPointerValue(publishItem1.Enabled)
 					publish1.MessageCondition = types.StringPointerValue(publishItem1.MessageCondition)
 					publish1.Name = types.StringPointerValue(publishItem1.Name)
-					publish1.Policy = types.StringPointerValue(publishItem1.Policy)
+					publish1.Policy = types.StringValue(publishItem1.Policy)
 
 					flows1.Publish = append(flows1.Publish, publish1)
 				}
@@ -871,7 +831,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					request1.Enabled = types.BoolPointerValue(requestItem1.Enabled)
 					request1.MessageCondition = types.StringPointerValue(requestItem1.MessageCondition)
 					request1.Name = types.StringPointerValue(requestItem1.Name)
-					request1.Policy = types.StringPointerValue(requestItem1.Policy)
+					request1.Policy = types.StringValue(requestItem1.Policy)
 
 					flows1.Request = append(flows1.Request, request1)
 				}
@@ -891,7 +851,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					response1.Enabled = types.BoolPointerValue(responseItem1.Enabled)
 					response1.MessageCondition = types.StringPointerValue(responseItem1.MessageCondition)
 					response1.Name = types.StringPointerValue(responseItem1.Name)
-					response1.Policy = types.StringPointerValue(responseItem1.Policy)
+					response1.Policy = types.StringValue(responseItem1.Policy)
 
 					flows1.Response = append(flows1.Response, response1)
 				}
@@ -956,7 +916,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					subscribe1.Enabled = types.BoolPointerValue(subscribeItem1.Enabled)
 					subscribe1.MessageCondition = types.StringPointerValue(subscribeItem1.MessageCondition)
 					subscribe1.Name = types.StringPointerValue(subscribeItem1.Name)
-					subscribe1.Policy = types.StringPointerValue(subscribeItem1.Policy)
+					subscribe1.Policy = types.StringValue(subscribeItem1.Policy)
 
 					flows1.Subscribe = append(flows1.Subscribe, subscribe1)
 				}
@@ -1043,7 +1003,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 							}
 						}
 						responseTemplateResult.PropagateErrorKeyToLogs = types.BoolPointerValue(responseTemplateValue.PropagateErrorKeyToLogs)
-						responseTemplateResult.Status = types.Int64PointerValue(responseTemplateValue.Status)
+						responseTemplateResult.Status = types.Int64Value(responseTemplateValue.Status)
 
 						responseTemplatesResult[responseTemplateKey] = responseTemplateResult
 					}

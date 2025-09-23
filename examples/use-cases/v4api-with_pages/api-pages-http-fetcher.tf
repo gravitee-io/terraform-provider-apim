@@ -56,9 +56,9 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
   }
   pages = [
     {
-      hrid = "docs-folder"
-      name = "Specifications"
-      type = "FOLDER"
+      hrid  = "docs-folder"
+      name  = "Specifications"
+      type  = "FOLDER"
       order = 0
     },
     {
