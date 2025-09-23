@@ -1,0 +1,39 @@
+---
+page_title: "Shared API resource configuration"
+subcategory: "Tutorials"
+---
+
+# Share API resource configuration between APIs
+
+~> API resource is different from Terraform resource. It is used by a Gravitee policies to use access data.
+
+In this example we show that APIs using an *"In memory users resource"* and share its configuration so all users are the same between APIs.
+
+## Provider configuration and resource configuration file
+
+```HCL
+{{ .ResourceTutorialMain.Content }}
+```
+
+This is the content of the resource configuration file, it creates two users that can be used by the basic authentication policy.
+
+```JSON
+{{ .ResourceTutorialConfig.Content }}
+```
+
+## Usage in APIs
+
+Below you will two APIs that use the same API resource configuration used to perform basic authentication.
+
+### API 1
+
+```HCL
+{{ .ResourceTutorialAPI1.Content }}
+```
+
+### API 2
+
+```HCL
+{{ .ResourceTutorialAPI1.Content }}
+```
+

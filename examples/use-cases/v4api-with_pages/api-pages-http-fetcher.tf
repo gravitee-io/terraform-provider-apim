@@ -62,8 +62,8 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
       order = 0
     },
     {
-      hrid       = "swagger"
-      name       = "Pet Store"
+      hrid        = "swagger"
+      name        = "Pet Store"
       parent_hrid = "docs-folder"
       source = {
         configuration = jsonencode({

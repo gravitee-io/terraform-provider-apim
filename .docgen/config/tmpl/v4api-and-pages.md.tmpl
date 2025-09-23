@@ -1,0 +1,22 @@
+---
+page_title: "API with pages"
+subcategory: "V4 API"
+---
+
+# Create a simple V4 HTTP that contains documentation pages.
+
+## Using a fetcher
+
+The HTTP fetcher is used to get then and poll an Open API spec every ten minutes. The spec is added to a "Specifications" folder.
+
+```HCL
+{{ .V4ApiPagesFetcher.Content }}
+```
+
+## Using inline Markdown
+
+The API contains a folder that contains a fake documentation page. It also has set up a home page with a simple content.
+
+```HCL
+{{ .V4ApiPagesMd.Content }}
+```

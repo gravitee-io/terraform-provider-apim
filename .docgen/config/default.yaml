@@ -21,6 +21,8 @@ outputs:
    target: docs/guides/v4api-native.md
  - template: {{ .RootDir }}/tmpl/v4api-message.md.tmpl
    target: docs/guides/v4api-message.md
+ - template: {{ .RootDir }}/tmpl/v4api-and-pages.md.tmpl
+   target: docs/guides/v4api-and-pages.md
  - template: {{ .RootDir }}/tmpl/spg-api.md.tmpl
    target: docs/guides/spg-api.md
  - template: {{ .RootDir }}/tmpl/spg-ratelimit.md.tmpl
@@ -33,6 +35,8 @@ outputs:
    target: docs/guides/application-m2m.md
  - template: {{ .RootDir }}/tmpl/application-spa.md.tmpl
    target: docs/guides/application-spa.md
+ - template: {{ .RootDir }}/tmpl/resource-tutorial.md.tmpl
+   target: docs/guides/resource-tutorial.md
 
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
@@ -64,4 +68,23 @@ chunks:
     required: true
   - template: examples/use-cases/application-spa/spa-app.tf
     exportedAs: ApplicationSPA
+    required: true
+
+  - template: examples/use-cases/v4api-with_pages/api-pages-http-fetcher.tf
+    exportedAs: V4ApiPagesFetcher
+    required: true
+  - template: examples/use-cases/v4api-with_pages/api-pages-inline-markdown.tf
+    exportedAs: V4ApiPagesMd
+    required: true
+  - template: examples/tutorials/v4api-shared-resource-local/api-1.tf
+    exportedAs: ResourceTutorialAPI1
+    required: true
+  - template: examples/tutorials/v4api-shared-resource-local/api-2.tf
+    exportedAs: ResourceTutorialAPI2
+    required: true
+  - template: examples/tutorials/v4api-shared-resource-local/basic-auth-config.json
+    exportedAs: ResourceTutorialConfig
+    required: true
+  - template: examples/tutorials/v4api-shared-resource-local/main.tf
+    exportedAs: ResourceTutorialMain
     required: true

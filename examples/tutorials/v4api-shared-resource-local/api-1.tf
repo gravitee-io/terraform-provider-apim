@@ -65,6 +65,7 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
       ]
       request = [
         {
+          # Authentication policy
           "name" : "Basic Authentication",
           "enabled" : true,
           "policy" : "policy-basic-authentication",
@@ -80,9 +81,10 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
   ]
   resources = [
     {
-      enabled       = true
-      name          = "In memory users"
-      type          = "auth-provider-inline-resource"
+      enabled = true
+      name    = "In memory users"
+      type    = "auth-provider-inline-resource"
+      # Where configuraiton file is included in the API resource
       configuration = data.local_file.api-resource-basic-auth.content
     }
   ]
