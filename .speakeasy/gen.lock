@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 3b928e8474d2bd361bee47e040f79762
+  docChecksum: ff797de90782fca68b49e9fcb5dd5732
   docVersion: 1.0.0
-  speakeasyVersion: 1.621.0
-  generationVersion: 2.707.0
+  speakeasyVersion: 1.622.1
+  generationVersion: 2.709.0
   releaseVersion: 0.3.0
   configChecksum: 35299afd03d9b81afa312b515f8fa84d
 features:
@@ -16,7 +16,6 @@ features:
     globalServerURLs: 2.83.0
     globals: 3.0.3
     groups: 2.81.2
-    ignores: 2.81.1
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.3
     retries: 2.81.4
@@ -117,7 +116,6 @@ generatedFiles:
   - internal/provider/types/logging_v4.go
   - internal/provider/types/member.go
   - internal/provider/types/metadata.go
-  - internal/provider/types/page_media.go
   - internal/provider/types/page_source.go
   - internal/provider/types/page_v4.go
   - internal/provider/types/page_v4_translation.go
@@ -129,7 +127,6 @@ generatedFiles:
   - internal/provider/types/property1.go
   - internal/provider/types/resource.go
   - internal/provider/types/response_template.go
-  - internal/provider/types/revision.go
   - internal/provider/types/sampling.go
   - internal/provider/types/selector.go
   - internal/provider/types/service_v4.go
@@ -219,7 +216,6 @@ generatedFiles:
   - internal/sdk/models/shared/metadata.go
   - internal/sdk/models/shared/metadataformat.go
   - internal/sdk/models/shared/operator.go
-  - internal/sdk/models/shared/pagemedia.go
   - internal/sdk/models/shared/pagesource.go
   - internal/sdk/models/shared/pagetype.go
   - internal/sdk/models/shared/pagev4.go
@@ -240,7 +236,6 @@ generatedFiles:
   - internal/sdk/models/shared/qos.go
   - internal/sdk/models/shared/resource.go
   - internal/sdk/models/shared/responsetemplate.go
-  - internal/sdk/models/shared/revision.go
   - internal/sdk/models/shared/sampling.go
   - internal/sdk/models/shared/schemebasicauth.go
   - internal/sdk/models/shared/security.go

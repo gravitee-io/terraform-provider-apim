@@ -9,7 +9,7 @@ import (
 // ResponseTemplate - API response template
 type ResponseTemplate struct {
 	// API response template status
-	Status *int64 `json:"status,omitempty"`
+	Status int64 `json:"status"`
 	// API response template headers
 	Headers map[string]string `json:"headers,omitempty"`
 	// API response template body
@@ -22,15 +22,15 @@ func (r ResponseTemplate) MarshalJSON() ([]byte, error) {
 }
 
 func (r *ResponseTemplate) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"status"}); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *ResponseTemplate) GetStatus() *int64 {
+func (r *ResponseTemplate) GetStatus() int64 {
 	if r == nil {
-		return nil
+		return 0
 	}
 	return r.Status
 }

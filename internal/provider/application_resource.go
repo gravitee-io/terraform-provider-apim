@@ -97,7 +97,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 				Description: `Application's description.`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtLeast(1),
+					stringvalidator.UTF8LengthBetween(1, 4000),
 				},
 			},
 			"domain": schema.StringAttribute{
@@ -107,6 +107,9 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Application's domain.`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(256),
+				},
 			},
 			"environment_id": schema.StringAttribute{
 				Computed: true,
@@ -135,6 +138,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
 				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
 				},
 			},
@@ -291,7 +295,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 				Description: `Application's name. Duplicate names can exists.`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthAtLeast(1),
+					stringvalidator.UTF8LengthBetween(1, 512),
 				},
 			},
 			"notify_members": schema.BoolAttribute{
@@ -393,6 +397,9 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},
 								Description: `Simple application client ID`,
+								Validators: []validator.String{
+									stringvalidator.UTF8LengthAtMost(300),
+								},
 							},
 							"type": schema.StringAttribute{
 								Computed: true,

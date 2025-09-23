@@ -94,6 +94,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 				Required:    true,
 				Description: `Human-readable ID of a spec`,
 				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
 				},
 			},
