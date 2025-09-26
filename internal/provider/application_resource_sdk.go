@@ -30,7 +30,6 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 		for _, membersItem := range resp.Members {
 			var members tfTypes.Member
 
-			members.ID = types.StringPointerValue(membersItem.ID)
 			members.Role = types.StringValue(membersItem.Role)
 			members.Source = types.StringValue(membersItem.Source)
 			members.SourceID = types.StringValue(membersItem.SourceID)
@@ -44,6 +43,7 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 
 			metadata.DefaultValue = types.StringPointerValue(metadataItem.DefaultValue)
 			metadata.Format = types.StringValue(string(metadataItem.Format))
+			metadata.Hidden = types.BoolPointerValue(metadataItem.Hidden)
 			metadata.Key = types.StringPointerValue(metadataItem.Key)
 			metadata.Name = types.StringValue(metadataItem.Name)
 			metadata.Value = types.StringPointerValue(metadataItem.Value)
@@ -358,15 +358,22 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		} else {
 			defaultValue = nil
 		}
+		hidden := new(bool)
+		if !metadataItem.Hidden.IsUnknown() && !metadataItem.Hidden.IsNull() {
+			*hidden = metadataItem.Hidden.ValueBool()
+		} else {
+			hidden = nil
+		}
 		metadata = append(metadata, shared.Metadata{
 			Key:          key,
 			Name:         name1,
 			Format:       format,
 			Value:        value,
 			DefaultValue: defaultValue,
+			Hidden:       hidden,
 		})
 	}
-	members := make([]shared.MemberInput, 0, len(r.Members))
+	members := make([]shared.Member, 0, len(r.Members))
 	for _, membersItem := range r.Members {
 		var source string
 		source = membersItem.Source.ValueString()
@@ -377,7 +384,7 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		var role string
 		role = membersItem.Role.ValueString()
 
-		members = append(members, shared.MemberInput{
+		members = append(members, shared.Member{
 			Source:   source,
 			SourceID: sourceID,
 			Role:     role,

@@ -2,13 +2,17 @@
 
 package shared
 
+// InvalidValueResponse - The invalid value.
+type InvalidValueResponse struct {
+}
+
 type DetailResponse struct {
 	// The error message
 	Message *string `json:"message,omitempty"`
 	// The json path of the field in error.
 	Location *string `json:"location,omitempty"`
 	// The invalid value.
-	InvalidValue *string `json:"invalidValue,omitempty"`
+	InvalidValue *InvalidValueResponse `json:"invalidValue,omitempty"`
 }
 
 func (d *DetailResponse) GetMessage() *string {
@@ -25,7 +29,7 @@ func (d *DetailResponse) GetLocation() *string {
 	return d.Location
 }
 
-func (d *DetailResponse) GetInvalidValue() *string {
+func (d *DetailResponse) GetInvalidValue() *InvalidValueResponse {
 	if d == nil {
 		return nil
 	}

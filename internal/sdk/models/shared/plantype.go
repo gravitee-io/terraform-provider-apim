@@ -7,12 +7,11 @@ import (
 	"fmt"
 )
 
-// PlanType - Plan type.
+// PlanType - Only one possible type: API
 type PlanType string
 
 const (
-	PlanTypeAPI     PlanType = "API"
-	PlanTypeCatalog PlanType = "CATALOG"
+	PlanTypeAPI PlanType = "API"
 )
 
 func (e PlanType) ToPointer() *PlanType {
@@ -25,8 +24,6 @@ func (e *PlanType) UnmarshalJSON(data []byte) error {
 	}
 	switch v {
 	case "API":
-		fallthrough
-	case "CATALOG":
 		*e = PlanType(v)
 		return nil
 	default:

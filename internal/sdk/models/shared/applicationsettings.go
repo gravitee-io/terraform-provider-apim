@@ -6,7 +6,7 @@ package shared
 type ApplicationSettings struct {
 	// Simple application settings
 	App *SimpleApplicationSettings `json:"app,omitempty"`
-	// Application OAuth client settings
+	// Application OAuth client settings. This require Dynamic Client Registration to be enabled at the environment level.
 	Oauth *ApplicationOAuthClientSettings `json:"oauth,omitempty"`
 	// Application TLS settings
 	TLS *ApplicationTLSSettings `json:"tls,omitempty"`

@@ -11,8 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ericlagergren/decimal"
-
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/optionalnullable"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/types"
 )
@@ -145,8 +143,6 @@ func getSimplePathParams(parentName string, objType reflect.Type, objValue refle
 		case types.Date:
 			pathParams[parentName] = valToString(objValue.Interface())
 		case big.Int:
-			pathParams[parentName] = valToString(objValue.Interface())
-		case decimal.Big:
 			pathParams[parentName] = valToString(objValue.Interface())
 		default:
 			var ppVals []string

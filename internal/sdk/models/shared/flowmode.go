@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// FlowMode - API's flow mode.
+// FlowMode - DEFAULT : all flows that match the conditions are executed in the order they are defined BEST_MATCH: only the best matching flow will be executed
 type FlowMode string
 
 const (

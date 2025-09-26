@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// Qos - Type of the quality of service.
+// Qos - Type of the quality of service (for message APIs).
 type Qos string
 
 const (

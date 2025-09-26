@@ -30,7 +30,6 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 		for _, membersItem := range resp.Members {
 			var members tfTypes.Member
 
-			members.ID = types.StringPointerValue(membersItem.ID)
 			members.Role = types.StringValue(membersItem.Role)
 			members.Source = types.StringValue(membersItem.Source)
 			members.SourceID = types.StringValue(membersItem.SourceID)
@@ -44,6 +43,7 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 
 			metadata.DefaultValue = types.StringPointerValue(metadataItem.DefaultValue)
 			metadata.Format = types.StringValue(string(metadataItem.Format))
+			metadata.Hidden = types.BoolPointerValue(metadataItem.Hidden)
 			metadata.Key = types.StringPointerValue(metadataItem.Key)
 			metadata.Name = types.StringValue(metadataItem.Name)
 			metadata.Value = types.StringPointerValue(metadataItem.Value)

@@ -10,17 +10,17 @@ import (
 type StepV4 struct {
 	// The name of the step
 	Name *string `json:"name,omitempty"`
-	// The description of the step
+	// A description for the step
 	Description *string `json:"description,omitempty"`
-	// Is the step enabled or not.
+	// To enable the step globally.
 	Enabled *bool `default:"true" json:"enabled"`
-	// The policy of the step
+	// The policy of the step (plugin ID)
 	Policy string `json:"policy"`
-	// The configuration of the step
+	// JSON Object configuration of the policy used.
 	Configuration any `json:"configuration,omitempty"`
-	// The condition of the step
+	// The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
 	Condition *string `json:"condition,omitempty"`
-	// The message condition of the step
+	// The message condition of the step (for message API)
 	MessageCondition *string `json:"messageCondition,omitempty"`
 }
 

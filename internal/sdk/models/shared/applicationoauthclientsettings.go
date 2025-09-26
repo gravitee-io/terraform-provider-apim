@@ -79,7 +79,7 @@ func (e *GrantType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// ApplicationOAuthClientSettings - Application OAuth client settings
+// ApplicationOAuthClientSettings - Application OAuth client settings. This require Dynamic Client Registration to be enabled at the environment level.
 type ApplicationOAuthClientSettings struct {
 	// OAuth client application type:
 	// `browser` for single page apps (SPA),
@@ -95,7 +95,7 @@ type ApplicationOAuthClientSettings struct {
 	//
 	GrantTypes []GrantType `json:"grantTypes"`
 	// OAuth client redirect Uris
-	RedirectUris             []string          `json:"redirectUris"`
+	RedirectUris             []string          `json:"redirectUris,omitempty"`
 	AdditionalClientMetadata map[string]string `json:"additionalClientMetadata,omitempty"`
 }
 
@@ -115,7 +115,7 @@ func (a *ApplicationOAuthClientSettings) GetGrantTypes() []GrantType {
 
 func (a *ApplicationOAuthClientSettings) GetRedirectUris() []string {
 	if a == nil {
-		return []string{}
+		return nil
 	}
 	return a.RedirectUris
 }

@@ -42,11 +42,12 @@ func (e *HTTPSelectorType) UnmarshalJSON(data []byte) error {
 type HTTPSelector struct {
 	// Selector type.
 	Type HTTPSelectorType `json:"type"`
-	// The path of the selector
+	// The path to match
 	Path *string `default:"/" json:"path"`
-	// The path operator of the selector
-	PathOperator *Operator    `default:"STARTS_WITH" json:"pathOperator"`
-	Methods      []HTTPMethod `json:"methods,omitempty"`
+	// Operator function to match a URI path
+	PathOperator *Operator `default:"STARTS_WITH" json:"pathOperator"`
+	// Methods to match, unset or empty means "any"
+	Methods []HTTPMethod `json:"methods,omitempty"`
 }
 
 func (h HTTPSelector) MarshalJSON() ([]byte, error) {

@@ -7,7 +7,11 @@ import (
 	"fmt"
 )
 
-// SamplingType - The type of the sampling
+// SamplingType - The type of the sampling:
+//
+// `PROBABILITY`: based on a specified probability,
+// `TEMPORAL`: all messages for on time duration,
+// `COUNT`: for every number of specified messages
 type SamplingType string
 
 const (
@@ -37,11 +41,21 @@ func (e *SamplingType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// Sampling - API analytics sampling
+// Sampling - API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.
 type Sampling struct {
-	// The type of the sampling
+	// The type of the sampling:
+	//
+	// `PROBABILITY`: based on a specified probability,
+	// `TEMPORAL`: all messages for on time duration,
+	// `COUNT`: for every number of specified messages
+	//
 	Type SamplingType `json:"type"`
-	// The value of the sampling
+	// The value of the sampling:
+	//
+	// `PROBABILITY`: between `0.01` and `0.5`,
+	// `TEMPORAL`: ISO-8601 duration format, 1 second minimum (PT1S)
+	// `COUNT`: greater than `1`,
+	//
 	Value *string `json:"value,omitempty"`
 }
 

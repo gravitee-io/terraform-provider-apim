@@ -2,13 +2,17 @@
 
 package shared
 
+// HTTPErrorInvalidValue - The invalid value.
+type HTTPErrorInvalidValue struct {
+}
+
 type HTTPErrorDetail struct {
 	// The error message
 	Message *string `json:"message,omitempty"`
 	// The json path of the field in error.
 	Location *string `json:"location,omitempty"`
 	// The invalid value.
-	InvalidValue *string `json:"invalidValue,omitempty"`
+	InvalidValue *HTTPErrorInvalidValue `json:"invalidValue,omitempty"`
 }
 
 func (h *HTTPErrorDetail) GetMessage() *string {
@@ -25,7 +29,7 @@ func (h *HTTPErrorDetail) GetLocation() *string {
 	return h.Location
 }
 
-func (h *HTTPErrorDetail) GetInvalidValue() *string {
+func (h *HTTPErrorDetail) GetInvalidValue() *HTTPErrorInvalidValue {
 	if h == nil {
 		return nil
 	}

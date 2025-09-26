@@ -63,7 +63,7 @@ type Apiv4DataSourceModel struct {
 	Plans             []tfTypes.PlanV4                               `tfsdk:"plans"`
 	PrimaryOwner      *tfTypes.PrimaryOwner                          `tfsdk:"primary_owner"`
 	Properties        []tfTypes.Property1                            `tfsdk:"properties"`
-	Resources         []tfTypes.Resource                             `tfsdk:"resources"`
+	Resources         []tfTypes.APIResource                          `tfsdk:"resources"`
 	ResponseTemplates map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
 	Services          *tfTypes.APIServices                           `tfsdk:"services"`
 	State             types.String                                   `tfsdk:"state"`
@@ -89,78 +89,97 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
 						Computed:    true,
-						Description: `Whether or not analytics is enabled.`,
+						Description: `Whether or not analytics are enabled.`,
 					},
 					"logging": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"condition": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Filter using EL what request should be logged`,
 							},
 							"content": schema.SingleNestedAttribute{
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"headers": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Enable to log request headers`,
 									},
 									"message_headers": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Enable to log message headers (Message APIs only)`,
 									},
 									"message_metadata": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Enable to log message metadata (Message APIs only)`,
 									},
 									"message_payload": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Enable to log message headers (Message APIs only)`,
 									},
 									"payload": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Enable to log request headers (Proxy APIs only)`,
 									},
 								},
-								Description: `API logging content`,
+								Description: `API logging content when one of logging mode is enabled (Not for native APIs)`,
 							},
 							"message_condition": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `Filter using EL what message should be logged`,
 							},
 							"mode": schema.SingleNestedAttribute{
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"endpoint": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Enables endpoint logging`,
 									},
 									"entrypoint": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Enables entrypoint logging`,
 									},
 								},
-								Description: `API logging mode`,
+								Description: `API logging mode (Not for native APIs)`,
 							},
 							"phase": schema.SingleNestedAttribute{
 								Computed: true,
 								Attributes: map[string]schema.Attribute{
 									"request": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Enables logging durring request phase`,
 									},
 									"response": schema.BoolAttribute{
-										Computed: true,
+										Computed:    true,
+										Description: `Enables logging durring response phase`,
 									},
 								},
-								Description: `Logging phase`,
+								Description: `Logging phase when one of logging mode is enabled (Not for native APIs)`,
 							},
 						},
-						Description: `API logging configuration`,
+						Description: `API logging configuration (Not for native APIs)`,
 					},
 					"sampling": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Computed:    true,
-								Description: `The type of the sampling`,
+								Computed: true,
+								MarkdownDescription: `The type of the sampling:` + "\n" +
+									`` + "\n" +
+									`` + "`" + `PROBABILITY` + "`" + `: based on a specified probability,` + "\n" +
+									`` + "`" + `TEMPORAL` + "`" + `: all messages for on time duration,` + "\n" +
+									`` + "`" + `COUNT` + "`" + `: for every number of specified messages`,
 							},
 							"value": schema.StringAttribute{
-								Computed:    true,
-								Description: `The value of the sampling`,
+								Computed: true,
+								MarkdownDescription: `The value of the sampling:` + "\n" +
+									`` + "\n" +
+									`` + "`" + `PROBABILITY` + "`" + `: between ` + "`" + `0.01` + "`" + ` and ` + "`" + `0.5` + "`" + `,` + "\n" +
+									`` + "`" + `TEMPORAL` + "`" + `: ISO-8601 duration format, 1 second minimum (PT1S)` + "\n" +
+									`` + "`" + `COUNT` + "`" + `: greater than ` + "`" + `1` + "`" + `,`,
 							},
 						},
-						Description: `API analytics sampling`,
+						Description: `API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.`,
 					},
 					"tracing": schema.SingleNestedAttribute{
 						Computed: true,
@@ -171,18 +190,18 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							},
 							"verbose": schema.BoolAttribute{
 								Computed:    true,
-								Description: `Enable technical tracing to get more details on request execution. Be careful this settings would generate more noise and would impact performance.`,
+								Description: `Enable technical tracing to get more details on request execution. Be careful this settings can generate more noise and can impact performance.`,
 							},
 						},
-						Description: `API analytic tracing`,
+						Description: `OpenTelemetry tracing (Not for native APIs)`,
 					},
 				},
-				Description: `API analytics`,
+				Description: `API analytics configuration to enable/disable what can be observed.`,
 			},
 			"categories": schema.ListAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
-				Description: `The list of category keys associated with this API.`,
+				Description: `The list of category names (or UUID) associated with this API.`,
 			},
 			"cross_id": schema.StringAttribute{
 				Computed:    true,
@@ -190,7 +209,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,
-				Description: `API's description. A short description of your API.`,
+				Description: `Basic API documentation to describe what this API does.`,
 			},
 			"endpoint_groups": schema.ListNestedAttribute{
 				Computed: true,
@@ -203,11 +222,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
-										Description: `Parsed as JSON.`,
+										Description: `JSON Configuration specific to this endpoint that cannot be define at the group level. Parsed as JSON.`,
 									},
 									"inherit_configuration": schema.BoolAttribute{
 										Computed:    true,
-										Description: `Is the configuration of the endpoint inherited from the endpoint group it belongs to.`,
+										Description: `Enables shared configuration inheritance.`,
 									},
 									"name": schema.StringAttribute{
 										Computed:    true,
@@ -215,7 +234,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 									"secondary": schema.BoolAttribute{
 										Computed:    true,
-										Description: `Is the endpoint a secondary endpoint.`,
+										Description: `Define this endpoint as fallback endpoint in case other endpoints are no longer responding.`,
 									},
 									"services": schema.SingleNestedAttribute{
 										Computed: true,
@@ -226,7 +245,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													"configuration": schema.StringAttribute{
 														CustomType:  jsontypes.NormalizedType{},
 														Computed:    true,
-														Description: `The configuration of the service. Parsed as JSON.`,
+														Description: `JSON configuration of the service. Parsed as JSON.`,
 													},
 													"enabled": schema.BoolAttribute{
 														Computed:    true,
@@ -234,13 +253,14 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													},
 													"override_configuration": schema.BoolAttribute{
 														Computed:    true,
-														Description: `Override the configuration of the service`,
+														Description: `When the configuration overrides an inherited configuration.`,
 													},
 													"type": schema.StringAttribute{
-														Computed: true,
+														Computed:    true,
+														Description: `The service plugin ID used.`,
 													},
 												},
-												Description: `Service`,
+												Description: `Specifies an API property fetch using an external source.`,
 											},
 										},
 										Description: `API Endpoint Services`,
@@ -248,23 +268,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									"shared_configuration_override": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
-										Description: `Parsed as JSON.`,
+										Description: `JSON Configuration that replaces the shared configuration defined at the group level. Parsed as JSON.`,
 									},
 									"tenants": schema.ListAttribute{
 										Computed:    true,
 										ElementType: types.StringType,
-										Description: `The list of tenants associated to the endpoint.`,
+										Description: `The list of Getaway's tenants on which the endpoint can be used.`,
 									},
 									"type": schema.StringAttribute{
 										Computed:    true,
-										Description: `The type of the endpoint`,
+										Description: `The type of endpoint`,
 									},
 									"weight": schema.Int32Attribute{
 										Computed:    true,
-										Description: `The weight of the endpoint`,
+										Description: `The weight of the endpoint for the load balancer algorythm.`,
 									},
 								},
 							},
+							Description: `All endpoints of this API.`,
 						},
 						"load_balancer": schema.SingleNestedAttribute{
 							Computed: true,
@@ -274,7 +295,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Description: `Load balancer type.`,
 								},
 							},
-							Description: `Load Balancer`,
+							Description: `Load Balancer to distribute traffic between endpoints.`,
 						},
 						"name": schema.StringAttribute{
 							Computed:    true,
@@ -289,7 +310,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										"configuration": schema.StringAttribute{
 											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `The configuration of the service. Parsed as JSON.`,
+											Description: `JSON configuration of the service. Parsed as JSON.`,
 										},
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -297,13 +318,14 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										},
 										"override_configuration": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Override the configuration of the service`,
+											Description: `When the configuration overrides an inherited configuration.`,
 										},
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The service plugin ID used.`,
 										},
 									},
-									Description: `Service`,
+									Description: `Specifies an API property fetch using an external source.`,
 								},
 								"health_check": schema.SingleNestedAttribute{
 									Computed: true,
@@ -311,7 +333,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										"configuration": schema.StringAttribute{
 											CustomType:  jsontypes.NormalizedType{},
 											Computed:    true,
-											Description: `The configuration of the service. Parsed as JSON.`,
+											Description: `JSON configuration of the service. Parsed as JSON.`,
 										},
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -319,13 +341,14 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										},
 										"override_configuration": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Override the configuration of the service`,
+											Description: `When the configuration overrides an inherited configuration.`,
 										},
 										"type": schema.StringAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `The service plugin ID used.`,
 										},
 									},
-									Description: `Service`,
+									Description: `Specifies an API property fetch using an external source.`,
 								},
 							},
 							Description: `API Endpoint Group Services`,
@@ -333,7 +356,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"shared_configuration": schema.StringAttribute{
 							CustomType:  jsontypes.NormalizedType{},
 							Computed:    true,
-							Description: `Parsed as JSON.`,
+							Description: `JSON configuration for the ` + "`" + `type` + "`" + ` of ` + "`" + `endpoints` + "`" + ` that will be shared across all endpoints. Parsed as JSON.`,
 						},
 						"type": schema.StringAttribute{
 							Computed:    true,
@@ -341,6 +364,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 					},
 				},
+				Description: `Common endpoints properties and container of endpoints specifying backends this API can call.`,
 			},
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
@@ -352,7 +376,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
 						Computed:    true,
-						Description: `Is the failover enabled.`,
+						Description: `Automatically redirects request to the next endpoint if the response is too slow.`,
 					},
 					"max_failures": schema.Int32Attribute{
 						Computed:    true,
@@ -360,7 +384,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 					},
 					"max_retries": schema.Int32Attribute{
 						Computed:    true,
-						Description: `The maximum number of retries.`,
+						Description: `Limit the number of retry attempts before recording an error. Each attempt dynamically selects an endpoint based on the load balancing algorithm.`,
 					},
 					"open_state_duration": schema.Int64Attribute{
 						Computed:    true,
@@ -372,24 +396,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 					},
 					"slow_call_duration": schema.Int64Attribute{
 						Computed:    true,
-						Description: `The duration in milliseconds to consider a request as slow.`,
+						Description: `Define a threshold for slow responses. Requests exceeding this duration are recorded as slow.`,
 					},
 				},
-				Description: `API Failover`,
+				Description: `Defines the failover behavior to bypass endpoints when some are slow.`,
 			},
 			"flow_execution": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
 					"match_required": schema.BoolAttribute{
 						Computed:    true,
-						Description: `Is the flow execution match required.`,
+						Description: `To indicate failure if no flow matches the request.`,
 					},
 					"mode": schema.StringAttribute{
 						Computed:    true,
-						Description: `API's flow mode.`,
+						Description: `DEFAULT : all flows that match the conditions are executed in the order they are defined BEST_MATCH: only the best matching flow will be executed`,
 					},
 				},
-				Description: `Flow execution`,
+				Description: `Flow execution enablement (Not applicable for Native API)`,
 			},
 			"flows": schema.ListNestedAttribute{
 				Computed: true,
@@ -401,24 +425,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Computed:    true,
-										Description: `The condition of the step`,
+										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 									},
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
-										Description: `The configuration of the step. Parsed as JSON.`,
+										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Computed:    true,
-										Description: `The description of the step`,
+										Description: `A description for the step`,
 									},
 									"enabled": schema.BoolAttribute{
 										Computed:    true,
-										Description: `Is the step enabled or not.`,
+										Description: `To enable the step globally.`,
 									},
 									"message_condition": schema.StringAttribute{
 										Computed:    true,
-										Description: `The message condition of the step`,
+										Description: `The message condition of the step (for message API)`,
 									},
 									"name": schema.StringAttribute{
 										Computed:    true,
@@ -426,7 +450,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 									"policy": schema.StringAttribute{
 										Computed:    true,
-										Description: `The policy of the step`,
+										Description: `The policy of the step (plugin ID)`,
 									},
 								},
 							},
@@ -436,34 +460,30 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed:    true,
 							Description: `Is the flow enabled.`,
 						},
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Flow's uuid.`,
-						},
 						"interact": schema.ListNestedAttribute{
 							Computed: true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Computed:    true,
-										Description: `The condition of the step`,
+										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 									},
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
-										Description: `The configuration of the step. Parsed as JSON.`,
+										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Computed:    true,
-										Description: `The description of the step`,
+										Description: `A description for the step`,
 									},
 									"enabled": schema.BoolAttribute{
 										Computed:    true,
-										Description: `Is the step enabled or not.`,
+										Description: `To enable the step globally.`,
 									},
 									"message_condition": schema.StringAttribute{
 										Computed:    true,
-										Description: `The message condition of the step`,
+										Description: `The message condition of the step (for message API)`,
 									},
 									"name": schema.StringAttribute{
 										Computed:    true,
@@ -471,7 +491,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 									"policy": schema.StringAttribute{
 										Computed:    true,
-										Description: `The policy of the step`,
+										Description: `The policy of the step (plugin ID)`,
 									},
 								},
 							},
@@ -487,24 +507,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Computed:    true,
-										Description: `The condition of the step`,
+										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 									},
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
-										Description: `The configuration of the step. Parsed as JSON.`,
+										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Computed:    true,
-										Description: `The description of the step`,
+										Description: `A description for the step`,
 									},
 									"enabled": schema.BoolAttribute{
 										Computed:    true,
-										Description: `Is the step enabled or not.`,
+										Description: `To enable the step globally.`,
 									},
 									"message_condition": schema.StringAttribute{
 										Computed:    true,
-										Description: `The message condition of the step`,
+										Description: `The message condition of the step (for message API)`,
 									},
 									"name": schema.StringAttribute{
 										Computed:    true,
@@ -512,7 +532,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 									"policy": schema.StringAttribute{
 										Computed:    true,
-										Description: `The policy of the step`,
+										Description: `The policy of the step (plugin ID)`,
 									},
 								},
 							},
@@ -524,24 +544,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Computed:    true,
-										Description: `The condition of the step`,
+										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 									},
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
-										Description: `The configuration of the step. Parsed as JSON.`,
+										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Computed:    true,
-										Description: `The description of the step`,
+										Description: `A description for the step`,
 									},
 									"enabled": schema.BoolAttribute{
 										Computed:    true,
-										Description: `Is the step enabled or not.`,
+										Description: `To enable the step globally.`,
 									},
 									"message_condition": schema.StringAttribute{
 										Computed:    true,
-										Description: `The message condition of the step`,
+										Description: `The message condition of the step (for message API)`,
 									},
 									"name": schema.StringAttribute{
 										Computed:    true,
@@ -549,7 +569,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 									"policy": schema.StringAttribute{
 										Computed:    true,
-										Description: `The policy of the step`,
+										Description: `The policy of the step (plugin ID)`,
 									},
 								},
 							},
@@ -561,24 +581,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Computed:    true,
-										Description: `The condition of the step`,
+										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 									},
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
-										Description: `The configuration of the step. Parsed as JSON.`,
+										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Computed:    true,
-										Description: `The description of the step`,
+										Description: `A description for the step`,
 									},
 									"enabled": schema.BoolAttribute{
 										Computed:    true,
-										Description: `Is the step enabled or not.`,
+										Description: `To enable the step globally.`,
 									},
 									"message_condition": schema.StringAttribute{
 										Computed:    true,
-										Description: `The message condition of the step`,
+										Description: `The message condition of the step (for message API)`,
 									},
 									"name": schema.StringAttribute{
 										Computed:    true,
@@ -586,7 +606,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 									"policy": schema.StringAttribute{
 										Computed:    true,
-										Description: `The policy of the step`,
+										Description: `The policy of the step (plugin ID)`,
 									},
 								},
 							},
@@ -605,11 +625,12 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											},
 											"channel_operator": schema.StringAttribute{
 												Computed:    true,
-												Description: `The path operator of the selector`,
+												Description: `Operator function to match a URI path`,
 											},
 											"entrypoints": schema.ListAttribute{
 												Computed:    true,
 												ElementType: types.StringType,
+												Description: `Among all entrypoints types, restrict which one will trigger this flow. Unset or empty means "all types".`,
 											},
 											"operations": schema.ListAttribute{
 												Computed:    true,
@@ -628,7 +649,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Attributes: map[string]schema.Attribute{
 											"condition": schema.StringAttribute{
 												Computed:    true,
-												Description: `The condition of the selector`,
+												Description: `The EL condition of the selector`,
 											},
 											"type": schema.StringAttribute{
 												Computed:    true,
@@ -643,14 +664,15 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											"methods": schema.ListAttribute{
 												Computed:    true,
 												ElementType: types.StringType,
+												Description: `Methods to match, unset or empty means "any"`,
 											},
 											"path": schema.StringAttribute{
 												Computed:    true,
-												Description: `The path of the selector`,
+												Description: `The path to match`,
 											},
 											"path_operator": schema.StringAttribute{
 												Computed:    true,
-												Description: `The path operator of the selector`,
+												Description: `Operator function to match a URI path`,
 											},
 											"type": schema.StringAttribute{
 												Computed:    true,
@@ -668,24 +690,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Computed:    true,
-										Description: `The condition of the step`,
+										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 									},
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
-										Description: `The configuration of the step. Parsed as JSON.`,
+										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Computed:    true,
-										Description: `The description of the step`,
+										Description: `A description for the step`,
 									},
 									"enabled": schema.BoolAttribute{
 										Computed:    true,
-										Description: `Is the step enabled or not.`,
+										Description: `To enable the step globally.`,
 									},
 									"message_condition": schema.StringAttribute{
 										Computed:    true,
-										Description: `The message condition of the step`,
+										Description: `The message condition of the step (for message API)`,
 									},
 									"name": schema.StringAttribute{
 										Computed:    true,
@@ -693,7 +715,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 									"policy": schema.StringAttribute{
 										Computed:    true,
-										Description: `The policy of the step`,
+										Description: `The policy of the step (plugin ID)`,
 									},
 								},
 							},
@@ -702,17 +724,16 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"tags": schema.ListAttribute{
 							Computed:    true,
 							ElementType: types.StringType,
-							Description: `Flow's tags.`,
+							Description: `Flow's informative tags.`,
 						},
 					},
 				},
-				Description: `List of flows for the API`,
+				Description: `Common flows for the API where traffic policies are configured.`,
 			},
 			"groups": schema.ListAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
-				MarkdownDescription: `List of groups associated with the API.` + "\n" +
-					`This groups are id or name references to existing groups in APIM.`,
+				Description: `Name or UUIDs of existing groups (of users) associated with this API.`,
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
@@ -729,7 +750,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"labels": schema.ListAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
-				Description: `List of labels of the API`,
+				Description: `Informative labels for this API.`,
 			},
 			"lifecycle_state": schema.StringAttribute{
 				Computed:    true,
@@ -746,32 +767,41 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Computed: true,
 									Attributes: map[string]schema.Attribute{
 										"allow_credentials": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `` + "`" + `Access-Control-Allow-Credentials` + "`" + `: Indicates whether or not the response to the request can be exposed when the credentials flag is true.`,
 										},
 										"allow_headers": schema.ListAttribute{
 											Computed:    true,
 											ElementType: types.StringType,
+											Description: `` + "`" + `Access-Control-Allow-Headers` + "`" + `: Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request.`,
 										},
 										"allow_methods": schema.ListAttribute{
 											Computed:    true,
 											ElementType: types.StringType,
+											Description: `` + "`" + `Access-Control-Allow-Methods` + "`" + `: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource.`,
 										},
 										"allow_origin": schema.ListAttribute{
 											Computed:    true,
 											ElementType: types.StringType,
+											MarkdownDescription: `` + "`" + `Access-Control-Allow-Origin` + "`" + `: The origin parameter specifies a URI that may access the resource. Scheme, domain and port are part of the same-origin definition.` + "\n" +
+												`If you choose to enable '*' it means that is allows all requests, regardless of origin. URIs RegExp patterns that may access the resource`,
 										},
 										"enabled": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Enable CORS`,
 										},
 										"expose_headers": schema.ListAttribute{
 											Computed:    true,
 											ElementType: types.StringType,
+											Description: `` + "`" + `Access-Control-Expose-Headers` + "`" + `: This header lets a server whitelist headers that browsers are allowed to access.`,
 										},
 										"max_age": schema.Int32Attribute{
-											Computed: true,
+											Computed:    true,
+											Description: `How long (in seconds) the results of a preflight request can be cached (-1 if disabled).`,
 										},
 										"run_policies": schema.BoolAttribute{
-											Computed: true,
+											Computed:    true,
+											Description: `Allow the Gateway to run policies during in pre-flight request`,
 										},
 									},
 									Description: `Http listener Cross-Origin Resource Sharing`,
@@ -783,7 +813,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											"configuration": schema.StringAttribute{
 												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
 												Computed: true,
@@ -793,11 +823,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 														Description: `The endpoint of the DLQ.`,
 													},
 												},
-												Description: `DLQ`,
+												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
 												Computed:    true,
-												Description: `Type of the quality of service.`,
+												Description: `Type of the quality of service (for message APIs).`,
 											},
 											"type": schema.StringAttribute{
 												Computed:    true,
@@ -805,30 +835,31 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											},
 										},
 									},
-								},
-								"path_mappings": schema.ListAttribute{
-									Computed:    true,
-									ElementType: types.StringType,
+									Description: `A list of possible entrypoint of the same type.`,
 								},
 								"paths": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
 										Attributes: map[string]schema.Attribute{
 											"host": schema.StringAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Virtual host required to access this API. (` + "`" + `Host` + "`" + ` or ` + "`" + `:Authority` + "`" + ` headers, remote address for websockets)`,
 											},
 											"override_access": schema.BoolAttribute{
-												Computed: true,
+												Computed:    true,
+												Description: `Override default organization entrypoint with ` + "`" + `host` + "`" + ``,
 											},
 											"path": schema.StringAttribute{
 												Computed: true,
 											},
 										},
 									},
+									Description: `One of the possible context paths of this API`,
 								},
 								"servers": schema.ListAttribute{
 									Computed:    true,
 									ElementType: types.StringType,
+									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -847,7 +878,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											"configuration": schema.StringAttribute{
 												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
 												Computed: true,
@@ -857,11 +888,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 														Description: `The endpoint of the DLQ.`,
 													},
 												},
-												Description: `DLQ`,
+												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
 												Computed:    true,
-												Description: `Type of the quality of service.`,
+												Description: `Type of the quality of service (for message APIs).`,
 											},
 											"type": schema.StringAttribute{
 												Computed:    true,
@@ -869,18 +900,16 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											},
 										},
 									},
+									Description: `A list of possible entrypoint of the same type.`,
 								},
 								"host": schema.StringAttribute{
 									Computed:    true,
 									Description: `A hostname for which the API will match against SNI.`,
 								},
-								"port": schema.Int64Attribute{
-									Computed:    true,
-									Description: `The port of the listener`,
-								},
 								"servers": schema.ListAttribute{
 									Computed:    true,
 									ElementType: types.StringType,
+									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -899,7 +928,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											"configuration": schema.StringAttribute{
 												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
 												Computed: true,
@@ -909,11 +938,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 														Description: `The endpoint of the DLQ.`,
 													},
 												},
-												Description: `DLQ`,
+												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
 												Computed:    true,
-												Description: `Type of the quality of service.`,
+												Description: `Type of the quality of service (for message APIs).`,
 											},
 											"type": schema.StringAttribute{
 												Computed:    true,
@@ -921,17 +950,19 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											},
 										},
 									},
+									Description: `A list of possible entrypoint of the same type.`,
 								},
 								"servers": schema.ListAttribute{
 									Computed:    true,
 									ElementType: types.StringType,
+									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Description: `Listener type.`,
 								},
 							},
-							Description: `Subscription listener`,
+							Description: `Subscription listener for message API.`,
 						},
 						"tcp": schema.SingleNestedAttribute{
 							Computed: true,
@@ -943,7 +974,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											"configuration": schema.StringAttribute{
 												CustomType:  jsontypes.NormalizedType{},
 												Computed:    true,
-												Description: `Parsed as JSON.`,
+												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
 												Computed: true,
@@ -953,11 +984,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 														Description: `The endpoint of the DLQ.`,
 													},
 												},
-												Description: `DLQ`,
+												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
 												Computed:    true,
-												Description: `Type of the quality of service.`,
+												Description: `Type of the quality of service (for message APIs).`,
 											},
 											"type": schema.StringAttribute{
 												Computed:    true,
@@ -965,6 +996,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											},
 										},
 									},
+									Description: `A list of possible entrypoint of the same type.`,
 								},
 								"hosts": schema.ListAttribute{
 									Computed:    true,
@@ -974,6 +1006,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								"servers": schema.ListAttribute{
 									Computed:    true,
 									ElementType: types.StringType,
+									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -984,16 +1017,12 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 					},
 				},
-				Description: `The list of listeners associated with this API.`,
+				Description: `The list of listeners defining how this API can be called. They depend on the API type.`,
 			},
 			"members": schema.ListNestedAttribute{
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `User UUID of the memeber`,
-						},
 						"role": schema.StringAttribute{
 							Computed:    true,
 							Description: `The role of the user in regards of the managed oject (API, Application, etc.)`,
@@ -1008,7 +1037,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 					},
 				},
-				Description: `Set of members associated with the plan`,
+				Description: `Users that can access or manage the API (depending on their roles).`,
 			},
 			"metadata": schema.ListNestedAttribute{
 				Computed: true,
@@ -1021,6 +1050,10 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"format": schema.StringAttribute{
 							Computed:    true,
 							Description: `The format of the metadata.`,
+						},
+						"hidden": schema.BoolAttribute{
+							Computed:    true,
+							Description: `if this metadata should be hidden`,
 						},
 						"key": schema.StringAttribute{
 							Computed:    true,
@@ -1051,22 +1084,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"access_controls": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"reference_id": schema.StringAttribute{
-										Computed:    true,
-										Description: `The id of the resource used to check the access control`,
-									},
-									"reference_type": schema.StringAttribute{
-										Computed:    true,
-										Description: `The type of the resource used to check the access control`,
-									},
-								},
-							},
-							Description: `List of access controls.`,
-						},
 						"configuration": schema.MapAttribute{
 							Computed:    true,
 							ElementType: types.StringType,
@@ -1076,17 +1093,9 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed:    true,
 							Description: `The content of the page, if any.`,
 						},
-						"content_type": schema.StringAttribute{
-							Computed:    true,
-							Description: `Page's content type.`,
-						},
 						"cross_id": schema.StringAttribute{
 							Computed:    true,
 							Description: `Page's cross uuid.`,
-						},
-						"excluded_access_controls": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Flag to restrict access to user matching the restrictions.`,
 						},
 						"hidden": schema.BoolAttribute{
 							Computed:    true,
@@ -1100,11 +1109,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed:    true,
 							Description: `A unique human readable id identifying this resource`,
 						},
-						"metadata": schema.MapAttribute{
-							Computed:    true,
-							ElementType: types.StringType,
-							Description: `Page's metadata.`,
-						},
 						"name": schema.StringAttribute{
 							Computed: true,
 							MarkdownDescription: `This is the display name of the page in APIM and on the portal.` + "\n" +
@@ -1116,12 +1120,8 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 						"parent_hrid": schema.StringAttribute{
 							Computed: true,
-							MarkdownDescription: `If your page contains a folder, setting this field to the map key associated to the` + "\n" +
-								`folder entry will be reflected into APIM by making the page a child of this folder.`,
-						},
-						"parent_id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Page's parent id.`,
+							MarkdownDescription: `If your page contains a folder, setting this field to the folder's hrid will be reflected ` + "\n" +
+								`into APIM by making the page a child of this folder.`,
 						},
 						"published": schema.BoolAttribute{
 							Computed:    true,
@@ -1133,143 +1133,27 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								"configuration": schema.StringAttribute{
 									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Page source's configuration. Parsed as JSON.`,
+									Description: `JSON object configuration of the fetch plugin. Parsed as JSON.`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
-									Description: `The type of the page source (=fetcher type).`,
+									Description: `The type of the page source (fetcher plugin ID).`,
 								},
 							},
 							MarkdownDescription: `Allow you to fetch pages from various external sources, ` + "\n" +
 								`overriding page content each time the source is fetched.`,
 						},
-						"translations": schema.ListNestedAttribute{
-							Computed: true,
-							NestedObject: schema.NestedAttributeObject{
-								Attributes: map[string]schema.Attribute{
-									"access_controls": schema.ListNestedAttribute{
-										Computed: true,
-										NestedObject: schema.NestedAttributeObject{
-											Attributes: map[string]schema.Attribute{
-												"reference_id": schema.StringAttribute{
-													Computed:    true,
-													Description: `The id of the resource used to check the access control`,
-												},
-												"reference_type": schema.StringAttribute{
-													Computed:    true,
-													Description: `The type of the resource used to check the access control`,
-												},
-											},
-										},
-										Description: `List of access controls.`,
-									},
-									"configuration": schema.MapAttribute{
-										Computed:    true,
-										ElementType: types.StringType,
-										Description: `Key/value page configuration (Configure swagger UI or or use Redoc instead)`,
-									},
-									"content": schema.StringAttribute{
-										Computed:    true,
-										Description: `The content of the page, if any.`,
-									},
-									"content_type": schema.StringAttribute{
-										Computed:    true,
-										Description: `Page's content type.`,
-									},
-									"cross_id": schema.StringAttribute{
-										Computed:    true,
-										Description: `Page's cross uuid.`,
-									},
-									"excluded_access_controls": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Flag to restrict access to user matching the restrictions.`,
-									},
-									"hidden": schema.BoolAttribute{
-										Computed:    true,
-										Description: `If folder is published but not shown in Portal.`,
-									},
-									"homepage": schema.BoolAttribute{
-										Computed:    true,
-										Description: `If true, this page will be displayed as the homepage of your API documentation.`,
-									},
-									"hrid": schema.StringAttribute{
-										Computed:    true,
-										Description: `A unique human readable id identifying this resource`,
-									},
-									"metadata": schema.MapAttribute{
-										Computed:    true,
-										ElementType: types.StringType,
-										Description: `Page's metadata.`,
-									},
-									"name": schema.StringAttribute{
-										Computed: true,
-										MarkdownDescription: `This is the display name of the page in APIM and on the portal.` + "\n" +
-											`This field can be edited safely if you want to rename a page.`,
-									},
-									"order": schema.Int64Attribute{
-										Computed:    true,
-										Description: `The order used to display the page in APIM and on the portal.`,
-									},
-									"parent_hrid": schema.StringAttribute{
-										Computed: true,
-										MarkdownDescription: `If your page contains a folder, setting this field to the map key associated to the` + "\n" +
-											`folder entry will be reflected into APIM by making the page a child of this folder.`,
-									},
-									"parent_id": schema.StringAttribute{
-										Computed:    true,
-										Description: `Page's parent id.`,
-									},
-									"published": schema.BoolAttribute{
-										Computed:    true,
-										Description: `If true, the page will be accessible from the portal (default is false)`,
-									},
-									"source": schema.SingleNestedAttribute{
-										Computed: true,
-										Attributes: map[string]schema.Attribute{
-											"configuration": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
-												Computed:    true,
-												Description: `Page source's configuration. Parsed as JSON.`,
-											},
-											"type": schema.StringAttribute{
-												Computed:    true,
-												Description: `The type of the page source (=fetcher type).`,
-											},
-										},
-										MarkdownDescription: `Allow you to fetch pages from various external sources, ` + "\n" +
-											`overriding page content each time the source is fetched.`,
-									},
-									"type": schema.StringAttribute{
-										Computed:    true,
-										Description: `The type of the documentation page or folder.`,
-									},
-									"updated_at": schema.StringAttribute{
-										Computed:    true,
-										Description: `Page's last update date.`,
-									},
-									"visibility": schema.StringAttribute{
-										Computed:    true,
-										Description: `The visibility of the resource regarding the portal.`,
-									},
-								},
-							},
-							Description: `List of page translations.`,
-						},
 						"type": schema.StringAttribute{
 							Computed:    true,
 							Description: `The type of the documentation page or folder.`,
 						},
-						"updated_at": schema.StringAttribute{
-							Computed:    true,
-							Description: `Page's last update date.`,
-						},
 						"visibility": schema.StringAttribute{
 							Computed:    true,
-							Description: `The visibility of the resource regarding the portal.`,
+							Description: `The visibility of the entity regarding the portal.`,
 						},
 					},
 				},
-				Description: `List of Pages for the API`,
+				Description: `Pages for the API`,
 			},
 			"plans": schema.ListNestedAttribute{
 				Computed: true,
@@ -1278,13 +1162,16 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"characteristics": schema.ListAttribute{
 							Computed:    true,
 							ElementType: types.StringType,
+							Description: `Plan informative characteristics`,
 						},
 						"description": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `A description for this plan.`,
 						},
 						"excluded_groups": schema.ListAttribute{
 							Computed:    true,
 							ElementType: types.StringType,
+							Description: `Access-control, UUID of groups excluded from this plan`,
 						},
 						"flows": schema.ListNestedAttribute{
 							Computed: true,
@@ -1296,24 +1183,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
 													Computed:    true,
-													Description: `The condition of the step`,
+													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 												},
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
-													Description: `The configuration of the step. Parsed as JSON.`,
+													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Computed:    true,
-													Description: `The description of the step`,
+													Description: `A description for the step`,
 												},
 												"enabled": schema.BoolAttribute{
 													Computed:    true,
-													Description: `Is the step enabled or not.`,
+													Description: `To enable the step globally.`,
 												},
 												"message_condition": schema.StringAttribute{
 													Computed:    true,
-													Description: `The message condition of the step`,
+													Description: `The message condition of the step (for message API)`,
 												},
 												"name": schema.StringAttribute{
 													Computed:    true,
@@ -1321,7 +1208,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 												"policy": schema.StringAttribute{
 													Computed:    true,
-													Description: `The policy of the step`,
+													Description: `The policy of the step (plugin ID)`,
 												},
 											},
 										},
@@ -1331,34 +1218,30 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										Computed:    true,
 										Description: `Is the flow enabled.`,
 									},
-									"id": schema.StringAttribute{
-										Computed:    true,
-										Description: `Flow's uuid.`,
-									},
 									"interact": schema.ListNestedAttribute{
 										Computed: true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
 													Computed:    true,
-													Description: `The condition of the step`,
+													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 												},
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
-													Description: `The configuration of the step. Parsed as JSON.`,
+													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Computed:    true,
-													Description: `The description of the step`,
+													Description: `A description for the step`,
 												},
 												"enabled": schema.BoolAttribute{
 													Computed:    true,
-													Description: `Is the step enabled or not.`,
+													Description: `To enable the step globally.`,
 												},
 												"message_condition": schema.StringAttribute{
 													Computed:    true,
-													Description: `The message condition of the step`,
+													Description: `The message condition of the step (for message API)`,
 												},
 												"name": schema.StringAttribute{
 													Computed:    true,
@@ -1366,7 +1249,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 												"policy": schema.StringAttribute{
 													Computed:    true,
-													Description: `The policy of the step`,
+													Description: `The policy of the step (plugin ID)`,
 												},
 											},
 										},
@@ -1382,24 +1265,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
 													Computed:    true,
-													Description: `The condition of the step`,
+													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 												},
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
-													Description: `The configuration of the step. Parsed as JSON.`,
+													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Computed:    true,
-													Description: `The description of the step`,
+													Description: `A description for the step`,
 												},
 												"enabled": schema.BoolAttribute{
 													Computed:    true,
-													Description: `Is the step enabled or not.`,
+													Description: `To enable the step globally.`,
 												},
 												"message_condition": schema.StringAttribute{
 													Computed:    true,
-													Description: `The message condition of the step`,
+													Description: `The message condition of the step (for message API)`,
 												},
 												"name": schema.StringAttribute{
 													Computed:    true,
@@ -1407,7 +1290,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 												"policy": schema.StringAttribute{
 													Computed:    true,
-													Description: `The policy of the step`,
+													Description: `The policy of the step (plugin ID)`,
 												},
 											},
 										},
@@ -1419,24 +1302,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
 													Computed:    true,
-													Description: `The condition of the step`,
+													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 												},
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
-													Description: `The configuration of the step. Parsed as JSON.`,
+													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Computed:    true,
-													Description: `The description of the step`,
+													Description: `A description for the step`,
 												},
 												"enabled": schema.BoolAttribute{
 													Computed:    true,
-													Description: `Is the step enabled or not.`,
+													Description: `To enable the step globally.`,
 												},
 												"message_condition": schema.StringAttribute{
 													Computed:    true,
-													Description: `The message condition of the step`,
+													Description: `The message condition of the step (for message API)`,
 												},
 												"name": schema.StringAttribute{
 													Computed:    true,
@@ -1444,7 +1327,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 												"policy": schema.StringAttribute{
 													Computed:    true,
-													Description: `The policy of the step`,
+													Description: `The policy of the step (plugin ID)`,
 												},
 											},
 										},
@@ -1456,24 +1339,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
 													Computed:    true,
-													Description: `The condition of the step`,
+													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 												},
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
-													Description: `The configuration of the step. Parsed as JSON.`,
+													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Computed:    true,
-													Description: `The description of the step`,
+													Description: `A description for the step`,
 												},
 												"enabled": schema.BoolAttribute{
 													Computed:    true,
-													Description: `Is the step enabled or not.`,
+													Description: `To enable the step globally.`,
 												},
 												"message_condition": schema.StringAttribute{
 													Computed:    true,
-													Description: `The message condition of the step`,
+													Description: `The message condition of the step (for message API)`,
 												},
 												"name": schema.StringAttribute{
 													Computed:    true,
@@ -1481,7 +1364,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 												"policy": schema.StringAttribute{
 													Computed:    true,
-													Description: `The policy of the step`,
+													Description: `The policy of the step (plugin ID)`,
 												},
 											},
 										},
@@ -1500,11 +1383,12 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 														},
 														"channel_operator": schema.StringAttribute{
 															Computed:    true,
-															Description: `The path operator of the selector`,
+															Description: `Operator function to match a URI path`,
 														},
 														"entrypoints": schema.ListAttribute{
 															Computed:    true,
 															ElementType: types.StringType,
+															Description: `Among all entrypoints types, restrict which one will trigger this flow. Unset or empty means "all types".`,
 														},
 														"operations": schema.ListAttribute{
 															Computed:    true,
@@ -1523,7 +1407,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 													Attributes: map[string]schema.Attribute{
 														"condition": schema.StringAttribute{
 															Computed:    true,
-															Description: `The condition of the selector`,
+															Description: `The EL condition of the selector`,
 														},
 														"type": schema.StringAttribute{
 															Computed:    true,
@@ -1538,14 +1422,15 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 														"methods": schema.ListAttribute{
 															Computed:    true,
 															ElementType: types.StringType,
+															Description: `Methods to match, unset or empty means "any"`,
 														},
 														"path": schema.StringAttribute{
 															Computed:    true,
-															Description: `The path of the selector`,
+															Description: `The path to match`,
 														},
 														"path_operator": schema.StringAttribute{
 															Computed:    true,
-															Description: `The path operator of the selector`,
+															Description: `Operator function to match a URI path`,
 														},
 														"type": schema.StringAttribute{
 															Computed:    true,
@@ -1563,24 +1448,24 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
 													Computed:    true,
-													Description: `The condition of the step`,
+													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 												},
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
-													Description: `The configuration of the step. Parsed as JSON.`,
+													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Computed:    true,
-													Description: `The description of the step`,
+													Description: `A description for the step`,
 												},
 												"enabled": schema.BoolAttribute{
 													Computed:    true,
-													Description: `Is the step enabled or not.`,
+													Description: `To enable the step globally.`,
 												},
 												"message_condition": schema.StringAttribute{
 													Computed:    true,
-													Description: `The message condition of the step`,
+													Description: `The message condition of the step (for message API)`,
 												},
 												"name": schema.StringAttribute{
 													Computed:    true,
@@ -1588,7 +1473,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 												"policy": schema.StringAttribute{
 													Computed:    true,
-													Description: `The policy of the step`,
+													Description: `The policy of the step (plugin ID)`,
 												},
 											},
 										},
@@ -1597,13 +1482,13 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									"tags": schema.ListAttribute{
 										Computed:    true,
 										ElementType: types.StringType,
-										Description: `Flow's tags.`,
+										Description: `Flow's informative tags.`,
 									},
 								},
 							},
-						},
-						"general_conditions": schema.StringAttribute{
-							Computed: true,
+							MarkdownDescription: `Flows like API flows, composed of step running plolicies. ` + "\n" +
+								`All steps are executed before the next plan flow or before the API flows,` + "\n" +
+								`same on the reponse, which means API reponse flows will always run last.`,
 						},
 						"hrid": schema.StringAttribute{
 							Computed:    true,
@@ -1614,7 +1499,8 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Description: `The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan).`,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `Name of the plan`,
 						},
 						"security": schema.SingleNestedAttribute{
 							Computed: true,
@@ -1622,37 +1508,40 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								"configuration": schema.StringAttribute{
 									CustomType:  jsontypes.NormalizedType{},
 									Computed:    true,
-									Description: `Parsed as JSON.`,
+									Description: `JSON Object to configure specific attributes of a Plan. Parsed as JSON.`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
-									Description: `Plan security type.`,
+									Description: `API Plan security implementation.`,
 								},
 							},
 							Description: `API plan security`,
 						},
 						"selection_rule": schema.StringAttribute{
-							Computed: true,
+							Computed:    true,
+							Description: `An EL expression that must return a boolean to enable the flow based on the request.`,
 						},
 						"status": schema.StringAttribute{
 							Computed:    true,
-							Description: `Plan status.`,
+							Description: `Plan status, only ` + "`" + `PUBLISHED` + "`" + ` makes the plan available at runtime.`,
 						},
 						"tags": schema.ListAttribute{
 							Computed:    true,
 							ElementType: types.StringType,
+							Description: `Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list.`,
 						},
 						"type": schema.StringAttribute{
 							Computed:    true,
-							Description: `Plan type.`,
+							Description: `Only one possible type: API`,
 						},
 						"validation": schema.StringAttribute{
-							Computed:    true,
-							Description: `Plan validation type.`,
+							Computed: true,
+							MarkdownDescription: `Usually specificies if subscriptions must be manually validated by a human actor.` + "\n" +
+								`For automation API, it is disabled hence it is always set to ` + "`" + `AUTO` + "`" + `.`,
 						},
 					},
 				},
-				Description: `List of Plans for the API`,
+				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `.`,
 			},
 			"primary_owner": schema.SingleNestedAttribute{
 				Computed: true,
@@ -1674,7 +1563,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						Description: `The type of membership`,
 					},
 				},
-				Description: `Primary owner, the creator of the application. Can perform all possible API actions.`,
+				Description: `User owner of this. Can perform all possible actions on it.`,
 			},
 			"properties": schema.ListNestedAttribute{
 				Computed: true,
@@ -1682,22 +1571,23 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 					Attributes: map[string]schema.Attribute{
 						"dynamic": schema.BoolAttribute{
 							Computed:    true,
-							Description: `is a dynamic property or not?`,
+							Description: `When the value was populated from dynamic property service.`,
 						},
 						"encrypted": schema.BoolAttribute{
 							Computed:    true,
-							Description: `is property encrypted or not?`,
+							Description: `When the value has been encrypted in database.`,
 						},
 						"key": schema.StringAttribute{
 							Computed:    true,
-							Description: `property key`,
+							Description: `Property key.`,
 						},
 						"value": schema.StringAttribute{
 							Computed:    true,
-							Description: `property value`,
+							Description: `Property value.`,
 						},
 					},
 				},
+				Description: `Properties usable using EL.`,
 			},
 			"resources": schema.ListNestedAttribute{
 				Computed: true,
@@ -1706,22 +1596,23 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"configuration": schema.StringAttribute{
 							CustomType:  jsontypes.NormalizedType{},
 							Computed:    true,
-							Description: `Resource configuration. Parsed as JSON.`,
+							Description: `JSON Object configuration specific to this resource. Parsed as JSON.`,
 						},
 						"enabled": schema.BoolAttribute{
 							Computed:    true,
-							Description: `API resource is enabled or not?`,
+							Description: `Make it available or not.`,
 						},
 						"name": schema.StringAttribute{
 							Computed:    true,
-							Description: `Resource name`,
+							Description: `API resource name`,
 						},
 						"type": schema.StringAttribute{
 							Computed:    true,
-							Description: `Resource type`,
+							Description: `Resource type (resource plugin ID)`,
 						},
 					},
 				},
+				Description: `Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).`,
 			},
 			"response_templates": schema.MapAttribute{
 				Computed: true,
@@ -1737,7 +1628,10 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 					},
 				},
-				Description: `A list of Response Templates for the API (Not applicable for Native API)`,
+				MarkdownDescription: `Map of content-type dependent Response Templates for the API (Not applicable for Native` + "\n" +
+					`API) to customize Gateway responses body on predefined errors.` + "\n" +
+					`` + "\n" +
+					`Key of the map is the error code.`,
 			},
 			"services": schema.SingleNestedAttribute{
 				Computed: true,
@@ -1748,7 +1642,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							"configuration": schema.StringAttribute{
 								CustomType:  jsontypes.NormalizedType{},
 								Computed:    true,
-								Description: `The configuration of the service. Parsed as JSON.`,
+								Description: `JSON configuration of the service. Parsed as JSON.`,
 							},
 							"enabled": schema.BoolAttribute{
 								Computed:    true,
@@ -1756,25 +1650,26 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							},
 							"override_configuration": schema.BoolAttribute{
 								Computed:    true,
-								Description: `Override the configuration of the service`,
+								Description: `When the configuration overrides an inherited configuration.`,
 							},
 							"type": schema.StringAttribute{
-								Computed: true,
+								Computed:    true,
+								Description: `The service plugin ID used.`,
 							},
 						},
-						Description: `Service`,
+						Description: `Specifies an API property fetch using an external source.`,
 					},
 				},
-				Description: `Api services`,
+				Description: `Api services (dynamic properties)`,
 			},
 			"state": schema.StringAttribute{
 				Computed:    true,
-				Description: `The state of the API regarding the gateway(s).`,
+				Description: `STARTED will make this API callable on tis context path, STOPPED will yield 404 error`,
 			},
 			"tags": schema.ListAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
-				Description: `The list of sharding tags associated with this API.`,
+				Description: `Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy".`,
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,
@@ -1782,11 +1677,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			},
 			"version": schema.StringAttribute{
 				Computed:    true,
-				Description: `API's version. It's a simple string only used in the portal.`,
+				Description: `API's version. It's a simple string only used to help manage API versioning.`,
 			},
 			"visibility": schema.StringAttribute{
 				Computed:    true,
-				Description: `The visibility of the resource regarding the portal.`,
+				Description: `The visibility of the entity regarding the portal.`,
 			},
 		},
 	}

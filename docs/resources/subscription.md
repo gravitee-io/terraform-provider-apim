@@ -30,9 +30,9 @@ resource "apim_subscription" "my_subscription" {
 ### Required
 
 - `api_hrid` (String) Human-readable ID of api
-- `application_hrid` (String) Application's Hrid that needs to subscribe to the API.
+- `application_hrid` (String) Application's hrid selected to subscribe an API.
 - `hrid` (String) A unique human readable id identifying this resource. Requires replacement if changed.
-- `plan_hrid` (String) API plan's Hrid
+- `plan_hrid` (String) API plan's hrid
 
 ### Optional
 
@@ -43,7 +43,7 @@ resource "apim_subscription" "my_subscription" {
 ### Read-Only
 
 - `id` (String) Subscription's uuid.
-- `starting_at` (String)
+- `starting_at` (String) Start validity date time of this Subscription
 
 ## Import
 

@@ -8,7 +8,7 @@ subcategory: "V4 API"
 The following example configures the V4 HTTP proxy API with CORS.
 If the pre-flight phase fails, it will return a 412 status code whatever all content type with bespoke body.
 
-```HCL
+```terraform
 resource "apim_apiv4" "v4api-proxy_response_templates" {
   # should match the resource name
   hrid            = "proxy_response_templates"

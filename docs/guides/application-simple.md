@@ -7,7 +7,7 @@ subcategory: "Application"
 
 The following example creates a simple application.
 
-```HCL
+```terraform
 resource "apim_application" "simple" {
   # should match the resource name
   hrid        = "simple"

@@ -10,7 +10,7 @@ This resource uses the Gravitee
 [Assign Attributes policy](https://documentation.gravitee.io/apim/create-and-configure-apis/apply-policies/policy-reference/assign-attributes)
 to assign a custom static attribute.
 
-```HCL
+```terraform
 resource "apim_apiv4" "kafka_native" {
   # should match the resource name
   hrid            = "kafka_native"

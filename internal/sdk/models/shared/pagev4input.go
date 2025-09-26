@@ -4,10 +4,9 @@ package shared
 
 import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
-	"time"
 )
 
-// PageV4Input - Documentation page. Can be of multiple formats.
+// PageV4Input - Documentation page.
 type PageV4Input struct {
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
@@ -23,12 +22,8 @@ type PageV4Input struct {
 	Order int64 `json:"order"`
 	// If true, the page will be accessible from the portal (default is false)
 	Published *bool `default:"false" json:"published"`
-	// The visibility of the resource regarding the portal.
+	// The visibility of the entity regarding the portal.
 	Visibility *Visibility `default:"PUBLIC" json:"visibility"`
-	// Page's last update date.
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	// Page's content type.
-	ContentType *string `json:"contentType,omitempty"`
 	// Allow you to fetch pages from various external sources,
 	// overriding page content each time the source is fetched.
 	//
@@ -37,22 +32,12 @@ type PageV4Input struct {
 	Configuration map[string]string `json:"configuration,omitempty"`
 	// If true, this page will be displayed as the homepage of your API documentation.
 	Homepage *bool `json:"homepage,omitempty"`
-	// Page's parent id.
-	ParentID *string `json:"parentId,omitempty"`
-	// If your page contains a folder, setting this field to the map key associated to the
-	// folder entry will be reflected into APIM by making the page a child of this folder.
+	// If your page contains a folder, setting this field to the folder's hrid will be reflected
+	// into APIM by making the page a child of this folder.
 	//
 	ParentHrid *string `json:"parentHrid,omitempty"`
-	// Flag to restrict access to user matching the restrictions.
-	ExcludedAccessControls *bool `json:"excludedAccessControls,omitempty"`
-	// List of access controls.
-	AccessControls []AccessControl `json:"accessControls,omitempty"`
-	// Page's metadata.
-	Metadata map[string]string `json:"metadata,omitempty"`
 	// If folder is published but not shown in Portal.
 	Hidden *bool `json:"hidden,omitempty"`
-	// List of page translations.
-	Translations []PageV4TranslationInput `json:"translations,omitempty"`
 }
 
 func (p PageV4Input) MarshalJSON() ([]byte, error) {
@@ -115,20 +100,6 @@ func (p *PageV4Input) GetVisibility() *Visibility {
 	return p.Visibility
 }
 
-func (p *PageV4Input) GetUpdatedAt() *time.Time {
-	if p == nil {
-		return nil
-	}
-	return p.UpdatedAt
-}
-
-func (p *PageV4Input) GetContentType() *string {
-	if p == nil {
-		return nil
-	}
-	return p.ContentType
-}
-
 func (p *PageV4Input) GetSource() *PageSource {
 	if p == nil {
 		return nil
@@ -150,13 +121,6 @@ func (p *PageV4Input) GetHomepage() *bool {
 	return p.Homepage
 }
 
-func (p *PageV4Input) GetParentID() *string {
-	if p == nil {
-		return nil
-	}
-	return p.ParentID
-}
-
 func (p *PageV4Input) GetParentHrid() *string {
 	if p == nil {
 		return nil
@@ -164,37 +128,9 @@ func (p *PageV4Input) GetParentHrid() *string {
 	return p.ParentHrid
 }
 
-func (p *PageV4Input) GetExcludedAccessControls() *bool {
-	if p == nil {
-		return nil
-	}
-	return p.ExcludedAccessControls
-}
-
-func (p *PageV4Input) GetAccessControls() []AccessControl {
-	if p == nil {
-		return nil
-	}
-	return p.AccessControls
-}
-
-func (p *PageV4Input) GetMetadata() map[string]string {
-	if p == nil {
-		return nil
-	}
-	return p.Metadata
-}
-
 func (p *PageV4Input) GetHidden() *bool {
 	if p == nil {
 		return nil
 	}
 	return p.Hidden
-}
-
-func (p *PageV4Input) GetTranslations() []PageV4TranslationInput {
-	if p == nil {
-		return nil
-	}
-	return p.Translations
 }

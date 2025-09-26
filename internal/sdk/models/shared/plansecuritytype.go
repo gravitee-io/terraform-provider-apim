@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// PlanSecurityType - Plan security type.
+// PlanSecurityType - API Plan security implementation.
 type PlanSecurityType string
 
 const (

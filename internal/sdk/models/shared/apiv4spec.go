@@ -12,56 +12,62 @@ type APIV4Spec struct {
 	Hrid string `json:"hrid"`
 	// API's name. Duplicate names can exists.
 	Name string `json:"name"`
-	// API's version. It's a simple string only used in the portal.
+	// API's version. It's a simple string only used to help manage API versioning.
 	Version string `json:"version"`
 	// API's type.
 	Type APIType `json:"type"`
-	// API's description. A short description of your API.
+	// Basic API documentation to describe what this API does.
 	Description *string `json:"description,omitempty"`
-	// The list of sharding tags associated with this API.
+	// Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy".
 	Tags []string `json:"tags,omitempty"`
-	// The list of listeners associated with this API.
-	Listeners      []Listener        `json:"listeners"`
+	// The list of listeners defining how this API can be called. They depend on the API type.
+	Listeners []Listener `json:"listeners"`
+	// Common endpoints properties and container of endpoints specifying backends this API can call.
 	EndpointGroups []EndpointGroupV4 `json:"endpointGroups"`
-	// API analytics
+	// API analytics configuration to enable/disable what can be observed.
 	Analytics *Analytics `json:"analytics,omitempty"`
-	// API Failover
-	Failover   *FailoverV4 `json:"failover,omitempty"`
-	Properties []Property  `json:"properties,omitempty"`
-	Resources  []Resource  `json:"resources,omitempty"`
-	// List of Plans for the API
+	// Defines the failover behavior to bypass endpoints when some are slow.
+	Failover *FailoverV4 `json:"failover,omitempty"`
+	// Properties usable using EL.
+	Properties []PropertyInput `json:"properties,omitempty"`
+	// Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).
+	Resources []APIResource `json:"resources,omitempty"`
+	// Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`.
 	Plans []PlanV4 `json:"plans,omitempty"`
-	// Flow execution
+	// Flow execution enablement (Not applicable for Native API)
 	FlowExecution *FlowExecution `json:"flowExecution,omitempty"`
-	// List of flows for the API
+	// Common flows for the API where traffic policies are configured.
 	Flows []FlowV4 `json:"flows,omitempty"`
-	// A list of Response Templates for the API (Not applicable for Native API)
+	// Map of content-type dependent Response Templates for the API (Not applicable for Native
+	// API) to customize Gateway responses body on predefined errors.
+	//
+	// Key of the map is the error code.
+	//
 	ResponseTemplates map[string]map[string]ResponseTemplate `json:"responseTemplates,omitempty"`
-	// Api services
+	// Api services (dynamic properties)
 	Services *APIServices `json:"services,omitempty"`
-	// List of groups associated with the API.
-	// This groups are id or name references to existing groups in APIM.
+	// Name or UUIDs of existing groups (of users) associated with this API.
 	Groups []string `json:"groups,omitempty"`
-	// The visibility of the resource regarding the portal.
+	// The visibility of the entity regarding the portal.
 	Visibility *Visibility `default:"PUBLIC" json:"visibility"`
-	// The state of the API regarding the gateway(s).
+	// STARTED will make this API callable on tis context path, STOPPED will yield 404 error
 	State *LifecycleState `json:"state,omitempty"`
-	// Primary owner, the creator of the application. Can perform all possible API actions.
+	// User owner of this. Can perform all possible actions on it.
 	PrimaryOwner *PrimaryOwner `json:"primaryOwner,omitempty"`
-	// List of labels of the API
+	// Informative labels for this API.
 	Labels []string `json:"labels,omitempty"`
 	// The list of API's metadata.
 	Metadata []Metadata `json:"metadata,omitempty"`
 	// The status of the API regarding the console.
 	LifecycleState APILifecycleState `json:"lifecycleState"`
-	// The list of category keys associated with this API.
+	// The list of category names (or UUID) associated with this API.
 	Categories []string `json:"categories,omitempty"`
-	// Set of members associated with the plan
-	Members []MemberInput `json:"members,omitempty"`
+	// Users that can access or manage the API (depending on their roles).
+	Members []Member `json:"members,omitempty"`
 	// If true, new members added to the API spec will
 	// be notified when the API is synced with APIM.
 	NotifyMembers *bool `default:"true" json:"notifyMembers"`
-	// List of Pages for the API
+	// Pages for the API
 	Pages []PageV4Input `json:"pages,omitempty"`
 }
 
@@ -146,14 +152,14 @@ func (a *APIV4Spec) GetFailover() *FailoverV4 {
 	return a.Failover
 }
 
-func (a *APIV4Spec) GetProperties() []Property {
+func (a *APIV4Spec) GetProperties() []PropertyInput {
 	if a == nil {
 		return nil
 	}
 	return a.Properties
 }
 
-func (a *APIV4Spec) GetResources() []Resource {
+func (a *APIV4Spec) GetResources() []APIResource {
 	if a == nil {
 		return nil
 	}
@@ -251,7 +257,7 @@ func (a *APIV4Spec) GetCategories() []string {
 	return a.Categories
 }
 
-func (a *APIV4Spec) GetMembers() []MemberInput {
+func (a *APIV4Spec) GetMembers() []Member {
 	if a == nil {
 		return nil
 	}

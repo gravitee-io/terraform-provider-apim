@@ -1,13 +1,16 @@
 variable "environment_id" {
-  type = string
+  type    = string
+  default = "DEFAULT"
 }
 
 variable "hrid" {
-  type = string
+  type    = string
+  default = "coucou"
 }
 
 variable "organization_id" {
-  type = string
+  type    = string
+  default = "DEFAULT"
 }
 
 resource "apim_apiv4" "test" {
@@ -20,27 +23,38 @@ resource "apim_apiv4" "test" {
   type            = "PROXY"
   version         = "1"
   visibility      = "PRIVATE"
+  labels = [
+    "test",
+    "all props"
+  ]
+  categories = [
+    "test",
+    "terraform"
+  ]
   listeners = [
     {
       http = {
         cors = {
           allow_credentials = true
           allow_headers = [
-            "accept"
+            "accept",
+            "content-type"
           ]
           allow_methods = [
             "DELETE",
             "GET",
             "OPTIONS",
             "PUT",
-            "PO"
+            "POST",
           ]
           allow_origin = [
-            ".*\\.acme\\.com"
+            ".*\\.acme\\.com",
+            ".*\\.simple\\.com"
           ]
           enabled = true
           expose_headers = [
-            "accept"
+            "accept",
+            "content-type"
           ]
           max_age      = 100
           run_policies = true
@@ -52,7 +66,6 @@ resource "apim_apiv4" "test" {
             type          = "http-proxy"
           }
         ]
-        path_mappings = []
         paths = [
           {
             path           = "/${var.hrid}/"
@@ -177,7 +190,6 @@ resource "apim_apiv4" "test" {
       })
     }
   ]
-
   flow_execution = {
     mode           = "DEFAULT"
     match_required = false
@@ -285,10 +297,10 @@ resource "apim_apiv4" "test" {
   }
   properties = [
     {
-      key       = "foo",
-      value     = "bar",
-      encrypted = false,
-      dynamic   = false
+      key         = "foo",
+      value       = "bar",
+      dynamic     = false
+      encryptable = true
     }
   ]
   pages = [

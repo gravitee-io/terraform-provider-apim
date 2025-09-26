@@ -7,7 +7,7 @@ subcategory: "Application"
 
 The following example creates an OAuth application that uses a certificate for authentication.
 
-```HCL
+```terraform
 resource "apim_application" "backend-to-backend" {
   # should match the resource name
   hrid        = "test-b2b-app"

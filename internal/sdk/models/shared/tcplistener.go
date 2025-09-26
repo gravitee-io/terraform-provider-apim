@@ -9,9 +9,11 @@ import (
 // TCPListener - TCP listener
 type TCPListener struct {
 	// Listener type.
-	Type        ListenerType `json:"type"`
+	Type ListenerType `json:"type"`
+	// A list of possible entrypoint of the same type.
 	Entrypoints []Entrypoint `json:"entrypoints,omitempty"`
-	Servers     []string     `json:"servers,omitempty"`
+	// Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
+	Servers []string `json:"servers,omitempty"`
 	// A list of hostnames for which the API will match against SNI.  This must be unique for all TCP listener for a given server id. See 'servers' attribute
 	Hosts []string `json:"hosts"`
 }

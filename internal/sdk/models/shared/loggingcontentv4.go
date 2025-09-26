@@ -2,12 +2,17 @@
 
 package shared
 
-// LoggingContentV4 - API logging content
+// LoggingContentV4 - API logging content when one of logging mode is enabled (Not for native APIs)
 type LoggingContentV4 struct {
-	Headers         *bool `json:"headers,omitempty"`
-	MessageHeaders  *bool `json:"messageHeaders,omitempty"`
-	Payload         *bool `json:"payload,omitempty"`
-	MessagePayload  *bool `json:"messagePayload,omitempty"`
+	// Enable to log request headers
+	Headers *bool `json:"headers,omitempty"`
+	// Enable to log message headers (Message APIs only)
+	MessageHeaders *bool `json:"messageHeaders,omitempty"`
+	// Enable to log request headers (Proxy APIs only)
+	Payload *bool `json:"payload,omitempty"`
+	// Enable to log message headers (Message APIs only)
+	MessagePayload *bool `json:"messagePayload,omitempty"`
+	// Enable to log message metadata (Message APIs only)
 	MessageMetadata *bool `json:"messageMetadata,omitempty"`
 }
 

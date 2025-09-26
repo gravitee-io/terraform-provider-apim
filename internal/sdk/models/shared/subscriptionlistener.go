@@ -6,12 +6,14 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
-// SubscriptionListener - Subscription listener
+// SubscriptionListener - Subscription listener for message API.
 type SubscriptionListener struct {
 	// Listener type.
-	Type        ListenerType `json:"type"`
+	Type ListenerType `json:"type"`
+	// A list of possible entrypoint of the same type.
 	Entrypoints []Entrypoint `json:"entrypoints,omitempty"`
-	Servers     []string     `json:"servers,omitempty"`
+	// Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
+	Servers []string `json:"servers,omitempty"`
 }
 
 func (s SubscriptionListener) MarshalJSON() ([]byte, error) {

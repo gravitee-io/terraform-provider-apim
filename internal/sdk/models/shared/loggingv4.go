@@ -2,15 +2,17 @@
 
 package shared
 
-// LoggingV4 - API logging configuration
+// LoggingV4 - API logging configuration (Not for native APIs)
 type LoggingV4 struct {
-	Condition        *string `json:"condition,omitempty"`
+	// Filter using EL what request should be logged
+	Condition *string `json:"condition,omitempty"`
+	// Filter using EL what message should be logged
 	MessageCondition *string `json:"messageCondition,omitempty"`
-	// API logging content
+	// API logging content when one of logging mode is enabled (Not for native APIs)
 	Content *LoggingContentV4 `json:"content,omitempty"`
-	// Logging phase
+	// Logging phase when one of logging mode is enabled (Not for native APIs)
 	Phase *LoggingPhase `json:"phase,omitempty"`
-	// API logging mode
+	// API logging mode (Not for native APIs)
 	Mode *LoggingModeV4 `json:"mode,omitempty"`
 }
 
