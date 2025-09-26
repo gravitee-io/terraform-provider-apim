@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// Visibility - The visibility of the resource regarding the portal.
+// Visibility - The visibility of the entity regarding the portal.
 type Visibility string
 
 const (

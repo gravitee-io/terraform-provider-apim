@@ -7,7 +7,7 @@ subcategory: ""
 
 This example demonstrates how to create an API with a JWT plan, set up an application, and configure a subscription that grants the application access to the API.
 
-```HCL
+```terraform
 resource "apim_apiv4" "api_app_subscription-api" {
   # should match the resource name
   hrid            = "simple-api-subscribed"

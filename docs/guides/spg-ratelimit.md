@@ -9,7 +9,7 @@ The following example configures the Shared Policy Group resource to use the Gra
 [Rate Limit policy](https://documentation.gravitee.io/apim/create-and-configure-apis/apply-policies/policy-reference/rate-limit).
 It applies rate limiting on the Request phase to limit traffic to 10 requests per minute.
 
-```HCL
+```terraform
 resource "apim_shared_policy_group" "simple" {
   # should match the resource name
   hrid        = "simple"

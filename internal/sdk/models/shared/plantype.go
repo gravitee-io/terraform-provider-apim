@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// PlanType - Plan type.
+// PlanType - Plan usage
 type PlanType string
 
 const (

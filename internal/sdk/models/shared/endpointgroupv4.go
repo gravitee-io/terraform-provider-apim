@@ -8,10 +8,12 @@ type EndpointGroupV4 struct {
 	Name *string `json:"name,omitempty"`
 	// The type of the endpoint group
 	Type string `json:"type"`
-	// Load Balancer
-	LoadBalancer        *LoadBalancer `json:"loadBalancer,omitempty"`
-	SharedConfiguration any           `json:"sharedConfiguration,omitempty"`
-	Endpoints           []EndpointV4  `json:"endpoints,omitempty"`
+	// Load Balancer to distribute traffic between endpoints.
+	LoadBalancer *LoadBalancer `json:"loadBalancer,omitempty"`
+	// JSON configuration for the `type` of `endpoints` that will be shared across all endpoints.
+	SharedConfiguration any `json:"sharedConfiguration,omitempty"`
+	// All endpoints of this API.
+	Endpoints []EndpointV4 `json:"endpoints,omitempty"`
 	// API Endpoint Group Services
 	Services *EndpointGroupServices `json:"services,omitempty"`
 }

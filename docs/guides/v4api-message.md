@@ -9,7 +9,7 @@ The following example configures the v4 message API resource to create a v4 mess
 This API has a WebSocket entrypoint and Kafka endpoint.
 It fetches messages from a Kafka cluster and publishes them to a client's WebSocket connection.
 
-```HCL
+```terraform
 resource "apim_apiv4" "message" {
   # should match the resource name
   hrid            = "message"

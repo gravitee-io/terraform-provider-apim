@@ -2,11 +2,11 @@
 
 package shared
 
-// TracingV4 - API analytic tracing
+// TracingV4 - OpenTelemetry tracing (Not for native APIs)
 type TracingV4 struct {
 	// Enable OpenTelemetry tracing
 	Enabled *bool `json:"enabled,omitempty"`
-	// Enable technical tracing to get more details on request execution. Be careful this settings would generate more noise and would impact performance.
+	// Enable technical tracing to get more details on request execution. Be careful this settings can generate more noise and can impact performance.
 	Verbose *bool `json:"verbose,omitempty"`
 }
 

@@ -20,6 +20,17 @@ resource "apim_apiv4" "test" {
   type            = "PROXY"
   version         = "1"
   visibility      = "PRIVATE"
+  labels = [
+    "test",
+    "all props"
+  ]
+  tags = [
+    "europe"
+  ]
+  categories = [
+    "test",
+    "terraform"
+  ]
   listeners = [
     {
       http = {
@@ -177,7 +188,6 @@ resource "apim_apiv4" "test" {
       })
     }
   ]
-
   flow_execution = {
     mode           = "DEFAULT"
     match_required = false

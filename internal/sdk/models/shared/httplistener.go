@@ -9,11 +9,14 @@ import (
 // HTTPListener - HTTP Listener
 type HTTPListener struct {
 	// Listener type.
-	Type         ListenerType `json:"type"`
-	Entrypoints  []Entrypoint `json:"entrypoints,omitempty"`
-	Servers      []string     `json:"servers,omitempty"`
-	Paths        []PathV4     `json:"paths,omitempty"`
-	PathMappings []string     `json:"pathMappings,omitempty"`
+	Type ListenerType `json:"type"`
+	// A list of possible entrypoint only one is possible for now.
+	Entrypoints []Entrypoint `json:"entrypoints,omitempty"`
+	// Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
+	Servers []string `json:"servers,omitempty"`
+	// One of the possible context paths of this API
+	Paths        []PathV4 `json:"paths,omitempty"`
+	PathMappings []string `json:"pathMappings,omitempty"`
 	// Http listener Cross-Origin Resource Sharing
 	Cors *Cors `json:"cors,omitempty"`
 }

@@ -197,7 +197,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `The condition of the step`,
+							Description: `The EL condition return a boolean to enable this step. Empty expression means it is enabled.`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtMost(1024),
 							},
@@ -209,7 +209,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `The configuration of the step. Parsed as JSON.`,
+							Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
 							Computed: true,
@@ -229,7 +229,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							PlanModifiers: []planmodifier.Bool{
 								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 							},
-							Description: `Is the step enabled or not. Default: true`,
+							Description: `Is the step statically enabled or not. Default: true`,
 						},
 						"message_condition": schema.StringAttribute{
 							Computed: true,
@@ -237,7 +237,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `The message condition of the step`,
+							Description: `The message condition of the step (for message API)`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtMost(256),
 							},

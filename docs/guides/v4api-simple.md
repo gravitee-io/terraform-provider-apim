@@ -12,7 +12,7 @@ This resource uses the Gravitee
 [Transform Headers policy](https://documentation.gravitee.io/apim/create-and-configure-apis/apply-policies/policy-reference/transform-headers)
 on the Request phase to add an extra header called "X-Hello.
 
-```HCL
+```terraform
 resource "apim_apiv4" "proxy" {
   # should match the resource name
   hrid            = "proxy"

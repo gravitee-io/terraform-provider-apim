@@ -2,9 +2,11 @@
 
 package shared
 
-// LoggingPhase - Logging phase
+// LoggingPhase - Logging phase when one of logging mode is enabled (Not for native APIs)
 type LoggingPhase struct {
-	Request  *bool `json:"request,omitempty"`
+	// Enables logging durring request phase
+	Request *bool `json:"request,omitempty"`
+	// Enables logging durring response phase
 	Response *bool `json:"response,omitempty"`
 }
 

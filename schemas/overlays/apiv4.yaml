@@ -27,39 +27,11 @@ actions:
   ## Avoid diff for optional properties
 
   ### API Spec
-  - target: $.components.schemas.ApiV4Spec.properties.categories
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApiV4Spec.properties.description
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApiV4Spec.properties.endpointGroups
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApiV4Spec.properties.flows
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApiV4Spec.properties.listeners
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApiV4Spec.properties.properties
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApiV4Spec.properties.resources
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApiV4Spec.properties.members
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApiV4Spec.properties.tags
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
@@ -76,19 +48,7 @@ actions:
 
 
   ### Schemas
-  - target: $.components.schemas.Analytics
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApiServices
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.BaseOriginContext
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.DefinitionContext
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
@@ -109,10 +69,6 @@ actions:
     update:
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.Metadata
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.PortalNotificationConfig
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true

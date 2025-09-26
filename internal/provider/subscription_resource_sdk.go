@@ -17,7 +17,7 @@ func (r *SubscriptionResourceModel) RefreshFromSharedSubscriptionState(ctx conte
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		r.APIHrid = types.StringValue(resp.APIHrid)
+		r.APIHrid = types.StringPointerValue(resp.APIHrid)
 		r.ApplicationHrid = types.StringValue(resp.ApplicationHrid)
 		endingAtValuable, endingAtDiags := customtypes.RFC3339Type{}.ValueFromString(ctx, types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.EndingAt)))
 		diags.Append(endingAtDiags...)

@@ -5,9 +5,9 @@ package shared
 // PageSource - Allow you to fetch pages from various external sources,
 // overriding page content each time the source is fetched.
 type PageSource struct {
-	// The type of the page source (=fetcher type).
+	// The type of the page source (fetcher plugin ID).
 	Type *string `json:"type,omitempty"`
-	// Page source's configuration.
+	// JSON object configuration of the fetch plugin.
 	Configuration any `json:"configuration,omitempty"`
 }
 

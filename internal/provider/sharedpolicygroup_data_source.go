@@ -115,12 +115,12 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 					Attributes: map[string]schema.Attribute{
 						"condition": schema.StringAttribute{
 							Computed:    true,
-							Description: `The condition of the step`,
+							Description: `The EL condition return a boolean to enable this step. Empty expression means it is enabled.`,
 						},
 						"configuration": schema.StringAttribute{
 							CustomType:  jsontypes.NormalizedType{},
 							Computed:    true,
-							Description: `The configuration of the step. Parsed as JSON.`,
+							Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
 							Computed:    true,
@@ -128,11 +128,11 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 						},
 						"enabled": schema.BoolAttribute{
 							Computed:    true,
-							Description: `Is the step enabled or not.`,
+							Description: `Is the step statically enabled or not.`,
 						},
 						"message_condition": schema.StringAttribute{
 							Computed:    true,
-							Description: `The message condition of the step`,
+							Description: `The message condition of the step (for message API)`,
 						},
 						"name": schema.StringAttribute{
 							Computed:    true,

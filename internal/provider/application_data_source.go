@@ -87,8 +87,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 			"groups": schema.ListAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
-				MarkdownDescription: `List of groups associated with the Application.` + "\n" +
-					`This groups are id or name references to existing groups in APIM.`,
+				Description: `List of groups associated with the Application. This groups are UUID of existing groups in APIM.`,
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
@@ -106,10 +105,6 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"id": schema.StringAttribute{
-							Computed:    true,
-							Description: `User UUID of the memeber`,
-						},
 						"role": schema.StringAttribute{
 							Computed:    true,
 							Description: `The role of the user in regards of the managed oject (API, Application, etc.)`,
@@ -124,7 +119,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 						},
 					},
 				},
-				Description: `Set of members associated with the application`,
+				Description: `Users that can manage this application`,
 			},
 			"metadata": schema.ListNestedAttribute{
 				Computed: true,
@@ -137,6 +132,10 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 						"format": schema.StringAttribute{
 							Computed:    true,
 							Description: `The format of the metadata.`,
+						},
+						"hidden": schema.BoolAttribute{
+							Computed:    true,
+							Description: `if this metadata should be hidden`,
 						},
 						"key": schema.StringAttribute{
 							Computed:    true,
@@ -192,7 +191,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Description: `The type of membership`,
 					},
 				},
-				Description: `Primary owner, the creator of the application. Can perform all possible API actions.`,
+				Description: `User owner of this. Can perform all possible actions on it.`,
 			},
 			"settings": schema.SingleNestedAttribute{
 				Computed: true,

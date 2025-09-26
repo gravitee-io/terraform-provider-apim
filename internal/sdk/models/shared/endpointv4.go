@@ -10,19 +10,21 @@ import (
 type EndpointV4 struct {
 	// The name of the endpoint
 	Name *string `json:"name,omitempty"`
-	// The type of the endpoint
+	// The type of endpoint
 	Type string `json:"type"`
-	// The weight of the endpoint
+	// The weight of the endpoint for the load balancer algorythm.
 	Weight *int `default:"1" json:"weight"`
-	// Is the configuration of the endpoint inherited from the endpoint group it belongs to.
-	InheritConfiguration        *bool `default:"false" json:"inheritConfiguration"`
-	Configuration               any   `json:"configuration,omitempty"`
-	SharedConfigurationOverride any   `json:"sharedConfigurationOverride,omitempty"`
+	// Enables shared configuration inheritance.
+	InheritConfiguration *bool `default:"false" json:"inheritConfiguration"`
+	// JSON Configuration specific to this endpoint that cannot be define at the group level.
+	Configuration any `json:"configuration,omitempty"`
+	// JSON Configuration that replaces the shared configuration defined at the group level.
+	SharedConfigurationOverride any `json:"sharedConfigurationOverride,omitempty"`
 	// API Endpoint Services
 	Services *EndpointServices `json:"services,omitempty"`
-	// Is the endpoint a secondary endpoint.
+	// Define this endpoint as fallback endpoint in case other endpoints are no longer responding.
 	Secondary *bool `default:"false" json:"secondary"`
-	// The list of tenants associated to the endpoint.
+	// The list of Getaway's tenants on which the endpoint can be used.
 	Tenants []string `json:"tenants,omitempty"`
 }
 

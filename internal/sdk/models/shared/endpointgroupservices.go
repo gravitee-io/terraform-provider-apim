@@ -4,9 +4,9 @@ package shared
 
 // EndpointGroupServices - API Endpoint Group Services
 type EndpointGroupServices struct {
-	// Service
+	// Specifies an API property fetch using an external source.
 	Discovery *ServiceV4 `json:"discovery,omitempty"`
-	// Service
+	// Specifies an API property fetch using an external source.
 	HealthCheck *ServiceV4 `json:"healthCheck,omitempty"`
 }
 

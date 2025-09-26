@@ -42,7 +42,7 @@ func (e *ConditionSelectorType) UnmarshalJSON(data []byte) error {
 type ConditionSelector struct {
 	// Selector type.
 	Type ConditionSelectorType `json:"type"`
-	// The condition of the selector
+	// The EL condition of the selector
 	Condition string `json:"condition"`
 }
 

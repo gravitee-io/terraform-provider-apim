@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// FlowMode - API's flow mode.
+// FlowMode - API's flow mode. `DEFAULT` delegate to Flow's selectors where `BEST_MATCH` will use the path to select the flow.
 type FlowMode string
 
 const (

@@ -2,29 +2,56 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // PlanV4 - API Plan
 type PlanV4 struct {
 	// A unique human readable id identifying this resource
-	Hrid        string  `json:"hrid"`
-	Name        string  `json:"name"`
+	Hrid string `json:"hrid"`
+	// Name of the plan
+	Name string `json:"name"`
+	// A description for this plan.
 	Description *string `json:"description,omitempty"`
 	// API plan security
-	Security          PlanSecurity `json:"security"`
-	Characteristics   []string     `json:"characteristics,omitempty"`
-	ExcludedGroups    []string     `json:"excludedGroups,omitempty"`
-	GeneralConditions *string      `json:"generalConditions,omitempty"`
-	Order             *int64       `json:"order,omitempty"`
-	SelectionRule     *string      `json:"selectionRule,omitempty"`
-	// Plan status.
+	Security PlanSecurity `json:"security"`
+	// Plan informative characteristics
+	Characteristics []string `json:"characteristics,omitempty"`
+	// Access-control, UUID of groups excluded from this plan
+	ExcludedGroups []string `json:"excludedGroups,omitempty"`
+	// Priority of the plan, lowest number is executed first. By default it respects order of creation.
+	Order *int64 `json:"order,omitempty"`
+	// An EL expression that must return a boolean to enable the flow based on the request.
+	SelectionRule *string `json:"selectionRule,omitempty"`
+	// Plan status, only `PUBLISHED` makes the plan available at runtime.
 	Status PlanStatus `json:"status"`
-	Tags   []string   `json:"tags,omitempty"`
-	// Plan type.
+	// Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy".
+	Tags []string `json:"tags,omitempty"`
+	// Plan usage
 	Type PlanType `json:"type"`
-	// Plan validation type.
-	Validation PlanValidation `json:"validation"`
-	Flows      []FlowV4       `json:"flows,omitempty"`
+	// Specificies if subscriptions must be manually validated or not.
+	// It must be AUTO when the plan security type is `KEY_LESS`.
+	//
+	Validation *PlanValidation `default:"MANUAL" json:"validation"`
+	// Flows like API flows, composed of step running plolicies.
+	// All steps are executed before the next plan flow or before the API flows,
+	// same on the reponse, which means API reponse flows will always run last.
+	//
+	Flows []FlowV4 `json:"flows,omitempty"`
 	// The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan).
 	Mode PlanMode `json:"mode"`
+}
+
+func (p PlanV4) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PlanV4) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"hrid", "name", "security", "status", "type", "mode"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (p *PlanV4) GetHrid() string {
@@ -69,13 +96,6 @@ func (p *PlanV4) GetExcludedGroups() []string {
 	return p.ExcludedGroups
 }
 
-func (p *PlanV4) GetGeneralConditions() *string {
-	if p == nil {
-		return nil
-	}
-	return p.GeneralConditions
-}
-
 func (p *PlanV4) GetOrder() *int64 {
 	if p == nil {
 		return nil
@@ -111,9 +131,9 @@ func (p *PlanV4) GetType() PlanType {
 	return p.Type
 }
 
-func (p *PlanV4) GetValidation() PlanValidation {
+func (p *PlanV4) GetValidation() *PlanValidation {
 	if p == nil {
-		return PlanValidation("")
+		return nil
 	}
 	return p.Validation
 }

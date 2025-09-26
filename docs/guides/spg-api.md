@@ -10,7 +10,7 @@ The following example configures the Shared Policy Group resource to use the Gra
 on the Request phase of a v4 HTTP proxy API.
 The resource removes the header "User-Agent" and adds a header named "X-Content-Path" that contains the API's context path.
 
-```HCL
+```terraform
 resource "apim_shared_policy_group" "curate_headers" {
   # should match the resource name
   hrid        = "curate_headers"

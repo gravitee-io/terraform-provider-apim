@@ -4,7 +4,7 @@ package shared
 
 // EndpointServices - API Endpoint Services
 type EndpointServices struct {
-	// Service
+	// Specifies an API property fetch using an external source.
 	HealthCheck *ServiceV4 `json:"healthCheck,omitempty"`
 }
 

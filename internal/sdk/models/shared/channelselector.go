@@ -73,9 +73,10 @@ type ChannelSelector struct {
 	Operations []Operation `json:"operations,omitempty"`
 	// The channel of the selector
 	Channel *string `default:"/" json:"channel"`
-	// The path operator of the selector
+	// Operator function to match a URI path
 	ChannelOperator *Operator `default:"STARTS_WITH" json:"channelOperator"`
-	Entrypoints     []string  `json:"entrypoints,omitempty"`
+	// Among all entrypoints types, restrict which one will trigger this flow. Unset or empty means "all types".
+	Entrypoints []string `json:"entrypoints,omitempty"`
 }
 
 func (c ChannelSelector) MarshalJSON() ([]byte, error) {

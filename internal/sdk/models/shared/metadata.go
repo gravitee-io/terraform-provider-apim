@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // Metadata is a generic data structure used internally
 type Metadata struct {
 	// The key of the metadata if different from sanitized name (lowercase + hyphens).
@@ -14,6 +18,19 @@ type Metadata struct {
 	Value *string `json:"value,omitempty"`
 	// The default value of the metadata if the value is not set.
 	DefaultValue *string `json:"defaultValue,omitempty"`
+	// if this metadata should be hidden
+	Hidden *bool `default:"false" json:"hidden"`
+}
+
+func (m Metadata) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(m, "", false)
+}
+
+func (m *Metadata) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &m, "", false, []string{"name", "format"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (m *Metadata) GetKey() *string {
@@ -49,4 +66,11 @@ func (m *Metadata) GetDefaultValue() *string {
 		return nil
 	}
 	return m.DefaultValue
+}
+
+func (m *Metadata) GetHidden() *bool {
+	if m == nil {
+		return nil
+	}
+	return m.Hidden
 }

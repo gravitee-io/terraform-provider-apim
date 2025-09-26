@@ -6,11 +6,11 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
-// FlowExecution - Flow execution
+// FlowExecution - Flow execution enablement (Not applicable for Native API)
 type FlowExecution struct {
-	// API's flow mode.
+	// API's flow mode. `DEFAULT` delegate to Flow's selectors where `BEST_MATCH` will use the path to select the flow.
 	Mode *FlowMode `default:"DEFAULT" json:"mode"`
-	// Is the flow execution match required.
+	// To indicate failure if no flow matches the request.
 	MatchRequired *bool `default:"false" json:"matchRequired"`
 }
 

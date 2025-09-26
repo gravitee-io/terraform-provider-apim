@@ -2,9 +2,11 @@
 
 package shared
 
-// LoggingModeV4 - API logging mode
+// LoggingModeV4 - API logging mode (Not for native APIs)
 type LoggingModeV4 struct {
-	Endpoint   *bool `json:"endpoint,omitempty"`
+	// Enables endpoint logging
+	Endpoint *bool `json:"endpoint,omitempty"`
+	// Enables entrypoint logging
 	Entrypoint *bool `json:"entrypoint,omitempty"`
 }
 

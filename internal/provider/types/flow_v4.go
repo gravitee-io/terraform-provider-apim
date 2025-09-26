@@ -9,7 +9,6 @@ import (
 type FlowV4 struct {
 	Connect   []StepV4       `tfsdk:"connect"`
 	Enabled   types.Bool     `tfsdk:"enabled"`
-	ID        types.String   `tfsdk:"id"`
 	Interact  []StepV4       `tfsdk:"interact"`
 	Name      types.String   `tfsdk:"name"`
 	Publish   []StepV4       `tfsdk:"publish"`
