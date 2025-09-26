@@ -451,7 +451,6 @@ components:
           examples:
             - I can use many characters to describe this API.
           maxLength: 4000
-          x-speakeasy-param-suppress-computed-diff: true
         tags:
           type: array
           description: Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy".
@@ -462,7 +461,6 @@ components:
           uniqueItems: true
           examples:
             - ["europe"]
-          x-speakeasy-param-suppress-computed-diff: true
         listeners:
           type: array
           description: The list of listeners defining how this API can be called. They depend on the API type.
@@ -487,14 +485,12 @@ components:
           items:
             $ref: "#/components/schemas/Property"
           default: []
-          x-speakeasy-param-suppress-computed-diff: true
         resources:
           type: array
           description: Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).
           items:
             $ref: "#/components/schemas/APIResource"
           default: []
-          x-speakeasy-param-suppress-computed-diff: true
         plans:
           type: array
           description: Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`.
@@ -509,7 +505,6 @@ components:
           items:
             $ref: "#/components/schemas/FlowV4"
           default: []
-          x-speakeasy-param-suppress-computed-diff: true
         responseTemplates:
           type: object
           description: |
@@ -564,7 +559,6 @@ components:
           default: []
           examples:
             - ["3ac914a2-4279-4aab-a19c-f784f07f8a42"]
-          x-speakeasy-param-suppress-computed-diff: true
         members:
           type: array
           description: Users can manage the API.
@@ -572,7 +566,6 @@ components:
             $ref: '#/components/schemas/Member'
           default: []
           uniqueItems: true
-          x-speakeasy-param-suppress-computed-diff: true
         notifyMembers:
           default: true
           description: |-
@@ -595,6 +588,10 @@ components:
         - version
         - lifecycleState
       x-speakeasy-entity: APIV4
+      # Customizations
+    ## Avoid diff for optional properties
+
+    ### API Spec
     ApiV4State:
       description: API state
       allOf:
@@ -1064,7 +1061,6 @@ components:
           $ref: "#/components/schemas/LoggingV4"
         tracing:
           $ref: "#/components/schemas/TracingV4"
-      x-speakeasy-param-suppress-computed-diff: true
     ApiLifecycleState:
       type: string
       description: The status of the API regarding the console.

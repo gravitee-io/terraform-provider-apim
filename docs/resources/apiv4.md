@@ -158,7 +158,7 @@ Optional:
 - `configuration` (String) JSON Configuration specific to this endpoint that cannot be define at the group level. Parsed as JSON.
 - `inherit_configuration` (Boolean) Enables shared configuration inheritance. Default: false
 - `name` (String) The name of the endpoint
-- `secondary` (Boolean) Define this endpoint as fallback endpoint in case other endpoints are no longer responding.
+- `secondary` (Boolean) Define this endpoint as fallback endpoint in case other endpoints are no longer responding. Default: false
 - `services` (Attributes) API Endpoint Services (see [below for nested schema](#nestedatt--endpoint_groups--endpoints--services))
 - `shared_configuration_override` (String) JSON Configuration that replaces the shared configuration defined at the group level. Parsed as JSON.
 - `tenants` (List of String) The list of Getaway's tenants on which the endpoint can be used.
@@ -288,7 +288,7 @@ Optional:
 Optional:
 
 - `host` (String) Virtual host required to access this API. (`Host` or `:Authority` headers, remote address for websockets)
-- `override_access` (Boolean)
+- `override_access` (Boolean) Default: false
 - `path` (String) Default: "/"
 
 
