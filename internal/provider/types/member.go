@@ -7,7 +7,6 @@ import (
 )
 
 type Member struct {
-	ID       types.String `tfsdk:"id"`
 	Role     types.String `tfsdk:"role"`
 	Source   types.String `tfsdk:"source"`
 	SourceID types.String `tfsdk:"source_id"`

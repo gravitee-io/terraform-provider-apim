@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// Operator - The path operator of the selector
+// Operator function to match a URI path
 type Operator string
 
 const (

@@ -7,7 +7,7 @@ subcategory: "Application"
 
 The following example creates a Single Page Application with OAuth.
 
-```HCL
+```terraform
 resource "apim_application" "spa" {
   # should match the resource name
   hrid        = "spa"

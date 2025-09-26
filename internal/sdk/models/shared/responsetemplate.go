@@ -8,13 +8,14 @@ import (
 
 // ResponseTemplate - API response template
 type ResponseTemplate struct {
-	// API response template status
+	// HTTP Status to return
 	Status int64 `json:"status"`
-	// API response template headers
+	// Headers to return as key/value pairs
 	Headers map[string]string `json:"headers,omitempty"`
-	// API response template body
-	Body                    *string `json:"body,omitempty"`
-	PropagateErrorKeyToLogs *bool   `default:"false" json:"propagateErrorKeyToLogs"`
+	// Response body (use `Content-Type` header to specify the content type)
+	Body *string `json:"body,omitempty"`
+	// Log the key associated with this response template
+	PropagateErrorKeyToLogs *bool `default:"false" json:"propagateErrorKeyToLogs"`
 }
 
 func (r ResponseTemplate) MarshalJSON() ([]byte, error) {

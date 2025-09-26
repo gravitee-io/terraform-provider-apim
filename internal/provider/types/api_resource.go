@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type Resource struct {
+type APIResource struct {
 	Configuration jsontypes.Normalized `tfsdk:"configuration"`
 	Enabled       types.Bool           `tfsdk:"enabled"`
 	Name          types.String         `tfsdk:"name"`

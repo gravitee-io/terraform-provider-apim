@@ -7,10 +7,9 @@ import (
 )
 
 type HTTPListener struct {
-	Cors         *Cors          `tfsdk:"cors"`
-	Entrypoints  []Entrypoint   `tfsdk:"entrypoints"`
-	PathMappings []types.String `tfsdk:"path_mappings"`
-	Paths        []PathV4       `tfsdk:"paths"`
-	Servers      []types.String `tfsdk:"servers"`
-	Type         types.String   `tfsdk:"type"`
+	Cors        *Cors          `tfsdk:"cors"`
+	Entrypoints []Entrypoint   `tfsdk:"entrypoints"`
+	Paths       []PathV4       `tfsdk:"paths"`
+	Servers     []types.String `tfsdk:"servers"`
+	Type        types.String   `tfsdk:"type"`
 }

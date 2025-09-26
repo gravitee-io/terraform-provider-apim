@@ -19,6 +19,11 @@ resource "apim_apiv4" "test" {
   hrid            = var.hrid
   lifecycle_state = "UNPUBLISHED"
   name            = var.name
+  description     = <<-EOT
+    Multiline comment to
+    make sure it does create
+    idempotency issue on update
+  EOT
   organization_id = var.organization_id
   state           = "STOPPED"
   type            = "PROXY"

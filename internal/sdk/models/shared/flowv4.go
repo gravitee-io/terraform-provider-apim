@@ -8,8 +8,6 @@ import (
 
 // FlowV4 - API or PLan Flow
 type FlowV4 struct {
-	// Flow's uuid.
-	ID *string `json:"id,omitempty"`
 	// Flow's name.
 	Name *string `json:"name,omitempty"`
 	// Is the flow enabled.
@@ -27,7 +25,7 @@ type FlowV4 struct {
 	Connect []StepV4 `json:"connect,omitempty"`
 	// Interact flow steps used for NATIVE APIs
 	Interact []StepV4 `json:"interact,omitempty"`
-	// Flow's tags.
+	// Flow's informative tags.
 	Tags []string `json:"tags,omitempty"`
 }
 
@@ -40,13 +38,6 @@ func (f *FlowV4) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
-}
-
-func (f *FlowV4) GetID() *string {
-	if f == nil {
-		return nil
-	}
-	return f.ID
 }
 
 func (f *FlowV4) GetName() *string {

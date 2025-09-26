@@ -15,7 +15,7 @@ Application Resource
 ```terraform
 resource "apim_application" "my_application" {
   background     = "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png"
-  description    = "This is the documentation explaining purpose of this Application  ."
+  description    = "This is the documentation explaining purpose of this Application."
   domain         = "examples.com"
   environment_id = "DEFAULT"
   groups = [
@@ -33,6 +33,7 @@ resource "apim_application" "my_application" {
     {
       default_value = "...my_default_value..."
       format        = "STRING"
+      hidden        = false
       key           = "...my_key..."
       name          = "...my_name..."
       value         = "...my_value..."
@@ -59,7 +60,7 @@ resource "apim_application" "my_application" {
       }
       application_type = "browser"
       grant_types = [
-        "implicit"
+        "authorization_code",
       ]
       redirect_uris = [
         "https://myapp.example.com/oauth/callback",
@@ -78,7 +79,7 @@ resource "apim_application" "my_application" {
 
 ### Required
 
-- `description` (String) Application's description.
+- `description` (String) This is where you can clearly state the API’s purpose and what problems it solves to help drive API discovery and adoption by making it easier for developers to find and understand the API’s capabilities.
 - `hrid` (String) A unique human readable id identifying this resource. Requires replacement if changed.
 - `name` (String) Application's name. Duplicate names can exists.
 
@@ -87,16 +88,15 @@ resource "apim_application" "my_application" {
 - `background` (String) Application's background url
 - `domain` (String) Application's domain.
 - `environment_id` (String) environment ID
-- `groups` (List of String) List of groups associated with the Application.
-This groups are id or name references to existing groups in APIM.
-- `members` (Attributes List) Set of members associated with the application (see [below for nested schema](#nestedatt--members))
+- `groups` (List of String) List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM.
+- `members` (Attributes List) Users that can access or manage this application (depending on their roles). (see [below for nested schema](#nestedatt--members))
 - `metadata` (Attributes List) The list of Application's metadata. (see [below for nested schema](#nestedatt--metadata))
 - `notify_members` (Boolean) If true, new members added to the Application spec will
 be notified when the Application is synced with APIM.
 Default: false
 - `organization_id` (String) organization ID
 - `picture_url` (String) Application's picture Url.
-- `primary_owner` (Attributes) Primary owner, the creator of the application. Can perform all possible API actions. (see [below for nested schema](#nestedatt--primary_owner))
+- `primary_owner` (Attributes) User owner of this. Can perform all possible actions on it. (see [below for nested schema](#nestedatt--primary_owner))
 - `settings` (Attributes) Application settings defines the configuration of consumers authentication. Depending on the control plane configuration some applications types may be restricted. `app` and `oauth` are mutually exclusive. If none is set it fallbacks to `app` without any property set. (see [below for nested schema](#nestedatt--settings))
 - `status` (String) Application are either ACTIVE or ARCHIVED never actually deleted. Default: "ACTIVE"; must be one of ["ACTIVE", "ARCHIVED"]
 
@@ -113,10 +113,6 @@ Optional:
 - `source` (String) Where the memeber was created (system, idp, etc.). Not Null
 - `source_id` (String) Id of the user in the source. Not Null
 
-Read-Only:
-
-- `id` (String) User UUID of the memeber
-
 
 <a id="nestedatt--metadata"></a>
 ### Nested Schema for `metadata`
@@ -125,6 +121,7 @@ Optional:
 
 - `default_value` (String) The default value of the metadata if the value is not set.
 - `format` (String) The format of the metadata. Not Null; must be one of ["STRING", "NUMERIC", "BOOLEAN", "DATE", "MAIL", "URL"]
+- `hidden` (Boolean) if this metadata should be hidden. Default: false
 - `key` (String) The key of the metadata if different from sanitized name (lowercase + hyphens).
 - `name` (String) The name of the metadata. Not Null
 - `value` (String) The value of the metadata.
@@ -147,7 +144,7 @@ Optional:
 Optional:
 
 - `app` (Attributes) Simple application settings (see [below for nested schema](#nestedatt--settings--app))
-- `oauth` (Attributes) Application OAuth client settings (see [below for nested schema](#nestedatt--settings--oauth))
+- `oauth` (Attributes) Application OAuth client settings. This require Dynamic Client Registration to be enabled at the environment level. (see [below for nested schema](#nestedatt--settings--oauth))
 - `tls` (Attributes) Application TLS settings (see [below for nested schema](#nestedatt--settings--tls))
 
 <a id="nestedatt--settings--app"></a>
@@ -176,7 +173,7 @@ Not Null; must be one of ["browser", "web", "native", "backend_to_backend"]
 `password` (Resource Owner Password) only with applicationType `native`.
 `client_credentials` only works  when application type is `backend_to_backend`
 Not Null
-- `redirect_uris` (List of String) OAuth client redirect Uris. Not Null
+- `redirect_uris` (List of String) OAuth client redirect Uris
 
 
 <a id="nestedatt--settings--tls"></a>

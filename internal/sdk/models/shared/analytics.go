@@ -6,15 +6,15 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
-// Analytics - API analytics
+// Analytics - API analytics configuration to enable/disable what can be observed.
 type Analytics struct {
-	// Whether or not analytics is enabled.
+	// Whether or not analytics are enabled.
 	Enabled *bool `default:"true" json:"enabled"`
-	// API analytics sampling
+	// API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.
 	Sampling *Sampling `json:"sampling,omitempty"`
-	// API logging configuration
+	// API logging configuration (Not for native APIs)
 	Logging *LoggingV4 `json:"logging,omitempty"`
-	// API analytic tracing
+	// OpenTelemetry tracing (Not for native APIs)
 	Tracing *TracingV4 `json:"tracing,omitempty"`
 }
 

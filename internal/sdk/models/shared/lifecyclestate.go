@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// LifecycleState - The state of the API regarding the gateway(s).
+// LifecycleState - STARTED will make this API callable on tis context path, STOPPED will yield 404 error
 type LifecycleState string
 
 const (

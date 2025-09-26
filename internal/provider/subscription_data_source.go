@@ -66,7 +66,7 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"application_hrid": schema.StringAttribute{
 				Computed:    true,
-				Description: `Application's Hrid that needs to subscribe to the API.`,
+				Description: `Application's hrid selected to subscribe an API.`,
 			},
 			"ending_at": schema.StringAttribute{
 				CustomType: customtypes.RFC3339Type{},
@@ -96,10 +96,11 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"plan_hrid": schema.StringAttribute{
 				Computed:    true,
-				Description: `API plan's Hrid`,
+				Description: `API plan's hrid`,
 			},
 			"starting_at": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Start validity date time of this Subscription`,
 			},
 		},
 	}

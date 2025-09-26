@@ -6,15 +6,16 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
-// ServiceV4 - Service
+// ServiceV4 - Specifies an API property fetch using an external source.
 type ServiceV4 struct {
-	// Override the configuration of the service
+	// When the configuration overrides an inherited configuration.
 	OverrideConfiguration *bool `default:"false" json:"overrideConfiguration"`
-	// The configuration of the service
-	Configuration any `json:"configuration,omitempty"`
+	// JSON configuration of the service.
+	Configuration any `json:"configuration"`
 	// Is the service enabled or not.
-	Enabled *bool   `default:"true" json:"enabled"`
-	Type    *string `json:"type,omitempty"`
+	Enabled *bool `default:"true" json:"enabled"`
+	// The service plugin ID used.
+	Type string `json:"type"`
 }
 
 func (s ServiceV4) MarshalJSON() ([]byte, error) {
@@ -22,7 +23,7 @@ func (s ServiceV4) MarshalJSON() ([]byte, error) {
 }
 
 func (s *ServiceV4) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"configuration", "type"}); err != nil {
 		return err
 	}
 	return nil
@@ -49,9 +50,9 @@ func (s *ServiceV4) GetEnabled() *bool {
 	return s.Enabled
 }
 
-func (s *ServiceV4) GetType() *string {
+func (s *ServiceV4) GetType() string {
 	if s == nil {
-		return nil
+		return ""
 	}
 	return s.Type
 }

@@ -41,12 +41,11 @@ type ApplicationState struct {
 	Hrid string `json:"hrid"`
 	// Application's name. Duplicate names can exists.
 	Name string `json:"name"`
-	// Application's description.
+	// This is where you can clearly state the API’s purpose and what problems it solves to help drive API discovery and adoption by making it easier for developers to find and understand the API’s capabilities.
 	Description string `json:"description"`
 	// Application's domain.
 	Domain *string `json:"domain,omitempty"`
-	// List of groups associated with the Application.
-	// This groups are id or name references to existing groups in APIM.
+	// List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM.
 	Groups []string `json:"groups,omitempty"`
 	// Application's picture Url.
 	PictureURL *string `json:"pictureUrl,omitempty"`
@@ -55,13 +54,13 @@ type ApplicationState struct {
 	NotifyMembers *bool `default:"false" json:"notifyMembers"`
 	// Application's background url
 	Background *string `json:"background,omitempty"`
-	// Primary owner, the creator of the application. Can perform all possible API actions.
+	// User owner of this. Can perform all possible actions on it.
 	PrimaryOwner *PrimaryOwner `json:"primaryOwner,omitempty"`
 	// Application settings defines the configuration of consumers authentication. Depending on the control plane configuration some applications types may be restricted. `app` and `oauth` are mutually exclusive. If none is set it fallbacks to `app` without any property set.
 	Settings *ApplicationSettings `json:"settings,omitempty"`
 	// The list of Application's metadata.
 	Metadata []Metadata `json:"metadata,omitempty"`
-	// Set of members associated with the application
+	// Users that can access or manage this application (depending on their roles).
 	Members []Member `json:"members,omitempty"`
 	// Application are either ACTIVE or ARCHIVED never actually deleted.
 	Status *ApplicationStateStatus `default:"ACTIVE" json:"status"`

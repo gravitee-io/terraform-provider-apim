@@ -2,15 +2,15 @@
 
 package shared
 
-// PropertyOutput - Api property
+// PropertyOutput - API property can be used within the API using EL expression `{#api.properties['key']}.
 type PropertyOutput struct {
-	// property key
+	// Property key.
 	Key string `json:"key"`
-	// property value
+	// Property value.
 	Value string `json:"value"`
-	// is property encrypted or not?
+	// When the value has been encrypted in database.
 	Encrypted *bool `json:"encrypted,omitempty"`
-	// is a dynamic property or not?
+	// When the value was populated from dynamic property service.
 	Dynamic *bool `json:"dynamic,omitempty"`
 }
 

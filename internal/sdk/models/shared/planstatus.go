@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// PlanStatus - Plan status.
+// PlanStatus - Plan status, only `PUBLISHED` makes the plan available at runtime.
 type PlanStatus string
 
 const (

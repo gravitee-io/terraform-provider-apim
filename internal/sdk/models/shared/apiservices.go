@@ -2,9 +2,9 @@
 
 package shared
 
-// APIServices - Api services
+// APIServices - Api services (dynamic properties)
 type APIServices struct {
-	// Service
+	// Specifies an API property fetch using an external source.
 	DynamicProperty *ServiceV4 `json:"dynamicProperty,omitempty"`
 }
 

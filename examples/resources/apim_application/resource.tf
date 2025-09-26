@@ -1,6 +1,6 @@
 resource "apim_application" "my_application" {
   background     = "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png"
-  description    = "This is the documentation explaining purpose of this Application  ."
+  description    = "This is the documentation explaining purpose of this Application."
   domain         = "examples.com"
   environment_id = "DEFAULT"
   groups = [
@@ -18,6 +18,7 @@ resource "apim_application" "my_application" {
     {
       default_value = "...my_default_value..."
       format        = "STRING"
+      hidden        = false
       key           = "...my_key..."
       name          = "...my_name..."
       value         = "...my_value..."
@@ -44,7 +45,7 @@ resource "apim_application" "my_application" {
       }
       application_type = "browser"
       grant_types = [
-        "implicit"
+        "authorization_code",
       ]
       redirect_uris = [
         "https://myapp.example.com/oauth/callback",

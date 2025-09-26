@@ -3,19 +3,82 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+type AllowMethod string
+
+const (
+	AllowMethodWildcard AllowMethod = "*"
+	AllowMethodGet      AllowMethod = "GET"
+	AllowMethodDelete   AllowMethod = "DELETE"
+	AllowMethodPatch    AllowMethod = "PATCH"
+	AllowMethodPost     AllowMethod = "POST"
+	AllowMethodPut      AllowMethod = "PUT"
+	AllowMethodOptions  AllowMethod = "OPTIONS"
+	AllowMethodTrace    AllowMethod = "TRACE"
+	AllowMethodHead     AllowMethod = "HEAD"
+)
+
+func (e AllowMethod) ToPointer() *AllowMethod {
+	return &e
+}
+func (e *AllowMethod) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "*":
+		fallthrough
+	case "GET":
+		fallthrough
+	case "DELETE":
+		fallthrough
+	case "PATCH":
+		fallthrough
+	case "POST":
+		fallthrough
+	case "PUT":
+		fallthrough
+	case "OPTIONS":
+		fallthrough
+	case "TRACE":
+		fallthrough
+	case "HEAD":
+		*e = AllowMethod(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for AllowMethod: %v", v)
+	}
+}
+
 // Cors - Http listener Cross-Origin Resource Sharing
 type Cors struct {
-	AllowCredentials *bool    `json:"allowCredentials,omitempty"`
-	AllowHeaders     []string `json:"allowHeaders,omitempty"`
-	AllowMethods     []string `json:"allowMethods,omitempty"`
-	AllowOrigin      []string `json:"allowOrigin,omitempty"`
-	Enabled          *bool    `json:"enabled,omitempty"`
-	ExposeHeaders    []string `json:"exposeHeaders,omitempty"`
-	MaxAge           *int     `default:"-1" json:"maxAge"`
-	RunPolicies      *bool    `json:"runPolicies,omitempty"`
+	// Enable CORS
+	Enabled *bool `json:"enabled,omitempty"`
+	// `Access-Control-Allow-Credentials`: Indicates whether or not the response to the request can be exposed when the credentials flag is true.
+	//
+	AllowCredentials *bool `json:"allowCredentials,omitempty"`
+	// `Access-Control-Allow-Headers`: Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request.
+	//
+	AllowHeaders []string `json:"allowHeaders,omitempty"`
+	// `Access-Control-Allow-Methods`: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource.
+	//
+	AllowMethods []AllowMethod `json:"allowMethods,omitempty"`
+	// `Access-Control-Allow-Origin`: The origin parameter specifies a URI that may access the resource. Scheme, domain and port are part of the same-origin definition.
+	// If you choose to enable '*' it means that is allows all requests, regardless of origin. URIs RegExp patterns that may access the resource
+	//
+	AllowOrigin []string `json:"allowOrigin,omitempty"`
+	// `Access-Control-Expose-Headers`: This header lets a server whitelist headers that browsers are allowed to access.
+	//
+	ExposeHeaders []string `json:"exposeHeaders,omitempty"`
+	// How long (in seconds) the results of a preflight request can be cached (-1 if disabled).
+	MaxAge *int `default:"-1" json:"maxAge"`
+	// Allow the Gateway to run policies during in pre-flight request
+	RunPolicies *bool `json:"runPolicies,omitempty"`
 }
 
 func (c Cors) MarshalJSON() ([]byte, error) {
@@ -27,6 +90,13 @@ func (c *Cors) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (c *Cors) GetEnabled() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.Enabled
 }
 
 func (c *Cors) GetAllowCredentials() *bool {
@@ -43,7 +113,7 @@ func (c *Cors) GetAllowHeaders() []string {
 	return c.AllowHeaders
 }
 
-func (c *Cors) GetAllowMethods() []string {
+func (c *Cors) GetAllowMethods() []AllowMethod {
 	if c == nil {
 		return nil
 	}
@@ -55,13 +125,6 @@ func (c *Cors) GetAllowOrigin() []string {
 		return nil
 	}
 	return c.AllowOrigin
-}
-
-func (c *Cors) GetEnabled() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.Enabled
 }
 
 func (c *Cors) GetExposeHeaders() []string {
