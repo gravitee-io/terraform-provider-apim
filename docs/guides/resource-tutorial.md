@@ -11,7 +11,7 @@ In this example we show that APIs using an *"In memory users resource"* and shar
 
 ## Provider configuration and resource configuration file
 
-```HCL
+```terraform
 terraform {
   required_providers {
     apim = {
@@ -54,7 +54,7 @@ Below you will two APIs that use the same API resource configuration used to per
 
 ### API 1
 
-```HCL
+```terraform
 resource "apim_apiv4" "simple-api-shared-resource-1" {
   # should match the resource name
   hrid            = "simple-api-shared-resource-1"
@@ -168,7 +168,7 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
 
 ### API 2
 
-```HCL
+```terraform
 resource "apim_apiv4" "simple-api-shared-resource-1" {
   # should match the resource name
   hrid            = "simple-api-shared-resource-1"

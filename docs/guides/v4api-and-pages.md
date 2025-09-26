@@ -9,7 +9,7 @@ subcategory: "V4 API"
 
 The HTTP fetcher is used to get then and poll an Open API spec every ten minutes. The spec is added to a "Specifications" folder.
 
-```HCL
+```terraform
 resource "apim_apiv4" "api-with-pages-fetcher" {
   # should match the resource name
   hrid            = "api-with-pages-fetcher"
@@ -68,9 +68,10 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
   }
   pages = [
     {
-      hrid = "docs-folder"
-      name = "Specifications"
-      type = "FOLDER"
+      hrid  = "docs-folder"
+      name  = "Specifications"
+      type  = "FOLDER"
+      order = 0
     },
     {
       hrid        = "swagger"
@@ -85,7 +86,8 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
         })
         type = "http-fetcher"
       }
-      type = "SWAGGER"
+      type  = "SWAGGER"
+      order = 1
     }
   ]
 
@@ -112,7 +114,7 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
 
 The API contains a folder that contains a fake documentation page. It also has set up a home page with a simple content.
 
-```HCL
+```terraform
 resource "apim_apiv4" "api-with-pages-inline" {
   # should match the resource name
   hrid            = "api-with-pages-inline"
@@ -149,9 +151,9 @@ resource "apim_apiv4" "api-with-pages-inline" {
       }
       endpoints = [
         {
-          name   = "Default HTTP proxy"
-          type   = "http-proxy"
-          weight = 1
+          name                  = "Default HTTP proxy"
+          type                  = "http-proxy"
+          weight                = 1
           inherit_configuration = false
           # Configuration is JSON as is depends on the type schema
           configuration = jsonencode({
@@ -171,7 +173,7 @@ resource "apim_apiv4" "api-with-pages-inline" {
   }
   pages = [
     {
-      hrid     = "markdown"
+      hrid     = "homepage"
       content  = <<-EOT
           # Homepage
           Go to the "Markdowns" folder to find some content.
@@ -190,11 +192,13 @@ resource "apim_apiv4" "api-with-pages-inline" {
       name        = "Hello Markdown"
       parent_hrid = "markdowns-folder"
       type        = "MARKDOWN"
+      order       = 0
     },
     {
-      hrid = "markdowns-folder"
-      name = "Markdowns"
-      type = "FOLDER"
+      hrid  = "markdowns-folder"
+      name  = "Markdowns"
+      type  = "FOLDER"
+      order = 1
     }
   ]
   plans = [
