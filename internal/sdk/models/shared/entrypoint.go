@@ -10,11 +10,12 @@ import (
 type Entrypoint struct {
 	// The type of the entrypoint
 	Type string `json:"type"`
-	// Type of the quality of service.
+	// Type of the quality of service (for message APIs).
 	Qos *Qos `default:"AUTO" json:"qos"`
-	// DLQ
-	Dlq           *Dlq `json:"dlq,omitempty"`
-	Configuration any  `json:"configuration,omitempty"`
+	// Dead Letter Queue to process undelivered messages.
+	Dlq *Dlq `json:"dlq,omitempty"`
+	// JSON configuration for the selected `type`.
+	Configuration any `json:"configuration,omitempty"`
 }
 
 func (e Entrypoint) MarshalJSON() ([]byte, error) {

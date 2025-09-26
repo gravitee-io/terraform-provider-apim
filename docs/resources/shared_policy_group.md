@@ -64,13 +64,13 @@ resource "apim_shared_policy_group" "my_sharedpolicygroup" {
 
 Optional:
 
-- `condition` (String) The condition of the step
-- `configuration` (String) The configuration of the step. Parsed as JSON.
+- `condition` (String) The EL condition return a boolean to enable this step. Empty expression means it is enabled.
+- `configuration` (String) JSON Object configuration of the policy used. Parsed as JSON.
 - `description` (String) The description of the step
-- `enabled` (Boolean) Is the step enabled or not. Default: true
-- `message_condition` (String) The message condition of the step
+- `enabled` (Boolean) Is the step statically enabled or not. Default: true
+- `message_condition` (String) The message condition of the step (for message API)
 - `name` (String) The name of the step
-- `policy` (String) The policy of the step
+- `policy` (String) The policy of the step. Not Null
 
 ## Import
 

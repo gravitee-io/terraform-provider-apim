@@ -95,7 +95,7 @@ type ApplicationOAuthClientSettings struct {
 	//
 	GrantTypes []GrantType `json:"grantTypes"`
 	// OAuth client redirect Uris
-	RedirectUris             []string          `json:"redirectUris"`
+	RedirectUris             []string          `json:"redirectUris,omitempty"`
 	AdditionalClientMetadata map[string]string `json:"additionalClientMetadata,omitempty"`
 }
 
@@ -115,7 +115,7 @@ func (a *ApplicationOAuthClientSettings) GetGrantTypes() []GrantType {
 
 func (a *ApplicationOAuthClientSettings) GetRedirectUris() []string {
 	if a == nil {
-		return []string{}
+		return nil
 	}
 	return a.RedirectUris
 }

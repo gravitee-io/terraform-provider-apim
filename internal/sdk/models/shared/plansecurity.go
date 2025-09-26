@@ -4,9 +4,10 @@ package shared
 
 // PlanSecurity - API plan security
 type PlanSecurity struct {
-	// Plan security type.
-	Type          PlanSecurityType `json:"type"`
-	Configuration any              `json:"configuration,omitempty"`
+	// API Plan security implementation.
+	Type PlanSecurityType `json:"type"`
+	// JSON Object to configure specific attributes of a Plan.
+	Configuration any `json:"configuration,omitempty"`
 }
 
 func (p *PlanSecurity) GetType() PlanSecurityType {

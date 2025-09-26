@@ -4,21 +4,12 @@ package shared
 
 // Member - Users that can manage an object (API, Application, etc.)
 type Member struct {
-	// User UUID of the memeber
-	ID *string `json:"id,omitempty"`
 	// Where the memeber was created (system, idp, etc.)
 	Source string `json:"source"`
 	// Id of the user in the source
 	SourceID string `json:"sourceId"`
 	// The role of the user in regards of the managed oject (API, Application, etc.)
 	Role string `json:"role"`
-}
-
-func (m *Member) GetID() *string {
-	if m == nil {
-		return nil
-	}
-	return m.ID
 }
 
 func (m *Member) GetSource() string {

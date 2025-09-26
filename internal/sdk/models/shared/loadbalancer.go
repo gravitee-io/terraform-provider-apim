@@ -41,7 +41,7 @@ func (e *LoadBalancerType) UnmarshalJSON(data []byte) error {
 	}
 }
 
-// LoadBalancer - Load Balancer
+// LoadBalancer - Load Balancer to distribute traffic between endpoints.
 type LoadBalancer struct {
 	// Load balancer type.
 	Type *LoadBalancerType `default:"ROUND_ROBIN" json:"type"`

@@ -9,12 +9,14 @@ import (
 // KafkaListener - Kafka listener
 type KafkaListener struct {
 	// Listener type.
-	Type        ListenerType `json:"type"`
+	Type ListenerType `json:"type"`
+	// A list of possible entrypoint only one is possible for now.
 	Entrypoints []Entrypoint `json:"entrypoints,omitempty"`
-	Servers     []string     `json:"servers,omitempty"`
+	// Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
+	Servers []string `json:"servers,omitempty"`
 	// A hostname for which the API will match against SNI.
 	Host string `json:"host"`
-	// The port of the listener
+	// The port of the listener.
 	Port *int64 `json:"port,omitempty"`
 }
 

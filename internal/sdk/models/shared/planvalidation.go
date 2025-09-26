@@ -7,7 +7,8 @@ import (
 	"fmt"
 )
 
-// PlanValidation - Plan validation type.
+// PlanValidation - Specificies if subscriptions must be manually validated or not.
+// It must be AUTO when the plan security type is `KEY_LESS`.
 type PlanValidation string
 
 const (

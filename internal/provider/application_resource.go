@@ -127,8 +127,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 				},
 				ElementType: types.StringType,
-				MarkdownDescription: `List of groups associated with the Application.` + "\n" +
-					`This groups are id or name references to existing groups in APIM.`,
+				Description: `List of groups associated with the Application. This groups are UUID of existing groups in APIM.`,
 			},
 			"hrid": schema.StringAttribute{
 				Required: true,
@@ -163,13 +162,6 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 					},
 					Attributes: map[string]schema.Attribute{
-						"id": schema.StringAttribute{
-							Computed: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
-							Description: `User UUID of the memeber`,
-						},
 						"role": schema.StringAttribute{
 							Computed: true,
 							Optional: true,
@@ -205,7 +197,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						},
 					},
 				},
-				Description: `Set of members associated with the application`,
+				Description: `Users that can manage this application`,
 				Validators: []validator.List{
 					listvalidator.UniqueValues(),
 				},
@@ -250,6 +242,15 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"URL",
 								),
 							},
+						},
+						"hidden": schema.BoolAttribute{
+							Computed: true,
+							Optional: true,
+							Default:  booldefault.StaticBool(false),
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+							},
+							Description: `if this metadata should be hidden. Default: false`,
 						},
 						"key": schema.StringAttribute{
 							Computed: true,
@@ -374,7 +375,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						},
 					},
 				},
-				Description: `Primary owner, the creator of the application. Can perform all possible API actions.`,
+				Description: `User owner of this. Can perform all possible actions on it.`,
 			},
 			"settings": schema.SingleNestedAttribute{
 				Computed: true,
@@ -470,14 +471,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"redirect_uris": schema.ListAttribute{
 								Computed: true,
 								Optional: true,
+								Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								PlanModifiers: []planmodifier.List{
 									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 								},
 								ElementType: types.StringType,
-								Description: `OAuth client redirect Uris. Not Null`,
-								Validators: []validator.List{
-									speakeasy_listvalidators.NotNull(),
-								},
+								Description: `OAuth client redirect Uris`,
 							},
 						},
 						Description: `Application OAuth client settings`,

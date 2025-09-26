@@ -6,7 +6,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
-// Dlq - DLQ
+// Dlq - Dead Letter Queue to process undelivered messages.
 type Dlq struct {
 	// The endpoint of the DLQ.
 	Endpoint *string `json:"endpoint,omitempty"`

@@ -7,13 +7,13 @@ import (
 	"time"
 )
 
-// SubscriptionSpec defines the desired state of Subscription.
+// SubscriptionSpec - Subscription specification
 type SubscriptionSpec struct {
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
-	// Application's Hrid that needs to subscribe to the API.
+	// Application's hrid selected to subscribe an API.
 	ApplicationHrid string `json:"applicationHrid"`
-	// API plan's Hrid
+	// API plan's hrid
 	PlanHrid string     `json:"planHrid"`
 	EndingAt *time.Time `json:"endingAt,omitempty"`
 }

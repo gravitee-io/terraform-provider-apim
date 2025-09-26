@@ -6,13 +6,13 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
-// FailoverV4 - API Failover
+// FailoverV4 - Defines the failover behavior to bypass endpoints when some are slow.
 type FailoverV4 struct {
-	// Is the failover enabled.
+	// Automatically redirects request to the next endpoint if the response is too slow.
 	Enabled *bool `default:"false" json:"enabled"`
-	// The maximum number of retries.
+	// Limit the number of retry attempts before recording an error. Each attempt dynamically selects an endpoint based on the load balancing algorithm.
 	MaxRetries *int `default:"2" json:"maxRetries"`
-	// The duration in milliseconds to consider a request as slow.
+	// Define a threshold for slow responses. Requests exceeding this duration are recorded as slow.
 	SlowCallDuration *int64 `default:"2000" json:"slowCallDuration"`
 	// The duration in milliseconds to indicate how long the circuit breaker should stay open, before it switches to half open.
 	OpenStateDuration *int64 `default:"10000" json:"openStateDuration"`

@@ -12,15 +12,15 @@ type StepV4 struct {
 	Name *string `json:"name,omitempty"`
 	// The description of the step
 	Description *string `json:"description,omitempty"`
-	// Is the step enabled or not.
+	// Is the step statically enabled or not.
 	Enabled *bool `default:"true" json:"enabled"`
 	// The policy of the step
 	Policy string `json:"policy"`
-	// The configuration of the step
+	// JSON Object configuration of the policy used.
 	Configuration any `json:"configuration,omitempty"`
-	// The condition of the step
+	// The EL condition return a boolean to enable this step. Empty expression means it is enabled.
 	Condition *string `json:"condition,omitempty"`
-	// The message condition of the step
+	// The message condition of the step (for message API)
 	MessageCondition *string `json:"messageCondition,omitempty"`
 }
 

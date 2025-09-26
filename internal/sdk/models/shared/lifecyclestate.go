@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-// LifecycleState - The state of the API regarding the gateway(s).
+// LifecycleState - The desired state of the API. Switching states between STOPPED and STARTED will effectively deploy the API and vice-versa.
 type LifecycleState string
 
 const (

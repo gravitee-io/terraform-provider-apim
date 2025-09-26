@@ -6,8 +6,9 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
-// PathV4 - API Path
+// PathV4 - API Path specification
 type PathV4 struct {
+	// Virtual host required to access this API. (`Host` or `:Authority` headers, remote address for websockets)
 	Host           *string `json:"host,omitempty"`
 	Path           *string `default:"/" json:"path"`
 	OverrideAccess *bool   `default:"false" json:"overrideAccess"`
