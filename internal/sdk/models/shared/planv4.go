@@ -30,8 +30,8 @@ type PlanV4 struct {
 	Tags []string `json:"tags,omitempty"`
 	// Only one possible type: API
 	Type *PlanType `default:"API" json:"type"`
-	// Usually specificies if subscriptions must be manually validated by a human actor.
-	// For automation API, it is disabled hence it is always set to `AUTO`.
+	// Specifies if subscriptions must be manually validated by a human actor.
+	// For automation API, it is default to `AUTO`.
 	//
 	Validation *PlanValidation `default:"AUTO" json:"validation"`
 	// Flows like API flows, composed of step running plolicies.

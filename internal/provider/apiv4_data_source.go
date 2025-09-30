@@ -1536,8 +1536,8 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 						"validation": schema.StringAttribute{
 							Computed: true,
-							MarkdownDescription: `Usually specificies if subscriptions must be manually validated by a human actor.` + "\n" +
-								`For automation API, it is disabled hence it is always set to ` + "`" + `AUTO` + "`" + `.`,
+							MarkdownDescription: `Specifies if subscriptions must be manually validated by a human actor.` + "\n" +
+								`For automation API, it is default to ` + "`" + `AUTO` + "`" + `.`,
 						},
 					},
 				},

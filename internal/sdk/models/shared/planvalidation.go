@@ -7,12 +7,13 @@ import (
 	"fmt"
 )
 
-// PlanValidation - Usually specificies if subscriptions must be manually validated by a human actor.
-// For automation API, it is disabled hence it is always set to `AUTO`.
+// PlanValidation - Specifies if subscriptions must be manually validated by a human actor.
+// For automation API, it is default to `AUTO`.
 type PlanValidation string
 
 const (
-	PlanValidationAuto PlanValidation = "AUTO"
+	PlanValidationAuto   PlanValidation = "AUTO"
+	PlanValidationManual PlanValidation = "MANUAL"
 )
 
 func (e PlanValidation) ToPointer() *PlanValidation {
@@ -25,6 +26,8 @@ func (e *PlanValidation) UnmarshalJSON(data []byte) error {
 	}
 	switch v {
 	case "AUTO":
+		fallthrough
+	case "MANUAL":
 		*e = PlanValidation(v)
 		return nil
 	default:

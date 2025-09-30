@@ -526,6 +526,8 @@ components:
           items:
             type: string
           default: []
+          examples:
+            - ["developers"]
         visibility:
           $ref: "#/components/schemas/Visibility"
         state:
@@ -540,6 +542,8 @@ components:
             maxLength: 64
           uniqueItems: true
           default: []
+          examples:
+            - ["example"]
         metadata:
           type: array
           description: The list of API's metadata.
@@ -556,7 +560,7 @@ components:
             type: string
           default: []
           examples:
-            - ["3ac914a2-4279-4aab-a19c-f784f07f8a42"]
+            - ["Example APIs"]
         members:
           type: array
           description: Users that can access or manage the API (depending on their roles).
@@ -1769,16 +1773,18 @@ components:
         - API
       enum:
         - API
+        - CATALOG
       default: API
     PlanValidation:
       type: string
       description: |
-        Usually specificies if subscriptions must be manually validated by a human actor.
-        For automation API, it is disabled hence it is always set to `AUTO`.
+        Specifies if subscriptions must be manually validated by a human actor.
+        For automation API, it is default to `AUTO`.
       examples:
         - AUTO
       enum:
         - AUTO
+        - MANUAL
       default: AUTO
     PlanMode:
       type: string
@@ -2201,6 +2207,8 @@ components:
               invalidValue:
                 type: object
                 description: The invalid value.
+                examples:
+                  - $...faulty
     Errors:
       description: >-
         When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
@@ -2261,6 +2269,8 @@ components:
       schema:
         type: string
         default: DEFAULT
+        examples:
+          - a44e0d1b-9fa9-4d64-8b76-3634623a2e27
       x-speakeasy-name-override: environmentId
     orgIdParam:
       name: orgId
@@ -2270,6 +2280,8 @@ components:
       schema:
         type: string
         default: DEFAULT
+        examples:
+          - dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145
       x-speakeasy-name-override: organizationId
     dryRunQueryParam:
       name: dryRun
@@ -2278,6 +2290,8 @@ components:
       schema:
         type: boolean
         default: false
+        examples:
+          - true
       x-speakeasy-terraform-ignore: true
     hridParam:
       name: hrid
@@ -2286,6 +2300,12 @@ components:
       description: Human-readable ID of a spec
       schema:
         type: string
+        examples:
+          - my_demo_api
+          - simple_demo_app
+          - keyless_demo_plan
+          - demo_subscription
+          - demo_shared_policy_groups
       x-speakeasy-param-force-new: true
     apiHridParam:
       name: apiHrid
@@ -2294,6 +2314,8 @@ components:
       description: Human-readable ID of api
       schema:
         type: string
+        examples:
+          - my_demo_api
   securitySchemes:
     BasicAuth:
       description: Basic authentication

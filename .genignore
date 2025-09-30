@@ -1,2 +1,13 @@
 examples/provider/provider.tf
 examples/resources/apim_apiv4/resource.tf
+examples/resources/apim_apiv4/import-by-string-id.tf
+examples/resources/apim_apiv4/import.sh
+examples/resources/apim_shared_policy_group/resource.tf
+examples/resources/apim_shared_policy_group/import-by-string-id.tf
+examples/resources/apim_shared_policy_group/import.sh
+examples/resources/apim_application/resource.tf
+examples/resources/apim_application/import-by-string-id.tf
+examples/resources/apim_application/import.sh
+examples/resources/apim_subscription/resource.tf
+examples/resources/apim_subscription/import-by-string-id.tf
+examples/resources/apim_subscription/import.sh

@@ -1,8 +1,10 @@
 import {
-  to = apim_application.my_apim_application
-  id = jsonencode({
-    environment_id  = "..."
-    hrid            = "..."
-    organization_id = "..."
-  })
+  to = apim_application.example
+  id = <<-EOT
+    {
+      "organization_id": "DEFAULT",
+      "environment_id": "DEFAULT",
+      "hrid": "example"
+    }
+  EOT
 }

@@ -3663,9 +3663,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							Description: `Only one possible type: API. Default: "API"; must be "API"`,
+							Description: `Only one possible type: API. Default: "API"; must be one of ["API", "CATALOG"]`,
 							Validators: []validator.String{
-								stringvalidator.OneOf("API"),
+								stringvalidator.OneOf(
+									"API",
+									"CATALOG",
+								),
 							},
 						},
 						"validation": schema.StringAttribute{
@@ -3675,11 +3678,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							PlanModifiers: []planmodifier.String{
 								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 							},
-							MarkdownDescription: `Usually specificies if subscriptions must be manually validated by a human actor.` + "\n" +
-								`For automation API, it is disabled hence it is always set to ` + "`" + `AUTO` + "`" + `.` + "\n" +
-								`Default: "AUTO"; must be "AUTO"`,
+							MarkdownDescription: `Specifies if subscriptions must be manually validated by a human actor.` + "\n" +
+								`For automation API, it is default to ` + "`" + `AUTO` + "`" + `.` + "\n" +
+								`Default: "AUTO"; must be one of ["AUTO", "MANUAL"]`,
 							Validators: []validator.String{
-								stringvalidator.OneOf("AUTO"),
+								stringvalidator.OneOf(
+									"AUTO",
+									"MANUAL",
+								),
 							},
 						},
 					},
@@ -4365,7 +4371,7 @@ func (r *Apiv4Resource) ImportState(ctx context.Context, req resource.ImportStat
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"environment_id": "...", "hrid": "...", "organization_id": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"environment_id": "a44e0d1b-9fa9-4d64-8b76-3634623a2e27", "hrid": "my_demo_api", "organization_id": "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"}': `+err.Error())
 		return
 	}
 
@@ -4374,13 +4380,13 @@ func (r *Apiv4Resource) ImportState(ctx context.Context, req resource.ImportStat
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"`)
 			return
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
 	if len(data.Hrid) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field hrid is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"my_demo_api"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("hrid"), data.Hrid)...)
@@ -4389,7 +4395,7 @@ func (r *Apiv4Resource) ImportState(ctx context.Context, req resource.ImportStat
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"`)
 			return
 		}
 	}
