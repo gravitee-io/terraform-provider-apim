@@ -7,20 +7,20 @@ APIM_SERVER_URL ?= http://localhost:30083/automation
 .PHONY: speakeasy
 speakeasy: ## Run speakeasy generation with curated examples and docs
 	speakeasy run --output console --minimal --skip-versioning
+	@make cloud-init-patch
 	@go mod tidy
 	@rm -rf examples/data-sources docs/data-sources examples/README.md USAGE.md > /dev/null
 	@git restore docs/guides
 	@terraform fmt -recursive > /dev/null
 	@go build
 
+cloud-init-patch:
+	@node cloud-init-patch.js
+
 .PHONY: lint
 lint: ## Run speakeasy lint accepting no error or warning
 	@speakeasy lint openapi --schema schemas/automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
-#	@make doc-gen
-#	@git diff --quiet HEAD docs/guides || { \
-#		echo "Error: Documentation generation produced changes. Please run 'make doc-gen' and commit the updated documentation."; \
-#		exit 1; \
-#	}
+	@grep "// BEGIN GRAVITEE CLOUD INIT" internal/provider/provider.go > /dev/null || (echo "Cloud initializer code snippet appear to be missing" && exit 1)
 	@terraform fmt -recursive -check || (echo "Error: Above terraform files are not properly formatted. Please run 'terraform fmt -recursive' to fix formatting issues" && exit 1)
 
 .PHONY: lint-fix
@@ -53,6 +53,10 @@ acceptance-tests: ## Run acceptance tests
 .PHONY: examples-tests
 examples-tests: ## Run acceptance tests using examples
 	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD="$${APIM_PASSWORD}" APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -v ./tests/examples
+
+.PHONY: unit-tests
+unit-tests: ## Run unit tests
+	@go test ./internal/...
 
 
 .PHONY: doc-gen

@@ -175,6 +175,9 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		security.CloudAuth = &cloudAuthEnvVar
 	}
 
+	// BEGIN GRAVITEE CLOUD INIT
+	serverUrl = CloudInitializer(security, serverUrl, &data, resp)
+	// END GRAVITEE CLOUD INIT
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),
 		Transport:  http.DefaultTransport,

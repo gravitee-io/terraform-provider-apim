@@ -11,3 +11,4 @@
 terraform-provider-apim
 docs/data-sources/
 examples/data-sources/
+__debug_bin*

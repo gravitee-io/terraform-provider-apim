@@ -86,3 +86,16 @@ jobs:
           APIM_USERNAME: ${{ vars.APIM_ADMIN_USERNAME }}
           APIM_PASSWORD: ${{ secrets.APIM_ADMIN_PASSWORD }}
         run: make acceptance-tests
+
+  unit:
+    name: Acceptance Tests (Terraform ${{ matrix.terraform-version }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Setup go
+        uses: ./.github/actions/setup-go
+      - name: Run unit tests
+        run: make unit-tests

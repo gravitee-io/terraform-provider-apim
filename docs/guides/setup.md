@@ -44,11 +44,10 @@ provider "apim" {
 
 ```hcl
 provider "apim" {
-  server_url      = "https://eu.cloudgate.gravitee.io/apim/automation"
-  bearer_auth     = "your_gravitee_cloud_jwt_goes_here"
-  organization_id = "organization_uuid_goes_here"
-  environment_id = "environment_uuid_goes_here"
+  cloud_auth     = "your_gravitee_cloud_jwt_goes_here"
 }
 ```
 
-For US setups change `eu` by `us` in `server_url`.
+This will set `server_url`, `bearer_auth`, `organization_id`, `environment_id` for you.
+
+~> `environment_id` becomes mandatory if the token is valid for multiple environment 
