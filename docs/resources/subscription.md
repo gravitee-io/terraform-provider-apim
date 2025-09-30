@@ -13,14 +13,12 @@ Subscription Resource
 ## Example Usage
 
 ```terraform
-resource "apim_subscription" "my_subscription" {
-  api_hrid         = "demo-api"
-  application_hrid = "demo-app"
+resource "apim_subscription" "example" {
+  hrid             = "example"
+  api_hrid         = "example"
+  plan_hrid        = "keyless"
+  application_hrid = "example"
   ending_at        = "2040-12-25T09:12:28Z"
-  environment_id   = "...my_environment_id..."
-  hrid             = "my_demo_api"
-  organization_id  = "...my_organization_id..."
-  plan_hrid        = "demo-plan"
 }
 ```
 
@@ -53,18 +51,20 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 
 ```terraform
 import {
-  to = apim_subscription.my_apim_subscription
-  id = jsonencode({
-    api_hrid = "..."
-    environment_id = "..."
-    hrid = "..."
-    organization_id = "..."
-  })
+  to = apim_subscription.example
+  id = <<-EOT
+    {
+      "organization_id": "DEFAULT",
+      "environment_id": "DEFAULT",
+      "api_hrid": "example"
+      "hrid": "example"
+    }
+  EOT
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import apim_subscription.my_apim_subscription '{"api_hrid": "...", "environment_id": "...", "hrid": "...", "organization_id": "..."}'
+terraform import apim_subscription.example '{"organization_id": "DEFAULT", "environment_id": "DEFAULT", "api_hrid": "example", "hrid": "example"}'
 ```

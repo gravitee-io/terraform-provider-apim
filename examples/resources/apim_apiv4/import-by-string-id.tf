@@ -1,8 +1,10 @@
 import {
-  to = apim_apiv4.my_apim_apiv4
-  id = jsonencode({
-    environment_id  = "..."
-    hrid            = "..."
-    organization_id = "..."
-  })
+  to = apim_apiv4.example
+  id = <<-EOT
+    {
+      "organization_id": "DEFAULT",
+      "environment_id": "DEFAULT",
+      "hrid": "example"
+    }
+  EOT
 }

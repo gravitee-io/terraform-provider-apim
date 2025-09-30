@@ -11,7 +11,8 @@ import (
 type PlanType string
 
 const (
-	PlanTypeAPI PlanType = "API"
+	PlanTypeAPI     PlanType = "API"
+	PlanTypeCatalog PlanType = "CATALOG"
 )
 
 func (e PlanType) ToPointer() *PlanType {
@@ -24,6 +25,8 @@ func (e *PlanType) UnmarshalJSON(data []byte) error {
 	}
 	switch v {
 	case "API":
+		fallthrough
+	case "CATALOG":
 		*e = PlanType(v)
 		return nil
 	default:

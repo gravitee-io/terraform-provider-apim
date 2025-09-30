@@ -413,12 +413,12 @@ func (r *SubscriptionResource) ImportState(ctx context.Context, req resource.Imp
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"api_hrid": "...", "environment_id": "...", "hrid": "...", "organization_id": "..."}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"api_hrid": "my_demo_api", "environment_id": "a44e0d1b-9fa9-4d64-8b76-3634623a2e27", "hrid": "my_demo_api", "organization_id": "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"}': `+err.Error())
 		return
 	}
 
 	if len(data.APIHrid) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field api_hrid is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field api_hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"my_demo_api"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("api_hrid"), data.APIHrid)...)
@@ -427,13 +427,13 @@ func (r *SubscriptionResource) ImportState(ctx context.Context, req resource.Imp
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"`)
 			return
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
 	if len(data.Hrid) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field hrid is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+		resp.Diagnostics.AddError("Missing required field", `The field hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"my_demo_api"`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("hrid"), data.Hrid)...)
@@ -442,7 +442,7 @@ func (r *SubscriptionResource) ImportState(ctx context.Context, req resource.Imp
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '""`)
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"`)
 			return
 		}
 	}

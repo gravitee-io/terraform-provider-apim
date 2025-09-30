@@ -1,1 +1,1 @@
-terraform import apim_application.my_apim_application '{"environment_id": "...", "hrid": "...", "organization_id": "..."}'
+terraform import apim_application.application-example '{"organization_id": "DEFAULT", "environment_id": "DEFAULT", "hrid": "application-example"}'

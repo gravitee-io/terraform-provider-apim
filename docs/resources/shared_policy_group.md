@@ -13,24 +13,29 @@ SharedPolicyGroup Resource
 ## Example Usage
 
 ```terraform
-resource "apim_shared_policy_group" "my_sharedpolicygroup" {
-  api_type             = "MESSAGE"
-  description          = "this is a shared policy group"
-  environment_id       = "...my_environment_id..."
-  hrid                 = "my_demo_api"
-  name                 = "My Shared Policy Group"
-  organization_id      = "...my_organization_id..."
-  phase                = "RESPONSE"
-  prerequisite_message = "the resource cache \"my-cache\" is required"
+resource "apim_shared_policy_group" "example" {
+  # should match the resource name
+  hrid        = "example"
+  name        = "[Terraform] Example headers"
+  description = "Simple Shared Policy Group that contains one step to remove User-Agent header and add X-Content-Path that contains this API context path"
+  api_type    = "PROXY"
+  phase       = "REQUEST"
   steps = [
     {
-      condition         = "...my_condition..."
-      configuration     = "{ \"see\": \"documentation\" }"
-      description       = "...my_description..."
-      enabled           = true
-      message_condition = "...my_message_condition..."
-      name              = "...my_name..."
-      policy            = "...my_policy..."
+      enabled = true
+      name    = "Curate headers"
+      policy  = "transform-headers"
+      # Configuration is JSON as the schema depends on the policy used
+      configuration = jsonencode({
+        scope = "REQUEST"
+        addHeaders = [
+          {
+            name  = "X-Context-Path"
+            value = "{#request.contextPath}"
+          }
+        ],
+        removeHeaders = ["User-Agent"]
+      })
     }
   ]
 }
@@ -80,17 +85,19 @@ In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.
 
 ```terraform
 import {
-  to = apim_shared_policy_group.my_apim_shared_policy_group
-  id = jsonencode({
-    environment_id = "..."
-    hrid = "..."
-    organization_id = "..."
-  })
+  to = apim_shared_policy_group.example
+  id = <<-EOT
+    {
+      "organization_id": "DEFAULT",
+      "environment_id": "DEFAULT",
+      "hrid": "example"
+    }
+  EOT
 }
 ```
 
 The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
 
 ```shell
-terraform import apim_shared_policy_group.my_apim_shared_policy_group '{"environment_id": "...", "hrid": "...", "organization_id": "..."}'
+terraform import apim_shared_policy_group.example '{"organization_id": "DEFAULT", "environment_id": "DEFAULT", "hrid": "example"}'
 ```
