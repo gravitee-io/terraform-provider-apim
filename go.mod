@@ -3,6 +3,7 @@ module github.com/gravitee-io/terraform-provider-apim
 go 1.23.7
 
 require (
+	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-docs v0.22.0
