@@ -1,16 +1,13 @@
 variable "environment_id" {
-  type    = string
-  default = "DEFAULT"
+  type = string
 }
 
 variable "hrid" {
-  type    = string
-  default = "coucou"
+  type = string
 }
 
 variable "organization_id" {
-  type    = string
-  default = "DEFAULT"
+  type = string
 }
 
 resource "apim_apiv4" "test" {
@@ -41,11 +38,11 @@ resource "apim_apiv4" "test" {
             "content-type"
           ]
           allow_methods = [
-            "DELETE",
+            # "DELETE",
             "GET",
             "OPTIONS",
-            "PUT",
-            "POST",
+            # "PUT",
+            # "POST",
           ]
           allow_origin = [
             ".*\\.acme\\.com",
@@ -346,50 +343,47 @@ resource "apim_apiv4" "test" {
     max_failures        = 10
     per_subscription    = true
   }
-  properties = [
-    {
-      key     = "foo",
-      value   = "bar",
-      dynamic = false
-    }
-  ]
+  # properties = [
+  #   {
+  #     key         = "foo",
+  #     value       = "bar",
+  #     dynamic     = false
+  #     encryptable = true
+  #   }
+  # ]
   pages = [
-    # {
-    #   hrid     = "homepage"
-    #   content  = <<-EOT
-    #       # Homepage
-    #       Go to the "Markdowns" folder to find some content.
-    #       EOT
-    #   name     = "Home"
-    #   homepage = true
-    #   type     = "MARKDOWN"
-    #   order    = 0
-    # },
-    # {
-    #   hrid        = "markdown"
-    #   content     = <<-EOT
-    #       Hello world!
-    #       --
-    #       This is markdown.
-    #       EOT
-    #   name        = "Hello Markdown"
-    #   parent_hrid = "markdowns-folder"
-    #   type        = "MARKDOWN"
-    #   order       = 1
-    # },
-    # {
-    #   hrid  = "markdowns-folder"
-    #   name  = "Markdowns"
-    #   type  = "FOLDER"
-    #   order = 2
-    # },
-    # {
-    #   hrid   = "hidden"
-    #   name   = "Invisible"
-    #   type   = "FOLDER"
-    #   hidden = true
-    #   order  = 3
-    # }
+    {
+      hrid     = "homepage"
+      content  = <<-EOT
+          # Homepage
+          Go to the "Markdowns" folder to find some content.
+          EOT
+      name     = "Home"
+      homepage = true
+      type     = "MARKDOWN"
+    },
+    {
+      hrid        = "markdown"
+      content     = <<-EOT
+          Hello world!
+          --
+          This is markdown.
+          EOT
+      name        = "Hello Markdown"
+      parent_hrid = "markdowns-folder"
+      type        = "MARKDOWN"
+    },
+    {
+      hrid = "markdowns-folder"
+      name = "Markdowns"
+      type = "FOLDER"
+    },
+    {
+      hrid       = "hidden"
+      name       = "Invisible"
+      type       = "FOLDER"
+      visibility = "PRIVATE"
+    }
   ]
   plans = [
     {

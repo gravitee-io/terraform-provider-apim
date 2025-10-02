@@ -64,7 +64,6 @@ resource "apim_apiv4" "api-with-pages-inline" {
       name     = "Home"
       homepage = true
       type     = "MARKDOWN"
-      order    = 0
     },
     {
       hrid        = "markdown"
@@ -76,13 +75,11 @@ resource "apim_apiv4" "api-with-pages-inline" {
       name        = "Hello Markdown"
       parent_hrid = "markdowns-folder"
       type        = "MARKDOWN"
-      order       = 1
     },
     {
-      hrid  = "markdowns-folder"
-      name  = "Markdowns"
-      type  = "FOLDER"
-      order = 2
+      hrid = "markdowns-folder"
+      name = "Markdowns"
+      type = "FOLDER"
     }
   ]
   plans = [

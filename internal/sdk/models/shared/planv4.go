@@ -20,8 +20,6 @@ type PlanV4 struct {
 	Characteristics []string `json:"characteristics,omitempty"`
 	// Access-control, UUID of groups excluded from this plan
 	ExcludedGroups []string `json:"excludedGroups,omitempty"`
-	// Priority of the plan, lowest number is executed first. By default it respects order of creation.
-	Order *int64 `json:"order,omitempty"`
 	// An EL expression that must return a boolean to enable the flow based on the request.
 	SelectionRule *string `json:"selectionRule,omitempty"`
 	// Plan status, only `PUBLISHED` makes the plan available at runtime.
@@ -96,13 +94,6 @@ func (p *PlanV4) GetExcludedGroups() []string {
 		return nil
 	}
 	return p.ExcludedGroups
-}
-
-func (p *PlanV4) GetOrder() *int64 {
-	if p == nil {
-		return nil
-	}
-	return p.Order
 }
 
 func (p *PlanV4) GetSelectionRule() *string {

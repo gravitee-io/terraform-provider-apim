@@ -32,7 +32,7 @@ type APIV4State struct {
 	Properties []PropertyOutput `json:"properties,omitempty"`
 	// Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).
 	Resources []APIResource `json:"resources,omitempty"`
-	// Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`.
+	// Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority.
 	Plans []PlanV4 `json:"plans,omitempty"`
 	// Flow execution enablement (Not applicable for Native API)
 	FlowExecution *FlowExecution `json:"flowExecution,omitempty"`
@@ -64,7 +64,7 @@ type APIV4State struct {
 	Categories []string `json:"categories,omitempty"`
 	// Users that can access or manage the API (depending on their roles).
 	Members []Member `json:"members,omitempty"`
-	// Pages for the API
+	// Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.
 	Pages []PageV4 `json:"pages,omitempty"`
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
 	Errors *Errors `json:"errors,omitempty"`

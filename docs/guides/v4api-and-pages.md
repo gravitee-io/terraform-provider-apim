@@ -68,10 +68,9 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
   }
   pages = [
     {
-      hrid  = "docs-folder"
-      name  = "Specifications"
-      type  = "FOLDER"
-      order = 0
+      hrid = "docs-folder"
+      name = "Specifications"
+      type = "FOLDER"
     },
     {
       hrid        = "swagger"
@@ -86,8 +85,7 @@ resource "apim_apiv4" "api-with-pages-fetcher" {
         })
         type = "http-fetcher"
       }
-      type  = "SWAGGER"
-      order = 1
+      type = "SWAGGER"
     }
   ]
 
@@ -193,13 +191,11 @@ resource "apim_apiv4" "api-with-pages-inline" {
       name        = "Hello Markdown"
       parent_hrid = "markdowns-folder"
       type        = "MARKDOWN"
-      order       = 1
     },
     {
-      hrid  = "markdowns-folder"
-      name  = "Markdowns"
-      type  = "FOLDER"
-      order = 2
+      hrid = "markdowns-folder"
+      name = "Markdowns"
+      type = "FOLDER"
     }
   ]
   plans = [

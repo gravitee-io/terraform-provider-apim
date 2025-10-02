@@ -1097,10 +1097,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed:    true,
 							Description: `Page's cross uuid.`,
 						},
-						"hidden": schema.BoolAttribute{
-							Computed:    true,
-							Description: `If folder is published but not shown in Portal.`,
-						},
 						"homepage": schema.BoolAttribute{
 							Computed:    true,
 							Description: `If true, this page will be displayed as the homepage of your API documentation.`,
@@ -1113,10 +1109,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed: true,
 							MarkdownDescription: `This is the display name of the page in APIM and on the portal.` + "\n" +
 								`This field can be edited safely if you want to rename a page.`,
-						},
-						"order": schema.Int64Attribute{
-							Computed:    true,
-							Description: `The order used to display the page in APIM and on the portal.`,
 						},
 						"parent_hrid": schema.StringAttribute{
 							Computed: true,
@@ -1153,7 +1145,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 					},
 				},
-				Description: `Pages for the API`,
+				Description: `Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.`,
 			},
 			"plans": schema.ListNestedAttribute{
 				Computed: true,
@@ -1545,7 +1537,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 					},
 				},
-				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `.`,
+				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `. Plans are prioritized by their position in the list, with earlier entries having higher priority.`,
 			},
 			"primary_owner": schema.SingleNestedAttribute{
 				Computed: true,

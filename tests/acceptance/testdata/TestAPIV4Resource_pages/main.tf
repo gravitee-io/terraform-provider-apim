@@ -6,19 +6,28 @@ variable "hrid" {
   type = string
 }
 
-variable "name" {
+variable "organization_id" {
   type = string
 }
 
-variable "organization_id" {
-  type = string
+variable "pages" {
+  type = list(
+    object({
+      hrid        = string,
+      name        = string
+      content     = string,
+      homepage    = bool,
+      type        = string,
+      parent_hrid = string
+    })
+  )
 }
 
 resource "apim_apiv4" "test" {
   environment_id  = var.environment_id
   hrid            = var.hrid
   lifecycle_state = "UNPUBLISHED"
-  name            = var.name
+  name            = "Test"
   description     = <<-EOT
     Multiline comment to
     make sure it does create
@@ -113,18 +122,5 @@ resource "apim_apiv4" "test" {
     }
   ]
 
-  plans = [
-    {
-      hrid        = "Keyless"
-      description = "No sec"
-      mode        = "STANDARD"
-      name        = "No security"
-      status      = "PUBLISHED"
-      type        = "API"
-      validation  = "AUTO"
-      security = {
-        type = "KEY_LESS"
-      }
-    }
-  ]
+  pages = var.pages
 }

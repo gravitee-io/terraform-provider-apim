@@ -16,7 +16,6 @@ import (
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
-	speakeasy_int64validators "github.com/gravitee-io/terraform-provider-apim/internal/validators/int64validators"
 	speakeasy_listvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
@@ -2537,14 +2536,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 							Description: `Page's cross uuid.`,
 						},
-						"hidden": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
-							Description: `If folder is published but not shown in Portal.`,
-						},
 						"homepage": schema.BoolAttribute{
 							Computed: true,
 							Optional: true,
@@ -2578,17 +2569,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 								stringvalidator.UTF8LengthAtMost(64),
-							},
-						},
-						"order": schema.Int64Attribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Int64{
-								speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
-							},
-							Description: `The order used to display the page in APIM and on the portal. Not Null`,
-							Validators: []validator.Int64{
-								speakeasy_int64validators.NotNull(),
 							},
 						},
 						"parent_hrid": schema.StringAttribute{
@@ -2680,7 +2660,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 					},
 				},
-				Description: `Pages for the API`,
+				Description: `Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.`,
 			},
 			"plans": schema.ListNestedAttribute{
 				Computed: true,
@@ -3698,7 +3678,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 					},
 				},
-				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `.`,
+				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `. Plans are prioritized by their position in the list, with earlier entries having higher priority.`,
 			},
 			"primary_owner": schema.SingleNestedAttribute{
 				Computed: true,

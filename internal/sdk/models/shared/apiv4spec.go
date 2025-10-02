@@ -32,7 +32,7 @@ type APIV4Spec struct {
 	Properties []PropertyInput `json:"properties,omitempty"`
 	// Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).
 	Resources []APIResource `json:"resources,omitempty"`
-	// Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`.
+	// Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority.
 	Plans []PlanV4 `json:"plans,omitempty"`
 	// Flow execution enablement (Not applicable for Native API)
 	FlowExecution *FlowExecution `json:"flowExecution,omitempty"`
@@ -67,7 +67,7 @@ type APIV4Spec struct {
 	// If true, new members added to the API spec will
 	// be notified when the API is synced with APIM.
 	NotifyMembers *bool `default:"true" json:"notifyMembers"`
-	// Pages for the API
+	// Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.
 	Pages []PageV4Input `json:"pages,omitempty"`
 }
 
