@@ -70,64 +70,7 @@ func TestAPIV4Resource_minimal(t *testing.T) {
 
 // Verifies the create, read, import, and delete lifecycle of the
 // `apim_apiv4` resource.
-// TODO fix bugs before enabling this one
-//func TestAPIV4Resource_all(t *testing.T) {
-//	t.Parallel()
-//
-//	environmentId := "DEFAULT"
-//	organizationId := "DEFAULT"
-//	randomId := "test-" + acctest.RandString(10)
-//	resourceAddress := "apim_apiv4.test"
-//
-//	resource.Test(t, resource.TestCase{
-//		Steps: []resource.TestStep{
-//			// Verifies resource create and read.
-//			{
-//				ProtoV6ProviderFactories: testProviders(),
-//				ConfigDirectory:          config.TestNameDirectory(),
-//				ConfigVariables: config.Variables{
-//					"environment_id":  config.StringVariable(environmentId),
-//					"hrid":            config.StringVariable(randomId),
-//					"organization_id": config.StringVariable(organizationId),
-//				},
-//			},
-//			// Verifies resource import.
-//			{
-//				ProtoV6ProviderFactories: testProviders(),
-//				ConfigDirectory:          config.TestNameDirectory(),
-//				ConfigVariables: config.Variables{
-//					"environment_id":  config.StringVariable(environmentId),
-//					"hrid":            config.StringVariable(randomId),
-//					"organization_id": config.StringVariable(organizationId),
-//				},
-//				ResourceName: resourceAddress,
-//				ImportState:  true,
-//				ImportStateIdFunc: func(s *terraform.State) (string, error) {
-//					importIDBytes, err := json.Marshal(struct {
-//						EnvironmentId  string `json:"environment_id"`
-//						Hrid           string `json:"hrid"`
-//						OrganizationId string `json:"organization_id"`
-//					}{
-//						EnvironmentId:  s.RootModule().Resources[resourceAddress].Primary.Attributes["environment_id"],
-//						Hrid:           s.RootModule().Resources[resourceAddress].Primary.Attributes["hrid"],
-//						OrganizationId: s.RootModule().Resources[resourceAddress].Primary.Attributes["organization_id"],
-//					})
-//
-//					return string(importIDBytes), err
-//				},
-//				ImportStateVerify: true,
-//				ImportStateVerifyIgnore: []string{
-//					"notify_members",
-//					"version",
-//				},
-//			},
-//			// Testing framework implicitly verifies resource delete.
-//		},
-//	})
-//}
-
-// Verifies the update of the name attribute of the `apim_apiv4` resource.
-func TestAPIV4Resource_update(t *testing.T) {
+func TestAPIV4Resource_all(t *testing.T) {
 	t.Parallel()
 
 	environmentId := "DEFAULT"
@@ -144,7 +87,6 @@ func TestAPIV4Resource_update(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
-					"name":            config.StringVariable(randomId + "-original"),
 					"organization_id": config.StringVariable(organizationId),
 				},
 			},
@@ -155,8 +97,122 @@ func TestAPIV4Resource_update(t *testing.T) {
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
-					"name":            config.StringVariable(randomId + "-original"),
 					"organization_id": config.StringVariable(organizationId),
+				},
+				ResourceName: resourceAddress,
+				ImportState:  true,
+				ImportStateIdFunc: func(s *terraform.State) (string, error) {
+					importIDBytes, err := json.Marshal(struct {
+						EnvironmentId  string `json:"environment_id"`
+						Hrid           string `json:"hrid"`
+						OrganizationId string `json:"organization_id"`
+					}{
+						EnvironmentId:  s.RootModule().Resources[resourceAddress].Primary.Attributes["environment_id"],
+						Hrid:           s.RootModule().Resources[resourceAddress].Primary.Attributes["hrid"],
+						OrganizationId: s.RootModule().Resources[resourceAddress].Primary.Attributes["organization_id"],
+					})
+
+					return string(importIDBytes), err
+				},
+				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{
+					"notify_members",
+					"version",
+					"pages.1.homepage",
+					"pages.2.homepage",
+					"pages.3.homepage",
+				},
+			},
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
+// Verifies the update of the name attribute of the `apim_apiv4` resource.
+func TestAPIV4Resource_plans(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId := "test-" + acctest.RandString(10)
+	resourceAddress := "apim_apiv4.test"
+
+	plan1 := config.ObjectVariable(config.Variables{
+		"hrid":        config.StringVariable("plan1"),
+		"description": config.StringVariable("plan 1"),
+		"mode":        config.StringVariable("STANDARD"),
+		"name":        config.StringVariable("plan 1"),
+		"status":      config.StringVariable("PUBLISHED"),
+		"type":        config.StringVariable("API"),
+		"validation":  config.StringVariable("AUTO"),
+		"security": config.ObjectVariable(config.Variables{
+			"type": config.StringVariable("KEY_LESS"),
+		}),
+	})
+	plan2 := config.ObjectVariable(config.Variables{
+		"hrid":        config.StringVariable("plan2"),
+		"description": config.StringVariable("plan 2"),
+		"mode":        config.StringVariable("STANDARD"),
+		"name":        config.StringVariable("plan 2"),
+		"status":      config.StringVariable("PUBLISHED"),
+		"type":        config.StringVariable("API"),
+		"validation":  config.StringVariable("AUTO"),
+		"security": config.ObjectVariable(config.Variables{
+			"type": config.StringVariable("MTLS"),
+		}),
+	})
+	plan3 := config.ObjectVariable(config.Variables{
+		"hrid":        config.StringVariable("plan3"),
+		"description": config.StringVariable("plan 3"),
+		"mode":        config.StringVariable("STANDARD"),
+		"name":        config.StringVariable("plan 3"),
+		"status":      config.StringVariable("PUBLISHED"),
+		"type":        config.StringVariable("API"),
+		"validation":  config.StringVariable("AUTO"),
+		"security": config.ObjectVariable(config.Variables{
+			"type": config.StringVariable("MTLS"),
+		}),
+	})
+	plan2Deprecated := config.ObjectVariable(config.Variables{
+		"hrid":        config.StringVariable("plan2"),
+		"description": config.StringVariable("plan 2"),
+		"mode":        config.StringVariable("STANDARD"),
+		"name":        config.StringVariable("plan 2"),
+		"status":      config.StringVariable("DEPRECATED"),
+		"type":        config.StringVariable("API"),
+		"validation":  config.StringVariable("AUTO"),
+		"security": config.ObjectVariable(config.Variables{
+			"type": config.StringVariable("MTLS"),
+		}),
+	})
+
+	plans := config.ListVariable(plan1, plan2, plan3)
+	plansDeprecated := config.ListVariable(plan1, plan3, plan2Deprecated)
+	plansShuffled := config.ListVariable(plan3, plan1, plan2)
+	plansDelete := config.ListVariable(plan1, plan2)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization_id": config.StringVariable(organizationId),
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"plans":           plans,
+				},
+			},
+			// Verifies resource import.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization_id": config.StringVariable(organizationId),
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"plans":           plans,
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
@@ -184,12 +240,159 @@ func TestAPIV4Resource_update(t *testing.T) {
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
+					"organization_id": config.StringVariable(organizationId),
 					"environment_id":  config.StringVariable(environmentId),
 					"hrid":            config.StringVariable(randomId),
-					"name":            config.StringVariable(randomId + "-updated"),
+					"plans":           plansDeprecated,
+				},
+				ExpectNonEmptyPlan: true,
+			},
+			// Verifies resource update again.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
 					"organization_id": config.StringVariable(organizationId),
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"plans":           plansShuffled,
 				},
 			},
+			// Verifies resource update again.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization_id": config.StringVariable(organizationId),
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"plans":           plansDelete,
+				},
+			},
+
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
+// Verifies the update of the name attribute of the `apim_apiv4` resource.
+func TestAPIV4Resource_pages(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId := "test-" + acctest.RandString(10)
+	resourceAddress := "apim_apiv4.test"
+
+	homePage := config.ObjectVariable(config.Variables{
+		"hrid":        config.StringVariable("homepage"),
+		"name":        config.StringVariable("Homepage"),
+		"content":     config.StringVariable("# Homepage"),
+		"homepage":    config.BoolVariable(true),
+		"type":        config.StringVariable("MARKDOWN"),
+		"parent_hrid": config.StringVariable(""),
+	})
+
+	folder := config.ObjectVariable(config.Variables{
+		"hrid":        config.StringVariable("folder"),
+		"name":        config.StringVariable("Pages"),
+		"content":     config.StringVariable(""),
+		"homepage":    config.BoolVariable(false),
+		"type":        config.StringVariable("FOLDER"),
+		"parent_hrid": config.StringVariable(""),
+	})
+
+	page := config.ObjectVariable(config.Variables{
+		"hrid":        config.StringVariable("page"),
+		"name":        config.StringVariable("Page"),
+		"content":     config.StringVariable("This is the content"),
+		"homepage":    config.BoolVariable(false),
+		"type":        config.StringVariable("MARKDOWN"),
+		"parent_hrid": config.StringVariable("folder"),
+	})
+
+	pages := config.ListVariable(homePage, folder, page)
+	pagesShuffled := config.ListVariable(folder, page, homePage)
+	pagesDelete := config.ListVariable(folder, homePage)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization_id": config.StringVariable(organizationId),
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"pages":           pages,
+				},
+			},
+			// Verifies resource import.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization_id": config.StringVariable(organizationId),
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"pages":           pages,
+				},
+				ResourceName: resourceAddress,
+				ImportState:  true,
+				ImportStateIdFunc: func(s *terraform.State) (string, error) {
+					importIDBytes, err := json.Marshal(struct {
+						EnvironmentId  string `json:"environment_id"`
+						Hrid           string `json:"hrid"`
+						OrganizationId string `json:"organization_id"`
+					}{
+						EnvironmentId:  s.RootModule().Resources[resourceAddress].Primary.Attributes["environment_id"],
+						Hrid:           s.RootModule().Resources[resourceAddress].Primary.Attributes["hrid"],
+						OrganizationId: s.RootModule().Resources[resourceAddress].Primary.Attributes["organization_id"],
+					})
+
+					return string(importIDBytes), err
+				},
+				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{
+					"notify_members",
+					"version",
+				},
+			},
+			// Verifies resource update.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization_id": config.StringVariable(organizationId),
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"pages":           pagesShuffled,
+				},
+			},
+			// Verifies resource update again.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization_id": config.StringVariable(organizationId),
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"pages":           pagesShuffled,
+				},
+			},
+			// Verifies resource update again.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization_id": config.StringVariable(organizationId),
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"pages":           pagesDelete,
+				},
+			},
+
 			// Testing framework implicitly verifies resource delete.
 		},
 	})

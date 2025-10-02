@@ -97,16 +97,3 @@ actions:
     description: Intentionally ignored for Terraform state
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.PlanV4.properties.order
-    description: |
-      May not be immediately populated, which can cause import testing errors:
-
-      apiv4_resource_test.go:23: Step 2/2 error running import: ImportStateVerify attributes not equivalent. Difference is shown below. The - symbol indicates attributes missing after import.
-
-        map[string]string{
-      +       "plans.Keyless.order": "0",
-        }
-
-      This property is unnecessary for Terraform anyways, so it is ignored.
-    update:
-      x-speakeasy-terraform-ignore: true
