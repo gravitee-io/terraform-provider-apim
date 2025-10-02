@@ -36,8 +36,6 @@ type PageV4Input struct {
 	// into APIM by making the page a child of this folder.
 	//
 	ParentHrid *string `json:"parentHrid,omitempty"`
-	// If folder is published but not shown in Portal.
-	Hidden *bool `json:"hidden,omitempty"`
 }
 
 func (p PageV4Input) MarshalJSON() ([]byte, error) {
@@ -126,11 +124,4 @@ func (p *PageV4Input) GetParentHrid() *string {
 		return nil
 	}
 	return p.ParentHrid
-}
-
-func (p *PageV4Input) GetHidden() *bool {
-	if p == nil {
-		return nil
-	}
-	return p.Hidden
 }

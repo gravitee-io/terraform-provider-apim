@@ -1675,9 +1675,6 @@ components:
           description: "If your page contains a folder, setting this field to the folder's hrid will be reflected \ninto APIM by making the page a child of this folder.\n"
           examples:
             - guides
-        hidden:
-          type: boolean
-          description: If folder is published but not shown in Portal.
       required:
         - hrid
         - name

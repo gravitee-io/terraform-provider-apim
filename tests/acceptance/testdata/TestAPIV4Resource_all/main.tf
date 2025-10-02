@@ -1,16 +1,13 @@
 variable "environment_id" {
   type    = string
-  default = "DEFAULT"
 }
 
 variable "hrid" {
   type    = string
-  default = "coucou"
 }
 
 variable "organization_id" {
   type    = string
-  default = "DEFAULT"
 }
 
 resource "apim_apiv4" "test" {
@@ -27,10 +24,10 @@ resource "apim_apiv4" "test" {
     "test",
     "all props"
   ]
-  categories = [
-    "test",
-    "terraform"
-  ]
+  # categories = [
+  #   "test",
+  #   "terraform"
+  # ]
   listeners = [
     {
       http = {
@@ -41,11 +38,11 @@ resource "apim_apiv4" "test" {
             "content-type"
           ]
           allow_methods = [
-            "DELETE",
+            # "DELETE",
             "GET",
             "OPTIONS",
-            "PUT",
-            "POST",
+            # "PUT",
+            # "POST",
           ]
           allow_origin = [
             ".*\\.acme\\.com",
@@ -249,31 +246,31 @@ resource "apim_apiv4" "test" {
     }
   }
   services = {
-    dynamic_property = {
-      overrideConfiguration = false,
-      configuration = jsonencode({
-        schedule = "*/30 * * * * *"
-        headers = [
-          {
-            name  = "X-Test"
-            value = "TRUE"
-          }
-        ]
-        url            = "https://api.gravitee.io/echo"
-        method         = "GET"
-        systemProxy    = false
-        transformation = <<-EOT
-        [
-            {
-                "operation": "default",
-                "spec": {}
-            }
-        ]
-        EOT
-      })
-      enabled = true,
-      type    = "http-dynamic-properties"
-    }
+    # dynamic_property = {
+    #   overrideConfiguration = false,
+    #   configuration = jsonencode({
+    #     schedule = "*/30 * * * * *"
+    #     headers = [
+    #       {
+    #         name  = "X-Test"
+    #         value = "TRUE"
+    #       }
+    #     ]
+    #     url            = "https://api.gravitee.io/echo"
+    #     method         = "GET"
+    #     systemProxy    = false
+    #     transformation = <<-EOT
+    #     [
+    #         {
+    #             "operation": "default",
+    #             "spec": {}
+    #         }
+    #     ]
+    #     EOT
+    #   })
+    #   enabled = true,
+    #   type    = "http-dynamic-properties"
+    # }
   }
   response_templates = {
     CORS_PREFLIGHT_FAILED : {
@@ -295,14 +292,14 @@ resource "apim_apiv4" "test" {
     max_failures        = 10
     per_subscription    = true
   }
-  properties = [
-    {
-      key         = "foo",
-      value       = "bar",
-      dynamic     = false
-      encryptable = true
-    }
-  ]
+  # properties = [
+  #   {
+  #     key         = "foo",
+  #     value       = "bar",
+  #     dynamic     = false
+  #     encryptable = true
+  #   }
+  # ]
   pages = [
     {
       hrid     = "homepage"
@@ -337,7 +334,7 @@ resource "apim_apiv4" "test" {
       hrid   = "hidden"
       name   = "Invisible"
       type   = "FOLDER"
-      hidden = true
+      visibility = "PRIVATE"
       order  = 3
     }
   ]

@@ -606,7 +606,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			}
 			pages.Content = types.StringPointerValue(pagesItem.Content)
 			pages.CrossID = types.StringPointerValue(pagesItem.CrossID)
-			pages.Hidden = types.BoolPointerValue(pagesItem.Hidden)
 			pages.Homepage = types.BoolPointerValue(pagesItem.Homepage)
 			pages.Hrid = types.StringValue(pagesItem.Hrid)
 			pages.Name = types.StringValue(pagesItem.Name)
@@ -2927,12 +2926,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			parentHrid = nil
 		}
-		hidden1 := new(bool)
-		if !pagesItem.Hidden.IsUnknown() && !pagesItem.Hidden.IsNull() {
-			*hidden1 = pagesItem.Hidden.ValueBool()
-		} else {
-			hidden1 = nil
-		}
 		pages = append(pages, shared.PageV4Input{
 			Hrid:          hrid2,
 			Name:          name20,
@@ -2945,7 +2938,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Configuration: configuration24,
 			Homepage:      homepage,
 			ParentHrid:    parentHrid,
-			Hidden:        hidden1,
 		})
 	}
 	out := shared.APIV4Spec{

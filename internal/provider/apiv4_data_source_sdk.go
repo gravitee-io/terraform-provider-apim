@@ -606,7 +606,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			}
 			pages.Content = types.StringPointerValue(pagesItem.Content)
 			pages.CrossID = types.StringPointerValue(pagesItem.CrossID)
-			pages.Hidden = types.BoolPointerValue(pagesItem.Hidden)
 			pages.Homepage = types.BoolPointerValue(pagesItem.Homepage)
 			pages.Hrid = types.StringValue(pagesItem.Hrid)
 			pages.Name = types.StringValue(pagesItem.Name)

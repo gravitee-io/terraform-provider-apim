@@ -2537,14 +2537,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 							Description: `Page's cross uuid.`,
 						},
-						"hidden": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
-							Description: `If folder is published but not shown in Portal.`,
-						},
 						"homepage": schema.BoolAttribute{
 							Computed: true,
 							Optional: true,

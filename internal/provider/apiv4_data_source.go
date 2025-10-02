@@ -1097,10 +1097,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed:    true,
 							Description: `Page's cross uuid.`,
 						},
-						"hidden": schema.BoolAttribute{
-							Computed:    true,
-							Description: `If folder is published but not shown in Portal.`,
-						},
 						"homepage": schema.BoolAttribute{
 							Computed:    true,
 							Description: `If true, this page will be displayed as the homepage of your API documentation.`,
