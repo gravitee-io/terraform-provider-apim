@@ -97,6 +97,3 @@ actions:
     description: Intentionally ignored for Terraform state
     update:
       x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.PlanV4.properties.order
-    description: This is no longer needed as order is the list order
-    remove: true

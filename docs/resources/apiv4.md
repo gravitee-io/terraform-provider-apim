@@ -209,7 +209,6 @@ resource "apim_apiv4" "example" {
           EOT
       homepage = true
       type     = "MARKDOWN"
-      order    = 0
     }
   ]
 }
@@ -245,8 +244,8 @@ resource "apim_apiv4" "example" {
 be notified when the API is synced with APIM.
 Default: true
 - `organization_id` (String) organization ID
-- `pages` (Attributes List) Pages for the API (see [below for nested schema](#nestedatt--pages))
-- `plans` (Attributes List) Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. (see [below for nested schema](#nestedatt--plans))
+- `pages` (Attributes List) Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below. (see [below for nested schema](#nestedatt--pages))
+- `plans` (Attributes List) Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority. (see [below for nested schema](#nestedatt--plans))
 - `primary_owner` (Attributes) User owner of this. Can perform all possible actions on it. (see [below for nested schema](#nestedatt--primary_owner))
 - `properties` (Attributes List) Properties usable using EL. (see [below for nested schema](#nestedatt--properties))
 - `resources` (Attributes List) Data resources usable in policy to access (mostly) external data (authentication, cache, registries...). (see [below for nested schema](#nestedatt--resources))
@@ -788,7 +787,6 @@ Optional:
 - `name` (String) This is the display name of the page in APIM and on the portal.
 This field can be edited safely if you want to rename a page.
 Not Null
-- `order` (Number) The order used to display the page in APIM and on the portal. Not Null
 - `parent_hrid` (String) If your page contains a folder, setting this field to the folder's hrid will be reflected 
 into APIM by making the page a child of this folder.
 - `published` (Boolean) If true, the page will be accessible from the portal (default is false). Default: false

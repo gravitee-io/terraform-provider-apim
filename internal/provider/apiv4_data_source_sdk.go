@@ -609,7 +609,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			pages.Homepage = types.BoolPointerValue(pagesItem.Homepage)
 			pages.Hrid = types.StringValue(pagesItem.Hrid)
 			pages.Name = types.StringValue(pagesItem.Name)
-			pages.Order = types.Int64Value(pagesItem.Order)
 			pages.ParentHrid = types.StringPointerValue(pagesItem.ParentHrid)
 			pages.Published = types.BoolPointerValue(pagesItem.Published)
 			if pagesItem.Source == nil {

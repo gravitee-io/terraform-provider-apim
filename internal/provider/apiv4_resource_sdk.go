@@ -609,7 +609,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			pages.Homepage = types.BoolPointerValue(pagesItem.Homepage)
 			pages.Hrid = types.StringValue(pagesItem.Hrid)
 			pages.Name = types.StringValue(pagesItem.Name)
-			pages.Order = types.Int64Value(pagesItem.Order)
 			pages.ParentHrid = types.StringPointerValue(pagesItem.ParentHrid)
 			pages.Published = types.BoolPointerValue(pagesItem.Published)
 			if pagesItem.Source == nil {
@@ -2875,9 +2874,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			content1 = nil
 		}
-		var order int64
-		order = pagesItem.Order.ValueInt64()
-
 		published := new(bool)
 		if !pagesItem.Published.IsUnknown() && !pagesItem.Published.IsNull() {
 			*published = pagesItem.Published.ValueBool()
@@ -2931,7 +2927,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Name:          name20,
 			Type:          type9,
 			Content:       content1,
-			Order:         order,
 			Published:     published,
 			Visibility:    visibility1,
 			Source:        source1,

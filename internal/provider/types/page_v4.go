@@ -13,7 +13,6 @@ type PageV4 struct {
 	Homepage      types.Bool              `tfsdk:"homepage"`
 	Hrid          types.String            `tfsdk:"hrid"`
 	Name          types.String            `tfsdk:"name"`
-	Order         types.Int64             `tfsdk:"order"`
 	ParentHrid    types.String            `tfsdk:"parent_hrid"`
 	Published     types.Bool              `tfsdk:"published"`
 	Source        *PageSource             `tfsdk:"source"`
