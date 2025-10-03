@@ -14,29 +14,29 @@
 
 outputs:
  - template: {{ .RootDir }}/tmpl/v4api-simple.md.tmpl
-   target: docs/guides/v4api-simple.md
+   target: templates/guides/v4api-simple.md
  - template: {{ .RootDir }}/tmpl/v4api-response-template.md.tmpl
-   target: docs/guides/v4api-response-template.md
+   target: templates/guides/v4api-response-template.md
  - template: {{ .RootDir }}/tmpl/v4api-native.md.tmpl
-   target: docs/guides/v4api-native.md
+   target: templates/guides/v4api-native.md
  - template: {{ .RootDir }}/tmpl/v4api-message.md.tmpl
-   target: docs/guides/v4api-message.md
+   target: templates/guides/v4api-message.md
  - template: {{ .RootDir }}/tmpl/v4api-and-pages.md.tmpl
-   target: docs/guides/v4api-and-pages.md
+   target: templates/guides/v4api-and-pages.md
  - template: {{ .RootDir }}/tmpl/spg-api.md.tmpl
-   target: docs/guides/spg-api.md
+   target: templates/guides/spg-api.md
  - template: {{ .RootDir }}/tmpl/spg-ratelimit.md.tmpl
-   target: docs/guides/spg-ratelimit.md
+   target: templates/guides/spg-ratelimit.md
  - template: {{ .RootDir }}/tmpl/subscription.md.tmpl
-   target: docs/guides/subscription.md
+   target: templates/guides/subscription.md
  - template: {{ .RootDir }}/tmpl/application-simple.md.tmpl
-   target: docs/guides/application-simple.md
+   target: templates/guides/application-simple.md
  - template: {{ .RootDir }}/tmpl/application-m2m.md.tmpl
-   target: docs/guides/application-m2m.md
+   target: templates/guides/application-m2m.md
  - template: {{ .RootDir }}/tmpl/application-spa.md.tmpl
-   target: docs/guides/application-spa.md
+   target: templates/guides/application-spa.md
  - template: {{ .RootDir }}/tmpl/resource-tutorial.md.tmpl
-   target: docs/guides/resource-tutorial.md
+   target: templates/guides/resource-tutorial.md
 
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
