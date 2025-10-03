@@ -6,12 +6,14 @@ APIM_SERVER_URL ?= http://localhost:30083/automation
 
 .PHONY: speakeasy
 speakeasy: ## Run speakeasy generation with curated examples and docs
+	@rm -f terraform-provider-apim
+	@mv ~/.terraformrc ~/.terraformrc.keep 2>/dev/null || true
+	@terraform fmt -recursive > /dev/null
 	speakeasy run --output console --skip-versioning
 	@make cloud-init-patch
 	@go mod tidy
 	@rm -rf examples/data-sources docs/data-sources examples/README.md USAGE.md > /dev/null
-	@git restore docs/guides
-	@terraform fmt -recursive > /dev/null
+	@mv ~/.terraformrc.keep ~/.terraformrc 2>/dev/null || true
 	@go build
 
 cloud-init-patch:

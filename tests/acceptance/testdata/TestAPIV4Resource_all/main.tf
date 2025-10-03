@@ -349,9 +349,9 @@ resource "apim_apiv4" "test" {
   }
   properties = [
     {
-      key         = "foo",
-      value       = "bar",
-      dynamic     = false
+      key     = "foo",
+      value   = "bar",
+      dynamic = false
     }
   ]
   pages = [
