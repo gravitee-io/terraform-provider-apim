@@ -194,7 +194,6 @@ resource "apim_apiv4" "example" {
           EOT
       homepage = true
       type     = "MARKDOWN"
-      order    = 0
     }
   ]
 }

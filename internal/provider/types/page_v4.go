@@ -10,11 +10,9 @@ type PageV4 struct {
 	Configuration map[string]types.String `tfsdk:"configuration"`
 	Content       types.String            `tfsdk:"content"`
 	CrossID       types.String            `tfsdk:"cross_id"`
-	Hidden        types.Bool              `tfsdk:"hidden"`
 	Homepage      types.Bool              `tfsdk:"homepage"`
 	Hrid          types.String            `tfsdk:"hrid"`
 	Name          types.String            `tfsdk:"name"`
-	Order         types.Int64             `tfsdk:"order"`
 	ParentHrid    types.String            `tfsdk:"parent_hrid"`
 	Published     types.Bool              `tfsdk:"published"`
 	Source        *PageSource             `tfsdk:"source"`

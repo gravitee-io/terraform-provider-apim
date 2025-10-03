@@ -18,8 +18,6 @@ type PageV4Input struct {
 	Type PageType `json:"type"`
 	// The content of the page, if any.
 	Content *string `json:"content,omitempty"`
-	// The order used to display the page in APIM and on the portal.
-	Order int64 `json:"order"`
 	// If true, the page will be accessible from the portal (default is false)
 	Published *bool `default:"false" json:"published"`
 	// The visibility of the entity regarding the portal.
@@ -36,8 +34,6 @@ type PageV4Input struct {
 	// into APIM by making the page a child of this folder.
 	//
 	ParentHrid *string `json:"parentHrid,omitempty"`
-	// If folder is published but not shown in Portal.
-	Hidden *bool `json:"hidden,omitempty"`
 }
 
 func (p PageV4Input) MarshalJSON() ([]byte, error) {
@@ -45,7 +41,7 @@ func (p PageV4Input) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PageV4Input) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"hrid", "name", "type", "order"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"hrid", "name", "type"}); err != nil {
 		return err
 	}
 	return nil
@@ -77,13 +73,6 @@ func (p *PageV4Input) GetContent() *string {
 		return nil
 	}
 	return p.Content
-}
-
-func (p *PageV4Input) GetOrder() int64 {
-	if p == nil {
-		return 0
-	}
-	return p.Order
 }
 
 func (p *PageV4Input) GetPublished() *bool {
@@ -126,11 +115,4 @@ func (p *PageV4Input) GetParentHrid() *string {
 		return nil
 	}
 	return p.ParentHrid
-}
-
-func (p *PageV4Input) GetHidden() *bool {
-	if p == nil {
-		return nil
-	}
-	return p.Hidden
 }
