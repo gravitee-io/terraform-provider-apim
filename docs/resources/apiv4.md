@@ -783,7 +783,6 @@ Optional:
 
 - `configuration` (Map of String) Key/value page configuration (Configure swagger UI or or use Redoc instead)
 - `content` (String) The content of the page, if any.
-- `hidden` (Boolean) If folder is published but not shown in Portal.
 - `homepage` (Boolean) If true, this page will be displayed as the homepage of your API documentation.
 - `hrid` (String) A unique human readable id identifying this resource. Not Null
 - `name` (String) This is the display name of the page in APIM and on the portal.

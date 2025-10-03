@@ -984,11 +984,6 @@ components:
           type: array
           items:
             type: string
-        order:
-          description: Priority of the plan, lowest number is executed first. By default it respects order of creation.
-          type: integer
-          minimum: 0
-          x-speakeasy-terraform-ignore: true
         selectionRule:
           type: string
           maxLength: 256

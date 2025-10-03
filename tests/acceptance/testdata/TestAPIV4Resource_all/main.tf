@@ -1,13 +1,13 @@
 variable "environment_id" {
-  type    = string
+  type = string
 }
 
 variable "hrid" {
-  type    = string
+  type = string
 }
 
 variable "organization_id" {
-  type    = string
+  type = string
 }
 
 resource "apim_apiv4" "test" {
@@ -310,7 +310,6 @@ resource "apim_apiv4" "test" {
       name     = "Home"
       homepage = true
       type     = "MARKDOWN"
-      order    = 0
     },
     {
       hrid        = "markdown"
@@ -322,20 +321,17 @@ resource "apim_apiv4" "test" {
       name        = "Hello Markdown"
       parent_hrid = "markdowns-folder"
       type        = "MARKDOWN"
-      order       = 1
     },
     {
-      hrid  = "markdowns-folder"
-      name  = "Markdowns"
-      type  = "FOLDER"
-      order = 2
+      hrid = "markdowns-folder"
+      name = "Markdowns"
+      type = "FOLDER"
     },
     {
-      hrid   = "hidden"
-      name   = "Invisible"
-      type   = "FOLDER"
+      hrid       = "hidden"
+      name       = "Invisible"
+      type       = "FOLDER"
       visibility = "PRIVATE"
-      order  = 3
     }
   ]
   plans = [
