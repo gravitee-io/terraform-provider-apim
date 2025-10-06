@@ -218,6 +218,43 @@ func TestAPIV4Resource_apikey(t *testing.T) {
 			},
 		},
 	})
+}
+
+func TestAPIV4Resource_plan_general_conditions(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId := "test-" + acctest.RandString(10)
+	pageHrid := "general_conditions"
+	updatedPageHrid := "homepage"
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization_id":         config.StringVariable(organizationId),
+					"environment_id":          config.StringVariable(environmentId),
+					"hrid":                    config.StringVariable(randomId),
+					"general_conditions_hrid": config.StringVariable(pageHrid),
+				},
+			},
+			// Verifies resource update.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization_id":         config.StringVariable(organizationId),
+					"environment_id":          config.StringVariable(environmentId),
+					"hrid":                    config.StringVariable(randomId),
+					"general_conditions_hrid": config.StringVariable(updatedPageHrid),
+				},
+			},
+		},
+	})
 
 }
 
