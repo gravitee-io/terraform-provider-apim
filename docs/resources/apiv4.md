@@ -820,12 +820,14 @@ Optional:
 - `characteristics` (List of String) Plan informative characteristics
 - `description` (String) A description for this plan.
 - `excluded_groups` (List of String) Access-control, UUID of groups excluded from this plan
-- `flows` (Attributes List) Flows like API flows, composed of step running plolicies. 
+- `flows` (Attributes List) Flows like API flows, composed of step running policies. 
 All steps are executed before the next plan flow or before the API flows,
 same on the reponse, which means API reponse flows will always run last. (see [below for nested schema](#nestedatt--plans--flows))
+- `general_conditions_hrid` (String) API page `hrid` that serves as general conditions documentation of this plan
 - `hrid` (String) A unique human readable id identifying this resource. Not Null
 - `mode` (String) The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan). Not Null; must be one of ["STANDARD", "PUSH"]
 - `name` (String) Name of the plan. Not Null
+- `order` (Number) Priority of the plan, lowest number is executed first. By default it respects order of creation.
 - `security` (Attributes) API plan security. Not Null (see [below for nested schema](#nestedatt--plans--security))
 - `selection_rule` (String) An EL expression that must return a boolean to enable the flow based on the request.
 - `status` (String) Plan status, only `PUBLISHED` makes the plan available at runtime. Not Null; must be one of ["STAGING", "PUBLISHED", "DEPRECATED", "CLOSED"]

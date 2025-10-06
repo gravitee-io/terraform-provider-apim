@@ -34,13 +34,15 @@ type PlanV4 struct {
 	// For automation API, it is default to `AUTO`.
 	//
 	Validation *PlanValidation `default:"AUTO" json:"validation"`
-	// Flows like API flows, composed of step running plolicies.
+	// Flows like API flows, composed of step running policies.
 	// All steps are executed before the next plan flow or before the API flows,
 	// same on the reponse, which means API reponse flows will always run last.
 	//
 	Flows []FlowV4 `json:"flows,omitempty"`
 	// The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan).
 	Mode PlanMode `json:"mode"`
+	// API page `hrid` that serves as general conditions documentation of this plan
+	GeneralConditionsHrid *string `json:"generalConditionsHrid,omitempty"`
 }
 
 func (p PlanV4) MarshalJSON() ([]byte, error) {
@@ -150,4 +152,11 @@ func (p *PlanV4) GetMode() PlanMode {
 		return PlanMode("")
 	}
 	return p.Mode
+}
+
+func (p *PlanV4) GetGeneralConditionsHrid() *string {
+	if p == nil {
+		return nil
+	}
+	return p.GeneralConditionsHrid
 }

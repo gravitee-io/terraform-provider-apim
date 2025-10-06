@@ -1486,9 +1486,13 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 								},
 							},
-							MarkdownDescription: `Flows like API flows, composed of step running plolicies. ` + "\n" +
+							MarkdownDescription: `Flows like API flows, composed of step running policies. ` + "\n" +
 								`All steps are executed before the next plan flow or before the API flows,` + "\n" +
 								`same on the reponse, which means API reponse flows will always run last.`,
+						},
+						"general_conditions_hrid": schema.StringAttribute{
+							Computed:    true,
+							Description: `API page ` + "`" + `hrid` + "`" + ` that serves as general conditions documentation of this plan`,
 						},
 						"hrid": schema.StringAttribute{
 							Computed:    true,

@@ -827,6 +827,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 				plans.Flows = append(plans.Flows, flows1)
 			}
+			plans.GeneralConditionsHrid = types.StringPointerValue(plansItem.GeneralConditionsHrid)
 			plans.Hrid = types.StringValue(plansItem.Hrid)
 			plans.Mode = types.StringValue(string(plansItem.Mode))
 			plans.Name = types.StringValue(plansItem.Name)
@@ -2236,20 +2237,27 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			})
 		}
 		mode1 := shared.PlanMode(plansItem.Mode.ValueString())
+		generalConditionsHrid := new(string)
+		if !plansItem.GeneralConditionsHrid.IsUnknown() && !plansItem.GeneralConditionsHrid.IsNull() {
+			*generalConditionsHrid = plansItem.GeneralConditionsHrid.ValueString()
+		} else {
+			generalConditionsHrid = nil
+		}
 		plans = append(plans, shared.PlanV4{
-			Hrid:            hrid1,
-			Name:            name4,
-			Description:     description1,
-			Security:        security,
-			Characteristics: characteristics,
-			ExcludedGroups:  excludedGroups,
-			SelectionRule:   selectionRule,
-			Status:          status,
-			Tags:            tags1,
-			Type:            type8,
-			Validation:      validation,
-			Flows:           flows,
-			Mode:            mode1,
+			Hrid:                  hrid1,
+			Name:                  name4,
+			Description:           description1,
+			Security:              security,
+			Characteristics:       characteristics,
+			ExcludedGroups:        excludedGroups,
+			SelectionRule:         selectionRule,
+			Status:                status,
+			Tags:                  tags1,
+			Type:                  type8,
+			Validation:            validation,
+			Flows:                 flows,
+			Mode:                  mode1,
+			GeneralConditionsHrid: generalConditionsHrid,
 		})
 	}
 	var flowExecution *shared.FlowExecution
