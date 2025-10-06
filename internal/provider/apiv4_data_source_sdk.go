@@ -827,6 +827,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 
 				plans.Flows = append(plans.Flows, flows1)
 			}
+			plans.GeneralConditionsHrid = types.StringPointerValue(plansItem.GeneralConditionsHrid)
 			plans.Hrid = types.StringValue(plansItem.Hrid)
 			plans.Mode = types.StringValue(string(plansItem.Mode))
 			plans.Name = types.StringValue(plansItem.Name)
