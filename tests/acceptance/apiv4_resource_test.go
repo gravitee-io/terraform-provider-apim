@@ -220,3 +220,27 @@ func TestAPIV4Resource_apikey(t *testing.T) {
 	})
 
 }
+
+func TestAPIV4Resource_dyn_props(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"organization_id": config.StringVariable(organizationId),
+				},
+			},
+		},
+	})
+
+}
