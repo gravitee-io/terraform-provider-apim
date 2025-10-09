@@ -20,7 +20,8 @@ resource "apim_shared_policy_group" "simple" {
           periodTime     = 1
           periodTimeUnit = "MINUTES"
           useKeyOnly     = false
-        }
+        },
+        errorStrategy = "FALLBACK_PASS_TROUGH"
       })
     },
   ]
