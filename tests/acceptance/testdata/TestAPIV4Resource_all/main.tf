@@ -259,17 +259,16 @@ resource "apim_apiv4" "test" {
             value = "TRUE"
           }
         ]
-        url            = "https://api.gravitee.io/echo"
-        method         = "GET"
-        systemProxy    = false
-        transformation = <<-EOT
-        [
+        url         = "https://api.gravitee.io/echo"
+        method      = "GET"
+        systemProxy = false
+        transformation = jsonencode(
+          [
             {
-                "operation": "default",
-                "spec": {}
+              operation = "default",
+              spec      = {}
             }
-        ]
-        EOT
+        ])
       })
       enabled = true,
       type    = "http-dynamic-properties"

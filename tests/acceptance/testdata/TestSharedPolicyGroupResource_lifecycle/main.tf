@@ -32,8 +32,9 @@ resource "apim_shared_policy_group" "test" {
           periodTime     = 1
           periodTimeUnit = "MINUTES"
           useKeyOnly     = false
-        }
-      })
+        },
+        errorStrategy = "FALLBACK_PASS_TROUGH"
+      }),
     },
   ]
 }
