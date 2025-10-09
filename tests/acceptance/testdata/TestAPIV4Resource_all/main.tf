@@ -27,10 +27,10 @@ resource "apim_apiv4" "test" {
     "test",
     "all props"
   ]
-  categories = [
-    "test",
-    "terraform"
-  ]
+  # categories = [
+  #   "test",
+  #   "terraform"
+  # ]
   listeners = [
     {
       http = {
@@ -49,6 +49,7 @@ resource "apim_apiv4" "test" {
           ]
           allow_origin = [
             ".*\\.acme\\.com",
+            ".*\\.example\\.com",
             ".*\\.simple\\.com"
           ]
           enabled = true
@@ -203,7 +204,13 @@ resource "apim_apiv4" "test" {
             type         = "HTTP"
             path         = "/"
             pathOperator = "STARTS_WITH"
-            methods      = []
+            methods = [
+              "GET",
+              "OPTIONS",
+              "PUT",
+              "POST",
+              "DELETE"
+            ]
           }
         }
       ]
@@ -275,16 +282,61 @@ resource "apim_apiv4" "test" {
     }
   }
   response_templates = {
+    INVALID_HTTP_METHOD = {
+      "*/*" : {
+        status = 400
+        headers = {
+          X-Error    = "invalid method"
+          X-Key      = "INVALID_HTTP_METHOD"
+          X-Encoding = "all"
+        }
+        body                        = "http method override denied"
+        propagate_error_key_to_logs = false
+      },
+    }
     CORS_PREFLIGHT_FAILED : {
       "*/*" : {
         status = 412
         headers = {
-          X-Error = "Cors preflight"
+          X-Error   = "Cors preflight"
+          X-Details = "Cors preflight"
+        }
+        body                        = "Custom CORS error message"
+        propagate_error_key_to_logs = false
+      },
+      "application/json" : {
+        status = 412
+        headers = {
+          X-Details = "Cors preflight, JSON"
+          X-Error   = "Cors preflight"
         }
         body                        = "Custom CORS error message"
         propagate_error_key_to_logs = false
       }
     }
+    NO_ENDPOINT_FOUND : {
+      "application/json" : {
+        status = 404
+        headers = {
+          X-Encoding = "JSON"
+          X-Key      = "NO_ENDPOINT_FOUND"
+          X-Error    = "endpoint not found"
+        }
+        body                        = "Custom endpoint not found error message"
+        propagate_error_key_to_logs = false
+      },
+      "*/*" : {
+        status = 404
+        headers = {
+          X-Error    = "endpoint not found"
+          X-Key      = "NO_ENDPOINT_FOUND"
+          X-Encoding = "all"
+        }
+        body                        = "Custom endpoint not found error message"
+        propagate_error_key_to_logs = false
+      },
+    }
+
   }
   failover = {
     enabled             = true
@@ -299,46 +351,45 @@ resource "apim_apiv4" "test" {
       key         = "foo",
       value       = "bar",
       dynamic     = false
-      encryptable = true
     }
   ]
   pages = [
-    {
-      hrid     = "homepage"
-      content  = <<-EOT
-          # Homepage
-          Go to the "Markdowns" folder to find some content.
-          EOT
-      name     = "Home"
-      homepage = true
-      type     = "MARKDOWN"
-      order    = 0
-    },
-    {
-      hrid        = "markdown"
-      content     = <<-EOT
-          Hello world!
-          --
-          This is markdown.
-          EOT
-      name        = "Hello Markdown"
-      parent_hrid = "markdowns-folder"
-      type        = "MARKDOWN"
-      order       = 1
-    },
-    {
-      hrid  = "markdowns-folder"
-      name  = "Markdowns"
-      type  = "FOLDER"
-      order = 2
-    },
-    {
-      hrid   = "hidden"
-      name   = "Invisible"
-      type   = "FOLDER"
-      hidden = true
-      order  = 3
-    }
+    # {
+    #   hrid     = "homepage"
+    #   content  = <<-EOT
+    #       # Homepage
+    #       Go to the "Markdowns" folder to find some content.
+    #       EOT
+    #   name     = "Home"
+    #   homepage = true
+    #   type     = "MARKDOWN"
+    #   order    = 0
+    # },
+    # {
+    #   hrid        = "markdown"
+    #   content     = <<-EOT
+    #       Hello world!
+    #       --
+    #       This is markdown.
+    #       EOT
+    #   name        = "Hello Markdown"
+    #   parent_hrid = "markdowns-folder"
+    #   type        = "MARKDOWN"
+    #   order       = 1
+    # },
+    # {
+    #   hrid  = "markdowns-folder"
+    #   name  = "Markdowns"
+    #   type  = "FOLDER"
+    #   order = 2
+    # },
+    # {
+    #   hrid   = "hidden"
+    #   name   = "Invisible"
+    #   type   = "FOLDER"
+    #   hidden = true
+    #   order  = 3
+    # }
   ]
   plans = [
     {
