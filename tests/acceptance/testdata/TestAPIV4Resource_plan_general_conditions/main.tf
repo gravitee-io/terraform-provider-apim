@@ -66,19 +66,11 @@ resource "apim_apiv4" "test" {
 
   pages = [
     {
-      hrid     = "homepage"
-      content  = "# Homepage"
-      name     = "Home"
-      homepage = true
-      type     = "MARKDOWN"
-      order    = 0
-    },
-    {
       hrid    = "general_conditions"
       content = "General conditions"
       name    = "Plan general conditions"
       type    = "MARKDOWN"
-      order   = 1
+      order   = 0
     },
   ]
   plans = [
