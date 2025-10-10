@@ -1811,6 +1811,8 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		for _, excludedGroupsItem := range plansItem.ExcludedGroups {
 			excludedGroups = append(excludedGroups, excludedGroupsItem.ValueString())
 		}
+		// APIV4#create,update.plans.orderAPIV4#create,update.plans.order.enum impedance mismatch: integer != string
+		var order *int64
 		selectionRule := new(string)
 		if !plansItem.SelectionRule.IsUnknown() && !plansItem.SelectionRule.IsNull() {
 			*selectionRule = plansItem.SelectionRule.ValueString()
@@ -2250,6 +2252,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Security:              security,
 			Characteristics:       characteristics,
 			ExcludedGroups:        excludedGroups,
+			Order:                 order,
 			SelectionRule:         selectionRule,
 			Status:                status,
 			Tags:                  tags1,
@@ -2884,8 +2887,8 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			content1 = nil
 		}
-		var order int64
-		order = pagesItem.Order.ValueInt64()
+		var order1 int64
+		order1 = pagesItem.Order.ValueInt64()
 
 		published := new(bool)
 		if !pagesItem.Published.IsUnknown() && !pagesItem.Published.IsNull() {
@@ -2946,7 +2949,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Name:          name20,
 			Type:          type9,
 			Content:       content1,
-			Order:         order,
+			Order:         order1,
 			Published:     published,
 			Visibility:    visibility1,
 			Source:        source1,

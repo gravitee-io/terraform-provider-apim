@@ -804,6 +804,12 @@ components:
               pikgTVupVbhYcNMLOVXO7Q31UEYfC7fxMGqzybXg67EhvzoykXhhYo3YqAjho2yh
               um2oEO8b5eQVAwRaooVLh0uqjZCpfN2ozscPpiTM9Pj3xQ==
               -----END CERTIFICATE-----
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+            schemaType: customtypes.TrimmedStringType{}
+            valueType: customtypes.TrimmedString
+            ## Field removal
       required:
         - clientCertificate
     ApplicationState:

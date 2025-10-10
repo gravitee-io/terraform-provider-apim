@@ -67,7 +67,7 @@ func (s *Apis) CreateOrUpdate(ctx context.Context, request operations.CreateOrUp
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "createOrUpdateApis",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "APIV4Spec", "json", `request:"mediaType=application/json"`)
@@ -322,7 +322,7 @@ func (s *Apis) Get(ctx context.Context, request operations.GetAPIRequest, opts .
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "getApi",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -566,7 +566,7 @@ func (s *Apis) Delete(ctx context.Context, request operations.DeleteAPIRequest, 
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "deleteApi",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

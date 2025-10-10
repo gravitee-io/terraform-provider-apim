@@ -12,6 +12,7 @@ import (
 	speakeasy_mapplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/mapplanmodifier"
 	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
+	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	speakeasy_listvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/listvalidators"
@@ -127,7 +128,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 				},
 				ElementType: types.StringType,
-				Description: `List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM.`,
+				Description: `List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM. Default: []`,
 			},
 			"hrid": schema.StringAttribute{
 				Required: true,
@@ -476,7 +477,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 								},
 								ElementType: types.StringType,
-								Description: `OAuth client redirect Uris`,
+								Description: `OAuth client redirect Uris. Default: []`,
 							},
 						},
 						Description: `Application OAuth client settings. This require Dynamic Client Registration to be enabled at the environment level.`,
@@ -489,8 +490,9 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						},
 						Attributes: map[string]schema.Attribute{
 							"client_certificate": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
+								CustomType: customtypes.TrimmedStringType{},
+								Computed:   true,
+								Optional:   true,
 								PlanModifiers: []planmodifier.String{
 									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},

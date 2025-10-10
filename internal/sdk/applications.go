@@ -68,7 +68,7 @@ func (s *Applications) CreateOrUpdate(ctx context.Context, request operations.Cr
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "createOrUpdateApplications",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "ApplicationSpec", "json", `request:"mediaType=application/json"`)
@@ -325,7 +325,7 @@ func (s *Applications) Get(ctx context.Context, request operations.GetApplicatio
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "getApplication",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -569,7 +569,7 @@ func (s *Applications) Delete(ctx context.Context, request operations.DeleteAppl
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "deleteApplication",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
