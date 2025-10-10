@@ -70,6 +70,15 @@ actions:
     update:
       x-speakeasy-param-suppress-computed-diff: true
 
+  - target: $.components.schemas.ApplicationTLSSettings.properties.clientCertificate
+    description: Using TrimmedString to make sure certs are  semantics equal regardless of trailing/leading spaced
+    update:
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+        schemaType: customtypes.TrimmedStringType{}
+        valueType: customtypes.TrimmedString
+
 
   ## Field removal
 #  - target: $.components.schemas.ApplicationState.allOf[?@.properties.environmentId].properties.environmentId

@@ -150,7 +150,7 @@ func getClientTLSCert(t *testing.T) string {
 		t.Fatalf("failed to encode certificate: %s", err)
 	}
 
-	return strings.TrimSpace(certData.String())
+	return certData.String()
 }
 
 func TestApplicationResource_withOrgIdFromProvider(t *testing.T) {
