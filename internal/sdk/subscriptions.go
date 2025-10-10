@@ -68,7 +68,7 @@ func (s *Subscriptions) Update(ctx context.Context, request operations.CreateOrU
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "createOrUpdateApiSubscriptions",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "SubscriptionSpec", "json", `request:"mediaType=application/json"`)
@@ -319,7 +319,7 @@ func (s *Subscriptions) Get(ctx context.Context, request operations.GetAPISubscr
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "getApiSubscription",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -563,7 +563,7 @@ func (s *Subscriptions) Delete(ctx context.Context, request operations.DeleteAPI
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "deleteApiSubscription",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 

@@ -231,14 +231,14 @@ resource "apim_apiv4" "example" {
 ### Optional
 
 - `analytics` (Attributes) API analytics configuration to enable/disable what can be observed. (see [below for nested schema](#nestedatt--analytics))
-- `categories` (List of String) The list of category names (or UUID) associated with this API.
+- `categories` (List of String) The list of category names (or UUID) associated with this API. Default: []
 - `description` (String) Basic API documentation to describe what this API does.
 - `environment_id` (String) environment ID
 - `failover` (Attributes) Defines the failover behavior to bypass endpoints when some are slow. (see [below for nested schema](#nestedatt--failover))
 - `flow_execution` (Attributes) Flow execution enablement (Not applicable for Native API) (see [below for nested schema](#nestedatt--flow_execution))
 - `flows` (Attributes List) Common flows for the API where traffic policies are configured. (see [below for nested schema](#nestedatt--flows))
-- `groups` (List of String) Name or UUIDs of existing groups (of users) associated with this API.
-- `labels` (List of String) Informative labels for this API.
+- `groups` (List of String) Name or UUIDs of existing groups (of users) associated with this API. Default: []
+- `labels` (List of String) Informative labels for this API. Default: []
 - `members` (Attributes List) Users that can access or manage the API (depending on their roles). (see [below for nested schema](#nestedatt--members))
 - `metadata` (Attributes List) The list of API's metadata. (see [below for nested schema](#nestedatt--metadata))
 - `notify_members` (Boolean) If true, new members added to the API spec will
@@ -256,7 +256,7 @@ API) to customize Gateway responses body on predefined errors.
 Key of the map is the error code.
 - `services` (Attributes) Api services (dynamic properties) (see [below for nested schema](#nestedatt--services))
 - `state` (String) STARTED will make this API callable on tis context path, STOPPED will yield 404 error. must be one of ["CLOSED", "INITIALIZED", "STARTED", "STOPPED", "STOPPING"]
-- `tags` (List of String) Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy".
+- `tags` (List of String) Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". Default: []
 - `visibility` (String) The visibility of the entity regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]
 
 ### Read-Only
@@ -827,7 +827,6 @@ same on the reponse, which means API reponse flows will always run last. (see [b
 - `hrid` (String) A unique human readable id identifying this resource. Not Null
 - `mode` (String) The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan). Not Null; must be one of ["STANDARD", "PUSH"]
 - `name` (String) Name of the plan. Not Null
-- `order` (Number) Priority of the plan, lowest number is executed first. By default it respects order of creation.
 - `security` (Attributes) API plan security. Not Null (see [below for nested schema](#nestedatt--plans--security))
 - `selection_rule` (String) An EL expression that must return a boolean to enable the flow based on the request.
 - `status` (String) Plan status, only `PUBLISHED` makes the plan available at runtime. Not Null; must be one of ["STAGING", "PUBLISHED", "DEPRECATED", "CLOSED"]

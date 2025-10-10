@@ -5,6 +5,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -245,6 +246,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"client_certificate": schema.StringAttribute{
+								CustomType:  customtypes.TrimmedStringType{},
 								Computed:    true,
 								Description: `Application TLS client certificate`,
 							},

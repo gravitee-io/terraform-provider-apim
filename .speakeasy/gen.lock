@@ -1,26 +1,26 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 350469422bd25f691cf01acd9965fcd5
+  docChecksum: 1b8d9dbf2a1df4cdb2f90b0fb02187a4
   docVersion: 1.0.0
-  speakeasyVersion: 1.633.1
-  generationVersion: 2.720.1
+  speakeasyVersion: 1.636.3
+  generationVersion: 2.723.11
   releaseVersion: 0.3.0
   configChecksum: 17b2d9e5c21bb0c9af103293912c80b3
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.0
-    core: 3.45.1
+    core: 3.45.3
     globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
     globals: 3.0.3
-    groups: 2.81.2
+    groups: 2.81.3
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.3
     retries: 2.81.4
     typeOverrides: 2.81.1
-    unions: 2.81.17
+    unions: 2.81.18
 generatedFiles:
   - .gitattributes
   - USAGE.md

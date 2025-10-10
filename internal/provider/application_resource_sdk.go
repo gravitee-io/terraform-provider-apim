@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
@@ -102,7 +103,9 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 				r.Settings.TLS = nil
 			} else {
 				r.Settings.TLS = &tfTypes.ApplicationTLSSettings{}
-				r.Settings.TLS.ClientCertificate = types.StringValue(resp.Settings.TLS.ClientCertificate)
+				clientCertificateValuable, clientCertificateDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringValue(resp.Settings.TLS.ClientCertificate))
+				diags.Append(clientCertificateDiags...)
+				r.Settings.TLS.ClientCertificate = clientCertificateValuable.(customtypes.TrimmedString)
 			}
 		}
 		if resp.Status != nil {

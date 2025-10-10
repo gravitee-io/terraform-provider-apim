@@ -48,7 +48,7 @@ resource "apim_application" "example" {
 - `background` (String) Application's background url
 - `domain` (String) Application's domain.
 - `environment_id` (String) environment ID
-- `groups` (List of String) List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM.
+- `groups` (List of String) List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM. Default: []
 - `members` (Attributes List) Users that can access or manage this application (depending on their roles). (see [below for nested schema](#nestedatt--members))
 - `metadata` (Attributes List) The list of Application's metadata. (see [below for nested schema](#nestedatt--metadata))
 - `notify_members` (Boolean) If true, new members added to the Application spec will
@@ -133,7 +133,7 @@ Not Null; must be one of ["browser", "web", "native", "backend_to_backend"]
 `password` (Resource Owner Password) only with applicationType `native`.
 `client_credentials` only works  when application type is `backend_to_backend`
 Not Null
-- `redirect_uris` (List of String) OAuth client redirect Uris
+- `redirect_uris` (List of String) OAuth client redirect Uris. Default: []
 
 
 <a id="nestedatt--settings--tls"></a>

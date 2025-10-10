@@ -67,7 +67,7 @@ func (s *SharedPolicyGroups) Get(ctx context.Context, request operations.GetPoli
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "getPolicyGroup",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -311,7 +311,7 @@ func (s *SharedPolicyGroups) Delete(ctx context.Context, request operations.Dele
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "deletePolicyGroup",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 
@@ -539,7 +539,7 @@ func (s *SharedPolicyGroups) CreateOrUpdate(ctx context.Context, request operati
 		BaseURL:          baseURL,
 		Context:          ctx,
 		OperationID:      "createOrUpdatePolicyGroup",
-		OAuth2Scopes:     []string{},
+		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "SharedPolicyGroupSpec", "json", `request:"mediaType=application/json"`)
