@@ -875,10 +875,10 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 			propertiesPriorData := properties
 			properties.Dynamic = types.BoolPointerValue(propertiesItem.Dynamic)
-			properties.Encryptable = propertiesPriorData.Encryptable
 			properties.Encrypted = types.BoolPointerValue(propertiesItem.Encrypted)
 			properties.Key = types.StringValue(propertiesItem.Key)
 			properties.Value = types.StringValue(propertiesItem.Value)
+			properties.Encryptable = propertiesPriorData.Encryptable
 
 			r.Properties = append(r.Properties, properties)
 		}

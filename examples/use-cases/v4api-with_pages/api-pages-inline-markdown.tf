@@ -80,6 +80,15 @@ resource "apim_apiv4" "api-with-pages-inline" {
       hrid = "markdowns-folder"
       name = "Markdowns"
       type = "FOLDER"
+    },
+    {
+      hrid      = "gen-conds"
+      content   = <<-EOT
+          You can use this plan without restrictions
+          EOT
+      name      = "Plan general conditions"
+      type      = "MARKDOWN"
+      published = true
     }
   ]
   plans = [
@@ -94,6 +103,7 @@ resource "apim_apiv4" "api-with-pages-inline" {
       security = {
         type = "KEY_LESS"
       }
+      general_conditions_hrid = "gen-conds"
     }
   ]
 }
