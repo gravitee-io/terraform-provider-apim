@@ -179,7 +179,6 @@ resource "apim_apiv4" "api-with-pages-inline" {
       name     = "Home"
       homepage = true
       type     = "MARKDOWN"
-      order    = 0
     },
     {
       hrid        = "markdown"

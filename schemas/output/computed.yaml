@@ -1679,7 +1679,6 @@ components:
         - name
         - type
         - visibility
-        - order
     PageType:
       type: string
       description: The type of the documentation page or folder.

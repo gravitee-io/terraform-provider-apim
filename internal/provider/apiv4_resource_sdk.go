@@ -606,11 +606,9 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			}
 			pages.Content = types.StringPointerValue(pagesItem.Content)
 			pages.CrossID = types.StringPointerValue(pagesItem.CrossID)
-			pages.Hidden = types.BoolPointerValue(pagesItem.Hidden)
 			pages.Homepage = types.BoolPointerValue(pagesItem.Homepage)
 			pages.Hrid = types.StringValue(pagesItem.Hrid)
 			pages.Name = types.StringValue(pagesItem.Name)
-			pages.Order = types.Int64Value(pagesItem.Order)
 			pages.ParentHrid = types.StringPointerValue(pagesItem.ParentHrid)
 			pages.Published = types.BoolPointerValue(pagesItem.Published)
 			if pagesItem.Source == nil {
@@ -1811,8 +1809,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		for _, excludedGroupsItem := range plansItem.ExcludedGroups {
 			excludedGroups = append(excludedGroups, excludedGroupsItem.ValueString())
 		}
-		// APIV4#create,update.plans.orderAPIV4#create,update.plans.order.enum impedance mismatch: integer != string
-		var order *int64
 		selectionRule := new(string)
 		if !plansItem.SelectionRule.IsUnknown() && !plansItem.SelectionRule.IsNull() {
 			*selectionRule = plansItem.SelectionRule.ValueString()
@@ -2252,7 +2248,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Security:              security,
 			Characteristics:       characteristics,
 			ExcludedGroups:        excludedGroups,
-			Order:                 order,
 			SelectionRule:         selectionRule,
 			Status:                status,
 			Tags:                  tags1,
@@ -2887,9 +2882,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			content1 = nil
 		}
-		var order1 int64
-		order1 = pagesItem.Order.ValueInt64()
-
 		published := new(bool)
 		if !pagesItem.Published.IsUnknown() && !pagesItem.Published.IsNull() {
 			*published = pagesItem.Published.ValueBool()
@@ -2938,25 +2930,17 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			parentHrid = nil
 		}
-		hidden1 := new(bool)
-		if !pagesItem.Hidden.IsUnknown() && !pagesItem.Hidden.IsNull() {
-			*hidden1 = pagesItem.Hidden.ValueBool()
-		} else {
-			hidden1 = nil
-		}
 		pages = append(pages, shared.PageV4Input{
 			Hrid:          hrid2,
 			Name:          name20,
 			Type:          type9,
 			Content:       content1,
-			Order:         order1,
 			Published:     published,
 			Visibility:    visibility1,
 			Source:        source1,
 			Configuration: configuration24,
 			Homepage:      homepage,
 			ParentHrid:    parentHrid,
-			Hidden:        hidden1,
 		})
 	}
 	out := shared.APIV4Spec{
