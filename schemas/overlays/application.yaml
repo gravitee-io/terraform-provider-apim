@@ -26,7 +26,7 @@ actions:
 
   ## Avoid diff for optional properties
 
-  ### API Spec
+  ### Application Spec
   - target: $.components.schemas.ApplicationSpec.properties.domain
     description: Prevent unknown values if unconfigured
     update:
@@ -56,7 +56,7 @@ actions:
     update:
       x-speakeasy-param-suppress-computed-diff: true
 
-  ### API State
+  ### Application State
   - target: $.components.schemas.ApplicationState.allOf[?@.properties.id]
     description: Not returned by the API, so prevent null values during refresh
     update:
@@ -81,12 +81,10 @@ actions:
 
 
   ## Field removal
-#  - target: $.components.schemas.ApplicationState.allOf[?@.properties.environmentId].properties.environmentId
-#    description: Not returned by the API, so prevent null values during refresh
-#    remove: true
-#  - target: $.components.schemas.ApplicationState.allOf[?@.properties.organizationId].properties.organizationId
-#    description: Not returned by the API, so prevent null values during refresh
-#    remove: true
+  - target: $.components.schemas.ApplicationSpec.properties.status
+    description: This property is not managed by Terraform as it is confusing and unnecessary for users.
+    update:
+      x-speakeasy-terraform-ignore: true
 
   ## XOR for app settings
   - target: $.components.schemas.ApplicationSettings.properties.app

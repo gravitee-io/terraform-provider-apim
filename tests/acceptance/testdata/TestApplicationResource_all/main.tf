@@ -48,5 +48,4 @@ resource "apim_application" "test" {
       defaultValue = "Any"
     }
   ]
-  status = "ACTIVE"
 }
