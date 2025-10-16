@@ -27,7 +27,7 @@ both changes will be considered as a resource swap. Terraform plan will prepare 
 ~> If you modify the `hrid` of a resource, analytics data are no longer accessible.
 If you then reapply the original `hrid`, analytics are accessible in the state prior to the `hrid` change.
 
-That's the reason we encourage you make Terraform resource name equal Gravitee `hrid`.
+That's the reason we encourage you to make Terraform resource name equal Gravitee `hrid`.
 
 ### Unicity
 
