@@ -9,6 +9,7 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 	@rm -f terraform-provider-apim
 	@mv ~/.terraformrc ~/.terraformrc.keep 2>/dev/null || true
 	@terraform fmt -recursive > /dev/null
+	@make doc-gen
 	speakeasy run --output console --skip-versioning
 	@make cloud-init-patch
 	@go mod tidy

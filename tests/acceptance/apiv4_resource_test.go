@@ -430,7 +430,9 @@ func TestAPIV4Resource_plan_general_conditions(t *testing.T) {
 	organizationId := "DEFAULT"
 	randomId := "test-" + acctest.RandString(10)
 	pageHrid := "general_conditions"
-	updatedPageHrid := "homepage"
+	updatedPageHrid := "general_conditions_v2"
+	nonExistingPageHrid := "foo"
+	unpublishedExistingPageHrid := "unpublished_general_conditions"
 
 	resource.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -455,6 +457,30 @@ func TestAPIV4Resource_plan_general_conditions(t *testing.T) {
 					"hrid":                    config.StringVariable(randomId),
 					"general_conditions_hrid": config.StringVariable(updatedPageHrid),
 				},
+			},
+			// Check error on page hrid.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization_id":         config.StringVariable(organizationId),
+					"environment_id":          config.StringVariable(environmentId),
+					"hrid":                    config.StringVariable(randomId),
+					"general_conditions_hrid": config.StringVariable(nonExistingPageHrid),
+				},
+				ExpectError: regexp.MustCompile("non existing page as general conditions"),
+			},
+			// Check error on unpublished page.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"organization_id":         config.StringVariable(organizationId),
+					"environment_id":          config.StringVariable(environmentId),
+					"hrid":                    config.StringVariable(randomId),
+					"general_conditions_hrid": config.StringVariable(unpublishedExistingPageHrid),
+				},
+				ExpectError: regexp.MustCompile("non published page as general conditions"),
 			},
 		},
 	})

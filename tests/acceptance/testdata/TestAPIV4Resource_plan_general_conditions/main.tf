@@ -66,11 +66,28 @@ resource "apim_apiv4" "test" {
 
   pages = [
     {
-      hrid    = "general_conditions"
-      content = "General conditions"
-      name    = "Plan general conditions"
-      type    = "MARKDOWN"
-      order   = 0
+      hrid      = "general_conditions"
+      content   = "General conditions"
+      name      = "Plan general conditions"
+      type      = "MARKDOWN"
+      published = true
+      order     = 0
+    },
+    {
+      hrid      = "general_conditions_v2"
+      content   = "General conditions"
+      name      = "Plan general conditions v2"
+      type      = "MARKDOWN"
+      published = true
+      order     = 1
+    },
+    {
+      hrid      = "unpublished_general_conditions"
+      content   = "General conditions"
+      name      = "Deprecated Plan general conditions"
+      type      = "MARKDOWN"
+      published = false
+      order     = 2
     },
   ]
   plans = [
