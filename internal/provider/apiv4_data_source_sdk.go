@@ -170,6 +170,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 
 			r.EndpointGroups = append(r.EndpointGroups, endpointGroups)
 		}
+		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		if resp.Failover == nil {
 			r.Failover = nil
 		} else {
@@ -601,6 +602,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			r.Metadata = append(r.Metadata, metadata)
 		}
 		r.Name = types.StringValue(resp.Name)
+		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.Pages = []tfTypes.PageV4{}
 
 		for _, pagesItem := range resp.Pages {
