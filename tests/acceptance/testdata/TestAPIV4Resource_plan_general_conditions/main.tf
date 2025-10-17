@@ -71,7 +71,6 @@ resource "apim_apiv4" "test" {
       name      = "Plan general conditions"
       type      = "MARKDOWN"
       published = true
-      order     = 0
     },
     {
       hrid      = "general_conditions_v2"
@@ -79,7 +78,6 @@ resource "apim_apiv4" "test" {
       name      = "Plan general conditions v2"
       type      = "MARKDOWN"
       published = true
-      order     = 1
     },
     {
       hrid      = "unpublished_general_conditions"
@@ -87,7 +85,6 @@ resource "apim_apiv4" "test" {
       name      = "Deprecated Plan general conditions"
       type      = "MARKDOWN"
       published = false
-      order     = 2
     },
   ]
   plans = [

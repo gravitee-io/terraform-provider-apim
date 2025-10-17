@@ -603,11 +603,18 @@ components:
             id:
               type: string
               description: API's uuid.
+              x-speakeasy-param-suppress-computed-diff: true
             crossId:
               type: string
               description: >-
                 When promoting an API from one environment to the other, this ID identifies the API across those different environments.
-          x-speakeasy-param-suppress-computed-diff: true
+              x-speakeasy-param-suppress-computed-diff: true
+            environmentId:
+              description: The environment ID of the API.
+              type: string
+            organizationId:
+              description: The organization ID of the API.
+              type: string
     ApplicationSpec:
       description: "Defines the desired state of Application. \nIt represents an API consumer. \nApplications act on behalf of users to request tokens, provide user identity information, and access protected resources from APIs. \nThey can be of different types, such as Simple, Web, SPA, Native, or Backend-to-backend, each with specific configuration requirements. \nApplications are also used to manage API keys, analytics, and subscriptions.\n"
       type: object
@@ -809,7 +816,6 @@ components:
               - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
             schemaType: customtypes.TrimmedStringType{}
             valueType: customtypes.TrimmedString
-            ## Field removal
       required:
         - clientCertificate
     ApplicationState:
@@ -827,6 +833,7 @@ components:
               description: Application's uuid.
               examples:
                 - 550e8400-e29b-41d4-a716-446655440000
+              x-speakeasy-param-suppress-computed-diff: true
             environmentId:
               description: The environment ID of the Application.
               type: string
@@ -839,7 +846,6 @@ components:
               default: DEFAULT
               examples:
                 - DEFAULT
-          x-speakeasy-param-suppress-computed-diff: true
     SubscriptionSpec:
       description: Subscription specification
       type: object
@@ -881,16 +887,23 @@ components:
             id:
               type: string
               description: Subscription's uuid.
+              x-speakeasy-param-suppress-computed-diff: true
             apiHrid:
               type: string
               description: The API's Hrid.
               example: demo-api
+            environmentId:
+              description: The environment ID of the Subscription.
+              type: string
+            organizationId:
+              description: The organization ID of the Subscription.
+              type: string
             startingAt:
               type: string
               description: Start validity date time of this Subscription
               format: date-time
               example: "2040-12-25T09:12:28+01:00"
-          x-speakeasy-param-suppress-computed-diff: true
+              x-speakeasy-param-suppress-computed-diff: true
     SharedPolicyGroupState:
       description: State of Shared Policy Groups that has been created/updated
       allOf:
@@ -904,16 +917,17 @@ components:
             id:
               description: The id of the shared policy group.
               type: string
+              x-speakeasy-param-suppress-computed-diff: true
             crossId:
               description: The Cross ID is used to identify a shared policy group that has been promoted from one environment to another.
               type: string
+              x-speakeasy-param-suppress-computed-diff: true
             environmentId:
               description: The environment ID of the shared policy group.
               type: string
             organizationId:
               description: The organization ID of the shared policy group.
               type: string
-          x-speakeasy-param-suppress-computed-diff: true
     SharedPolicyGroupSpec:
       description: Shared Policy Group Spec
       type: object
