@@ -986,6 +986,7 @@ components:
             type: string
             maxLength: 64
           uniqueItems: true
+          default: []
         type:
           $ref: '#/components/schemas/PlanType'
         validation:
@@ -1658,6 +1659,7 @@ components:
           description: If true, this page will be displayed as the homepage of your API documentation.
           examples:
             - true
+          default: false
         parentHrid:
           type: string
           description: |

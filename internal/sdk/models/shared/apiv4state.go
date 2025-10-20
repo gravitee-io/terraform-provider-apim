@@ -72,10 +72,6 @@ type APIV4State struct {
 	ID *string `json:"id,omitempty"`
 	// When promoting an API from one environment to the other, this ID identifies the API across those different environments.
 	CrossID *string `json:"crossId,omitempty"`
-	// The environment ID of the API.
-	EnvironmentID *string `json:"environmentId,omitempty"`
-	// The organization ID of the API.
-	OrganizationID *string `json:"organizationId,omitempty"`
 }
 
 func (a APIV4State) MarshalJSON() ([]byte, error) {
@@ -297,18 +293,4 @@ func (a *APIV4State) GetCrossID() *string {
 		return nil
 	}
 	return a.CrossID
-}
-
-func (a *APIV4State) GetEnvironmentID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.EnvironmentID
-}
-
-func (a *APIV4State) GetOrganizationID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.OrganizationID
 }
