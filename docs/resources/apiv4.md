@@ -260,7 +260,6 @@ Key of the map is the error code.
 
 ### Read-Only
 
-- `cross_id` (String) When promoting an API from one environment to the other, this ID identifies the API across those different environments.
 - `id` (String) API's uuid.
 
 <a id="nestedatt--endpoint_groups"></a>
