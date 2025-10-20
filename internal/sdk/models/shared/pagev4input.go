@@ -29,7 +29,7 @@ type PageV4Input struct {
 	// Key/value page configuration (Configure swagger UI or or use Redoc instead)
 	Configuration map[string]string `json:"configuration,omitempty"`
 	// If true, this page will be displayed as the homepage of your API documentation.
-	Homepage *bool `json:"homepage,omitempty"`
+	Homepage *bool `default:"false" json:"homepage"`
 	// If your page contains a folder, setting this field to the folder's hrid will be reflected
 	// into APIM by making the page a child of this folder.
 	//

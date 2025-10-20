@@ -90,7 +90,7 @@ resource "apim_apiv4" "test" {
   plans = [
     {
       hrid        = "Keyless"
-      description = "No sec"
+      description = "No security"
       mode        = "STANDARD"
       name        = "No security"
       status      = "PUBLISHED"

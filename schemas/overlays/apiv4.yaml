@@ -24,6 +24,56 @@ actions:
 
   # Customizations
 
+  ## Avoid diff for optional properties
+
+  ### API Spec
+
+  - target: $.components.schemas.ApiV4Spec.properties.description
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.endpointGroups
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+  - target: $.components.schemas.ApiV4Spec.properties.listeners
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.members
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.metadata
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.primaryOwner
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.plans
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.pages
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.properties
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.responseTemplates
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.resources
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
   ### API State
   - target: $.components.schemas.ApiV4State.allOf[?@.properties.id].properties.id
     description: Not returned by the API, so prevent null values during refresh
@@ -33,6 +83,54 @@ actions:
     description: Not returned by the API, so prevent null values during refresh
     update:
       x-speakeasy-param-suppress-computed-diff: true
+
+
+  ### Schemas
+  - target: $.components.schemas.Analytics
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiServices
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FailoverV4
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowExecution
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.Plan
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PagesV4
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PrimaryOwner
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.Metadata
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ResponseTemplate
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+
+  ## Field removal
+  - target: $.components.schemas.ApiV4State.allOf[?@.properties.environmentId].properties.environmentId
+    description: Not returned by the API, so prevent null values during refresh
+    remove: true
+  - target: $.components.schemas.ApiV4State.allOf[?@.properties.organizationId].properties.organizationId
+    description: Not returned by the API, so prevent null values during refresh
+    remove: true
 
   ## Schemaless config
   - target: $.components.schemas.EndpointGroupV4.properties.sharedConfiguration

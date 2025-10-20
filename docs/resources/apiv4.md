@@ -782,7 +782,7 @@ Optional:
 
 - `configuration` (Map of String) Key/value page configuration (Configure swagger UI or or use Redoc instead)
 - `content` (String) The content of the page, if any.
-- `homepage` (Boolean) If true, this page will be displayed as the homepage of your API documentation.
+- `homepage` (Boolean) If true, this page will be displayed as the homepage of your API documentation. Default: false
 - `hrid` (String) A unique human readable id identifying this resource. Not Null
 - `name` (String) This is the display name of the page in APIM and on the portal.
 This field can be edited safely if you want to rename a page.
@@ -827,7 +827,7 @@ same on the reponse, which means API reponse flows will always run last. (see [b
 - `security` (Attributes) API plan security. Not Null (see [below for nested schema](#nestedatt--plans--security))
 - `selection_rule` (String) An EL expression that must return a boolean to enable the flow based on the request.
 - `status` (String) Plan status, only `PUBLISHED` makes the plan available at runtime. Not Null; must be one of ["STAGING", "PUBLISHED", "DEPRECATED", "CLOSED"]
-- `tags` (List of String) Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list.
+- `tags` (List of String) Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list. Default: []
 - `type` (String) Only one possible type: API. Default: "API"; must be one of ["API", "CATALOG"]
 - `validation` (String) Specifies if subscriptions must be manually validated by a human actor.
 For automation API, it is default to `AUTO`.
