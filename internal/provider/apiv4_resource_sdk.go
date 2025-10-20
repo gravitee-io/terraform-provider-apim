@@ -73,7 +73,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		for _, v := range resp.Categories {
 			r.Categories = append(r.Categories, types.StringValue(v))
 		}
-		r.CrossID = types.StringPointerValue(resp.CrossID)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.EndpointGroups = []tfTypes.EndpointGroupV4{}
 
@@ -170,6 +169,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 			r.EndpointGroups = append(r.EndpointGroups, endpointGroups)
 		}
+		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		if resp.Failover == nil {
 			r.Failover = nil
 		} else {
@@ -601,6 +601,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			r.Metadata = append(r.Metadata, metadata)
 		}
 		r.Name = types.StringValue(resp.Name)
+		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.Pages = []tfTypes.PageV4{}
 
 		for _, pagesItem := range resp.Pages {

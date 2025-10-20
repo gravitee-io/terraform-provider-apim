@@ -42,7 +42,6 @@ type Apiv4DataSource struct {
 type Apiv4DataSourceModel struct {
 	Analytics         *tfTypes.Analytics                             `tfsdk:"analytics"`
 	Categories        []types.String                                 `tfsdk:"categories"`
-	CrossID           types.String                                   `tfsdk:"cross_id"`
 	Description       types.String                                   `tfsdk:"description"`
 	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
 	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
@@ -204,10 +203,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Computed:    true,
 				ElementType: types.StringType,
 				Description: `The list of category names (or UUID) associated with this API.`,
-			},
-			"cross_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `When promoting an API from one environment to the other, this ID identifies the API across those different environments.`,
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,
