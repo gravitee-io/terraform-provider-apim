@@ -343,14 +343,20 @@ resource "apim_apiv4" "test" {
     max_failures        = 10
     per_subscription    = true
   }
-  # properties = [
-  #   {
-  #     key         = "foo",
-  #     value       = "bar",
-  #     dynamic     = false
-  #     encryptable = true
-  #   }
-  # ]
+  properties = [
+    {
+      key   = "foo",
+      value = "bar"
+    },
+    {
+      key   = "baz",
+      value = "qux"
+    },
+    {
+      key   = "plugh",
+      value = "xyzzy"
+    }
+  ]
   pages = [
     {
       hrid     = "homepage"
