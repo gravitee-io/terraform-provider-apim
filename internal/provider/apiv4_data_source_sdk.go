@@ -868,13 +868,12 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				r.PrimaryOwner.Type = types.StringNull()
 			}
 		}
-		r.Properties = []tfTypes.Property1{}
+		r.Properties = []tfTypes.Property{}
 
 		for _, propertiesItem := range resp.Properties {
-			var properties tfTypes.Property1
+			var properties tfTypes.Property
 
 			properties.Dynamic = types.BoolPointerValue(propertiesItem.Dynamic)
-			properties.Encrypted = types.BoolPointerValue(propertiesItem.Encrypted)
 			properties.Key = types.StringValue(propertiesItem.Key)
 			properties.Value = types.StringValue(propertiesItem.Value)
 

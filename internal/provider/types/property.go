@@ -7,9 +7,7 @@ import (
 )
 
 type Property struct {
-	Dynamic     types.Bool   `tfsdk:"dynamic"`
-	Encryptable types.Bool   `tfsdk:"encryptable"`
-	Encrypted   types.Bool   `tfsdk:"encrypted"`
-	Key         types.String `tfsdk:"key"`
-	Value       types.String `tfsdk:"value"`
+	Dynamic types.Bool   `tfsdk:"dynamic"`
+	Key     types.String `tfsdk:"key"`
+	Value   types.String `tfsdk:"value"`
 }

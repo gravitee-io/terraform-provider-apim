@@ -1828,13 +1828,17 @@ components:
           description: When the value has been encrypted in database.
           type: boolean
           readOnly: true
+          x-speakeasy-terraform-ignore: true
         dynamic:
           description: When the value was populated from dynamic property service.
           type: boolean
+          x-speakeasy-terraform-read-only: true
+          default: false
         encryptable:
           description: When the input value needs to be encrypted.
           type: boolean
           writeOnly: true
+          x-speakeasy-terraform-ignore: true
     Qos:
       type: string
       description: Type of the quality of service (for message APIs).

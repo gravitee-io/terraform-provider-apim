@@ -3748,25 +3748,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						"dynamic": schema.BoolAttribute{
 							Computed: true,
 							Optional: true,
+							Default:  booldefault.StaticBool(false),
 							PlanModifiers: []planmodifier.Bool{
 								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 							},
-							Description: `When the value was populated from dynamic property service.`,
-						},
-						"encryptable": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
-							Description: `When the input value needs to be encrypted.`,
-						},
-						"encrypted": schema.BoolAttribute{
-							Computed: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
-							Description: `When the value has been encrypted in database.`,
+							Description: `When the value was populated from dynamic property service. Default: false`,
 						},
 						"key": schema.StringAttribute{
 							Computed: true,

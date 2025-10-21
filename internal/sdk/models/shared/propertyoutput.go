@@ -2,6 +2,10 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // PropertyOutput - API property can be used within the API using EL expression `{#api.properties['key']}.
 type PropertyOutput struct {
 	// Property key.
@@ -11,7 +15,18 @@ type PropertyOutput struct {
 	// When the value has been encrypted in database.
 	Encrypted *bool `json:"encrypted,omitempty"`
 	// When the value was populated from dynamic property service.
-	Dynamic *bool `json:"dynamic,omitempty"`
+	Dynamic *bool `default:"false" json:"dynamic"`
+}
+
+func (p PropertyOutput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PropertyOutput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"key", "value"}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (p *PropertyOutput) GetKey() string {

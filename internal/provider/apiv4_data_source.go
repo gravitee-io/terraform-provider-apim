@@ -62,7 +62,7 @@ type Apiv4DataSourceModel struct {
 	Pages             []tfTypes.PageV4                               `tfsdk:"pages"`
 	Plans             []tfTypes.PlanV4                               `tfsdk:"plans"`
 	PrimaryOwner      *tfTypes.PrimaryOwner                          `tfsdk:"primary_owner"`
-	Properties        []tfTypes.Property1                            `tfsdk:"properties"`
+	Properties        []tfTypes.Property                             `tfsdk:"properties"`
 	Resources         []tfTypes.APIResource                          `tfsdk:"resources"`
 	ResponseTemplates map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
 	Services          *tfTypes.APIServices                           `tfsdk:"services"`
@@ -1568,10 +1568,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"dynamic": schema.BoolAttribute{
 							Computed:    true,
 							Description: `When the value was populated from dynamic property service.`,
-						},
-						"encrypted": schema.BoolAttribute{
-							Computed:    true,
-							Description: `When the value has been encrypted in database.`,
 						},
 						"key": schema.StringAttribute{
 							Computed:    true,

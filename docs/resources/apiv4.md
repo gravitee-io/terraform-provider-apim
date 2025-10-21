@@ -1002,14 +1002,9 @@ Optional:
 
 Optional:
 
-- `dynamic` (Boolean) When the value was populated from dynamic property service.
-- `encryptable` (Boolean) When the input value needs to be encrypted.
+- `dynamic` (Boolean) When the value was populated from dynamic property service. Default: false
 - `key` (String) Property key. Not Null
 - `value` (String) Property value. Not Null
-
-Read-Only:
-
-- `encrypted` (Boolean) When the value has been encrypted in database.
 
 
 <a id="nestedatt--resources"></a>

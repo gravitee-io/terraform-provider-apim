@@ -873,12 +873,9 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		for _, propertiesItem := range resp.Properties {
 			var properties tfTypes.Property
 
-			propertiesPriorData := properties
 			properties.Dynamic = types.BoolPointerValue(propertiesItem.Dynamic)
-			properties.Encrypted = types.BoolPointerValue(propertiesItem.Encrypted)
 			properties.Key = types.StringValue(propertiesItem.Key)
 			properties.Value = types.StringValue(propertiesItem.Value)
-			properties.Encryptable = propertiesPriorData.Encryptable
 
 			r.Properties = append(r.Properties, properties)
 		}
@@ -1742,17 +1739,10 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			dynamic = nil
 		}
-		encryptable := new(bool)
-		if !propertiesItem.Encryptable.IsUnknown() && !propertiesItem.Encryptable.IsNull() {
-			*encryptable = propertiesItem.Encryptable.ValueBool()
-		} else {
-			encryptable = nil
-		}
 		properties = append(properties, shared.PropertyInput{
-			Key:         key,
-			Value:       value1,
-			Dynamic:     dynamic,
-			Encryptable: encryptable,
+			Key:     key,
+			Value:   value1,
+			Dynamic: dynamic,
 		})
 	}
 	resources := make([]shared.APIResource, 0, len(r.Resources))
