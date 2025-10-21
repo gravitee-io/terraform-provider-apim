@@ -34,11 +34,9 @@ resource "apim_apiv4" "simple-api-shared-resource-2" {
       }
       endpoints = [
         {
-          name                  = "Default HTTP proxy"
-          type                  = "http-proxy"
-          weight                = 1
-          inherit_configuration = false
-          # Configuration is JSON as is depends on the type schema
+          name = "Default HTTP proxy"
+          type = "http-proxy"
+          # Configuration is JSON as it is owned by the "http-proxy" endpoint plugin
           configuration = jsonencode({
             target = "https://api.gravitee.io/whattimeisit"
           })
@@ -46,10 +44,6 @@ resource "apim_apiv4" "simple-api-shared-resource-2" {
       ]
     }
   ]
-  flow_execution = {
-    mode           = "DEFAULT"
-    match_required = false
-  }
   flows = [
     {
       enabled = true
@@ -59,21 +53,21 @@ resource "apim_apiv4" "simple-api-shared-resource-2" {
             type         = "HTTP"
             path         = "/"
             pathOperator = "STARTS_WITH"
-            methods      = []
           }
         }
       ]
       request = [
         {
           # Authentication policy
-          "name" : "Basic Authentication",
-          "enabled" : true,
-          "policy" : "policy-basic-authentication",
-          "configuration" : jsonencode({
-            "authenticationProviders" = [
+          name    = "Basic Authentication",
+          enabled = true,
+          policy  = "policy-basic-authentication",
+          # Configuration is JSON as is depends on the
+          configuration = jsonencode({
+            authenticationProviders = [
               "In memory users"
             ]
-            "realm" = "gravitee.io"
+            realm = "gravitee.io"
           })
         }
       ]
@@ -93,8 +87,8 @@ resource "apim_apiv4" "simple-api-shared-resource-2" {
   }
   plans = [
     {
-      hrid        = "keyLess"
-      name        = "KeyLess"
+      hrid        = "keyless"
+      name        = "Key Less"
       type        = "API"
       mode        = "STANDARD"
       validation  = "AUTO"
