@@ -14,29 +14,29 @@
 
 outputs:
  - template: {{ .RootDir }}/tmpl/v4api-simple.md.tmpl
-   target: templates/guides/v4api-simple.md
+   target: templates/guides/docgen_v4api-simple.md
  - template: {{ .RootDir }}/tmpl/v4api-response-template.md.tmpl
-   target: templates/guides/v4api-response-template.md
+   target: templates/guides/docgen_v4api-response-template.md
  - template: {{ .RootDir }}/tmpl/v4api-native.md.tmpl
-   target: templates/guides/v4api-native.md
+   target: templates/guides/docgen_v4api-native.md
  - template: {{ .RootDir }}/tmpl/v4api-message.md.tmpl
-   target: templates/guides/v4api-message.md
+   target: templates/guides/docgen_v4api-message.md
  - template: {{ .RootDir }}/tmpl/v4api-and-pages.md.tmpl
-   target: templates/guides/v4api-and-pages.md
+   target: templates/guides/docgen_v4api-and-pages.md
  - template: {{ .RootDir }}/tmpl/spg-api.md.tmpl
-   target: templates/guides/spg-api.md
+   target: templates/guides/docgen_spg-api.md
  - template: {{ .RootDir }}/tmpl/spg-ratelimit.md.tmpl
-   target: templates/guides/spg-ratelimit.md
+   target: templates/guides/docgen_spg-ratelimit.md
  - template: {{ .RootDir }}/tmpl/subscription.md.tmpl
-   target: templates/guides/subscription.md
+   target: templates/guides/docgen_subscription.md
  - template: {{ .RootDir }}/tmpl/application-simple.md.tmpl
-   target: templates/guides/application-simple.md
+   target: templates/guides/docgen_application-simple.md
  - template: {{ .RootDir }}/tmpl/application-m2m.md.tmpl
-   target: templates/guides/application-m2m.md
+   target: templates/guides/docgen_application-m2m.md
  - template: {{ .RootDir }}/tmpl/application-spa.md.tmpl
-   target: templates/guides/application-spa.md
+   target: templates/guides/docgen_application-spa.md
  - template: {{ .RootDir }}/tmpl/resource-tutorial.md.tmpl
-   target: templates/guides/resource-tutorial.md
+   target: templates/guides/docgen_resource-tutorial.md
 
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf

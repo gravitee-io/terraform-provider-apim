@@ -3,11 +3,17 @@ page_title: "Shared API resource configuration"
 subcategory: "Tutorials"
 ---
 
+
+---
+page_title: "Shared API resource configuration"
+subcategory: "Tutorials"
+---
+
 # Share API resource configuration between APIs
 
-~> API resource is different from Terraform resource. It is used by a Gravitee policies to use access data.
+~> API resource is different from Terraform resource. It is used by Gravitee policies to use access data.
 
-In this example we show that APIs using an *"In memory users resource"* and share its configuration so all users are the same between APIs.
+In this example we show that APIs using an *"In memory users resource"* and share its configuration so all users are the same across APIs.
 
 ## Provider configuration and resource configuration file
 
@@ -29,7 +35,7 @@ data "local_file" "api-resource-basic-auth" {
 }
 ```
 
-This is the content of the resource configuration file, it creates two users that can be used by the basic authentication policy.
+This is the content of the resource configuration file `basic-auth-config.json`, it creates two users that can be used by the basic authentication policy.
 
 ```JSON
 {
@@ -50,7 +56,7 @@ This is the content of the resource configuration file, it creates two users tha
 
 ## Usage in APIs
 
-Below you will two APIs that use the same API resource configuration used to perform basic authentication.
+Below, two APIs using the same API resource configuration to perform basic authentication.
 
 ### API 1
 
@@ -91,11 +97,9 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
       }
       endpoints = [
         {
-          name                  = "Default HTTP proxy"
-          type                  = "http-proxy"
-          weight                = 1
-          inherit_configuration = false
-          # Configuration is JSON as is depends on the type schema
+          name = "Default HTTP proxy"
+          type = "http-proxy"
+          # Configuration is JSON as it is owned by the "http-proxy" endpoint plugin
           configuration = jsonencode({
             target = "https://api.gravitee.io/echo"
           })
@@ -103,10 +107,6 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
       ]
     }
   ]
-  flow_execution = {
-    mode           = "DEFAULT"
-    match_required = false
-  }
   flows = [
     {
       enabled = true
@@ -116,21 +116,21 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
             type         = "HTTP"
             path         = "/"
             pathOperator = "STARTS_WITH"
-            methods      = []
           }
         }
       ]
       request = [
         {
           # Authentication policy
-          "name" : "Basic Authentication",
-          "enabled" : true,
-          "policy" : "policy-basic-authentication",
-          "configuration" : jsonencode({
-            "authenticationProviders" = [
+          name    = "Basic Authentication",
+          enabled = true,
+          policy  = "policy-basic-authentication",
+          # Configuration is JSON as is depends on the
+          configuration = jsonencode({
+            authenticationProviders = [
               "In memory users"
             ]
-            "realm" = "gravitee.io"
+            realm = "gravitee.io"
           })
         }
       ]
@@ -150,8 +150,8 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
   }
   plans = [
     {
-      hrid        = "keyLess"
-      name        = "KeyLess"
+      hrid        = "keyless"
+      name        = "Key Less"
       type        = "API"
       mode        = "STANDARD"
       validation  = "AUTO"
@@ -205,11 +205,9 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
       }
       endpoints = [
         {
-          name                  = "Default HTTP proxy"
-          type                  = "http-proxy"
-          weight                = 1
-          inherit_configuration = false
-          # Configuration is JSON as is depends on the type schema
+          name = "Default HTTP proxy"
+          type = "http-proxy"
+          # Configuration is JSON as it is owned by the "http-proxy" endpoint plugin
           configuration = jsonencode({
             target = "https://api.gravitee.io/echo"
           })
@@ -217,10 +215,6 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
       ]
     }
   ]
-  flow_execution = {
-    mode           = "DEFAULT"
-    match_required = false
-  }
   flows = [
     {
       enabled = true
@@ -230,21 +224,21 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
             type         = "HTTP"
             path         = "/"
             pathOperator = "STARTS_WITH"
-            methods      = []
           }
         }
       ]
       request = [
         {
           # Authentication policy
-          "name" : "Basic Authentication",
-          "enabled" : true,
-          "policy" : "policy-basic-authentication",
-          "configuration" : jsonencode({
-            "authenticationProviders" = [
+          name    = "Basic Authentication",
+          enabled = true,
+          policy  = "policy-basic-authentication",
+          # Configuration is JSON as is depends on the
+          configuration = jsonencode({
+            authenticationProviders = [
               "In memory users"
             ]
-            "realm" = "gravitee.io"
+            realm = "gravitee.io"
           })
         }
       ]
@@ -264,8 +258,8 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
   }
   plans = [
     {
-      hrid        = "keyLess"
-      name        = "KeyLess"
+      hrid        = "keyless"
+      name        = "Key Less"
       type        = "API"
       mode        = "STANDARD"
       validation  = "AUTO"
@@ -277,6 +271,56 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
     }
   ]
 }
+
+```
+
+
+
+# Share API resource configuration between APIs
+
+~> API resource is different from Terraform resource. It is used by a Gravitee policies to use access data.
+
+In this example we show that APIs using an *"In memory users resource"* and share its configuration so all users are the same between APIs.
+
+## Provider configuration and resource configuration file
+
+```terraform
+terraform {
+  required_providers {
+    apim = {
+      source = "gravitee-io/apim"
+    }
+    local = {
+      source = "hashicorp/local"
+    }
+  }
+}
+
+# Using "local" datasource to read the file.
+data "local_file" "api-resource-basic-auth" {
+  filename = "basic-auth-config.json"
+}
+```
+
+This is the content of the resource configuration file, it creates two users that can be used by the basic authentication policy.
+
+```JSON
+
+```
+
+## Usage in APIs
+
+Below you will two APIs that use the same API resource configuration used to perform basic authentication.
+
+### API 1
+
+```terraform
+
+```
+
+### API 2
+
+```terraform
 
 ```
 
