@@ -692,6 +692,7 @@ components:
           default: ACTIVE
           examples:
             - ACTIVE
+          x-speakeasy-terraform-ignore: true
       required:
         - hrid
         - name
@@ -809,7 +810,6 @@ components:
               - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
             schemaType: customtypes.TrimmedStringType{}
             valueType: customtypes.TrimmedString
-            ## Field removal
       required:
         - clientCertificate
     ApplicationState:

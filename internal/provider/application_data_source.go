@@ -54,7 +54,6 @@ type ApplicationDataSourceModel struct {
 	PictureURL     types.String                 `tfsdk:"picture_url"`
 	PrimaryOwner   *tfTypes.PrimaryOwner        `tfsdk:"primary_owner"`
 	Settings       *tfTypes.ApplicationSettings `tfsdk:"settings"`
-	Status         types.String                 `tfsdk:"status"`
 }
 
 // Metadata returns the data source type name.
@@ -255,10 +254,6 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 					},
 				},
 				Description: `Application settings defines the configuration of consumers authentication. Depending on the control plane configuration some applications types may be restricted. ` + "`" + `app` + "`" + ` and ` + "`" + `oauth` + "`" + ` are mutually exclusive. If none is set it fallbacks to ` + "`" + `app` + "`" + ` without any property set.`,
-			},
-			"status": schema.StringAttribute{
-				Computed:    true,
-				Description: `Application are either ACTIVE or ARCHIVED never actually deleted.`,
 			},
 		},
 	}

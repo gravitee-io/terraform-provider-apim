@@ -58,7 +58,6 @@ Default: false
 - `picture_url` (String) Application's picture Url.
 - `primary_owner` (Attributes) User owner of this. Can perform all possible actions on it. (see [below for nested schema](#nestedatt--primary_owner))
 - `settings` (Attributes) Application settings defines the configuration of consumers authentication. Depending on the control plane configuration some applications types may be restricted. `app` and `oauth` are mutually exclusive. If none is set it fallbacks to `app` without any property set. (see [below for nested schema](#nestedatt--settings))
-- `status` (String) Application are either ACTIVE or ARCHIVED never actually deleted. Default: "ACTIVE"; must be one of ["ACTIVE", "ARCHIVED"]
 
 ### Read-Only
 
