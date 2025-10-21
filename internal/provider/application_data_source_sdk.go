@@ -108,11 +108,6 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 				r.Settings.TLS.ClientCertificate = clientCertificateValuable.(customtypes.TrimmedString)
 			}
 		}
-		if resp.Status != nil {
-			r.Status = types.StringValue(string(*resp.Status))
-		} else {
-			r.Status = types.StringNull()
-		}
 	}
 
 	return diags

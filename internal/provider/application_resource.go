@@ -27,7 +27,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -72,7 +71,6 @@ type ApplicationResourceModel struct {
 	PictureURL     types.String                 `tfsdk:"picture_url"`
 	PrimaryOwner   *tfTypes.PrimaryOwner        `tfsdk:"primary_owner"`
 	Settings       *tfTypes.ApplicationSettings `tfsdk:"settings"`
-	Status         types.String                 `tfsdk:"status"`
 }
 
 func (r *ApplicationResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -506,21 +504,6 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					},
 				},
 				Description: `Application settings defines the configuration of consumers authentication. Depending on the control plane configuration some applications types may be restricted. ` + "`" + `app` + "`" + ` and ` + "`" + `oauth` + "`" + ` are mutually exclusive. If none is set it fallbacks to ` + "`" + `app` + "`" + ` without any property set.`,
-			},
-			"status": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				Default:  stringdefault.StaticString(`ACTIVE`),
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `Application are either ACTIVE or ARCHIVED never actually deleted. Default: "ACTIVE"; must be one of ["ACTIVE", "ARCHIVED"]`,
-				Validators: []validator.String{
-					stringvalidator.OneOf(
-						"ACTIVE",
-						"ARCHIVED",
-					),
-				},
 			},
 		},
 	}
