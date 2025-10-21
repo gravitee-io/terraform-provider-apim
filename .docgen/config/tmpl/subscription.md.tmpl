@@ -1,6 +1,6 @@
 ---
 page_title: "Subscription to an API with a JWT Plan"
-subcategory: ""
+subcategory: "Subscription"
 ---
 
 # Subscription to an API with a JWT Plan
