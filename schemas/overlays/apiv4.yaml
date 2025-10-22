@@ -29,21 +29,46 @@ actions:
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-computed: false
+      x-speakeasy-param-suppress-computed-diff: true
+
+  - target: $.components.schemas.ApiV4Spec.properties.pages
+    update:
+      x-speakeasy-param-computed: true
+
   - target: $.components.schemas.ApiV4State.allOf[?@.properties.id].properties.id
     description: Not returned by the API, so prevent null values during refresh
     update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
+
 
   ### API Spec
 
   - target: $.components.schemas.ApiV4Spec.properties.metadata
     description: Prevent unknown values if unconfigured
     update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.properties
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.resources
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.members
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApiV4Spec.properties.primaryOwner
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-terraform-ignore: true
+
 
   ### API State
   - target: $.components.schemas.ApiV4State.allOf[?@.properties.id].properties.id
