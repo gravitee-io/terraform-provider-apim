@@ -36,19 +36,15 @@ actions:
       x-speakeasy-param-suppress-computed-diff: true
 
   ## Field removal
-  - target: $.components.schemas.Property.properties.encryptable
-    description: This does not mek sense in Terraform as the value would be in clear test in the resource
+  - target: $.components.schemas.EncryptedProperty.properties.value
+    description: Make this sensitive
     update:
-      x-speakeasy-terraform-ignore: true
-  - target: $.components.schemas.Property.properties.encrypted
-    description: Since we don't support encryptable, this one does not make sense either in terraform
-    update:
-      x-speakeasy-terraform-ignore: true
+      x-speakeasy-param-sensitive: true
   - target: $.components.schemas.Property.properties.dynamic
-    description: User may not change this value it is meant to be informative
+    description: Make this sensitive
     update:
-      x-speakeasy-terraform-read-only: true
-      default: false
+      x-speakeasy-param-readonly: true
+
   - target: $.components.schemas.ApiV4State.allOf[?@.properties.environmentId].properties.environmentId
     description: Not returned by the API, so prevent null values during refresh
     remove: true
