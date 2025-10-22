@@ -55,19 +55,6 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 		r.NotifyMembers = types.BoolPointerValue(resp.NotifyMembers)
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.PictureURL = types.StringPointerValue(resp.PictureURL)
-		if resp.PrimaryOwner == nil {
-			r.PrimaryOwner = nil
-		} else {
-			r.PrimaryOwner = &tfTypes.PrimaryOwner{}
-			r.PrimaryOwner.DisplayName = types.StringPointerValue(resp.PrimaryOwner.DisplayName)
-			r.PrimaryOwner.Email = types.StringPointerValue(resp.PrimaryOwner.Email)
-			r.PrimaryOwner.ID = types.StringPointerValue(resp.PrimaryOwner.ID)
-			if resp.PrimaryOwner.Type != nil {
-				r.PrimaryOwner.Type = types.StringValue(string(*resp.PrimaryOwner.Type))
-			} else {
-				r.PrimaryOwner.Type = types.StringNull()
-			}
-		}
 		if resp.Settings == nil {
 			r.Settings = nil
 		} else {
@@ -238,48 +225,15 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 	} else {
 		background = nil
 	}
-	var primaryOwner *shared.PrimaryOwner
-	if r.PrimaryOwner != nil {
-		id := new(string)
-		if !r.PrimaryOwner.ID.IsUnknown() && !r.PrimaryOwner.ID.IsNull() {
-			*id = r.PrimaryOwner.ID.ValueString()
-		} else {
-			id = nil
-		}
-		email := new(string)
-		if !r.PrimaryOwner.Email.IsUnknown() && !r.PrimaryOwner.Email.IsNull() {
-			*email = r.PrimaryOwner.Email.ValueString()
-		} else {
-			email = nil
-		}
-		displayName := new(string)
-		if !r.PrimaryOwner.DisplayName.IsUnknown() && !r.PrimaryOwner.DisplayName.IsNull() {
-			*displayName = r.PrimaryOwner.DisplayName.ValueString()
-		} else {
-			displayName = nil
-		}
-		typeVar := new(shared.MembershipMemberType)
-		if !r.PrimaryOwner.Type.IsUnknown() && !r.PrimaryOwner.Type.IsNull() {
-			*typeVar = shared.MembershipMemberType(r.PrimaryOwner.Type.ValueString())
-		} else {
-			typeVar = nil
-		}
-		primaryOwner = &shared.PrimaryOwner{
-			ID:          id,
-			Email:       email,
-			DisplayName: displayName,
-			Type:        typeVar,
-		}
-	}
 	var settings *shared.ApplicationSettings
 	if r.Settings != nil {
 		var app *shared.SimpleApplicationSettings
 		if r.Settings.App != nil {
-			typeVar1 := new(string)
+			typeVar := new(string)
 			if !r.Settings.App.Type.IsUnknown() && !r.Settings.App.Type.IsNull() {
-				*typeVar1 = r.Settings.App.Type.ValueString()
+				*typeVar = r.Settings.App.Type.ValueString()
 			} else {
-				typeVar1 = nil
+				typeVar = nil
 			}
 			clientID := new(string)
 			if !r.Settings.App.ClientID.IsUnknown() && !r.Settings.App.ClientID.IsNull() {
@@ -288,7 +242,7 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 				clientID = nil
 			}
 			app = &shared.SimpleApplicationSettings{
-				Type:     typeVar1,
+				Type:     typeVar,
 				ClientID: clientID,
 			}
 		}
@@ -397,7 +351,6 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		PictureURL:    pictureURL,
 		NotifyMembers: notifyMembers,
 		Background:    background,
-		PrimaryOwner:  primaryOwner,
 		Settings:      settings,
 		Metadata:      metadata,
 		Members:       members,

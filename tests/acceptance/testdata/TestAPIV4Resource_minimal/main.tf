@@ -31,7 +31,7 @@ resource "apim_apiv4" "test" {
       services = {}
       endpoints = [
         {
-          name = "Default HTTP proxy"
+          #name = "Default HTTP proxy"
           type = "http-proxy"
           configuration = jsonencode({
             target = "https://example.com"

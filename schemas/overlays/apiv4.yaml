@@ -24,31 +24,26 @@ actions:
 
   # Customizations
 
-  ## Nothing is computed
+  ## Nothing is computed (except for defaulted attributes)
   - target: $.components.schemas.*.properties.*
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-computed: false
-      x-speakeasy-param-suppress-computed-diff: true
 
-  - target: $.components.schemas.ApiV4Spec.properties.pages
-    update:
-      x-speakeasy-param-computed: true
 
+  ## Need to be computed to avoid diff
   - target: $.components.schemas.ApiV4State.allOf[?@.properties.id].properties.id
-    description: Not returned by the API, so prevent null values during refresh
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
 
-
-  ### API Spec
-
-  - target: $.components.schemas.ApiV4Spec.properties.metadata
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-computed: true
-      x-speakeasy-param-suppress-computed-diff: true
+  ## Should be computed but can't be
+#  - target: $.components.schemas.ApiV4Spec.properties.metadata
+#    description: API return some, need to ignore
+#    update:
+#      x-speakeasy-param-computed: true
+#      x-speakeasy-param-suppress-computed-diff: true
+  ## Empty array create diff, should be fixed at the API level
   - target: $.components.schemas.ApiV4Spec.properties.properties
     description: Prevent unknown values if unconfigured
     update:
@@ -64,19 +59,18 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
+
+
+  ## Removal
+  - target: $.components.schemas.ApiV4State.allOf[?@.properties.crossId].properties.crossId
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.ApiV4Spec.properties.primaryOwner
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-terraform-ignore: true
-
-
-  ### API State
-  - target: $.components.schemas.ApiV4State.allOf[?@.properties.id].properties.id
-    description: Not returned by the API, so prevent null values during refresh
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApiV4State.allOf[?@.properties.crossId].properties.crossId
-    description: Not returned by the API, so prevent null values during refresh
+  - target: $.components.schemas.PrimaryOwner
+    description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-terraform-ignore: true
 
