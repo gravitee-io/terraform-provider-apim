@@ -75,6 +75,15 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		}
 		r.CrossID = types.StringPointerValue(resp.CrossID)
 		r.Description = types.StringPointerValue(resp.Description)
+		r.EncryptedProperties = []tfTypes.EncryptedProperty1{}
+
+		for _, encryptedPropertiesItem := range resp.EncryptedProperties {
+			var encryptedProperties tfTypes.EncryptedProperty1
+
+			encryptedProperties.Key = types.StringValue(encryptedPropertiesItem.Key)
+
+			r.EncryptedProperties = append(r.EncryptedProperties, encryptedProperties)
+		}
 		r.EndpointGroups = []tfTypes.EndpointGroupV4{}
 
 		for _, endpointGroupsItem := range resp.EndpointGroups {

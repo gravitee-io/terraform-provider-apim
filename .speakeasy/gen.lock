@@ -1,10 +1,10 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: db388d4a30a4dbba6833c5800054eddd
+  docChecksum: 8daf32ba69e1bcbdc9d95b1e66dccbd4
   docVersion: 1.0.0
-  speakeasyVersion: 1.637.3
-  generationVersion: 2.727.9
+  speakeasyVersion: 1.638.0
+  generationVersion: 2.728.0
   releaseVersion: 0.3.0
   configChecksum: 0de90f5502c4fbbe2714048d2be31b55
 features:
@@ -86,6 +86,8 @@ generatedFiles:
   - internal/provider/types/condition_selector.go
   - internal/provider/types/cors.go
   - internal/provider/types/dlq.go
+  - internal/provider/types/encrypted_property.go
+  - internal/provider/types/encrypted_property1.go
   - internal/provider/types/endpoint_group_services.go
   - internal/provider/types/endpoint_group_v4.go
   - internal/provider/types/endpoint_services.go
@@ -171,6 +173,8 @@ generatedFiles:
   - internal/sdk/models/shared/conditionselector.go
   - internal/sdk/models/shared/cors.go
   - internal/sdk/models/shared/dlq.go
+  - internal/sdk/models/shared/encryptedproperty.go
+  - internal/sdk/models/shared/encryptedpropertyoutput.go
   - internal/sdk/models/shared/endpointgroupservices.go
   - internal/sdk/models/shared/endpointgroupv4.go
   - internal/sdk/models/shared/endpointservices.go
@@ -214,8 +218,8 @@ generatedFiles:
   - internal/sdk/models/shared/planv4.go
   - internal/sdk/models/shared/planvalidation.go
   - internal/sdk/models/shared/primaryowner.go
+  - internal/sdk/models/shared/property.go
   - internal/sdk/models/shared/propertyinput.go
-  - internal/sdk/models/shared/propertyoutput.go
   - internal/sdk/models/shared/qos.go
   - internal/sdk/models/shared/responsetemplate.go
   - internal/sdk/models/shared/sampling.go

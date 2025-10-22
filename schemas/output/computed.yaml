@@ -483,6 +483,11 @@ components:
           items:
             $ref: "#/components/schemas/Property"
           default: []
+        encryptedProperties:
+          description: Properties encrypted on write usable with EL.
+          type: array
+          items:
+            $ref: "#/components/schemas/EncryptedProperty"
         resources:
           type: array
           description: Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).
@@ -1824,21 +1829,26 @@ components:
         value:
           description: Property value.
           type: string
-        encrypted:
-          description: When the value has been encrypted in database.
-          type: boolean
-          readOnly: true
-          x-speakeasy-terraform-ignore: true
         dynamic:
           description: When the value was populated from dynamic property service.
           type: boolean
-          x-speakeasy-terraform-read-only: true
-          default: false
-        encryptable:
-          description: When the input value needs to be encrypted.
-          type: boolean
+          readOnly: true
+          x-speakeasy-param-readonly: true
+    EncryptedProperty:
+      description: API property can be used within the API using EL expression `{#api.properties['key']}.
+      type: object
+      required:
+        - key
+        - value
+      properties:
+        key:
+          description: Property key.
+          type: string
+        value:
+          description: Property value to be encrypted.
+          type: string
           writeOnly: true
-          x-speakeasy-terraform-ignore: true
+          x-speakeasy-param-sensitive: true
     Qos:
       type: string
       description: Type of the quality of service (for message APIs).

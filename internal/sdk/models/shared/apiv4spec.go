@@ -30,6 +30,8 @@ type APIV4Spec struct {
 	Failover *FailoverV4 `json:"failover,omitempty"`
 	// Properties usable using EL.
 	Properties []PropertyInput `json:"properties,omitempty"`
+	// Properties encrypted on write usable with EL.
+	EncryptedProperties []EncryptedProperty `json:"encryptedProperties,omitempty"`
 	// Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).
 	Resources []APIResource `json:"resources,omitempty"`
 	// Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority.
@@ -157,6 +159,13 @@ func (a *APIV4Spec) GetProperties() []PropertyInput {
 		return nil
 	}
 	return a.Properties
+}
+
+func (a *APIV4Spec) GetEncryptedProperties() []EncryptedProperty {
+	if a == nil {
+		return nil
+	}
+	return a.EncryptedProperties
 }
 
 func (a *APIV4Spec) GetResources() []APIResource {
