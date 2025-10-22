@@ -57,15 +57,15 @@ actions:
       x-speakeasy-param-suppress-computed-diff: true
 
   ### API State
-  - target: $.components.schemas.ApplicationState.allOf[?@.properties.id]
+  - target: $.components.schemas.ApplicationState.allOf[?@.properties.id].properties.id
     description: Not returned by the API, so prevent null values during refresh
     update:
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApplicationState.allOf[?@.properties.crossId]
+  - target: $.components.schemas.ApplicationState.allOf[?@.properties.crossId].properties.crossId
     description: Not returned by the API, so prevent null values during refresh
     update:
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApplicationState.allOf[?@.properties.metadata]
+  - target: $.components.schemas.ApplicationState.allOf[?@.properties.metadata].properties.metadata
     description: Metadata are not ordered
     update:
       x-speakeasy-param-suppress-computed-diff: true
@@ -79,14 +79,6 @@ actions:
         schemaType: customtypes.TrimmedStringType{}
         valueType: customtypes.TrimmedString
 
-
-  ## Field removal
-#  - target: $.components.schemas.ApplicationState.allOf[?@.properties.environmentId].properties.environmentId
-#    description: Not returned by the API, so prevent null values during refresh
-#    remove: true
-#  - target: $.components.schemas.ApplicationState.allOf[?@.properties.organizationId].properties.organizationId
-#    description: Not returned by the API, so prevent null values during refresh
-#    remove: true
 
   ## XOR for app settings
   - target: $.components.schemas.ApplicationSettings.properties.app

@@ -449,7 +449,8 @@ components:
             $ref: "#/components/schemas/EndpointGroupV4"
           minItems: 1
         analytics:
-          $ref: "#/components/schemas/Analytics"
+          allOf:
+            - $ref: "#/components/schemas/Analytics"
         failover:
           $ref: "#/components/schemas/FailoverV4"
         properties:
@@ -986,6 +987,7 @@ components:
             type: string
             maxLength: 64
           uniqueItems: true
+          default: []
         type:
           $ref: '#/components/schemas/PlanType'
         validation:
@@ -1042,7 +1044,7 @@ components:
         enabled:
           type: boolean
           description: Whether or not analytics are enabled.
-          default: true
+          # default: true
         sampling:
           $ref: "#/components/schemas/Sampling"
         logging:
@@ -1656,6 +1658,7 @@ components:
           description: If true, this page will be displayed as the homepage of your API documentation.
           examples:
             - true
+          default: false
         parentHrid:
           type: string
           description: |

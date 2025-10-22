@@ -6,6 +6,46 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// APIV4StateAnalytics - API analytics configuration to enable/disable what can be observed.
+type APIV4StateAnalytics struct {
+	// Whether or not analytics are enabled.
+	Enabled *bool `json:"enabled,omitempty"`
+	// API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.
+	Sampling *Sampling `json:"sampling,omitempty"`
+	// API logging configuration (Not for native APIs)
+	Logging *LoggingV4 `json:"logging,omitempty"`
+	// OpenTelemetry tracing (Not for native APIs)
+	Tracing *TracingV4 `json:"tracing,omitempty"`
+}
+
+func (a *APIV4StateAnalytics) GetEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.Enabled
+}
+
+func (a *APIV4StateAnalytics) GetSampling() *Sampling {
+	if a == nil {
+		return nil
+	}
+	return a.Sampling
+}
+
+func (a *APIV4StateAnalytics) GetLogging() *LoggingV4 {
+	if a == nil {
+		return nil
+	}
+	return a.Logging
+}
+
+func (a *APIV4StateAnalytics) GetTracing() *TracingV4 {
+	if a == nil {
+		return nil
+	}
+	return a.Tracing
+}
+
 // APIV4State - API state
 type APIV4State struct {
 	// A unique human readable id identifying this resource
@@ -23,9 +63,8 @@ type APIV4State struct {
 	// The list of listeners defining how this API can be called. They depend on the API type.
 	Listeners []Listener `json:"listeners"`
 	// Common endpoints properties and container of endpoints specifying backends this API can call.
-	EndpointGroups []EndpointGroupV4 `json:"endpointGroups"`
-	// API analytics configuration to enable/disable what can be observed.
-	Analytics *Analytics `json:"analytics,omitempty"`
+	EndpointGroups []EndpointGroupV4    `json:"endpointGroups"`
+	Analytics      *APIV4StateAnalytics `json:"analytics,omitempty"`
 	// Defines the failover behavior to bypass endpoints when some are slow.
 	Failover *FailoverV4 `json:"failover,omitempty"`
 	// Properties usable using EL.
@@ -72,6 +111,10 @@ type APIV4State struct {
 	ID *string `json:"id,omitempty"`
 	// When promoting an API from one environment to the other, this ID identifies the API across those different environments.
 	CrossID *string `json:"crossId,omitempty"`
+	// The environment ID of the API.
+	EnvironmentID *string `json:"environmentId,omitempty"`
+	// The organization ID of the API.
+	OrganizationID *string `json:"organizationId,omitempty"`
 }
 
 func (a APIV4State) MarshalJSON() ([]byte, error) {
@@ -141,7 +184,7 @@ func (a *APIV4State) GetEndpointGroups() []EndpointGroupV4 {
 	return a.EndpointGroups
 }
 
-func (a *APIV4State) GetAnalytics() *Analytics {
+func (a *APIV4State) GetAnalytics() *APIV4StateAnalytics {
 	if a == nil {
 		return nil
 	}
@@ -293,4 +336,18 @@ func (a *APIV4State) GetCrossID() *string {
 		return nil
 	}
 	return a.CrossID
+}
+
+func (a *APIV4State) GetEnvironmentID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EnvironmentID
+}
+
+func (a *APIV4State) GetOrganizationID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.OrganizationID
 }

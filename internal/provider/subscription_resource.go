@@ -65,26 +65,16 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 		MarkdownDescription: "Subscription Resource",
 		Attributes: map[string]schema.Attribute{
 			"api_hrid": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Required:    true,
 				Description: `Human-readable ID of api`,
 			},
 			"application_hrid": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Required:    true,
 				Description: `Application's hrid selected to subscribe an API.`,
 			},
 			"ending_at": schema.StringAttribute{
 				CustomType: customtypes.RFC3339Type{},
-				Computed:   true,
 				Optional:   true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
 				Validators: []validator.String{
 					validators.IsRFC3339(),
 				},
@@ -119,10 +109,7 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `organization ID`,
 			},
 			"plan_hrid": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Required:    true,
 				Description: `API plan's hrid`,
 			},
 			"starting_at": schema.StringAttribute{
