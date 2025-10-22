@@ -246,7 +246,6 @@ Default: true
 - `organization_id` (String) organization ID
 - `pages` (Attributes List) Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below. (see [below for nested schema](#nestedatt--pages))
 - `plans` (Attributes List) Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority. (see [below for nested schema](#nestedatt--plans))
-- `primary_owner` (Attributes) User owner of this. Can perform all possible actions on it. (see [below for nested schema](#nestedatt--primary_owner))
 - `properties` (Attributes List) Properties usable using EL. (see [below for nested schema](#nestedatt--properties))
 - `resources` (Attributes List) Data resources usable in policy to access (mostly) external data (authentication, cache, registries...). (see [below for nested schema](#nestedatt--resources))
 - `response_templates` (Map of Map of Object) Map of content-type dependent Response Templates for the API (Not applicable for Native
@@ -511,7 +510,7 @@ Optional:
 
 Optional:
 
-- `enabled` (Boolean) Whether or not analytics are enabled. Default: true
+- `enabled` (Boolean) Whether or not analytics are enabled.
 - `logging` (Attributes) API logging configuration (Not for native APIs) (see [below for nested schema](#nestedatt--analytics--logging))
 - `sampling` (Attributes) API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink. (see [below for nested schema](#nestedatt--analytics--sampling))
 - `tracing` (Attributes) OpenTelemetry tracing (Not for native APIs) (see [below for nested schema](#nestedatt--analytics--tracing))
@@ -983,17 +982,6 @@ Optional:
 - `configuration` (String) JSON Object to configure specific attributes of a Plan. Parsed as JSON.
 - `type` (String) API Plan security implementation. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS"]
 
-
-
-<a id="nestedatt--primary_owner"></a>
-### Nested Schema for `primary_owner`
-
-Optional:
-
-- `display_name` (String) Owner's name.
-- `email` (String) Owner's email. Can be null if owner is a group.
-- `id` (String) Owner's uuid.
-- `type` (String) The type of membership. must be one of ["USER", "GROUP"]
 
 
 <a id="nestedatt--properties"></a>

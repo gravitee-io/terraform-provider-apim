@@ -67,7 +67,6 @@ type ApplicationResourceModel struct {
 	NotifyMembers  types.Bool                   `tfsdk:"notify_members"`
 	OrganizationID types.String                 `tfsdk:"organization_id"`
 	PictureURL     types.String                 `tfsdk:"picture_url"`
-	PrimaryOwner   *tfTypes.PrimaryOwner        `tfsdk:"primary_owner"`
 	Settings       *tfTypes.ApplicationSettings `tfsdk:"settings"`
 	Status         types.String                 `tfsdk:"status"`
 }
@@ -254,39 +253,6 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 			"picture_url": schema.StringAttribute{
 				Optional:    true,
 				Description: `Application's picture Url.`,
-			},
-			"primary_owner": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
-				Attributes: map[string]schema.Attribute{
-					"display_name": schema.StringAttribute{
-						Optional:    true,
-						Description: `Owner's name.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtLeast(1),
-						},
-					},
-					"email": schema.StringAttribute{
-						Optional:    true,
-						Description: `Owner's email. Can be null if owner is a group.`,
-					},
-					"id": schema.StringAttribute{
-						Optional:    true,
-						Description: `Owner's uuid.`,
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Description: `The type of membership. must be one of ["USER", "GROUP"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"USER",
-								"GROUP",
-							),
-						},
-					},
-				},
-				Description: `User owner of this. Can perform all possible actions on it.`,
 			},
 			"settings": schema.SingleNestedAttribute{
 				Computed: true,

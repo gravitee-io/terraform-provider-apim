@@ -449,7 +449,8 @@ components:
             $ref: "#/components/schemas/EndpointGroupV4"
           minItems: 1
         analytics:
-          $ref: "#/components/schemas/Analytics"
+          allOf:
+            - $ref: "#/components/schemas/Analytics"
         failover:
           $ref: "#/components/schemas/FailoverV4"
         properties:
@@ -1043,7 +1044,7 @@ components:
         enabled:
           type: boolean
           description: Whether or not analytics are enabled.
-          default: true
+          # default: true
         sampling:
           $ref: "#/components/schemas/Sampling"
         logging:
