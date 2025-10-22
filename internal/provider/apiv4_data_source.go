@@ -40,37 +40,38 @@ type Apiv4DataSource struct {
 
 // Apiv4DataSourceModel describes the data model.
 type Apiv4DataSourceModel struct {
-	Analytics         *tfTypes.Analytics                             `tfsdk:"analytics"`
-	Categories        []types.String                                 `tfsdk:"categories"`
-	CrossID           types.String                                   `tfsdk:"cross_id"`
-	Description       types.String                                   `tfsdk:"description"`
-	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
-	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
-	Failover          *tfTypes.FailoverV4                            `tfsdk:"failover"`
-	FlowExecution     *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
-	Flows             []tfTypes.FlowV4                               `tfsdk:"flows"`
-	Groups            []types.String                                 `tfsdk:"groups"`
-	Hrid              types.String                                   `tfsdk:"hrid"`
-	ID                types.String                                   `tfsdk:"id"`
-	Labels            []types.String                                 `tfsdk:"labels"`
-	LifecycleState    types.String                                   `tfsdk:"lifecycle_state"`
-	Listeners         []tfTypes.Listener                             `tfsdk:"listeners"`
-	Members           []tfTypes.Member                               `tfsdk:"members"`
-	Metadata          []tfTypes.Metadata                             `tfsdk:"metadata"`
-	Name              types.String                                   `tfsdk:"name"`
-	OrganizationID    types.String                                   `tfsdk:"organization_id"`
-	Pages             []tfTypes.PageV4                               `tfsdk:"pages"`
-	Plans             []tfTypes.PlanV4                               `tfsdk:"plans"`
-	PrimaryOwner      *tfTypes.PrimaryOwner                          `tfsdk:"primary_owner"`
-	Properties        []tfTypes.Property1                            `tfsdk:"properties"`
-	Resources         []tfTypes.APIResource                          `tfsdk:"resources"`
-	ResponseTemplates map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
-	Services          *tfTypes.APIServices                           `tfsdk:"services"`
-	State             types.String                                   `tfsdk:"state"`
-	Tags              []types.String                                 `tfsdk:"tags"`
-	Type              types.String                                   `tfsdk:"type"`
-	Version           types.String                                   `tfsdk:"version"`
-	Visibility        types.String                                   `tfsdk:"visibility"`
+	Analytics           *tfTypes.Analytics                             `tfsdk:"analytics"`
+	Categories          []types.String                                 `tfsdk:"categories"`
+	CrossID             types.String                                   `tfsdk:"cross_id"`
+	Description         types.String                                   `tfsdk:"description"`
+	EncryptedProperties []tfTypes.EncryptedProperty1                   `tfsdk:"encrypted_properties"`
+	EndpointGroups      []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
+	EnvironmentID       types.String                                   `tfsdk:"environment_id"`
+	Failover            *tfTypes.FailoverV4                            `tfsdk:"failover"`
+	FlowExecution       *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
+	Flows               []tfTypes.FlowV4                               `tfsdk:"flows"`
+	Groups              []types.String                                 `tfsdk:"groups"`
+	Hrid                types.String                                   `tfsdk:"hrid"`
+	ID                  types.String                                   `tfsdk:"id"`
+	Labels              []types.String                                 `tfsdk:"labels"`
+	LifecycleState      types.String                                   `tfsdk:"lifecycle_state"`
+	Listeners           []tfTypes.Listener                             `tfsdk:"listeners"`
+	Members             []tfTypes.Member                               `tfsdk:"members"`
+	Metadata            []tfTypes.Metadata                             `tfsdk:"metadata"`
+	Name                types.String                                   `tfsdk:"name"`
+	OrganizationID      types.String                                   `tfsdk:"organization_id"`
+	Pages               []tfTypes.PageV4                               `tfsdk:"pages"`
+	Plans               []tfTypes.PlanV4                               `tfsdk:"plans"`
+	PrimaryOwner        *tfTypes.PrimaryOwner                          `tfsdk:"primary_owner"`
+	Properties          []tfTypes.Property                             `tfsdk:"properties"`
+	Resources           []tfTypes.APIResource                          `tfsdk:"resources"`
+	ResponseTemplates   map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
+	Services            *tfTypes.APIServices                           `tfsdk:"services"`
+	State               types.String                                   `tfsdk:"state"`
+	Tags                []types.String                                 `tfsdk:"tags"`
+	Type                types.String                                   `tfsdk:"type"`
+	Version             types.String                                   `tfsdk:"version"`
+	Visibility          types.String                                   `tfsdk:"visibility"`
 }
 
 // Metadata returns the data source type name.
@@ -210,6 +211,18 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"description": schema.StringAttribute{
 				Computed:    true,
 				Description: `Basic API documentation to describe what this API does.`,
+			},
+			"encrypted_properties": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key": schema.StringAttribute{
+							Computed:    true,
+							Description: `Property key.`,
+						},
+					},
+				},
+				Description: `Properties encrypted on write usable with EL.`,
 			},
 			"endpoint_groups": schema.ListNestedAttribute{
 				Computed: true,
@@ -1568,10 +1581,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"dynamic": schema.BoolAttribute{
 							Computed:    true,
 							Description: `When the value was populated from dynamic property service.`,
-						},
-						"encrypted": schema.BoolAttribute{
-							Computed:    true,
-							Description: `When the value has been encrypted in database.`,
 						},
 						"key": schema.StringAttribute{
 							Computed:    true,

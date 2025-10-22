@@ -75,6 +75,15 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		}
 		r.CrossID = types.StringPointerValue(resp.CrossID)
 		r.Description = types.StringPointerValue(resp.Description)
+		r.EncryptedProperties = []tfTypes.EncryptedProperty1{}
+
+		for _, encryptedPropertiesItem := range resp.EncryptedProperties {
+			var encryptedProperties tfTypes.EncryptedProperty1
+
+			encryptedProperties.Key = types.StringValue(encryptedPropertiesItem.Key)
+
+			r.EncryptedProperties = append(r.EncryptedProperties, encryptedProperties)
+		}
 		r.EndpointGroups = []tfTypes.EndpointGroupV4{}
 
 		for _, endpointGroupsItem := range resp.EndpointGroups {
@@ -868,13 +877,12 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				r.PrimaryOwner.Type = types.StringNull()
 			}
 		}
-		r.Properties = []tfTypes.Property1{}
+		r.Properties = []tfTypes.Property{}
 
 		for _, propertiesItem := range resp.Properties {
-			var properties tfTypes.Property1
+			var properties tfTypes.Property
 
 			properties.Dynamic = types.BoolPointerValue(propertiesItem.Dynamic)
-			properties.Encrypted = types.BoolPointerValue(propertiesItem.Encrypted)
 			properties.Key = types.StringValue(propertiesItem.Key)
 			properties.Value = types.StringValue(propertiesItem.Value)
 

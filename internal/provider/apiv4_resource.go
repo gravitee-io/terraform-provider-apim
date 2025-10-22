@@ -64,38 +64,39 @@ type Apiv4Resource struct {
 
 // Apiv4ResourceModel describes the resource data model.
 type Apiv4ResourceModel struct {
-	Analytics         *tfTypes.Analytics                             `tfsdk:"analytics"`
-	Categories        []types.String                                 `tfsdk:"categories"`
-	CrossID           types.String                                   `tfsdk:"cross_id"`
-	Description       types.String                                   `tfsdk:"description"`
-	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
-	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
-	Failover          *tfTypes.FailoverV4                            `tfsdk:"failover"`
-	FlowExecution     *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
-	Flows             []tfTypes.FlowV4                               `tfsdk:"flows"`
-	Groups            []types.String                                 `tfsdk:"groups"`
-	Hrid              types.String                                   `tfsdk:"hrid"`
-	ID                types.String                                   `tfsdk:"id"`
-	Labels            []types.String                                 `tfsdk:"labels"`
-	LifecycleState    types.String                                   `tfsdk:"lifecycle_state"`
-	Listeners         []tfTypes.Listener                             `tfsdk:"listeners"`
-	Members           []tfTypes.Member                               `tfsdk:"members"`
-	Metadata          []tfTypes.Metadata                             `tfsdk:"metadata"`
-	Name              types.String                                   `tfsdk:"name"`
-	NotifyMembers     types.Bool                                     `tfsdk:"notify_members"`
-	OrganizationID    types.String                                   `tfsdk:"organization_id"`
-	Pages             []tfTypes.PageV4                               `tfsdk:"pages"`
-	Plans             []tfTypes.PlanV4                               `tfsdk:"plans"`
-	PrimaryOwner      *tfTypes.PrimaryOwner                          `tfsdk:"primary_owner"`
-	Properties        []tfTypes.Property                             `tfsdk:"properties"`
-	Resources         []tfTypes.APIResource                          `tfsdk:"resources"`
-	ResponseTemplates map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
-	Services          *tfTypes.APIServices                           `tfsdk:"services"`
-	State             types.String                                   `tfsdk:"state"`
-	Tags              []types.String                                 `tfsdk:"tags"`
-	Type              types.String                                   `tfsdk:"type"`
-	Version           types.String                                   `tfsdk:"version"`
-	Visibility        types.String                                   `tfsdk:"visibility"`
+	Analytics           *tfTypes.Analytics                             `tfsdk:"analytics"`
+	Categories          []types.String                                 `tfsdk:"categories"`
+	CrossID             types.String                                   `tfsdk:"cross_id"`
+	Description         types.String                                   `tfsdk:"description"`
+	EncryptedProperties []tfTypes.EncryptedProperty                    `tfsdk:"encrypted_properties"`
+	EndpointGroups      []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
+	EnvironmentID       types.String                                   `tfsdk:"environment_id"`
+	Failover            *tfTypes.FailoverV4                            `tfsdk:"failover"`
+	FlowExecution       *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
+	Flows               []tfTypes.FlowV4                               `tfsdk:"flows"`
+	Groups              []types.String                                 `tfsdk:"groups"`
+	Hrid                types.String                                   `tfsdk:"hrid"`
+	ID                  types.String                                   `tfsdk:"id"`
+	Labels              []types.String                                 `tfsdk:"labels"`
+	LifecycleState      types.String                                   `tfsdk:"lifecycle_state"`
+	Listeners           []tfTypes.Listener                             `tfsdk:"listeners"`
+	Members             []tfTypes.Member                               `tfsdk:"members"`
+	Metadata            []tfTypes.Metadata                             `tfsdk:"metadata"`
+	Name                types.String                                   `tfsdk:"name"`
+	NotifyMembers       types.Bool                                     `tfsdk:"notify_members"`
+	OrganizationID      types.String                                   `tfsdk:"organization_id"`
+	Pages               []tfTypes.PageV4                               `tfsdk:"pages"`
+	Plans               []tfTypes.PlanV4                               `tfsdk:"plans"`
+	PrimaryOwner        *tfTypes.PrimaryOwner                          `tfsdk:"primary_owner"`
+	Properties          []tfTypes.Property                             `tfsdk:"properties"`
+	Resources           []tfTypes.APIResource                          `tfsdk:"resources"`
+	ResponseTemplates   map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
+	Services            *tfTypes.APIServices                           `tfsdk:"services"`
+	State               types.String                                   `tfsdk:"state"`
+	Tags                []types.String                                 `tfsdk:"tags"`
+	Type                types.String                                   `tfsdk:"type"`
+	Version             types.String                                   `tfsdk:"version"`
+	Visibility          types.String                                   `tfsdk:"visibility"`
 }
 
 func (r *Apiv4Resource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -349,6 +350,47 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(4000),
 				},
+			},
+			"encrypted_properties": schema.ListNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+				},
+				NestedObject: schema.NestedAttributeObject{
+					Validators: []validator.Object{
+						speakeasy_objectvalidators.NotNull(),
+					},
+					PlanModifiers: []planmodifier.Object{
+						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+					},
+					Attributes: map[string]schema.Attribute{
+						"key": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Property key. Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
+						},
+						"value": schema.StringAttribute{
+							Computed:  true,
+							Optional:  true,
+							Sensitive: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
+							Description: `Property value to be encrypted. Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
+						},
+					},
+				},
+				Description: `Properties encrypted on write usable with EL.`,
 			},
 			"endpoint_groups": schema.ListNestedAttribute{
 				Required: true,
@@ -3747,26 +3789,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					Attributes: map[string]schema.Attribute{
 						"dynamic": schema.BoolAttribute{
 							Computed: true,
-							Optional: true,
 							PlanModifiers: []planmodifier.Bool{
 								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 							},
 							Description: `When the value was populated from dynamic property service.`,
-						},
-						"encryptable": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
-							Description: `When the input value needs to be encrypted.`,
-						},
-						"encrypted": schema.BoolAttribute{
-							Computed: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
-							Description: `When the value has been encrypted in database.`,
 						},
 						"key": schema.StringAttribute{
 							Computed: true,

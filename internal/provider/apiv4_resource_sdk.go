@@ -75,6 +75,17 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		}
 		r.CrossID = types.StringPointerValue(resp.CrossID)
 		r.Description = types.StringPointerValue(resp.Description)
+		r.EncryptedProperties = []tfTypes.EncryptedProperty{}
+
+		for _, encryptedPropertiesItem := range resp.EncryptedProperties {
+			var encryptedProperties tfTypes.EncryptedProperty
+
+			encryptedPropertiesPriorData := encryptedProperties
+			encryptedProperties.Key = types.StringValue(encryptedPropertiesItem.Key)
+			encryptedProperties.Value = encryptedPropertiesPriorData.Value
+
+			r.EncryptedProperties = append(r.EncryptedProperties, encryptedProperties)
+		}
 		r.EndpointGroups = []tfTypes.EndpointGroupV4{}
 
 		for _, endpointGroupsItem := range resp.EndpointGroups {
@@ -873,12 +884,9 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		for _, propertiesItem := range resp.Properties {
 			var properties tfTypes.Property
 
-			propertiesPriorData := properties
 			properties.Dynamic = types.BoolPointerValue(propertiesItem.Dynamic)
-			properties.Encrypted = types.BoolPointerValue(propertiesItem.Encrypted)
 			properties.Key = types.StringValue(propertiesItem.Key)
 			properties.Value = types.StringValue(propertiesItem.Value)
-			properties.Encryptable = propertiesPriorData.Encryptable
 
 			r.Properties = append(r.Properties, properties)
 		}
@@ -1736,23 +1744,22 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		var value1 string
 		value1 = propertiesItem.Value.ValueString()
 
-		dynamic := new(bool)
-		if !propertiesItem.Dynamic.IsUnknown() && !propertiesItem.Dynamic.IsNull() {
-			*dynamic = propertiesItem.Dynamic.ValueBool()
-		} else {
-			dynamic = nil
-		}
-		encryptable := new(bool)
-		if !propertiesItem.Encryptable.IsUnknown() && !propertiesItem.Encryptable.IsNull() {
-			*encryptable = propertiesItem.Encryptable.ValueBool()
-		} else {
-			encryptable = nil
-		}
 		properties = append(properties, shared.PropertyInput{
-			Key:         key,
-			Value:       value1,
-			Dynamic:     dynamic,
-			Encryptable: encryptable,
+			Key:   key,
+			Value: value1,
+		})
+	}
+	encryptedProperties := make([]shared.EncryptedProperty, 0, len(r.EncryptedProperties))
+	for _, encryptedPropertiesItem := range r.EncryptedProperties {
+		var key1 string
+		key1 = encryptedPropertiesItem.Key.ValueString()
+
+		var value2 string
+		value2 = encryptedPropertiesItem.Value.ValueString()
+
+		encryptedProperties = append(encryptedProperties, shared.EncryptedProperty{
+			Key:   key1,
+			Value: value2,
 		})
 	}
 	resources := make([]shared.APIResource, 0, len(r.Resources))
@@ -2682,26 +2689,26 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	responseTemplates := make(map[string]map[string]shared.ResponseTemplate)
 	for responseTemplatesKey, responseTemplatesValue := range r.ResponseTemplates {
 		responseTemplatesInst := make(map[string]shared.ResponseTemplate)
-		for key1, value2 := range responseTemplatesValue {
+		for key2, value3 := range responseTemplatesValue {
 			var status1 int64
-			status1 = value2.Status.ValueInt64()
+			status1 = value3.Status.ValueInt64()
 
 			headers1 := make(map[string]string)
-			for headersKey, headersValue := range value2.Headers {
+			for headersKey, headersValue := range value3.Headers {
 				var headersInst string
 				headersInst = headersValue.ValueString()
 
 				headers1[headersKey] = headersInst
 			}
 			body := new(string)
-			if !value2.Body.IsUnknown() && !value2.Body.IsNull() {
-				*body = value2.Body.ValueString()
+			if !value3.Body.IsUnknown() && !value3.Body.IsNull() {
+				*body = value3.Body.ValueString()
 			} else {
 				body = nil
 			}
 			propagateErrorKeyToLogs := new(bool)
-			if !value2.PropagateErrorKeyToLogs.IsUnknown() && !value2.PropagateErrorKeyToLogs.IsNull() {
-				*propagateErrorKeyToLogs = value2.PropagateErrorKeyToLogs.ValueBool()
+			if !value3.PropagateErrorKeyToLogs.IsUnknown() && !value3.PropagateErrorKeyToLogs.IsNull() {
+				*propagateErrorKeyToLogs = value3.PropagateErrorKeyToLogs.ValueBool()
 			} else {
 				propagateErrorKeyToLogs = nil
 			}
@@ -2711,7 +2718,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				Body:                    body,
 				PropagateErrorKeyToLogs: propagateErrorKeyToLogs,
 			}
-			responseTemplatesInst[key1] = inst
+			responseTemplatesInst[key2] = inst
 		}
 		responseTemplates[responseTemplatesKey] = responseTemplatesInst
 	}
@@ -2802,21 +2809,21 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	}
 	metadata := make([]shared.Metadata, 0, len(r.Metadata))
 	for _, metadataItem := range r.Metadata {
-		key2 := new(string)
+		key3 := new(string)
 		if !metadataItem.Key.IsUnknown() && !metadataItem.Key.IsNull() {
-			*key2 = metadataItem.Key.ValueString()
+			*key3 = metadataItem.Key.ValueString()
 		} else {
-			key2 = nil
+			key3 = nil
 		}
 		var name19 string
 		name19 = metadataItem.Name.ValueString()
 
 		format := shared.MetadataFormat(metadataItem.Format.ValueString())
-		value3 := new(string)
+		value4 := new(string)
 		if !metadataItem.Value.IsUnknown() && !metadataItem.Value.IsNull() {
-			*value3 = metadataItem.Value.ValueString()
+			*value4 = metadataItem.Value.ValueString()
 		} else {
-			value3 = nil
+			value4 = nil
 		}
 		defaultValue := new(string)
 		if !metadataItem.DefaultValue.IsUnknown() && !metadataItem.DefaultValue.IsNull() {
@@ -2831,10 +2838,10 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			hidden = nil
 		}
 		metadata = append(metadata, shared.Metadata{
-			Key:          key2,
+			Key:          key3,
 			Name:         name19,
 			Format:       format,
-			Value:        value3,
+			Value:        value4,
 			DefaultValue: defaultValue,
 			Hidden:       hidden,
 		})
@@ -2944,34 +2951,35 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		})
 	}
 	out := shared.APIV4Spec{
-		Hrid:              hrid,
-		Name:              name,
-		Version:           version,
-		Type:              typeVar,
-		Description:       description,
-		Tags:              tags,
-		Listeners:         listeners,
-		EndpointGroups:    endpointGroups,
-		Analytics:         analytics,
-		Failover:          failover,
-		Properties:        properties,
-		Resources:         resources,
-		Plans:             plans,
-		FlowExecution:     flowExecution,
-		Flows:             flows1,
-		ResponseTemplates: responseTemplates,
-		Services:          services2,
-		Groups:            groups,
-		Visibility:        visibility,
-		State:             state,
-		PrimaryOwner:      primaryOwner,
-		Labels:            labels,
-		Metadata:          metadata,
-		LifecycleState:    lifecycleState,
-		Categories:        categories,
-		Members:           members,
-		NotifyMembers:     notifyMembers,
-		Pages:             pages,
+		Hrid:                hrid,
+		Name:                name,
+		Version:             version,
+		Type:                typeVar,
+		Description:         description,
+		Tags:                tags,
+		Listeners:           listeners,
+		EndpointGroups:      endpointGroups,
+		Analytics:           analytics,
+		Failover:            failover,
+		Properties:          properties,
+		EncryptedProperties: encryptedProperties,
+		Resources:           resources,
+		Plans:               plans,
+		FlowExecution:       flowExecution,
+		Flows:               flows1,
+		ResponseTemplates:   responseTemplates,
+		Services:            services2,
+		Groups:              groups,
+		Visibility:          visibility,
+		State:               state,
+		PrimaryOwner:        primaryOwner,
+		Labels:              labels,
+		Metadata:            metadata,
+		LifecycleState:      lifecycleState,
+		Categories:          categories,
+		Members:             members,
+		NotifyMembers:       notifyMembers,
+		Pages:               pages,
 	}
 
 	return &out, diags

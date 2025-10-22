@@ -29,7 +29,9 @@ type APIV4State struct {
 	// Defines the failover behavior to bypass endpoints when some are slow.
 	Failover *FailoverV4 `json:"failover,omitempty"`
 	// Properties usable using EL.
-	Properties []PropertyOutput `json:"properties,omitempty"`
+	Properties []Property `json:"properties,omitempty"`
+	// Properties encrypted on write usable with EL.
+	EncryptedProperties []EncryptedPropertyOutput `json:"encryptedProperties,omitempty"`
 	// Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).
 	Resources []APIResource `json:"resources,omitempty"`
 	// Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority.
@@ -155,11 +157,18 @@ func (a *APIV4State) GetFailover() *FailoverV4 {
 	return a.Failover
 }
 
-func (a *APIV4State) GetProperties() []PropertyOutput {
+func (a *APIV4State) GetProperties() []Property {
 	if a == nil {
 		return nil
 	}
 	return a.Properties
+}
+
+func (a *APIV4State) GetEncryptedProperties() []EncryptedPropertyOutput {
+	if a == nil {
+		return nil
+	}
+	return a.EncryptedProperties
 }
 
 func (a *APIV4State) GetResources() []APIResource {

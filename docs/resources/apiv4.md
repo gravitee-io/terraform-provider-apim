@@ -232,6 +232,7 @@ resource "apim_apiv4" "example" {
 - `analytics` (Attributes) API analytics configuration to enable/disable what can be observed. (see [below for nested schema](#nestedatt--analytics))
 - `categories` (List of String) The list of category names (or UUID) associated with this API. Default: []
 - `description` (String) Basic API documentation to describe what this API does.
+- `encrypted_properties` (Attributes List) Properties encrypted on write usable with EL. (see [below for nested schema](#nestedatt--encrypted_properties))
 - `environment_id` (String) environment ID
 - `failover` (Attributes) Defines the failover behavior to bypass endpoints when some are slow. (see [below for nested schema](#nestedatt--failover))
 - `flow_execution` (Attributes) Flow execution enablement (Not applicable for Native API) (see [below for nested schema](#nestedatt--flow_execution))
@@ -585,6 +586,15 @@ Optional:
 - `enabled` (Boolean) Enable OpenTelemetry tracing
 - `verbose` (Boolean) Enable technical tracing to get more details on request execution. Be careful this settings can generate more noise and can impact performance.
 
+
+
+<a id="nestedatt--encrypted_properties"></a>
+### Nested Schema for `encrypted_properties`
+
+Optional:
+
+- `key` (String) Property key. Not Null
+- `value` (String, Sensitive) Property value to be encrypted. Not Null
 
 
 <a id="nestedatt--failover"></a>
@@ -1002,14 +1012,12 @@ Optional:
 
 Optional:
 
-- `dynamic` (Boolean) When the value was populated from dynamic property service.
-- `encryptable` (Boolean) When the input value needs to be encrypted.
 - `key` (String) Property key. Not Null
 - `value` (String) Property value. Not Null
 
 Read-Only:
 
-- `encrypted` (Boolean) When the value has been encrypted in database.
+- `dynamic` (Boolean) When the value was populated from dynamic property service.
 
 
 <a id="nestedatt--resources"></a>

@@ -1,17 +1,17 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: ba9d806a5eb897694913e4bdef9dc2c5
+  docChecksum: 8daf32ba69e1bcbdc9d95b1e66dccbd4
   docVersion: 1.0.0
-  speakeasyVersion: 1.637.0
-  generationVersion: 2.727.4
+  speakeasyVersion: 1.638.0
+  generationVersion: 2.728.0
   releaseVersion: 0.3.0
   configChecksum: 0de90f5502c4fbbe2714048d2be31b55
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.0
-    core: 3.46.1
+    core: 3.46.2
     globalSecurity: 2.82.1
     globalServerURLs: 2.83.0
     globals: 3.0.3
@@ -86,6 +86,8 @@ generatedFiles:
   - internal/provider/types/condition_selector.go
   - internal/provider/types/cors.go
   - internal/provider/types/dlq.go
+  - internal/provider/types/encrypted_property.go
+  - internal/provider/types/encrypted_property1.go
   - internal/provider/types/endpoint_group_services.go
   - internal/provider/types/endpoint_group_v4.go
   - internal/provider/types/endpoint_services.go
@@ -112,7 +114,6 @@ generatedFiles:
   - internal/provider/types/plan_v4.go
   - internal/provider/types/primary_owner.go
   - internal/provider/types/property.go
-  - internal/provider/types/property1.go
   - internal/provider/types/response_template.go
   - internal/provider/types/sampling.go
   - internal/provider/types/selector.go
@@ -172,6 +173,8 @@ generatedFiles:
   - internal/sdk/models/shared/conditionselector.go
   - internal/sdk/models/shared/cors.go
   - internal/sdk/models/shared/dlq.go
+  - internal/sdk/models/shared/encryptedproperty.go
+  - internal/sdk/models/shared/encryptedpropertyoutput.go
   - internal/sdk/models/shared/endpointgroupservices.go
   - internal/sdk/models/shared/endpointgroupv4.go
   - internal/sdk/models/shared/endpointservices.go
@@ -215,8 +218,8 @@ generatedFiles:
   - internal/sdk/models/shared/planv4.go
   - internal/sdk/models/shared/planvalidation.go
   - internal/sdk/models/shared/primaryowner.go
+  - internal/sdk/models/shared/property.go
   - internal/sdk/models/shared/propertyinput.go
-  - internal/sdk/models/shared/propertyoutput.go
   - internal/sdk/models/shared/qos.go
   - internal/sdk/models/shared/responsetemplate.go
   - internal/sdk/models/shared/sampling.go

@@ -8,10 +8,6 @@ type PropertyInput struct {
 	Key string `json:"key"`
 	// Property value.
 	Value string `json:"value"`
-	// When the value was populated from dynamic property service.
-	Dynamic *bool `json:"dynamic,omitempty"`
-	// When the input value needs to be encrypted.
-	Encryptable *bool `json:"encryptable,omitempty"`
 }
 
 func (p *PropertyInput) GetKey() string {
@@ -26,18 +22,4 @@ func (p *PropertyInput) GetValue() string {
 		return ""
 	}
 	return p.Value
-}
-
-func (p *PropertyInput) GetDynamic() *bool {
-	if p == nil {
-		return nil
-	}
-	return p.Dynamic
-}
-
-func (p *PropertyInput) GetEncryptable() *bool {
-	if p == nil {
-		return nil
-	}
-	return p.Encryptable
 }
