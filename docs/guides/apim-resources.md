@@ -4,7 +4,7 @@ page_title: "Gravitee resources"
 
 # Gravitee resources specifics
 
-There are a few things you need to know before you use Gravitee resources
+This guide describes how the Gravitee APIM Terraform provider manages Gravitee resources.
 
 ## Human-Readable Identifier (`hrid`) property
 
