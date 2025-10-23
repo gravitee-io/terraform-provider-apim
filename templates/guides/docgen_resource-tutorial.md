@@ -3,17 +3,11 @@ page_title: "Shared API resource configuration"
 subcategory: "Tutorials"
 ---
 
-
----
-page_title: "Shared API resource configuration"
-subcategory: "Tutorials"
----
-
 # Share API resource configuration between APIs
 
-~> API resource is different from Terraform resource. It is used by Gravitee policies to use access data.
+~> An API resource is different from a Terraform resource. It is used by Gravitee policies to access data.
 
-In this example we show that APIs using an *"In memory users resource"* and share its configuration so all users are the same across APIs.
+In this example, we show an API using an "In memory users resource" and share its configuration so all users are the same across APIs.
 
 ## Provider configuration and resource configuration file
 
@@ -35,7 +29,7 @@ data "local_file" "api-resource-basic-auth" {
 }
 ```
 
-This is the content of the resource configuration file `basic-auth-config.json`, it creates two users that can be used by the basic authentication policy.
+This is the contents of the resource configuration file `basic-auth-config.json`. It creates two users that can be used by the basic authentication policy.
 
 ```JSON
 {
@@ -56,7 +50,7 @@ This is the content of the resource configuration file `basic-auth-config.json`,
 
 ## Usage in APIs
 
-Below, two APIs using the same API resource configuration to perform basic authentication.
+The following two APIs use the same API resource configuration to perform basic authentication.
 
 ### API 1
 
@@ -169,11 +163,11 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
 ### API 2
 
 ```terraform
-resource "apim_apiv4" "simple-api-shared-resource-1" {
+resource "apim_apiv4" "simple-api-shared-resource-2" {
   # should match the resource name
-  hrid            = "simple-api-shared-resource-1"
-  name            = "[Terraform] Simple API with shared resource [1/2]"
-  description     = "A simple API that routes traffic to gravitee echo API. Using basic auth configured in a shared resource"
+  hrid            = "simple-api-shared-resource-2"
+  name            = "[Terraform] Simple API with shared resource [2/2]"
+  description     = "A simple API that routes traffic to gravitee whattimeisit API. Using basic auth configured in a shared resource"
   version         = "1"
   type            = "PROXY"
   state           = "STARTED"
@@ -190,7 +184,7 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
         ]
         paths = [
           {
-            path = "/simple-api-shared-resource-1/"
+            path = "/simple-api-shared-resource-2/"
           }
         ]
       }
@@ -209,7 +203,7 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
           type = "http-proxy"
           # Configuration is JSON as it is owned by the "http-proxy" endpoint plugin
           configuration = jsonencode({
-            target = "https://api.gravitee.io/echo"
+            target = "https://api.gravitee.io/whattimeisit"
           })
         }
       ]
@@ -274,53 +268,4 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
 
 ```
 
-
-
-# Share API resource configuration between APIs
-
-~> API resource is different from Terraform resource. It is used by a Gravitee policies to use access data.
-
-In this example we show that APIs using an *"In memory users resource"* and share its configuration so all users are the same between APIs.
-
-## Provider configuration and resource configuration file
-
-```terraform
-terraform {
-  required_providers {
-    apim = {
-      source = "gravitee-io/apim"
-    }
-    local = {
-      source = "hashicorp/local"
-    }
-  }
-}
-
-# Using "local" datasource to read the file.
-data "local_file" "api-resource-basic-auth" {
-  filename = "basic-auth-config.json"
-}
-```
-
-This is the content of the resource configuration file, it creates two users that can be used by the basic authentication policy.
-
-```JSON
-
-```
-
-## Usage in APIs
-
-Below you will two APIs that use the same API resource configuration used to perform basic authentication.
-
-### API 1
-
-```terraform
-
-```
-
-### API 2
-
-```terraform
-
-```
 
