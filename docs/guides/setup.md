@@ -5,18 +5,23 @@ page_title: "Setup"
 # Setup
 
 ## Pre-requisites
-Before you configure your provider, ensure you have the following:
+Before configuring the provider, check the following information is well known:
 
-* The host and port for your Management API
-* Automation API must be enabled
-  * It is enabled on by default on Gravitee Cloud
-  * Check with your DevOps team for on-prem or Gravitee for hosted environments
-* Credentials:
+* The host and port for your Management API 
+  * It is automatically configured for [Gravitee Cloud](#gravitee-cloud)
+* Automation API is enabled
+  * It is enabled by default on Gravitee Cloud
+  * Check with your DevOps team or with Gravitee if your installation is managed 
+* Credentials
     * Service account [Define an APIM service account for Terraform](https://documentation.gravitee.io/apim/terraform/define-an-apim-service-account-for-terraform) (Gravitee documentation website)
     * or Gravitee Cloud token
-* (Optional) For a multi-tenant setup:
+* (Optional) For a multi-tenant installation:
     * Organization ID
     * Environment ID
+
+## Environment variables
+
+All the above can be configured using [environment variables overrides](../envvar).
 
 ## Simple instance with a service account
 
@@ -40,7 +45,7 @@ provider "apim" {
 }
 ```
 
-## Gravitee Cloud 
+## Gravitee Cloud
 
 ```hcl
 provider "apim" {
@@ -50,4 +55,4 @@ provider "apim" {
 
 This will set `server_url`, `bearer_auth`, `organization_id`, `environment_id` for you.
 
-~> `environment_id` becomes mandatory if the token is valid for multiple environment 
+~> `environment_id` is mandatory if the token is intended to work in multiple environments.
