@@ -55,4 +55,4 @@ provider "apim" {
 
 This will set `server_url`, `bearer_auth`, `organization_id`, `environment_id` for you.
 
-~> `environment_id` becomes mandatory if the token was crafted to work on multiple environments.
+~> `environment_id` is mandatory if the token is intended to work in multiple environments.
