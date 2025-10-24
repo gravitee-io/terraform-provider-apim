@@ -34,5 +34,22 @@ jobs:
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
           terraform_wrapper: false
+      - name: Generate
+        run: make speakeasy
+      - name: Check repo is clean
+        run: |
+          # Remove speakeasy cli
+          rm -fR speakeasy-${{ steps.speakeasy-version.outputs.version }}-linux
+          
+          # Ignore changes to workflow.lock
+          git checkout -- .speakeasy/workflow.lock
+          
+          git add .
+          
+          if [[ -n "$(git status --porcelain)" ]]; then
+            export PAGER= # don't let `git diff` invoke `less`
+            git diff --cached        
+            exit 1
+          fi
       - name: Run lint
         run: make lint
