@@ -64,7 +64,7 @@ unit-tests: ## Run unit tests
 
 .PHONY: doc-gen
 doc-gen: ## Generate Terraform examples docs
-	@docker run --rm -v ./.docgen/config:/config -v ./:/plugin graviteeio/doc-gen
+	@docker run --rm -u $$(id -u) -v ./.docgen/config:/config -v ./:/plugin graviteeio/doc-gen
 
 .PHONY: help
 help: ## Display this help.
