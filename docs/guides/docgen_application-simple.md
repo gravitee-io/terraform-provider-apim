@@ -24,3 +24,4 @@ resource "apim_application" "simple" {
   }]
 }
 ```
+

@@ -5,7 +5,7 @@ subcategory: "Application"
 
 # Single page application
 
-The following example creates a Single Page Application with OAuth.
+The following example creates a **Single Page Application** with OAuth.
 
 ```terraform
 resource "apim_application" "spa" {
