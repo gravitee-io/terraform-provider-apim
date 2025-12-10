@@ -4,6 +4,8 @@ on:
   push:
     branches-ignore:
       - master
+  schedule:
+    - cron: 00 05 * * 1-5
 
 env:
   APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL_MASTER }}
@@ -37,6 +39,14 @@ jobs:
           APIM_USERNAME: ${{ vars.APIM_API1_USERNAME }}
           APIM_PASSWORD: ${{ secrets.APIM_API1_PASSWORD }}
         run: make pre-test
+      - name: Send slack notification on failure
+        if: failure() && github.event.schedule != ''
+        uses: ./.github/actions/send-slack-notification
+        with:
+          job_name: ${{ github.job }}
+          job_status: ${{ job.status }}
+          circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
+
   examples:
     name: Run Terraform examples
     runs-on: ubuntu-latest
@@ -58,6 +68,14 @@ jobs:
           APIM_USERNAME: "${{ vars.APIM_ADMIN_USERNAME }}"
           APIM_PASSWORD: "${{ secrets.APIM_ADMIN_PASSWORD }}"
         run: make examples-tests
+      - name: Send slack notification
+        if: (failure() || success()) && github.event.schedule != ''
+        uses: ./.github/actions/send-slack-notification
+        with:
+          job_name: ${{ github.job }}
+          job_status: ${{ job.status }}
+          circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
+
   acceptance:
     name: Acceptance Tests (Terraform ${{ matrix.terraform-version }})
     runs-on: ubuntu-latest
@@ -87,9 +105,16 @@ jobs:
           APIM_USERNAME: ${{ vars.APIM_ADMIN_USERNAME }}
           APIM_PASSWORD: ${{ secrets.APIM_ADMIN_PASSWORD }}
         run: make acceptance-tests
+      - name: Send slack notification
+        if: (failure() || success()) && github.event.schedule != ''
+        uses: ./.github/actions/send-slack-notification
+        with:
+          job_name: ${{ github.job }} - Terraform ${{ matrix.terraform-version }}
+          job_status: ${{ job.status }}
+          circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
 
   unit:
-    name: Acceptance Tests (Terraform ${{ matrix.terraform-version }})
+    name: Unit tests
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
