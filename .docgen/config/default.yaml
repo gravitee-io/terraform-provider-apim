@@ -35,6 +35,8 @@ outputs:
    target: templates/guides/docgen_application-m2m.md
  - template: {{ .RootDir }}/tmpl/application-spa.md.tmpl
    target: templates/guides/docgen_application-spa.md
+ - template: {{ .RootDir }}/tmpl/v4api-mcp.md.tmpl
+   target: templates/guides/docgen_v4api-mcp.md
  - template: {{ .RootDir }}/tmpl/resource-tutorial.md.tmpl
    target: templates/guides/docgen_resource-tutorial.md
 
@@ -69,12 +71,14 @@ chunks:
   - template: examples/use-cases/application-spa/spa-app.tf
     exportedAs: ApplicationSPA
     required: true
-
   - template: examples/use-cases/v4api-with_pages/api-pages-http-fetcher.tf
     exportedAs: V4ApiPagesFetcher
     required: true
   - template: examples/use-cases/v4api-with_pages/api-pages-inline-markdown.tf
     exportedAs: V4ApiPagesMd
+    required: true
+  - template: examples/use-cases/v4api-mcp/mcp-api.tf
+    exportedAs: V4ApiMCP
     required: true
   - template: examples/tutorials/v4api-shared-resource-local/api-1.tf
     exportedAs: ResourceTutorialAPI1
