@@ -11,9 +11,11 @@ import (
 type APIType string
 
 const (
-	APITypeMessage APIType = "MESSAGE"
-	APITypeProxy   APIType = "PROXY"
-	APITypeNative  APIType = "NATIVE"
+	APITypeLlmProxy APIType = "LLM_PROXY"
+	APITypeMcpProxy APIType = "MCP_PROXY"
+	APITypeMessage  APIType = "MESSAGE"
+	APITypeProxy    APIType = "PROXY"
+	APITypeNative   APIType = "NATIVE"
 )
 
 func (e APIType) ToPointer() *APIType {
@@ -25,6 +27,10 @@ func (e *APIType) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
+	case "LLM_PROXY":
+		fallthrough
+	case "MCP_PROXY":
+		fallthrough
 	case "MESSAGE":
 		fallthrough
 	case "PROXY":

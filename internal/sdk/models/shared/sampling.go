@@ -10,14 +10,16 @@ import (
 // SamplingType - The type of the sampling:
 //
 // `PROBABILITY`: based on a specified probability,
-// `TEMPORAL`: all messages for on time duration,
-// `COUNT`: for every number of specified messages
+// `TEMPORAL`: report one message at least every,
+// `COUNT`: for every number of specified messages,
+// `WINDOWED_COUNT`: x number of messages on a time windows,
 type SamplingType string
 
 const (
-	SamplingTypeProbability SamplingType = "PROBABILITY"
-	SamplingTypeTemporal    SamplingType = "TEMPORAL"
-	SamplingTypeCount       SamplingType = "COUNT"
+	SamplingTypeProbability   SamplingType = "PROBABILITY"
+	SamplingTypeTemporal      SamplingType = "TEMPORAL"
+	SamplingTypeCount         SamplingType = "COUNT"
+	SamplingTypeWindowedCount SamplingType = "WINDOWED_COUNT"
 )
 
 func (e SamplingType) ToPointer() *SamplingType {
@@ -34,6 +36,8 @@ func (e *SamplingType) UnmarshalJSON(data []byte) error {
 	case "TEMPORAL":
 		fallthrough
 	case "COUNT":
+		fallthrough
+	case "WINDOWED_COUNT":
 		*e = SamplingType(v)
 		return nil
 	default:
@@ -46,8 +50,9 @@ type Sampling struct {
 	// The type of the sampling:
 	//
 	// `PROBABILITY`: based on a specified probability,
-	// `TEMPORAL`: all messages for on time duration,
-	// `COUNT`: for every number of specified messages
+	// `TEMPORAL`: report one message at least every,
+	// `COUNT`: for every number of specified messages,
+	// `WINDOWED_COUNT`: x number of messages on a time windows,
 	//
 	Type SamplingType `json:"type"`
 	// The value of the sampling:
@@ -55,6 +60,7 @@ type Sampling struct {
 	// `PROBABILITY`: between `0.01` and `0.5`,
 	// `TEMPORAL`: ISO-8601 duration format, 1 second minimum (PT1S)
 	// `COUNT`: greater than `1`,
+	// `WINDOWED_COUNT`: x/<ISO-8601 duration> cannot exceed 1 message per second
 	//
 	Value *string `json:"value,omitempty"`
 }

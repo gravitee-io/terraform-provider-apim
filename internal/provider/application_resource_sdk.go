@@ -217,8 +217,8 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		domain = nil
 	}
 	groups := make([]string, 0, len(r.Groups))
-	for _, groupsItem := range r.Groups {
-		groups = append(groups, groupsItem.ValueString())
+	for groupsIndex := range r.Groups {
+		groups = append(groups, r.Groups[groupsIndex].ValueString())
 	}
 	pictureURL := new(string)
 	if !r.PictureURL.IsUnknown() && !r.PictureURL.IsNull() {
@@ -300,13 +300,13 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 				grantTypes = append(grantTypes, shared.GrantType(grantTypesItem.ValueString()))
 			}
 			redirectUris := make([]string, 0, len(r.Settings.Oauth.RedirectUris))
-			for _, redirectUrisItem := range r.Settings.Oauth.RedirectUris {
-				redirectUris = append(redirectUris, redirectUrisItem.ValueString())
+			for redirectUrisIndex := range r.Settings.Oauth.RedirectUris {
+				redirectUris = append(redirectUris, r.Settings.Oauth.RedirectUris[redirectUrisIndex].ValueString())
 			}
 			additionalClientMetadata := make(map[string]string)
-			for additionalClientMetadataKey, additionalClientMetadataValue := range r.Settings.Oauth.AdditionalClientMetadata {
+			for additionalClientMetadataKey := range r.Settings.Oauth.AdditionalClientMetadata {
 				var additionalClientMetadataInst string
-				additionalClientMetadataInst = additionalClientMetadataValue.ValueString()
+				additionalClientMetadataInst = r.Settings.Oauth.AdditionalClientMetadata[additionalClientMetadataKey].ValueString()
 
 				additionalClientMetadata[additionalClientMetadataKey] = additionalClientMetadataInst
 			}
@@ -333,32 +333,32 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		}
 	}
 	metadata := make([]shared.Metadata, 0, len(r.Metadata))
-	for _, metadataItem := range r.Metadata {
+	for metadataIndex := range r.Metadata {
 		key := new(string)
-		if !metadataItem.Key.IsUnknown() && !metadataItem.Key.IsNull() {
-			*key = metadataItem.Key.ValueString()
+		if !r.Metadata[metadataIndex].Key.IsUnknown() && !r.Metadata[metadataIndex].Key.IsNull() {
+			*key = r.Metadata[metadataIndex].Key.ValueString()
 		} else {
 			key = nil
 		}
 		var name1 string
-		name1 = metadataItem.Name.ValueString()
+		name1 = r.Metadata[metadataIndex].Name.ValueString()
 
-		format := shared.MetadataFormat(metadataItem.Format.ValueString())
+		format := shared.MetadataFormat(r.Metadata[metadataIndex].Format.ValueString())
 		value := new(string)
-		if !metadataItem.Value.IsUnknown() && !metadataItem.Value.IsNull() {
-			*value = metadataItem.Value.ValueString()
+		if !r.Metadata[metadataIndex].Value.IsUnknown() && !r.Metadata[metadataIndex].Value.IsNull() {
+			*value = r.Metadata[metadataIndex].Value.ValueString()
 		} else {
 			value = nil
 		}
 		defaultValue := new(string)
-		if !metadataItem.DefaultValue.IsUnknown() && !metadataItem.DefaultValue.IsNull() {
-			*defaultValue = metadataItem.DefaultValue.ValueString()
+		if !r.Metadata[metadataIndex].DefaultValue.IsUnknown() && !r.Metadata[metadataIndex].DefaultValue.IsNull() {
+			*defaultValue = r.Metadata[metadataIndex].DefaultValue.ValueString()
 		} else {
 			defaultValue = nil
 		}
 		hidden := new(bool)
-		if !metadataItem.Hidden.IsUnknown() && !metadataItem.Hidden.IsNull() {
-			*hidden = metadataItem.Hidden.ValueBool()
+		if !r.Metadata[metadataIndex].Hidden.IsUnknown() && !r.Metadata[metadataIndex].Hidden.IsNull() {
+			*hidden = r.Metadata[metadataIndex].Hidden.ValueBool()
 		} else {
 			hidden = nil
 		}
@@ -372,15 +372,15 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		})
 	}
 	members := make([]shared.Member, 0, len(r.Members))
-	for _, membersItem := range r.Members {
+	for membersIndex := range r.Members {
 		var source string
-		source = membersItem.Source.ValueString()
+		source = r.Members[membersIndex].Source.ValueString()
 
 		var sourceID string
-		sourceID = membersItem.SourceID.ValueString()
+		sourceID = r.Members[membersIndex].SourceID.ValueString()
 
 		var role string
-		role = membersItem.Role.ValueString()
+		role = r.Members[membersIndex].Role.ValueString()
 
 		members = append(members, shared.Member{
 			Source:   source,

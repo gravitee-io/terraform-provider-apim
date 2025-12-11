@@ -1085,6 +1085,8 @@ components:
       examples:
         - MESSAGE
       enum:
+        - LLM_PROXY
+        - MCP_PROXY
         - MESSAGE
         - PROXY
         - NATIVE
@@ -1914,12 +1916,14 @@ components:
             The type of the sampling:
 
             `PROBABILITY`: based on a specified probability,
-            `TEMPORAL`: all messages for on time duration,
-            `COUNT`: for every number of specified messages
+            `TEMPORAL`: report one message at least every,
+            `COUNT`: for every number of specified messages,
+            `WINDOWED_COUNT`: x number of messages on a time windows,
           enum:
             - PROBABILITY
             - TEMPORAL
             - COUNT
+            - WINDOWED_COUNT
         value:
           type: string
           description: |
@@ -1928,6 +1932,7 @@ components:
             `PROBABILITY`: between `0.01` and `0.5`,
             `TEMPORAL`: ISO-8601 duration format, 1 second minimum (PT1S)
             `COUNT`: greater than `1`,
+            `WINDOWED_COUNT`: x/<ISO-8601 duration> cannot exceed 1 message per second
       required:
         - type
     MembershipMemberType:
@@ -1944,12 +1949,14 @@ components:
         - $ref: "#/components/schemas/HttpSelector"
         - $ref: "#/components/schemas/ChannelSelector"
         - $ref: "#/components/schemas/ConditionSelector"
+        - $ref: "#/components/schemas/McpSelector"
       discriminator:
         propertyName: type
         mapping:
           HTTP: "#/components/schemas/HttpSelector"
           CHANNEL: "#/components/schemas/ChannelSelector"
           CONDITION: "#/components/schemas/ConditionSelector"
+          MCP: "#/components/schemas/McpSelector"
     BaseSelector:
       description: Base selector
       properties:
@@ -1962,12 +1969,14 @@ components:
             - HTTP
             - CHANNEL
             - CONDITION
+            - MCP
       discriminator:
         propertyName: type
         mapping:
           HTTP: "#/components/schemas/HttpSelector"
           CHANNEL: "#/components/schemas/ChannelSelector"
           CONDITION: "#/components/schemas/ConditionSelector"
+          MCP: "#/components/schemas/McpSelector"
       required:
         - type
     ServiceV4:
@@ -2023,6 +2032,21 @@ components:
       required:
         - enabled
         - policy
+    McpSelector:
+      type: object
+      title: "McpSelector"
+      required:
+        - methods
+      allOf:
+        - $ref: "#/components/schemas/BaseSelector"
+        - type: object
+          properties:
+            methods:
+              type: array
+              description: MCP Methods to select on
+              items:
+                type: string
+              uniqueItems: true
     StepV4:
       description: Flow step
       allOf:

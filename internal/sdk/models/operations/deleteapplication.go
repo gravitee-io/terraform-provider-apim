@@ -54,7 +54,7 @@ func (d DeleteApplicationRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteApplicationRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"hrid"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil

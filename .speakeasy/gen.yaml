@@ -20,6 +20,8 @@ generation:
   sdkHooksConfigAccess: true
   schemas:
     allOfMergeStrategy: shallowMerge
+  requestBodyFieldName: ""
+  persistentEdits: {}
   tests:
     generateTests: false
     generateNewTests: true
@@ -29,7 +31,7 @@ go:
   additionalDependencies:
     github.com/golang-jwt/jwt/v5: v5.3.0
 terraform:
-  version: 0.3.1
+  version: 0.3.2
   additionalDataSources: []
   additionalDependencies: {}
   additionalEphemeralResources: []
@@ -40,7 +42,11 @@ terraform:
   allowUnknownFieldsInWeakUnions: false
   author: gravitee-io
   baseErrorName: ApimError
+  debugLogging: {}
   defaultErrorName: APIError
+  enableCustomCodeRegions: false
+  enableOperationSecurity: false
+  enableOperationServers: false
   enableTypeDeduplication: false
   environmentVariables:
     - env: APIM_SERVER_URL
@@ -57,4 +63,8 @@ terraform:
       providerAttribute: organization_id
     - env: APIM_ENV_ID
       providerAttribute: environment_id
+  excludeEmptyObjectSchemas: false
+  includeEmptyObjects: false
+  inferUnionDiscriminators: false
   packageName: apim
+  unionStrategy: populated-fields

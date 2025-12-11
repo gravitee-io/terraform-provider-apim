@@ -15,6 +15,7 @@ const (
 	ConditionSelectorTypeHTTP      ConditionSelectorType = "HTTP"
 	ConditionSelectorTypeChannel   ConditionSelectorType = "CHANNEL"
 	ConditionSelectorTypeCondition ConditionSelectorType = "CONDITION"
+	ConditionSelectorTypeMcp       ConditionSelectorType = "MCP"
 )
 
 func (e ConditionSelectorType) ToPointer() *ConditionSelectorType {
@@ -31,6 +32,8 @@ func (e *ConditionSelectorType) UnmarshalJSON(data []byte) error {
 	case "CHANNEL":
 		fallthrough
 	case "CONDITION":
+		fallthrough
+	case "MCP":
 		*e = ConditionSelectorType(v)
 		return nil
 	default:
@@ -51,7 +54,7 @@ func (c ConditionSelector) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ConditionSelector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"type", "condition"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

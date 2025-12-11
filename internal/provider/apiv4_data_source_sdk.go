@@ -341,6 +341,14 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					}
 					selectors.HTTP.Type = types.StringValue(string(selectorsItem.HTTPSelector.Type))
 				}
+				if selectorsItem.McpSelector != nil {
+					selectors.Mcp = &tfTypes.McpSelector{}
+					selectors.Mcp.Methods = make([]types.String, 0, len(selectorsItem.McpSelector.Methods))
+					for _, v := range selectorsItem.McpSelector.Methods {
+						selectors.Mcp.Methods = append(selectors.Mcp.Methods, types.StringValue(v))
+					}
+					selectors.Mcp.Type = types.StringValue(string(selectorsItem.McpSelector.Type))
+				}
 
 				flows.Selectors = append(flows.Selectors, selectors)
 			}
@@ -794,6 +802,14 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 							selectors1.HTTP.PathOperator = types.StringNull()
 						}
 						selectors1.HTTP.Type = types.StringValue(string(selectorsItem1.HTTPSelector.Type))
+					}
+					if selectorsItem1.McpSelector != nil {
+						selectors1.Mcp = &tfTypes.McpSelector{}
+						selectors1.Mcp.Methods = make([]types.String, 0, len(selectorsItem1.McpSelector.Methods))
+						for _, v := range selectorsItem1.McpSelector.Methods {
+							selectors1.Mcp.Methods = append(selectors1.Mcp.Methods, types.StringValue(v))
+						}
+						selectors1.Mcp.Type = types.StringValue(string(selectorsItem1.McpSelector.Type))
 					}
 
 					flows1.Selectors = append(flows1.Selectors, selectors1)

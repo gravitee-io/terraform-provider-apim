@@ -1,5 +1,5 @@
 workflowVersion: 1.0.0
-speakeasyVersion: 1.637.3
+speakeasyVersion: 1.676.1
 sources:
     automation-api:
         inputs:

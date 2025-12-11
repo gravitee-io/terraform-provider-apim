@@ -15,6 +15,7 @@ const (
 	HTTPSelectorTypeHTTP      HTTPSelectorType = "HTTP"
 	HTTPSelectorTypeChannel   HTTPSelectorType = "CHANNEL"
 	HTTPSelectorTypeCondition HTTPSelectorType = "CONDITION"
+	HTTPSelectorTypeMcp       HTTPSelectorType = "MCP"
 )
 
 func (e HTTPSelectorType) ToPointer() *HTTPSelectorType {
@@ -31,6 +32,8 @@ func (e *HTTPSelectorType) UnmarshalJSON(data []byte) error {
 	case "CHANNEL":
 		fallthrough
 	case "CONDITION":
+		fallthrough
+	case "MCP":
 		*e = HTTPSelectorType(v)
 		return nil
 	default:
@@ -55,7 +58,7 @@ func (h HTTPSelector) MarshalJSON() ([]byte, error) {
 }
 
 func (h *HTTPSelector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &h, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &h, "", false, nil); err != nil {
 		return err
 	}
 	return nil

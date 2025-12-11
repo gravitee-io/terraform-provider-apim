@@ -23,7 +23,7 @@ func (k KafkaListener) MarshalJSON() ([]byte, error) {
 }
 
 func (k *KafkaListener) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &k, "", false, []string{"type", "host"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &k, "", false, nil); err != nil {
 		return err
 	}
 	return nil
