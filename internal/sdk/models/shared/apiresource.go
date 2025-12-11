@@ -23,7 +23,7 @@ func (a APIResource) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIResource) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"name", "type", "configuration"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil

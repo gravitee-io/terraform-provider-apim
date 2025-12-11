@@ -56,7 +56,7 @@ func (g GetAPISubscriptionRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetAPISubscriptionRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"apiHrid", "hrid"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil

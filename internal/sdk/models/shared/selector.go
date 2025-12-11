@@ -15,13 +15,15 @@ const (
 	SelectorTypeHTTP      SelectorType = "HTTP"
 	SelectorTypeChannel   SelectorType = "CHANNEL"
 	SelectorTypeCondition SelectorType = "CONDITION"
+	SelectorTypeMcp       SelectorType = "MCP"
 )
 
 // Selector - Flow selector
 type Selector struct {
-	HTTPSelector      *HTTPSelector      `queryParam:"inline,name=Selector"`
-	ChannelSelector   *ChannelSelector   `queryParam:"inline,name=Selector"`
-	ConditionSelector *ConditionSelector `queryParam:"inline,name=Selector"`
+	HTTPSelector      *HTTPSelector      `queryParam:"inline,name=Selector" union:"member"`
+	ChannelSelector   *ChannelSelector   `queryParam:"inline,name=Selector" union:"member"`
+	ConditionSelector *ConditionSelector `queryParam:"inline,name=Selector" union:"member"`
+	McpSelector       *McpSelector       `queryParam:"inline,name=Selector" union:"member"`
 
 	Type SelectorType
 }
@@ -59,6 +61,18 @@ func CreateSelectorCondition(condition ConditionSelector) Selector {
 	return Selector{
 		ConditionSelector: &condition,
 		Type:              typ,
+	}
+}
+
+func CreateSelectorMcp(mcp McpSelector) Selector {
+	typ := SelectorTypeMcp
+
+	typStr := McpSelectorType(typ)
+	mcp.Type = typStr
+
+	return Selector{
+		McpSelector: &mcp,
+		Type:        typ,
 	}
 }
 
@@ -101,6 +115,15 @@ func (u *Selector) UnmarshalJSON(data []byte) error {
 		u.ConditionSelector = conditionSelector
 		u.Type = SelectorTypeCondition
 		return nil
+	case "MCP":
+		mcpSelector := new(McpSelector)
+		if err := utils.UnmarshalJSON(data, &mcpSelector, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == MCP) type McpSelector within Selector: %w", string(data), err)
+		}
+
+		u.McpSelector = mcpSelector
+		u.Type = SelectorTypeMcp
+		return nil
 	}
 
 	return fmt.Errorf("could not unmarshal `%s` into any supported union types for Selector", string(data))
@@ -117,6 +140,10 @@ func (u Selector) MarshalJSON() ([]byte, error) {
 
 	if u.ConditionSelector != nil {
 		return utils.MarshalJSON(u.ConditionSelector, "", true)
+	}
+
+	if u.McpSelector != nil {
+		return utils.MarshalJSON(u.McpSelector, "", true)
 	}
 
 	return nil, errors.New("could not marshal union type Selector: all fields are null")

@@ -167,8 +167,9 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								MarkdownDescription: `The type of the sampling:` + "\n" +
 									`` + "\n" +
 									`` + "`" + `PROBABILITY` + "`" + `: based on a specified probability,` + "\n" +
-									`` + "`" + `TEMPORAL` + "`" + `: all messages for on time duration,` + "\n" +
-									`` + "`" + `COUNT` + "`" + `: for every number of specified messages`,
+									`` + "`" + `TEMPORAL` + "`" + `: report one message at least every,` + "\n" +
+									`` + "`" + `COUNT` + "`" + `: for every number of specified messages,` + "\n" +
+									`` + "`" + `WINDOWED_COUNT` + "`" + `: x number of messages on a time windows,`,
 							},
 							"value": schema.StringAttribute{
 								Computed: true,
@@ -176,7 +177,8 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									`` + "\n" +
 									`` + "`" + `PROBABILITY` + "`" + `: between ` + "`" + `0.01` + "`" + ` and ` + "`" + `0.5` + "`" + `,` + "\n" +
 									`` + "`" + `TEMPORAL` + "`" + `: ISO-8601 duration format, 1 second minimum (PT1S)` + "\n" +
-									`` + "`" + `COUNT` + "`" + `: greater than ` + "`" + `1` + "`" + `,`,
+									`` + "`" + `COUNT` + "`" + `: greater than ` + "`" + `1` + "`" + `,` + "\n" +
+									`` + "`" + `WINDOWED_COUNT` + "`" + `: x/<ISO-8601 duration> cannot exceed 1 message per second`,
 							},
 						},
 						Description: `API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.`,
@@ -681,6 +683,21 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										},
 										Description: `HTTP selector`,
 									},
+									"mcp": schema.SingleNestedAttribute{
+										Computed: true,
+										Attributes: map[string]schema.Attribute{
+											"methods": schema.ListAttribute{
+												Computed:    true,
+												ElementType: types.StringType,
+												Description: `MCP Methods to select on`,
+											},
+											"type": schema.StringAttribute{
+												Computed:    true,
+												Description: `Selector type.`,
+											},
+										},
+										Description: `Base selector`,
+									},
 								},
 							},
 						},
@@ -737,7 +754,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
-				Description: `Human-readable ID of a spec`,
+				Description: `A unique human readable id identifying this resource`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
@@ -1430,6 +1447,21 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 														},
 													},
 													Description: `HTTP selector`,
+												},
+												"mcp": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"methods": schema.ListAttribute{
+															Computed:    true,
+															ElementType: types.StringType,
+															Description: `MCP Methods to select on`,
+														},
+														"type": schema.StringAttribute{
+															Computed:    true,
+															Description: `Selector type.`,
+														},
+													},
+													Description: `Base selector`,
 												},
 											},
 										},

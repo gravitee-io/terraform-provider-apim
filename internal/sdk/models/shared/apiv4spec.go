@@ -76,7 +76,7 @@ func (a APIV4Spec) MarshalJSON() ([]byte, error) {
 }
 
 func (a *APIV4Spec) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, []string{"hrid", "name", "version", "type", "listeners", "endpointGroups", "lifecycleState"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
 		return err
 	}
 	return nil

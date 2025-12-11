@@ -224,7 +224,7 @@ resource "apim_apiv4" "example" {
 - `lifecycle_state` (String) The status of the API regarding the console. must be one of ["ARCHIVED", "CREATED", "DEPRECATED", "PUBLISHED", "UNPUBLISHED"]
 - `listeners` (Attributes List) The list of listeners defining how this API can be called. They depend on the API type. (see [below for nested schema](#nestedatt--listeners))
 - `name` (String) API's name. Duplicate names can exists.
-- `type` (String) API's type. must be one of ["MESSAGE", "PROXY", "NATIVE"]
+- `type` (String) API's type. must be one of ["LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]
 - `version` (String) API's version. It's a simple string only used to help manage API versioning.
 
 ### Optional
@@ -567,14 +567,16 @@ Optional:
 - `type` (String) The type of the sampling:
 
 `PROBABILITY`: based on a specified probability,
-`TEMPORAL`: all messages for on time duration,
-`COUNT`: for every number of specified messages
-Not Null; must be one of ["PROBABILITY", "TEMPORAL", "COUNT"]
+`TEMPORAL`: report one message at least every,
+`COUNT`: for every number of specified messages,
+`WINDOWED_COUNT`: x number of messages on a time windows,
+Not Null; must be one of ["PROBABILITY", "TEMPORAL", "COUNT", "WINDOWED_COUNT"]
 - `value` (String) The value of the sampling:
 
 `PROBABILITY`: between `0.01` and `0.5`,
 `TEMPORAL`: ISO-8601 duration format, 1 second minimum (PT1S)
 `COUNT`: greater than `1`,
+`WINDOWED_COUNT`: x/<ISO-8601 duration> cannot exceed 1 message per second
 
 
 <a id="nestedatt--analytics--tracing"></a>
@@ -703,6 +705,7 @@ Optional:
 - `channel` (Attributes) Channel selector (see [below for nested schema](#nestedatt--flows--selectors--channel))
 - `condition` (Attributes) Condition selector (see [below for nested schema](#nestedatt--flows--selectors--condition))
 - `http` (Attributes) HTTP selector (see [below for nested schema](#nestedatt--flows--selectors--http))
+- `mcp` (Attributes) Base selector (see [below for nested schema](#nestedatt--flows--selectors--mcp))
 
 <a id="nestedatt--flows--selectors--channel"></a>
 ### Nested Schema for `flows.selectors.channel`
@@ -713,7 +716,7 @@ Optional:
 - `channel_operator` (String) Operator function to match a URI path. Default: "STARTS_WITH"; must be one of ["EQUALS", "STARTS_WITH"]
 - `entrypoints` (List of String) Among all entrypoints types, restrict which one will trigger this flow. Unset or empty means "all types".
 - `operations` (List of String) The list of operations associated with this channel selector.
-- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION"]
+- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]
 
 
 <a id="nestedatt--flows--selectors--condition"></a>
@@ -722,7 +725,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition of the selector. Not Null
-- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION"]
+- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]
 
 
 <a id="nestedatt--flows--selectors--http"></a>
@@ -733,7 +736,16 @@ Optional:
 - `methods` (List of String) Methods to match, unset or empty means "any"
 - `path` (String) The path to match. Default: "/"
 - `path_operator` (String) Operator function to match a URI path. Default: "STARTS_WITH"; must be one of ["EQUALS", "STARTS_WITH"]
-- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION"]
+- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]
+
+
+<a id="nestedatt--flows--selectors--mcp"></a>
+### Nested Schema for `flows.selectors.mcp`
+
+Optional:
+
+- `methods` (List of String) MCP Methods to select on. Not Null
+- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]
 
 
 
@@ -927,6 +939,7 @@ Optional:
 - `channel` (Attributes) Channel selector (see [below for nested schema](#nestedatt--plans--flows--selectors--channel))
 - `condition` (Attributes) Condition selector (see [below for nested schema](#nestedatt--plans--flows--selectors--condition))
 - `http` (Attributes) HTTP selector (see [below for nested schema](#nestedatt--plans--flows--selectors--http))
+- `mcp` (Attributes) Base selector (see [below for nested schema](#nestedatt--plans--flows--selectors--mcp))
 
 <a id="nestedatt--plans--flows--selectors--channel"></a>
 ### Nested Schema for `plans.flows.selectors.channel`
@@ -937,7 +950,7 @@ Optional:
 - `channel_operator` (String) Operator function to match a URI path. Default: "STARTS_WITH"; must be one of ["EQUALS", "STARTS_WITH"]
 - `entrypoints` (List of String) Among all entrypoints types, restrict which one will trigger this flow. Unset or empty means "all types".
 - `operations` (List of String) The list of operations associated with this channel selector.
-- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION"]
+- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]
 
 
 <a id="nestedatt--plans--flows--selectors--condition"></a>
@@ -946,7 +959,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition of the selector. Not Null
-- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION"]
+- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]
 
 
 <a id="nestedatt--plans--flows--selectors--http"></a>
@@ -957,7 +970,16 @@ Optional:
 - `methods` (List of String) Methods to match, unset or empty means "any"
 - `path` (String) The path to match. Default: "/"
 - `path_operator` (String) Operator function to match a URI path. Default: "STARTS_WITH"; must be one of ["EQUALS", "STARTS_WITH"]
-- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION"]
+- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]
+
+
+<a id="nestedatt--plans--flows--selectors--mcp"></a>
+### Nested Schema for `plans.flows.selectors.mcp`
+
+Optional:
+
+- `methods` (List of String) MCP Methods to select on. Not Null
+- `type` (String) Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]
 
 
 

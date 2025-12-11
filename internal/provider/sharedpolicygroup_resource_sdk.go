@@ -161,41 +161,41 @@ func (r *SharedPolicyGroupResourceModel) ToSharedSharedPolicyGroupSpec(ctx conte
 
 	phase := shared.FlowPhase(r.Phase.ValueString())
 	steps := make([]shared.StepV4, 0, len(r.Steps))
-	for _, stepsItem := range r.Steps {
+	for stepsIndex := range r.Steps {
 		name1 := new(string)
-		if !stepsItem.Name.IsUnknown() && !stepsItem.Name.IsNull() {
-			*name1 = stepsItem.Name.ValueString()
+		if !r.Steps[stepsIndex].Name.IsUnknown() && !r.Steps[stepsIndex].Name.IsNull() {
+			*name1 = r.Steps[stepsIndex].Name.ValueString()
 		} else {
 			name1 = nil
 		}
 		description1 := new(string)
-		if !stepsItem.Description.IsUnknown() && !stepsItem.Description.IsNull() {
-			*description1 = stepsItem.Description.ValueString()
+		if !r.Steps[stepsIndex].Description.IsUnknown() && !r.Steps[stepsIndex].Description.IsNull() {
+			*description1 = r.Steps[stepsIndex].Description.ValueString()
 		} else {
 			description1 = nil
 		}
 		enabled := new(bool)
-		if !stepsItem.Enabled.IsUnknown() && !stepsItem.Enabled.IsNull() {
-			*enabled = stepsItem.Enabled.ValueBool()
+		if !r.Steps[stepsIndex].Enabled.IsUnknown() && !r.Steps[stepsIndex].Enabled.IsNull() {
+			*enabled = r.Steps[stepsIndex].Enabled.ValueBool()
 		} else {
 			enabled = nil
 		}
 		var policy string
-		policy = stepsItem.Policy.ValueString()
+		policy = r.Steps[stepsIndex].Policy.ValueString()
 
 		var configuration interface{}
-		if !stepsItem.Configuration.IsUnknown() && !stepsItem.Configuration.IsNull() {
-			_ = json.Unmarshal([]byte(stepsItem.Configuration.ValueString()), &configuration)
+		if !r.Steps[stepsIndex].Configuration.IsUnknown() && !r.Steps[stepsIndex].Configuration.IsNull() {
+			_ = json.Unmarshal([]byte(r.Steps[stepsIndex].Configuration.ValueString()), &configuration)
 		}
 		condition := new(string)
-		if !stepsItem.Condition.IsUnknown() && !stepsItem.Condition.IsNull() {
-			*condition = stepsItem.Condition.ValueString()
+		if !r.Steps[stepsIndex].Condition.IsUnknown() && !r.Steps[stepsIndex].Condition.IsNull() {
+			*condition = r.Steps[stepsIndex].Condition.ValueString()
 		} else {
 			condition = nil
 		}
 		messageCondition := new(string)
-		if !stepsItem.MessageCondition.IsUnknown() && !stepsItem.MessageCondition.IsNull() {
-			*messageCondition = stepsItem.MessageCondition.ValueString()
+		if !r.Steps[stepsIndex].MessageCondition.IsUnknown() && !r.Steps[stepsIndex].MessageCondition.IsNull() {
+			*messageCondition = r.Steps[stepsIndex].MessageCondition.ValueString()
 		} else {
 			messageCondition = nil
 		}

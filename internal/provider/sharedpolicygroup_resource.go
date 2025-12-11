@@ -77,9 +77,11 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `API's type. must be one of ["MESSAGE", "PROXY", "NATIVE"]`,
+				Description: `API's type. must be one of ["LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
+						"LLM_PROXY",
+						"MCP_PROXY",
 						"MESSAGE",
 						"PROXY",
 						"NATIVE",
@@ -603,7 +605,10 @@ func (r *SharedPolicyGroupResource) Delete(ctx context.Context, req resource.Del
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
