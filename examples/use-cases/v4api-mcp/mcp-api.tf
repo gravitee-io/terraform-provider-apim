@@ -122,12 +122,12 @@ resource "apim_apiv4" "mcp" {
       enabled = true
       selectors = [
         {
-          type         = "HTTP"
+          type = "HTTP"
           "http" : {
             type         = "HTTP"
             path         = "/v1/forecast"
             pathOperator = "EQUALS"
-            methods = ["GET"]
+            methods      = ["GET"]
           }
         }
       ]

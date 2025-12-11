@@ -1,0 +1,18 @@
+---
+page_title: "API with MCP"
+subcategory: "V4 API"
+---
+
+# Create an HTTP proxy API with MCP entrypoint.
+
+This API proxies to Open Weather API performing a POST request for you.
+
+* call GET /open-weatherapis/v1/forecast to get a predefined 7-days weather forecast.
+* call GET /open-weatherapis/mcp to get the MCP payload.
+
+Tool definition has been forged from an OpenAPI you can find as a documentation page.
+It is ready to be used with you favorite AI agent.
+
+```terraform
+{{ .V4ApiMCP.Content }}
+```
