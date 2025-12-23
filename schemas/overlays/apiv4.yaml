@@ -43,6 +43,14 @@ actions:
   - target: $.components.schemas.ApiV4State.allOf[?@.properties.organizationId].properties.organizationId
     description: Not returned by the API, so prevent null values during refresh
     remove: true
+  - target: $.components.schemas.PlanV4.properties.id
+    description: Not returned by the API, so prevent null values during refresh
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.PageV4.properties.id
+    description: Not returned by the API, so prevent null values during refresh
+    update:
+      x-speakeasy-terraform-ignore: true
 
   ## Schemaless config
   - target: $.components.schemas.EndpointGroupV4.properties.sharedConfiguration
