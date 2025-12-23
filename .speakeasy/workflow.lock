@@ -1,4 +1,4 @@
-speakeasyVersion: 1.676.1
+speakeasyVersion: 1.678.0
 sources:
     Gravitee.io - Automation API:
         sourceNamespace: gravitee-io-gko---automation-api
@@ -9,8 +9,8 @@ sources:
             - 0.2.0
     automation-api:
         sourceNamespace: gravitee-io-gko---automation-api
-        sourceRevisionDigest: sha256:2753a80fba0bf96dc587625b22fbd4ce7acb509bb19b7202829d4a96e00b4111
-        sourceBlobDigest: sha256:bf841078159280c7f7fa590c060ec83aa03aac5a21e96f9a05f60502e4c70dd8
+        sourceRevisionDigest: sha256:dead3bc01a2f21d8fe733e351199e65e6c9513b18fa271d431b4cf4c4047cf37
+        sourceBlobDigest: sha256:065fecfa401098195202c83485dc67306e8a577f8bd4826d60a40ed70c335bf4
         tags:
             - latest
             - 1.0.0
@@ -18,8 +18,8 @@ targets:
     apim:
         source: automation-api
         sourceNamespace: gravitee-io-gko---automation-api
-        sourceRevisionDigest: sha256:2753a80fba0bf96dc587625b22fbd4ce7acb509bb19b7202829d4a96e00b4111
-        sourceBlobDigest: sha256:bf841078159280c7f7fa590c060ec83aa03aac5a21e96f9a05f60502e4c70dd8
+        sourceRevisionDigest: sha256:dead3bc01a2f21d8fe733e351199e65e6c9513b18fa271d431b4cf4c4047cf37
+        sourceBlobDigest: sha256:065fecfa401098195202c83485dc67306e8a577f8bd4826d60a40ed70c335bf4
     gravitee-apim:
         source: Gravitee.io - Automation API
         sourceNamespace: gravitee-io-gko---automation-api
@@ -27,7 +27,7 @@ targets:
         sourceBlobDigest: sha256:e5bdd28116e0660af601a098573e8a5044ef09f829e56844984aec28f40ca240
 workflow:
     workflowVersion: 1.0.0
-    speakeasyVersion: 1.676.1
+    speakeasyVersion: 1.678.0
     sources:
         automation-api:
             inputs:

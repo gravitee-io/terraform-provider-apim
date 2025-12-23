@@ -67,4 +67,5 @@ terraform:
   includeEmptyObjects: false
   inferUnionDiscriminators: false
   packageName: apim
+  respectRequiredFields: false
   unionStrategy: populated-fields
