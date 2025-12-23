@@ -224,7 +224,7 @@ resource "apim_apiv4" "example" {
 - `lifecycle_state` (String) The status of the API regarding the console. must be one of ["ARCHIVED", "CREATED", "DEPRECATED", "PUBLISHED", "UNPUBLISHED"]
 - `listeners` (Attributes List) The list of listeners defining how this API can be called. They depend on the API type. (see [below for nested schema](#nestedatt--listeners))
 - `name` (String) API's name. Duplicate names can exists.
-- `type` (String) API's type. must be one of ["LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]
+- `type` (String) API's type. must be one of ["A2A_PROXY", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]
 - `version` (String) API's version. It's a simple string only used to help manage API versioning.
 
 ### Optional
@@ -1004,7 +1004,7 @@ Optional:
 Optional:
 
 - `configuration` (String) JSON Object to configure specific attributes of a Plan. Parsed as JSON.
-- `type` (String) API Plan security implementation. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS"]
+- `type` (String) API Plan security implementation. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS", "API_KEY"]
 
 
 
