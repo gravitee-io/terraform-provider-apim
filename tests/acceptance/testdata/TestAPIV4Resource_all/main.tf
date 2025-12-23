@@ -38,11 +38,11 @@ resource "apim_apiv4" "test" {
             "content-type"
           ]
           allow_methods = [
-            # "DELETE",
+            "DELETE",
             "GET",
             "OPTIONS",
-            # "PUT",
-            # "POST",
+            "PUT",
+            "POST",
           ]
           allow_origin = [
             ".*\\.acme\\.com",

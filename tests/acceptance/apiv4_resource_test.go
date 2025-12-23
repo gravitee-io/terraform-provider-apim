@@ -620,6 +620,15 @@ func TestAPIV4Resource_cors(t *testing.T) {
 					),
 				},
 			},
+			// Update `allow_methods` and set '*'.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid":          config.StringVariable(randomId),
+					"allow_methods": config.ListVariable(config.StringVariable("*")),
+				},
+			},
 			// Update `allow_origin`.
 			{
 				ProtoV6ProviderFactories: testProviders(),
