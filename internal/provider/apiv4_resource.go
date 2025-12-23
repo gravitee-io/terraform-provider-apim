@@ -1314,9 +1314,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Attributes: map[string]schema.Attribute{
 									"channel": schema.SingleNestedAttribute{
 										Optional: true,
-										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.UseConfigValue(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"channel": schema.StringAttribute{
 												Computed:    true,
@@ -1380,9 +1377,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"condition": schema.SingleNestedAttribute{
 										Optional: true,
-										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.UseConfigValue(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"condition": schema.StringAttribute{
 												Computed:    true,
@@ -1418,9 +1412,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"http": schema.SingleNestedAttribute{
 										Optional: true,
-										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.UseConfigValue(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"methods": schema.ListAttribute{
 												Computed:    true,
@@ -1478,9 +1469,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"mcp": schema.SingleNestedAttribute{
 										Optional: true,
-										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.UseConfigValue(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"methods": schema.ListAttribute{
 												Computed:    true,
@@ -1700,9 +1688,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					Attributes: map[string]schema.Attribute{
 						"http": schema.SingleNestedAttribute{
 							Optional: true,
-							PlanModifiers: []planmodifier.Object{
-								speakeasy_objectplanmodifier.UseConfigValue(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"cors": schema.SingleNestedAttribute{
 									Computed: true,
@@ -1888,9 +1873,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						"kafka": schema.SingleNestedAttribute{
 							Optional: true,
-							PlanModifiers: []planmodifier.Object{
-								speakeasy_objectplanmodifier.UseConfigValue(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"entrypoints": schema.ListNestedAttribute{
 									Computed: true,
@@ -1987,9 +1969,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						"subscription": schema.SingleNestedAttribute{
 							Optional: true,
-							PlanModifiers: []planmodifier.Object{
-								speakeasy_objectplanmodifier.UseConfigValue(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"entrypoints": schema.ListNestedAttribute{
 									Computed: true,
@@ -2078,9 +2057,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						"tcp": schema.SingleNestedAttribute{
 							Optional: true,
-							PlanModifiers: []planmodifier.Object{
-								speakeasy_objectplanmodifier.UseConfigValue(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"entrypoints": schema.ListNestedAttribute{
 									Computed: true,
@@ -3065,9 +3041,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											Attributes: map[string]schema.Attribute{
 												"channel": schema.SingleNestedAttribute{
 													Optional: true,
-													PlanModifiers: []planmodifier.Object{
-														speakeasy_objectplanmodifier.UseConfigValue(),
-													},
 													Attributes: map[string]schema.Attribute{
 														"channel": schema.StringAttribute{
 															Computed:    true,
@@ -3131,9 +3104,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												"condition": schema.SingleNestedAttribute{
 													Optional: true,
-													PlanModifiers: []planmodifier.Object{
-														speakeasy_objectplanmodifier.UseConfigValue(),
-													},
 													Attributes: map[string]schema.Attribute{
 														"condition": schema.StringAttribute{
 															Computed:    true,
@@ -3169,9 +3139,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												"http": schema.SingleNestedAttribute{
 													Optional: true,
-													PlanModifiers: []planmodifier.Object{
-														speakeasy_objectplanmodifier.UseConfigValue(),
-													},
 													Attributes: map[string]schema.Attribute{
 														"methods": schema.ListAttribute{
 															Computed:    true,
@@ -3229,9 +3196,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												"mcp": schema.SingleNestedAttribute{
 													Optional: true,
-													PlanModifiers: []planmodifier.Object{
-														speakeasy_objectplanmodifier.UseConfigValue(),
-													},
 													Attributes: map[string]schema.Attribute{
 														"methods": schema.ListAttribute{
 															Computed:    true,
