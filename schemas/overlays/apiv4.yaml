@@ -342,6 +342,14 @@ actions:
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.PlanV4.properties.id
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.PageV4.properties.id
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.PageV4.properties.crossId
     description: Prevent unknown values if unconfigured
     update:
