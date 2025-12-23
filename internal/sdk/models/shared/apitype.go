@@ -11,6 +11,7 @@ import (
 type APIType string
 
 const (
+	APITypeA2AProxy APIType = "A2A_PROXY"
 	APITypeLlmProxy APIType = "LLM_PROXY"
 	APITypeMcpProxy APIType = "MCP_PROXY"
 	APITypeMessage  APIType = "MESSAGE"
@@ -27,6 +28,8 @@ func (e *APIType) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	switch v {
+	case "A2A_PROXY":
+		fallthrough
 	case "LLM_PROXY":
 		fallthrough
 	case "MCP_PROXY":
