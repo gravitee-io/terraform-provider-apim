@@ -15,6 +15,7 @@ const (
 	PlanSecurityTypeOauth2  PlanSecurityType = "OAUTH2"
 	PlanSecurityTypeJwt     PlanSecurityType = "JWT"
 	PlanSecurityTypeMtls    PlanSecurityType = "MTLS"
+	PlanSecurityTypeAPIKey  PlanSecurityType = "API_KEY"
 )
 
 func (e PlanSecurityType) ToPointer() *PlanSecurityType {
@@ -33,6 +34,8 @@ func (e *PlanSecurityType) UnmarshalJSON(data []byte) error {
 	case "JWT":
 		fallthrough
 	case "MTLS":
+		fallthrough
+	case "API_KEY":
 		*e = PlanSecurityType(v)
 		return nil
 	default:

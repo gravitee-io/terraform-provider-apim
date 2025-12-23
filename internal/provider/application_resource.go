@@ -137,7 +137,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{

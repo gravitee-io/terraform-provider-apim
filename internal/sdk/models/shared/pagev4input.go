@@ -8,6 +8,10 @@ import (
 
 // PageV4Input - Documentation page.
 type PageV4Input struct {
+	// Legacy API Page GUID for backward compatibility with GKO
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	ID *string `json:"id,omitempty"`
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
 	// This is the display name of the page in APIM and on the portal.
@@ -45,6 +49,13 @@ func (p *PageV4Input) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (p *PageV4Input) GetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ID
 }
 
 func (p *PageV4Input) GetHrid() string {

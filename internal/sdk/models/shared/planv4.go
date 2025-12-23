@@ -8,6 +8,10 @@ import (
 
 // PlanV4 - API Plan
 type PlanV4 struct {
+	// Legacy API Plan GUID for backward compatibility with GKO
+	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	ID *string `json:"id,omitempty"`
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
 	// Name of the plan
@@ -52,6 +56,13 @@ func (p *PlanV4) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (p *PlanV4) GetID() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ID
 }
 
 func (p *PlanV4) GetHrid() string {

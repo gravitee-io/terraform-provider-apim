@@ -1796,6 +1796,8 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	}
 	plans := make([]shared.PlanV4, 0, len(r.Plans))
 	for plansIndex := range r.Plans {
+		// APIV4#create,update.plans.idAPIV4#create,update.plans.id impedance mismatch: string != arraytrace=["APIV4#create,update.req.plans.[].characteristics"]
+		var id *string
 		var hrid1 string
 		hrid1 = r.Plans[plansIndex].Hrid.ValueString()
 
@@ -2272,6 +2274,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			generalConditionsHrid = nil
 		}
 		plans = append(plans, shared.PlanV4{
+			ID:                    id,
 			Hrid:                  hrid1,
 			Name:                  name4,
 			Description:           description1,
@@ -2809,11 +2812,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	}
 	var primaryOwner *shared.PrimaryOwner
 	if r.PrimaryOwner != nil {
-		id := new(string)
+		id1 := new(string)
 		if !r.PrimaryOwner.ID.IsUnknown() && !r.PrimaryOwner.ID.IsNull() {
-			*id = r.PrimaryOwner.ID.ValueString()
+			*id1 = r.PrimaryOwner.ID.ValueString()
 		} else {
-			id = nil
+			id1 = nil
 		}
 		email := new(string)
 		if !r.PrimaryOwner.Email.IsUnknown() && !r.PrimaryOwner.Email.IsNull() {
@@ -2834,7 +2837,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			typeVar20 = nil
 		}
 		primaryOwner = &shared.PrimaryOwner{
-			ID:          id,
+			ID:          id1,
 			Email:       email,
 			DisplayName: displayName,
 			Type:        typeVar20,
@@ -2913,6 +2916,8 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	}
 	pages := make([]shared.PageV4Input, 0, len(r.Pages))
 	for pagesIndex := range r.Pages {
+		// APIV4#create,update.pages.idAPIV4#create,update.pages.id impedance mismatch: string != maptrace=["APIV4#create,update.req.pages.[].configuration"]
+		var id2 *string
 		var hrid2 string
 		hrid2 = r.Pages[pagesIndex].Hrid.ValueString()
 
@@ -2975,6 +2980,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			parentHrid = nil
 		}
 		pages = append(pages, shared.PageV4Input{
+			ID:            id2,
 			Hrid:          hrid2,
 			Name:          name20,
 			Type:          type9,
