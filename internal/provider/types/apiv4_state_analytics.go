@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type Analytics struct {
+type APIV4StateAnalytics struct {
 	Enabled  types.Bool `tfsdk:"enabled"`
 	Logging  *LoggingV4 `tfsdk:"logging"`
 	Sampling *Sampling  `tfsdk:"sampling"`

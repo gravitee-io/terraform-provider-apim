@@ -21,7 +21,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		if resp.Analytics == nil {
 			r.Analytics = nil
 		} else {
-			r.Analytics = &tfTypes.Analytics{}
+			r.Analytics = &tfTypes.APIV4StateAnalytics{}
 			r.Analytics.Enabled = types.BoolPointerValue(resp.Analytics.Enabled)
 			if resp.Analytics.Logging == nil {
 				r.Analytics.Logging = nil

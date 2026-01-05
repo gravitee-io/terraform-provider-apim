@@ -90,7 +90,6 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				Description: `The Cross ID is used to identify a shared policy group that has been promoted from one environment to another.`,
 			},
 			"description": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `The description of the shared policy group`,
 				Validators: []validator.String{
@@ -148,18 +147,13 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				},
 			},
 			"prerequisite_message": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Optional:    true,
 				Description: `The prerequisite message of the shared policy group. This message is displayed to the user to help understand the prerequisite to use the shared policy group.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(1024),
 				},
 			},
 			"steps": schema.ListNestedAttribute{
-				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
@@ -167,7 +161,6 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 					},
 					Attributes: map[string]schema.Attribute{
 						"condition": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 							Validators: []validator.String{
@@ -176,12 +169,10 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 						},
 						"configuration": schema.StringAttribute{
 							CustomType:  jsontypes.NormalizedType{},
-							Computed:    true,
 							Optional:    true,
 							Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `A description for the step`,
 							Validators: []validator.String{
@@ -203,7 +194,6 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							},
 						},
 						"name": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `The name of the step`,
 							Validators: []validator.String{
@@ -211,7 +201,6 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							},
 						},
 						"policy": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `The policy of the step (plugin ID). Not Null`,
 							Validators: []validator.String{

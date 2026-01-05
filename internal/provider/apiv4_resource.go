@@ -7,7 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	speakeasy_boolplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/boolplanmodifier"
 	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
@@ -61,7 +60,7 @@ type Apiv4Resource struct {
 
 // Apiv4ResourceModel describes the resource data model.
 type Apiv4ResourceModel struct {
-	Analytics         *tfTypes.Analytics                             `tfsdk:"analytics"`
+	Analytics         *tfTypes.APIV4SpecAnalytics                    `tfsdk:"analytics"`
 	Categories        []types.String                                 `tfsdk:"categories"`
 	Description       types.String                                   `tfsdk:"description"`
 	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
@@ -102,11 +101,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 		MarkdownDescription: "Apiv4 Resource",
 		Attributes: map[string]schema.Attribute{
 			"analytics": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
-						Computed:    true,
 						Optional:    true,
 						Description: `Whether or not analytics are enabled.`,
 					},
@@ -115,7 +112,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"condition": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Filter using EL what request should be logged`,
 							},
@@ -124,27 +120,22 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"headers": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Enable to log request headers`,
 									},
 									"message_headers": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Enable to log message headers (Message APIs only)`,
 									},
 									"message_metadata": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Enable to log message metadata (Message APIs only)`,
 									},
 									"message_payload": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Enable to log message headers (Message APIs only)`,
 									},
 									"payload": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Enable to log request headers (Proxy APIs only)`,
 									},
@@ -152,7 +143,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Description: `API logging content when one of logging mode is enabled (Not for native APIs)`,
 							},
 							"message_condition": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Filter using EL what message should be logged`,
 							},
@@ -161,12 +151,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"endpoint": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Enables endpoint logging`,
 									},
 									"entrypoint": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Enables entrypoint logging`,
 									},
@@ -178,12 +166,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"request": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Enables logging durring request phase`,
 									},
 									"response": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Enables logging durring response phase`,
 									},
@@ -198,7 +184,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Computed: true,
 								Optional: true,
 								MarkdownDescription: `The type of the sampling:` + "\n" +
 									`` + "\n" +
@@ -218,7 +203,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 							},
 							"value": schema.StringAttribute{
-								Computed: true,
 								Optional: true,
 								MarkdownDescription: `The value of the sampling:` + "\n" +
 									`` + "\n" +
@@ -235,12 +219,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Enable OpenTelemetry tracing`,
 							},
 							"verbose": schema.BoolAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `Enable technical tracing to get more details on request execution. Be careful this settings can generate more noise and can impact performance.`,
 							},
@@ -258,7 +240,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `The list of category names (or UUID) associated with this API. Default: []`,
 			},
 			"description": schema.StringAttribute{
-				Computed:    true,
 				Optional:    true,
 				Description: `Basic API documentation to describe what this API does.`,
 				Validators: []validator.String{
@@ -273,7 +254,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"endpoints": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
@@ -282,7 +262,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Attributes: map[string]schema.Attribute{
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
 										Optional:    true,
 										Description: `JSON Configuration specific to this endpoint that cannot be define at the group level. Parsed as JSON.`,
 									},
@@ -293,7 +272,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Enables shared configuration inheritance. Default: false`,
 									},
 									"name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the endpoint`,
 									},
@@ -313,7 +291,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Attributes: map[string]schema.Attribute{
 													"configuration": schema.StringAttribute{
 														CustomType:  jsontypes.NormalizedType{},
-														Computed:    true,
 														Optional:    true,
 														Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
 														Validators: []validator.String{
@@ -333,7 +310,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 														Description: `When the configuration overrides an inherited configuration. Default: false`,
 													},
 													"type": schema.StringAttribute{
-														Computed:    true,
 														Optional:    true,
 														Description: `The service plugin ID used. Not Null`,
 														Validators: []validator.String{
@@ -348,18 +324,15 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"shared_configuration_override": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
 										Optional:    true,
 										Description: `JSON Configuration that replaces the shared configuration defined at the group level. Parsed as JSON.`,
 									},
 									"tenants": schema.ListAttribute{
-										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 										Description: `The list of Getaway's tenants on which the endpoint can be used.`,
 									},
 									"type": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The type of endpoint. Not Null`,
 										Validators: []validator.String{
@@ -398,7 +371,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Load Balancer to distribute traffic between endpoints.`,
 						},
 						"name": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `The name of the endpoint group`,
 						},
@@ -412,7 +384,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
 											CustomType:  jsontypes.NormalizedType{},
-											Computed:    true,
 											Optional:    true,
 											Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
 											Validators: []validator.String{
@@ -432,7 +403,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											Description: `When the configuration overrides an inherited configuration. Default: false`,
 										},
 										"type": schema.StringAttribute{
-											Computed:    true,
 											Optional:    true,
 											Description: `The service plugin ID used. Not Null`,
 											Validators: []validator.String{
@@ -448,7 +418,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
 											CustomType:  jsontypes.NormalizedType{},
-											Computed:    true,
 											Optional:    true,
 											Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
 											Validators: []validator.String{
@@ -468,7 +437,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											Description: `When the configuration overrides an inherited configuration. Default: false`,
 										},
 										"type": schema.StringAttribute{
-											Computed:    true,
 											Optional:    true,
 											Description: `The service plugin ID used. Not Null`,
 											Validators: []validator.String{
@@ -483,12 +451,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						"shared_configuration": schema.StringAttribute{
 							CustomType:  jsontypes.NormalizedType{},
-							Computed:    true,
 							Optional:    true,
 							Description: `JSON configuration for the ` + "`" + `type` + "`" + ` of ` + "`" + `endpoints` + "`" + ` that will be shared across all endpoints. Parsed as JSON.`,
 						},
 						"type": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `The type of the endpoint group. Not Null`,
 							Validators: []validator.String{
@@ -585,7 +551,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Flow execution enablement (Not applicable for Native API)`,
 			},
 			"flows": schema.ListNestedAttribute{
-				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
@@ -593,7 +558,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"connect": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
@@ -601,7 +565,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 										Validators: []validator.String{
@@ -610,12 +573,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
 										Optional:    true,
 										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `A description for the step`,
 										Validators: []validator.String{
@@ -637,7 +598,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the step`,
 										Validators: []validator.String{
@@ -645,7 +605,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"policy": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
@@ -664,7 +623,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Is the flow enabled. Default: true`,
 						},
 						"interact": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
@@ -672,7 +630,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 										Validators: []validator.String{
@@ -681,12 +638,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
 										Optional:    true,
 										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `A description for the step`,
 										Validators: []validator.String{
@@ -708,7 +663,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the step`,
 										Validators: []validator.String{
@@ -716,7 +670,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"policy": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
@@ -729,7 +682,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Interact flow steps used for NATIVE APIs`,
 						},
 						"name": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `Flow's name.`,
 							Validators: []validator.String{
@@ -737,7 +689,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"publish": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
@@ -745,7 +696,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 										Validators: []validator.String{
@@ -754,12 +704,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
 										Optional:    true,
 										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `A description for the step`,
 										Validators: []validator.String{
@@ -781,7 +729,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the step`,
 										Validators: []validator.String{
@@ -789,7 +736,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"policy": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
@@ -802,7 +748,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Publish flow steps used for MESSAGE and NATIVE APIs`,
 						},
 						"request": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
@@ -810,7 +755,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 										Validators: []validator.String{
@@ -819,12 +763,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
 										Optional:    true,
 										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `A description for the step`,
 										Validators: []validator.String{
@@ -846,7 +788,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the step`,
 										Validators: []validator.String{
@@ -854,7 +795,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"policy": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
@@ -867,7 +807,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Request flow steps used for PROXY and MESSAGE APIs`,
 						},
 						"response": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
@@ -875,7 +814,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 										Validators: []validator.String{
@@ -884,12 +822,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
 										Optional:    true,
 										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `A description for the step`,
 										Validators: []validator.String{
@@ -911,7 +847,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the step`,
 										Validators: []validator.String{
@@ -919,7 +854,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"policy": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
@@ -932,7 +866,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Response flow steps used for PROXY and MESSAGE APIs`,
 						},
 						"selectors": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
@@ -982,7 +915,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 												Validators: []validator.String{
@@ -1020,7 +952,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 												Validators: []validator.String{
@@ -1080,7 +1011,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 												Validators: []validator.String{
@@ -1120,7 +1050,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 												Validators: []validator.String{
@@ -1147,7 +1076,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"subscribe": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
@@ -1155,7 +1083,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 										Validators: []validator.String{
@@ -1164,12 +1091,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
-										Computed:    true,
 										Optional:    true,
 										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `A description for the step`,
 										Validators: []validator.String{
@@ -1191,7 +1116,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The name of the step`,
 										Validators: []validator.String{
@@ -1199,7 +1123,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"policy": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
@@ -1212,7 +1135,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Subscribe flow steps used for MESSAGE and NATIVE APIs`,
 						},
 						"tags": schema.ListAttribute{
-							Computed:    true,
 							Optional:    true,
 							ElementType: types.StringType,
 							Description: `Flow's informative tags.`,
@@ -1291,12 +1213,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									Optional: true,
 									Attributes: map[string]schema.Attribute{
 										"allow_credentials": schema.BoolAttribute{
-											Computed:    true,
 											Optional:    true,
 											Description: `` + "`" + `Access-Control-Allow-Credentials` + "`" + `: Indicates whether or not the response to the request can be exposed when the credentials flag is true.`,
 										},
 										"allow_headers": schema.ListAttribute{
-											Computed:    true,
 											Optional:    true,
 											ElementType: types.StringType,
 											Description: `` + "`" + `Access-Control-Allow-Headers` + "`" + `: Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request.`,
@@ -1305,7 +1225,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 										},
 										"allow_methods": schema.ListAttribute{
-											Computed:    true,
 											Optional:    true,
 											ElementType: types.StringType,
 											Description: `` + "`" + `Access-Control-Allow-Methods` + "`" + `: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource.`,
@@ -1314,7 +1233,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 										},
 										"allow_origin": schema.ListAttribute{
-											Computed:    true,
 											Optional:    true,
 											ElementType: types.StringType,
 											MarkdownDescription: `` + "`" + `Access-Control-Allow-Origin` + "`" + `: The origin parameter specifies a URI that may access the resource. Scheme, domain and port are part of the same-origin definition.` + "\n" +
@@ -1324,12 +1242,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 										},
 										"enabled": schema.BoolAttribute{
-											Computed:    true,
 											Optional:    true,
 											Description: `Enable CORS`,
 										},
 										"expose_headers": schema.ListAttribute{
-											Computed:    true,
 											Optional:    true,
 											ElementType: types.StringType,
 											Description: `` + "`" + `Access-Control-Expose-Headers` + "`" + `: This header lets a server whitelist headers that browsers are allowed to access.`,
@@ -1344,7 +1260,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											Description: `How long (in seconds) the results of a preflight request can be cached (-1 if disabled). Default: -1`,
 										},
 										"run_policies": schema.BoolAttribute{
-											Computed:    true,
 											Optional:    true,
 											Description: `Allow the Gateway to run policies during in pre-flight request`,
 										},
@@ -1352,7 +1267,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									Description: `Http listener Cross-Origin Resource Sharing`,
 								},
 								"entrypoints": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Validators: []validator.Object{
@@ -1361,7 +1275,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
 												CustomType:  jsontypes.NormalizedType{},
-												Computed:    true,
 												Optional:    true,
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
@@ -1370,7 +1283,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
-														Computed:    true,
 														Optional:    true,
 														Description: `The endpoint of the DLQ.`,
 													},
@@ -1392,7 +1304,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `The type of the entrypoint. Not Null`,
 												Validators: []validator.String{
@@ -1415,7 +1326,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 										Attributes: map[string]schema.Attribute{
 											"host": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Virtual host required to access this API. (` + "`" + `Host` + "`" + ` or ` + "`" + `:Authority` + "`" + ` headers, remote address for websockets)`,
 											},
@@ -1439,7 +1349,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
@@ -1475,7 +1384,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 							Attributes: map[string]schema.Attribute{
 								"entrypoints": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Validators: []validator.Object{
@@ -1484,7 +1392,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
 												CustomType:  jsontypes.NormalizedType{},
-												Computed:    true,
 												Optional:    true,
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
@@ -1493,7 +1400,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
-														Computed:    true,
 														Optional:    true,
 														Description: `The endpoint of the DLQ.`,
 													},
@@ -1515,7 +1421,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `The type of the entrypoint. Not Null`,
 												Validators: []validator.String{
@@ -1538,7 +1443,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
@@ -1574,7 +1478,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 							Attributes: map[string]schema.Attribute{
 								"entrypoints": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Validators: []validator.Object{
@@ -1583,7 +1486,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
 												CustomType:  jsontypes.NormalizedType{},
-												Computed:    true,
 												Optional:    true,
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
@@ -1592,7 +1494,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
-														Computed:    true,
 														Optional:    true,
 														Description: `The endpoint of the DLQ.`,
 													},
@@ -1614,7 +1515,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `The type of the entrypoint. Not Null`,
 												Validators: []validator.String{
@@ -1629,7 +1529,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
@@ -1665,7 +1564,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 							Attributes: map[string]schema.Attribute{
 								"entrypoints": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Validators: []validator.Object{
@@ -1674,7 +1572,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
 												CustomType:  jsontypes.NormalizedType{},
-												Computed:    true,
 												Optional:    true,
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
@@ -1683,7 +1580,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
-														Computed:    true,
 														Optional:    true,
 														Description: `The endpoint of the DLQ.`,
 													},
@@ -1705,7 +1601,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `The type of the entrypoint. Not Null`,
 												Validators: []validator.String{
@@ -1730,7 +1625,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
-									Computed:    true,
 									Optional:    true,
 									ElementType: types.StringType,
 									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
@@ -1781,33 +1675,21 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"role": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The role of the user in regards of the managed oject (API, Application, etc.). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"source": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `Where the memeber was created (system, idp, etc.). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"source_id": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `Id of the user in the source. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -1835,11 +1717,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"default_value": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The default value of the metadata if the value is not set.`,
 						},
 						"format": schema.StringAttribute{
@@ -1862,42 +1740,27 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"hidden": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  booldefault.StaticBool(false),
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(false),
 							Description: `if this metadata should be hidden. Default: false`,
 						},
 						"key": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The key of the metadata if different from sanitized name (lowercase + hyphens).`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtLeast(1),
 							},
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The name of the metadata. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"value": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The value of the metadata.`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtLeast(1),
@@ -1931,7 +1794,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `organization ID`,
 			},
 			"pages": schema.ListNestedAttribute{
-				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
@@ -1939,13 +1801,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"configuration": schema.MapAttribute{
-							Computed:    true,
 							Optional:    true,
 							ElementType: types.StringType,
 							Description: `Key/value page configuration (Configure swagger UI or or use Redoc instead)`,
 						},
 						"content": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `The content of the page, if any.`,
 						},
@@ -1970,7 +1830,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
 							Optional: true,
 							MarkdownDescription: `This is the display name of the page in APIM and on the portal.` + "\n" +
 								`This field can be edited safely if you want to rename a page.` + "\n" +
@@ -1981,7 +1840,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"parent_hrid": schema.StringAttribute{
-							Computed: true,
 							Optional: true,
 							MarkdownDescription: `If your page contains a folder, setting this field to the folder's hrid will be reflected ` + "\n" +
 								`into APIM by making the page a child of this folder.`,
@@ -1998,12 +1856,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
 									CustomType:  jsontypes.NormalizedType{},
-									Computed:    true,
 									Optional:    true,
 									Description: `JSON object configuration of the fetch plugin. Parsed as JSON.`,
 								},
 								"type": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `The type of the page source (fetcher plugin ID).`,
 									Validators: []validator.String{
@@ -2051,7 +1907,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.`,
 			},
 			"plans": schema.ListNestedAttribute{
-				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
@@ -2059,24 +1914,20 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"characteristics": schema.ListAttribute{
-							Computed:    true,
 							Optional:    true,
 							ElementType: types.StringType,
 							Description: `Plan informative characteristics`,
 						},
 						"description": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `A description for this plan.`,
 						},
 						"excluded_groups": schema.ListAttribute{
-							Computed:    true,
 							Optional:    true,
 							ElementType: types.StringType,
 							Description: `Access-control, UUID of groups excluded from this plan`,
 						},
 						"flows": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
@@ -2084,7 +1935,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"connect": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -2092,7 +1942,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 													Validators: []validator.String{
@@ -2101,12 +1950,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
-													Computed:    true,
 													Optional:    true,
 													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `A description for the step`,
 													Validators: []validator.String{
@@ -2128,7 +1975,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"name": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The name of the step`,
 													Validators: []validator.String{
@@ -2136,7 +1982,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"policy": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
@@ -2155,7 +2000,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Is the flow enabled. Default: true`,
 									},
 									"interact": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -2163,7 +2007,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 													Validators: []validator.String{
@@ -2172,12 +2015,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
-													Computed:    true,
 													Optional:    true,
 													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `A description for the step`,
 													Validators: []validator.String{
@@ -2199,7 +2040,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"name": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The name of the step`,
 													Validators: []validator.String{
@@ -2207,7 +2047,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"policy": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
@@ -2220,7 +2059,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Interact flow steps used for NATIVE APIs`,
 									},
 									"name": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `Flow's name.`,
 										Validators: []validator.String{
@@ -2228,7 +2066,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"publish": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -2236,7 +2073,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 													Validators: []validator.String{
@@ -2245,12 +2081,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
-													Computed:    true,
 													Optional:    true,
 													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `A description for the step`,
 													Validators: []validator.String{
@@ -2272,7 +2106,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"name": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The name of the step`,
 													Validators: []validator.String{
@@ -2280,7 +2113,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"policy": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
@@ -2293,7 +2125,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Publish flow steps used for MESSAGE and NATIVE APIs`,
 									},
 									"request": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -2301,7 +2132,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 													Validators: []validator.String{
@@ -2310,12 +2140,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
-													Computed:    true,
 													Optional:    true,
 													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `A description for the step`,
 													Validators: []validator.String{
@@ -2337,7 +2165,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"name": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The name of the step`,
 													Validators: []validator.String{
@@ -2345,7 +2172,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"policy": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
@@ -2358,7 +2184,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Request flow steps used for PROXY and MESSAGE APIs`,
 									},
 									"response": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -2366,7 +2191,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 													Validators: []validator.String{
@@ -2375,12 +2199,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
-													Computed:    true,
 													Optional:    true,
 													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `A description for the step`,
 													Validators: []validator.String{
@@ -2402,7 +2224,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"name": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The name of the step`,
 													Validators: []validator.String{
@@ -2410,7 +2231,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"policy": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
@@ -2423,7 +2243,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Response flow steps used for PROXY and MESSAGE APIs`,
 									},
 									"selectors": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -2473,7 +2292,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 														"type": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 															Validators: []validator.String{
@@ -2511,7 +2329,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 														"type": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 															Validators: []validator.String{
@@ -2571,7 +2388,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 														"type": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 															Validators: []validator.String{
@@ -2611,7 +2427,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 														"type": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 															Validators: []validator.String{
@@ -2638,7 +2453,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"subscribe": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
@@ -2646,7 +2460,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 													Validators: []validator.String{
@@ -2655,12 +2468,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
-													Computed:    true,
 													Optional:    true,
 													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `A description for the step`,
 													Validators: []validator.String{
@@ -2682,7 +2493,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"name": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The name of the step`,
 													Validators: []validator.String{
@@ -2690,7 +2500,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"policy": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
@@ -2703,7 +2512,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Subscribe flow steps used for MESSAGE and NATIVE APIs`,
 									},
 									"tags": schema.ListAttribute{
-										Computed:    true,
 										Optional:    true,
 										ElementType: types.StringType,
 										Description: `Flow's informative tags.`,
@@ -2718,7 +2526,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								`same on the reponse, which means API reponse flows will always run last.`,
 						},
 						"general_conditions_hrid": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `API page ` + "`" + `hrid` + "`" + ` that serves as general conditions documentation of this plan`,
 						},
@@ -2745,7 +2552,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"name": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `Name of the plan. Not Null`,
 							Validators: []validator.String{
@@ -2759,7 +2565,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
 									CustomType:  jsontypes.NormalizedType{},
-									Computed:    true,
 									Optional:    true,
 									Description: `JSON Object to configure specific attributes of a Plan. Parsed as JSON.`,
 								},
@@ -2784,7 +2589,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"selection_rule": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `An EL expression that must return a boolean to enable the flow based on the request.`,
 							Validators: []validator.String{
@@ -2860,45 +2664,26 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"dynamic": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `When the value was populated from dynamic property service.`,
 						},
 						"encryptable": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `When the input value needs to be encrypted.`,
 						},
 						"encrypted": schema.BoolAttribute{
-							Computed: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
 							Description: `When the value has been encrypted in database.`,
 						},
 						"key": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `Property key. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"value": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `Property value. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -2923,43 +2708,28 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"configuration": schema.StringAttribute{
-							CustomType: jsontypes.NormalizedType{},
-							Computed:   true,
-							Optional:   true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							CustomType:  jsontypes.NormalizedType{},
+							Optional:    true,
 							Description: `JSON Object configuration specific to this resource. Not Null; Parsed as JSON.`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"enabled": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  booldefault.StaticBool(true),
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(true),
 							Description: `Make it available or not. Default: true`,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `API resource name. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"type": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `Resource type (resource plugin ID). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -2970,7 +2740,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).`,
 			},
 			"response_templates": schema.MapAttribute{
-				Computed: true,
 				Optional: true,
 				ElementType: types.MapType{
 					ElemType: types.ObjectType{
@@ -2999,7 +2768,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Attributes: map[string]schema.Attribute{
 							"configuration": schema.StringAttribute{
 								CustomType:  jsontypes.NormalizedType{},
-								Computed:    true,
 								Optional:    true,
 								Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
 								Validators: []validator.String{
@@ -3019,7 +2787,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Description: `When the configuration overrides an inherited configuration. Default: false`,
 							},
 							"type": schema.StringAttribute{
-								Computed:    true,
 								Optional:    true,
 								Description: `The service plugin ID used. Not Null`,
 								Validators: []validator.String{
