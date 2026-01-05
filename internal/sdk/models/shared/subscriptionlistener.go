@@ -6,7 +6,6 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
-// SubscriptionListener - Subscription listener for message API.
 type SubscriptionListener struct {
 	// Listener type.
 	Type ListenerType `json:"type"`
