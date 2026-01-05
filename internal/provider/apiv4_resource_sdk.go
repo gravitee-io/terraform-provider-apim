@@ -137,7 +137,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			if endpointGroupsItem.Services == nil {
 				endpointGroups.Services = nil
 			} else {
-				endpointGroups.Services = &tfTypes.Services{}
+				endpointGroups.Services = &tfTypes.EndpointGroupV4Services{}
 				if endpointGroupsItem.Services.Discovery == nil {
 					endpointGroups.Services.Discovery = nil
 				} else {
@@ -869,6 +869,18 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			} else {
 				plans.Validation = types.StringNull()
 			}
+			if plansItem.XSpeakeasyParamComputed == nil {
+				plans.XSpeakeasyParamComputed = jsontypes.NewNormalizedNull()
+			} else {
+				xSpeakeasyParamComputedResult, _ := json.Marshal(plansItem.XSpeakeasyParamComputed)
+				plans.XSpeakeasyParamComputed = jsontypes.NewNormalizedValue(string(xSpeakeasyParamComputedResult))
+			}
+			if plansItem.XSpeakeasyParamSuppressComputedDiff == nil {
+				plans.XSpeakeasyParamSuppressComputedDiff = jsontypes.NewNormalizedNull()
+			} else {
+				xSpeakeasyParamSuppressComputedDiffResult, _ := json.Marshal(plansItem.XSpeakeasyParamSuppressComputedDiff)
+				plans.XSpeakeasyParamSuppressComputedDiff = jsontypes.NewNormalizedValue(string(xSpeakeasyParamSuppressComputedDiffResult))
+			}
 
 			r.Plans = append(r.Plans, plans)
 		}
@@ -927,7 +939,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		if resp.Services == nil {
 			r.Services = nil
 		} else {
-			r.Services = &tfTypes.APIServices{}
+			r.Services = &tfTypes.APIV4SpecServices{}
 			if resp.Services.DynamicProperty == nil {
 				r.Services.DynamicProperty = nil
 			} else {
@@ -1469,7 +1481,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				Tenants:                     tenants,
 			})
 		}
-		var services1 *shared.Services
+		var services1 *shared.EndpointGroupV4Services
 		if r.EndpointGroups[endpointGroupsIndex].Services != nil {
 			var discovery *shared.ServiceV4
 			if r.EndpointGroups[endpointGroupsIndex].Services.Discovery != nil {
@@ -1523,7 +1535,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					Type:                  typeVar8,
 				}
 			}
-			services1 = &shared.Services{
+			services1 = &shared.EndpointGroupV4Services{
 				Discovery:   discovery,
 				HealthCheck: healthCheck1,
 			}
@@ -2259,28 +2271,38 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			generalConditionsHrid = nil
 		}
+		var xSpeakeasyParamComputed interface{}
+		if !r.Plans[plansIndex].XSpeakeasyParamComputed.IsUnknown() && !r.Plans[plansIndex].XSpeakeasyParamComputed.IsNull() {
+			_ = json.Unmarshal([]byte(r.Plans[plansIndex].XSpeakeasyParamComputed.ValueString()), &xSpeakeasyParamComputed)
+		}
+		var xSpeakeasyParamSuppressComputedDiff interface{}
+		if !r.Plans[plansIndex].XSpeakeasyParamSuppressComputedDiff.IsUnknown() && !r.Plans[plansIndex].XSpeakeasyParamSuppressComputedDiff.IsNull() {
+			_ = json.Unmarshal([]byte(r.Plans[plansIndex].XSpeakeasyParamSuppressComputedDiff.ValueString()), &xSpeakeasyParamSuppressComputedDiff)
+		}
 		plans = append(plans, shared.PlanV4{
-			Hrid:                  hrid1,
-			Name:                  name4,
-			Description:           description1,
-			Security:              security,
-			Characteristics:       characteristics,
-			ExcludedGroups:        excludedGroups,
-			SelectionRule:         selectionRule,
-			Status:                status,
-			Tags:                  tags1,
-			Type:                  type8,
-			Validation:            validation,
-			Flows:                 flows,
-			Mode:                  mode1,
-			GeneralConditionsHrid: generalConditionsHrid,
+			Hrid:                                hrid1,
+			Name:                                name4,
+			Description:                         description1,
+			Security:                            security,
+			Characteristics:                     characteristics,
+			ExcludedGroups:                      excludedGroups,
+			SelectionRule:                       selectionRule,
+			Status:                              status,
+			Tags:                                tags1,
+			Type:                                type8,
+			Validation:                          validation,
+			Flows:                               flows,
+			Mode:                                mode1,
+			GeneralConditionsHrid:               generalConditionsHrid,
+			XSpeakeasyParamComputed:             xSpeakeasyParamComputed,
+			XSpeakeasyParamSuppressComputedDiff: xSpeakeasyParamSuppressComputedDiff,
 		})
 	}
 	var flowExecution *shared.APIV4SpecFlowExecution
 	if r.FlowExecution != nil {
-		mode2 := new(shared.FlowMode)
+		mode2 := new(shared.APIV4SpecMode)
 		if !r.FlowExecution.Mode.IsUnknown() && !r.FlowExecution.Mode.IsNull() {
-			*mode2 = shared.FlowMode(r.FlowExecution.Mode.ValueString())
+			*mode2 = shared.APIV4SpecMode(r.FlowExecution.Mode.ValueString())
 		} else {
 			mode2 = nil
 		}
@@ -2747,7 +2769,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		}
 		responseTemplates[responseTemplatesKey] = responseTemplatesInst
 	}
-	var services2 *shared.APIServices
+	var services2 *shared.APIV4SpecServices
 	if r.Services != nil {
 		var dynamicProperty *shared.ServiceV4
 		if r.Services.DynamicProperty != nil {
@@ -2775,7 +2797,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				Type:                  typeVar19,
 			}
 		}
-		services2 = &shared.APIServices{
+		services2 = &shared.APIV4SpecServices{
 			DynamicProperty: dynamicProperty,
 		}
 	}

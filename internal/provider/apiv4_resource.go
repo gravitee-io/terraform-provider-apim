@@ -84,7 +84,7 @@ type Apiv4ResourceModel struct {
 	Properties        []tfTypes.Property                             `tfsdk:"properties"`
 	Resources         []tfTypes.APIResource                          `tfsdk:"resources"`
 	ResponseTemplates map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
-	Services          *tfTypes.APIServices                           `tfsdk:"services"`
+	Services          *tfTypes.APIV4SpecServices                     `tfsdk:"services"`
 	State             types.String                                   `tfsdk:"state"`
 	Tags              []types.String                                 `tfsdk:"tags"`
 	Type              types.String                                   `tfsdk:"type"`
@@ -549,10 +549,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"match_required": schema.BoolAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `To indicate failure if no flow matches the request. Default: false`,
+						Description: `To indicate failure if no flow matches the request.`,
 					},
 					"mode": schema.StringAttribute{
 						Computed:    true,
@@ -1344,7 +1342,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
@@ -1461,7 +1458,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
@@ -1555,7 +1551,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
@@ -1641,7 +1636,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
@@ -1998,18 +1992,22 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"characteristics": schema.ListAttribute{
+							Computed:    true,
 							Optional:    true,
+							Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 							ElementType: types.StringType,
-							Description: `Plan informative characteristics`,
+							Description: `Plan informative characteristics. Default: []`,
 						},
 						"description": schema.StringAttribute{
 							Optional:    true,
 							Description: `A description for this plan.`,
 						},
 						"excluded_groups": schema.ListAttribute{
+							Computed:    true,
 							Optional:    true,
+							Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 							ElementType: types.StringType,
-							Description: `Access-control, UUID of groups excluded from this plan`,
+							Description: `Access-control, UUID of groups excluded from this plan. Default: []`,
 						},
 						"flows": schema.ListNestedAttribute{
 							Optional: true,
@@ -2729,6 +2727,18 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								),
 							},
 						},
+						"x_speakeasy_param_computed": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
+							Optional:    true,
+							Description: `Parsed as JSON.`,
+						},
+						"x_speakeasy_param_suppress_computed_diff": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
+							Optional:    true,
+							Description: `Parsed as JSON.`,
+						},
 					},
 				},
 				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `. Plans are prioritized by their position in the list, with earlier entries having higher priority.`,
@@ -2843,7 +2853,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					`Key of the map is the error code.`,
 			},
 			"services": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"dynamic_property": schema.SingleNestedAttribute{

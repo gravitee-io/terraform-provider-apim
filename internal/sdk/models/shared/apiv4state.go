@@ -3,6 +3,8 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
@@ -115,12 +117,38 @@ func (a *APIV4StateFailover) GetPerSubscription() *bool {
 	return a.PerSubscription
 }
 
+// APIV4StateMode - DEFAULT : all flows that match the conditions are executed in the order they are defined BEST_MATCH: only the best matching flow will be executed
+type APIV4StateMode string
+
+const (
+	APIV4StateModeBestMatch APIV4StateMode = "BEST_MATCH"
+	APIV4StateModeDefault   APIV4StateMode = "DEFAULT"
+)
+
+func (e APIV4StateMode) ToPointer() *APIV4StateMode {
+	return &e
+}
+func (e *APIV4StateMode) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "BEST_MATCH":
+		fallthrough
+	case "DEFAULT":
+		*e = APIV4StateMode(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for APIV4StateMode: %v", v)
+	}
+}
+
 // APIV4StateFlowExecution - Flow execution enablement (Not applicable for Native API)
 type APIV4StateFlowExecution struct {
-	// DEFAULT : all flows that match the conditions are executed in the order they are defined BEST_MATCH: only the best matching flow will be executed
-	Mode *FlowMode `default:"DEFAULT" json:"mode"`
+	Mode *APIV4StateMode `default:"DEFAULT" json:"mode"`
 	// To indicate failure if no flow matches the request.
-	MatchRequired *bool `default:"false" json:"matchRequired"`
+	MatchRequired *bool `json:"matchRequired,omitempty"`
 }
 
 func (a APIV4StateFlowExecution) MarshalJSON() ([]byte, error) {
@@ -134,7 +162,7 @@ func (a *APIV4StateFlowExecution) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (a *APIV4StateFlowExecution) GetMode() *FlowMode {
+func (a *APIV4StateFlowExecution) GetMode() *APIV4StateMode {
 	if a == nil {
 		return nil
 	}
@@ -146,6 +174,19 @@ func (a *APIV4StateFlowExecution) GetMatchRequired() *bool {
 		return nil
 	}
 	return a.MatchRequired
+}
+
+// APIV4StateServices - Api services (dynamic properties)
+type APIV4StateServices struct {
+	// Specifies an API property fetch using an external source.
+	DynamicProperty *ServiceV4 `json:"dynamicProperty,omitempty"`
+}
+
+func (a *APIV4StateServices) GetDynamicProperty() *ServiceV4 {
+	if a == nil {
+		return nil
+	}
+	return a.DynamicProperty
 }
 
 // APIV4State - API state
@@ -183,8 +224,7 @@ type APIV4State struct {
 	// Key of the map is the error code.
 	//
 	ResponseTemplates map[string]map[string]ResponseTemplate `json:"responseTemplates,omitempty"`
-	// Api services (dynamic properties)
-	Services *APIServices `json:"services,omitempty"`
+	Services          *APIV4StateServices                    `json:"services,omitempty"`
 	// Name or UUIDs of existing groups (of users) associated with this API.
 	Groups []string `json:"groups,omitempty"`
 	// The visibility of the entity regarding the portal.
@@ -340,7 +380,7 @@ func (a *APIV4State) GetResponseTemplates() map[string]map[string]ResponseTempla
 	return a.ResponseTemplates
 }
 
-func (a *APIV4State) GetServices() *APIServices {
+func (a *APIV4State) GetServices() *APIV4StateServices {
 	if a == nil {
 		return nil
 	}

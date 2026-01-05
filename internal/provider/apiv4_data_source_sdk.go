@@ -137,7 +137,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			if endpointGroupsItem.Services == nil {
 				endpointGroups.Services = nil
 			} else {
-				endpointGroups.Services = &tfTypes.Services{}
+				endpointGroups.Services = &tfTypes.EndpointGroupV4Services{}
 				if endpointGroupsItem.Services.Discovery == nil {
 					endpointGroups.Services.Discovery = nil
 				} else {
@@ -869,6 +869,18 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			} else {
 				plans.Validation = types.StringNull()
 			}
+			if plansItem.XSpeakeasyParamComputed == nil {
+				plans.XSpeakeasyParamComputed = jsontypes.NewNormalizedNull()
+			} else {
+				xSpeakeasyParamComputedResult, _ := json.Marshal(plansItem.XSpeakeasyParamComputed)
+				plans.XSpeakeasyParamComputed = jsontypes.NewNormalizedValue(string(xSpeakeasyParamComputedResult))
+			}
+			if plansItem.XSpeakeasyParamSuppressComputedDiff == nil {
+				plans.XSpeakeasyParamSuppressComputedDiff = jsontypes.NewNormalizedNull()
+			} else {
+				xSpeakeasyParamSuppressComputedDiffResult, _ := json.Marshal(plansItem.XSpeakeasyParamSuppressComputedDiff)
+				plans.XSpeakeasyParamSuppressComputedDiff = jsontypes.NewNormalizedValue(string(xSpeakeasyParamSuppressComputedDiffResult))
+			}
 
 			r.Plans = append(r.Plans, plans)
 		}
@@ -925,7 +937,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		if resp.Services == nil {
 			r.Services = nil
 		} else {
-			r.Services = &tfTypes.APIServices{}
+			r.Services = &tfTypes.APIV4StateServices{}
 			if resp.Services.DynamicProperty == nil {
 				r.Services.DynamicProperty = nil
 			} else {

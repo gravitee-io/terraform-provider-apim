@@ -2,6 +2,6 @@
 
 package types
 
-type APIServices struct {
+type APIV4StateServices struct {
 	DynamicProperty *ServiceV4 `tfsdk:"dynamic_property"`
 }

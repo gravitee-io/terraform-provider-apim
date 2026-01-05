@@ -63,7 +63,7 @@ type Apiv4DataSourceModel struct {
 	Properties        []tfTypes.Property1                            `tfsdk:"properties"`
 	Resources         []tfTypes.APIResource                          `tfsdk:"resources"`
 	ResponseTemplates map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
-	Services          *tfTypes.APIServices                           `tfsdk:"services"`
+	Services          *tfTypes.APIV4StateServices                    `tfsdk:"services"`
 	State             types.String                                   `tfsdk:"state"`
 	Tags              []types.String                                 `tfsdk:"tags"`
 	Type              types.String                                   `tfsdk:"type"`
@@ -1560,6 +1560,16 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed: true,
 							MarkdownDescription: `Specifies if subscriptions must be manually validated by a human actor.` + "\n" +
 								`For automation API, it is default to ` + "`" + `AUTO` + "`" + `.`,
+						},
+						"x_speakeasy_param_computed": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
+							Description: `Parsed as JSON.`,
+						},
+						"x_speakeasy_param_suppress_computed_diff": schema.StringAttribute{
+							CustomType:  jsontypes.NormalizedType{},
+							Computed:    true,
+							Description: `Parsed as JSON.`,
 						},
 					},
 				},

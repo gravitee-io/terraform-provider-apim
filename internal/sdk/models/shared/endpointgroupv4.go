@@ -2,26 +2,26 @@
 
 package shared
 
-// Services - API Endpoint Group Services
-type Services struct {
+// EndpointGroupV4Services - API Endpoint Group Services
+type EndpointGroupV4Services struct {
 	// Specifies an API property fetch using an external source.
 	Discovery *ServiceV4 `json:"discovery,omitempty"`
 	// Specifies an API property fetch using an external source.
 	HealthCheck *ServiceV4 `json:"healthCheck,omitempty"`
 }
 
-func (s *Services) GetDiscovery() *ServiceV4 {
-	if s == nil {
+func (e *EndpointGroupV4Services) GetDiscovery() *ServiceV4 {
+	if e == nil {
 		return nil
 	}
-	return s.Discovery
+	return e.Discovery
 }
 
-func (s *Services) GetHealthCheck() *ServiceV4 {
-	if s == nil {
+func (e *EndpointGroupV4Services) GetHealthCheck() *ServiceV4 {
+	if e == nil {
 		return nil
 	}
-	return s.HealthCheck
+	return e.HealthCheck
 }
 
 // EndpointGroupV4 - API Endpoint Group
@@ -35,8 +35,8 @@ type EndpointGroupV4 struct {
 	// JSON configuration for the `type` of `endpoints` that will be shared across all endpoints.
 	SharedConfiguration any `json:"sharedConfiguration,omitempty"`
 	// All endpoints of this API.
-	Endpoints []EndpointV4 `json:"endpoints,omitempty"`
-	Services  *Services    `json:"services,omitempty"`
+	Endpoints []EndpointV4             `json:"endpoints,omitempty"`
+	Services  *EndpointGroupV4Services `json:"services,omitempty"`
 }
 
 func (e *EndpointGroupV4) GetName() *string {
@@ -74,7 +74,7 @@ func (e *EndpointGroupV4) GetEndpoints() []EndpointV4 {
 	return e.Endpoints
 }
 
-func (e *EndpointGroupV4) GetServices() *Services {
+func (e *EndpointGroupV4) GetServices() *EndpointGroupV4Services {
 	if e == nil {
 		return nil
 	}
