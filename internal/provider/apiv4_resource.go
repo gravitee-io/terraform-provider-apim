@@ -305,6 +305,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"services": schema.SingleNestedAttribute{
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.UseConfigValue(),
+										},
 										Attributes: map[string]schema.Attribute{
 											"health_check": schema.SingleNestedAttribute{
 												Optional: true,
