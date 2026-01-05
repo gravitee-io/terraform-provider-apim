@@ -304,7 +304,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Define this endpoint as fallback endpoint in case other endpoints are no longer responding. Default: false`,
 									},
 									"services": schema.SingleNestedAttribute{
-										Computed: true,
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"health_check": schema.SingleNestedAttribute{

@@ -6,6 +6,69 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
+// EndpointV4HealthCheck - Specifies an API property fetch using an external source.
+type EndpointV4HealthCheck struct {
+	// When the configuration overrides an inherited configuration.
+	OverrideConfiguration *bool `default:"false" json:"overrideConfiguration"`
+	// JSON configuration of the service.
+	Configuration any `json:"configuration"`
+	// Is the service enabled or not.
+	Enabled *bool `default:"true" json:"enabled"`
+	// The service plugin ID used.
+	Type string `json:"type"`
+}
+
+func (e EndpointV4HealthCheck) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
+}
+
+func (e *EndpointV4HealthCheck) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (e *EndpointV4HealthCheck) GetOverrideConfiguration() *bool {
+	if e == nil {
+		return nil
+	}
+	return e.OverrideConfiguration
+}
+
+func (e *EndpointV4HealthCheck) GetConfiguration() any {
+	if e == nil {
+		return nil
+	}
+	return e.Configuration
+}
+
+func (e *EndpointV4HealthCheck) GetEnabled() *bool {
+	if e == nil {
+		return nil
+	}
+	return e.Enabled
+}
+
+func (e *EndpointV4HealthCheck) GetType() string {
+	if e == nil {
+		return ""
+	}
+	return e.Type
+}
+
+// EndpointV4Services - API Endpoint Services
+type EndpointV4Services struct {
+	HealthCheck *EndpointV4HealthCheck `json:"healthCheck,omitempty"`
+}
+
+func (e *EndpointV4Services) GetHealthCheck() *EndpointV4HealthCheck {
+	if e == nil {
+		return nil
+	}
+	return e.HealthCheck
+}
+
 // EndpointV4 - API endpoint
 type EndpointV4 struct {
 	// The name of the endpoint
@@ -19,9 +82,8 @@ type EndpointV4 struct {
 	// JSON Configuration specific to this endpoint that cannot be define at the group level.
 	Configuration any `json:"configuration,omitempty"`
 	// JSON Configuration that replaces the shared configuration defined at the group level.
-	SharedConfigurationOverride any `json:"sharedConfigurationOverride,omitempty"`
-	// API Endpoint Services
-	Services *EndpointServices `json:"services,omitempty"`
+	SharedConfigurationOverride any                 `json:"sharedConfigurationOverride,omitempty"`
+	Services                    *EndpointV4Services `json:"services,omitempty"`
 	// Define this endpoint as fallback endpoint in case other endpoints are no longer responding.
 	Secondary *bool `default:"false" json:"secondary"`
 	// The list of Getaway's tenants on which the endpoint can be used.
@@ -81,7 +143,7 @@ func (e *EndpointV4) GetSharedConfigurationOverride() any {
 	return e.SharedConfigurationOverride
 }
 
-func (e *EndpointV4) GetServices() *EndpointServices {
+func (e *EndpointV4) GetServices() *EndpointV4Services {
 	if e == nil {
 		return nil
 	}

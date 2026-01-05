@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type EndpointServicesHealthCheck struct {
+type EndpointV4HealthCheck struct {
 	Configuration         jsontypes.Normalized `tfsdk:"configuration"`
 	Enabled               types.Bool           `tfsdk:"enabled"`
 	OverrideConfiguration types.Bool           `tfsdk:"override_configuration"`

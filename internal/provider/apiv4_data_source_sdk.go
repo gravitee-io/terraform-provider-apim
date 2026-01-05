@@ -96,11 +96,11 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				if endpointsItem.Services == nil {
 					endpoints.Services = nil
 				} else {
-					endpoints.Services = &tfTypes.EndpointServices{}
+					endpoints.Services = &tfTypes.EndpointV4Services{}
 					if endpointsItem.Services.HealthCheck == nil {
 						endpoints.Services.HealthCheck = nil
 					} else {
-						endpoints.Services.HealthCheck = &tfTypes.EndpointServicesHealthCheck{}
+						endpoints.Services.HealthCheck = &tfTypes.EndpointV4HealthCheck{}
 						configurationResult1, _ := json.Marshal(endpointsItem.Services.HealthCheck.Configuration)
 						endpoints.Services.HealthCheck.Configuration = jsontypes.NewNormalizedValue(string(configurationResult1))
 						endpoints.Services.HealthCheck.Enabled = types.BoolPointerValue(endpointsItem.Services.HealthCheck.Enabled)
