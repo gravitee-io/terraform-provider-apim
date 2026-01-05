@@ -3,5 +3,5 @@
 package types
 
 type EndpointServices struct {
-	HealthCheck *ServiceV4 `tfsdk:"health_check"`
+	HealthCheck *EndpointServicesHealthCheck `tfsdk:"health_check"`
 }

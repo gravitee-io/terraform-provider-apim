@@ -100,7 +100,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					if endpointsItem.Services.HealthCheck == nil {
 						endpoints.Services.HealthCheck = nil
 					} else {
-						endpoints.Services.HealthCheck = &tfTypes.ServiceV4{}
+						endpoints.Services.HealthCheck = &tfTypes.EndpointServicesHealthCheck{}
 						configurationResult1, _ := json.Marshal(endpointsItem.Services.HealthCheck.Configuration)
 						endpoints.Services.HealthCheck.Configuration = jsontypes.NewNormalizedValue(string(configurationResult1))
 						endpoints.Services.HealthCheck.Enabled = types.BoolPointerValue(endpointsItem.Services.HealthCheck.Enabled)
@@ -151,7 +151,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				if endpointGroupsItem.Services.HealthCheck == nil {
 					endpointGroups.Services.HealthCheck = nil
 				} else {
-					endpointGroups.Services.HealthCheck = &tfTypes.HealthCheck{}
+					endpointGroups.Services.HealthCheck = &tfTypes.EndpointGroupV4HealthCheck{}
 					configurationResult3, _ := json.Marshal(endpointGroupsItem.Services.HealthCheck.Configuration)
 					endpointGroups.Services.HealthCheck.Configuration = jsontypes.NewNormalizedValue(string(configurationResult3))
 					endpointGroups.Services.HealthCheck.Enabled = types.BoolPointerValue(endpointGroupsItem.Services.HealthCheck.Enabled)
@@ -1417,7 +1417,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			}
 			var services *shared.EndpointServices
 			if r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Services != nil {
-				var healthCheck *shared.ServiceV4
+				var healthCheck *shared.EndpointServicesHealthCheck
 				if r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Services.HealthCheck != nil {
 					overrideConfiguration := new(bool)
 					if !r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Services.HealthCheck.OverrideConfiguration.IsUnknown() && !r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Services.HealthCheck.OverrideConfiguration.IsNull() {
@@ -1436,7 +1436,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					var typeVar6 string
 					typeVar6 = r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Services.HealthCheck.Type.ValueString()
 
-					healthCheck = &shared.ServiceV4{
+					healthCheck = &shared.EndpointServicesHealthCheck{
 						OverrideConfiguration: overrideConfiguration,
 						Configuration:         configuration5,
 						Enabled:               enabled1,
@@ -1497,7 +1497,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					Type:                  typeVar7,
 				}
 			}
-			var healthCheck1 *shared.HealthCheck
+			var healthCheck1 *shared.EndpointGroupV4HealthCheck
 			if r.EndpointGroups[endpointGroupsIndex].Services.HealthCheck != nil {
 				overrideConfiguration2 := new(bool)
 				if !r.EndpointGroups[endpointGroupsIndex].Services.HealthCheck.OverrideConfiguration.IsUnknown() && !r.EndpointGroups[endpointGroupsIndex].Services.HealthCheck.OverrideConfiguration.IsNull() {
@@ -1516,7 +1516,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				var typeVar8 string
 				typeVar8 = r.EndpointGroups[endpointGroupsIndex].Services.HealthCheck.Type.ValueString()
 
-				healthCheck1 = &shared.HealthCheck{
+				healthCheck1 = &shared.EndpointGroupV4HealthCheck{
 					OverrideConfiguration: overrideConfiguration2,
 					Configuration:         configuration7,
 					Enabled:               enabled3,

@@ -308,7 +308,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Optional: true,
 										Attributes: map[string]schema.Attribute{
 											"health_check": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"configuration": schema.StringAttribute{

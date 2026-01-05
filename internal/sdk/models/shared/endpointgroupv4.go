@@ -57,8 +57,8 @@ func (d *Discovery) GetType() string {
 	return d.Type
 }
 
-// HealthCheck - Specifies an API property fetch using an external source.
-type HealthCheck struct {
+// EndpointGroupV4HealthCheck - Specifies an API property fetch using an external source.
+type EndpointGroupV4HealthCheck struct {
 	// When the configuration overrides an inherited configuration.
 	OverrideConfiguration *bool `default:"false" json:"overrideConfiguration"`
 	// JSON configuration of the service.
@@ -69,49 +69,49 @@ type HealthCheck struct {
 	Type string `json:"type"`
 }
 
-func (h HealthCheck) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(h, "", false)
+func (e EndpointGroupV4HealthCheck) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(e, "", false)
 }
 
-func (h *HealthCheck) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &h, "", false, nil); err != nil {
+func (e *EndpointGroupV4HealthCheck) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (h *HealthCheck) GetOverrideConfiguration() *bool {
-	if h == nil {
+func (e *EndpointGroupV4HealthCheck) GetOverrideConfiguration() *bool {
+	if e == nil {
 		return nil
 	}
-	return h.OverrideConfiguration
+	return e.OverrideConfiguration
 }
 
-func (h *HealthCheck) GetConfiguration() any {
-	if h == nil {
+func (e *EndpointGroupV4HealthCheck) GetConfiguration() any {
+	if e == nil {
 		return nil
 	}
-	return h.Configuration
+	return e.Configuration
 }
 
-func (h *HealthCheck) GetEnabled() *bool {
-	if h == nil {
+func (e *EndpointGroupV4HealthCheck) GetEnabled() *bool {
+	if e == nil {
 		return nil
 	}
-	return h.Enabled
+	return e.Enabled
 }
 
-func (h *HealthCheck) GetType() string {
-	if h == nil {
+func (e *EndpointGroupV4HealthCheck) GetType() string {
+	if e == nil {
 		return ""
 	}
-	return h.Type
+	return e.Type
 }
 
 // EndpointGroupV4Services - API Endpoint Group Services
 type EndpointGroupV4Services struct {
-	Discovery   *Discovery   `json:"discovery,omitempty"`
-	HealthCheck *HealthCheck `json:"healthCheck,omitempty"`
+	Discovery   *Discovery                  `json:"discovery,omitempty"`
+	HealthCheck *EndpointGroupV4HealthCheck `json:"healthCheck,omitempty"`
 }
 
 func (e *EndpointGroupV4Services) GetDiscovery() *Discovery {
@@ -121,7 +121,7 @@ func (e *EndpointGroupV4Services) GetDiscovery() *Discovery {
 	return e.Discovery
 }
 
-func (e *EndpointGroupV4Services) GetHealthCheck() *HealthCheck {
+func (e *EndpointGroupV4Services) GetHealthCheck() *EndpointGroupV4HealthCheck {
 	if e == nil {
 		return nil
 	}
