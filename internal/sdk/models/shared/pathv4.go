@@ -12,7 +12,7 @@ type PathV4 struct {
 	Host *string `json:"host,omitempty"`
 	Path *string `default:"/" json:"path"`
 	// Override default organization entrypoint with `host`
-	OverrideAccess *bool `json:"overrideAccess,omitempty"`
+	OverrideAccess *bool `default:"false" json:"overrideAccess"`
 }
 
 func (p PathV4) MarshalJSON() ([]byte, error) {

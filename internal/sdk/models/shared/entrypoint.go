@@ -69,7 +69,7 @@ func (d *Dlq) GetEndpoint() *string {
 type Entrypoint struct {
 	// The type of the entrypoint
 	Type string `json:"type"`
-	Qos  *Qos   `json:"qos,omitempty"`
+	Qos  *Qos   `default:"AUTO" json:"qos"`
 	Dlq  *Dlq   `json:"dlq,omitempty"`
 	// JSON configuration for the selected `type`.
 	Configuration any `json:"configuration,omitempty"`

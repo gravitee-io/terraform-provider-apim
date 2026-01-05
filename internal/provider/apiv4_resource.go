@@ -1354,8 +1354,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
+												Computed:    true,
 												Optional:    true,
-												Description: `Type of the quality of service (for message APIs). must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
+												Default:     stringdefault.StaticString(`AUTO`),
+												Description: `Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"NONE",
@@ -1392,8 +1394,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Virtual host required to access this API. (` + "`" + `Host` + "`" + ` or ` + "`" + `:Authority` + "`" + ` headers, remote address for websockets)`,
 											},
 											"override_access": schema.BoolAttribute{
+												Computed:    true,
 												Optional:    true,
-												Description: `Override default organization entrypoint with ` + "`" + `host` + "`" + ``,
+												Default:     booldefault.StaticBool(false),
+												Description: `Override default organization entrypoint with ` + "`" + `host` + "`" + `. Default: false`,
 											},
 											"path": schema.StringAttribute{
 												Computed:    true,
@@ -1468,8 +1472,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
+												Computed:    true,
 												Optional:    true,
-												Description: `Type of the quality of service (for message APIs). must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
+												Default:     stringdefault.StaticString(`AUTO`),
+												Description: `Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"NONE",
@@ -1561,8 +1567,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
+												Computed:    true,
 												Optional:    true,
-												Description: `Type of the quality of service (for message APIs). must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
+												Default:     stringdefault.StaticString(`AUTO`),
+												Description: `Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"NONE",
@@ -1646,8 +1654,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
+												Computed:    true,
 												Optional:    true,
-												Description: `Type of the quality of service (for message APIs). must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
+												Default:     stringdefault.StaticString(`AUTO`),
+												Description: `Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"NONE",
