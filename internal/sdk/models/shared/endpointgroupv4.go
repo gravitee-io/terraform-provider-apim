@@ -2,22 +2,126 @@
 
 package shared
 
-// EndpointGroupV4Services - API Endpoint Group Services
-type EndpointGroupV4Services struct {
-	// Specifies an API property fetch using an external source.
-	Discovery *ServiceV4 `json:"discovery,omitempty"`
-	// Specifies an API property fetch using an external source.
-	HealthCheck *ServiceV4 `json:"healthCheck,omitempty"`
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
+// Discovery - Specifies an API property fetch using an external source.
+type Discovery struct {
+	// When the configuration overrides an inherited configuration.
+	OverrideConfiguration *bool `default:"false" json:"overrideConfiguration"`
+	// JSON configuration of the service.
+	Configuration any `json:"configuration"`
+	// Is the service enabled or not.
+	Enabled *bool `default:"true" json:"enabled"`
+	// The service plugin ID used.
+	Type string `json:"type"`
 }
 
-func (e *EndpointGroupV4Services) GetDiscovery() *ServiceV4 {
+func (d Discovery) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *Discovery) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d *Discovery) GetOverrideConfiguration() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.OverrideConfiguration
+}
+
+func (d *Discovery) GetConfiguration() any {
+	if d == nil {
+		return nil
+	}
+	return d.Configuration
+}
+
+func (d *Discovery) GetEnabled() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.Enabled
+}
+
+func (d *Discovery) GetType() string {
+	if d == nil {
+		return ""
+	}
+	return d.Type
+}
+
+// HealthCheck - Specifies an API property fetch using an external source.
+type HealthCheck struct {
+	// When the configuration overrides an inherited configuration.
+	OverrideConfiguration *bool `default:"false" json:"overrideConfiguration"`
+	// JSON configuration of the service.
+	Configuration any `json:"configuration"`
+	// Is the service enabled or not.
+	Enabled *bool `default:"true" json:"enabled"`
+	// The service plugin ID used.
+	Type string `json:"type"`
+}
+
+func (h HealthCheck) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(h, "", false)
+}
+
+func (h *HealthCheck) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &h, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (h *HealthCheck) GetOverrideConfiguration() *bool {
+	if h == nil {
+		return nil
+	}
+	return h.OverrideConfiguration
+}
+
+func (h *HealthCheck) GetConfiguration() any {
+	if h == nil {
+		return nil
+	}
+	return h.Configuration
+}
+
+func (h *HealthCheck) GetEnabled() *bool {
+	if h == nil {
+		return nil
+	}
+	return h.Enabled
+}
+
+func (h *HealthCheck) GetType() string {
+	if h == nil {
+		return ""
+	}
+	return h.Type
+}
+
+// EndpointGroupV4Services - API Endpoint Group Services
+type EndpointGroupV4Services struct {
+	Discovery   *Discovery   `json:"discovery,omitempty"`
+	HealthCheck *HealthCheck `json:"healthCheck,omitempty"`
+}
+
+func (e *EndpointGroupV4Services) GetDiscovery() *Discovery {
 	if e == nil {
 		return nil
 	}
 	return e.Discovery
 }
 
-func (e *EndpointGroupV4Services) GetHealthCheck() *ServiceV4 {
+func (e *EndpointGroupV4Services) GetHealthCheck() *HealthCheck {
 	if e == nil {
 		return nil
 	}

@@ -3,6 +3,6 @@
 package types
 
 type EndpointGroupV4Services struct {
-	Discovery   *ServiceV4 `tfsdk:"discovery"`
-	HealthCheck *ServiceV4 `tfsdk:"health_check"`
+	Discovery   *Discovery   `tfsdk:"discovery"`
+	HealthCheck *HealthCheck `tfsdk:"health_check"`
 }

@@ -141,7 +141,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				if endpointGroupsItem.Services.Discovery == nil {
 					endpointGroups.Services.Discovery = nil
 				} else {
-					endpointGroups.Services.Discovery = &tfTypes.ServiceV4{}
+					endpointGroups.Services.Discovery = &tfTypes.Discovery{}
 					configurationResult2, _ := json.Marshal(endpointGroupsItem.Services.Discovery.Configuration)
 					endpointGroups.Services.Discovery.Configuration = jsontypes.NewNormalizedValue(string(configurationResult2))
 					endpointGroups.Services.Discovery.Enabled = types.BoolPointerValue(endpointGroupsItem.Services.Discovery.Enabled)
@@ -151,7 +151,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				if endpointGroupsItem.Services.HealthCheck == nil {
 					endpointGroups.Services.HealthCheck = nil
 				} else {
-					endpointGroups.Services.HealthCheck = &tfTypes.ServiceV4{}
+					endpointGroups.Services.HealthCheck = &tfTypes.HealthCheck{}
 					configurationResult3, _ := json.Marshal(endpointGroupsItem.Services.HealthCheck.Configuration)
 					endpointGroups.Services.HealthCheck.Configuration = jsontypes.NewNormalizedValue(string(configurationResult3))
 					endpointGroups.Services.HealthCheck.Enabled = types.BoolPointerValue(endpointGroupsItem.Services.HealthCheck.Enabled)

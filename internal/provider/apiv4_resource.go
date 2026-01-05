@@ -350,9 +350,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `JSON Configuration that replaces the shared configuration defined at the group level. Parsed as JSON.`,
 									},
 									"tenants": schema.ListAttribute{
+										Computed:    true,
 										Optional:    true,
+										Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 										ElementType: types.StringType,
-										Description: `The list of Getaway's tenants on which the endpoint can be used.`,
+										Description: `The list of Getaway's tenants on which the endpoint can be used. Default: []`,
 									},
 									"type": schema.StringAttribute{
 										Optional:    true,
@@ -400,7 +402,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"discovery": schema.SingleNestedAttribute{
-									Computed: true,
 									Optional: true,
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
@@ -434,7 +435,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									Description: `Specifies an API property fetch using an external source.`,
 								},
 								"health_check": schema.SingleNestedAttribute{
-									Computed: true,
 									Optional: true,
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
@@ -546,7 +546,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Defines the failover behavior to bypass endpoints when some are slow.`,
 			},
 			"flow_execution": schema.SingleNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
 				Attributes: map[string]schema.Attribute{
 					"match_required": schema.BoolAttribute{
 						Optional:    true,
@@ -1350,10 +1354,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
-												Default:     stringdefault.StaticString(`AUTO`),
-												Description: `Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
+												Description: `Type of the quality of service (for message APIs). must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"NONE",
@@ -1390,10 +1392,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Virtual host required to access this API. (` + "`" + `Host` + "`" + ` or ` + "`" + `:Authority` + "`" + ` headers, remote address for websockets)`,
 											},
 											"override_access": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
-												Default:     booldefault.StaticBool(false),
-												Description: `Override default organization entrypoint with ` + "`" + `host` + "`" + `. Default: false`,
+												Description: `Override default organization entrypoint with ` + "`" + `host` + "`" + ``,
 											},
 											"path": schema.StringAttribute{
 												Computed:    true,
@@ -1409,9 +1409,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
+									Computed:    true,
 									Optional:    true,
+									Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 									ElementType: types.StringType,
-									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
+									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol). Default: []`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -1466,10 +1468,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
-												Default:     stringdefault.StaticString(`AUTO`),
-												Description: `Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
+												Description: `Type of the quality of service (for message APIs). must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"NONE",
@@ -1502,9 +1502,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
+									Computed:    true,
 									Optional:    true,
+									Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 									ElementType: types.StringType,
-									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
+									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol). Default: []`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -1559,10 +1561,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
-												Default:     stringdefault.StaticString(`AUTO`),
-												Description: `Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
+												Description: `Type of the quality of service (for message APIs). must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"NONE",
@@ -1587,9 +1587,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
+									Computed:    true,
 									Optional:    true,
+									Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 									ElementType: types.StringType,
-									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
+									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol). Default: []`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -1644,10 +1646,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
-												Default:     stringdefault.StaticString(`AUTO`),
-												Description: `Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
+												Description: `Type of the quality of service (for message APIs). must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
 														"NONE",
@@ -1682,9 +1682,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
+									Computed:    true,
 									Optional:    true,
+									Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 									ElementType: types.StringType,
-									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
+									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol). Default: []`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
