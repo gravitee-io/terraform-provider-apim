@@ -9,13 +9,24 @@ import (
 // APIV4StateAnalytics - API analytics configuration to enable/disable what can be observed.
 type APIV4StateAnalytics struct {
 	// Whether or not analytics are enabled.
-	Enabled *bool `json:"enabled,omitempty"`
+	Enabled *bool `default:"true" json:"enabled"`
 	// API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.
 	Sampling *Sampling `json:"sampling,omitempty"`
 	// API logging configuration (Not for native APIs)
 	Logging *LoggingV4 `json:"logging,omitempty"`
 	// OpenTelemetry tracing (Not for native APIs)
 	Tracing *TracingV4 `json:"tracing,omitempty"`
+}
+
+func (a APIV4StateAnalytics) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *APIV4StateAnalytics) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (a *APIV4StateAnalytics) GetEnabled() *bool {

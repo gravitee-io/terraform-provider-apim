@@ -101,22 +101,17 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 		MarkdownDescription: "Apiv4 Resource",
 		Attributes: map[string]schema.Attribute{
 			"analytics": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-				},
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
-						Description: `Whether or not analytics are enabled.`,
+						Default:     booldefault.StaticBool(true),
+						Description: `Whether or not analytics are enabled. Default: true`,
 					},
 					"logging": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-						},
 						Attributes: map[string]schema.Attribute{
 							"condition": schema.StringAttribute{
 								Optional:    true,
@@ -125,9 +120,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							"content": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"headers": schema.BoolAttribute{
 										Optional:    true,
@@ -159,9 +151,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							"mode": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"endpoint": schema.BoolAttribute{
 										Optional:    true,
@@ -177,9 +166,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							"phase": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"request": schema.BoolAttribute{
 										Optional:    true,
@@ -198,9 +184,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					"sampling": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-						},
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Optional: true,
@@ -236,9 +219,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					"tracing": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-						},
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Optional:    true,
