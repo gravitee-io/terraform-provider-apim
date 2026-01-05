@@ -306,10 +306,16 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									"services": schema.SingleNestedAttribute{
 										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.Object{
+											speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+										},
 										Attributes: map[string]schema.Attribute{
 											"health_check": schema.SingleNestedAttribute{
 												Computed: true,
 												Optional: true,
+												PlanModifiers: []planmodifier.Object{
+													speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+												},
 												Attributes: map[string]schema.Attribute{
 													"configuration": schema.StringAttribute{
 														CustomType:  jsontypes.NormalizedType{},
@@ -401,10 +407,16 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						"services": schema.SingleNestedAttribute{
 							Computed: true,
 							Optional: true,
+							PlanModifiers: []planmodifier.Object{
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							},
 							Attributes: map[string]schema.Attribute{
 								"discovery": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
 											CustomType:  jsontypes.NormalizedType{},
@@ -439,6 +451,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								"health_check": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
 											CustomType:  jsontypes.NormalizedType{},
@@ -550,10 +565,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Defines the failover behavior to bypass endpoints when some are slow.`,
 			},
 			"flow_execution": schema.SingleNestedAttribute{
+				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					speakeasy_objectplanmodifier.UseConfigValue(),
-				},
 				Attributes: map[string]schema.Attribute{
 					"match_required": schema.BoolAttribute{
 						Computed:    true,
@@ -2910,10 +2923,16 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"services": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
 				Attributes: map[string]schema.Attribute{
 					"dynamic_property": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"configuration": schema.StringAttribute{
 								CustomType:  jsontypes.NormalizedType{},
