@@ -552,6 +552,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"flow_execution": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
 				Attributes: map[string]schema.Attribute{
 					"match_required": schema.BoolAttribute{
 						Computed:    true,
@@ -560,9 +563,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Description: `To indicate failure if no flow matches the request. Default: false`,
 					},
 					"mode": schema.StringAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     stringdefault.StaticString(`DEFAULT`),
+						Computed: true,
+						Optional: true,
+						Default:  stringdefault.StaticString(`DEFAULT`),
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+						},
 						Description: `DEFAULT : all flows that match the conditions are executed in the order they are defined BEST_MATCH: only the best matching flow will be executed. Default: "DEFAULT"; must be one of ["BEST_MATCH", "DEFAULT"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
