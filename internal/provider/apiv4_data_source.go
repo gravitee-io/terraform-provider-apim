@@ -45,8 +45,8 @@ type Apiv4DataSourceModel struct {
 	Description       types.String                                   `tfsdk:"description"`
 	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
 	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
-	Failover          *tfTypes.FailoverV4                            `tfsdk:"failover"`
-	FlowExecution     *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
+	Failover          *tfTypes.APIV4StateFailover                    `tfsdk:"failover"`
+	FlowExecution     *tfTypes.APIV4StateFlowExecution               `tfsdk:"flow_execution"`
 	Flows             []tfTypes.FlowV4                               `tfsdk:"flows"`
 	Groups            []types.String                                 `tfsdk:"groups"`
 	Hrid              types.String                                   `tfsdk:"hrid"`

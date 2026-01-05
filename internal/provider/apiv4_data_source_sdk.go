@@ -137,7 +137,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			if endpointGroupsItem.Services == nil {
 				endpointGroups.Services = nil
 			} else {
-				endpointGroups.Services = &tfTypes.EndpointGroupServices{}
+				endpointGroups.Services = &tfTypes.Services{}
 				if endpointGroupsItem.Services.Discovery == nil {
 					endpointGroups.Services.Discovery = nil
 				} else {
@@ -173,7 +173,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		if resp.Failover == nil {
 			r.Failover = nil
 		} else {
-			r.Failover = &tfTypes.FailoverV4{}
+			r.Failover = &tfTypes.APIV4StateFailover{}
 			r.Failover.Enabled = types.BoolPointerValue(resp.Failover.Enabled)
 			r.Failover.MaxFailures = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Failover.MaxFailures))
 			r.Failover.MaxRetries = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Failover.MaxRetries))
@@ -184,7 +184,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		if resp.FlowExecution == nil {
 			r.FlowExecution = nil
 		} else {
-			r.FlowExecution = &tfTypes.FlowExecution{}
+			r.FlowExecution = &tfTypes.APIV4StateFlowExecution{}
 			r.FlowExecution.MatchRequired = types.BoolPointerValue(resp.FlowExecution.MatchRequired)
 			if resp.FlowExecution.Mode != nil {
 				r.FlowExecution.Mode = types.StringValue(string(*resp.FlowExecution.Mode))

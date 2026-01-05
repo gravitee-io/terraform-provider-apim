@@ -9,24 +9,13 @@ import (
 // APIV4StateAnalytics - API analytics configuration to enable/disable what can be observed.
 type APIV4StateAnalytics struct {
 	// Whether or not analytics are enabled.
-	Enabled *bool `default:"true" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.
 	Sampling *Sampling `json:"sampling,omitempty"`
 	// API logging configuration (Not for native APIs)
 	Logging *LoggingV4 `json:"logging,omitempty"`
 	// OpenTelemetry tracing (Not for native APIs)
 	Tracing *TracingV4 `json:"tracing,omitempty"`
-}
-
-func (a APIV4StateAnalytics) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *APIV4StateAnalytics) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *APIV4StateAnalytics) GetEnabled() *bool {
@@ -57,6 +46,108 @@ func (a *APIV4StateAnalytics) GetTracing() *TracingV4 {
 	return a.Tracing
 }
 
+// APIV4StateFailover - Defines the failover behavior to bypass endpoints when some are slow.
+type APIV4StateFailover struct {
+	// Automatically redirects request to the next endpoint if the response is too slow.
+	Enabled *bool `default:"false" json:"enabled"`
+	// Limit the number of retry attempts before recording an error. Each attempt dynamically selects an endpoint based on the load balancing algorithm.
+	MaxRetries *int `default:"2" json:"maxRetries"`
+	// Define a threshold for slow responses. Requests exceeding this duration are recorded as slow.
+	SlowCallDuration *int64 `default:"2000" json:"slowCallDuration"`
+	// The duration in milliseconds to indicate how long the circuit breaker should stay open, before it switches to half open.
+	OpenStateDuration *int64 `default:"10000" json:"openStateDuration"`
+	// The maximum number of failures allowed before the circuit breaker can calculate the error rate.
+	MaxFailures *int `default:"5" json:"maxFailures"`
+	// If true, a circuit breaker breaker will be dedicated for each subscriber, else, one and only circuit breaker will be used for the API.
+	PerSubscription *bool `default:"true" json:"perSubscription"`
+}
+
+func (a APIV4StateFailover) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *APIV4StateFailover) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *APIV4StateFailover) GetEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.Enabled
+}
+
+func (a *APIV4StateFailover) GetMaxRetries() *int {
+	if a == nil {
+		return nil
+	}
+	return a.MaxRetries
+}
+
+func (a *APIV4StateFailover) GetSlowCallDuration() *int64 {
+	if a == nil {
+		return nil
+	}
+	return a.SlowCallDuration
+}
+
+func (a *APIV4StateFailover) GetOpenStateDuration() *int64 {
+	if a == nil {
+		return nil
+	}
+	return a.OpenStateDuration
+}
+
+func (a *APIV4StateFailover) GetMaxFailures() *int {
+	if a == nil {
+		return nil
+	}
+	return a.MaxFailures
+}
+
+func (a *APIV4StateFailover) GetPerSubscription() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.PerSubscription
+}
+
+// APIV4StateFlowExecution - Flow execution enablement (Not applicable for Native API)
+type APIV4StateFlowExecution struct {
+	// DEFAULT : all flows that match the conditions are executed in the order they are defined BEST_MATCH: only the best matching flow will be executed
+	Mode *FlowMode `default:"DEFAULT" json:"mode"`
+	// To indicate failure if no flow matches the request.
+	MatchRequired *bool `default:"false" json:"matchRequired"`
+}
+
+func (a APIV4StateFlowExecution) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *APIV4StateFlowExecution) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *APIV4StateFlowExecution) GetMode() *FlowMode {
+	if a == nil {
+		return nil
+	}
+	return a.Mode
+}
+
+func (a *APIV4StateFlowExecution) GetMatchRequired() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.MatchRequired
+}
+
 // APIV4State - API state
 type APIV4State struct {
 	// A unique human readable id identifying this resource
@@ -76,16 +167,14 @@ type APIV4State struct {
 	// Common endpoints properties and container of endpoints specifying backends this API can call.
 	EndpointGroups []EndpointGroupV4    `json:"endpointGroups"`
 	Analytics      *APIV4StateAnalytics `json:"analytics,omitempty"`
-	// Defines the failover behavior to bypass endpoints when some are slow.
-	Failover *FailoverV4 `json:"failover,omitempty"`
+	Failover       *APIV4StateFailover  `json:"failover,omitempty"`
 	// Properties usable using EL.
 	Properties []PropertyOutput `json:"properties,omitempty"`
 	// Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).
 	Resources []APIResource `json:"resources,omitempty"`
 	// Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority.
-	Plans []PlanV4 `json:"plans,omitempty"`
-	// Flow execution enablement (Not applicable for Native API)
-	FlowExecution *FlowExecution `json:"flowExecution,omitempty"`
+	Plans         []PlanV4                 `json:"plans,omitempty"`
+	FlowExecution *APIV4StateFlowExecution `json:"flowExecution,omitempty"`
 	// Common flows for the API where traffic policies are configured.
 	Flows []FlowV4 `json:"flows,omitempty"`
 	// Map of content-type dependent Response Templates for the API (Not applicable for Native
@@ -202,7 +291,7 @@ func (a *APIV4State) GetAnalytics() *APIV4StateAnalytics {
 	return a.Analytics
 }
 
-func (a *APIV4State) GetFailover() *FailoverV4 {
+func (a *APIV4State) GetFailover() *APIV4StateFailover {
 	if a == nil {
 		return nil
 	}
@@ -230,7 +319,7 @@ func (a *APIV4State) GetPlans() []PlanV4 {
 	return a.Plans
 }
 
-func (a *APIV4State) GetFlowExecution() *FlowExecution {
+func (a *APIV4State) GetFlowExecution() *APIV4StateFlowExecution {
 	if a == nil {
 		return nil
 	}

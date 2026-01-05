@@ -8,10 +8,10 @@ import (
 )
 
 type EndpointGroupV4 struct {
-	Endpoints           []EndpointV4           `tfsdk:"endpoints"`
-	LoadBalancer        *LoadBalancer          `tfsdk:"load_balancer"`
-	Name                types.String           `tfsdk:"name"`
-	Services            *EndpointGroupServices `tfsdk:"services"`
-	SharedConfiguration jsontypes.Normalized   `tfsdk:"shared_configuration"`
-	Type                types.String           `tfsdk:"type"`
+	Endpoints           []EndpointV4         `tfsdk:"endpoints"`
+	LoadBalancer        *LoadBalancer        `tfsdk:"load_balancer"`
+	Name                types.String         `tfsdk:"name"`
+	Services            *Services            `tfsdk:"services"`
+	SharedConfiguration jsontypes.Normalized `tfsdk:"shared_configuration"`
+	Type                types.String         `tfsdk:"type"`
 }

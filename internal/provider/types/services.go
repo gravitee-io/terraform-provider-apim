@@ -2,7 +2,7 @@
 
 package types
 
-type EndpointGroupServices struct {
+type Services struct {
 	Discovery   *ServiceV4 `tfsdk:"discovery"`
 	HealthCheck *ServiceV4 `tfsdk:"health_check"`
 }

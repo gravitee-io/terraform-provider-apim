@@ -65,8 +65,8 @@ type Apiv4ResourceModel struct {
 	Description       types.String                                   `tfsdk:"description"`
 	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
 	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
-	Failover          *tfTypes.FailoverV4                            `tfsdk:"failover"`
-	FlowExecution     *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
+	Failover          *tfTypes.APIV4SpecFailover                     `tfsdk:"failover"`
+	FlowExecution     *tfTypes.APIV4SpecFlowExecution                `tfsdk:"flow_execution"`
 	Flows             []tfTypes.FlowV4                               `tfsdk:"flows"`
 	Groups            []types.String                                 `tfsdk:"groups"`
 	Hrid              types.String                                   `tfsdk:"hrid"`
@@ -108,10 +108,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     booldefault.StaticBool(true),
-						Description: `Whether or not analytics are enabled. Default: true`,
+						Description: `Whether or not analytics are enabled.`,
 					},
 					"logging": schema.SingleNestedAttribute{
 						Computed: true,
@@ -399,7 +397,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `The name of the endpoint group`,
 						},
 						"services": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"discovery": schema.SingleNestedAttribute{
@@ -498,7 +495,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `environment ID`,
 			},
 			"failover": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
@@ -550,7 +546,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Defines the failover behavior to bypass endpoints when some are slow.`,
 			},
 			"flow_execution": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"match_required": schema.BoolAttribute{

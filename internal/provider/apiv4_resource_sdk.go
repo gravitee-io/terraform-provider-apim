@@ -137,7 +137,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			if endpointGroupsItem.Services == nil {
 				endpointGroups.Services = nil
 			} else {
-				endpointGroups.Services = &tfTypes.EndpointGroupServices{}
+				endpointGroups.Services = &tfTypes.Services{}
 				if endpointGroupsItem.Services.Discovery == nil {
 					endpointGroups.Services.Discovery = nil
 				} else {
@@ -173,7 +173,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		if resp.Failover == nil {
 			r.Failover = nil
 		} else {
-			r.Failover = &tfTypes.FailoverV4{}
+			r.Failover = &tfTypes.APIV4SpecFailover{}
 			r.Failover.Enabled = types.BoolPointerValue(resp.Failover.Enabled)
 			r.Failover.MaxFailures = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Failover.MaxFailures))
 			r.Failover.MaxRetries = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Failover.MaxRetries))
@@ -184,7 +184,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		if resp.FlowExecution == nil {
 			r.FlowExecution = nil
 		} else {
-			r.FlowExecution = &tfTypes.FlowExecution{}
+			r.FlowExecution = &tfTypes.APIV4SpecFlowExecution{}
 			r.FlowExecution.MatchRequired = types.BoolPointerValue(resp.FlowExecution.MatchRequired)
 			if resp.FlowExecution.Mode != nil {
 				r.FlowExecution.Mode = types.StringValue(string(*resp.FlowExecution.Mode))
@@ -1469,7 +1469,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				Tenants:                     tenants,
 			})
 		}
-		var services1 *shared.EndpointGroupServices
+		var services1 *shared.Services
 		if r.EndpointGroups[endpointGroupsIndex].Services != nil {
 			var discovery *shared.ServiceV4
 			if r.EndpointGroups[endpointGroupsIndex].Services.Discovery != nil {
@@ -1523,7 +1523,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					Type:                  typeVar8,
 				}
 			}
-			services1 = &shared.EndpointGroupServices{
+			services1 = &shared.Services{
 				Discovery:   discovery,
 				HealthCheck: healthCheck1,
 			}
@@ -1685,7 +1685,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Tracing:  tracing,
 		}
 	}
-	var failover *shared.FailoverV4
+	var failover *shared.APIV4SpecFailover
 	if r.Failover != nil {
 		enabled6 := new(bool)
 		if !r.Failover.Enabled.IsUnknown() && !r.Failover.Enabled.IsNull() {
@@ -1723,7 +1723,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			perSubscription = nil
 		}
-		failover = &shared.FailoverV4{
+		failover = &shared.APIV4SpecFailover{
 			Enabled:           enabled6,
 			MaxRetries:        maxRetries,
 			SlowCallDuration:  slowCallDuration,
@@ -2276,7 +2276,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			GeneralConditionsHrid: generalConditionsHrid,
 		})
 	}
-	var flowExecution *shared.FlowExecution
+	var flowExecution *shared.APIV4SpecFlowExecution
 	if r.FlowExecution != nil {
 		mode2 := new(shared.FlowMode)
 		if !r.FlowExecution.Mode.IsUnknown() && !r.FlowExecution.Mode.IsNull() {
@@ -2290,7 +2290,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			matchRequired = nil
 		}
-		flowExecution = &shared.FlowExecution{
+		flowExecution = &shared.APIV4SpecFlowExecution{
 			Mode:          mode2,
 			MatchRequired: matchRequired,
 		}
