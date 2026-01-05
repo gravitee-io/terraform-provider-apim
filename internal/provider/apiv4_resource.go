@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_boolplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/boolplanmodifier"
 	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
@@ -104,9 +105,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
-						Computed:    true,
-						Optional:    true,
-						Default:     booldefault.StaticBool(true),
+						Computed: true,
+						Optional: true,
+						Default:  booldefault.StaticBool(true),
+						PlanModifiers: []planmodifier.Bool{
+							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+						},
 						Description: `Whether or not analytics are enabled. Default: true`,
 					},
 					"logging": schema.SingleNestedAttribute{
