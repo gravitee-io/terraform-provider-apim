@@ -146,20 +146,9 @@ func (e *APIV4SpecMode) UnmarshalJSON(data []byte) error {
 
 // APIV4SpecFlowExecution - Flow execution enablement (Not applicable for Native API)
 type APIV4SpecFlowExecution struct {
-	Mode *APIV4SpecMode `default:"DEFAULT" json:"mode"`
+	Mode *APIV4SpecMode `json:"mode,omitempty"`
 	// To indicate failure if no flow matches the request.
 	MatchRequired *bool `json:"matchRequired,omitempty"`
-}
-
-func (a APIV4SpecFlowExecution) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *APIV4SpecFlowExecution) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *APIV4SpecFlowExecution) GetMode() *APIV4SpecMode {

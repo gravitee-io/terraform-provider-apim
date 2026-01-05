@@ -3,25 +3,22 @@
 package types
 
 import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type PlanV4 struct {
-	Characteristics                     []types.String       `tfsdk:"characteristics"`
-	Description                         types.String         `tfsdk:"description"`
-	ExcludedGroups                      []types.String       `tfsdk:"excluded_groups"`
-	Flows                               []FlowV4             `tfsdk:"flows"`
-	GeneralConditionsHrid               types.String         `tfsdk:"general_conditions_hrid"`
-	Hrid                                types.String         `tfsdk:"hrid"`
-	Mode                                types.String         `tfsdk:"mode"`
-	Name                                types.String         `tfsdk:"name"`
-	Security                            PlanSecurity         `tfsdk:"security"`
-	SelectionRule                       types.String         `tfsdk:"selection_rule"`
-	Status                              types.String         `tfsdk:"status"`
-	Tags                                []types.String       `tfsdk:"tags"`
-	Type                                types.String         `tfsdk:"type"`
-	Validation                          types.String         `tfsdk:"validation"`
-	XSpeakeasyParamComputed             jsontypes.Normalized `tfsdk:"x_speakeasy_param_computed"`
-	XSpeakeasyParamSuppressComputedDiff jsontypes.Normalized `tfsdk:"x_speakeasy_param_suppress_computed_diff"`
+	Characteristics       []types.String `tfsdk:"characteristics"`
+	Description           types.String   `tfsdk:"description"`
+	ExcludedGroups        []types.String `tfsdk:"excluded_groups"`
+	Flows                 []FlowV4       `tfsdk:"flows"`
+	GeneralConditionsHrid types.String   `tfsdk:"general_conditions_hrid"`
+	Hrid                  types.String   `tfsdk:"hrid"`
+	Mode                  types.String   `tfsdk:"mode"`
+	Name                  types.String   `tfsdk:"name"`
+	Security              PlanSecurity   `tfsdk:"security"`
+	SelectionRule         types.String   `tfsdk:"selection_rule"`
+	Status                types.String   `tfsdk:"status"`
+	Tags                  []types.String `tfsdk:"tags"`
+	Type                  types.String   `tfsdk:"type"`
+	Validation            types.String   `tfsdk:"validation"`
 }

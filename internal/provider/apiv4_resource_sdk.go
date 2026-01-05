@@ -869,18 +869,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			} else {
 				plans.Validation = types.StringNull()
 			}
-			if plansItem.XSpeakeasyParamComputed == nil {
-				plans.XSpeakeasyParamComputed = jsontypes.NewNormalizedNull()
-			} else {
-				xSpeakeasyParamComputedResult, _ := json.Marshal(plansItem.XSpeakeasyParamComputed)
-				plans.XSpeakeasyParamComputed = jsontypes.NewNormalizedValue(string(xSpeakeasyParamComputedResult))
-			}
-			if plansItem.XSpeakeasyParamSuppressComputedDiff == nil {
-				plans.XSpeakeasyParamSuppressComputedDiff = jsontypes.NewNormalizedNull()
-			} else {
-				xSpeakeasyParamSuppressComputedDiffResult, _ := json.Marshal(plansItem.XSpeakeasyParamSuppressComputedDiff)
-				plans.XSpeakeasyParamSuppressComputedDiff = jsontypes.NewNormalizedValue(string(xSpeakeasyParamSuppressComputedDiffResult))
-			}
 
 			r.Plans = append(r.Plans, plans)
 		}
@@ -2271,31 +2259,21 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			generalConditionsHrid = nil
 		}
-		var xSpeakeasyParamComputed interface{}
-		if !r.Plans[plansIndex].XSpeakeasyParamComputed.IsUnknown() && !r.Plans[plansIndex].XSpeakeasyParamComputed.IsNull() {
-			_ = json.Unmarshal([]byte(r.Plans[plansIndex].XSpeakeasyParamComputed.ValueString()), &xSpeakeasyParamComputed)
-		}
-		var xSpeakeasyParamSuppressComputedDiff interface{}
-		if !r.Plans[plansIndex].XSpeakeasyParamSuppressComputedDiff.IsUnknown() && !r.Plans[plansIndex].XSpeakeasyParamSuppressComputedDiff.IsNull() {
-			_ = json.Unmarshal([]byte(r.Plans[plansIndex].XSpeakeasyParamSuppressComputedDiff.ValueString()), &xSpeakeasyParamSuppressComputedDiff)
-		}
 		plans = append(plans, shared.PlanV4{
-			Hrid:                                hrid1,
-			Name:                                name4,
-			Description:                         description1,
-			Security:                            security,
-			Characteristics:                     characteristics,
-			ExcludedGroups:                      excludedGroups,
-			SelectionRule:                       selectionRule,
-			Status:                              status,
-			Tags:                                tags1,
-			Type:                                type8,
-			Validation:                          validation,
-			Flows:                               flows,
-			Mode:                                mode1,
-			GeneralConditionsHrid:               generalConditionsHrid,
-			XSpeakeasyParamComputed:             xSpeakeasyParamComputed,
-			XSpeakeasyParamSuppressComputedDiff: xSpeakeasyParamSuppressComputedDiff,
+			Hrid:                  hrid1,
+			Name:                  name4,
+			Description:           description1,
+			Security:              security,
+			Characteristics:       characteristics,
+			ExcludedGroups:        excludedGroups,
+			SelectionRule:         selectionRule,
+			Status:                status,
+			Tags:                  tags1,
+			Type:                  type8,
+			Validation:            validation,
+			Flows:                 flows,
+			Mode:                  mode1,
+			GeneralConditionsHrid: generalConditionsHrid,
 		})
 	}
 	var flowExecution *shared.APIV4SpecFlowExecution

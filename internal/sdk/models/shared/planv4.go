@@ -40,9 +40,7 @@ type PlanV4 struct {
 	// The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan).
 	Mode PlanMode `json:"mode"`
 	// API page `hrid` that serves as general conditions documentation of this plan
-	GeneralConditionsHrid               *string `json:"generalConditionsHrid,omitempty"`
-	XSpeakeasyParamComputed             any     `json:"x-speakeasy-param-computed,omitempty"`
-	XSpeakeasyParamSuppressComputedDiff any     `json:"x-speakeasy-param-suppress-computed-diff,omitempty"`
+	GeneralConditionsHrid *string `json:"generalConditionsHrid,omitempty"`
 }
 
 func (p PlanV4) MarshalJSON() ([]byte, error) {
@@ -152,18 +150,4 @@ func (p *PlanV4) GetGeneralConditionsHrid() *string {
 		return nil
 	}
 	return p.GeneralConditionsHrid
-}
-
-func (p *PlanV4) GetXSpeakeasyParamComputed() any {
-	if p == nil {
-		return nil
-	}
-	return p.XSpeakeasyParamComputed
-}
-
-func (p *PlanV4) GetXSpeakeasyParamSuppressComputedDiff() any {
-	if p == nil {
-		return nil
-	}
-	return p.XSpeakeasyParamSuppressComputedDiff
 }

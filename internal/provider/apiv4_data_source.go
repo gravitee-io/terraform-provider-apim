@@ -1561,16 +1561,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							MarkdownDescription: `Specifies if subscriptions must be manually validated by a human actor.` + "\n" +
 								`For automation API, it is default to ` + "`" + `AUTO` + "`" + `.`,
 						},
-						"x_speakeasy_param_computed": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
-							Computed:    true,
-							Description: `Parsed as JSON.`,
-						},
-						"x_speakeasy_param_suppress_computed_diff": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
-							Computed:    true,
-							Description: `Parsed as JSON.`,
-						},
 					},
 				},
 				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `. Plans are prioritized by their position in the list, with earlier entries having higher priority.`,

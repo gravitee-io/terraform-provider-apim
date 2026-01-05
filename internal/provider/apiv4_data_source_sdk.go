@@ -869,18 +869,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			} else {
 				plans.Validation = types.StringNull()
 			}
-			if plansItem.XSpeakeasyParamComputed == nil {
-				plans.XSpeakeasyParamComputed = jsontypes.NewNormalizedNull()
-			} else {
-				xSpeakeasyParamComputedResult, _ := json.Marshal(plansItem.XSpeakeasyParamComputed)
-				plans.XSpeakeasyParamComputed = jsontypes.NewNormalizedValue(string(xSpeakeasyParamComputedResult))
-			}
-			if plansItem.XSpeakeasyParamSuppressComputedDiff == nil {
-				plans.XSpeakeasyParamSuppressComputedDiff = jsontypes.NewNormalizedNull()
-			} else {
-				xSpeakeasyParamSuppressComputedDiffResult, _ := json.Marshal(plansItem.XSpeakeasyParamSuppressComputedDiff)
-				plans.XSpeakeasyParamSuppressComputedDiff = jsontypes.NewNormalizedValue(string(xSpeakeasyParamSuppressComputedDiffResult))
-			}
 
 			r.Plans = append(r.Plans, plans)
 		}
