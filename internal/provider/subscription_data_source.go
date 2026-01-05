@@ -75,7 +75,7 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `environment ID`,
+				Description: `The environment ID of the Subscription.`,
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
@@ -92,7 +92,7 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `organization ID`,
+				Description: `The organization ID of the Subscription.`,
 			},
 			"plan_hrid": schema.StringAttribute{
 				Computed:    true,

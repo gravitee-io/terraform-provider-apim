@@ -21,7 +21,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		if resp.Analytics == nil {
 			r.Analytics = nil
 		} else {
-			r.Analytics = &tfTypes.Analytics{}
+			r.Analytics = &tfTypes.APIV4SpecAnalytics{}
 			r.Analytics.Enabled = types.BoolPointerValue(resp.Analytics.Enabled)
 			if resp.Analytics.Logging == nil {
 				r.Analytics.Logging = nil
@@ -73,7 +73,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		for _, v := range resp.Categories {
 			r.Categories = append(r.Categories, types.StringValue(v))
 		}
-		r.CrossID = types.StringPointerValue(resp.CrossID)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.EndpointGroups = []tfTypes.EndpointGroupV4{}
 
@@ -170,6 +169,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 			r.EndpointGroups = append(r.EndpointGroups, endpointGroups)
 		}
+		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		if resp.Failover == nil {
 			r.Failover = nil
 		} else {
@@ -601,6 +601,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			r.Metadata = append(r.Metadata, metadata)
 		}
 		r.Name = types.StringValue(resp.Name)
+		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.Pages = []tfTypes.PageV4{}
 
 		for _, pagesItem := range resp.Pages {
@@ -870,19 +871,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			}
 
 			r.Plans = append(r.Plans, plans)
-		}
-		if resp.PrimaryOwner == nil {
-			r.PrimaryOwner = nil
-		} else {
-			r.PrimaryOwner = &tfTypes.PrimaryOwner{}
-			r.PrimaryOwner.DisplayName = types.StringPointerValue(resp.PrimaryOwner.DisplayName)
-			r.PrimaryOwner.Email = types.StringPointerValue(resp.PrimaryOwner.Email)
-			r.PrimaryOwner.ID = types.StringPointerValue(resp.PrimaryOwner.ID)
-			if resp.PrimaryOwner.Type != nil {
-				r.PrimaryOwner.Type = types.StringValue(string(*resp.PrimaryOwner.Type))
-			} else {
-				r.PrimaryOwner.Type = types.StringNull()
-			}
 		}
 		r.Properties = []tfTypes.Property{}
 
@@ -1549,7 +1537,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Services:            services1,
 		})
 	}
-	var analytics *shared.Analytics
+	var analytics *shared.APIV4SpecAnalytics
 	if r.Analytics != nil {
 		enabled4 := new(bool)
 		if !r.Analytics.Enabled.IsUnknown() && !r.Analytics.Enabled.IsNull() {
@@ -1690,7 +1678,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				Verbose: verbose,
 			}
 		}
-		analytics = &shared.Analytics{
+		analytics = &shared.APIV4SpecAnalytics{
 			Enabled:  enabled4,
 			Sampling: sampling,
 			Logging:  logging,
@@ -2807,39 +2795,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	} else {
 		state = nil
 	}
-	var primaryOwner *shared.PrimaryOwner
-	if r.PrimaryOwner != nil {
-		id := new(string)
-		if !r.PrimaryOwner.ID.IsUnknown() && !r.PrimaryOwner.ID.IsNull() {
-			*id = r.PrimaryOwner.ID.ValueString()
-		} else {
-			id = nil
-		}
-		email := new(string)
-		if !r.PrimaryOwner.Email.IsUnknown() && !r.PrimaryOwner.Email.IsNull() {
-			*email = r.PrimaryOwner.Email.ValueString()
-		} else {
-			email = nil
-		}
-		displayName := new(string)
-		if !r.PrimaryOwner.DisplayName.IsUnknown() && !r.PrimaryOwner.DisplayName.IsNull() {
-			*displayName = r.PrimaryOwner.DisplayName.ValueString()
-		} else {
-			displayName = nil
-		}
-		typeVar20 := new(shared.MembershipMemberType)
-		if !r.PrimaryOwner.Type.IsUnknown() && !r.PrimaryOwner.Type.IsNull() {
-			*typeVar20 = shared.MembershipMemberType(r.PrimaryOwner.Type.ValueString())
-		} else {
-			typeVar20 = nil
-		}
-		primaryOwner = &shared.PrimaryOwner{
-			ID:          id,
-			Email:       email,
-			DisplayName: displayName,
-			Type:        typeVar20,
-		}
-	}
 	labels := make([]string, 0, len(r.Labels))
 	for labelsIndex := range r.Labels {
 		labels = append(labels, r.Labels[labelsIndex].ValueString())
@@ -2940,18 +2895,18 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		}
 		var source1 *shared.PageSource
 		if r.Pages[pagesIndex].Source != nil {
-			typeVar21 := new(string)
+			typeVar20 := new(string)
 			if !r.Pages[pagesIndex].Source.Type.IsUnknown() && !r.Pages[pagesIndex].Source.Type.IsNull() {
-				*typeVar21 = r.Pages[pagesIndex].Source.Type.ValueString()
+				*typeVar20 = r.Pages[pagesIndex].Source.Type.ValueString()
 			} else {
-				typeVar21 = nil
+				typeVar20 = nil
 			}
 			var configuration23 interface{}
 			if !r.Pages[pagesIndex].Source.Configuration.IsUnknown() && !r.Pages[pagesIndex].Source.Configuration.IsNull() {
 				_ = json.Unmarshal([]byte(r.Pages[pagesIndex].Source.Configuration.ValueString()), &configuration23)
 			}
 			source1 = &shared.PageSource{
-				Type:          typeVar21,
+				Type:          typeVar20,
 				Configuration: configuration23,
 			}
 		}
@@ -3008,7 +2963,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		Groups:            groups,
 		Visibility:        visibility,
 		State:             state,
-		PrimaryOwner:      primaryOwner,
 		Labels:            labels,
 		Metadata:          metadata,
 		LifecycleState:    lifecycleState,

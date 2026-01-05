@@ -7,9 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	speakeasy_boolplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/boolplanmodifier"
-	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
-	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
@@ -73,10 +70,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 		MarkdownDescription: "SharedPolicyGroup Resource",
 		Attributes: map[string]schema.Attribute{
 			"api_type": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Required:    true,
 				Description: `API's type. must be one of ["LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -96,22 +90,15 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				Description: `The Cross ID is used to identify a shared policy group that has been promoted from one environment to another.`,
 			},
 			"description": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Optional:    true,
 				Description: `The description of the shared policy group`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(1024),
 				},
 			},
 			"environment_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				Description: `environment ID`,
 			},
 			"hrid": schema.StringAttribute{
@@ -134,28 +121,19 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				Description: `The id of the shared policy group.`,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Required:    true,
 				Description: `The name of the shared policy group`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(512),
 				},
 			},
 			"organization_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				Description: `organization ID`,
 			},
 			"phase": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Required:    true,
 				Description: `The execution phase of a policy. must be one of ["REQUEST", "RESPONSE", "INTERACT", "CONNECT", "PUBLISH", "SUBSCRIBE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -169,98 +147,61 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				},
 			},
 			"prerequisite_message": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Optional:    true,
 				Description: `The prerequisite message of the shared policy group. This message is displayed to the user to help understand the prerequisite to use the shared policy group.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(1024),
 				},
 			},
 			"steps": schema.ListNestedAttribute{
-				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
 					},
-					PlanModifiers: []planmodifier.Object{
-						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-					},
 					Attributes: map[string]schema.Attribute{
 						"condition": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtMost(1024),
 							},
 						},
 						"configuration": schema.StringAttribute{
-							CustomType: jsontypes.NormalizedType{},
-							Computed:   true,
-							Optional:   true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							CustomType:  jsontypes.NormalizedType{},
+							Optional:    true,
 							Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `A description for the step`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtMost(256),
 							},
 						},
 						"enabled": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  booldefault.StaticBool(true),
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(true),
 							Description: `To enable the step globally. Default: true`,
 						},
 						"message_condition": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
 							Description: `The message condition of the step (for message API)`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtMost(256),
 							},
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The name of the step`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtMost(64),
 							},
 						},
 						"policy": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The policy of the step (plugin ID). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),

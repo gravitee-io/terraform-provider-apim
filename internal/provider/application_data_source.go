@@ -52,7 +52,6 @@ type ApplicationDataSourceModel struct {
 	NotifyMembers  types.Bool                   `tfsdk:"notify_members"`
 	OrganizationID types.String                 `tfsdk:"organization_id"`
 	PictureURL     types.String                 `tfsdk:"picture_url"`
-	PrimaryOwner   *tfTypes.PrimaryOwner        `tfsdk:"primary_owner"`
 	Settings       *tfTypes.ApplicationSettings `tfsdk:"settings"`
 }
 
@@ -170,28 +169,6 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 			"picture_url": schema.StringAttribute{
 				Computed:    true,
 				Description: `Application's picture Url.`,
-			},
-			"primary_owner": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"display_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Owner's name.`,
-					},
-					"email": schema.StringAttribute{
-						Computed:    true,
-						Description: `Owner's email. Can be null if owner is a group.`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Owner's uuid.`,
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Description: `The type of membership`,
-					},
-				},
-				Description: `User owner of this. Can perform all possible actions on it.`,
 			},
 			"settings": schema.SingleNestedAttribute{
 				Computed: true,
