@@ -3,74 +3,17 @@
 package shared
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
-
-// Qos - Type of the quality of service (for message APIs).
-type Qos string
-
-const (
-	QosNone        Qos = "NONE"
-	QosAuto        Qos = "AUTO"
-	QosAtMostOnce  Qos = "AT_MOST_ONCE"
-	QosAtLeastOnce Qos = "AT_LEAST_ONCE"
-)
-
-func (e Qos) ToPointer() *Qos {
-	return &e
-}
-func (e *Qos) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "NONE":
-		fallthrough
-	case "AUTO":
-		fallthrough
-	case "AT_MOST_ONCE":
-		fallthrough
-	case "AT_LEAST_ONCE":
-		*e = Qos(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for Qos: %v", v)
-	}
-}
-
-// Dlq - Dead Letter Queue to process undelivered messages.
-type Dlq struct {
-	// The endpoint of the DLQ.
-	Endpoint *string `json:"endpoint,omitempty"`
-}
-
-func (d Dlq) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(d, "", false)
-}
-
-func (d *Dlq) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (d *Dlq) GetEndpoint() *string {
-	if d == nil {
-		return nil
-	}
-	return d.Endpoint
-}
 
 // Entrypoint - API Endpoint
 type Entrypoint struct {
 	// The type of the entrypoint
 	Type string `json:"type"`
-	Qos  *Qos   `default:"AUTO" json:"qos"`
-	Dlq  *Dlq   `json:"dlq,omitempty"`
+	// Type of the quality of service (for message APIs).
+	Qos *Qos `default:"AUTO" json:"qos"`
+	// Dead Letter Queue to process undelivered messages.
+	Dlq *Dlq `json:"dlq,omitempty"`
 	// JSON configuration for the selected `type`.
 	Configuration any `json:"configuration,omitempty"`
 }
