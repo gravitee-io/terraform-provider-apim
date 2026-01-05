@@ -74,6 +74,7 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 			},
 			"ending_at": schema.StringAttribute{
 				CustomType: customtypes.RFC3339Type{},
+				Computed:   true,
 				Optional:   true,
 				Validators: []validator.String{
 					validators.IsRFC3339(),

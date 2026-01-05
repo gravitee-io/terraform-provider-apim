@@ -21,7 +21,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		if resp.Analytics == nil {
 			r.Analytics = nil
 		} else {
-			r.Analytics = &tfTypes.APIV4SpecAnalytics{}
+			r.Analytics = &tfTypes.Analytics{}
 			r.Analytics.Enabled = types.BoolPointerValue(resp.Analytics.Enabled)
 			if resp.Analytics.Logging == nil {
 				r.Analytics.Logging = nil
@@ -1537,7 +1537,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Services:            services1,
 		})
 	}
-	var analytics *shared.APIV4SpecAnalytics
+	var analytics *shared.Analytics
 	if r.Analytics != nil {
 		enabled4 := new(bool)
 		if !r.Analytics.Enabled.IsUnknown() && !r.Analytics.Enabled.IsNull() {
@@ -1678,7 +1678,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				Verbose: verbose,
 			}
 		}
-		analytics = &shared.APIV4SpecAnalytics{
+		analytics = &shared.Analytics{
 			Enabled:  enabled4,
 			Sampling: sampling,
 			Logging:  logging,

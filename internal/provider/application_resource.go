@@ -7,6 +7,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_boolplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/boolplanmodifier"
+	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
@@ -78,7 +80,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 		MarkdownDescription: "Application Resource",
 		Attributes: map[string]schema.Attribute{
 			"background": schema.StringAttribute{
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Application's background url`,
 			},
 			"description": schema.StringAttribute{
@@ -89,7 +95,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"domain": schema.StringAttribute{
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Application's domain.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
@@ -101,9 +111,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `environment ID`,
 			},
 			"groups": schema.ListAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+				Computed: true,
+				Optional: true,
+				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+				PlanModifiers: []planmodifier.List{
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+				},
 				ElementType: types.StringType,
 				Description: `List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM. Default: []`,
 			},
@@ -127,7 +140,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Application's uuid.`,
 			},
 			"members": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
@@ -137,21 +154,33 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					},
 					Attributes: map[string]schema.Attribute{
 						"role": schema.StringAttribute{
-							Optional:    true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `The role of the user in regards of the managed oject (API, Application, etc.). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"source": schema.StringAttribute{
-							Optional:    true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `Where the memeber was created (system, idp, etc.). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"source_id": schema.StringAttribute{
-							Optional:    true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `Id of the user in the source. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -165,7 +194,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"metadata": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
@@ -175,7 +208,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					},
 					Attributes: map[string]schema.Attribute{
 						"default_value": schema.StringAttribute{
-							Optional:    true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `The default value of the metadata if the value is not set.`,
 						},
 						"format": schema.StringAttribute{
@@ -198,27 +235,42 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						"hidden": schema.BoolAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     booldefault.StaticBool(false),
+							Computed: true,
+							Optional: true,
+							Default:  booldefault.StaticBool(false),
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+							},
 							Description: `if this metadata should be hidden. Default: false`,
 						},
 						"key": schema.StringAttribute{
-							Optional:    true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `The key of the metadata if different from sanitized name (lowercase + hyphens).`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtLeast(1),
 							},
 						},
 						"name": schema.StringAttribute{
-							Optional:    true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `The name of the metadata. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"value": schema.StringAttribute{
-							Optional:    true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `The value of the metadata.`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtLeast(1),
@@ -249,7 +301,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `organization ID`,
 			},
 			"picture_url": schema.StringAttribute{
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `Application's picture Url.`,
 			},
 			"settings": schema.SingleNestedAttribute{
@@ -261,6 +317,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"client_id": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Simple application client ID`,
 								Validators: []validator.String{
@@ -268,6 +325,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								},
 							},
 							"type": schema.StringAttribute{
+								Computed:    true,
 								Optional:    true,
 								Description: `Simple application type, for information`,
 							},
@@ -279,10 +337,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"additional_client_metadata": schema.MapAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 							},
 							"application_type": schema.StringAttribute{
+								Computed: true,
 								Optional: true,
 								MarkdownDescription: `OAuth client application type: ` + "\n" +
 									`` + "`" + `browser` + "`" + ` for single page apps (SPA),` + "\n" +
@@ -301,6 +361,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								},
 							},
 							"grant_types": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
 								ElementType: types.StringType,
 								MarkdownDescription: `OAuth client grant types. ` + "`" + `authorization_code` + "`" + ` is mandatory except when application type is ` + "`" + `backend_to_backend` + "`" + `.` + "\n" +
@@ -330,6 +391,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Attributes: map[string]schema.Attribute{
 							"client_certificate": schema.StringAttribute{
 								CustomType:  customtypes.TrimmedStringType{},
+								Computed:    true,
 								Optional:    true,
 								Description: `Application TLS client certificate. Not Null`,
 								Validators: []validator.String{
