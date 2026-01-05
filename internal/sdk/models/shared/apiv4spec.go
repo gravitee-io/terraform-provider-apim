@@ -3,8 +3,6 @@
 package shared
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
@@ -48,136 +46,6 @@ func (a *APIV4SpecAnalytics) GetTracing() *TracingV4 {
 	return a.Tracing
 }
 
-// APIV4SpecFailover - Defines the failover behavior to bypass endpoints when some are slow.
-type APIV4SpecFailover struct {
-	// Automatically redirects request to the next endpoint if the response is too slow.
-	Enabled *bool `default:"false" json:"enabled"`
-	// Limit the number of retry attempts before recording an error. Each attempt dynamically selects an endpoint based on the load balancing algorithm.
-	MaxRetries *int `default:"2" json:"maxRetries"`
-	// Define a threshold for slow responses. Requests exceeding this duration are recorded as slow.
-	SlowCallDuration *int64 `default:"2000" json:"slowCallDuration"`
-	// The duration in milliseconds to indicate how long the circuit breaker should stay open, before it switches to half open.
-	OpenStateDuration *int64 `default:"10000" json:"openStateDuration"`
-	// The maximum number of failures allowed before the circuit breaker can calculate the error rate.
-	MaxFailures *int `default:"5" json:"maxFailures"`
-	// If true, a circuit breaker breaker will be dedicated for each subscriber, else, one and only circuit breaker will be used for the API.
-	PerSubscription *bool `default:"true" json:"perSubscription"`
-}
-
-func (a APIV4SpecFailover) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *APIV4SpecFailover) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a *APIV4SpecFailover) GetEnabled() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.Enabled
-}
-
-func (a *APIV4SpecFailover) GetMaxRetries() *int {
-	if a == nil {
-		return nil
-	}
-	return a.MaxRetries
-}
-
-func (a *APIV4SpecFailover) GetSlowCallDuration() *int64 {
-	if a == nil {
-		return nil
-	}
-	return a.SlowCallDuration
-}
-
-func (a *APIV4SpecFailover) GetOpenStateDuration() *int64 {
-	if a == nil {
-		return nil
-	}
-	return a.OpenStateDuration
-}
-
-func (a *APIV4SpecFailover) GetMaxFailures() *int {
-	if a == nil {
-		return nil
-	}
-	return a.MaxFailures
-}
-
-func (a *APIV4SpecFailover) GetPerSubscription() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.PerSubscription
-}
-
-// APIV4SpecMode - DEFAULT : all flows that match the conditions are executed in the order they are defined BEST_MATCH: only the best matching flow will be executed
-type APIV4SpecMode string
-
-const (
-	APIV4SpecModeBestMatch APIV4SpecMode = "BEST_MATCH"
-	APIV4SpecModeDefault   APIV4SpecMode = "DEFAULT"
-)
-
-func (e APIV4SpecMode) ToPointer() *APIV4SpecMode {
-	return &e
-}
-func (e *APIV4SpecMode) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "BEST_MATCH":
-		fallthrough
-	case "DEFAULT":
-		*e = APIV4SpecMode(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for APIV4SpecMode: %v", v)
-	}
-}
-
-// APIV4SpecFlowExecution - Flow execution enablement (Not applicable for Native API)
-type APIV4SpecFlowExecution struct {
-	Mode *APIV4SpecMode `json:"mode,omitempty"`
-	// To indicate failure if no flow matches the request.
-	MatchRequired *bool `json:"matchRequired,omitempty"`
-}
-
-func (a *APIV4SpecFlowExecution) GetMode() *APIV4SpecMode {
-	if a == nil {
-		return nil
-	}
-	return a.Mode
-}
-
-func (a *APIV4SpecFlowExecution) GetMatchRequired() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.MatchRequired
-}
-
-// APIV4SpecServices - Api services (dynamic properties)
-type APIV4SpecServices struct {
-	// Specifies an API property fetch using an external source.
-	DynamicProperty *ServiceV4 `json:"dynamicProperty,omitempty"`
-}
-
-func (a *APIV4SpecServices) GetDynamicProperty() *ServiceV4 {
-	if a == nil {
-		return nil
-	}
-	return a.DynamicProperty
-}
-
 // APIV4Spec - ApiV4DefinitionSpec defines the desired state of ApiDefinition.
 type APIV4Spec struct {
 	// A unique human readable id identifying this resource
@@ -197,14 +65,16 @@ type APIV4Spec struct {
 	// Common endpoints properties and container of endpoints specifying backends this API can call.
 	EndpointGroups []EndpointGroupV4   `json:"endpointGroups"`
 	Analytics      *APIV4SpecAnalytics `json:"analytics,omitempty"`
-	Failover       *APIV4SpecFailover  `json:"failover,omitempty"`
+	// Defines the failover behavior to bypass endpoints when some are slow.
+	Failover *FailoverV4 `json:"failover,omitempty"`
 	// Properties usable using EL.
 	Properties []PropertyInput `json:"properties,omitempty"`
 	// Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).
 	Resources []APIResource `json:"resources,omitempty"`
 	// Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority.
-	Plans         []PlanV4                `json:"plans,omitempty"`
-	FlowExecution *APIV4SpecFlowExecution `json:"flowExecution,omitempty"`
+	Plans []PlanV4 `json:"plans,omitempty"`
+	// Flow execution enablement (Not applicable for Native API)
+	FlowExecution *FlowExecution `json:"flowExecution,omitempty"`
 	// Common flows for the API where traffic policies are configured.
 	Flows []FlowV4 `json:"flows,omitempty"`
 	// Map of content-type dependent Response Templates for the API (Not applicable for Native
@@ -213,7 +83,8 @@ type APIV4Spec struct {
 	// Key of the map is the error code.
 	//
 	ResponseTemplates map[string]map[string]ResponseTemplate `json:"responseTemplates,omitempty"`
-	Services          *APIV4SpecServices                     `json:"services,omitempty"`
+	// Api services (dynamic properties)
+	Services *APIServices `json:"services,omitempty"`
 	// Name or UUIDs of existing groups (of users) associated with this API.
 	Groups []string `json:"groups,omitempty"`
 	// The visibility of the entity regarding the portal.
@@ -313,7 +184,7 @@ func (a *APIV4Spec) GetAnalytics() *APIV4SpecAnalytics {
 	return a.Analytics
 }
 
-func (a *APIV4Spec) GetFailover() *APIV4SpecFailover {
+func (a *APIV4Spec) GetFailover() *FailoverV4 {
 	if a == nil {
 		return nil
 	}
@@ -341,7 +212,7 @@ func (a *APIV4Spec) GetPlans() []PlanV4 {
 	return a.Plans
 }
 
-func (a *APIV4Spec) GetFlowExecution() *APIV4SpecFlowExecution {
+func (a *APIV4Spec) GetFlowExecution() *FlowExecution {
 	if a == nil {
 		return nil
 	}
@@ -362,7 +233,7 @@ func (a *APIV4Spec) GetResponseTemplates() map[string]map[string]ResponseTemplat
 	return a.ResponseTemplates
 }
 
-func (a *APIV4Spec) GetServices() *APIV4SpecServices {
+func (a *APIV4Spec) GetServices() *APIServices {
 	if a == nil {
 		return nil
 	}

@@ -45,8 +45,8 @@ type Apiv4DataSourceModel struct {
 	Description       types.String                                   `tfsdk:"description"`
 	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
 	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
-	Failover          *tfTypes.APIV4StateFailover                    `tfsdk:"failover"`
-	FlowExecution     *tfTypes.APIV4StateFlowExecution               `tfsdk:"flow_execution"`
+	Failover          *tfTypes.FailoverV4                            `tfsdk:"failover"`
+	FlowExecution     *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
 	Flows             []tfTypes.FlowV4                               `tfsdk:"flows"`
 	Groups            []types.String                                 `tfsdk:"groups"`
 	Hrid              types.String                                   `tfsdk:"hrid"`
@@ -63,7 +63,7 @@ type Apiv4DataSourceModel struct {
 	Properties        []tfTypes.Property1                            `tfsdk:"properties"`
 	Resources         []tfTypes.APIResource                          `tfsdk:"resources"`
 	ResponseTemplates map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
-	Services          *tfTypes.APIV4StateServices                    `tfsdk:"services"`
+	Services          *tfTypes.APIServices                           `tfsdk:"services"`
 	State             types.String                                   `tfsdk:"state"`
 	Tags              []types.String                                 `tfsdk:"tags"`
 	Type              types.String                                   `tfsdk:"type"`

@@ -96,11 +96,11 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				if endpointsItem.Services == nil {
 					endpoints.Services = nil
 				} else {
-					endpoints.Services = &tfTypes.EndpointV4Services{}
+					endpoints.Services = &tfTypes.EndpointServices{}
 					if endpointsItem.Services.HealthCheck == nil {
 						endpoints.Services.HealthCheck = nil
 					} else {
-						endpoints.Services.HealthCheck = &tfTypes.EndpointV4HealthCheck{}
+						endpoints.Services.HealthCheck = &tfTypes.ServiceV4{}
 						configurationResult1, _ := json.Marshal(endpointsItem.Services.HealthCheck.Configuration)
 						endpoints.Services.HealthCheck.Configuration = jsontypes.NewNormalizedValue(string(configurationResult1))
 						endpoints.Services.HealthCheck.Enabled = types.BoolPointerValue(endpointsItem.Services.HealthCheck.Enabled)
@@ -137,11 +137,11 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			if endpointGroupsItem.Services == nil {
 				endpointGroups.Services = nil
 			} else {
-				endpointGroups.Services = &tfTypes.EndpointGroupV4Services{}
+				endpointGroups.Services = &tfTypes.EndpointGroupServices{}
 				if endpointGroupsItem.Services.Discovery == nil {
 					endpointGroups.Services.Discovery = nil
 				} else {
-					endpointGroups.Services.Discovery = &tfTypes.Discovery{}
+					endpointGroups.Services.Discovery = &tfTypes.ServiceV4{}
 					configurationResult2, _ := json.Marshal(endpointGroupsItem.Services.Discovery.Configuration)
 					endpointGroups.Services.Discovery.Configuration = jsontypes.NewNormalizedValue(string(configurationResult2))
 					endpointGroups.Services.Discovery.Enabled = types.BoolPointerValue(endpointGroupsItem.Services.Discovery.Enabled)
@@ -151,7 +151,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				if endpointGroupsItem.Services.HealthCheck == nil {
 					endpointGroups.Services.HealthCheck = nil
 				} else {
-					endpointGroups.Services.HealthCheck = &tfTypes.EndpointGroupV4HealthCheck{}
+					endpointGroups.Services.HealthCheck = &tfTypes.ServiceV4{}
 					configurationResult3, _ := json.Marshal(endpointGroupsItem.Services.HealthCheck.Configuration)
 					endpointGroups.Services.HealthCheck.Configuration = jsontypes.NewNormalizedValue(string(configurationResult3))
 					endpointGroups.Services.HealthCheck.Enabled = types.BoolPointerValue(endpointGroupsItem.Services.HealthCheck.Enabled)
@@ -173,7 +173,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		if resp.Failover == nil {
 			r.Failover = nil
 		} else {
-			r.Failover = &tfTypes.APIV4SpecFailover{}
+			r.Failover = &tfTypes.FailoverV4{}
 			r.Failover.Enabled = types.BoolPointerValue(resp.Failover.Enabled)
 			r.Failover.MaxFailures = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Failover.MaxFailures))
 			r.Failover.MaxRetries = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Failover.MaxRetries))
@@ -184,7 +184,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		if resp.FlowExecution == nil {
 			r.FlowExecution = nil
 		} else {
-			r.FlowExecution = &tfTypes.APIV4SpecFlowExecution{}
+			r.FlowExecution = &tfTypes.FlowExecution{}
 			r.FlowExecution.MatchRequired = types.BoolPointerValue(resp.FlowExecution.MatchRequired)
 			if resp.FlowExecution.Mode != nil {
 				r.FlowExecution.Mode = types.StringValue(string(*resp.FlowExecution.Mode))
@@ -927,7 +927,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		if resp.Services == nil {
 			r.Services = nil
 		} else {
-			r.Services = &tfTypes.APIV4SpecServices{}
+			r.Services = &tfTypes.APIServices{}
 			if resp.Services.DynamicProperty == nil {
 				r.Services.DynamicProperty = nil
 			} else {
@@ -1415,9 +1415,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			if !r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].SharedConfigurationOverride.IsUnknown() && !r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].SharedConfigurationOverride.IsNull() {
 				_ = json.Unmarshal([]byte(r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].SharedConfigurationOverride.ValueString()), &sharedConfigurationOverride)
 			}
-			var services *shared.EndpointV4Services
+			var services *shared.EndpointServices
 			if r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Services != nil {
-				var healthCheck *shared.EndpointV4HealthCheck
+				var healthCheck *shared.ServiceV4
 				if r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Services.HealthCheck != nil {
 					overrideConfiguration := new(bool)
 					if !r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Services.HealthCheck.OverrideConfiguration.IsUnknown() && !r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Services.HealthCheck.OverrideConfiguration.IsNull() {
@@ -1436,14 +1436,14 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					var typeVar6 string
 					typeVar6 = r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Services.HealthCheck.Type.ValueString()
 
-					healthCheck = &shared.EndpointV4HealthCheck{
+					healthCheck = &shared.ServiceV4{
 						OverrideConfiguration: overrideConfiguration,
 						Configuration:         configuration5,
 						Enabled:               enabled1,
 						Type:                  typeVar6,
 					}
 				}
-				services = &shared.EndpointV4Services{
+				services = &shared.EndpointServices{
 					HealthCheck: healthCheck,
 				}
 			}
@@ -1469,9 +1469,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				Tenants:                     tenants,
 			})
 		}
-		var services1 *shared.EndpointGroupV4Services
+		var services1 *shared.EndpointGroupServices
 		if r.EndpointGroups[endpointGroupsIndex].Services != nil {
-			var discovery *shared.Discovery
+			var discovery *shared.ServiceV4
 			if r.EndpointGroups[endpointGroupsIndex].Services.Discovery != nil {
 				overrideConfiguration1 := new(bool)
 				if !r.EndpointGroups[endpointGroupsIndex].Services.Discovery.OverrideConfiguration.IsUnknown() && !r.EndpointGroups[endpointGroupsIndex].Services.Discovery.OverrideConfiguration.IsNull() {
@@ -1490,14 +1490,14 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				var typeVar7 string
 				typeVar7 = r.EndpointGroups[endpointGroupsIndex].Services.Discovery.Type.ValueString()
 
-				discovery = &shared.Discovery{
+				discovery = &shared.ServiceV4{
 					OverrideConfiguration: overrideConfiguration1,
 					Configuration:         configuration6,
 					Enabled:               enabled2,
 					Type:                  typeVar7,
 				}
 			}
-			var healthCheck1 *shared.EndpointGroupV4HealthCheck
+			var healthCheck1 *shared.ServiceV4
 			if r.EndpointGroups[endpointGroupsIndex].Services.HealthCheck != nil {
 				overrideConfiguration2 := new(bool)
 				if !r.EndpointGroups[endpointGroupsIndex].Services.HealthCheck.OverrideConfiguration.IsUnknown() && !r.EndpointGroups[endpointGroupsIndex].Services.HealthCheck.OverrideConfiguration.IsNull() {
@@ -1516,14 +1516,14 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				var typeVar8 string
 				typeVar8 = r.EndpointGroups[endpointGroupsIndex].Services.HealthCheck.Type.ValueString()
 
-				healthCheck1 = &shared.EndpointGroupV4HealthCheck{
+				healthCheck1 = &shared.ServiceV4{
 					OverrideConfiguration: overrideConfiguration2,
 					Configuration:         configuration7,
 					Enabled:               enabled3,
 					Type:                  typeVar8,
 				}
 			}
-			services1 = &shared.EndpointGroupV4Services{
+			services1 = &shared.EndpointGroupServices{
 				Discovery:   discovery,
 				HealthCheck: healthCheck1,
 			}
@@ -1685,7 +1685,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Tracing:  tracing,
 		}
 	}
-	var failover *shared.APIV4SpecFailover
+	var failover *shared.FailoverV4
 	if r.Failover != nil {
 		enabled6 := new(bool)
 		if !r.Failover.Enabled.IsUnknown() && !r.Failover.Enabled.IsNull() {
@@ -1723,7 +1723,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			perSubscription = nil
 		}
-		failover = &shared.APIV4SpecFailover{
+		failover = &shared.FailoverV4{
 			Enabled:           enabled6,
 			MaxRetries:        maxRetries,
 			SlowCallDuration:  slowCallDuration,
@@ -2276,11 +2276,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			GeneralConditionsHrid: generalConditionsHrid,
 		})
 	}
-	var flowExecution *shared.APIV4SpecFlowExecution
+	var flowExecution *shared.FlowExecution
 	if r.FlowExecution != nil {
-		mode2 := new(shared.APIV4SpecMode)
+		mode2 := new(shared.FlowMode)
 		if !r.FlowExecution.Mode.IsUnknown() && !r.FlowExecution.Mode.IsNull() {
-			*mode2 = shared.APIV4SpecMode(r.FlowExecution.Mode.ValueString())
+			*mode2 = shared.FlowMode(r.FlowExecution.Mode.ValueString())
 		} else {
 			mode2 = nil
 		}
@@ -2290,7 +2290,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			matchRequired = nil
 		}
-		flowExecution = &shared.APIV4SpecFlowExecution{
+		flowExecution = &shared.FlowExecution{
 			Mode:          mode2,
 			MatchRequired: matchRequired,
 		}
@@ -2747,7 +2747,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		}
 		responseTemplates[responseTemplatesKey] = responseTemplatesInst
 	}
-	var services2 *shared.APIV4SpecServices
+	var services2 *shared.APIServices
 	if r.Services != nil {
 		var dynamicProperty *shared.ServiceV4
 		if r.Services.DynamicProperty != nil {
@@ -2775,7 +2775,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				Type:                  typeVar19,
 			}
 		}
-		services2 = &shared.APIV4SpecServices{
+		services2 = &shared.APIServices{
 			DynamicProperty: dynamicProperty,
 		}
 	}

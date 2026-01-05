@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type APIV4StateFlowExecution struct {
+type FlowExecution struct {
 	MatchRequired types.Bool   `tfsdk:"match_required"`
 	Mode          types.String `tfsdk:"mode"`
 }

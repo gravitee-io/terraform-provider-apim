@@ -12,7 +12,7 @@ type EndpointV4 struct {
 	InheritConfiguration        types.Bool           `tfsdk:"inherit_configuration"`
 	Name                        types.String         `tfsdk:"name"`
 	Secondary                   types.Bool           `tfsdk:"secondary"`
-	Services                    *EndpointV4Services  `tfsdk:"services"`
+	Services                    *EndpointServices    `tfsdk:"services"`
 	SharedConfigurationOverride jsontypes.Normalized `tfsdk:"shared_configuration_override"`
 	Tenants                     []types.String       `tfsdk:"tenants"`
 	Type                        types.String         `tfsdk:"type"`

@@ -2,132 +2,6 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
-)
-
-// Discovery - Specifies an API property fetch using an external source.
-type Discovery struct {
-	// When the configuration overrides an inherited configuration.
-	OverrideConfiguration *bool `default:"false" json:"overrideConfiguration"`
-	// JSON configuration of the service.
-	Configuration any `json:"configuration"`
-	// Is the service enabled or not.
-	Enabled *bool `default:"true" json:"enabled"`
-	// The service plugin ID used.
-	Type string `json:"type"`
-}
-
-func (d Discovery) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(d, "", false)
-}
-
-func (d *Discovery) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (d *Discovery) GetOverrideConfiguration() *bool {
-	if d == nil {
-		return nil
-	}
-	return d.OverrideConfiguration
-}
-
-func (d *Discovery) GetConfiguration() any {
-	if d == nil {
-		return nil
-	}
-	return d.Configuration
-}
-
-func (d *Discovery) GetEnabled() *bool {
-	if d == nil {
-		return nil
-	}
-	return d.Enabled
-}
-
-func (d *Discovery) GetType() string {
-	if d == nil {
-		return ""
-	}
-	return d.Type
-}
-
-// EndpointGroupV4HealthCheck - Specifies an API property fetch using an external source.
-type EndpointGroupV4HealthCheck struct {
-	// When the configuration overrides an inherited configuration.
-	OverrideConfiguration *bool `default:"false" json:"overrideConfiguration"`
-	// JSON configuration of the service.
-	Configuration any `json:"configuration"`
-	// Is the service enabled or not.
-	Enabled *bool `default:"true" json:"enabled"`
-	// The service plugin ID used.
-	Type string `json:"type"`
-}
-
-func (e EndpointGroupV4HealthCheck) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(e, "", false)
-}
-
-func (e *EndpointGroupV4HealthCheck) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &e, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (e *EndpointGroupV4HealthCheck) GetOverrideConfiguration() *bool {
-	if e == nil {
-		return nil
-	}
-	return e.OverrideConfiguration
-}
-
-func (e *EndpointGroupV4HealthCheck) GetConfiguration() any {
-	if e == nil {
-		return nil
-	}
-	return e.Configuration
-}
-
-func (e *EndpointGroupV4HealthCheck) GetEnabled() *bool {
-	if e == nil {
-		return nil
-	}
-	return e.Enabled
-}
-
-func (e *EndpointGroupV4HealthCheck) GetType() string {
-	if e == nil {
-		return ""
-	}
-	return e.Type
-}
-
-// EndpointGroupV4Services - API Endpoint Group Services
-type EndpointGroupV4Services struct {
-	Discovery   *Discovery                  `json:"discovery,omitempty"`
-	HealthCheck *EndpointGroupV4HealthCheck `json:"healthCheck,omitempty"`
-}
-
-func (e *EndpointGroupV4Services) GetDiscovery() *Discovery {
-	if e == nil {
-		return nil
-	}
-	return e.Discovery
-}
-
-func (e *EndpointGroupV4Services) GetHealthCheck() *EndpointGroupV4HealthCheck {
-	if e == nil {
-		return nil
-	}
-	return e.HealthCheck
-}
-
 // EndpointGroupV4 - API Endpoint Group
 type EndpointGroupV4 struct {
 	// The name of the endpoint group
@@ -139,8 +13,9 @@ type EndpointGroupV4 struct {
 	// JSON configuration for the `type` of `endpoints` that will be shared across all endpoints.
 	SharedConfiguration any `json:"sharedConfiguration,omitempty"`
 	// All endpoints of this API.
-	Endpoints []EndpointV4             `json:"endpoints,omitempty"`
-	Services  *EndpointGroupV4Services `json:"services,omitempty"`
+	Endpoints []EndpointV4 `json:"endpoints,omitempty"`
+	// API Endpoint Group Services
+	Services *EndpointGroupServices `json:"services,omitempty"`
 }
 
 func (e *EndpointGroupV4) GetName() *string {
@@ -178,7 +53,7 @@ func (e *EndpointGroupV4) GetEndpoints() []EndpointV4 {
 	return e.Endpoints
 }
 
-func (e *EndpointGroupV4) GetServices() *EndpointGroupV4Services {
+func (e *EndpointGroupV4) GetServices() *EndpointGroupServices {
 	if e == nil {
 		return nil
 	}

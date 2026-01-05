@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-type APIV4SpecFailover struct {
+type FailoverV4 struct {
 	Enabled           types.Bool  `tfsdk:"enabled"`
 	MaxFailures       types.Int32 `tfsdk:"max_failures"`
 	MaxRetries        types.Int32 `tfsdk:"max_retries"`

@@ -96,11 +96,11 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				if endpointsItem.Services == nil {
 					endpoints.Services = nil
 				} else {
-					endpoints.Services = &tfTypes.EndpointV4Services{}
+					endpoints.Services = &tfTypes.EndpointServices{}
 					if endpointsItem.Services.HealthCheck == nil {
 						endpoints.Services.HealthCheck = nil
 					} else {
-						endpoints.Services.HealthCheck = &tfTypes.EndpointV4HealthCheck{}
+						endpoints.Services.HealthCheck = &tfTypes.ServiceV4{}
 						configurationResult1, _ := json.Marshal(endpointsItem.Services.HealthCheck.Configuration)
 						endpoints.Services.HealthCheck.Configuration = jsontypes.NewNormalizedValue(string(configurationResult1))
 						endpoints.Services.HealthCheck.Enabled = types.BoolPointerValue(endpointsItem.Services.HealthCheck.Enabled)
@@ -137,11 +137,11 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			if endpointGroupsItem.Services == nil {
 				endpointGroups.Services = nil
 			} else {
-				endpointGroups.Services = &tfTypes.EndpointGroupV4Services{}
+				endpointGroups.Services = &tfTypes.EndpointGroupServices{}
 				if endpointGroupsItem.Services.Discovery == nil {
 					endpointGroups.Services.Discovery = nil
 				} else {
-					endpointGroups.Services.Discovery = &tfTypes.Discovery{}
+					endpointGroups.Services.Discovery = &tfTypes.ServiceV4{}
 					configurationResult2, _ := json.Marshal(endpointGroupsItem.Services.Discovery.Configuration)
 					endpointGroups.Services.Discovery.Configuration = jsontypes.NewNormalizedValue(string(configurationResult2))
 					endpointGroups.Services.Discovery.Enabled = types.BoolPointerValue(endpointGroupsItem.Services.Discovery.Enabled)
@@ -151,7 +151,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				if endpointGroupsItem.Services.HealthCheck == nil {
 					endpointGroups.Services.HealthCheck = nil
 				} else {
-					endpointGroups.Services.HealthCheck = &tfTypes.EndpointGroupV4HealthCheck{}
+					endpointGroups.Services.HealthCheck = &tfTypes.ServiceV4{}
 					configurationResult3, _ := json.Marshal(endpointGroupsItem.Services.HealthCheck.Configuration)
 					endpointGroups.Services.HealthCheck.Configuration = jsontypes.NewNormalizedValue(string(configurationResult3))
 					endpointGroups.Services.HealthCheck.Enabled = types.BoolPointerValue(endpointGroupsItem.Services.HealthCheck.Enabled)
@@ -173,7 +173,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		if resp.Failover == nil {
 			r.Failover = nil
 		} else {
-			r.Failover = &tfTypes.APIV4StateFailover{}
+			r.Failover = &tfTypes.FailoverV4{}
 			r.Failover.Enabled = types.BoolPointerValue(resp.Failover.Enabled)
 			r.Failover.MaxFailures = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Failover.MaxFailures))
 			r.Failover.MaxRetries = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Failover.MaxRetries))
@@ -184,7 +184,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		if resp.FlowExecution == nil {
 			r.FlowExecution = nil
 		} else {
-			r.FlowExecution = &tfTypes.APIV4StateFlowExecution{}
+			r.FlowExecution = &tfTypes.FlowExecution{}
 			r.FlowExecution.MatchRequired = types.BoolPointerValue(resp.FlowExecution.MatchRequired)
 			if resp.FlowExecution.Mode != nil {
 				r.FlowExecution.Mode = types.StringValue(string(*resp.FlowExecution.Mode))
@@ -925,7 +925,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		if resp.Services == nil {
 			r.Services = nil
 		} else {
-			r.Services = &tfTypes.APIV4StateServices{}
+			r.Services = &tfTypes.APIServices{}
 			if resp.Services.DynamicProperty == nil {
 				r.Services.DynamicProperty = nil
 			} else {

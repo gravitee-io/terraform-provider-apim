@@ -65,8 +65,8 @@ type Apiv4ResourceModel struct {
 	Description       types.String                                   `tfsdk:"description"`
 	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
 	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
-	Failover          *tfTypes.APIV4SpecFailover                     `tfsdk:"failover"`
-	FlowExecution     *tfTypes.APIV4SpecFlowExecution                `tfsdk:"flow_execution"`
+	Failover          *tfTypes.FailoverV4                            `tfsdk:"failover"`
+	FlowExecution     *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
 	Flows             []tfTypes.FlowV4                               `tfsdk:"flows"`
 	Groups            []types.String                                 `tfsdk:"groups"`
 	Hrid              types.String                                   `tfsdk:"hrid"`
@@ -84,7 +84,7 @@ type Apiv4ResourceModel struct {
 	Properties        []tfTypes.Property                             `tfsdk:"properties"`
 	Resources         []tfTypes.APIResource                          `tfsdk:"resources"`
 	ResponseTemplates map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
-	Services          *tfTypes.APIV4SpecServices                     `tfsdk:"services"`
+	Services          *tfTypes.APIServices                           `tfsdk:"services"`
 	State             types.String                                   `tfsdk:"state"`
 	Tags              []types.String                                 `tfsdk:"tags"`
 	Type              types.String                                   `tfsdk:"type"`
@@ -304,12 +304,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Define this endpoint as fallback endpoint in case other endpoints are no longer responding. Default: false`,
 									},
 									"services": schema.SingleNestedAttribute{
+										Computed: true,
 										Optional: true,
-										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.UseConfigValue(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"health_check": schema.SingleNestedAttribute{
+												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"configuration": schema.StringAttribute{
@@ -400,9 +399,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `The name of the endpoint group`,
 						},
 						"services": schema.SingleNestedAttribute{
+							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"discovery": schema.SingleNestedAttribute{
+									Computed: true,
 									Optional: true,
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
@@ -436,6 +437,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									Description: `Specifies an API property fetch using an external source.`,
 								},
 								"health_check": schema.SingleNestedAttribute{
+									Computed: true,
 									Optional: true,
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
@@ -496,6 +498,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `environment ID`,
 			},
 			"failover": schema.SingleNestedAttribute{
+				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
@@ -549,17 +552,18 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"flow_execution": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-				},
 				Attributes: map[string]schema.Attribute{
 					"match_required": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
-						Description: `To indicate failure if no flow matches the request.`,
+						Default:     booldefault.StaticBool(false),
+						Description: `To indicate failure if no flow matches the request. Default: false`,
 					},
 					"mode": schema.StringAttribute{
+						Computed:    true,
 						Optional:    true,
-						Description: `DEFAULT : all flows that match the conditions are executed in the order they are defined BEST_MATCH: only the best matching flow will be executed. must be one of ["BEST_MATCH", "DEFAULT"]`,
+						Default:     stringdefault.StaticString(`DEFAULT`),
+						Description: `DEFAULT : all flows that match the conditions are executed in the order they are defined BEST_MATCH: only the best matching flow will be executed. Default: "DEFAULT"; must be one of ["BEST_MATCH", "DEFAULT"]`,
 						Validators: []validator.String{
 							stringvalidator.OneOf(
 								"BEST_MATCH",
@@ -2902,6 +2906,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					`Key of the map is the error code.`,
 			},
 			"services": schema.SingleNestedAttribute{
+				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"dynamic_property": schema.SingleNestedAttribute{
