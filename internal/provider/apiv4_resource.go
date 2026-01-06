@@ -576,17 +576,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Flow execution enablement (Not applicable for Native API)`,
 			},
 			"flows": schema.ListNestedAttribute{
-				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+					speakeasy_listplanmodifier.UseConfigValue(),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
-					},
-					PlanModifiers: []planmodifier.Object{
-						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 					},
 					Attributes: map[string]schema.Attribute{
 						"connect": schema.ListNestedAttribute{
@@ -594,9 +590,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
-								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
@@ -625,11 +618,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
@@ -666,9 +656,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
 								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Optional:    true,
@@ -696,11 +683,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
@@ -738,9 +722,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
 								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Optional:    true,
@@ -768,11 +749,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
@@ -803,9 +781,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
 								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Optional:    true,
@@ -833,11 +808,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
@@ -868,9 +840,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
 								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Optional:    true,
@@ -898,11 +867,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
@@ -932,9 +898,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
-								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"channel": schema.SingleNestedAttribute{
@@ -1146,9 +1109,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
 								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Optional:    true,
@@ -1176,11 +1136,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
