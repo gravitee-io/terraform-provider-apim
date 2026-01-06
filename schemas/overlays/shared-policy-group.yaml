@@ -28,12 +28,15 @@ actions:
   - target: $.components.schemas.SharedPolicyGroupState.allOf[?@.properties.id].properties.id
     description: Not required for Terraform
     update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.SharedPolicyGroupState.allOf[?@.properties.crossId].properties.crossId
     description: Not required for Terraform
     update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.SharedPolicyGroupSpec.properties.prerequisiteMessage
-    description: Prevent unknown values in plans if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
+#  - target: $.components.schemas.SharedPolicyGroupSpec.properties.prerequisiteMessage
+#    description: Prevent unknown values in plans if unconfigured
+#    update:
+#      x-speakeasy-param-computed: true
+#      x-speakeasy-param-suppress-computed-diff: true

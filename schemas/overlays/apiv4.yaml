@@ -7,7 +7,6 @@ actions:
 
 
   # Entity management
-
   - target: $.paths["/organizations/{orgId}/environments/{envId}/apis"].put
     update:
       x-speakeasy-entity-operation: APIV4#create,update
@@ -21,15 +20,102 @@ actions:
     update:
       x-speakeasy-entity: APIV4
 
+  # Customizations'
+  ## Defaults that fixes diff issues
+  - target: $.components.schemas.PlanV4.properties.characteristics
+    description: Prevent unknown values if unconfigured
+    update:
+      default: []
+  - target: $.components.schemas.PlanV4.properties.excludedGroups
+    description: Prevent unknown values if unconfigured
+    update:
+      default: []
+  - target: $.components.schemas.PlanV4.properties.flows
+    description: Prevent unknown values if unconfigured
+    update:
+      default: []
+  - target: $.components.schemas.EndpointV4.properties.tenants
+    description: Prevent unknown values if unconfigured
+    update:
+      default: []
+#  - target: $.components.schemas.FlowV4.properties.request
+#    description: Prevent unknown values if unconfigured
+#    update:
+#      default: []
+#  - target: $.components.schemas.FlowV4.properties.response
+#    description: Prevent unknown values if unconfigured
+#    update:
+#      default: []
+#  - target: $.components.schemas.FlowV4.properties.subscribe
+#    description: Prevent unknown values if unconfigured
+#    update:
+#      default: []
+#  - target: $.components.schemas.FlowV4.properties.publish
+#    description: Prevent unknown values if unconfigured
+#    update:
+#      default: []
+#  - target: $.components.schemas.FlowV4.properties.connect
+#    description: Prevent unknown values if unconfigured
+#    update:
+#      default: []
+#  - target: $.components.schemas.FlowV4.properties.interact
+#    description: Prevent unknown values if unconfigured
+#    update:
+#      default: []
+  - target: $.components.schemas.FlowV4.properties.tags
+    description: Prevent unknown values if unconfigured
+    update:
+      default: []
 
-  # Customizations
-
-  ## Nothing is computed (except for defaulted attributes)
-  - target: $.components.schemas.*.properties.*
+  ## Don't use computed when not needed (beyond the global stuff)
+  - target: $.components.schemas.EndpointV4.properties.*
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-computed: false
-
+  - target: $.components.schemas.Entrypoint.properties.*
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.EndpointGroupV4.properties.*
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.EndpointGroupServices.properties.*
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.EndpointServices.properties.*
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.ApiV4Spec.properties.services
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.Sampling
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LoggingV4
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.TracingV4
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LoggingContentV4
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LoggingPhase
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LoggingModeV4
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
 
   ## Need to be computed to avoid diff
   - target: $.components.schemas.ApiV4State.allOf[?@.properties.id].properties.id
@@ -37,13 +123,19 @@ actions:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
 
-  ## Should be computed but can't be
-#  - target: $.components.schemas.ApiV4Spec.properties.metadata
-#    description: API return some, need to ignore
-#    update:
-#      x-speakeasy-param-computed: true
-#      x-speakeasy-param-suppress-computed-diff: true
-  ## Empty array create diff, should be fixed at the API level
+  ## API returns non-empty defaults for these
+  - target: $.components.schemas.ApiV4Spec.properties.metadata
+    description: API return some stuff, need to ignore
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.analytics
+    description: API return some stuff, need to ignore
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ## Empty array returned by default creates diff
   - target: $.components.schemas.ApiV4Spec.properties.properties
     description: Prevent unknown values if unconfigured
     update:
@@ -54,12 +146,93 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.flows
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-terraform-plan-only: true
   - target: $.components.schemas.ApiV4Spec.properties.members
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.pages
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PlanV4.properties.flows
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  ## FIXME applied but ignored in plan
+  - target: $.components.schemas.BaseListener.properties.servers
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
 
+  # $ref usage
+  ## API Services
+  - target: $.components.schemas.ApiV4Spec.properties.services
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiServices
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  ## Failover
+  - target: $.components.schemas.ApiV4Spec.properties.failover
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FailoverV4
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  ## Flow execution
+  - target: $.components.schemas.ApiV4Spec.properties.flowExecution
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowExecution
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ## Endpoint services
+  - target: $.components.schemas.EndpointServices
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ## Endpoint group services
+  - target: $.components.schemas.EndpointGroupServices
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ## FIXME applied but ignored in plan
+  - target: $.components.schemas.Entrypoint.properties.qos
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.Qos
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  ## FIXME applied but ignored in plan
+  - target: $.components.schemas.PathV4.properties.overrideAccess
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
 
   ## Removal
   - target: $.components.schemas.ApiV4State.allOf[?@.properties.crossId].properties.crossId
@@ -70,6 +243,10 @@ actions:
     update:
       x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.PrimaryOwner
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.PageV4.properties.crossId
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-terraform-ignore: true

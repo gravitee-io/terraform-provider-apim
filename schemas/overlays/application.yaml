@@ -27,33 +27,36 @@ actions:
   ## Avoid diff for optional properties
 
   ### Application Spec
-  - target: $.components.schemas.ApplicationSpec.properties.domain
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
+#  - target: $.components.schemas.ApplicationSpec.properties.domain
+#    description: Prevent unknown values if unconfigured
+#    update:
+#      x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApplicationSpec.properties.groups
     description: Prevent unknown values if unconfigured
     update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApplicationSpec.properties.pictureUrl
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApplicationSpec.properties.background
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApplicationSpec.properties.metadata
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
+#  - target: $.components.schemas.ApplicationSpec.properties.pictureUrl
+#    description: Prevent unknown values if unconfigured
+#    update:
+#      x-speakeasy-param-suppress-computed-diff: true
+#  - target: $.components.schemas.ApplicationSpec.properties.background
+#    description: Prevent unknown values if unconfigured
+#    update:
+#      x-speakeasy-param-suppress-computed-diff: true
+#  - target: $.components.schemas.ApplicationSpec.properties.metadata
+#    description: Prevent unknown values if unconfigured
+#    update:
+#      x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApplicationSpec.properties.members
     description: Prevent unknown values if unconfigured
     update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApplicationSpec.properties.settings
     description: Prevent unknown values if unconfigured
     update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
 
   ### Application State

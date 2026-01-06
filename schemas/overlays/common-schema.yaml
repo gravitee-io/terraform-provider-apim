@@ -5,6 +5,13 @@ info:
   version: 0.0.1
 actions:
 
+
+  ## Nothing is computed (except for defaulted attributes)
+  - target: $.components.schemas.*.properties.*
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: false
+
   # Terraform ignored
   - target: $.components.schemas.Errors
     description: Intentionally ignored for Terraform state

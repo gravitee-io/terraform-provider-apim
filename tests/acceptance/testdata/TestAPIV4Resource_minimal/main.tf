@@ -28,7 +28,6 @@ resource "apim_apiv4" "test" {
       load_balancer = {
         type = "ROUND_ROBIN"
       }
-      services = {}
       endpoints = [
         {
           #name = "Default HTTP proxy"
@@ -36,7 +35,6 @@ resource "apim_apiv4" "test" {
           configuration = jsonencode({
             target = "https://example.com"
           })
-          services = {}
         }
       ]
     }
