@@ -3,8 +3,8 @@
 package types
 
 type Listener struct {
-	HTTP         *HTTPListener         `queryParam:"inline" tfsdk:"http" tfPlanOnly:"true"`
-	Kafka        *KafkaListener        `queryParam:"inline" tfsdk:"kafka" tfPlanOnly:"true"`
-	Subscription *SubscriptionListener `queryParam:"inline" tfsdk:"subscription" tfPlanOnly:"true"`
-	TCP          *TCPListener          `queryParam:"inline" tfsdk:"tcp" tfPlanOnly:"true"`
+	HTTP         *HTTPListener         `queryParam:"inline" tfsdk:"http"`
+	Kafka        *KafkaListener        `queryParam:"inline" tfsdk:"kafka"`
+	Subscription *SubscriptionListener `queryParam:"inline" tfsdk:"subscription"`
+	TCP          *TCPListener          `queryParam:"inline" tfsdk:"tcp"`
 }

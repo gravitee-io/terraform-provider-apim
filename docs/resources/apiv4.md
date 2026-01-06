@@ -284,7 +284,7 @@ Optional:
 - `secondary` (Boolean) Define this endpoint as fallback endpoint in case other endpoints are no longer responding. Default: false
 - `services` (Attributes) API Endpoint Services (see [below for nested schema](#nestedatt--endpoint_groups--endpoints--services))
 - `shared_configuration_override` (String) JSON Configuration that replaces the shared configuration defined at the group level. Parsed as JSON.
-- `tenants` (List of String) The list of Getaway's tenants on which the endpoint can be used.
+- `tenants` (List of String) The list of Getaway's tenants on which the endpoint can be used. Default: []
 - `type` (String) The type of endpoint. Not Null
 - `weight` (Number) The weight of the endpoint for the load balancer algorythm. Default: 1
 
@@ -623,7 +623,7 @@ Optional:
 - `response` (Attributes List) Response flow steps used for PROXY and MESSAGE APIs (see [below for nested schema](#nestedatt--flows--response))
 - `selectors` (Attributes List) (see [below for nested schema](#nestedatt--flows--selectors))
 - `subscribe` (Attributes List) Subscribe flow steps used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--flows--subscribe))
-- `tags` (List of String) Flow's informative tags.
+- `tags` (List of String) Flow's informative tags. Default: []
 
 <a id="nestedatt--flows--connect"></a>
 ### Nested Schema for `flows.connect`
@@ -805,10 +805,6 @@ overriding page content each time the source is fetched. (see [below for nested 
 - `type` (String) The type of the documentation page or folder. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]
 - `visibility` (String) The visibility of the entity regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]
 
-Read-Only:
-
-- `cross_id` (String) Page's cross uuid.
-
 <a id="nestedatt--pages--source"></a>
 ### Nested Schema for `pages.source`
 
@@ -824,9 +820,9 @@ Optional:
 
 Optional:
 
-- `characteristics` (List of String) Plan informative characteristics
+- `characteristics` (List of String) Plan informative characteristics. Default: []
 - `description` (String) A description for this plan.
-- `excluded_groups` (List of String) Access-control, UUID of groups excluded from this plan
+- `excluded_groups` (List of String) Access-control, UUID of groups excluded from this plan. Default: []
 - `flows` (Attributes List) Flows like API flows, composed of step running policies. 
 All steps are executed before the next plan flow or before the API flows,
 same on the reponse, which means API reponse flows will always run last. (see [below for nested schema](#nestedatt--plans--flows))
@@ -857,7 +853,7 @@ Optional:
 - `response` (Attributes List) Response flow steps used for PROXY and MESSAGE APIs (see [below for nested schema](#nestedatt--plans--flows--response))
 - `selectors` (Attributes List) (see [below for nested schema](#nestedatt--plans--flows--selectors))
 - `subscribe` (Attributes List) Subscribe flow steps used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--subscribe))
-- `tags` (List of String) Flow's informative tags.
+- `tags` (List of String) Flow's informative tags. Default: []
 
 <a id="nestedatt--plans--flows--connect"></a>
 ### Nested Schema for `plans.flows.connect`

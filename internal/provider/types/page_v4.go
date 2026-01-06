@@ -9,7 +9,6 @@ import (
 type PageV4 struct {
 	Configuration map[string]types.String `tfsdk:"configuration"`
 	Content       types.String            `tfsdk:"content"`
-	CrossID       types.String            `tfsdk:"cross_id"`
 	Homepage      types.Bool              `tfsdk:"homepage"`
 	Hrid          types.String            `tfsdk:"hrid"`
 	Name          types.String            `tfsdk:"name"`
