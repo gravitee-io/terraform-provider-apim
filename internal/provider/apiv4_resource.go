@@ -1424,10 +1424,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Virtual host required to access this API. (` + "`" + `Host` + "`" + ` or ` + "`" + `:Authority` + "`" + ` headers, remote address for websockets)`,
 											},
 											"override_access": schema.BoolAttribute{
-												Computed:    true,
 												Optional:    true,
-												Default:     booldefault.StaticBool(false),
-												Description: `Override default organization entrypoint with ` + "`" + `host` + "`" + `. Default: false`,
+												Description: `Override default organization entrypoint with ` + "`" + `host` + "`" + ``,
 											},
 											"path": schema.StringAttribute{
 												Computed:    true,
