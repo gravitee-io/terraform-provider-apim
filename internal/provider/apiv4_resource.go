@@ -113,22 +113,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Description: `Whether or not analytics are enabled.`,
 					},
 					"logging": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-						},
 						Attributes: map[string]schema.Attribute{
 							"condition": schema.StringAttribute{
 								Optional:    true,
 								Description: `Filter using EL what request should be logged`,
 							},
 							"content": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"headers": schema.BoolAttribute{
 										Optional:    true,
@@ -158,11 +150,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Description: `Filter using EL what message should be logged`,
 							},
 							"mode": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"endpoint": schema.BoolAttribute{
 										Optional:    true,
@@ -176,11 +164,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Description: `API logging mode (Not for native APIs)`,
 							},
 							"phase": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"request": schema.BoolAttribute{
 										Optional:    true,
@@ -197,11 +181,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Description: `API logging configuration (Not for native APIs)`,
 					},
 					"sampling": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-						},
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
 								Optional: true,
@@ -235,11 +215,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Description: `API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.`,
 					},
 					"tracing": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-						},
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Optional:    true,
