@@ -1104,10 +1104,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed:    true,
 							Description: `The content of the page, if any.`,
 						},
-						"cross_id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Page's cross uuid.`,
-						},
 						"homepage": schema.BoolAttribute{
 							Computed:    true,
 							Description: `If true, this page will be displayed as the homepage of your API documentation.`,

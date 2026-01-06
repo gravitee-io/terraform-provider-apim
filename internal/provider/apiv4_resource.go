@@ -1942,10 +1942,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Optional:    true,
 							Description: `The content of the page, if any.`,
 						},
-						"cross_id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Page's cross uuid.`,
-						},
 						"homepage": schema.BoolAttribute{
 							Computed:    true,
 							Optional:    true,
