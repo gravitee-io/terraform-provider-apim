@@ -21,7 +21,8 @@ generation:
   schemas:
     allOfMergeStrategy: shallowMerge
   requestBodyFieldName: ""
-  persistentEdits: {}
+  persistentEdits:
+    enabled: "true"
   tests:
     generateTests: false
     generateNewTests: true

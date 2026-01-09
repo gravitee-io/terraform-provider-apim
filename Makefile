@@ -11,14 +11,10 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 	@terraform fmt -recursive > /dev/null
 	@make doc-gen
 	speakeasy run --output console --skip-versioning
-	@make cloud-init-patch
 	@go mod tidy
 	@rm -rf examples/data-sources docs/data-sources examples/README.md USAGE.md > /dev/null
 	@mv ~/.terraformrc.keep ~/.terraformrc 2>/dev/null || true
 	@go build
-
-cloud-init-patch:
-	@node cloud-init-patch.js
 
 .PHONY: lint
 lint: ## Run speakeasy lint accepting no error or warning
