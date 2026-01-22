@@ -21,10 +21,10 @@ const (
 
 // Listener
 type Listener struct {
-	HTTPListener         *HTTPListener         `queryParam:"inline,name=Listener" union:"member"`
-	SubscriptionListener *SubscriptionListener `queryParam:"inline,name=Listener" union:"member"`
-	TCPListener          *TCPListener          `queryParam:"inline,name=Listener" union:"member"`
-	KafkaListener        *KafkaListener        `queryParam:"inline,name=Listener" union:"member"`
+	HTTPListener         *HTTPListener         `queryParam:"inline" union:"member"`
+	SubscriptionListener *SubscriptionListener `queryParam:"inline" union:"member"`
+	TCPListener          *TCPListener          `queryParam:"inline" union:"member"`
+	KafkaListener        *KafkaListener        `queryParam:"inline" union:"member"`
 
 	Type ListenerUnionType
 }
