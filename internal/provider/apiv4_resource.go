@@ -902,9 +902,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Attributes: map[string]schema.Attribute{
 									"channel": schema.SingleNestedAttribute{
 										Optional: true,
-										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.UseConfigValue(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"channel": schema.StringAttribute{
 												Computed:    true,
@@ -967,9 +964,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"condition": schema.SingleNestedAttribute{
 										Optional: true,
-										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.UseConfigValue(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"condition": schema.StringAttribute{
 												Computed:    true,
@@ -1004,9 +998,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"http": schema.SingleNestedAttribute{
 										Optional: true,
-										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.UseConfigValue(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"methods": schema.ListAttribute{
 												Computed:    true,
@@ -1063,9 +1054,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"mcp": schema.SingleNestedAttribute{
 										Optional: true,
-										PlanModifiers: []planmodifier.Object{
-											speakeasy_objectplanmodifier.UseConfigValue(),
-										},
 										Attributes: map[string]schema.Attribute{
 											"methods": schema.ListAttribute{
 												Computed:    true,
@@ -1234,9 +1222,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					Attributes: map[string]schema.Attribute{
 						"http": schema.SingleNestedAttribute{
 							Optional: true,
-							PlanModifiers: []planmodifier.Object{
-								speakeasy_objectplanmodifier.UseConfigValue(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"cors": schema.SingleNestedAttribute{
 									Computed: true,
@@ -1419,9 +1404,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						"kafka": schema.SingleNestedAttribute{
 							Optional: true,
-							PlanModifiers: []planmodifier.Object{
-								speakeasy_objectplanmodifier.UseConfigValue(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"entrypoints": schema.ListNestedAttribute{
 									Optional: true,
@@ -1520,9 +1502,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						"subscription": schema.SingleNestedAttribute{
 							Optional: true,
-							PlanModifiers: []planmodifier.Object{
-								speakeasy_objectplanmodifier.UseConfigValue(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"entrypoints": schema.ListNestedAttribute{
 									Optional: true,
@@ -1613,9 +1592,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						"tcp": schema.SingleNestedAttribute{
 							Optional: true,
-							PlanModifiers: []planmodifier.Object{
-								speakeasy_objectplanmodifier.UseConfigValue(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"entrypoints": schema.ListNestedAttribute{
 									Optional: true,
@@ -2371,9 +2347,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											Attributes: map[string]schema.Attribute{
 												"channel": schema.SingleNestedAttribute{
 													Optional: true,
-													PlanModifiers: []planmodifier.Object{
-														speakeasy_objectplanmodifier.UseConfigValue(),
-													},
 													Attributes: map[string]schema.Attribute{
 														"channel": schema.StringAttribute{
 															Computed:    true,
@@ -2436,9 +2409,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												"condition": schema.SingleNestedAttribute{
 													Optional: true,
-													PlanModifiers: []planmodifier.Object{
-														speakeasy_objectplanmodifier.UseConfigValue(),
-													},
 													Attributes: map[string]schema.Attribute{
 														"condition": schema.StringAttribute{
 															Computed:    true,
@@ -2473,9 +2443,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												"http": schema.SingleNestedAttribute{
 													Optional: true,
-													PlanModifiers: []planmodifier.Object{
-														speakeasy_objectplanmodifier.UseConfigValue(),
-													},
 													Attributes: map[string]schema.Attribute{
 														"methods": schema.ListAttribute{
 															Computed:    true,
@@ -2532,9 +2499,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												"mcp": schema.SingleNestedAttribute{
 													Optional: true,
-													PlanModifiers: []planmodifier.Object{
-														speakeasy_objectplanmodifier.UseConfigValue(),
-													},
 													Attributes: map[string]schema.Attribute{
 														"methods": schema.ListAttribute{
 															Computed:    true,
@@ -3352,13 +3316,13 @@ func (r *Apiv4Resource) ImportState(ctx context.Context, req resource.ImportStat
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"`)
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"'`)
 			return
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
 	if len(data.Hrid) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"my_demo_api"`)
+		resp.Diagnostics.AddError("Missing required field", `The field hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"my_demo_api"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("hrid"), data.Hrid)...)
@@ -3367,7 +3331,7 @@ func (r *Apiv4Resource) ImportState(ctx context.Context, req resource.ImportStat
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"`)
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"'`)
 			return
 		}
 	}
