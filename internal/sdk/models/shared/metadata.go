@@ -27,7 +27,7 @@ func (m Metadata) MarshalJSON() ([]byte, error) {
 }
 
 func (m *Metadata) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &m, "", false, []string{"name", "format"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &m, "", false, nil); err != nil {
 		return err
 	}
 	return nil

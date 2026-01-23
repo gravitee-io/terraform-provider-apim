@@ -82,7 +82,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `environment ID`,
+				Description: `The environment ID of the Application.`,
 			},
 			"groups": schema.ListAttribute{
 				Computed:    true,
@@ -91,7 +91,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
-				Description: `Human-readable ID of a spec`,
+				Description: `A unique human readable id identifying this resource`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
@@ -165,7 +165,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `organization ID`,
+				Description: `The organization ID of the Application.`,
 			},
 			"picture_url": schema.StringAttribute{
 				Computed:    true,

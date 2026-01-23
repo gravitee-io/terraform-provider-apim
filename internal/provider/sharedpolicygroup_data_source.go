@@ -78,11 +78,11 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `environment ID`,
+				Description: `The environment ID of the shared policy group.`,
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
-				Description: `Human-readable ID of a spec`,
+				Description: `A unique human readable id identifying this resource`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
@@ -99,7 +99,7 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `organization ID`,
+				Description: `The organization ID of the shared policy group.`,
 			},
 			"phase": schema.StringAttribute{
 				Computed:    true,

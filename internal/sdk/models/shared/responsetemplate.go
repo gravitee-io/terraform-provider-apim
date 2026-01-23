@@ -23,7 +23,7 @@ func (r ResponseTemplate) MarshalJSON() ([]byte, error) {
 }
 
 func (r *ResponseTemplate) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, []string{"status"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
 		return err
 	}
 	return nil

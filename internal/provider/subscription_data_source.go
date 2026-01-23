@@ -62,7 +62,7 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 		Attributes: map[string]schema.Attribute{
 			"api_hrid": schema.StringAttribute{
 				Required:    true,
-				Description: `Human-readable ID of api`,
+				Description: `The API's Hrid.`,
 			},
 			"application_hrid": schema.StringAttribute{
 				Computed:    true,
@@ -79,7 +79,7 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
-				Description: `Human-readable ID of a spec`,
+				Description: `A unique human readable id identifying this resource`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),

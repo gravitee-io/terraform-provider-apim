@@ -3,7 +3,7 @@
 package types
 
 type Selector struct {
-	Channel   *ChannelSelector   `queryParam:"inline" tfsdk:"channel" tfPlanOnly:"true"`
-	Condition *ConditionSelector `queryParam:"inline" tfsdk:"condition" tfPlanOnly:"true"`
-	HTTP      *HTTPSelector      `queryParam:"inline" tfsdk:"http" tfPlanOnly:"true"`
+	Channel   *ChannelSelector   `queryParam:"inline" tfsdk:"channel"`
+	Condition *ConditionSelector `queryParam:"inline" tfsdk:"condition"`
+	HTTP      *HTTPSelector      `queryParam:"inline" tfsdk:"http"`
 }

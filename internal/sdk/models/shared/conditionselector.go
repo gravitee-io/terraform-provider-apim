@@ -51,7 +51,7 @@ func (c ConditionSelector) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ConditionSelector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"type", "condition"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

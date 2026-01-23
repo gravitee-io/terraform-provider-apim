@@ -1,4 +1,4 @@
-speakeasyVersion: 1.637.3
+speakeasyVersion: 1.696.0
 sources:
     Gravitee.io - Automation API:
         sourceNamespace: gravitee-io-gko---automation-api
@@ -27,7 +27,7 @@ targets:
         sourceBlobDigest: sha256:e5bdd28116e0660af601a098573e8a5044ef09f829e56844984aec28f40ca240
 workflow:
     workflowVersion: 1.0.0
-    speakeasyVersion: 1.637.3
+    speakeasyVersion: 1.696.0
     sources:
         automation-api:
             inputs:

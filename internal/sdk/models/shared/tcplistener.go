@@ -23,7 +23,7 @@ func (t TCPListener) MarshalJSON() ([]byte, error) {
 }
 
 func (t *TCPListener) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &t, "", false, []string{"type", "hosts"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &t, "", false, nil); err != nil {
 		return err
 	}
 	return nil

@@ -84,7 +84,7 @@ func (c ChannelSelector) MarshalJSON() ([]byte, error) {
 }
 
 func (c *ChannelSelector) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"type"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil

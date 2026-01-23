@@ -19,9 +19,9 @@ const (
 
 // Selector - Flow selector
 type Selector struct {
-	HTTPSelector      *HTTPSelector      `queryParam:"inline,name=Selector"`
-	ChannelSelector   *ChannelSelector   `queryParam:"inline,name=Selector"`
-	ConditionSelector *ConditionSelector `queryParam:"inline,name=Selector"`
+	HTTPSelector      *HTTPSelector      `queryParam:"inline" union:"member"`
+	ChannelSelector   *ChannelSelector   `queryParam:"inline" union:"member"`
+	ConditionSelector *ConditionSelector `queryParam:"inline" union:"member"`
 
 	Type SelectorType
 }
