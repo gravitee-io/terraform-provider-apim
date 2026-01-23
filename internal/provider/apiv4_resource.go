@@ -589,6 +589,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"connect": schema.ListNestedAttribute{
+							Computed: true,
 							Optional: true,
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
@@ -2005,6 +2006,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"connect": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
