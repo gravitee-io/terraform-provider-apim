@@ -307,7 +307,11 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				if selectorsItem.ChannelSelector != nil {
 					selectors.Channel = &tfTypes.ChannelSelector{}
 					selectors.Channel.Channel = types.StringPointerValue(selectorsItem.ChannelSelector.Channel)
-					selectors.Channel.ChannelOperator = types.StringValue(string(selectorsItem.ChannelSelector.ChannelOperator))
+					if selectorsItem.ChannelSelector.ChannelOperator != nil {
+						selectors.Channel.ChannelOperator = types.StringValue(string(*selectorsItem.ChannelSelector.ChannelOperator))
+					} else {
+						selectors.Channel.ChannelOperator = types.StringNull()
+					}
 					selectors.Channel.Entrypoints = make([]types.String, 0, len(selectorsItem.ChannelSelector.Entrypoints))
 					for _, v := range selectorsItem.ChannelSelector.Entrypoints {
 						selectors.Channel.Entrypoints = append(selectors.Channel.Entrypoints, types.StringValue(v))
@@ -330,7 +334,11 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 						selectors.HTTP.Methods = append(selectors.HTTP.Methods, types.StringValue(string(v)))
 					}
 					selectors.HTTP.Path = types.StringPointerValue(selectorsItem.HTTPSelector.Path)
-					selectors.HTTP.PathOperator = types.StringValue(string(selectorsItem.HTTPSelector.PathOperator))
+					if selectorsItem.HTTPSelector.PathOperator != nil {
+						selectors.HTTP.PathOperator = types.StringValue(string(*selectorsItem.HTTPSelector.PathOperator))
+					} else {
+						selectors.HTTP.PathOperator = types.StringNull()
+					}
 					selectors.HTTP.Type = types.StringValue(string(selectorsItem.HTTPSelector.Type))
 				}
 				if selectorsItem.McpSelector != nil {
@@ -761,7 +769,11 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					if selectorsItem1.ChannelSelector != nil {
 						selectors1.Channel = &tfTypes.ChannelSelector{}
 						selectors1.Channel.Channel = types.StringPointerValue(selectorsItem1.ChannelSelector.Channel)
-						selectors1.Channel.ChannelOperator = types.StringValue(string(selectorsItem1.ChannelSelector.ChannelOperator))
+						if selectorsItem1.ChannelSelector.ChannelOperator != nil {
+							selectors1.Channel.ChannelOperator = types.StringValue(string(*selectorsItem1.ChannelSelector.ChannelOperator))
+						} else {
+							selectors1.Channel.ChannelOperator = types.StringNull()
+						}
 						selectors1.Channel.Entrypoints = make([]types.String, 0, len(selectorsItem1.ChannelSelector.Entrypoints))
 						for _, v := range selectorsItem1.ChannelSelector.Entrypoints {
 							selectors1.Channel.Entrypoints = append(selectors1.Channel.Entrypoints, types.StringValue(v))
@@ -784,7 +796,11 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 							selectors1.HTTP.Methods = append(selectors1.HTTP.Methods, types.StringValue(string(v)))
 						}
 						selectors1.HTTP.Path = types.StringPointerValue(selectorsItem1.HTTPSelector.Path)
-						selectors1.HTTP.PathOperator = types.StringValue(string(selectorsItem1.HTTPSelector.PathOperator))
+						if selectorsItem1.HTTPSelector.PathOperator != nil {
+							selectors1.HTTP.PathOperator = types.StringValue(string(*selectorsItem1.HTTPSelector.PathOperator))
+						} else {
+							selectors1.HTTP.PathOperator = types.StringNull()
+						}
 						selectors1.HTTP.Type = types.StringValue(string(selectorsItem1.HTTPSelector.Type))
 					}
 					if selectorsItem1.McpSelector != nil {
@@ -1843,7 +1859,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					} else {
 						path1 = nil
 					}
-					pathOperator := shared.Operator(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].HTTP.PathOperator.ValueString())
+					pathOperator := new(shared.Operator)
+					if !r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].HTTP.PathOperator.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].HTTP.PathOperator.IsNull() {
+						*pathOperator = shared.Operator(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].HTTP.PathOperator.ValueString())
+					} else {
+						pathOperator = nil
+					}
 					methods := make([]shared.HTTPMethod, 0, len(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].HTTP.Methods))
 					for _, methodsItem := range r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].HTTP.Methods {
 						methods = append(methods, shared.HTTPMethod(methodsItem.ValueString()))
@@ -1870,7 +1891,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					} else {
 						channel = nil
 					}
-					channelOperator := shared.Operator(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel.ChannelOperator.ValueString())
+					channelOperator := new(shared.Operator)
+					if !r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel.ChannelOperator.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel.ChannelOperator.IsNull() {
+						*channelOperator = shared.Operator(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel.ChannelOperator.ValueString())
+					} else {
+						channelOperator = nil
+					}
 					entrypoints4 := make([]string, 0, len(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel.Entrypoints))
 					for entrypointsIndex4 := range r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel.Entrypoints {
 						entrypoints4 = append(entrypoints4, r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel.Entrypoints[entrypointsIndex4].ValueString())
@@ -2292,7 +2318,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					path2 = nil
 				}
-				pathOperator1 := shared.Operator(r.Flows[flowsIndex1].Selectors[selectorsItem1].HTTP.PathOperator.ValueString())
+				pathOperator1 := new(shared.Operator)
+				if !r.Flows[flowsIndex1].Selectors[selectorsItem1].HTTP.PathOperator.IsUnknown() && !r.Flows[flowsIndex1].Selectors[selectorsItem1].HTTP.PathOperator.IsNull() {
+					*pathOperator1 = shared.Operator(r.Flows[flowsIndex1].Selectors[selectorsItem1].HTTP.PathOperator.ValueString())
+				} else {
+					pathOperator1 = nil
+				}
 				methods2 := make([]shared.HTTPMethod, 0, len(r.Flows[flowsIndex1].Selectors[selectorsItem1].HTTP.Methods))
 				for _, methodsItem1 := range r.Flows[flowsIndex1].Selectors[selectorsItem1].HTTP.Methods {
 					methods2 = append(methods2, shared.HTTPMethod(methodsItem1.ValueString()))
@@ -2319,7 +2350,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					channel1 = nil
 				}
-				channelOperator1 := shared.Operator(r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel.ChannelOperator.ValueString())
+				channelOperator1 := new(shared.Operator)
+				if !r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel.ChannelOperator.IsUnknown() && !r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel.ChannelOperator.IsNull() {
+					*channelOperator1 = shared.Operator(r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel.ChannelOperator.ValueString())
+				} else {
+					channelOperator1 = nil
+				}
 				entrypoints5 := make([]string, 0, len(r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel.Entrypoints))
 				for entrypointsIndex5 := range r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel.Entrypoints {
 					entrypoints5 = append(entrypoints5, r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel.Entrypoints[entrypointsIndex5].ValueString())

@@ -77,7 +77,7 @@ type ChannelSelector struct {
 	// The channel of the selector
 	Channel *string `default:"/" json:"channel"`
 	// Operator function to match a URI path
-	ChannelOperator Operator `json:"channelOperator"`
+	ChannelOperator *Operator `default:"STARTS_WITH" json:"channelOperator"`
 	// Among all entrypoints types, restrict which one will trigger this flow. Unset or empty means "all types".
 	Entrypoints []string `json:"entrypoints,omitempty"`
 }
@@ -114,9 +114,9 @@ func (c *ChannelSelector) GetChannel() *string {
 	return c.Channel
 }
 
-func (c *ChannelSelector) GetChannelOperator() Operator {
+func (c *ChannelSelector) GetChannelOperator() *Operator {
 	if c == nil {
-		return Operator("")
+		return nil
 	}
 	return c.ChannelOperator
 }

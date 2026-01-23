@@ -48,7 +48,7 @@ type HTTPSelector struct {
 	// The path to match
 	Path *string `default:"/" json:"path"`
 	// Operator function to match a URI path
-	PathOperator Operator `json:"pathOperator"`
+	PathOperator *Operator `default:"STARTS_WITH" json:"pathOperator"`
 	// Methods to match, unset or empty means "any"
 	Methods []HTTPMethod `json:"methods,omitempty"`
 }
@@ -78,9 +78,9 @@ func (h *HTTPSelector) GetPath() *string {
 	return h.Path
 }
 
-func (h *HTTPSelector) GetPathOperator() Operator {
+func (h *HTTPSelector) GetPathOperator() *Operator {
 	if h == nil {
-		return Operator("")
+		return nil
 	}
 	return h.PathOperator
 }
