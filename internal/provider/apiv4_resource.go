@@ -960,9 +960,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `The channel of the selector. Default: "/"`,
 											},
 											"channel_operator": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     stringdefault.StaticString(`STARTS_WITH`),
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`STARTS_WITH`),
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Operator function to match a URI path. Default: "STARTS_WITH"; must be one of ["EQUALS", "STARTS_WITH"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -1068,9 +1071,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"path_operator": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     stringdefault.StaticString(`STARTS_WITH`),
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`STARTS_WITH`),
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Operator function to match a URI path. Default: "STARTS_WITH"; must be one of ["EQUALS", "STARTS_WITH"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -2430,9 +2436,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															Description: `The channel of the selector. Default: "/"`,
 														},
 														"channel_operator": schema.StringAttribute{
-															Computed:    true,
-															Optional:    true,
-															Default:     stringdefault.StaticString(`STARTS_WITH`),
+															Computed: true,
+															Optional: true,
+															Default:  stringdefault.StaticString(`STARTS_WITH`),
+															PlanModifiers: []planmodifier.String{
+																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+															},
 															Description: `Operator function to match a URI path. Default: "STARTS_WITH"; must be one of ["EQUALS", "STARTS_WITH"]`,
 															Validators: []validator.String{
 																stringvalidator.OneOf(
@@ -2538,9 +2547,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 														"path_operator": schema.StringAttribute{
-															Computed:    true,
-															Optional:    true,
-															Default:     stringdefault.StaticString(`STARTS_WITH`),
+															Computed: true,
+															Optional: true,
+															Default:  stringdefault.StaticString(`STARTS_WITH`),
+															PlanModifiers: []planmodifier.String{
+																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+															},
 															Description: `Operator function to match a URI path. Default: "STARTS_WITH"; must be one of ["EQUALS", "STARTS_WITH"]`,
 															Validators: []validator.String{
 																stringvalidator.OneOf(
