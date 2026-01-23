@@ -1224,7 +1224,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"cors": schema.SingleNestedAttribute{
-									Computed: true,
 									Optional: true,
 									Attributes: map[string]schema.Attribute{
 										"allow_credentials": schema.BoolAttribute{
@@ -1294,7 +1293,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
@@ -1418,7 +1416,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
@@ -1516,7 +1513,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
@@ -1606,7 +1602,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
