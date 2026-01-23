@@ -54,7 +54,7 @@ func (g GetApplicationRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (g *GetApplicationRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &g, "", false, []string{"hrid"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
 		return err
 	}
 	return nil

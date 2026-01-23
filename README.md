@@ -50,7 +50,7 @@ terraform {
 }
 
 provider "apim" {
-  # Configuration options
+  server_url = "..." # Optional - can use APIM_SERVER_URL environment variable
 }
 ```
 <!-- End Installation [installation] -->

@@ -13,6 +13,7 @@ generation:
     requestResponseComponentNamesFeb2024: true
     securityFeb2025: true
     sharedErrorComponentsApr2025: true
+    sharedNestedComponentsJan2026: false
   auth:
     oAuth2ClientCredentialsEnabled: true
     oAuth2PasswordEnabled: true
@@ -20,6 +21,8 @@ generation:
   sdkHooksConfigAccess: true
   schemas:
     allOfMergeStrategy: shallowMerge
+  requestBodyFieldName: ""
+  persistentEdits: {}
   tests:
     generateTests: false
     generateNewTests: true
@@ -33,6 +36,7 @@ terraform:
   additionalDataSources: []
   additionalDependencies: {}
   additionalEphemeralResources: []
+  additionalListResources: []
   additionalProviderAttributes:
     httpHeaders: ""
     tlsSkipVerify: ""
@@ -40,7 +44,11 @@ terraform:
   allowUnknownFieldsInWeakUnions: false
   author: gravitee-io
   baseErrorName: ApimError
+  debugLogging: {}
   defaultErrorName: APIError
+  enableCustomCodeRegions: false
+  enableOperationSecurity: false
+  enableOperationServers: false
   enableTypeDeduplication: false
   environmentVariables:
     - env: APIM_SERVER_URL
@@ -57,4 +65,9 @@ terraform:
       providerAttribute: organization_id
     - env: APIM_ENV_ID
       providerAttribute: environment_id
+  excludeEmptyObjectSchemas: false
+  includeEmptyObjects: false
+  inferUnionDiscriminators: false
   packageName: apim
+  respectRequiredFields: false
+  unionStrategy: populated-fields

@@ -8,6 +8,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
+	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -209,6 +210,7 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 
 	resp.DataSourceData = configureData
 	resp.EphemeralResourceData = configureData
+	resp.ListResourceData = configureData
 	resp.ResourceData = configureData
 }
 
@@ -232,6 +234,10 @@ func (p *ApimProvider) DataSources(ctx context.Context) []func() datasource.Data
 
 func (p *ApimProvider) EphemeralResources(ctx context.Context) []func() ephemeral.EphemeralResource {
 	return []func() ephemeral.EphemeralResource{}
+}
+
+func (p *ApimProvider) ListResources(ctx context.Context) []func() list.ListResource {
+	return []func() list.ListResource{}
 }
 
 func New(version string) func() provider.Provider {

@@ -839,7 +839,10 @@ func (r *ApplicationResource) Delete(ctx context.Context, req resource.DeleteReq
 		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
 		return
 	}
-	if res.StatusCode != 204 {
+	switch res.StatusCode {
+	case 204, 404:
+		break
+	default:
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
@@ -865,13 +868,13 @@ func (r *ApplicationResource) ImportState(ctx context.Context, req resource.Impo
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"`)
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"'`)
 			return
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
 	if len(data.Hrid) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"my_demo_api"`)
+		resp.Diagnostics.AddError("Missing required field", `The field hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"my_demo_api"'`)
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("hrid"), data.Hrid)...)
@@ -880,7 +883,7 @@ func (r *ApplicationResource) ImportState(ctx context.Context, req resource.Impo
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"`)
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"'`)
 			return
 		}
 	}

@@ -48,7 +48,7 @@ func (p PlanV4) MarshalJSON() ([]byte, error) {
 }
 
 func (p *PlanV4) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &p, "", false, []string{"hrid", "name", "security", "status", "mode"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
 		return err
 	}
 	return nil

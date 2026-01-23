@@ -245,7 +245,6 @@ func TestAPIV4Resource_plans(t *testing.T) {
 					"hrid":            config.StringVariable(randomId),
 					"plans":           plansDeprecated,
 				},
-				ExpectNonEmptyPlan: true,
 			},
 			// Verifies resource update again.
 			{

@@ -31,7 +31,7 @@ func (s SubscriptionState) MarshalJSON() ([]byte, error) {
 }
 
 func (s *SubscriptionState) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &s, "", false, []string{"hrid", "applicationHrid", "planHrid"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &s, "", false, nil); err != nil {
 		return err
 	}
 	return nil

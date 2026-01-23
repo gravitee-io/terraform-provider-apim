@@ -56,7 +56,7 @@ func (d DeleteAPISubscriptionRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (d *DeleteAPISubscriptionRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &d, "", false, []string{"apiHrid", "hrid"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
 		return err
 	}
 	return nil

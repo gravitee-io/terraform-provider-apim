@@ -58,7 +58,7 @@ func (c CreateOrUpdateApisRequest) MarshalJSON() ([]byte, error) {
 }
 
 func (c *CreateOrUpdateApisRequest) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &c, "", false, []string{"ApiV4Spec"}); err != nil {
+	if err := utils.UnmarshalJSON(data, &c, "", false, nil); err != nil {
 		return err
 	}
 	return nil
