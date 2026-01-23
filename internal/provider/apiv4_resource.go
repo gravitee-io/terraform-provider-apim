@@ -485,8 +485,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `environment ID`,
 			},
 			"failover": schema.SingleNestedAttribute{
@@ -591,9 +594,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
 								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.UseConfigValue(),
-								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Optional:    true,
@@ -658,9 +658,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
-								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
@@ -728,9 +725,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
 								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.UseConfigValue(),
-								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Optional:    true,
@@ -790,9 +784,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
 								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.UseConfigValue(),
-								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
 										Optional:    true,
@@ -851,9 +842,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
-								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
@@ -1117,9 +1105,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
-								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.UseConfigValue(),
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
@@ -1845,8 +1830,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					`Default: true`,
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `organization ID`,
 			},
 			"pages": schema.ListNestedAttribute{
@@ -2024,7 +2012,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											PlanModifiers: []planmodifier.Object{
 												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-												speakeasy_objectplanmodifier.UseConfigValue(),
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
@@ -2096,7 +2083,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											PlanModifiers: []planmodifier.Object{
 												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-												speakeasy_objectplanmodifier.UseConfigValue(),
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
@@ -2169,7 +2155,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											PlanModifiers: []planmodifier.Object{
 												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-												speakeasy_objectplanmodifier.UseConfigValue(),
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
@@ -2235,7 +2220,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											PlanModifiers: []planmodifier.Object{
 												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-												speakeasy_objectplanmodifier.UseConfigValue(),
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
@@ -2301,7 +2285,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											PlanModifiers: []planmodifier.Object{
 												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-												speakeasy_objectplanmodifier.UseConfigValue(),
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
@@ -2574,7 +2557,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											PlanModifiers: []planmodifier.Object{
 												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-												speakeasy_objectplanmodifier.UseConfigValue(),
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
