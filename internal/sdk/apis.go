@@ -285,8 +285,8 @@ func (s *Apis) CreateOrUpdate(ctx context.Context, request operations.CreateOrUp
 
 }
 
-// Get one Application
-// Get an Application using HRID
+// Get one API
+// Get an API using HRID
 func (s *Apis) Get(ctx context.Context, request operations.GetAPIRequest, opts ...operations.Option) (*operations.GetAPIResponse, error) {
 	globals := operations.GetAPIGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
