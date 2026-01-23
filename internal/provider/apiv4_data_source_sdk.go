@@ -307,11 +307,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				if selectorsItem.ChannelSelector != nil {
 					selectors.Channel = &tfTypes.ChannelSelector{}
 					selectors.Channel.Channel = types.StringPointerValue(selectorsItem.ChannelSelector.Channel)
-					if selectorsItem.ChannelSelector.ChannelOperator != nil {
-						selectors.Channel.ChannelOperator = types.StringValue(string(*selectorsItem.ChannelSelector.ChannelOperator))
-					} else {
-						selectors.Channel.ChannelOperator = types.StringNull()
-					}
+					selectors.Channel.ChannelOperator = types.StringValue(string(selectorsItem.ChannelSelector.ChannelOperator))
 					selectors.Channel.Entrypoints = make([]types.String, 0, len(selectorsItem.ChannelSelector.Entrypoints))
 					for _, v := range selectorsItem.ChannelSelector.Entrypoints {
 						selectors.Channel.Entrypoints = append(selectors.Channel.Entrypoints, types.StringValue(v))
@@ -334,11 +330,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 						selectors.HTTP.Methods = append(selectors.HTTP.Methods, types.StringValue(string(v)))
 					}
 					selectors.HTTP.Path = types.StringPointerValue(selectorsItem.HTTPSelector.Path)
-					if selectorsItem.HTTPSelector.PathOperator != nil {
-						selectors.HTTP.PathOperator = types.StringValue(string(*selectorsItem.HTTPSelector.PathOperator))
-					} else {
-						selectors.HTTP.PathOperator = types.StringNull()
-					}
+					selectors.HTTP.PathOperator = types.StringValue(string(selectorsItem.HTTPSelector.PathOperator))
 					selectors.HTTP.Type = types.StringValue(string(selectorsItem.HTTPSelector.Type))
 				}
 				if selectorsItem.McpSelector != nil {
@@ -769,11 +761,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					if selectorsItem1.ChannelSelector != nil {
 						selectors1.Channel = &tfTypes.ChannelSelector{}
 						selectors1.Channel.Channel = types.StringPointerValue(selectorsItem1.ChannelSelector.Channel)
-						if selectorsItem1.ChannelSelector.ChannelOperator != nil {
-							selectors1.Channel.ChannelOperator = types.StringValue(string(*selectorsItem1.ChannelSelector.ChannelOperator))
-						} else {
-							selectors1.Channel.ChannelOperator = types.StringNull()
-						}
+						selectors1.Channel.ChannelOperator = types.StringValue(string(selectorsItem1.ChannelSelector.ChannelOperator))
 						selectors1.Channel.Entrypoints = make([]types.String, 0, len(selectorsItem1.ChannelSelector.Entrypoints))
 						for _, v := range selectorsItem1.ChannelSelector.Entrypoints {
 							selectors1.Channel.Entrypoints = append(selectors1.Channel.Entrypoints, types.StringValue(v))
@@ -796,11 +784,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 							selectors1.HTTP.Methods = append(selectors1.HTTP.Methods, types.StringValue(string(v)))
 						}
 						selectors1.HTTP.Path = types.StringPointerValue(selectorsItem1.HTTPSelector.Path)
-						if selectorsItem1.HTTPSelector.PathOperator != nil {
-							selectors1.HTTP.PathOperator = types.StringValue(string(*selectorsItem1.HTTPSelector.PathOperator))
-						} else {
-							selectors1.HTTP.PathOperator = types.StringNull()
-						}
+						selectors1.HTTP.PathOperator = types.StringValue(string(selectorsItem1.HTTPSelector.PathOperator))
 						selectors1.HTTP.Type = types.StringValue(string(selectorsItem1.HTTPSelector.Type))
 					}
 					if selectorsItem1.McpSelector != nil {
