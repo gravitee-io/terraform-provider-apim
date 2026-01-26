@@ -189,7 +189,6 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							Description: `The default value of the metadata if the value is not set.`,
 						},
 						"format": schema.StringAttribute{
-							Computed:    true,
 							Optional:    true,
 							Description: `The format of the metadata. Not Null; must be one of ["STRING", "NUMERIC", "BOOLEAN", "DATE", "MAIL", "URL"]`,
 							Validators: []validator.String{
