@@ -1917,8 +1917,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						"homepage": schema.BoolAttribute{
 							Computed:    true,
 							Optional:    true,
-							Default:     booldefault.StaticBool(false),
-							Description: `If true, this page will be displayed as the homepage of your API documentation. Default: false`,
+							Description: `If true, this page will be displayed as the homepage of your API documentation.`,
 						},
 						"hrid": schema.StringAttribute{
 							Computed:    true,
