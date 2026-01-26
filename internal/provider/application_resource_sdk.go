@@ -52,7 +52,6 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 			r.Metadata = append(r.Metadata, metadata)
 		}
 		r.Name = types.StringValue(resp.Name)
-		r.NotifyMembers = types.BoolPointerValue(resp.NotifyMembers)
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.PictureURL = types.StringPointerValue(resp.PictureURL)
 		if resp.Settings == nil {
@@ -213,12 +212,6 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 	} else {
 		pictureURL = nil
 	}
-	notifyMembers := new(bool)
-	if !r.NotifyMembers.IsUnknown() && !r.NotifyMembers.IsNull() {
-		*notifyMembers = r.NotifyMembers.ValueBool()
-	} else {
-		notifyMembers = nil
-	}
 	background := new(string)
 	if !r.Background.IsUnknown() && !r.Background.IsNull() {
 		*background = r.Background.ValueString()
@@ -343,17 +336,16 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		})
 	}
 	out := shared.ApplicationSpec{
-		Hrid:          hrid,
-		Name:          name,
-		Description:   description,
-		Domain:        domain,
-		Groups:        groups,
-		PictureURL:    pictureURL,
-		NotifyMembers: notifyMembers,
-		Background:    background,
-		Settings:      settings,
-		Metadata:      metadata,
-		Members:       members,
+		Hrid:        hrid,
+		Name:        name,
+		Description: description,
+		Domain:      domain,
+		Groups:      groups,
+		PictureURL:  pictureURL,
+		Background:  background,
+		Settings:    settings,
+		Metadata:    metadata,
+		Members:     members,
 	}
 
 	return &out, diags

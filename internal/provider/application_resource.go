@@ -23,7 +23,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -65,7 +64,6 @@ type ApplicationResourceModel struct {
 	Members        []tfTypes.Member             `tfsdk:"members"`
 	Metadata       []tfTypes.Metadata           `tfsdk:"metadata"`
 	Name           types.String                 `tfsdk:"name"`
-	NotifyMembers  types.Bool                   `tfsdk:"notify_members"`
 	OrganizationID types.String                 `tfsdk:"organization_id"`
 	PictureURL     types.String                 `tfsdk:"picture_url"`
 	Settings       *tfTypes.ApplicationSettings `tfsdk:"settings"`
@@ -238,14 +236,6 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 512),
 				},
-			},
-			"notify_members": schema.BoolAttribute{
-				Computed: true,
-				Optional: true,
-				Default:  booldefault.StaticBool(false),
-				MarkdownDescription: `If true, new members added to the Application spec will` + "\n" +
-					`be notified when the Application is synced with APIM.` + "\n" +
-					`Default: false`,
 			},
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
