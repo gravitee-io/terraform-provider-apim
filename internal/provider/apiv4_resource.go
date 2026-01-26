@@ -103,7 +103,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 		MarkdownDescription: "Apiv4 Resource",
 		Attributes: map[string]schema.Attribute{
 			"analytics": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
@@ -111,7 +110,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Description: `Whether or not analytics are enabled.`,
 					},
 					"logging": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"condition": schema.StringAttribute{
@@ -119,7 +117,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Description: `Filter using EL what request should be logged`,
 							},
 							"content": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"headers": schema.BoolAttribute{
@@ -165,7 +162,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Description: `API logging mode (Not for native APIs)`,
 							},
 							"phase": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
 								Attributes: map[string]schema.Attribute{
 									"request": schema.BoolAttribute{
@@ -186,16 +182,15 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Optional: true,
+								Required: true,
 								MarkdownDescription: `The type of the sampling:` + "\n" +
 									`` + "\n" +
 									`` + "`" + `PROBABILITY` + "`" + `: based on a specified probability,` + "\n" +
 									`` + "`" + `TEMPORAL` + "`" + `: report one message at least every,` + "\n" +
 									`` + "`" + `COUNT` + "`" + `: for every number of specified messages,` + "\n" +
 									`` + "`" + `WINDOWED_COUNT` + "`" + `: x number of messages on a time windows,` + "\n" +
-									`Not Null; must be one of ["PROBABILITY", "TEMPORAL", "COUNT", "WINDOWED_COUNT"]`,
+									`must be one of ["PROBABILITY", "TEMPORAL", "COUNT", "WINDOWED_COUNT"]`,
 								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf(
 										"PROBABILITY",
 										"TEMPORAL",
@@ -217,7 +212,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Description: `API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.`,
 					},
 					"tracing": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
@@ -1917,8 +1911,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `The content of the page, if any.`,
 						},
 						"homepage": schema.BoolAttribute{
+							Computed:    true,
 							Optional:    true,
-							Description: `If true, this page will be displayed as the homepage of your API documentation.`,
+							Default:     booldefault.StaticBool(false),
+							Description: `If true, this page will be displayed as the homepage of your API documentation. Default: false`,
 						},
 						"hrid": schema.StringAttribute{
 							Computed:    true,
