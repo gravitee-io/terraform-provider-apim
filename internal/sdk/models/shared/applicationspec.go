@@ -53,6 +53,9 @@ type ApplicationSpec struct {
 	Groups []string `json:"groups,omitempty"`
 	// Application's picture Url.
 	PictureURL *string `json:"pictureUrl,omitempty"`
+	// If true, new members added to the Application spec will
+	// be notified when the Application is synced with APIM.
+	NotifyMembers *bool `json:"notifyMembers,omitempty"`
 	// Application's background url
 	Background *string `json:"background,omitempty"`
 	// User owner of this. Can perform all possible actions on it.
@@ -118,6 +121,13 @@ func (a *ApplicationSpec) GetPictureURL() *string {
 		return nil
 	}
 	return a.PictureURL
+}
+
+func (a *ApplicationSpec) GetNotifyMembers() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.NotifyMembers
 }
 
 func (a *ApplicationSpec) GetBackground() *string {

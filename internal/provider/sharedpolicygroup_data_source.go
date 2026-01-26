@@ -40,7 +40,6 @@ type SharedPolicyGroupDataSource struct {
 // SharedPolicyGroupDataSourceModel describes the data model.
 type SharedPolicyGroupDataSourceModel struct {
 	APIType             types.String     `tfsdk:"api_type"`
-	CrossID             types.String     `tfsdk:"cross_id"`
 	Description         types.String     `tfsdk:"description"`
 	EnvironmentID       types.String     `tfsdk:"environment_id"`
 	Hrid                types.String     `tfsdk:"hrid"`
@@ -66,10 +65,6 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 			"api_type": schema.StringAttribute{
 				Computed:    true,
 				Description: `API's type.`,
-			},
-			"cross_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `The Cross ID is used to identify a shared policy group that has been promoted from one environment to another.`,
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,

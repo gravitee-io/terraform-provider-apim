@@ -49,7 +49,6 @@ type SharedPolicyGroupResource struct {
 // SharedPolicyGroupResourceModel describes the resource data model.
 type SharedPolicyGroupResourceModel struct {
 	APIType             types.String     `tfsdk:"api_type"`
-	CrossID             types.String     `tfsdk:"cross_id"`
 	Description         types.String     `tfsdk:"description"`
 	EnvironmentID       types.String     `tfsdk:"environment_id"`
 	Hrid                types.String     `tfsdk:"hrid"`
@@ -81,13 +80,6 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 						"NATIVE",
 					),
 				},
-			},
-			"cross_id": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `The Cross ID is used to identify a shared policy group that has been promoted from one environment to another.`,
 			},
 			"description": schema.StringAttribute{
 				Optional:    true,

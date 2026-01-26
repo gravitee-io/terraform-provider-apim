@@ -49,6 +49,7 @@ type ApplicationDataSourceModel struct {
 	Members        []tfTypes.Member             `tfsdk:"members"`
 	Metadata       []tfTypes.Metadata           `tfsdk:"metadata"`
 	Name           types.String                 `tfsdk:"name"`
+	NotifyMembers  types.Bool                   `tfsdk:"notify_members"`
 	OrganizationID types.String                 `tfsdk:"organization_id"`
 	PictureURL     types.String                 `tfsdk:"picture_url"`
 	Settings       *tfTypes.ApplicationSettings `tfsdk:"settings"`
@@ -154,6 +155,11 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 			"name": schema.StringAttribute{
 				Computed:    true,
 				Description: `Application's name. Duplicate names can exists.`,
+			},
+			"notify_members": schema.BoolAttribute{
+				Computed: true,
+				MarkdownDescription: `If true, new members added to the Application spec will` + "\n" +
+					`be notified when the Application is synced with APIM.`,
 			},
 			"organization_id": schema.StringAttribute{
 				Computed:    true,

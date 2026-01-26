@@ -52,6 +52,7 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 			r.Metadata = append(r.Metadata, metadata)
 		}
 		r.Name = types.StringValue(resp.Name)
+		r.NotifyMembers = types.BoolPointerValue(resp.NotifyMembers)
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.PictureURL = types.StringPointerValue(resp.PictureURL)
 		if resp.Settings == nil {
