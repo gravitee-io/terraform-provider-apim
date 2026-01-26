@@ -314,27 +314,41 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												Attributes: map[string]schema.Attribute{
 													"configuration": schema.StringAttribute{
-														CustomType:  jsontypes.NormalizedType{},
-														Optional:    true,
+														CustomType: jsontypes.NormalizedType{},
+														Computed:   true,
+														Optional:   true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
 														Validators: []validator.String{
 															speakeasy_stringvalidators.NotNull(),
 														},
 													},
 													"enabled": schema.BoolAttribute{
-														Computed:    true,
-														Optional:    true,
-														Default:     booldefault.StaticBool(true),
+														Computed: true,
+														Optional: true,
+														Default:  booldefault.StaticBool(true),
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														Description: `Is the service enabled or not. Default: true`,
 													},
 													"override_configuration": schema.BoolAttribute{
-														Computed:    true,
-														Optional:    true,
-														Default:     booldefault.StaticBool(false),
+														Computed: true,
+														Optional: true,
+														Default:  booldefault.StaticBool(false),
+														PlanModifiers: []planmodifier.Bool{
+															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+														},
 														Description: `When the configuration overrides an inherited configuration. Default: false`,
 													},
 													"type": schema.StringAttribute{
-														Optional:    true,
+														Computed: true,
+														Optional: true,
+														PlanModifiers: []planmodifier.String{
+															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+														},
 														Description: `The service plugin ID used. Not Null`,
 														Validators: []validator.String{
 															speakeasy_stringvalidators.NotNull(),
@@ -418,27 +432,41 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
-											Optional:    true,
+											CustomType: jsontypes.NormalizedType{},
+											Computed:   true,
+											Optional:   true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"enabled": schema.BoolAttribute{
-											Computed:    true,
-											Optional:    true,
-											Default:     booldefault.StaticBool(true),
+											Computed: true,
+											Optional: true,
+											Default:  booldefault.StaticBool(true),
+											PlanModifiers: []planmodifier.Bool{
+												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+											},
 											Description: `Is the service enabled or not. Default: true`,
 										},
 										"override_configuration": schema.BoolAttribute{
-											Computed:    true,
-											Optional:    true,
-											Default:     booldefault.StaticBool(false),
+											Computed: true,
+											Optional: true,
+											Default:  booldefault.StaticBool(false),
+											PlanModifiers: []planmodifier.Bool{
+												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+											},
 											Description: `When the configuration overrides an inherited configuration. Default: false`,
 										},
 										"type": schema.StringAttribute{
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `The service plugin ID used. Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -455,27 +483,41 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
-											Optional:    true,
+											CustomType: jsontypes.NormalizedType{},
+											Computed:   true,
+											Optional:   true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"enabled": schema.BoolAttribute{
-											Computed:    true,
-											Optional:    true,
-											Default:     booldefault.StaticBool(true),
+											Computed: true,
+											Optional: true,
+											Default:  booldefault.StaticBool(true),
+											PlanModifiers: []planmodifier.Bool{
+												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+											},
 											Description: `Is the service enabled or not. Default: true`,
 										},
 										"override_configuration": schema.BoolAttribute{
-											Computed:    true,
-											Optional:    true,
-											Default:     booldefault.StaticBool(false),
+											Computed: true,
+											Optional: true,
+											Default:  booldefault.StaticBool(false),
+											PlanModifiers: []planmodifier.Bool{
+												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+											},
 											Description: `When the configuration overrides an inherited configuration. Default: false`,
 										},
 										"type": schema.StringAttribute{
-											Optional:    true,
+											Computed: true,
+											Optional: true,
+											PlanModifiers: []planmodifier.String{
+												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+											},
 											Description: `The service plugin ID used. Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -2944,27 +2986,41 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						Attributes: map[string]schema.Attribute{
 							"configuration": schema.StringAttribute{
-								CustomType:  jsontypes.NormalizedType{},
-								Optional:    true,
+								CustomType: jsontypes.NormalizedType{},
+								Computed:   true,
+								Optional:   true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
 								Validators: []validator.String{
 									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enabled": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(true),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(true),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `Is the service enabled or not. Default: true`,
 							},
 							"override_configuration": schema.BoolAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     booldefault.StaticBool(false),
+								Computed: true,
+								Optional: true,
+								Default:  booldefault.StaticBool(false),
+								PlanModifiers: []planmodifier.Bool{
+									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+								},
 								Description: `When the configuration overrides an inherited configuration. Default: false`,
 							},
 							"type": schema.StringAttribute{
-								Optional:    true,
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.String{
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+								},
 								Description: `The service plugin ID used. Not Null`,
 								Validators: []validator.String{
 									speakeasy_stringvalidators.NotNull(),
