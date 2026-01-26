@@ -585,6 +585,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"flows": schema.ListNestedAttribute{
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
 					speakeasy_listplanmodifier.UseConfigValue(),
 				},
 				NestedObject: schema.NestedAttributeObject{
