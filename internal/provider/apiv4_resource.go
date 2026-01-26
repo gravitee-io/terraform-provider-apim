@@ -1819,10 +1819,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"hidden": schema.BoolAttribute{
-							Computed:    true,
 							Optional:    true,
-							Default:     booldefault.StaticBool(false),
-							Description: `if this metadata should be hidden. Default: false`,
+							Description: `if this metadata should be hidden`,
 						},
 						"key": schema.StringAttribute{
 							Computed: true,

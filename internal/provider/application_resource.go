@@ -23,7 +23,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -203,10 +202,8 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						"hidden": schema.BoolAttribute{
-							Computed:    true,
 							Optional:    true,
-							Default:     booldefault.StaticBool(false),
-							Description: `if this metadata should be hidden. Default: false`,
+							Description: `if this metadata should be hidden`,
 						},
 						"key": schema.StringAttribute{
 							Computed: true,
