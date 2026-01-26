@@ -2,31 +2,16 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
-)
-
 // Analytics - API analytics configuration to enable/disable what can be observed.
 type Analytics struct {
 	// Whether or not analytics are enabled.
-	Enabled *bool `default:"true" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.
 	Sampling *Sampling `json:"sampling,omitempty"`
 	// API logging configuration (Not for native APIs)
 	Logging *LoggingV4 `json:"logging,omitempty"`
 	// OpenTelemetry tracing (Not for native APIs)
 	Tracing *TracingV4 `json:"tracing,omitempty"`
-}
-
-func (a Analytics) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *Analytics) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
 }
 
 func (a *Analytics) GetEnabled() *bool {

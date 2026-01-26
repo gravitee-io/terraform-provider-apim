@@ -107,10 +107,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     booldefault.StaticBool(true),
-						Description: `Whether or not analytics are enabled. Default: true`,
+						Description: `Whether or not analytics are enabled.`,
 					},
 					"logging": schema.SingleNestedAttribute{
 						Computed: true,
