@@ -1819,11 +1819,17 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"hidden": schema.BoolAttribute{
+							Computed:    true,
 							Optional:    true,
-							Description: `if this metadata should be hidden`,
+							Default:     booldefault.StaticBool(false),
+							Description: `if this metadata should be hidden. Default: false`,
 						},
 						"key": schema.StringAttribute{
-							Optional:    true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.String{
+								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+							},
 							Description: `The key of the metadata if different from sanitized name (lowercase + hyphens).`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtLeast(1),
