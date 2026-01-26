@@ -630,7 +630,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
@@ -699,7 +698,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
@@ -769,7 +767,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
@@ -832,7 +829,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
@@ -895,7 +891,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
@@ -1166,7 +1161,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed:    true,
 										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
@@ -2064,7 +2058,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													Description: `To enable the step globally. Default: true`,
 												},
 												"message_condition": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The message condition of the step (for message API)`,
 													Validators: []validator.String{
@@ -2133,7 +2126,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													Description: `To enable the step globally. Default: true`,
 												},
 												"message_condition": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The message condition of the step (for message API)`,
 													Validators: []validator.String{
@@ -2203,7 +2195,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													Description: `To enable the step globally. Default: true`,
 												},
 												"message_condition": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The message condition of the step (for message API)`,
 													Validators: []validator.String{
@@ -2266,7 +2257,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													Description: `To enable the step globally. Default: true`,
 												},
 												"message_condition": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The message condition of the step (for message API)`,
 													Validators: []validator.String{
@@ -2329,7 +2319,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													Description: `To enable the step globally. Default: true`,
 												},
 												"message_condition": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The message condition of the step (for message API)`,
 													Validators: []validator.String{
@@ -2600,7 +2589,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													Description: `To enable the step globally. Default: true`,
 												},
 												"message_condition": schema.StringAttribute{
-													Computed:    true,
 													Optional:    true,
 													Description: `The message condition of the step (for message API)`,
 													Validators: []validator.String{
