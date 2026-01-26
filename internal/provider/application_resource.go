@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
@@ -106,7 +107,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Optional: true,
 				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+					custom_listplanmodifier.IgnoreEmptyList(),
 				},
 				ElementType: types.StringType,
 				Description: `List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM. Default: []`,
@@ -173,7 +174,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"metadata": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),

@@ -583,10 +583,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Flow execution enablement (Not applicable for Native API)`,
 			},
 			"flows": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
 					custom_listplanmodifier.IgnoreEmptyList(),
-					speakeasy_listplanmodifier.UseConfigValue(),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
