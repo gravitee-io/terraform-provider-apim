@@ -7,7 +7,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
@@ -160,9 +159,6 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
 					},
-					PlanModifiers: []planmodifier.Object{
-						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-					},
 					Attributes: map[string]schema.Attribute{
 						"condition": schema.StringAttribute{
 							Optional:    true,
@@ -190,11 +186,8 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							Description: `To enable the step globally. Default: true`,
 						},
 						"message_condition": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
 							Description: `The message condition of the step (for message API)`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtMost(256),
