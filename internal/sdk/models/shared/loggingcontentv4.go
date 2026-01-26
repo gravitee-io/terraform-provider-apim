@@ -2,18 +2,33 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // LoggingContentV4 - API logging content when one of logging mode is enabled (Not for native APIs)
 type LoggingContentV4 struct {
 	// Enable to log request headers
-	Headers *bool `json:"headers,omitempty"`
+	Headers *bool `default:"false" json:"headers"`
 	// Enable to log message headers (Message APIs only)
-	MessageHeaders *bool `json:"messageHeaders,omitempty"`
+	MessageHeaders *bool `default:"false" json:"messageHeaders"`
 	// Enable to log request headers (Proxy APIs only)
-	Payload *bool `json:"payload,omitempty"`
+	Payload *bool `default:"false" json:"payload"`
 	// Enable to log message headers (Message APIs only)
-	MessagePayload *bool `json:"messagePayload,omitempty"`
+	MessagePayload *bool `default:"false" json:"messagePayload"`
 	// Enable to log message metadata (Message APIs only)
-	MessageMetadata *bool `json:"messageMetadata,omitempty"`
+	MessageMetadata *bool `default:"false" json:"messageMetadata"`
+}
+
+func (l LoggingContentV4) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LoggingContentV4) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (l *LoggingContentV4) GetHeaders() *bool {
