@@ -103,6 +103,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 		MarkdownDescription: "Apiv4 Resource",
 		Attributes: map[string]schema.Attribute{
 			"analytics": schema.SingleNestedAttribute{
+				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
@@ -182,15 +183,16 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Required: true,
+								Optional: true,
 								MarkdownDescription: `The type of the sampling:` + "\n" +
 									`` + "\n" +
 									`` + "`" + `PROBABILITY` + "`" + `: based on a specified probability,` + "\n" +
 									`` + "`" + `TEMPORAL` + "`" + `: report one message at least every,` + "\n" +
 									`` + "`" + `COUNT` + "`" + `: for every number of specified messages,` + "\n" +
 									`` + "`" + `WINDOWED_COUNT` + "`" + `: x number of messages on a time windows,` + "\n" +
-									`must be one of ["PROBABILITY", "TEMPORAL", "COUNT", "WINDOWED_COUNT"]`,
+									`Not Null; must be one of ["PROBABILITY", "TEMPORAL", "COUNT", "WINDOWED_COUNT"]`,
 								Validators: []validator.String{
+									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf(
 										"PROBABILITY",
 										"TEMPORAL",
@@ -2765,9 +2767,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"tags": schema.ListAttribute{
+							Computed:    true,
 							Optional:    true,
+							Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 							ElementType: types.StringType,
-							Description: `Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list.`,
+							Description: `Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list. Default: []`,
 							Validators: []validator.List{
 								listvalidator.UniqueValues(),
 							},
