@@ -55,7 +55,7 @@ type ApplicationSpec struct {
 	PictureURL *string `json:"pictureUrl,omitempty"`
 	// If true, new members added to the Application spec will
 	// be notified when the Application is synced with APIM.
-	NotifyMembers *bool `json:"notifyMembers,omitempty"`
+	NotifyMembers *bool `default:"false" json:"notifyMembers"`
 	// Application's background url
 	Background *string `json:"background,omitempty"`
 	// User owner of this. Can perform all possible actions on it.

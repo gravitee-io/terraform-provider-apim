@@ -246,9 +246,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"notify_members": schema.BoolAttribute{
+				Computed: true,
 				Optional: true,
+				Default:  booldefault.StaticBool(false),
 				MarkdownDescription: `If true, new members added to the Application spec will` + "\n" +
-					`be notified when the Application is synced with APIM.`,
+					`be notified when the Application is synced with APIM.` + "\n" +
+					`Default: false`,
 			},
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
