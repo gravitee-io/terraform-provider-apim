@@ -1276,26 +1276,33 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											Description: `` + "`" + `Access-Control-Allow-Credentials` + "`" + `: Indicates whether or not the response to the request can be exposed when the credentials flag is true.`,
 										},
 										"allow_headers": schema.ListAttribute{
+											Computed:    true,
 											Optional:    true,
+											Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 											ElementType: types.StringType,
-											Description: `` + "`" + `Access-Control-Allow-Headers` + "`" + `: Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request.`,
+											Description: `` + "`" + `Access-Control-Allow-Headers` + "`" + `: Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request. Default: []`,
 											Validators: []validator.List{
 												listvalidator.UniqueValues(),
 											},
 										},
 										"allow_methods": schema.ListAttribute{
+											Computed:    true,
 											Optional:    true,
+											Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 											ElementType: types.StringType,
-											Description: `` + "`" + `Access-Control-Allow-Methods` + "`" + `: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource.`,
+											Description: `` + "`" + `Access-Control-Allow-Methods` + "`" + `: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource. Default: []`,
 											Validators: []validator.List{
 												listvalidator.UniqueValues(),
 											},
 										},
 										"allow_origin": schema.ListAttribute{
+											Computed:    true,
 											Optional:    true,
+											Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 											ElementType: types.StringType,
 											MarkdownDescription: `` + "`" + `Access-Control-Allow-Origin` + "`" + `: The origin parameter specifies a URI that may access the resource. Scheme, domain and port are part of the same-origin definition.` + "\n" +
-												`If you choose to enable '*' it means that is allows all requests, regardless of origin. URIs RegExp patterns that may access the resource`,
+												`If you choose to enable '*' it means that is allows all requests, regardless of origin. URIs RegExp patterns that may access the resource` + "\n" +
+												`Default: []`,
 											Validators: []validator.List{
 												listvalidator.UniqueValues(),
 											},
@@ -1305,9 +1312,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											Description: `Enable CORS`,
 										},
 										"expose_headers": schema.ListAttribute{
+											Computed:    true,
 											Optional:    true,
+											Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 											ElementType: types.StringType,
-											Description: `` + "`" + `Access-Control-Expose-Headers` + "`" + `: This header lets a server whitelist headers that browsers are allowed to access.`,
+											Description: `` + "`" + `Access-Control-Expose-Headers` + "`" + `: This header lets a server whitelist headers that browsers are allowed to access. Default: []`,
 											Validators: []validator.List{
 												listvalidator.UniqueValues(),
 											},
