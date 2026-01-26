@@ -360,14 +360,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						"load_balancer": schema.SingleNestedAttribute{
 							Computed: true,
 							Optional: true,
+							PlanModifiers: []planmodifier.Object{
+								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							},
 							Attributes: map[string]schema.Attribute{
 								"type": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									Default:  stringdefault.StaticString(`ROUND_ROBIN`),
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
+									Optional:    true,
+									Default:     stringdefault.StaticString(`ROUND_ROBIN`),
 									Description: `Load balancer type. Default: "ROUND_ROBIN"; must be one of ["RANDOM", "ROUND_ROBIN", "WEIGHTED_RANDOM", "WEIGHTED_ROUND_ROBIN"]`,
 									Validators: []validator.String{
 										stringvalidator.OneOf(
