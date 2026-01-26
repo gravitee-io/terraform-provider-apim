@@ -362,9 +362,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"type": schema.StringAttribute{
-									Computed:    true,
-									Optional:    true,
-									Default:     stringdefault.StaticString(`ROUND_ROBIN`),
+									Computed: true,
+									Optional: true,
+									Default:  stringdefault.StaticString(`ROUND_ROBIN`),
+									PlanModifiers: []planmodifier.String{
+										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+									},
 									Description: `Load balancer type. Default: "ROUND_ROBIN"; must be one of ["RANDOM", "ROUND_ROBIN", "WEIGHTED_RANDOM", "WEIGHTED_ROUND_ROBIN"]`,
 									Validators: []validator.String{
 										stringvalidator.OneOf(
@@ -918,7 +921,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Response flow steps used for PROXY and MESSAGE APIs`,
 						},
 						"selectors": schema.ListNestedAttribute{
+							Computed: true,
 							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
@@ -2340,7 +2347,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Response flow steps used for PROXY and MESSAGE APIs`,
 									},
 									"selectors": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											custom_listplanmodifier.IgnoreEmptyList(),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
