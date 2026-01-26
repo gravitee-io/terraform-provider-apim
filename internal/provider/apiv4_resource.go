@@ -1927,7 +1927,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `If true, the page will be accessible from the portal (default is false). Default: false`,
 						},
 						"source": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
