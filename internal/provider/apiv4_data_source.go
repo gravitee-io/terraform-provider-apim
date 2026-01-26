@@ -40,7 +40,7 @@ type Apiv4DataSource struct {
 
 // Apiv4DataSourceModel describes the data model.
 type Apiv4DataSourceModel struct {
-	Analytics         *tfTypes.APIV4StateAnalytics                   `tfsdk:"analytics"`
+	Analytics         *tfTypes.Analytics                             `tfsdk:"analytics"`
 	Categories        []types.String                                 `tfsdk:"categories"`
 	Description       types.String                                   `tfsdk:"description"`
 	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`

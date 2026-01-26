@@ -62,7 +62,7 @@ type Apiv4Resource struct {
 
 // Apiv4ResourceModel describes the resource data model.
 type Apiv4ResourceModel struct {
-	Analytics         *tfTypes.APIV4SpecAnalytics                    `tfsdk:"analytics"`
+	Analytics         *tfTypes.Analytics                             `tfsdk:"analytics"`
 	Categories        []types.String                                 `tfsdk:"categories"`
 	Description       types.String                                   `tfsdk:"description"`
 	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
@@ -105,20 +105,16 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"analytics": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-				},
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
-						Description: `Whether or not analytics are enabled.`,
+						Default:     booldefault.StaticBool(true),
+						Description: `Whether or not analytics are enabled. Default: true`,
 					},
 					"logging": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-						},
 						Attributes: map[string]schema.Attribute{
 							"condition": schema.StringAttribute{
 								Optional:    true,
@@ -127,9 +123,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							"content": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"headers": schema.BoolAttribute{
 										Optional:    true,
@@ -161,9 +154,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							"mode": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"endpoint": schema.BoolAttribute{
 										Optional:    true,
@@ -179,9 +169,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							"phase": schema.SingleNestedAttribute{
 								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"request": schema.BoolAttribute{
 										Optional:    true,
@@ -234,9 +221,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					"tracing": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-						},
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
 								Optional:    true,
@@ -1935,10 +1919,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `The content of the page, if any.`,
 						},
 						"homepage": schema.BoolAttribute{
-							Computed:    true,
 							Optional:    true,
-							Default:     booldefault.StaticBool(false),
-							Description: `If true, this page will be displayed as the homepage of your API documentation. Default: false`,
+							Description: `If true, this page will be displayed as the homepage of your API documentation.`,
 						},
 						"hrid": schema.StringAttribute{
 							Computed:    true,
@@ -2789,11 +2771,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"tags": schema.ListAttribute{
-							Computed:    true,
 							Optional:    true,
-							Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 							ElementType: types.StringType,
-							Description: `Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list. Default: []`,
+							Description: `Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list.`,
 							Validators: []validator.List{
 								listvalidator.UniqueValues(),
 							},
@@ -3004,9 +2984,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			},
 			"type": schema.StringAttribute{
 				Required:    true,
-				Description: `API's type. must be one of ["LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
+				Description: `API's type. must be one of ["A2A_PROXY", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
+						"A2A_PROXY",
 						"LLM_PROXY",
 						"MCP_PROXY",
 						"MESSAGE",
