@@ -33,7 +33,7 @@ jobs:
       - name: Setup terraform
         uses: ./.github/actions/setup-terraform
         with:
-          terraform_version: "1.13.*"
+          terraform_version: "latest"
       - name: Run pre-tests using ${{ matrix.env.name }} - user ${{ vars.APIM_ADMIN_USERNAME }}
         env:
           APIM_SERVER_URL: ${{ matrix.env.url }}
@@ -55,7 +55,7 @@ jobs:
           circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
           trigger: test_results_notification
   examples:
-    name: Run Terraform examples (Env ${{ matrix.env.name }} + Terraform ${{ matrix.terraform-version }})
+    name: Run Terraform examples (Env ${{ matrix.env.name }} + Terraform/OpenTofu latest)
     runs-on: ubuntu-latest
     needs:
       - pre-test-validation
@@ -76,7 +76,14 @@ jobs:
       - name: Setup terraform
         uses: ./.github/actions/setup-terraform
         with:
-          terraform_version: "1.13.*"
+          terraform_version: "latest"
+      - name: Setup OpenTofu
+        uses: ./.github/actions/setup-opentofu
+        with:
+          tofu_version: "latest"
+      - name: Build provider
+        shell: bash
+        run: go build
       - name: Run examples using ${{ matrix.env.url }}
         env:
           APIM_SERVER_URL: ${{ matrix.env.url }}
