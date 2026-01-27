@@ -10,7 +10,7 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 	@mv ~/.terraformrc ~/.terraformrc.keep 2>/dev/null || true
 	@terraform fmt -recursive > /dev/null
 	@make doc-gen
-	speakeasy run --output console --skip-versioning
+	speakeasy run --output console --skip-versioning --skip-compile --skip-testing --skip-upload-spec
 	@make cloud-init-patch
 	@go mod tidy
 	@rm -rf examples/data-sources docs/data-sources examples/README.md USAGE.md > /dev/null
@@ -36,8 +36,13 @@ sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-mana
 
 PRE_TEST_DIR = "$(shell pwd)/examples/use-cases/application-simple"
 
+.PHONY: local-test-setup
+local-test-setup:
+	@./tests/examples/setup-local-provider.sh
+	@go build
+
 .PHONY: pre-test
-pre-test:
+pre-test: local-test-setup
 	@echo "Validating resource creation with user ${APIM_USERNAME}"
 	@cd $(PRE_TEST_DIR) && rm -rf terraform.state terraform.state.backup .terraform && \
 	terraform apply -auto-approve 2>&1 > /tmp/tf.log || \
@@ -50,16 +55,16 @@ pre-test:
 
 .PHONY: acceptance-tests
 acceptance-tests: ## Run acceptance tests
-	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD="$${APIM_PASSWORD}" APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -v ./tests/acceptance
+	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD="$${APIM_PASSWORD}" APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -count=1 -v ./tests/acceptance
 
 
 .PHONY: examples-tests
-examples-tests: ## Run acceptance tests using examples
-	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD="$${APIM_PASSWORD}" APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -v ./tests/examples
+examples-tests: local-test-setup ## Run acceptance tests using examples
+	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD="$${APIM_PASSWORD}" APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -count=1  -v ./tests/examples
 
 .PHONY: unit-tests
 unit-tests: ## Run unit tests
-	@go test ./internal/...
+	@go test -count=1 ./internal/...
 
 
 .PHONY: doc-gen

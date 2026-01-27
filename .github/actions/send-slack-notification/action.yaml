@@ -1,0 +1,30 @@
+name: send-slack-notification
+description: Send slack notification by running a CircleCI pipeline
+inputs:
+  job_name:
+    description: 'Name fo the job'
+    required: true
+  job_status:
+    description: 'Job status'
+    required: false
+  circleci_token:
+    description: 'CircleCI token'
+    required: true
+  release_version:
+    description: 'Release tag'
+    required: false
+  trigger:
+    description: 'Job trigger'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      env:
+        CIRCLECI_TOKEN: ${{ inputs.circleci_token }}
+      run: |
+        echo "🧪 Triggering pipeline"
+        JOB_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/job/${{ job.check_run_id }}"
+        npx zx hack/scripts/trigger-slack-notification.mjs --trigger "${{inputs.trigger}}" --branch "${{ github.ref_name }}" --job-name "${{ inputs.job_name }}" --job-status "${{ inputs.job_status == 'success' && 'pass' || 'fail'}}" --job-url "${JOB_URL}" --release-version "${{inputs.release_version}}"  
+
