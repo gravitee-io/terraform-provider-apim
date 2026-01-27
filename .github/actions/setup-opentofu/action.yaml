@@ -1,0 +1,12 @@
+name: configure-terraform
+description: Install Terraform and and configure the APIM provider
+inputs:
+  tofu_version:
+    description: 'OpenTofu version to use'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - uses: opentofu/setup-opentofu@v1
+      with:
+        tofu_version: '${{ inputs.tofu_version }}'
