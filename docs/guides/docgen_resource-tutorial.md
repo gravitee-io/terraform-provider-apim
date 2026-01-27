@@ -109,7 +109,7 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
           http = {
             type         = "HTTP"
             path         = "/"
-            pathOperator = "STARTS_WITH"
+            path_operator = "STARTS_WITH"
           }
         }
       ]
@@ -217,7 +217,7 @@ resource "apim_apiv4" "simple-api-shared-resource-2" {
           http = {
             type         = "HTTP"
             path         = "/"
-            pathOperator = "STARTS_WITH"
+            path_operator = "STARTS_WITH"
           }
         }
       ]

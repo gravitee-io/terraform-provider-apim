@@ -89,7 +89,7 @@ resource "apim_apiv4" "example" {
           http = {
             type         = "HTTP"
             path         = "/"
-            pathOperator = "STARTS_WITH"
+            path_operator = "STARTS_WITH"
             methods      = []
           }
         }
@@ -149,7 +149,7 @@ resource "apim_apiv4" "example" {
               http = {
                 type         = "HTTP"
                 path         = "/"
-                pathOperator = "STARTS_WITH"
+                path_operator = "STARTS_WITH"
                 methods      = []
               }
             }

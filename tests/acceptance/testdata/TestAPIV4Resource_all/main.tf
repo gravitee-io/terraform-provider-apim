@@ -198,9 +198,9 @@ resource "apim_apiv4" "test" {
       selectors = [
         {
           http = {
-            type         = "HTTP"
-            path         = "/"
-            pathOperator = "STARTS_WITH"
+            type          = "HTTP"
+            path          = "/"
+            path_operator = "STARTS_WITH"
             methods = [
               "GET",
               "OPTIONS",

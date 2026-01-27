@@ -50,9 +50,9 @@ resource "apim_apiv4" "simple-api-shared-resource-1" {
       selectors = [
         {
           http = {
-            type         = "HTTP"
-            path         = "/"
-            pathOperator = "STARTS_WITH"
+            type          = "HTTP"
+            path          = "/"
+            path_operator = "STARTS_WITH"
           }
         }
       ]

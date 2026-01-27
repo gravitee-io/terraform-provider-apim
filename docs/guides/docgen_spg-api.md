@@ -98,7 +98,7 @@ resource "apim_apiv4" "shared_policy_group" {
           http = {
             type         = "HTTP"
             path         = "/"
-            pathOperator = "STARTS_WITH"
+            path_operator = "STARTS_WITH"
             methods      = []
           }
         }

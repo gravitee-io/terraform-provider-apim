@@ -3,7 +3,7 @@ name: Terraform Provider Tests
 on:
   push:
     branches-ignore:
-      - master
+      - main
 
 env:
   APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL_STABLE }}
