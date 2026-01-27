@@ -56,19 +56,6 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 		r.NotifyMembers = types.BoolPointerValue(resp.NotifyMembers)
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.PictureURL = types.StringPointerValue(resp.PictureURL)
-		if resp.PrimaryOwner == nil {
-			r.PrimaryOwner = nil
-		} else {
-			r.PrimaryOwner = &tfTypes.PrimaryOwner{}
-			r.PrimaryOwner.DisplayName = types.StringPointerValue(resp.PrimaryOwner.DisplayName)
-			r.PrimaryOwner.Email = types.StringPointerValue(resp.PrimaryOwner.Email)
-			r.PrimaryOwner.ID = types.StringPointerValue(resp.PrimaryOwner.ID)
-			if resp.PrimaryOwner.Type != nil {
-				r.PrimaryOwner.Type = types.StringValue(string(*resp.PrimaryOwner.Type))
-			} else {
-				r.PrimaryOwner.Type = types.StringNull()
-			}
-		}
 		if resp.Settings == nil {
 			r.Settings = nil
 		} else {

@@ -3,12 +3,27 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // LoggingModeV4 - API logging mode (Not for native APIs)
 type LoggingModeV4 struct {
 	// Enables endpoint logging
-	Endpoint *bool `json:"endpoint,omitempty"`
+	Endpoint *bool `default:"false" json:"endpoint"`
 	// Enables entrypoint logging
-	Entrypoint *bool `json:"entrypoint,omitempty"`
+	Entrypoint *bool `default:"false" json:"entrypoint"`
+}
+
+func (l LoggingModeV4) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LoggingModeV4) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (l *LoggingModeV4) GetEndpoint() *bool {

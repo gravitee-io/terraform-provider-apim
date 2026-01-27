@@ -246,7 +246,6 @@ Default: true
 - `organization_id` (String) organization ID
 - `pages` (Attributes List) Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below. (see [below for nested schema](#nestedatt--pages))
 - `plans` (Attributes List) Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority. (see [below for nested schema](#nestedatt--plans))
-- `primary_owner` (Attributes) User owner of this. Can perform all possible actions on it. (see [below for nested schema](#nestedatt--primary_owner))
 - `properties` (Attributes List) Properties usable using EL. (see [below for nested schema](#nestedatt--properties))
 - `resources` (Attributes List) Data resources usable in policy to access (mostly) external data (authentication, cache, registries...). (see [below for nested schema](#nestedatt--resources))
 - `response_templates` (Map of Map of Object) Map of content-type dependent Response Templates for the API (Not applicable for Native
@@ -260,7 +259,6 @@ Key of the map is the error code.
 
 ### Read-Only
 
-- `cross_id` (String) When promoting an API from one environment to the other, this ID identifies the API across those different environments.
 - `id` (String) API's uuid.
 
 <a id="nestedatt--endpoint_groups"></a>
@@ -286,7 +284,7 @@ Optional:
 - `secondary` (Boolean) Define this endpoint as fallback endpoint in case other endpoints are no longer responding. Default: false
 - `services` (Attributes) API Endpoint Services (see [below for nested schema](#nestedatt--endpoint_groups--endpoints--services))
 - `shared_configuration_override` (String) JSON Configuration that replaces the shared configuration defined at the group level. Parsed as JSON.
-- `tenants` (List of String) The list of Getaway's tenants on which the endpoint can be used.
+- `tenants` (List of String) The list of Getaway's tenants on which the endpoint can be used. Default: []
 - `type` (String) The type of endpoint. Not Null
 - `weight` (Number) The weight of the endpoint for the load balancer algorythm. Default: 1
 
@@ -512,7 +510,7 @@ Optional:
 
 Optional:
 
-- `enabled` (Boolean) Whether or not analytics are enabled. Default: true
+- `enabled` (Boolean) Whether or not analytics are enabled.
 - `logging` (Attributes) API logging configuration (Not for native APIs) (see [below for nested schema](#nestedatt--analytics--logging))
 - `sampling` (Attributes) API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink. (see [below for nested schema](#nestedatt--analytics--sampling))
 - `tracing` (Attributes) OpenTelemetry tracing (Not for native APIs) (see [below for nested schema](#nestedatt--analytics--tracing))
@@ -625,7 +623,7 @@ Optional:
 - `response` (Attributes List) Response flow steps used for PROXY and MESSAGE APIs (see [below for nested schema](#nestedatt--flows--response))
 - `selectors` (Attributes List) (see [below for nested schema](#nestedatt--flows--selectors))
 - `subscribe` (Attributes List) Subscribe flow steps used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--flows--subscribe))
-- `tags` (List of String) Flow's informative tags.
+- `tags` (List of String) Flow's informative tags. Default: []
 
 <a id="nestedatt--flows--connect"></a>
 ### Nested Schema for `flows.connect`
@@ -794,7 +792,7 @@ Optional:
 
 - `configuration` (Map of String) Key/value page configuration (Configure swagger UI or or use Redoc instead)
 - `content` (String) The content of the page, if any.
-- `homepage` (Boolean) If true, this page will be displayed as the homepage of your API documentation.
+- `homepage` (Boolean) If true, this page will be displayed as the homepage of your API documentation. Default: false
 - `hrid` (String) A unique human readable id identifying this resource. Not Null
 - `name` (String) This is the display name of the page in APIM and on the portal.
 This field can be edited safely if you want to rename a page.
@@ -806,10 +804,6 @@ into APIM by making the page a child of this folder.
 overriding page content each time the source is fetched. (see [below for nested schema](#nestedatt--pages--source))
 - `type` (String) The type of the documentation page or folder. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]
 - `visibility` (String) The visibility of the entity regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]
-
-Read-Only:
-
-- `cross_id` (String) Page's cross uuid.
 
 <a id="nestedatt--pages--source"></a>
 ### Nested Schema for `pages.source`
@@ -826,9 +820,9 @@ Optional:
 
 Optional:
 
-- `characteristics` (List of String) Plan informative characteristics
+- `characteristics` (List of String) Plan informative characteristics. Default: []
 - `description` (String) A description for this plan.
-- `excluded_groups` (List of String) Access-control, UUID of groups excluded from this plan
+- `excluded_groups` (List of String) Access-control, UUID of groups excluded from this plan. Default: []
 - `flows` (Attributes List) Flows like API flows, composed of step running policies. 
 All steps are executed before the next plan flow or before the API flows,
 same on the reponse, which means API reponse flows will always run last. (see [below for nested schema](#nestedatt--plans--flows))
@@ -839,7 +833,7 @@ same on the reponse, which means API reponse flows will always run last. (see [b
 - `security` (Attributes) API plan security. Not Null (see [below for nested schema](#nestedatt--plans--security))
 - `selection_rule` (String) An EL expression that must return a boolean to enable the flow based on the request.
 - `status` (String) Plan status, only `PUBLISHED` makes the plan available at runtime. Not Null; must be one of ["STAGING", "PUBLISHED", "DEPRECATED", "CLOSED"]
-- `tags` (List of String) Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list.
+- `tags` (List of String) Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list. Default: []
 - `type` (String) Only one possible type: API. Default: "API"; must be one of ["API", "CATALOG"]
 - `validation` (String) Specifies if subscriptions must be manually validated by a human actor.
 For automation API, it is default to `AUTO`.
@@ -859,7 +853,7 @@ Optional:
 - `response` (Attributes List) Response flow steps used for PROXY and MESSAGE APIs (see [below for nested schema](#nestedatt--plans--flows--response))
 - `selectors` (Attributes List) (see [below for nested schema](#nestedatt--plans--flows--selectors))
 - `subscribe` (Attributes List) Subscribe flow steps used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--subscribe))
-- `tags` (List of String) Flow's informative tags.
+- `tags` (List of String) Flow's informative tags. Default: []
 
 <a id="nestedatt--plans--flows--connect"></a>
 ### Nested Schema for `plans.flows.connect`
@@ -1006,17 +1000,6 @@ Optional:
 - `configuration` (String) JSON Object to configure specific attributes of a Plan. Parsed as JSON.
 - `type` (String) API Plan security implementation. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS"]
 
-
-
-<a id="nestedatt--primary_owner"></a>
-### Nested Schema for `primary_owner`
-
-Optional:
-
-- `display_name` (String) Owner's name.
-- `email` (String) Owner's email. Can be null if owner is a group.
-- `id` (String) Owner's uuid.
-- `type` (String) The type of membership. must be one of ["USER", "GROUP"]
 
 
 <a id="nestedatt--properties"></a>

@@ -56,7 +56,6 @@ be notified when the Application is synced with APIM.
 Default: false
 - `organization_id` (String) organization ID
 - `picture_url` (String) Application's picture Url.
-- `primary_owner` (Attributes) User owner of this. Can perform all possible actions on it. (see [below for nested schema](#nestedatt--primary_owner))
 - `settings` (Attributes) Application settings defines the configuration of consumers authentication. Depending on the control plane configuration some applications types may be restricted. `app` and `oauth` are mutually exclusive. If none is set it fallbacks to `app` without any property set. (see [below for nested schema](#nestedatt--settings))
 
 ### Read-Only
@@ -84,17 +83,6 @@ Optional:
 - `key` (String) The key of the metadata if different from sanitized name (lowercase + hyphens).
 - `name` (String) The name of the metadata. Not Null
 - `value` (String) The value of the metadata.
-
-
-<a id="nestedatt--primary_owner"></a>
-### Nested Schema for `primary_owner`
-
-Optional:
-
-- `display_name` (String) Owner's name.
-- `email` (String) Owner's email. Can be null if owner is a group.
-- `id` (String) Owner's uuid.
-- `type` (String) The type of membership. must be one of ["USER", "GROUP"]
 
 
 <a id="nestedatt--settings"></a>

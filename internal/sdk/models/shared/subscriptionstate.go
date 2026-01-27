@@ -23,6 +23,10 @@ type SubscriptionState struct {
 	ID *string `json:"id,omitempty"`
 	// The API's Hrid.
 	APIHrid *string `json:"apiHrid,omitempty"`
+	// The environment ID of the Subscription.
+	EnvironmentID *string `json:"environmentId,omitempty"`
+	// The organization ID of the Subscription.
+	OrganizationID *string `json:"organizationId,omitempty"`
 	// Start validity date time of this Subscription
 	StartingAt *time.Time `json:"startingAt,omitempty"`
 }
@@ -85,6 +89,20 @@ func (s *SubscriptionState) GetAPIHrid() *string {
 		return nil
 	}
 	return s.APIHrid
+}
+
+func (s *SubscriptionState) GetEnvironmentID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.EnvironmentID
+}
+
+func (s *SubscriptionState) GetOrganizationID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.OrganizationID
 }
 
 func (s *SubscriptionState) GetStartingAt() *time.Time {

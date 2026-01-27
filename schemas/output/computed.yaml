@@ -429,6 +429,7 @@ components:
       properties:
         hrid:
           $ref: "#/components/schemas/Hrid"
+          x-speakeasy-param-computed: false
         name:
           type: string
           description: API's name. Duplicate names can exists.
@@ -436,6 +437,7 @@ components:
             - My Api
           minLength: 1
           maxLength: 512
+          x-speakeasy-param-computed: false
         version:
           type: string
           description: API's version. It's a simple string only used to help manage API versioning.
@@ -443,14 +445,17 @@ components:
             - 1.0.0
           minLength: 1
           maxLength: 64
+          x-speakeasy-param-computed: false
         type:
           $ref: "#/components/schemas/ApiType"
+          x-speakeasy-param-computed: false
         description:
           type: string
           description: Basic API documentation to describe what this API does.
           examples:
             - I can use many characters to describe this API.
           maxLength: 4000
+          x-speakeasy-param-computed: false
         tags:
           type: array
           description: Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy".
@@ -461,48 +466,64 @@ components:
           uniqueItems: true
           examples:
             - ["europe"]
+          x-speakeasy-param-computed: false
         listeners:
           type: array
           description: The list of listeners defining how this API can be called. They depend on the API type.
           items:
             $ref: "#/components/schemas/Listener"
           minItems: 1
+          x-speakeasy-param-computed: false
         endpointGroups:
           type: array
           description: Common endpoints properties and container of endpoints specifying backends this API can call.
           items:
             $ref: "#/components/schemas/EndpointGroupV4"
           minItems: 1
+          x-speakeasy-param-computed: false
         analytics:
           $ref: "#/components/schemas/Analytics"
+          x-speakeasy-param-computed: false
         failover:
           $ref: "#/components/schemas/FailoverV4"
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         properties:
           description: Properties usable using EL.
           type: array
           items:
             $ref: "#/components/schemas/Property"
           default: []
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
         resources:
           type: array
           description: Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).
           items:
             $ref: "#/components/schemas/APIResource"
           default: []
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
         plans:
           type: array
           description: Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority.
           items:
             $ref: '#/components/schemas/PlanV4'
           default: []
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
         flowExecution:
           $ref: "#/components/schemas/FlowExecution"
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         flows:
           type: array
           description: Common flows for the API where traffic policies are configured.
           items:
             $ref: "#/components/schemas/FlowV4"
           default: []
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
         responseTemplates:
           type: object
           description: |
@@ -518,8 +539,11 @@ components:
               Key is a MIME content type (eg. */*, application/json ...)
             additionalProperties:
               $ref: "#/components/schemas/ResponseTemplate"
+          x-speakeasy-param-computed: false
         services:
           $ref: "#/components/schemas/ApiServices"
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         groups:
           type: array
           description: Name or UUIDs of existing groups (of users) associated with this API.
@@ -528,12 +552,17 @@ components:
           default: []
           examples:
             - ["developers"]
+          x-speakeasy-param-computed: false
         visibility:
           $ref: "#/components/schemas/Visibility"
+          x-speakeasy-param-computed: false
         state:
           $ref: "#/components/schemas/LifecycleState"
+          x-speakeasy-param-computed: false
         primaryOwner:
           $ref: "#/components/schemas/PrimaryOwner"
+          x-speakeasy-param-computed: false
+          x-speakeasy-terraform-ignore: true
         labels:
           type: array
           description: Informative labels for this API.
@@ -544,6 +573,7 @@ components:
           default: []
           examples:
             - ["example"]
+          x-speakeasy-param-computed: false
         metadata:
           type: array
           description: The list of API's metadata.
@@ -551,8 +581,11 @@ components:
             $ref: "#/components/schemas/Metadata"
           uniqueItems: true
           default: []
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         lifecycleState:
           $ref: "#/components/schemas/ApiLifecycleState"
+          x-speakeasy-param-computed: false
         categories:
           type: array
           description: The list of category names (or UUID) associated with this API.
@@ -561,6 +594,7 @@ components:
           default: []
           examples:
             - ["Example APIs"]
+          x-speakeasy-param-computed: false
         members:
           type: array
           description: Users that can access or manage the API (depending on their roles).
@@ -568,6 +602,8 @@ components:
             $ref: '#/components/schemas/Member'
           default: []
           uniqueItems: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
         notifyMembers:
           default: true
           description: |-
@@ -575,12 +611,15 @@ components:
             be notified when the API is synced with APIM.
           type: boolean
           writeOnly: true
+          x-speakeasy-param-computed: false
         pages:
           type: array
           description: Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.
           items:
             $ref: '#/components/schemas/PageV4'
           default: []
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
       required:
         - hrid
         - name
@@ -603,17 +642,28 @@ components:
             id:
               type: string
               description: API's uuid.
+              x-speakeasy-param-computed: true
+              x-speakeasy-param-suppress-computed-diff: true
             crossId:
               type: string
               description: >-
                 When promoting an API from one environment to the other, this ID identifies the API across those different environments.
-          x-speakeasy-param-suppress-computed-diff: true
+              x-speakeasy-terraform-ignore: true
+            environmentId:
+              description: The environment ID of the API.
+              type: string
+              x-speakeasy-param-suppress-computed-diff: true
+            organizationId:
+              description: The organization ID of the API.
+              type: string
+              x-speakeasy-param-suppress-computed-diff: true
     ApplicationSpec:
       description: "Defines the desired state of Application. \nIt represents an API consumer. \nApplications act on behalf of users to request tokens, provide user identity information, and access protected resources from APIs. \nThey can be of different types, such as Simple, Web, SPA, Native, or Backend-to-backend, each with specific configuration requirements. \nApplications are also used to manage API keys, analytics, and subscriptions.\n"
       type: object
       properties:
         hrid:
           $ref: "#/components/schemas/Hrid"
+          x-speakeasy-param-computed: false
         name:
           type: string
           description: Application's name. Duplicate names can exists.
@@ -621,6 +671,7 @@ components:
             - Example Application
           minLength: 1
           maxLength: 512
+          x-speakeasy-param-computed: false
         description:
           type: string
           description: This is where you can clearly state the API’s purpose and what problems it solves to help drive API discovery and adoption by making it easier for developers to find and understand the API’s capabilities.
@@ -628,13 +679,14 @@ components:
             - This is the documentation explaining purpose of this Application.
           minLength: 1
           maxLength: 4000
+          x-speakeasy-param-computed: false
         domain:
           type: string
           description: Application's domain.
           examples:
             - examples.com
           maxLength: 256
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-computed: false
         groups:
           type: array
           description: >-
@@ -643,30 +695,34 @@ components:
             type: string
           default: []
           example: ["developers"]
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
         pictureUrl:
           type: string
           description: Application's picture Url.
           examples:
             - "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png"
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-computed: false
         notifyMembers:
           type: boolean
           description: |-
             If true, new members added to the Application spec will
             be notified when the Application is synced with APIM.
           default: false
+          x-speakeasy-param-computed: false
         background:
           type: string
           description: Application's background url
           examples:
             - "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png"
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-computed: false
         primaryOwner:
           $ref: "#/components/schemas/PrimaryOwner"
           readOnly: true
+          x-speakeasy-param-computed: false
         settings:
           $ref: "#/components/schemas/ApplicationSettings"
+          x-speakeasy-param-computed: true
           x-speakeasy-param-suppress-computed-diff: true
         metadata:
           type: array
@@ -674,7 +730,8 @@ components:
           items:
             $ref: "#/components/schemas/Metadata"
           default: []
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
         members:
           type: array
           description: Users that can access or manage this application (depending on their roles).
@@ -682,6 +739,7 @@ components:
             $ref: '#/components/schemas/Member'
           uniqueItems: true
           default: []
+          x-speakeasy-param-computed: true
           x-speakeasy-param-suppress-computed-diff: true
         status:
           type: string
@@ -692,7 +750,9 @@ components:
           default: ACTIVE
           examples:
             - ACTIVE
+          x-speakeasy-param-computed: false
           x-speakeasy-terraform-ignore: true
+          #  boolean 'false' defaulted
       required:
         - hrid
         - name
@@ -704,14 +764,17 @@ components:
       properties:
         app:
           $ref: '#/components/schemas/SimpleApplicationSettings'
+          x-speakeasy-param-computed: false
           x-speakeasy-xor-with:
             - ../oauth
         oauth:
           $ref: '#/components/schemas/ApplicationOAuthClientSettings'
+          x-speakeasy-param-computed: false
           x-speakeasy-xor-with:
             - ../app
         tls:
           $ref: '#/components/schemas/ApplicationTLSSettings'
+          x-speakeasy-param-computed: false
     SimpleApplicationSettings:
       type: object
       description: Simple application settings
@@ -721,12 +784,14 @@ components:
           description: Simple application type, for information
           examples:
             - web
+          x-speakeasy-param-computed: false
         clientId:
           type: string
           description: Simple application client ID
           maxLength: 300
           examples:
             - example-client-id
+          x-speakeasy-param-computed: false
     ApplicationOAuthClientSettings:
       type: object
       description: Application OAuth client settings. This require Dynamic Client Registration to be enabled at the environment level.
@@ -741,6 +806,7 @@ components:
             - backend_to_backend
           examples:
             - browser
+          x-speakeasy-param-computed: false
         grantTypes:
           type: array
           description: |
@@ -760,6 +826,7 @@ components:
           uniqueItems: true
           examples:
             - ["authorization_code"]
+          x-speakeasy-param-computed: false
         redirectUris:
           description: OAuth client redirect Uris
           items:
@@ -768,10 +835,12 @@ components:
           examples:
             - ["https://myapp.example.com/oauth/callback"]
           default: []
+          x-speakeasy-param-computed: false
         additionalClientMetadata:
           type: object
           additionalProperties:
             type: string
+          x-speakeasy-param-computed: false
       required:
         - applicationType
         - redirectUris
@@ -805,6 +874,7 @@ components:
               pikgTVupVbhYcNMLOVXO7Q31UEYfC7fxMGqzybXg67EhvzoykXhhYo3YqAjho2yh
               um2oEO8b5eQVAwRaooVLh0uqjZCpfN2ozscPpiTM9Pj3xQ==
               -----END CERTIFICATE-----
+          x-speakeasy-param-computed: false
           x-speakeasy-terraform-custom-type:
             imports:
               - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
@@ -827,6 +897,7 @@ components:
               description: Application's uuid.
               examples:
                 - 550e8400-e29b-41d4-a716-446655440000
+              x-speakeasy-param-suppress-computed-diff: true
             environmentId:
               description: The environment ID of the Application.
               type: string
@@ -839,25 +910,28 @@ components:
               default: DEFAULT
               examples:
                 - DEFAULT
-          x-speakeasy-param-suppress-computed-diff: true
     SubscriptionSpec:
       description: Subscription specification
       type: object
       properties:
         hrid:
           $ref: "#/components/schemas/Hrid"
+          x-speakeasy-param-computed: false
         applicationHrid:
           type: string
           description: Application's hrid selected to subscribe an API.
           example: demo-app
+          x-speakeasy-param-computed: false
         planHrid:
           type: string
           description: API plan's hrid
           example: demo-plan
+          x-speakeasy-param-computed: false
         endingAt:
           type: string
           format: date-time
           example: "2040-12-25T09:12:28Z"
+          x-speakeasy-param-computed: false
           x-speakeasy-terraform-custom-type:
             imports:
               - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
@@ -881,16 +955,25 @@ components:
             id:
               type: string
               description: Subscription's uuid.
+              x-speakeasy-param-computed: true
+              x-speakeasy-param-suppress-computed-diff: true
             apiHrid:
               type: string
               description: The API's Hrid.
               example: demo-api
+            environmentId:
+              description: The environment ID of the Subscription.
+              type: string
+            organizationId:
+              description: The organization ID of the Subscription.
+              type: string
             startingAt:
               type: string
               description: Start validity date time of this Subscription
               format: date-time
               example: "2040-12-25T09:12:28+01:00"
-          x-speakeasy-param-suppress-computed-diff: true
+              x-speakeasy-param-computed: true
+              x-speakeasy-param-suppress-computed-diff: true
     SharedPolicyGroupState:
       description: State of Shared Policy Groups that has been created/updated
       allOf:
@@ -904,50 +987,59 @@ components:
             id:
               description: The id of the shared policy group.
               type: string
+              x-speakeasy-param-computed: true
+              x-speakeasy-param-suppress-computed-diff: true
             crossId:
               description: The Cross ID is used to identify a shared policy group that has been promoted from one environment to another.
               type: string
+              x-speakeasy-terraform-ignore: true
             environmentId:
               description: The environment ID of the shared policy group.
               type: string
             organizationId:
               description: The organization ID of the shared policy group.
               type: string
-          x-speakeasy-param-suppress-computed-diff: true
     SharedPolicyGroupSpec:
       description: Shared Policy Group Spec
       type: object
       properties:
         hrid:
           $ref: "#/components/schemas/Hrid"
+          x-speakeasy-param-computed: false
         apiType:
           $ref: "#/components/schemas/ApiType"
+          x-speakeasy-param-computed: false
         description:
           type: string
           description: The description of the shared policy group
           examples:
             - this is a shared policy group
           maxLength: 1024
+          x-speakeasy-param-computed: false
         prerequisiteMessage:
           type: string
           description: The prerequisite message of the shared policy group. This message is displayed to the user to help understand the prerequisite to use the shared policy group.
           examples:
             - the resource cache "my-cache" is required
           maxLength: 1024
-          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-param-computed: false
         name:
           type: string
           description: The name of the shared policy group
           examples:
             - My Shared Policy Group
           maxLength: 512
+          x-speakeasy-param-computed: false
         phase:
           $ref: "#/components/schemas/FlowPhase"
+          x-speakeasy-param-computed: false
         steps:
           description: SharedPolicyGroup Steps
           items:
             $ref: "#/components/schemas/StepV4"
           type: array
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
       required:
         - hrid
         - apiType
@@ -970,32 +1062,42 @@ components:
       properties:
         hrid:
           $ref: "#/components/schemas/Hrid"
+          x-speakeasy-param-computed: false
         name:
           type: string
           description: Name of the plan
           maxLength: 64
+          x-speakeasy-param-computed: false
         description:
           type: string
           description: A description for this plan.
+          x-speakeasy-param-computed: false
         security:
           $ref: '#/components/schemas/PlanSecurity'
+          x-speakeasy-param-computed: false
         characteristics:
           type: array
           description: Plan informative characteristics
           items:
             type: string
             maxLength: 64
+          x-speakeasy-param-computed: false
+          default: []
         excludedGroups:
           description: Access-control, UUID of groups excluded from this plan
           type: array
           items:
             type: string
+          x-speakeasy-param-computed: false
+          default: []
         selectionRule:
           type: string
           maxLength: 256
           description: An EL expression that must return a boolean to enable the flow based on the request.
+          x-speakeasy-param-computed: false
         status:
           $ref: '#/components/schemas/PlanStatus'
+          x-speakeasy-param-computed: false
         tags:
           type: array
           description: Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list.
@@ -1003,20 +1105,29 @@ components:
             type: string
             maxLength: 64
           uniqueItems: true
+          x-speakeasy-param-computed: false
+          default: []
         type:
           $ref: '#/components/schemas/PlanType'
+          x-speakeasy-param-computed: false
         validation:
           $ref: '#/components/schemas/PlanValidation'
+          x-speakeasy-param-computed: false
         flows:
           type: array
           description: "Flows like API flows, composed of step running policies. \nAll steps are executed before the next plan flow or before the API flows,\nsame on the reponse, which means API reponse flows will always run last.\n"
           items:
             $ref: '#/components/schemas/FlowV4'
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
         mode:
           $ref: '#/components/schemas/PlanMode'
+          x-speakeasy-param-computed: false
         generalConditionsHrid:
           type: string
           description: API page `hrid` that serves as general conditions documentation of this plan
+          x-speakeasy-param-computed: false
       required:
         - hrid
         - name
@@ -1034,16 +1145,19 @@ components:
           description: Where the memeber was created (system, idp, etc.)
           examples:
             - system
+          x-speakeasy-param-computed: false
         sourceId:
           description: Id of the user in the source
           type: string
           examples:
             - "john.doe@example.com"
+          x-speakeasy-param-computed: false
         role:
           description: The role of the user in regards of the managed oject (API, Application, etc.)
           examples:
             - REVIEWER
           type: string
+          x-speakeasy-param-computed: false
       required:
         - source
         - sourceId
@@ -1055,13 +1169,18 @@ components:
         enabled:
           type: boolean
           description: Whether or not analytics are enabled.
-          default: true
+          x-speakeasy-param-computed: false
         sampling:
           $ref: "#/components/schemas/Sampling"
+          x-speakeasy-param-computed: false
         logging:
           $ref: "#/components/schemas/LoggingV4"
+          x-speakeasy-param-computed: false
         tracing:
           $ref: "#/components/schemas/TracingV4"
+          x-speakeasy-param-computed: false
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
     ApiLifecycleState:
       type: string
       description: The status of the API regarding the console.
@@ -1079,6 +1198,8 @@ components:
       properties:
         dynamicProperty:
           $ref: "#/components/schemas/ServiceV4"
+          x-speakeasy-param-computed: false
+      x-speakeasy-param-suppress-computed-diff: true
     ApiType:
       type: string
       description: API's type.
@@ -1170,10 +1291,12 @@ components:
         enabled:
           type: boolean
           description: Enable CORS
+          x-speakeasy-param-computed: false
         allowCredentials:
           type: boolean
           description: |
             `Access-Control-Allow-Credentials`: Indicates whether or not the response to the request can be exposed when the credentials flag is true.
+          x-speakeasy-param-computed: false
         allowHeaders:
           type: array
           description: |
@@ -1181,6 +1304,8 @@ components:
           items:
             type: string
           uniqueItems: true
+          x-speakeasy-param-computed: false
+          default: []
         allowMethods:
           description: |
             `Access-Control-Allow-Methods`: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource.
@@ -1198,6 +1323,8 @@ components:
               - OPTIONS
               - TRACE
               - HEAD
+          x-speakeasy-param-computed: false
+          default: []
         allowOrigin:
           uniqueItems: true
           description: |
@@ -1208,6 +1335,8 @@ components:
             type: string
           examples:
             - ["*", "http://api.acme\\.com", ".*\\.api\\.acme\\.com"]
+          x-speakeasy-param-computed: false
+          default: []
         exposeHeaders:
           description: |
             `Access-Control-Expose-Headers`: This header lets a server whitelist headers that browsers are allowed to access.
@@ -1217,14 +1346,19 @@ components:
             type: string
           examples:
             - ["Content-Type"]
+          x-speakeasy-param-computed: false
+          default: []
         maxAge:
           description: How long (in seconds) the results of a preflight request can be cached (-1 if disabled).
           type: integer
           format: int32
           default: -1
+          x-speakeasy-param-computed: false
         runPolicies:
           description: Allow the Gateway to run policies during in pre-flight request
           type: boolean
+          x-speakeasy-param-computed: false
+      x-speakeasy-param-computed: false
     Dlq:
       description: Dead Letter Queue to process undelivered messages.
       type: object
@@ -1232,6 +1366,8 @@ components:
         endpoint:
           type: string
           description: The endpoint of the DLQ.
+          x-speakeasy-param-computed: false
+      x-speakeasy-param-computed: false
     EndpointV4:
       description: API endpoint
       type: object
@@ -1241,39 +1377,49 @@ components:
           description: The name of the endpoint
           examples:
             - default-endpoint
+          x-speakeasy-param-computed: false
         type:
           type: string
           description: The type of endpoint
           examples:
             - http-proxy
+          x-speakeasy-param-computed: false
         weight:
           type: integer
           format: int32
           description: The weight of the endpoint for the load balancer algorythm.
           default: 1
+          x-speakeasy-param-computed: false
         inheritConfiguration:
           type: boolean
           description: Enables shared configuration inheritance.
           default: false
+          x-speakeasy-param-computed: false
         configuration:
           type: object
           description: JSON Configuration specific to this endpoint that cannot be define at the group level.
+          x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
         sharedConfigurationOverride:
           type: object
           description: JSON Configuration that replaces the shared configuration defined at the group level.
+          x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
         services:
           $ref: "#/components/schemas/EndpointServices"
+          x-speakeasy-param-computed: false
         secondary:
           type: boolean
           description: Define this endpoint as fallback endpoint in case other endpoints are no longer responding.
           default: false
+          x-speakeasy-param-computed: false
         tenants:
           type: array
           description: The list of Getaway's tenants on which the endpoint can be used.
           items:
             type: string
+          x-speakeasy-param-computed: false
+          default: []
       required:
         - type
     EndpointGroupV4:
@@ -1285,24 +1431,30 @@ components:
           description: The name of the endpoint group
           examples:
             - default-endpoint-group
+          x-speakeasy-param-computed: false
         type:
           type: string
           description: The type of the endpoint group
           examples:
             - http-proxy
+          x-speakeasy-param-computed: false
         loadBalancer:
           $ref: "#/components/schemas/LoadBalancer"
+          x-speakeasy-param-computed: false
         sharedConfiguration:
           description: JSON configuration for the `type` of `endpoints` that will be shared across all endpoints.
           type: object
+          x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
         endpoints:
           type: array
           description: All endpoints of this API.
           items:
             $ref: "#/components/schemas/EndpointV4"
+          x-speakeasy-param-computed: false
         services:
           $ref: "#/components/schemas/EndpointGroupServices"
+          x-speakeasy-param-computed: false
       required:
         - type
     EndpointGroupServices:
@@ -1311,14 +1463,19 @@ components:
       properties:
         discovery:
           $ref: "#/components/schemas/ServiceV4"
+          x-speakeasy-param-computed: false
         healthCheck:
           $ref: "#/components/schemas/ServiceV4"
+          x-speakeasy-param-computed: false
+      x-speakeasy-param-suppress-computed-diff: true
     EndpointServices:
       description: API Endpoint Services
       type: object
       properties:
         healthCheck:
           $ref: "#/components/schemas/ServiceV4"
+          x-speakeasy-param-computed: false
+      x-speakeasy-param-suppress-computed-diff: true
     Entrypoint:
       description: API Endpoint
       type: object
@@ -1330,13 +1487,18 @@ components:
           description: The type of the entrypoint
           examples:
             - http-get
+          x-speakeasy-param-computed: false
         qos:
           $ref: "#/components/schemas/Qos"
+          x-speakeasy-param-computed: false
+          x-speakeasy-param-suppress-computed-diff: true
         dlq:
           $ref: "#/components/schemas/Dlq"
+          x-speakeasy-param-computed: false
         configuration:
           description: JSON configuration for the selected `type`.
           type: object
+          x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
     FlowV4:
       description: API or PLan Flow
@@ -1348,44 +1510,60 @@ components:
           examples:
             - My Flow
           maxLength: 256
+          x-speakeasy-param-computed: false
         enabled:
           type: boolean
           description: Is the flow enabled.
           default: true
+          x-speakeasy-param-computed: false
         selectors:
           type: array
           items:
             $ref: "#/components/schemas/Selector"
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         request:
           type: array
           description: Request flow steps used for PROXY and MESSAGE APIs
           items:
             $ref: "#/components/schemas/StepV4"
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         response:
           type: array
           description: Response flow steps used for PROXY and MESSAGE APIs
           items:
             $ref: "#/components/schemas/StepV4"
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         subscribe:
           type: array
           description: Subscribe flow steps used for MESSAGE and NATIVE APIs
           items:
             $ref: "#/components/schemas/StepV4"
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         publish:
           type: array
           description: Publish flow steps used for MESSAGE and NATIVE APIs
           items:
             $ref: "#/components/schemas/StepV4"
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         connect:
           type: array
           description: Connect flow steps used for NATIVE APIs
           items:
             $ref: "#/components/schemas/StepV4"
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         interact:
           type: array
           description: Interact flow steps used for NATIVE APIs
           items:
             $ref: "#/components/schemas/StepV4"
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         tags:
           type: array
           items:
@@ -1395,6 +1573,9 @@ components:
           examples:
             - [tag1, tag2]
           uniqueItems: true
+          x-speakeasy-param-computed: true
+          default: []
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
       required:
         - enabled
     FlowExecution:
@@ -1403,10 +1584,14 @@ components:
       properties:
         mode:
           $ref: "#/components/schemas/FlowMode"
+          x-speakeasy-param-computed: false
         matchRequired:
           type: boolean
           description: To indicate failure if no flow matches the request.
           default: false
+          x-speakeasy-param-computed: false
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
     FlowMode:
       type: string
       description: "DEFAULT : all flows that match the conditions are executed in the order they are defined BEST_MATCH: only the best matching flow will be executed"
@@ -1434,6 +1619,7 @@ components:
                 $ref: "#/components/schemas/PathV4"
             cors:
               $ref: "#/components/schemas/Cors"
+              x-speakeasy-param-computed: false
     HttpMethod:
       type: string
       description: The method of the selector
@@ -1477,6 +1663,7 @@ components:
               items:
                 $ref: "#/components/schemas/HttpMethod"
               uniqueItems: true
+      x-speakeasy-param-computed: true
     Listener:
       description: Listener
       oneOf:
@@ -1499,17 +1686,21 @@ components:
       properties:
         type:
           $ref: "#/components/schemas/ListenerType"
+          x-speakeasy-param-computed: false
         entrypoints:
           description: A list of possible entrypoint of the same type.
           type: array
           minItems: 1
           items:
             $ref: "#/components/schemas/Entrypoint"
+          x-speakeasy-param-computed: false
         servers:
           type: array
           description: Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
           items:
             type: string
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
       discriminator:
         propertyName: type
         mapping:
@@ -1542,8 +1733,11 @@ components:
             - ROUND_ROBIN
             - WEIGHTED_RANDOM
             - WEIGHTED_ROUND_ROBIN
+          x-speakeasy-param-computed: false
       required:
         - type
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
     LoggingV4:
       description: API logging configuration (Not for native APIs)
       type: object
@@ -1553,17 +1747,23 @@ components:
           description: Filter using EL what request should be logged
           examples:
             - "{#request.headers['Content-Type'][0] == 'application/json'}"
+          x-speakeasy-param-computed: false
         messageCondition:
           type: string
           description: Filter using EL what message should be logged
           examples:
             - "{ #message.headers['Content-Type'][0] == 'application/json'}"
+          x-speakeasy-param-computed: false
         content:
           $ref: "#/components/schemas/LoggingContentV4"
+          x-speakeasy-param-computed: false
         phase:
           $ref: "#/components/schemas/LoggingPhase"
+          x-speakeasy-param-computed: false
         mode:
           $ref: "#/components/schemas/LoggingModeV4"
+          x-speakeasy-param-computed: false
+      x-speakeasy-param-computed: false
     LoggingContentV4:
       description: API logging content when one of logging mode is enabled (Not for native APIs)
       type: object
@@ -1571,18 +1771,29 @@ components:
         headers:
           type: boolean
           description: Enable to log request headers
+          x-speakeasy-param-computed: false
+          default: false
         messageHeaders:
           type: boolean
           description: Enable to log message headers (Message APIs only)
+          x-speakeasy-param-computed: false
+          default: false
         payload:
           type: boolean
           description: Enable to log request headers (Proxy APIs only)
+          x-speakeasy-param-computed: false
+          default: false
         messagePayload:
           type: boolean
           description: Enable to log message headers (Message APIs only)
+          x-speakeasy-param-computed: false
+          default: false
         messageMetadata:
           type: boolean
           description: Enable to log message metadata (Message APIs only)
+          x-speakeasy-param-computed: false
+          default: false
+      x-speakeasy-param-computed: false
     LoggingModeV4:
       description: API logging mode (Not for native APIs)
       type: object
@@ -1590,9 +1801,14 @@ components:
         endpoint:
           type: boolean
           description: Enables endpoint logging
+          x-speakeasy-param-computed: false
+          default: false
         entrypoint:
           type: boolean
           description: Enables entrypoint logging
+          x-speakeasy-param-computed: false
+          default: false
+      x-speakeasy-param-computed: false
     LoggingPhase:
       description: Logging phase when one of logging mode is enabled (Not for native APIs)
       type: object
@@ -1600,9 +1816,14 @@ components:
         request:
           type: boolean
           description: Enables logging durring request phase
+          x-speakeasy-param-computed: false
+          default: false
         response:
           type: boolean
           description: Enables logging durring response phase
+          x-speakeasy-param-computed: false
+          default: false
+      x-speakeasy-param-computed: false
     TracingV4:
       description: OpenTelemetry tracing (Not for native APIs)
       type: object
@@ -1610,9 +1831,12 @@ components:
         enabled:
           type: boolean
           description: Enable OpenTelemetry tracing
+          x-speakeasy-param-computed: false
         verbose:
           type: boolean
           description: Enable technical tracing to get more details on request execution. Be careful this settings can generate more noise and can impact performance.
+          x-speakeasy-param-computed: false
+      x-speakeasy-param-computed: false
     Operator:
       type: string
       description: Operator function to match a URI path
@@ -1622,18 +1846,23 @@ components:
       enum:
         - EQUALS
         - STARTS_WITH
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
     PageV4:
       description: Documentation page.
       type: object
       properties:
         hrid:
           $ref: "#/components/schemas/Hrid"
+          x-speakeasy-param-computed: false
         crossId:
           type: string
           description: Page's cross uuid.
           examples:
             - 00f8c9e7-78fc-4907-b8c9-e778fc790750
           readOnly: true
+          x-speakeasy-param-computed: false
+          x-speakeasy-terraform-ignore: true
         name:
           type: string
           description: |
@@ -1642,23 +1871,29 @@ components:
           examples:
             - My Page
           maxLength: 64
+          x-speakeasy-param-computed: false
         type:
           $ref: "#/components/schemas/PageType"
+          x-speakeasy-param-computed: false
         content:
           type: string
           description: The content of the page, if any.
           examples:
             - My Page content
+          x-speakeasy-param-computed: false
         published:
           type: boolean
           description: If true, the page will be accessible from the portal (default is false)
           examples:
             - true
           default: false
+          x-speakeasy-param-computed: false
         visibility:
           $ref: "#/components/schemas/Visibility"
+          x-speakeasy-param-computed: false
         source:
           $ref: "#/components/schemas/PageSource"
+          x-speakeasy-param-computed: false
         configuration:
           type: object
           description: Key/value page configuration (Configure swagger UI or or use Redoc instead)
@@ -1667,16 +1902,20 @@ components:
             maxLength: 200
           examples:
             - viewer: Redoc
+          x-speakeasy-param-computed: false
         homepage:
           type: boolean
           description: If true, this page will be displayed as the homepage of your API documentation.
           examples:
             - true
+          x-speakeasy-param-computed: false
+          default: false
         parentHrid:
           type: string
           description: "If your page contains a folder, setting this field to the folder's hrid will be reflected \ninto APIM by making the page a child of this folder.\n"
           examples:
             - guides
+          x-speakeasy-param-computed: false
       required:
         - hrid
         - name
@@ -1712,10 +1951,13 @@ components:
             - github-fetcher
             - bitbucket-fetcher
           maxLength: 64
+          x-speakeasy-param-computed: false
         configuration:
           type: object
           description: JSON object configuration of the fetch plugin.
+          x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
+      x-speakeasy-param-computed: false
     PathV4:
       description: API Path specification
       type: object
@@ -1723,13 +1965,17 @@ components:
         host:
           type: string
           description: Virtual host required to access this API. (`Host` or `:Authority` headers, remote address for websockets)
+          x-speakeasy-param-computed: false
         path:
           type: string
           default: "/"
+          x-speakeasy-param-computed: false
         overrideAccess:
           type: boolean
           description: Override default organization entrypoint with `host`
           default: false
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
       required:
         - path
     PlanSecurity:
@@ -1738,9 +1984,11 @@ components:
       properties:
         type:
           $ref: "#/components/schemas/PlanSecurityType"
+          x-speakeasy-param-computed: false
         configuration:
           description: JSON Object to configure specific attributes of a Plan.
           type: object
+          x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
       required:
         - type
@@ -1801,19 +2049,24 @@ components:
           description: Owner's uuid.
           examples:
             - 00f8c9e7-78fc-4907-b8c9-e778fc790750
+          x-speakeasy-param-computed: false
         email:
           type: string
           description: Owner's email. Can be null if owner is a group.
           examples:
             - "john.doe@example.com"
+          x-speakeasy-param-computed: false
         displayName:
           type: string
           description: Owner's name.
           examples:
             - John Doe
           minLength: 1
+          x-speakeasy-param-computed: false
         type:
           $ref: "#/components/schemas/MembershipMemberType"
+          x-speakeasy-param-computed: false
+      x-speakeasy-terraform-ignore: true
     Property:
       description: API property can be used within the API using EL expression `{#api.properties['key']}.
       type: object
@@ -1824,20 +2077,25 @@ components:
         key:
           description: Property key.
           type: string
+          x-speakeasy-param-computed: false
         value:
           description: Property value.
           type: string
+          x-speakeasy-param-computed: false
         encrypted:
           description: When the value has been encrypted in database.
           type: boolean
           readOnly: true
+          x-speakeasy-param-computed: false
         dynamic:
           description: When the value was populated from dynamic property service.
           type: boolean
+          x-speakeasy-param-computed: false
         encryptable:
           description: When the input value needs to be encrypted.
           type: boolean
           writeOnly: true
+          x-speakeasy-param-computed: false
     Qos:
       type: string
       description: Type of the quality of service (for message APIs).
@@ -1849,6 +2107,7 @@ components:
         - AUTO
         - AT_MOST_ONCE
         - AT_LEAST_ONCE
+      x-speakeasy-param-suppress-computed-diff: true
     APIResource:
       description: API resource
       type: object
@@ -1856,6 +2115,7 @@ components:
         name:
           description: API resource name
           type: string
+          x-speakeasy-param-computed: false
         type:
           description: Resource type (resource plugin ID)
           type: string
@@ -1874,14 +2134,17 @@ components:
             - ai-model-text-classification
             - confluent-schema-registry
             - content-provider-inline-resource
+          x-speakeasy-param-computed: false
         configuration:
           description: JSON Object configuration specific to this resource.
           type: object
+          x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
         enabled:
           description: Make it available or not.
           type: boolean
           default: true
+          x-speakeasy-param-computed: false
       required:
         - name
         - type
@@ -1893,18 +2156,22 @@ components:
         status:
           description: HTTP Status to return
           type: integer
+          x-speakeasy-param-computed: false
         headers:
           description: Headers to return as key/value pairs
           type: object
           additionalProperties:
             type: string
+          x-speakeasy-param-computed: false
         body:
           description: Response body (use `Content-Type` header to specify the content type)
           type: string
+          x-speakeasy-param-computed: false
         propagateErrorKeyToLogs:
           type: boolean
           description: Log the key associated with this response template
           default: false
+          x-speakeasy-param-computed: false
       required:
         - status
     Sampling:
@@ -1925,6 +2192,7 @@ components:
             - TEMPORAL
             - COUNT
             - WINDOWED_COUNT
+          x-speakeasy-param-computed: false
         value:
           type: string
           description: |
@@ -1934,8 +2202,10 @@ components:
             `TEMPORAL`: ISO-8601 duration format, 1 second minimum (PT1S)
             `COUNT`: greater than `1`,
             `WINDOWED_COUNT`: x/<ISO-8601 duration> cannot exceed 1 message per second
+          x-speakeasy-param-computed: false
       required:
         - type
+      x-speakeasy-param-computed: false
     MembershipMemberType:
       type: string
       description: The type of membership
@@ -1971,6 +2241,7 @@ components:
             - CHANNEL
             - CONDITION
             - MCP
+          x-speakeasy-param-computed: false
       discriminator:
         propertyName: type
         mapping:
@@ -1988,20 +2259,26 @@ components:
           type: boolean
           description: When the configuration overrides an inherited configuration.
           default: false
+          x-speakeasy-param-computed: false
         configuration:
           type: object
           description: JSON configuration of the service.
+          x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
         enabled:
           type: boolean
           description: Is the service enabled or not.
           default: true
+          x-speakeasy-param-computed: false
         type:
           type: string
           description: The service plugin ID used.
+          x-speakeasy-param-computed: false
       required:
         - type
         - configuration
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
     BaseStep:
       description: Base step
       type: object
@@ -2010,26 +2287,32 @@ components:
           type: string
           description: The name of the step
           maxLength: 64
+          x-speakeasy-param-computed: false
         description:
           type: string
           description: A description for the step
           maxLength: 256
+          x-speakeasy-param-computed: false
         enabled:
           type: boolean
           description: To enable the step globally.
           default: true
+          x-speakeasy-param-computed: false
         policy:
           type: string
           description: The policy of the step (plugin ID)
           maxLength: 64
+          x-speakeasy-param-computed: false
         configuration:
           type: object
           description: JSON Object configuration of the policy used.
+          x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
         condition:
           type: string
           description: The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
           maxLength: 1024
+          x-speakeasy-param-computed: false
       required:
         - enabled
         - policy
@@ -2057,6 +2340,7 @@ components:
               type: string
               description: The message condition of the step (for message API)
               maxLength: 256
+              x-speakeasy-param-computed: false
     SubscriptionListener:
       description: Subscription listener for message API.
       title: "SubscriptionListener"
@@ -2105,34 +2389,42 @@ components:
           type: boolean
           description: Automatically redirects request to the next endpoint if the response is too slow.
           default: false
+          x-speakeasy-param-computed: false
         maxRetries:
           type: integer
           format: int32
           description: Limit the number of retry attempts before recording an error. Each attempt dynamically selects an endpoint based on the load balancing algorithm.
           default: 2
           minimum: 0
+          x-speakeasy-param-computed: false
         slowCallDuration:
           type: integer
           format: int64
           description: Define a threshold for slow responses. Requests exceeding this duration are recorded as slow.
           default: 2000
           minimum: 50
+          x-speakeasy-param-computed: false
         openStateDuration:
           type: integer
           format: int64
           description: The duration in milliseconds to indicate how long the circuit breaker should stay open, before it switches to half open.
           default: 10000
           minimum: 500
+          x-speakeasy-param-computed: false
         maxFailures:
           type: integer
           format: int32
           description: The maximum number of failures allowed before the circuit breaker can calculate the error rate.
           default: 5
           minimum: 1
+          x-speakeasy-param-computed: false
         perSubscription:
           type: boolean
           description: If true, a circuit breaker breaker will be dedicated for each subscriber, else, one and only circuit breaker will be used for the API.
           default: true
+          x-speakeasy-param-computed: false
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
     Metadata:
       description: Metadata is a generic data structure used internally
       type: object
@@ -2141,22 +2433,29 @@ components:
           type: string
           description: The key of the metadata if different from sanitized name (lowercase + hyphens).
           minLength: 1
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         name:
           type: string
           description: The name of the metadata.
+          x-speakeasy-param-computed: false
         format:
           $ref: "#/components/schemas/MetadataFormat"
+          x-speakeasy-param-computed: false
         value:
           type: string
           description: The value of the metadata.
           minLength: 1
+          x-speakeasy-param-computed: false
         defaultValue:
           type: string
           description: The default value of the metadata if the value is not set.
+          x-speakeasy-param-computed: false
         hidden:
           type: boolean
           description: if this metadata should be hidden
           default: false
+          x-speakeasy-param-computed: false
       required:
         - name
         - format
@@ -2172,6 +2471,7 @@ components:
         - DATE
         - MAIL
         - URL
+      x-speakeasy-param-computed: false
     LifecycleState:
       type: string
       description: STARTED will make this API callable on tis context path, STOPPED will yield 404 error
@@ -2193,21 +2493,25 @@ components:
           description: Error code
           examples:
             - 400
+          x-speakeasy-param-computed: false
         message:
           type: string
           description: Error message
           examples:
             - Bad request
+          x-speakeasy-param-computed: false
         technicalCode:
           type: string
           description: A technical code to identify the error
           examples:
             - invalid.import.definition
+          x-speakeasy-param-computed: false
         parameters:
           type: object
           description: A map of parameters to be used in the error message
           additionalProperties:
             type: string
+          x-speakeasy-param-computed: false
         details:
           type: array
           description: A list of details about the error
@@ -2229,6 +2533,7 @@ components:
                 description: The invalid value.
                 examples:
                   - $...faulty
+          x-speakeasy-param-computed: false
     Errors:
       description: >-
         When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
@@ -2239,12 +2544,14 @@ components:
           items:
             type: string
           type: array
+          x-speakeasy-param-computed: false
         warning:
           description: >-
             Warning errors do not block object creation/update/delete, most of the time because the value is ignored or defaulted.
           items:
             type: string
           type: array
+          x-speakeasy-param-computed: false
       type: object
       x-speakeasy-terraform-ignore: true
   responses:
