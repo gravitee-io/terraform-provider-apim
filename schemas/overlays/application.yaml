@@ -27,48 +27,37 @@ actions:
   ## Avoid diff for optional properties
 
   ### Application Spec
-  - target: $.components.schemas.ApplicationSpec.properties.domain
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApplicationSpec.properties.groups
     description: Prevent unknown values if unconfigured
     update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApplicationSpec.properties.pictureUrl
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApplicationSpec.properties.background
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApplicationSpec.properties.metadata
-    description: Prevent unknown values if unconfigured
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+
   - target: $.components.schemas.ApplicationSpec.properties.members
     description: Prevent unknown values if unconfigured
     update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApplicationSpec.properties.settings
     description: Prevent unknown values if unconfigured
     update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
 
   ### Application State
-  - target: $.components.schemas.ApplicationState.allOf[?@.properties.id]
+  - target: $.components.schemas.ApplicationState.allOf[?@.properties.id].properties.id
     description: Not returned by the API, so prevent null values during refresh
     update:
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApplicationState.allOf[?@.properties.crossId]
+  - target: $.components.schemas.ApplicationState.allOf[?@.properties.crossId].properties.crossId
     description: Not returned by the API, so prevent null values during refresh
     update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApplicationState.allOf[?@.properties.metadata]
-    description: Metadata are not ordered
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.ApplicationSpec.properties.metadata
+    description: Prevent empty array to create plan diff
     update:
-      x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
 
   - target: $.components.schemas.ApplicationTLSSettings.properties.clientCertificate
     description: Using TrimmedString to make sure certs are  semantics equal regardless of trailing/leading spaced
@@ -80,11 +69,16 @@ actions:
         valueType: customtypes.TrimmedString
 
 
-  ## Field removal
+  ## Ignored for Terraform
   - target: $.components.schemas.ApplicationSpec.properties.status
     description: This property is not managed by Terraform as it is confusing and unnecessary for users.
     update:
       x-speakeasy-terraform-ignore: true
+
+  #  boolean 'false' defaulted
+#  - target: $.components.schemas.ApplicationSpec.properties.notifyMembers.default
+#    description: removing default "false" to avoid a computed value
+#    remove: true
 
   ## XOR for app settings
   - target: $.components.schemas.ApplicationSettings.properties.app

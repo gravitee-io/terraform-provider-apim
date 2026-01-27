@@ -25,15 +25,17 @@ actions:
 
   ## Avoid diff for optional properties
 
-  - target: $.components.schemas.SharedPolicyGroupState.allOf[?@.properties.id]
+  - target: $.components.schemas.SharedPolicyGroupState.allOf[?@.properties.id].properties.id
     description: Not required for Terraform
     update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.SharedPolicyGroupState.allOf[?@.properties.crossId]
+  - target: $.components.schemas.SharedPolicyGroupState.allOf[?@.properties.crossId].properties.crossId
     description: Not required for Terraform
     update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.SharedPolicyGroupSpec.properties.prerequisiteMessage
-    description: Prevent unknown values in plans if unconfigured
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.SharedPolicyGroupSpec.properties.steps
+    description: Prevent empty array to create plan diff
     update:
-      x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
