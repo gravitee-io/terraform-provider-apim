@@ -55,7 +55,7 @@ jobs:
         if: ${{ !inputs.dry_run }}
         uses: ./.github/actions/send-slack-notification
         with:
-          job_name: ${{ github.job }} - Release ${{ RELEASE_VERSION }}
+          job_name: ${{ github.job }} - Release ${{ env.RELEASE_VERSION }}
           circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
           trigger: release_notification
-          release_version: ${{ RELEASE_VERSION }}
+          release_version: ${{ env.RELEASE_VERSION }}
