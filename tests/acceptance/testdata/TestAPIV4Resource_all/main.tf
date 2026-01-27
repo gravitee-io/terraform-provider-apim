@@ -397,6 +397,41 @@ resource "apim_apiv4" "test" {
       security = {
         type = "KEY_LESS"
       }
+      flows = [
+        {
+          enabled = true
+          selectors = [
+            {
+              http = {
+                type         = "HTTP"
+                path         = "/"
+                pathOperator = "STARTS_WITH"
+                methods = [
+                  "GET",
+                  "OPTIONS",
+                  "PUT",
+                  "POST",
+                  "DELETE"
+                ]
+              }
+            }
+          ]
+          request = [
+            {
+              # Authentication policy
+              "name" : "Basic Authentication",
+              "enabled" : true,
+              "policy" : "policy-basic-authentication",
+              "configuration" : jsonencode({
+                "authenticationProviders" = [
+                  "In memory users"
+                ]
+                "realm" = "gravitee.io"
+              })
+            }
+          ]
+        }
+      ]
     }
   ]
 }

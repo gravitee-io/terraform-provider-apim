@@ -19,26 +19,21 @@ actions:
     update:
       x-speakeasy-entity: Subscription
 
-  # Removed fields
-  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.environmentId].properties.environmentId
-    description: Not returned by the API, so prevent null values during refresh
-    remove: true
-  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.organizationId].properties.organizationId
-    description: Not returned by the API, so prevent null values during refresh
-    remove: true
-
   # Diff removal API State
-  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.id]
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.id].properties.id
     description: Not returned by the API, so prevent null values during refresh
     update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.crossId]
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.crossId].properties.crossId
     description: Not returned by the API, so prevent null values during refresh
     update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.startingAt]
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.startingAt].properties.startingAt
     description: Not returned by the API, so prevent null values during refresh
     update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.SubscriptionSpec.properties.endingAt
     description: Using RFC3339 to make sure dates semantics equal

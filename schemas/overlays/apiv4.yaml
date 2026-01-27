@@ -7,7 +7,6 @@ actions:
 
 
   # Entity management
-
   - target: $.paths["/organizations/{orgId}/environments/{envId}/apis"].put
     update:
       x-speakeasy-entity-operation: APIV4#create,update
@@ -21,28 +20,320 @@ actions:
     update:
       x-speakeasy-entity: APIV4
 
-
-  # Customizations
-
-  ### API State
-  # TODO this is masking many API inconsistencies and should be reworked
-  - target: $.components.schemas.ApiV4State.allOf[?@.properties.id]
-    description: Not returned by the API, so prevent null values during refresh
+  # Customizations'
+  ## Defaults that fixes diff issues
+  - target: $.components.schemas.PlanV4.properties.characteristics
+    description: Prevent diff in plan
     update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApiV4State.allOf[?@.properties.crossId]
-    description: Not returned by the API, so prevent null values during refresh
+      default: []
+  - target: $.components.schemas.PlanV4.properties.excludedGroups
+    description: Prevent diff in plan
     update:
+      default: []
+  - target: $.components.schemas.PlanV4.properties.tags
+    description: Prevent diff in plan
+    update:
+      default: []
+  - target: $.components.schemas.EndpointV4.properties.tenants
+    description: Prevent diff in plan
+    update:
+      default: []
+  - target: $.components.schemas.Cors.properties.allowHeaders
+    description: Prevent diff in plan
+    update:
+      default: []
+  - target: $.components.schemas.Cors.properties.allowMethods
+    description: Prevent diff in plan
+    update:
+      default: [ ]
+  - target: $.components.schemas.Cors.properties.allowOrigin
+    description: Prevent diff in plan
+    update:
+      default: [ ]
+  - target: $.components.schemas.Cors.properties.exposeHeaders
+    description: Prevent diff in plan
+    update:
+      default: [ ]
+
+
+  ## Don't use computed when not needed (beyond the global stuff)
+  - target: $.components.schemas.EndpointV4.properties.*
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.EndpointGroupV4.properties.*
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.EndpointGroupServices.properties.*
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.EndpointServices.properties.*
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.Entrypoint.properties.*
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.HttpListener.allOf[?@.properties.cors].properties.cors
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.ApiV4Spec.properties.services
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.Sampling
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.Cors
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.Dlq
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LoggingV4
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.TracingV4
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LoggingContentV4
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LoggingPhase
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.LoggingModeV4
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+
+  ## Need to be computed to avoid diff
+  - target: $.components.schemas.ApiV4State.allOf[?@.properties.id].properties.id
+    description: API return some stuff, need to ignore
+    update:
+      x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
-
-
-  ## Field removal
-  - target: $.components.schemas.ApiV4State.allOf[?@.properties.environmentId].properties.environmentId
-    description: Not returned by the API, so prevent null values during refresh
-    remove: true
   - target: $.components.schemas.ApiV4State.allOf[?@.properties.organizationId].properties.organizationId
-    description: Not returned by the API, so prevent null values during refresh
-    remove: true
+    description: API return some stuff, need to ignore
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4State.allOf[?@.properties.environmentId].properties.environmentId
+    description: API return some stuff, need to ignore
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ## API returns non-empty defaults for these
+  - target: $.components.schemas.ApiV4Spec.properties.metadata
+    description: API return some stuff, need to ignore
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.Analytics
+    description: API return some stuff, need to ignore
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowV4.properties.tags
+    description: Prevent unknown values if unconfigured
+    update:
+      default: []
+  - target: $.components.schemas.Operator
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.HttpSelector
+    update:
+      x-speakeasy-param-computed: true
+  - target: $.components.schemas.LoadBalancer
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PageSource
+    update:
+      x-speakeasy-param-computed: false
+  ## Api return empty lists of objects that should be ignored if config value is null
+  ### Flow
+  - target: $.components.schemas.FlowV4.properties.connect
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowV4.properties.interact
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowV4.properties.publish
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowV4.properties.request
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowV4.properties.response
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowV4.properties.subscribe
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowV4.properties.tags
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.FlowV4.properties.selectors
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PlanV4.properties.flows
+    description: Prevent diff in plan
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ### API
+  - target: $.components.schemas.ApiV4Spec.properties.properties
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.ApiV4Spec.properties.resources
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.ApiV4Spec.properties.members
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.ApiV4Spec.properties.pages
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.ApiV4Spec.properties.flows
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.ApiV4Spec.properties.plans
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  ### Plan
+  - target: $.components.schemas.PlanV4.properties.flows
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  ### Listener
+  - target: $.components.schemas.BaseListener.properties.servers
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+
+  # $ref usage
+  ## API Services
+  - target: $.components.schemas.ApiV4Spec.properties.services
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiServices
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  ## Failover
+  - target: $.components.schemas.ApiV4Spec.properties.failover
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FailoverV4
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  ## Flow execution
+  - target: $.components.schemas.ApiV4Spec.properties.flowExecution
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowExecution
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ## Endpoint services
+  - target: $.components.schemas.EndpointServices
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ServiceV4
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ## Endpoint group services
+  - target: $.components.schemas.EndpointGroupServices
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.Entrypoint.properties.qos
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.Qos
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PathV4.properties.overrideAccess
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ## Removal
+  - target: $.components.schemas.ApiV4State.allOf[?@.properties.crossId].properties.crossId
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.ApiV4Spec.properties.primaryOwner
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.PrimaryOwner
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.PageV4.properties.crossId
+    description: Prevent unknown values if unconfigured
+    update:
+      x-speakeasy-terraform-ignore: true
 
   ## Schemaless config
   - target: $.components.schemas.EndpointGroupV4.properties.sharedConfiguration
@@ -92,8 +383,19 @@ actions:
     update:
       type: string
 
-  ## Terraform Ignored
-  - target: $.components.schemas.Errors
-    description: Intentionally ignored for Terraform state
+  ## Defaults
+  - target: $.components.schemas.Analytics.properties.enabled.default
+    remove: true
+  - target: $.components.schemas.PageV4.properties.homepage
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
     update:
-      x-speakeasy-terraform-ignore: true
+      default: false
+  - target: $.components.schemas.LoggingContentV4.properties.*
+    update:
+      default: false
+  - target: $.components.schemas.LoggingModeV4.properties.*
+    update:
+      default: false
+  - target: $.components.schemas.LoggingPhase.properties.*
+    update:
+      default: false
