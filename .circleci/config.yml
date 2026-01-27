@@ -9,7 +9,8 @@ parameters:
     type: enum
     default: none
     enum:
-      - slack_notification
+      - test_results_notification
+      - release_notification
       - none
   job_name:
     type: string
@@ -23,6 +24,9 @@ parameters:
     enum:
       - pass
       - fail
+  release_version:
+    type: string
+    default: ""
 
 jobs:
   notify-slack:
@@ -81,13 +85,55 @@ jobs:
               ]
             }
 
+  notify-release:
+    docker:
+      - image: cimg/base:stable
+    resource_class: small
+    steps:
+      - keeper/env-export:
+          secret-url: keeper://ZOz4db245GNaETVwmPBk8w/field/password
+          var-name: SLACK_ACCESS_TOKEN
+      - run:
+          name: Validate version parameter
+          command: |
+            VERSION="<< pipeline.parameters.release_version >>"
+            if [[ -z "$VERSION" ]]; then
+              echo "Version parameter is empty"
+              exit 1
+            fi
+            
+            # Check if version starts with 'v' and follows semver pattern
+            if [[ ! "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?(\+[a-zA-Z0-9.-]+)?$ ]]; then
+              echo "Version must be a valid semver starting with 'v' (e.g., v1.2.3)"
+              exit 1
+            fi
+            
+            echo "VERSION=$VERSION" >> $BASH_ENV
+      - slack/notify:
+          channel: C02NGT20S4W
+          event: always
+          custom: |
+            {
+              "text": ":terraform: Terraform provider - Version ${VERSION} released! :ramen:"
+            }
+
 workflows:
   send-notification:
     when:
       equal:
         - << pipeline.parameters.trigger >>
-        - slack_notification
+        - test_results_notification
     jobs:
       - notify-slack:
-          name: Send slack notification
+          name: Send test result notification
+          context: cicd-orchestrator
+
+  release-notification:
+    when:
+      equal:
+        - << pipeline.parameters.trigger >>
+        - release_notification
+    jobs:
+      - notify-release:
+          name: Send release notification
           context: cicd-orchestrator

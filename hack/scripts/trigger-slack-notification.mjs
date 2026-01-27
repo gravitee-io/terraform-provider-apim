@@ -19,20 +19,23 @@ import {triggerPipeline} from "./lib/circleci.mjs";
 import {LOG, toggleVerbosity} from "./lib/index.mjs";
 
 const VERBOSE = argv.verbose;
+const TRIGGER = argv["trigger"];
 const BRANCH = argv["branch"];
 const JOB_NAME = argv["job-name"];
 const JOB_STATUS = argv["job-status"];
 const JOB_URL = argv["job-url"];
+const RELEASE_VERSION = argv["release-version"];
 
 toggleVerbosity(VERBOSE);
 
 LOG.blue(`Triggering pipeline`);
 
 const parameters = {
-    trigger: "slack_notification",
+    trigger: TRIGGER,
     job_name: JOB_NAME,
     job_status: JOB_STATUS,
-    job_url: JOB_URL
+    job_url: JOB_URL,
+    release_version: RELEASE_VERSION
 };
 
 LOG.blue(`
