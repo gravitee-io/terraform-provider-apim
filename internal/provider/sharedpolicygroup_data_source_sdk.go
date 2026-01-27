@@ -19,7 +19,6 @@ func (r *SharedPolicyGroupDataSourceModel) RefreshFromSharedSharedPolicyGroupSta
 
 	if resp != nil {
 		r.APIType = types.StringValue(string(resp.APIType))
-		r.CrossID = types.StringPointerValue(resp.CrossID)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)

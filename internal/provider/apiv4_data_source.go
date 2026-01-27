@@ -43,7 +43,6 @@ type Apiv4DataSource struct {
 type Apiv4DataSourceModel struct {
 	Analytics         *tfTypes.Analytics                             `tfsdk:"analytics"`
 	Categories        []types.String                                 `tfsdk:"categories"`
-	CrossID           types.String                                   `tfsdk:"cross_id"`
 	Description       types.String                                   `tfsdk:"description"`
 	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
 	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
@@ -62,7 +61,6 @@ type Apiv4DataSourceModel struct {
 	OrganizationID    types.String                                   `tfsdk:"organization_id"`
 	Pages             []tfTypes.PageV4                               `tfsdk:"pages"`
 	Plans             []tfTypes.PlanV4                               `tfsdk:"plans"`
-	PrimaryOwner      *tfTypes.PrimaryOwner                          `tfsdk:"primary_owner"`
 	Properties        []tfTypes.Property1                            `tfsdk:"properties"`
 	Resources         []tfTypes.APIResource                          `tfsdk:"resources"`
 	ResponseTemplates map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
@@ -205,10 +203,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Computed:    true,
 				ElementType: types.StringType,
 				Description: `The list of category names (or UUID) associated with this API.`,
-			},
-			"cross_id": schema.StringAttribute{
-				Computed:    true,
-				Description: `When promoting an API from one environment to the other, this ID identifies the API across those different environments.`,
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,
@@ -372,7 +366,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `environment ID`,
+				Description: `The environment ID of the API.`,
 			},
 			"failover": schema.SingleNestedAttribute{
 				Computed: true,
@@ -1096,7 +1090,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `organization ID`,
+				Description: `The organization ID of the API.`,
 			},
 			"pages": schema.ListNestedAttribute{
 				Computed: true,
@@ -1110,10 +1104,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"content": schema.StringAttribute{
 							Computed:    true,
 							Description: `The content of the page, if any.`,
-						},
-						"cross_id": schema.StringAttribute{
-							Computed:    true,
-							Description: `Page's cross uuid.`,
 						},
 						"homepage": schema.BoolAttribute{
 							Computed:    true,
@@ -1571,28 +1561,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 					},
 				},
 				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `. Plans are prioritized by their position in the list, with earlier entries having higher priority.`,
-			},
-			"primary_owner": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"display_name": schema.StringAttribute{
-						Computed:    true,
-						Description: `Owner's name.`,
-					},
-					"email": schema.StringAttribute{
-						Computed:    true,
-						Description: `Owner's email. Can be null if owner is a group.`,
-					},
-					"id": schema.StringAttribute{
-						Computed:    true,
-						Description: `Owner's uuid.`,
-					},
-					"type": schema.StringAttribute{
-						Computed:    true,
-						Description: `The type of membership`,
-					},
-				},
-				Description: `User owner of this. Can perform all possible actions on it.`,
 			},
 			"properties": schema.ListNestedAttribute{
 				Computed: true,

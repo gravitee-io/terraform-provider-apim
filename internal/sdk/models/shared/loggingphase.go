@@ -3,12 +3,27 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // LoggingPhase - Logging phase when one of logging mode is enabled (Not for native APIs)
 type LoggingPhase struct {
 	// Enables logging durring request phase
-	Request *bool `json:"request,omitempty"`
+	Request *bool `default:"false" json:"request"`
 	// Enables logging durring response phase
-	Response *bool `json:"response,omitempty"`
+	Response *bool `default:"false" json:"response"`
+}
+
+func (l LoggingPhase) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(l, "", false)
+}
+
+func (l *LoggingPhase) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &l, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (l *LoggingPhase) GetRequest() *bool {

@@ -74,7 +74,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		for _, v := range resp.Categories {
 			r.Categories = append(r.Categories, types.StringValue(v))
 		}
-		r.CrossID = types.StringPointerValue(resp.CrossID)
 		r.Description = types.StringPointerValue(resp.Description)
 		r.EndpointGroups = []tfTypes.EndpointGroupV4{}
 
@@ -171,6 +170,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 
 			r.EndpointGroups = append(r.EndpointGroups, endpointGroups)
 		}
+		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		if resp.Failover == nil {
 			r.Failover = nil
 		} else {
@@ -602,6 +602,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			r.Metadata = append(r.Metadata, metadata)
 		}
 		r.Name = types.StringValue(resp.Name)
+		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.Pages = []tfTypes.PageV4{}
 
 		for _, pagesItem := range resp.Pages {
@@ -614,7 +615,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				}
 			}
 			pages.Content = types.StringPointerValue(pagesItem.Content)
-			pages.CrossID = types.StringPointerValue(pagesItem.CrossID)
 			pages.Homepage = types.BoolPointerValue(pagesItem.Homepage)
 			pages.Hrid = types.StringValue(pagesItem.Hrid)
 			pages.Name = types.StringValue(pagesItem.Name)
@@ -871,19 +871,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			}
 
 			r.Plans = append(r.Plans, plans)
-		}
-		if resp.PrimaryOwner == nil {
-			r.PrimaryOwner = nil
-		} else {
-			r.PrimaryOwner = &tfTypes.PrimaryOwner{}
-			r.PrimaryOwner.DisplayName = types.StringPointerValue(resp.PrimaryOwner.DisplayName)
-			r.PrimaryOwner.Email = types.StringPointerValue(resp.PrimaryOwner.Email)
-			r.PrimaryOwner.ID = types.StringPointerValue(resp.PrimaryOwner.ID)
-			if resp.PrimaryOwner.Type != nil {
-				r.PrimaryOwner.Type = types.StringValue(string(*resp.PrimaryOwner.Type))
-			} else {
-				r.PrimaryOwner.Type = types.StringNull()
-			}
 		}
 		r.Properties = []tfTypes.Property1{}
 

@@ -23,8 +23,10 @@ func (r *SubscriptionResourceModel) RefreshFromSharedSubscriptionState(ctx conte
 		endingAtValuable, endingAtDiags := customtypes.RFC3339Type{}.ValueFromString(ctx, types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.EndingAt)))
 		diags.Append(endingAtDiags...)
 		r.EndingAt = endingAtValuable.(customtypes.RFC3339)
+		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
+		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.PlanHrid = types.StringValue(resp.PlanHrid)
 		r.StartingAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.StartingAt))
 	}

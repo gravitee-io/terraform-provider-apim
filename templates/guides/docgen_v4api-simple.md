@@ -75,10 +75,10 @@ deployed to the Gateway
       selectors = [
         {
           http = {
-            type         = "HTTP"
-            path         = "/"
-            pathOperator = "STARTS_WITH"
-            methods      = []
+            type          = "HTTP"
+            path          = "/"
+            path_operator = "STARTS_WITH"
+            methods       = []
           }
         }
       ]

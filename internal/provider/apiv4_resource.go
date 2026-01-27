@@ -9,10 +9,8 @@ import (
 	"encoding/json"
 	"fmt"
 	speakeasy_boolplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/boolplanmodifier"
-	speakeasy_int32planmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/int32planmodifier"
-	speakeasy_int64planmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/int64planmodifier"
+	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
-	speakeasy_mapplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/mapplanmodifier"
 	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
@@ -67,7 +65,6 @@ type Apiv4Resource struct {
 type Apiv4ResourceModel struct {
 	Analytics         *tfTypes.Analytics                             `tfsdk:"analytics"`
 	Categories        []types.String                                 `tfsdk:"categories"`
-	CrossID           types.String                                   `tfsdk:"cross_id"`
 	Description       types.String                                   `tfsdk:"description"`
 	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
 	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
@@ -87,7 +84,6 @@ type Apiv4ResourceModel struct {
 	OrganizationID    types.String                                   `tfsdk:"organization_id"`
 	Pages             []tfTypes.PageV4                               `tfsdk:"pages"`
 	Plans             []tfTypes.PlanV4                               `tfsdk:"plans"`
-	PrimaryOwner      *tfTypes.PrimaryOwner                          `tfsdk:"primary_owner"`
 	Properties        []tfTypes.Property                             `tfsdk:"properties"`
 	Resources         []tfTypes.APIResource                          `tfsdk:"resources"`
 	ResponseTemplates map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
@@ -115,135 +111,88 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-						Default:  booldefault.StaticBool(true),
-						PlanModifiers: []planmodifier.Bool{
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
-						Description: `Whether or not analytics are enabled. Default: true`,
+						Optional:    true,
+						Description: `Whether or not analytics are enabled.`,
 					},
 					"logging": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-						},
 						Attributes: map[string]schema.Attribute{
 							"condition": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
+								Optional:    true,
 								Description: `Filter using EL what request should be logged`,
 							},
 							"content": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"headers": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Enable to log request headers`,
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
+										Description: `Enable to log request headers. Default: false`,
 									},
 									"message_headers": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Enable to log message headers (Message APIs only)`,
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
+										Description: `Enable to log message headers (Message APIs only). Default: false`,
 									},
 									"message_metadata": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Enable to log message metadata (Message APIs only)`,
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
+										Description: `Enable to log message metadata (Message APIs only). Default: false`,
 									},
 									"message_payload": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Enable to log message headers (Message APIs only)`,
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
+										Description: `Enable to log message headers (Message APIs only). Default: false`,
 									},
 									"payload": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Enable to log request headers (Proxy APIs only)`,
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
+										Description: `Enable to log request headers (Proxy APIs only). Default: false`,
 									},
 								},
 								Description: `API logging content when one of logging mode is enabled (Not for native APIs)`,
 							},
 							"message_condition": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
+								Optional:    true,
 								Description: `Filter using EL what message should be logged`,
 							},
 							"mode": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"endpoint": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Enables endpoint logging`,
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
+										Description: `Enables endpoint logging. Default: false`,
 									},
 									"entrypoint": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Enables entrypoint logging`,
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
+										Description: `Enables entrypoint logging. Default: false`,
 									},
 								},
 								Description: `API logging mode (Not for native APIs)`,
 							},
 							"phase": schema.SingleNestedAttribute{
-								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"request": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Enables logging durring request phase`,
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
+										Description: `Enables logging durring request phase. Default: false`,
 									},
 									"response": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
-										Description: `Enables logging durring response phase`,
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
+										Description: `Enables logging durring response phase. Default: false`,
 									},
 								},
 								Description: `Logging phase when one of logging mode is enabled (Not for native APIs)`,
@@ -252,18 +201,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Description: `API logging configuration (Not for native APIs)`,
 					},
 					"sampling": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-						},
 						Attributes: map[string]schema.Attribute{
 							"type": schema.StringAttribute{
-								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
 								MarkdownDescription: `The type of the sampling:` + "\n" +
 									`` + "\n" +
 									`` + "`" + `PROBABILITY` + "`" + `: based on a specified probability,` + "\n" +
@@ -282,11 +223,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 							},
 							"value": schema.StringAttribute{
-								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
 								MarkdownDescription: `The value of the sampling:` + "\n" +
 									`` + "\n" +
 									`` + "`" + `PROBABILITY` + "`" + `: between ` + "`" + `0.01` + "`" + ` and ` + "`" + `0.5` + "`" + `,` + "\n" +
@@ -298,26 +235,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Description: `API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.`,
 					},
 					"tracing": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-						},
 						Attributes: map[string]schema.Attribute{
 							"enabled": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-								PlanModifiers: []planmodifier.Bool{
-									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-								},
+								Optional:    true,
 								Description: `Enable OpenTelemetry tracing`,
 							},
 							"verbose": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-								PlanModifiers: []planmodifier.Bool{
-									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-								},
+								Optional:    true,
 								Description: `Enable technical tracing to get more details on request execution. Be careful this settings can generate more noise and can impact performance.`,
 							},
 						},
@@ -327,28 +252,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `API analytics configuration to enable/disable what can be observed.`,
 			},
 			"categories": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
+				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
 				Description: `The list of category names (or UUID) associated with this API. Default: []`,
 			},
-			"cross_id": schema.StringAttribute{
-				Computed: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
-				Description: `When promoting an API from one environment to the other, this ID identifies the API across those different environments.`,
-			},
 			"description": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Optional:    true,
 				Description: `Basic API documentation to describe what this API does.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(4000),
@@ -356,64 +267,37 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			},
 			"endpoint_groups": schema.ListNestedAttribute{
 				Required: true,
-				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
 					},
-					PlanModifiers: []planmodifier.Object{
-						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-					},
 					Attributes: map[string]schema.Attribute{
 						"endpoints": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
-							PlanModifiers: []planmodifier.List{
-								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
 								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-								},
 								Attributes: map[string]schema.Attribute{
 									"configuration": schema.StringAttribute{
-										CustomType: jsontypes.NormalizedType{},
-										Computed:   true,
-										Optional:   true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										CustomType:  jsontypes.NormalizedType{},
+										Optional:    true,
 										Description: `JSON Configuration specific to this endpoint that cannot be define at the group level. Parsed as JSON.`,
 									},
 									"inherit_configuration": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										Default:  booldefault.StaticBool(false),
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
 										Description: `Enables shared configuration inheritance. Default: false`,
 									},
 									"name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The name of the endpoint`,
 									},
 									"secondary": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										Default:  booldefault.StaticBool(false),
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(false),
 										Description: `Define this endpoint as fallback endpoint in case other endpoints are no longer responding. Default: false`,
 									},
 									"services": schema.SingleNestedAttribute{
@@ -431,41 +315,27 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												Attributes: map[string]schema.Attribute{
 													"configuration": schema.StringAttribute{
-														CustomType: jsontypes.NormalizedType{},
-														Computed:   true,
-														Optional:   true,
-														PlanModifiers: []planmodifier.String{
-															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-														},
+														CustomType:  jsontypes.NormalizedType{},
+														Optional:    true,
 														Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
 														Validators: []validator.String{
 															speakeasy_stringvalidators.NotNull(),
 														},
 													},
 													"enabled": schema.BoolAttribute{
-														Computed: true,
-														Optional: true,
-														Default:  booldefault.StaticBool(true),
-														PlanModifiers: []planmodifier.Bool{
-															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-														},
+														Computed:    true,
+														Optional:    true,
+														Default:     booldefault.StaticBool(true),
 														Description: `Is the service enabled or not. Default: true`,
 													},
 													"override_configuration": schema.BoolAttribute{
-														Computed: true,
-														Optional: true,
-														Default:  booldefault.StaticBool(false),
-														PlanModifiers: []planmodifier.Bool{
-															speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-														},
+														Computed:    true,
+														Optional:    true,
+														Default:     booldefault.StaticBool(false),
 														Description: `When the configuration overrides an inherited configuration. Default: false`,
 													},
 													"type": schema.StringAttribute{
-														Computed: true,
-														Optional: true,
-														PlanModifiers: []planmodifier.String{
-															speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-														},
+														Optional:    true,
 														Description: `The service plugin ID used. Not Null`,
 														Validators: []validator.String{
 															speakeasy_stringvalidators.NotNull(),
@@ -478,41 +348,28 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `API Endpoint Services`,
 									},
 									"shared_configuration_override": schema.StringAttribute{
-										CustomType: jsontypes.NormalizedType{},
-										Computed:   true,
-										Optional:   true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										CustomType:  jsontypes.NormalizedType{},
+										Optional:    true,
 										Description: `JSON Configuration that replaces the shared configuration defined at the group level. Parsed as JSON.`,
 									},
 									"tenants": schema.ListAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.List{
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
+										Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 										ElementType: types.StringType,
-										Description: `The list of Getaway's tenants on which the endpoint can be used.`,
+										Description: `The list of Getaway's tenants on which the endpoint can be used. Default: []`,
 									},
 									"type": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The type of endpoint. Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
 										},
 									},
 									"weight": schema.Int32Attribute{
-										Computed: true,
-										Optional: true,
-										Default:  int32default.StaticInt32(1),
-										PlanModifiers: []planmodifier.Int32{
-											speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
+										Default:     int32default.StaticInt32(1),
 										Description: `The weight of the endpoint for the load balancer algorythm. Default: 1`,
 									},
 								},
@@ -527,12 +384,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 							Attributes: map[string]schema.Attribute{
 								"type": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									Default:  stringdefault.StaticString(`ROUND_ROBIN`),
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
+									Optional:    true,
+									Default:     stringdefault.StaticString(`ROUND_ROBIN`),
 									Description: `Load balancer type. Default: "ROUND_ROBIN"; must be one of ["RANDOM", "ROUND_ROBIN", "WEIGHTED_RANDOM", "WEIGHTED_ROUND_ROBIN"]`,
 									Validators: []validator.String{
 										stringvalidator.OneOf(
@@ -547,11 +401,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Load Balancer to distribute traffic between endpoints.`,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The name of the endpoint group`,
 						},
 						"services": schema.SingleNestedAttribute{
@@ -569,41 +419,27 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
-											CustomType: jsontypes.NormalizedType{},
-											Computed:   true,
-											Optional:   true,
-											PlanModifiers: []planmodifier.String{
-												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-											},
+											CustomType:  jsontypes.NormalizedType{},
+											Optional:    true,
 											Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"enabled": schema.BoolAttribute{
-											Computed: true,
-											Optional: true,
-											Default:  booldefault.StaticBool(true),
-											PlanModifiers: []planmodifier.Bool{
-												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
+											Optional:    true,
+											Default:     booldefault.StaticBool(true),
 											Description: `Is the service enabled or not. Default: true`,
 										},
 										"override_configuration": schema.BoolAttribute{
-											Computed: true,
-											Optional: true,
-											Default:  booldefault.StaticBool(false),
-											PlanModifiers: []planmodifier.Bool{
-												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
+											Optional:    true,
+											Default:     booldefault.StaticBool(false),
 											Description: `When the configuration overrides an inherited configuration. Default: false`,
 										},
 										"type": schema.StringAttribute{
-											Computed: true,
-											Optional: true,
-											PlanModifiers: []planmodifier.String{
-												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-											},
+											Optional:    true,
 											Description: `The service plugin ID used. Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -620,41 +456,27 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
-											CustomType: jsontypes.NormalizedType{},
-											Computed:   true,
-											Optional:   true,
-											PlanModifiers: []planmodifier.String{
-												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-											},
+											CustomType:  jsontypes.NormalizedType{},
+											Optional:    true,
 											Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
 										},
 										"enabled": schema.BoolAttribute{
-											Computed: true,
-											Optional: true,
-											Default:  booldefault.StaticBool(true),
-											PlanModifiers: []planmodifier.Bool{
-												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
+											Optional:    true,
+											Default:     booldefault.StaticBool(true),
 											Description: `Is the service enabled or not. Default: true`,
 										},
 										"override_configuration": schema.BoolAttribute{
-											Computed: true,
-											Optional: true,
-											Default:  booldefault.StaticBool(false),
-											PlanModifiers: []planmodifier.Bool{
-												speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-											},
+											Computed:    true,
+											Optional:    true,
+											Default:     booldefault.StaticBool(false),
 											Description: `When the configuration overrides an inherited configuration. Default: false`,
 										},
 										"type": schema.StringAttribute{
-											Computed: true,
-											Optional: true,
-											PlanModifiers: []planmodifier.String{
-												speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-											},
+											Optional:    true,
 											Description: `The service plugin ID used. Not Null`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
@@ -667,20 +489,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `API Endpoint Group Services`,
 						},
 						"shared_configuration": schema.StringAttribute{
-							CustomType: jsontypes.NormalizedType{},
-							Computed:   true,
-							Optional:   true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							CustomType:  jsontypes.NormalizedType{},
+							Optional:    true,
 							Description: `JSON configuration for the ` + "`" + `type` + "`" + ` of ` + "`" + `endpoints` + "`" + ` that will be shared across all endpoints. Parsed as JSON.`,
 						},
 						"type": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The type of the endpoint group. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -694,8 +508,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `environment ID`,
 			},
 			"failover": schema.SingleNestedAttribute{
@@ -706,63 +523,45 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-						Default:  booldefault.StaticBool(false),
-						PlanModifiers: []planmodifier.Bool{
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
 						Description: `Automatically redirects request to the next endpoint if the response is too slow. Default: false`,
 					},
 					"max_failures": schema.Int32Attribute{
-						Computed: true,
-						Optional: true,
-						Default:  int32default.StaticInt32(5),
-						PlanModifiers: []planmodifier.Int32{
-							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
-						},
+						Computed:    true,
+						Optional:    true,
+						Default:     int32default.StaticInt32(5),
 						Description: `The maximum number of failures allowed before the circuit breaker can calculate the error rate. Default: 5`,
 						Validators: []validator.Int32{
 							int32validator.AtLeast(1),
 						},
 					},
 					"max_retries": schema.Int32Attribute{
-						Computed: true,
-						Optional: true,
-						Default:  int32default.StaticInt32(2),
-						PlanModifiers: []planmodifier.Int32{
-							speakeasy_int32planmodifier.SuppressDiff(speakeasy_int32planmodifier.ExplicitSuppress),
-						},
+						Computed:    true,
+						Optional:    true,
+						Default:     int32default.StaticInt32(2),
 						Description: `Limit the number of retry attempts before recording an error. Each attempt dynamically selects an endpoint based on the load balancing algorithm. Default: 2`,
 					},
 					"open_state_duration": schema.Int64Attribute{
-						Computed: true,
-						Optional: true,
-						Default:  int64default.StaticInt64(10000),
-						PlanModifiers: []planmodifier.Int64{
-							speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
-						},
+						Computed:    true,
+						Optional:    true,
+						Default:     int64default.StaticInt64(10000),
 						Description: `The duration in milliseconds to indicate how long the circuit breaker should stay open, before it switches to half open. Default: 10000`,
 						Validators: []validator.Int64{
 							int64validator.AtLeast(500),
 						},
 					},
 					"per_subscription": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-						Default:  booldefault.StaticBool(true),
-						PlanModifiers: []planmodifier.Bool{
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(true),
 						Description: `If true, a circuit breaker breaker will be dedicated for each subscriber, else, one and only circuit breaker will be used for the API. Default: true`,
 					},
 					"slow_call_duration": schema.Int64Attribute{
-						Computed: true,
-						Optional: true,
-						Default:  int64default.StaticInt64(2000),
-						PlanModifiers: []planmodifier.Int64{
-							speakeasy_int64planmodifier.SuppressDiff(speakeasy_int64planmodifier.ExplicitSuppress),
-						},
+						Computed:    true,
+						Optional:    true,
+						Default:     int64default.StaticInt64(2000),
 						Description: `Define a threshold for slow responses. Requests exceeding this duration are recorded as slow. Default: 2000`,
 						Validators: []validator.Int64{
 							int64validator.AtLeast(50),
@@ -779,12 +578,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 				Attributes: map[string]schema.Attribute{
 					"match_required": schema.BoolAttribute{
-						Computed: true,
-						Optional: true,
-						Default:  booldefault.StaticBool(false),
-						PlanModifiers: []planmodifier.Bool{
-							speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-						},
+						Computed:    true,
+						Optional:    true,
+						Default:     booldefault.StaticBool(false),
 						Description: `To indicate failure if no flow matches the request. Default: false`,
 					},
 					"mode": schema.StringAttribute{
@@ -809,14 +605,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+					custom_listplanmodifier.IgnoreEmptyList(),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
-					},
-					PlanModifiers: []planmodifier.Object{
-						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 					},
 					Attributes: map[string]schema.Attribute{
 						"connect": schema.ListNestedAttribute{
@@ -834,73 +627,46 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(1024),
 										},
 									},
 									"configuration": schema.StringAttribute{
-										CustomType: jsontypes.NormalizedType{},
-										Computed:   true,
-										Optional:   true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										CustomType:  jsontypes.NormalizedType{},
+										Optional:    true,
 										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `A description for the step`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
 										},
 									},
 									"enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										Default:  booldefault.StaticBool(true),
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
 										},
 									},
 									"name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The name of the step`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(64),
 										},
 									},
 									"policy": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
@@ -912,12 +678,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Connect flow steps used for NATIVE APIs`,
 						},
 						"enabled": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  booldefault.StaticBool(true),
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(true),
 							Description: `Is the flow enabled. Default: true`,
 						},
 						"interact": schema.ListNestedAttribute{
@@ -935,73 +698,46 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(1024),
 										},
 									},
 									"configuration": schema.StringAttribute{
-										CustomType: jsontypes.NormalizedType{},
-										Computed:   true,
-										Optional:   true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										CustomType:  jsontypes.NormalizedType{},
+										Optional:    true,
 										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `A description for the step`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
 										},
 									},
 									"enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										Default:  booldefault.StaticBool(true),
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
 										},
 									},
 									"name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The name of the step`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(64),
 										},
 									},
 									"policy": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
@@ -1013,11 +749,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Interact flow steps used for NATIVE APIs`,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `Flow's name.`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtMost(256),
@@ -1038,73 +770,46 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(1024),
 										},
 									},
 									"configuration": schema.StringAttribute{
-										CustomType: jsontypes.NormalizedType{},
-										Computed:   true,
-										Optional:   true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										CustomType:  jsontypes.NormalizedType{},
+										Optional:    true,
 										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `A description for the step`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
 										},
 									},
 									"enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										Default:  booldefault.StaticBool(true),
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
 										},
 									},
 									"name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The name of the step`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(64),
 										},
 									},
 									"policy": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
@@ -1130,73 +835,46 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(1024),
 										},
 									},
 									"configuration": schema.StringAttribute{
-										CustomType: jsontypes.NormalizedType{},
-										Computed:   true,
-										Optional:   true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										CustomType:  jsontypes.NormalizedType{},
+										Optional:    true,
 										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `A description for the step`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
 										},
 									},
 									"enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										Default:  booldefault.StaticBool(true),
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
 										},
 									},
 									"name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The name of the step`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(64),
 										},
 									},
 									"policy": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
@@ -1222,73 +900,46 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(1024),
 										},
 									},
 									"configuration": schema.StringAttribute{
-										CustomType: jsontypes.NormalizedType{},
-										Computed:   true,
-										Optional:   true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										CustomType:  jsontypes.NormalizedType{},
+										Optional:    true,
 										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `A description for the step`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
 										},
 									},
 									"enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										Default:  booldefault.StaticBool(true),
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
 										},
 									},
 									"name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The name of the step`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(64),
 										},
 									},
 									"policy": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
@@ -1323,9 +974,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `The channel of the selector. Default: "/"`,
 											},
 											"channel_operator": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     stringdefault.StaticString(`STARTS_WITH`),
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`STARTS_WITH`),
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Operator function to match a URI path. Default: "STARTS_WITH"; must be one of ["EQUALS", "STARTS_WITH"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -1353,7 +1007,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 												Validators: []validator.String{
@@ -1388,7 +1041,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 												Validators: []validator.String{
@@ -1433,9 +1085,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"path_operator": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     stringdefault.StaticString(`STARTS_WITH`),
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`STARTS_WITH`),
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Operator function to match a URI path. Default: "STARTS_WITH"; must be one of ["EQUALS", "STARTS_WITH"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -1445,7 +1100,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 												Validators: []validator.String{
@@ -1482,7 +1136,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 												Validators: []validator.String{
@@ -1523,73 +1176,46 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(1024),
 										},
 									},
 									"configuration": schema.StringAttribute{
-										CustomType: jsontypes.NormalizedType{},
-										Computed:   true,
-										Optional:   true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										CustomType:  jsontypes.NormalizedType{},
+										Optional:    true,
 										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `A description for the step`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
 										},
 									},
 									"enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										Default:  booldefault.StaticBool(true),
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
 										Description: `To enable the step globally. Default: true`,
 									},
 									"message_condition": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The message condition of the step (for message API)`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
 										},
 									},
 									"name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The name of the step`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(64),
 										},
 									},
 									"policy": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
@@ -1603,11 +1229,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						"tags": schema.ListAttribute{
 							Computed: true,
 							Optional: true,
+							Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 							PlanModifiers: []planmodifier.List{
-								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								custom_listplanmodifier.IgnoreEmptyList(),
 							},
 							ElementType: types.StringType,
-							Description: `Flow's informative tags.`,
+							Description: `Flow's informative tags. Default: []`,
 							Validators: []validator.List{
 								listvalidator.UniqueValues(),
 							},
@@ -1617,12 +1244,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Common flows for the API where traffic policies are configured.`,
 			},
 			"groups": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
+				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
 				Description: `Name or UUIDs of existing groups (of users) associated with this API. Default: []`,
 			},
@@ -1646,12 +1270,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `API's uuid.`,
 			},
 			"labels": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
+				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
 				Description: `Informative labels for this API. Default: []`,
 				Validators: []validator.List{
@@ -1659,10 +1280,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"lifecycle_state": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Required:    true,
 				Description: `The status of the API regarding the console. must be one of ["ARCHIVED", "CREATED", "DEPRECATED", "PUBLISHED", "UNPUBLISHED"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -1676,34 +1294,27 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			},
 			"listeners": schema.ListNestedAttribute{
 				Required: true,
-				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
-					},
-					PlanModifiers: []planmodifier.Object{
-						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 					},
 					Attributes: map[string]schema.Attribute{
 						"http": schema.SingleNestedAttribute{
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"cors": schema.SingleNestedAttribute{
-									Computed: true,
 									Optional: true,
 									Attributes: map[string]schema.Attribute{
 										"allow_credentials": schema.BoolAttribute{
-											Computed:    true,
 											Optional:    true,
 											Description: `` + "`" + `Access-Control-Allow-Credentials` + "`" + `: Indicates whether or not the response to the request can be exposed when the credentials flag is true.`,
 										},
 										"allow_headers": schema.ListAttribute{
 											Computed:    true,
 											Optional:    true,
+											Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 											ElementType: types.StringType,
-											Description: `` + "`" + `Access-Control-Allow-Headers` + "`" + `: Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request.`,
+											Description: `` + "`" + `Access-Control-Allow-Headers` + "`" + `: Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request. Default: []`,
 											Validators: []validator.List{
 												listvalidator.UniqueValues(),
 											},
@@ -1711,8 +1322,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										"allow_methods": schema.ListAttribute{
 											Computed:    true,
 											Optional:    true,
+											Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 											ElementType: types.StringType,
-											Description: `` + "`" + `Access-Control-Allow-Methods` + "`" + `: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource.`,
+											Description: `` + "`" + `Access-Control-Allow-Methods` + "`" + `: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource. Default: []`,
 											Validators: []validator.List{
 												listvalidator.UniqueValues(),
 											},
@@ -1720,23 +1332,25 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										"allow_origin": schema.ListAttribute{
 											Computed:    true,
 											Optional:    true,
+											Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 											ElementType: types.StringType,
 											MarkdownDescription: `` + "`" + `Access-Control-Allow-Origin` + "`" + `: The origin parameter specifies a URI that may access the resource. Scheme, domain and port are part of the same-origin definition.` + "\n" +
-												`If you choose to enable '*' it means that is allows all requests, regardless of origin. URIs RegExp patterns that may access the resource`,
+												`If you choose to enable '*' it means that is allows all requests, regardless of origin. URIs RegExp patterns that may access the resource` + "\n" +
+												`Default: []`,
 											Validators: []validator.List{
 												listvalidator.UniqueValues(),
 											},
 										},
 										"enabled": schema.BoolAttribute{
-											Computed:    true,
 											Optional:    true,
 											Description: `Enable CORS`,
 										},
 										"expose_headers": schema.ListAttribute{
 											Computed:    true,
 											Optional:    true,
+											Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 											ElementType: types.StringType,
-											Description: `` + "`" + `Access-Control-Expose-Headers` + "`" + `: This header lets a server whitelist headers that browsers are allowed to access.`,
+											Description: `` + "`" + `Access-Control-Expose-Headers` + "`" + `: This header lets a server whitelist headers that browsers are allowed to access. Default: []`,
 											Validators: []validator.List{
 												listvalidator.UniqueValues(),
 											},
@@ -1748,7 +1362,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											Description: `How long (in seconds) the results of a preflight request can be cached (-1 if disabled). Default: -1`,
 										},
 										"run_policies": schema.BoolAttribute{
-											Computed:    true,
 											Optional:    true,
 											Description: `Allow the Gateway to run policies during in pre-flight request`,
 										},
@@ -1756,7 +1369,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									Description: `Http listener Cross-Origin Resource Sharing`,
 								},
 								"entrypoints": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Validators: []validator.Object{
@@ -1765,16 +1377,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
 												CustomType:  jsontypes.NormalizedType{},
-												Computed:    true,
 												Optional:    true,
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
-														Computed:    true,
 														Optional:    true,
 														Description: `The endpoint of the DLQ.`,
 													},
@@ -1782,9 +1391,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     stringdefault.StaticString(`AUTO`),
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`AUTO`),
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -1796,7 +1408,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `The type of the entrypoint. Not Null`,
 												Validators: []validator.String{
@@ -1819,14 +1430,16 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 										Attributes: map[string]schema.Attribute{
 											"host": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `Virtual host required to access this API. (` + "`" + `Host` + "`" + ` or ` + "`" + `:Authority` + "`" + ` headers, remote address for websockets)`,
 											},
 											"override_access": schema.BoolAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     booldefault.StaticBool(false),
+												Computed: true,
+												Optional: true,
+												Default:  booldefault.StaticBool(false),
+												PlanModifiers: []planmodifier.Bool{
+													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+												},
 												Description: `Override default organization entrypoint with ` + "`" + `host` + "`" + `. Default: false`,
 											},
 											"path": schema.StringAttribute{
@@ -1843,8 +1456,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									ElementType: types.StringType,
 									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
 								},
@@ -1876,7 +1492,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"entrypoints": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Validators: []validator.Object{
@@ -1885,16 +1500,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
 												CustomType:  jsontypes.NormalizedType{},
-												Computed:    true,
 												Optional:    true,
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
-														Computed:    true,
 														Optional:    true,
 														Description: `The endpoint of the DLQ.`,
 													},
@@ -1902,9 +1514,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     stringdefault.StaticString(`AUTO`),
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`AUTO`),
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -1916,7 +1531,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `The type of the entrypoint. Not Null`,
 												Validators: []validator.String{
@@ -1939,8 +1553,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									ElementType: types.StringType,
 									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
 								},
@@ -1972,7 +1589,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"entrypoints": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Validators: []validator.Object{
@@ -1981,16 +1597,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
 												CustomType:  jsontypes.NormalizedType{},
-												Computed:    true,
 												Optional:    true,
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
-														Computed:    true,
 														Optional:    true,
 														Description: `The endpoint of the DLQ.`,
 													},
@@ -1998,9 +1611,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     stringdefault.StaticString(`AUTO`),
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`AUTO`),
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -2012,7 +1628,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `The type of the entrypoint. Not Null`,
 												Validators: []validator.String{
@@ -2027,8 +1642,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									ElementType: types.StringType,
 									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
 								},
@@ -2060,7 +1678,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"entrypoints": schema.ListNestedAttribute{
-									Computed: true,
 									Optional: true,
 									NestedObject: schema.NestedAttributeObject{
 										Validators: []validator.Object{
@@ -2069,16 +1686,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
 												CustomType:  jsontypes.NormalizedType{},
-												Computed:    true,
 												Optional:    true,
 												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
-												Computed: true,
 												Optional: true,
 												Attributes: map[string]schema.Attribute{
 													"endpoint": schema.StringAttribute{
-														Computed:    true,
 														Optional:    true,
 														Description: `The endpoint of the DLQ.`,
 													},
@@ -2086,9 +1700,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												Description: `Dead Letter Queue to process undelivered messages.`,
 											},
 											"qos": schema.StringAttribute{
-												Computed:    true,
-												Optional:    true,
-												Default:     stringdefault.StaticString(`AUTO`),
+												Computed: true,
+												Optional: true,
+												Default:  stringdefault.StaticString(`AUTO`),
+												PlanModifiers: []planmodifier.String{
+													speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+												},
 												Description: `Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]`,
 												Validators: []validator.String{
 													stringvalidator.OneOf(
@@ -2100,7 +1717,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 											"type": schema.StringAttribute{
-												Computed:    true,
 												Optional:    true,
 												Description: `The type of the entrypoint. Not Null`,
 												Validators: []validator.String{
@@ -2125,8 +1741,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									ElementType: types.StringType,
 									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
 								},
@@ -2165,44 +1784,29 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+					custom_listplanmodifier.IgnoreEmptyList(),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
 					},
-					PlanModifiers: []planmodifier.Object{
-						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-					},
 					Attributes: map[string]schema.Attribute{
 						"role": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The role of the user in regards of the managed oject (API, Application, etc.). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"source": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `Where the memeber was created (system, idp, etc.). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"source_id": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `Id of the user in the source. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -2230,19 +1834,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"default_value": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The default value of the metadata if the value is not set.`,
 						},
 						"format": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The format of the metadata. Not Null; must be one of ["STRING", "NUMERIC", "BOOLEAN", "DATE", "MAIL", "URL"]`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -2257,12 +1853,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"hidden": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  booldefault.StaticBool(false),
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(false),
 							Description: `if this metadata should be hidden. Default: false`,
 						},
 						"key": schema.StringAttribute{
@@ -2277,22 +1870,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The name of the metadata. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"value": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The value of the metadata.`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtLeast(1),
@@ -2306,10 +1891,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"name": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Required:    true,
 				Description: `API's name. Duplicate names can exists.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 512),
@@ -2324,62 +1906,42 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					`Default: true`,
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `organization ID`,
 			},
 			"pages": schema.ListNestedAttribute{
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+					custom_listplanmodifier.IgnoreEmptyList(),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
 					},
-					PlanModifiers: []planmodifier.Object{
-						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-					},
 					Attributes: map[string]schema.Attribute{
 						"configuration": schema.MapAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Map{
-								speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							ElementType: types.StringType,
 							Description: `Key/value page configuration (Configure swagger UI or or use Redoc instead)`,
 						},
 						"content": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `The content of the page, if any.`,
 						},
-						"cross_id": schema.StringAttribute{
-							Computed: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
-							Description: `Page's cross uuid.`,
-						},
 						"homepage": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
-							Description: `If true, this page will be displayed as the homepage of your API documentation.`,
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(false),
+							Description: `If true, this page will be displayed as the homepage of your API documentation. Default: false`,
 						},
 						"hrid": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
 							Description: `A unique human readable id identifying this resource. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -2388,11 +1950,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
 							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
 							MarkdownDescription: `This is the display name of the page in APIM and on the portal.` + "\n" +
 								`This field can be edited safely if you want to rename a page.` + "\n" +
 								`Not Null`,
@@ -2402,45 +1960,26 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"parent_hrid": schema.StringAttribute{
-							Computed: true,
 							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
 							MarkdownDescription: `If your page contains a folder, setting this field to the folder's hrid will be reflected ` + "\n" +
 								`into APIM by making the page a child of this folder.`,
 						},
 						"published": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  booldefault.StaticBool(false),
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(false),
 							Description: `If true, the page will be accessible from the portal (default is false). Default: false`,
 						},
 						"source": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
-							PlanModifiers: []planmodifier.Object{
-								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-							},
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
-									CustomType: jsontypes.NormalizedType{},
-									Computed:   true,
-									Optional:   true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									CustomType:  jsontypes.NormalizedType{},
+									Optional:    true,
 									Description: `JSON object configuration of the fetch plugin. Parsed as JSON.`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Optional:    true,
 									Description: `The type of the page source (fetcher plugin ID).`,
 									Validators: []validator.String{
 										stringvalidator.UTF8LengthAtMost(64),
@@ -2451,11 +1990,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								`overriding page content each time the source is fetched.`,
 						},
 						"type": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
 							Description: `The type of the documentation page or folder. Not Null; must be one of ["ASCIIDOC", "ASYNCAPI", "MARKDOWN", "MARKDOWN_TEMPLATE", "SWAGGER", "FOLDER", "LINK", "ROOT", "SYSTEM_FOLDER", "TRANSLATION"]`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -2474,12 +2010,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"visibility": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  stringdefault.StaticString(`PUBLIC`),
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`PUBLIC`),
 							Description: `The visibility of the entity regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]`,
 							Validators: []validator.String{
 								stringvalidator.OneOf(
@@ -2496,46 +2029,36 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+					custom_listplanmodifier.IgnoreEmptyList(),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
 					},
-					PlanModifiers: []planmodifier.Object{
-						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-					},
 					Attributes: map[string]schema.Attribute{
 						"characteristics": schema.ListAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.List{
-								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
+							Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 							ElementType: types.StringType,
-							Description: `Plan informative characteristics`,
+							Description: `Plan informative characteristics. Default: []`,
 						},
 						"description": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `A description for this plan.`,
 						},
 						"excluded_groups": schema.ListAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.List{
-								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
+							Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 							ElementType: types.StringType,
-							Description: `Access-control, UUID of groups excluded from this plan`,
+							Description: `Access-control, UUID of groups excluded from this plan. Default: []`,
 						},
 						"flows": schema.ListNestedAttribute{
 							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
 								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},
 							NestedObject: schema.NestedAttributeObject{
@@ -2561,73 +2084,46 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(1024),
 													},
 												},
 												"configuration": schema.StringAttribute{
-													CustomType: jsontypes.NormalizedType{},
-													Computed:   true,
-													Optional:   true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													CustomType:  jsontypes.NormalizedType{},
+													Optional:    true,
 													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `A description for the step`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(256),
 													},
 												},
 												"enabled": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(true),
-													PlanModifiers: []planmodifier.Bool{
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-													},
+													Computed:    true,
+													Optional:    true,
+													Default:     booldefault.StaticBool(true),
 													Description: `To enable the step globally. Default: true`,
 												},
 												"message_condition": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The message condition of the step (for message API)`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(256),
 													},
 												},
 												"name": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The name of the step`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(64),
 													},
 												},
 												"policy": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
@@ -2639,12 +2135,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Connect flow steps used for NATIVE APIs`,
 									},
 									"enabled": schema.BoolAttribute{
-										Computed: true,
-										Optional: true,
-										Default:  booldefault.StaticBool(true),
-										PlanModifiers: []planmodifier.Bool{
-											speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-										},
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
 										Description: `Is the flow enabled. Default: true`,
 									},
 									"interact": schema.ListNestedAttribute{
@@ -2662,73 +2155,46 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(1024),
 													},
 												},
 												"configuration": schema.StringAttribute{
-													CustomType: jsontypes.NormalizedType{},
-													Computed:   true,
-													Optional:   true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													CustomType:  jsontypes.NormalizedType{},
+													Optional:    true,
 													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `A description for the step`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(256),
 													},
 												},
 												"enabled": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(true),
-													PlanModifiers: []planmodifier.Bool{
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-													},
+													Computed:    true,
+													Optional:    true,
+													Default:     booldefault.StaticBool(true),
 													Description: `To enable the step globally. Default: true`,
 												},
 												"message_condition": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The message condition of the step (for message API)`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(256),
 													},
 												},
 												"name": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The name of the step`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(64),
 													},
 												},
 												"policy": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
@@ -2740,11 +2206,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Interact flow steps used for NATIVE APIs`,
 									},
 									"name": schema.StringAttribute{
-										Computed: true,
-										Optional: true,
-										PlanModifiers: []planmodifier.String{
-											speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-										},
+										Optional:    true,
 										Description: `Flow's name.`,
 										Validators: []validator.String{
 											stringvalidator.UTF8LengthAtMost(256),
@@ -2765,73 +2227,46 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(1024),
 													},
 												},
 												"configuration": schema.StringAttribute{
-													CustomType: jsontypes.NormalizedType{},
-													Computed:   true,
-													Optional:   true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													CustomType:  jsontypes.NormalizedType{},
+													Optional:    true,
 													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `A description for the step`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(256),
 													},
 												},
 												"enabled": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(true),
-													PlanModifiers: []planmodifier.Bool{
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-													},
+													Computed:    true,
+													Optional:    true,
+													Default:     booldefault.StaticBool(true),
 													Description: `To enable the step globally. Default: true`,
 												},
 												"message_condition": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The message condition of the step (for message API)`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(256),
 													},
 												},
 												"name": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The name of the step`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(64),
 													},
 												},
 												"policy": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
@@ -2857,73 +2292,46 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(1024),
 													},
 												},
 												"configuration": schema.StringAttribute{
-													CustomType: jsontypes.NormalizedType{},
-													Computed:   true,
-													Optional:   true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													CustomType:  jsontypes.NormalizedType{},
+													Optional:    true,
 													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `A description for the step`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(256),
 													},
 												},
 												"enabled": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(true),
-													PlanModifiers: []planmodifier.Bool{
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-													},
+													Computed:    true,
+													Optional:    true,
+													Default:     booldefault.StaticBool(true),
 													Description: `To enable the step globally. Default: true`,
 												},
 												"message_condition": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The message condition of the step (for message API)`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(256),
 													},
 												},
 												"name": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The name of the step`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(64),
 													},
 												},
 												"policy": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
@@ -2949,73 +2357,46 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(1024),
 													},
 												},
 												"configuration": schema.StringAttribute{
-													CustomType: jsontypes.NormalizedType{},
-													Computed:   true,
-													Optional:   true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													CustomType:  jsontypes.NormalizedType{},
+													Optional:    true,
 													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `A description for the step`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(256),
 													},
 												},
 												"enabled": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(true),
-													PlanModifiers: []planmodifier.Bool{
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-													},
+													Computed:    true,
+													Optional:    true,
+													Default:     booldefault.StaticBool(true),
 													Description: `To enable the step globally. Default: true`,
 												},
 												"message_condition": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The message condition of the step (for message API)`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(256),
 													},
 												},
 												"name": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The name of the step`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(64),
 													},
 												},
 												"policy": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
@@ -3050,9 +2431,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															Description: `The channel of the selector. Default: "/"`,
 														},
 														"channel_operator": schema.StringAttribute{
-															Computed:    true,
-															Optional:    true,
-															Default:     stringdefault.StaticString(`STARTS_WITH`),
+															Computed: true,
+															Optional: true,
+															Default:  stringdefault.StaticString(`STARTS_WITH`),
+															PlanModifiers: []planmodifier.String{
+																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+															},
 															Description: `Operator function to match a URI path. Default: "STARTS_WITH"; must be one of ["EQUALS", "STARTS_WITH"]`,
 															Validators: []validator.String{
 																stringvalidator.OneOf(
@@ -3080,7 +2464,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 														"type": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 															Validators: []validator.String{
@@ -3115,7 +2498,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 														"type": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 															Validators: []validator.String{
@@ -3160,9 +2542,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 														"path_operator": schema.StringAttribute{
-															Computed:    true,
-															Optional:    true,
-															Default:     stringdefault.StaticString(`STARTS_WITH`),
+															Computed: true,
+															Optional: true,
+															Default:  stringdefault.StaticString(`STARTS_WITH`),
+															PlanModifiers: []planmodifier.String{
+																speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+															},
 															Description: `Operator function to match a URI path. Default: "STARTS_WITH"; must be one of ["EQUALS", "STARTS_WITH"]`,
 															Validators: []validator.String{
 																stringvalidator.OneOf(
@@ -3172,7 +2557,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 														"type": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 															Validators: []validator.String{
@@ -3209,7 +2593,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 															},
 														},
 														"type": schema.StringAttribute{
-															Computed:    true,
 															Optional:    true,
 															Description: `Selector type. Not Null; must be one of ["HTTP", "CHANNEL", "CONDITION", "MCP"]`,
 															Validators: []validator.String{
@@ -3250,73 +2633,46 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(1024),
 													},
 												},
 												"configuration": schema.StringAttribute{
-													CustomType: jsontypes.NormalizedType{},
-													Computed:   true,
-													Optional:   true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													CustomType:  jsontypes.NormalizedType{},
+													Optional:    true,
 													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `A description for the step`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(256),
 													},
 												},
 												"enabled": schema.BoolAttribute{
-													Computed: true,
-													Optional: true,
-													Default:  booldefault.StaticBool(true),
-													PlanModifiers: []planmodifier.Bool{
-														speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-													},
+													Computed:    true,
+													Optional:    true,
+													Default:     booldefault.StaticBool(true),
 													Description: `To enable the step globally. Default: true`,
 												},
 												"message_condition": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The message condition of the step (for message API)`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(256),
 													},
 												},
 												"name": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The name of the step`,
 													Validators: []validator.String{
 														stringvalidator.UTF8LengthAtMost(64),
 													},
 												},
 												"policy": schema.StringAttribute{
-													Computed: true,
-													Optional: true,
-													PlanModifiers: []planmodifier.String{
-														speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-													},
+													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
@@ -3330,11 +2686,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									"tags": schema.ListAttribute{
 										Computed: true,
 										Optional: true,
+										Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 										PlanModifiers: []planmodifier.List{
+											custom_listplanmodifier.IgnoreEmptyList(),
 											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										ElementType: types.StringType,
-										Description: `Flow's informative tags.`,
+										Description: `Flow's informative tags. Default: []`,
 										Validators: []validator.List{
 											listvalidator.UniqueValues(),
 										},
@@ -3346,19 +2704,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								`same on the reponse, which means API reponse flows will always run last.`,
 						},
 						"general_conditions_hrid": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `API page ` + "`" + `hrid` + "`" + ` that serves as general conditions documentation of this plan`,
 						},
 						"hrid": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
 							Description: `A unique human readable id identifying this resource. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -3367,11 +2718,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"mode": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
 							Description: `The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan). Not Null; must be one of ["STANDARD", "PUSH"]`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -3382,11 +2730,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `Name of the plan. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -3396,25 +2740,15 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						"security": schema.SingleNestedAttribute{
 							Computed: true,
 							Optional: true,
-							PlanModifiers: []planmodifier.Object{
-								speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-							},
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
-									CustomType: jsontypes.NormalizedType{},
-									Computed:   true,
-									Optional:   true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									CustomType:  jsontypes.NormalizedType{},
+									Optional:    true,
 									Description: `JSON Object to configure specific attributes of a Plan. Parsed as JSON.`,
 								},
 								"type": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									PlanModifiers: []planmodifier.String{
-										speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-									},
+									Computed:    true,
+									Optional:    true,
 									Description: `API Plan security implementation. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS"]`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
@@ -3433,22 +2767,15 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"selection_rule": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `An EL expression that must return a boolean to enable the flow based on the request.`,
 							Validators: []validator.String{
 								stringvalidator.UTF8LengthAtMost(256),
 							},
 						},
 						"status": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
 							Description: `Plan status, only ` + "`" + `PUBLISHED` + "`" + ` makes the plan available at runtime. Not Null; must be one of ["STAGING", "PUBLISHED", "DEPRECATED", "CLOSED"]`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -3461,24 +2788,19 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"tags": schema.ListAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.List{
-								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
+							Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 							ElementType: types.StringType,
-							Description: `Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list.`,
+							Description: `Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list. Default: []`,
 							Validators: []validator.List{
 								listvalidator.UniqueValues(),
 							},
 						},
 						"type": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  stringdefault.StaticString(`API`),
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
+							Default:     stringdefault.StaticString(`API`),
 							Description: `Only one possible type: API. Default: "API"; must be one of ["API", "CATALOG"]`,
 							Validators: []validator.String{
 								stringvalidator.OneOf(
@@ -3491,9 +2813,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Computed: true,
 							Optional: true,
 							Default:  stringdefault.StaticString(`AUTO`),
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
 							MarkdownDescription: `Specifies if subscriptions must be manually validated by a human actor.` + "\n" +
 								`For automation API, it is default to ` + "`" + `AUTO` + "`" + `.` + "\n" +
 								`Default: "AUTO"; must be one of ["AUTO", "MANUAL"]`,
@@ -3508,111 +2827,38 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `. Plans are prioritized by their position in the list, with earlier entries having higher priority.`,
 			},
-			"primary_owner": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-				},
-				Attributes: map[string]schema.Attribute{
-					"display_name": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Owner's name.`,
-						Validators: []validator.String{
-							stringvalidator.UTF8LengthAtLeast(1),
-						},
-					},
-					"email": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Owner's email. Can be null if owner is a group.`,
-					},
-					"id": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `Owner's uuid.`,
-					},
-					"type": schema.StringAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.String{
-							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-						},
-						Description: `The type of membership. must be one of ["USER", "GROUP"]`,
-						Validators: []validator.String{
-							stringvalidator.OneOf(
-								"USER",
-								"GROUP",
-							),
-						},
-					},
-				},
-				Description: `User owner of this. Can perform all possible actions on it.`,
-			},
 			"properties": schema.ListNestedAttribute{
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+					custom_listplanmodifier.IgnoreEmptyList(),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
 					},
-					PlanModifiers: []planmodifier.Object{
-						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-					},
 					Attributes: map[string]schema.Attribute{
 						"dynamic": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `When the value was populated from dynamic property service.`,
 						},
 						"encryptable": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `When the input value needs to be encrypted.`,
 						},
 						"encrypted": schema.BoolAttribute{
-							Computed: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
 							Description: `When the value has been encrypted in database.`,
 						},
 						"key": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `Property key. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"value": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `Property value. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -3626,54 +2872,36 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+					custom_listplanmodifier.IgnoreEmptyList(),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
 					},
-					PlanModifiers: []planmodifier.Object{
-						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
-					},
 					Attributes: map[string]schema.Attribute{
 						"configuration": schema.StringAttribute{
-							CustomType: jsontypes.NormalizedType{},
-							Computed:   true,
-							Optional:   true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							CustomType:  jsontypes.NormalizedType{},
+							Optional:    true,
 							Description: `JSON Object configuration specific to this resource. Not Null; Parsed as JSON.`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"enabled": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							Default:  booldefault.StaticBool(true),
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(true),
 							Description: `Make it available or not. Default: true`,
 						},
 						"name": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `API resource name. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"type": schema.StringAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.String{
-								speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							Description: `Resource type (resource plugin ID). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
@@ -3684,11 +2912,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).`,
 			},
 			"response_templates": schema.MapAttribute{
-				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.Map{
-					speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
-				},
 				ElementType: types.MapType{
 					ElemType: types.ObjectType{
 						AttrTypes: map[string]attr.Type{
@@ -3721,41 +2945,27 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						Attributes: map[string]schema.Attribute{
 							"configuration": schema.StringAttribute{
-								CustomType: jsontypes.NormalizedType{},
-								Computed:   true,
-								Optional:   true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
+								CustomType:  jsontypes.NormalizedType{},
+								Optional:    true,
 								Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
 								Validators: []validator.String{
 									speakeasy_stringvalidators.NotNull(),
 								},
 							},
 							"enabled": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-								Default:  booldefault.StaticBool(true),
-								PlanModifiers: []planmodifier.Bool{
-									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-								},
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(true),
 								Description: `Is the service enabled or not. Default: true`,
 							},
 							"override_configuration": schema.BoolAttribute{
-								Computed: true,
-								Optional: true,
-								Default:  booldefault.StaticBool(false),
-								PlanModifiers: []planmodifier.Bool{
-									speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-								},
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
 								Description: `When the configuration overrides an inherited configuration. Default: false`,
 							},
 							"type": schema.StringAttribute{
-								Computed: true,
-								Optional: true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
+								Optional:    true,
 								Description: `The service plugin ID used. Not Null`,
 								Validators: []validator.String{
 									speakeasy_stringvalidators.NotNull(),
@@ -3768,11 +2978,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Api services (dynamic properties)`,
 			},
 			"state": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				Description: `STARTED will make this API callable on tis context path, STOPPED will yield 404 error. must be one of ["CLOSED", "INITIALIZED", "STARTED", "STOPPED", "STOPPING"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -3785,12 +2992,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"tags": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
+				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
 				Description: `Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". Default: []`,
 				Validators: []validator.List{
@@ -3798,10 +3002,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"type": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Required:    true,
 				Description: `API's type. must be one of ["A2A_PROXY", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -3815,22 +3016,16 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"version": schema.StringAttribute{
-				Required: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Required:    true,
 				Description: `API's version. It's a simple string only used to help manage API versioning.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthBetween(1, 64),
 				},
 			},
 			"visibility": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				Default:  stringdefault.StaticString(`PUBLIC`),
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
+				Default:     stringdefault.StaticString(`PUBLIC`),
 				Description: `The visibility of the entity regarding the portal. Default: "PUBLIC"; must be one of ["PUBLIC", "PRIVATE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
