@@ -36,6 +36,7 @@ jobs:
 
           git tag -a v$TAG -m "Release v$TAG"
           git push origin v$TAG
+          echo 'RELEASE_VERSION=v$TAG' >> $BASH_ENV
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@111c56156bcc6918c056dbef52164cfa583dc549 # v5.2.0
         id: import_gpg
@@ -50,3 +51,11 @@ jobs:
           # GitHub sets the GITHUB_TOKEN secret automatically.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+      - name: Send slack notification release
+        if: ${{ !inputs.dry_run }}
+        uses: ./.github/actions/send-slack-notification
+        with:
+          job_name: ${{ github.job }} - Release ${{ RELEASE_VERSION }}
+          circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
+          trigger: release_notification
+          release_version: ${{ RELEASE_VERSION }}

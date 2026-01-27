@@ -10,6 +10,35 @@ jobs:
     runs-on:
       - ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6
+        with:
+          go-version-file: go.mod
+      - name: Verify OAS schema matches upstream
+        run: |
+          # Download the upstream OAS file
+          curl -sSL "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/4.9.x/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml" -o /tmp/upstream-oas.yaml
+          
+          # Compare the files ignoring whitespace differences
+          if ! diff -wB schemas/automation-api-oas.yaml /tmp/upstream-oas.yaml > /dev/null; then
+            echo "❌ ERROR: Local schemas/automation-api-oas.yaml differs from upstream source"
+            echo "Differences found (ignoring whitespace):"
+            diff -wB schemas/automation-api-oas.yaml /tmp/upstream-oas.yaml || true
+            echo ""
+            echo "Please update schemas/automation-api-oas.yaml to match the upstream version:"
+            echo "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/4.10.x/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml"
+            exit 1
+          else
+            echo "✅ Local OAS schema matches upstream version (ignoring whitespace)"
+          fi
+      - name: Get speakeasy version
+        id: speakeasy-version
+        run: |
+          VERSION=$(grep 'speakeasyVersion:' .speakeasy/workflow.yaml | sed -e 's/speakeasyVersion: //')
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
       - name: Install Speakeasy
         uses: mheap/setup-go-cli@fa9b01cdd4115eac636164f0de43bf7d51c82697 #
         with:

@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL_MASTER }}
+  APIM_SERVER_URL: ${{ vars.TEST_SERVER_URL_STABLE }}
 
 concurrency:
   group: ${{ github.workflow }}
@@ -26,8 +26,8 @@ jobs:
       - name: Setup terraform
         uses: ./.github/actions/setup-terraform
         with:
-          terraform_version: "1.12.*"
-      - name: Run pre-tests using ${{ env.APIM_SERVER_URL }} - user ${{ vars.APIM_ADMIN_USERNAME }}
+          terraform_version: "latest"
+      - name: Run pre-tests using ${{ matrix.env.name }} - user ${{ vars.APIM_ADMIN_USERNAME }}
         env:
           APIM_USERNAME: ${{ vars.APIM_ADMIN_USERNAME }}
           APIM_PASSWORD: ${{ secrets.APIM_ADMIN_PASSWORD }}
@@ -37,8 +37,16 @@ jobs:
           APIM_USERNAME: ${{ vars.APIM_API1_USERNAME }}
           APIM_PASSWORD: ${{ secrets.APIM_API1_PASSWORD }}
         run: make pre-test
+      - name: Send slack notification on failure
+        if: failure() && github.event.schedule != ''
+        uses: ./.github/actions/send-slack-notification
+        with:
+          job_name: ${{ github.job }} - ${{ matrix.env.name }}
+          job_status: ${{ job.status }}
+          circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
+          trigger: test_results_notification
   examples:
-    name: Run Terraform examples
+    name: Run Terraform examples on Stable Env (Terraform/OpenTofu latest)
     runs-on: ubuntu-latest
     needs:
       - pre-test-validation
@@ -52,12 +60,28 @@ jobs:
       - name: Setup terraform
         uses: ./.github/actions/setup-terraform
         with:
-          terraform_version: "1.12.*"
-      - name: Run example using ${{ env.APIM_SERVER_URL }}
+          terraform_version: "latest"
+      - name: Setup OpenTofu
+        uses: ./.github/actions/setup-opentofu
+        with:
+          tofu_version: "latest"
+      - name: Build provider
+        shell: bash
+        run: go build
+      - name: Run examples
         env:
           APIM_USERNAME: "${{ vars.APIM_ADMIN_USERNAME }}"
           APIM_PASSWORD: "${{ secrets.APIM_ADMIN_PASSWORD }}"
         run: make examples-tests
+      - name: Send slack notification
+        if: (failure() || success()) && github.event.schedule != ''
+        uses: ./.github/actions/send-slack-notification
+        with:
+          job_name: ${{ github.job }} - Env Stable + Terraform/OpenTofu latest
+          job_status: ${{ job.status }}
+          circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
+          trigger: test_results_notification
+
   acceptance:
     name: Acceptance Tests (Terraform ${{ matrix.terraform-version }})
     runs-on: ubuntu-latest
@@ -86,7 +110,14 @@ jobs:
           APIM_USERNAME: ${{ vars.APIM_ADMIN_USERNAME }}
           APIM_PASSWORD: ${{ secrets.APIM_ADMIN_PASSWORD }}
         run: make acceptance-tests
-
+      - name: Send slack notification
+        if: (failure() || success()) && github.event.schedule != ''
+        uses: ./.github/actions/send-slack-notification
+        with:
+          job_name: ${{ github.job }} - Env ${{ matrix.env.name }} + Terraform ${{ matrix.terraform-version }}
+          job_status: ${{ job.status }}
+          circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
+          trigger: test_results_notification
   unit:
     name: Acceptance Tests (Terraform ${{ matrix.terraform-version }})
     runs-on: ubuntu-latest
