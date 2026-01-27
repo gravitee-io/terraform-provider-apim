@@ -36,7 +36,7 @@ jobs:
 
           git tag -a v$TAG -m "Release v$TAG"
           git push origin v$TAG
-          echo 'RELEASE_VERSION=v$TAG' >> $GITHUB_ENV
+          echo "RELEASE_VERSION=v$TAG" >> $GITHUB_ENV
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@111c56156bcc6918c056dbef52164cfa583dc549 # v5.2.0
         id: import_gpg
