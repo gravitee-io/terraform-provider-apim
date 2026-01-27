@@ -45,7 +45,7 @@ type HTTPSelector struct {
 	// The path to match
 	Path *string `default:"/" json:"path"`
 	// Operator function to match a URI path
-	PathOperator *Operator `default:"STARTS_WITH" json:"path_operator"`
+	PathOperator *Operator `default:"STARTS_WITH" json:"pathOperator"`
 	// Methods to match, unset or empty means "any"
 	Methods []HTTPMethod `json:"methods,omitempty"`
 }
