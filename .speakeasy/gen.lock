@@ -5,12 +5,12 @@ management:
   docVersion: 1.0.0
   speakeasyVersion: 1.696.0
   generationVersion: 2.799.0
-  releaseVersion: 0.3.2
-  configChecksum: 852ace73a6e439287d209a3631559f42
+  releaseVersion: 0.3.3
+  configChecksum: b5852c36c6e57564e18cc9ee5f7f3eb5
 persistentEdits:
-  generation_id: 0d8b3197-26ed-40b8-9374-f5c6bc29b2ba
-  pristine_commit_hash: 68043eb6d1737cf9e61b643cf045da04a37da382
-  pristine_tree_hash: a7a9de73763aa7e7e0aedb52011b88e9f4ad5306
+  generation_id: 4cd4ae64-af00-48a9-8070-243384d221c5
+  pristine_commit_hash: 1bf933b19771f45e71276923d105feb8adec36e5
+  pristine_tree_hash: 0dc9d3ee988c8cd546819011223f4055eb4e7bc6
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -52,8 +52,8 @@ trackedFiles:
     pristine_git_object: 7b6d309036caadf342e220760efa8897491c94cd
   go.mod:
     id: c47645c391ad
-    last_write_checksum: sha1:af9b27c163618cc75f2f7d8c35fcbfb2f59a9409
-    pristine_git_object: 550a5dd52988d2912380b455f8b9efd1012b52ab
+    last_write_checksum: sha1:a4c42355ca4f2eaf39432bfa8387475b1aba1bf0
+    pristine_git_object: 669f09994bcf4a7037fd1248e58fb631ae572328
   internal/planmodifiers/boolplanmodifier/suppress_diff.go:
     id: 3cf85b98963e
     last_write_checksum: sha1:4aedff9ecc21859b458cad320f1a0ac888f188fa
@@ -488,8 +488,8 @@ trackedFiles:
     pristine_git_object: 35d8a1e2ad48a64702c6a654ac8880dabec053b0
   internal/sdk/graviteeapim.go:
     id: 1f2cf575c2fd
-    last_write_checksum: sha1:06541998a7640f4cea5590f8073bf7436b3ada24
-    pristine_git_object: b0d11ca1c3a68a44b8b977b62f1aec40eb1915a3
+    last_write_checksum: sha1:07d3c650620dedb735019708d65b1b5295490331
+    pristine_git_object: 1c996a9329572a473d1744289436d063af2ced83
   internal/sdk/internal/config/sdkconfiguration.go:
     id: 6af0bc8635d9
     last_write_checksum: sha1:2a48947c3420b3f0f5f9cfafbfd744c80a32b4c5
