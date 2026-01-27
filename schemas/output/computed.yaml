@@ -1454,7 +1454,7 @@ components:
       required:
         - type
         - path
-        - pathOperator
+        - path_operator
       allOf:
         - $ref: "#/components/schemas/BaseSelector"
         - type: object
@@ -1466,7 +1466,7 @@ components:
                 - /my/path
               default: /
               maxLength: 256
-            pathOperator:
+            path_operator:
               $ref: "#/components/schemas/Operator"
             methods:
               type: array
