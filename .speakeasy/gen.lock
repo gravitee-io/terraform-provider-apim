@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 195a2873caa061a129446ad2575aa839
+  docChecksum: 59126c132dcc5ccab1d86996a21cd2c3
   docVersion: 1.0.0
   speakeasyVersion: 1.696.0
   generationVersion: 2.799.0
   releaseVersion: 0.3.3
   configChecksum: b5852c36c6e57564e18cc9ee5f7f3eb5
 persistentEdits:
-  generation_id: a51cf97b-1168-4d83-9d7f-615d22903672
-  pristine_commit_hash: 47178f0af8624560027d67a83b20ac90be589d56
-  pristine_tree_hash: 8f1123b3be14291e1b9439df6a6e8ba4f30dcb50
+  generation_id: 32b00913-e4b9-46f0-b826-87a8f3a91871
+  pristine_commit_hash: 48755c5d549fc6464d3a27f3eca8b2d176c4a6c0
+  pristine_tree_hash: 0dc9d3ee988c8cd546819011223f4055eb4e7bc6
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -736,8 +736,8 @@ trackedFiles:
     pristine_git_object: c2fa87c469f2781e7ea4341ebd872cbde32c339f
   internal/sdk/models/shared/httpselector.go:
     id: 6cbc0d5c6faa
-    last_write_checksum: sha1:32d3eaa864bdc289f929e2ac4b4ec07443870aac
-    pristine_git_object: 924b6d8b72539d4e281c5ad7c3f401d3aaf5766d
+    last_write_checksum: sha1:2ec1e8a0724c9995db02bd11c1db285095ecbe46
+    pristine_git_object: 451ebe1c53643fa3f54c1898e732f5a187a358a8
   internal/sdk/models/shared/kafkalistener.go:
     id: ca73dcb94bff
     last_write_checksum: sha1:aeba091995e23ed31736ac807ee052811dad7cd4
