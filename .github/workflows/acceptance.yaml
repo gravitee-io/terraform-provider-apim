@@ -53,7 +53,7 @@ jobs:
           job_name: ${{ github.job }} - ${{ matrix.env.name }}
           job_status: ${{ job.status }}
           circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
-
+          trigger: test_results_notification
   examples:
     name: Run Terraform examples (Env ${{ matrix.env.name }} + Terraform ${{ matrix.terraform-version }})
     runs-on: ubuntu-latest
@@ -90,6 +90,7 @@ jobs:
           job_name: ${{ github.job }} - Env ${{ matrix.env.name }} + Terraform ${{ matrix.terraform-version }})
           job_status: ${{ job.status }}
           circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
+          trigger: test_results_notification
 
   acceptance:
     name: Acceptance Tests (Env ${{ matrix.env.name }} + Terraform ${{ matrix.terraform-version }})
@@ -134,7 +135,7 @@ jobs:
           job_name: ${{ github.job }} - Env ${{ matrix.env.name }} + Terraform ${{ matrix.terraform-version }}
           job_status: ${{ job.status }}
           circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
-
+          trigger: test_results_notification
   unit:
     name: Unit tests
     runs-on: ubuntu-latest
