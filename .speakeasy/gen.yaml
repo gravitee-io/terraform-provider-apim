@@ -39,7 +39,7 @@ terraform:
   additionalEphemeralResources: []
   additionalListResources: []
   additionalProviderAttributes:
-    httpHeaders: ""
+    httpHeaders: "http_headers"
     tlsSkipVerify: ""
   additionalResources: []
   allowUnknownFieldsInWeakUnions: false

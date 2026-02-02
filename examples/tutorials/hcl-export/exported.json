@@ -1,0 +1,196 @@
+{
+  "export": {
+    "date": "2026-02-02T11:01:47.139884934Z",
+    "apimVersion": "4.11.0-SNAPSHOT"
+  },
+  "api": {
+    "definitionVersion": "V4",
+    "type": "PROXY",
+    "listeners": [
+      {
+        "type": "HTTP",
+        "paths": [
+          {
+            "path": "/automation-api/ready/",
+            "overrideAccess": false
+          }
+        ],
+        "pathMappings": [],
+        "entrypoints": [
+          {
+            "type": "http-proxy",
+            "qos": "AUTO",
+            "configuration": {}
+          }
+        ],
+        "servers": []
+      }
+    ],
+    "endpointGroups": [
+      {
+        "name": "Default HTTP proxy group",
+        "type": "http-proxy",
+        "loadBalancer": {
+          "type": "ROUND_ROBIN"
+        },
+        "sharedConfiguration": "{\"headers\":[{\"name\":\"Foo\",\"value\":\"Bar\"}],\"proxy\":{\"useSystemProxy\":false,\"enabled\":false},\"http\":{\"keepAliveTimeout\":30000,\"keepAlive\":true,\"propagateClientHost\":true,\"followRedirects\":false,\"readTimeout\":10000,\"idleTimeout\":0,\"connectTimeout\":3000,\"useCompression\":true,\"maxConcurrentConnections\":20,\"version\":\"HTTP_1_1\",\"pipelining\":false},\"ssl\":{\"keyStore\":{\"type\":\"\"},\"hostnameVerifier\":true,\"trustStore\":{\"type\":\"\"},\"trustAll\":false}}",
+        "endpoints": [
+          {
+            "name": "Default HTTP proxy",
+            "type": "http-proxy",
+            "weight": 1,
+            "inheritConfiguration": true,
+            "configuration": {
+              "target": "https://api.gravitee.io/echo"
+            },
+            "services": {},
+            "secondary": false,
+            "tenants": []
+          }
+        ],
+        "services": {}
+      }
+    ],
+    "analytics": {
+      "enabled": true
+    },
+    "flowExecution": {
+      "mode": "DEFAULT",
+      "matchRequired": false
+    },
+    "flows": [
+      {
+        "name": "Default",
+        "enabled": true,
+        "selectors": [
+          {
+            "type": "HTTP",
+            "path": "/",
+            "pathOperator": "EQUALS",
+            "methods": []
+          }
+        ],
+        "request": [
+          {
+            "name": "Common OAS policy",
+            "enabled": true,
+            "policy": "shared-policy-group-policy",
+            "configuration": {
+              "sharedPolicyGroupId": "ffd6f930-6fbd-4f11-96f9-306fbd9f11e0"
+            }
+          }
+        ],
+        "response": [
+          {
+            "name": "Transform Headers",
+            "enabled": true,
+            "policy": "transform-headers",
+            "configuration": {
+              "whitelistHeaders": [],
+              "addHeaders": [
+                {
+                  "name": "Warning",
+                  "value": "None"
+                }
+              ],
+              "scope": "REQUEST",
+              "removeHeaders": []
+            }
+          }
+        ],
+        "subscribe": [],
+        "publish": [],
+        "connect": [],
+        "interact": [],
+        "tags": []
+      }
+    ],
+    "id": "1d5a2d23-df93-450c-9a2d-23df93950c33",
+    "name": "Automation exportable",
+    "description": "",
+    "apiVersion": "1",
+    "deployedAt": "2026-02-02T11:01:09.045Z",
+    "createdAt": "2026-02-02T10:58:09.998Z",
+    "updatedAt": "2026-02-02T11:01:09.045Z",
+    "disableMembershipNotifications": false,
+    "groups": [],
+    "state": "STOPPED",
+    "visibility": "PRIVATE",
+    "labels": [],
+    "lifecycleState": "CREATED",
+    "tags": [],
+    "primaryOwner": {
+      "id": "67f4af8a-e325-4289-b4af-8ae32532897d",
+      "email": "benoit.bordigoni@graviteesource.com",
+      "displayName": "Benoît Bordigoni",
+      "type": "USER"
+    },
+    "categories": [],
+    "originContext": {
+      "origin": "MANAGEMENT"
+    },
+    "responseTemplates": {},
+    "resources": [],
+    "properties": []
+  },
+  "pages": [
+    {
+      "id": "d73e0602-460b-451d-be06-02460b251d00",
+      "name": "Legal",
+      "type": "FOLDER",
+      "order": 0,
+      "published": true,
+      "visibility": "PUBLIC",
+      "updatedAt": "2026-02-02T11:00:08.352Z",
+      "configuration": {},
+      "homepage": false,
+      "excludedAccessControls": false,
+      "accessControls": [],
+      "metadata": {}
+    },
+    {
+      "id": "dc0d8bda-6c16-4793-8d8b-da6c16279348",
+      "name": "General Conditions",
+      "type": "MARKDOWN",
+      "content": "Anyone is free to use this example API",
+      "order": 0,
+      "published": true,
+      "visibility": "PUBLIC",
+      "updatedAt": "2026-02-02T11:00:42.905Z",
+      "configuration": {},
+      "homepage": false,
+      "parentId": "d73e0602-460b-451d-be06-02460b251d00",
+      "excludedAccessControls": false,
+      "accessControls": [],
+      "metadata": {}
+    }
+  ],
+  "plans": [
+    {
+      "definitionVersion": "V4",
+      "flows": [],
+      "id": "fa417460-3df3-44b1-8174-603df3d4b178",
+      "name": "Default Keyless (UNSECURED)",
+      "description": "Default unsecured plan",
+      "apiId": "1d5a2d23-df93-450c-9a2d-23df93950c33",
+      "security": {
+        "type": "KEY_LESS",
+        "configuration": {}
+      },
+      "mode": "STANDARD",
+      "characteristics": [],
+      "commentRequired": false,
+      "createdAt": "2026-02-02T10:58:12.414Z",
+      "excludedGroups": [],
+      "generalConditions": "dc0d8bda-6c16-4793-8d8b-da6c16279348",
+      "order": 1,
+      "publishedAt": "2026-02-02T10:58:12.557Z",
+      "status": "PUBLISHED",
+      "tags": [],
+      "type": "API",
+      "updatedAt": "2026-02-02T11:01:05.373Z",
+      "validation": "MANUAL"
+    }
+  ],
+  "apiMedia": []
+}
