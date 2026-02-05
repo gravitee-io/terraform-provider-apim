@@ -28,7 +28,7 @@ lint-fix: ## Fix issues that can be found
 
 .PHONY: sync-oas
 sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-management
-	@cp ../gravitee-api-management/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml schemas/automation-api-oas.yaml
+	curl -sSL "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/4.10.x/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml" -o schemas/automation-api-oas.yaml
 
 PRE_TEST_DIR = "$(shell pwd)/examples/use-cases/application-simple"
 
