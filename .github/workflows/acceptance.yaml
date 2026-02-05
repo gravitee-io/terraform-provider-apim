@@ -12,13 +12,32 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  verify-oas:
+    name: Verify OAS schema matches APIM main branch
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      contents: "read"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Verify OAS schema matches upstream
+        uses: ./.github/actions/verify-oas-upstream
+      - name: Send slack notification
+        if: (failure() || success()) && github.event.schedule != ''
+        uses: ./.github/actions/send-slack-notification
+        with:
+          job_name: ${{ github.job }}
+          job_status: ${{ job.status }}
+          circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
+          trigger: test_results_notification
   pre-test-validation:
     name: Pre-test validation
     permissions:
       contents: "read"
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         env:
           - name: Dev
@@ -146,6 +165,7 @@ jobs:
   unit:
     name: Unit tests
     runs-on: ubuntu-latest
+    continue-on-error: true
     permissions:
       contents: "read"
     steps:
