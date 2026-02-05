@@ -859,7 +859,11 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			for _, v := range plansItem.Tags {
 				plans.Tags = append(plans.Tags, types.StringValue(v))
 			}
-			plans.Type = types.StringValue(string(plansItem.Type))
+			if plansItem.Type != nil {
+				plans.Type = types.StringValue(string(*plansItem.Type))
+			} else {
+				plans.Type = types.StringNull()
+			}
 			if plansItem.Validation != nil {
 				plans.Validation = types.StringValue(string(*plansItem.Validation))
 			} else {
@@ -1820,7 +1824,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		for tagsIndex1 := range r.Plans[plansIndex].Tags {
 			tags1 = append(tags1, r.Plans[plansIndex].Tags[tagsIndex1].ValueString())
 		}
-		type8 := shared.PlanType(r.Plans[plansIndex].Type.ValueString())
+		type8 := new(shared.PlanType)
+		if !r.Plans[plansIndex].Type.IsUnknown() && !r.Plans[plansIndex].Type.IsNull() {
+			*type8 = shared.PlanType(r.Plans[plansIndex].Type.ValueString())
+		} else {
+			type8 = nil
+		}
 		validation := new(shared.PlanValidation)
 		if !r.Plans[plansIndex].Validation.IsUnknown() && !r.Plans[plansIndex].Validation.IsNull() {
 			*validation = shared.PlanValidation(r.Plans[plansIndex].Validation.ValueString())
