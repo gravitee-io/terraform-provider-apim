@@ -28,7 +28,7 @@ type PlanV4 struct {
 	// Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list.
 	Tags []string `json:"tags,omitempty"`
 	// Only one possible type: API
-	Type *PlanType `default:"API" json:"type"`
+	Type PlanType `json:"type"`
 	// Specifies if subscriptions must be manually validated by a human actor.
 	// For automation API, it is default to `AUTO`.
 	//
@@ -118,9 +118,9 @@ func (p *PlanV4) GetTags() []string {
 	return p.Tags
 }
 
-func (p *PlanV4) GetType() *PlanType {
+func (p *PlanV4) GetType() PlanType {
 	if p == nil {
-		return nil
+		return PlanType("")
 	}
 	return p.Type
 }

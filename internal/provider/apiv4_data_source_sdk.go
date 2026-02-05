@@ -859,11 +859,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			for _, v := range plansItem.Tags {
 				plans.Tags = append(plans.Tags, types.StringValue(v))
 			}
-			if plansItem.Type != nil {
-				plans.Type = types.StringValue(string(*plansItem.Type))
-			} else {
-				plans.Type = types.StringNull()
-			}
+			plans.Type = types.StringValue(string(plansItem.Type))
 			if plansItem.Validation != nil {
 				plans.Validation = types.StringValue(string(*plansItem.Validation))
 			} else {

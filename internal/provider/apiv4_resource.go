@@ -2800,9 +2800,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						"type": schema.StringAttribute{
 							Computed:    true,
 							Optional:    true,
-							Default:     stringdefault.StaticString(`API`),
-							Description: `Only one possible type: API. Default: "API"; must be one of ["API", "CATALOG"]`,
+							Description: `Only one possible type: API. Not Null; must be one of ["API", "CATALOG"]`,
 							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
 								stringvalidator.OneOf(
 									"API",
 									"CATALOG",
