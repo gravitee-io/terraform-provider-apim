@@ -1,0 +1,30 @@
+name: Verify OAS schema matches upstream
+
+description: |
+  Downloads upstream OpenAPI schema and verifies it matches the local
+  schemas/automation-api-oas.yaml, ignoring whitespace differences.
+
+runs:
+  using: composite
+  steps:
+    - name: Verify OAS schema matches upstream
+      shell: bash
+      run: |
+        # Upstream OAS URL (single source of truth)
+        UPSTREAM_OAS_URL="https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/4.9.x/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml"
+
+        # Download the upstream OAS file
+        curl -sSL "$UPSTREAM_OAS_URL" -o /tmp/upstream-oas.yaml
+        
+        # Compare the files ignoring whitespace differences
+        if ! diff -wB schemas/automation-api-oas.yaml /tmp/upstream-oas.yaml > /dev/null; then
+          echo "❌ ERROR: Local schemas/automation-api-oas.yaml differs from upstream source"
+          echo "Differences found (ignoring whitespace):"
+          diff -wB schemas/automation-api-oas.yaml /tmp/upstream-oas.yaml || true
+          echo ""
+          echo "Please update schemas/automation-api-oas.yaml to match the upstream version:"
+          echo "$UPSTREAM_OAS_URL"
+          exit 1
+        else
+          echo "✅ Local OAS schema matches upstream version (ignoring whitespace)"
+        fi

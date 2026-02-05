@@ -18,22 +18,7 @@ jobs:
         with:
           go-version-file: go.mod
       - name: Verify OAS schema matches upstream
-        run: |
-          # Download the upstream OAS file
-          curl -sSL "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/4.9.x/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml" -o /tmp/upstream-oas.yaml
-          
-          # Compare the files ignoring whitespace differences
-          if ! diff -wB schemas/automation-api-oas.yaml /tmp/upstream-oas.yaml > /dev/null; then
-            echo "❌ ERROR: Local schemas/automation-api-oas.yaml differs from upstream source"
-            echo "Differences found (ignoring whitespace):"
-            diff -wB schemas/automation-api-oas.yaml /tmp/upstream-oas.yaml || true
-            echo ""
-            echo "Please update schemas/automation-api-oas.yaml to match the upstream version:"
-            echo "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/4.10.x/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml"
-            exit 1
-          else
-            echo "✅ Local OAS schema matches upstream version (ignoring whitespace)"
-          fi
+        uses: ./.github/actions/verify-oas-upstream
       - name: Get speakeasy version
         id: speakeasy-version
         run: |
