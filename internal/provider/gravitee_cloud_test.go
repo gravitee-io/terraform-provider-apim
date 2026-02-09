@@ -2,13 +2,14 @@ package provider
 
 import (
 	"fmt"
+	"os"
+	"testing"
+
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	tfp "github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/stretchr/testify/assert"
-	"os"
-	"testing"
 )
 
 func TestCloudInitializerNoCloudAuth(t *testing.T) {
