@@ -94,12 +94,25 @@ async function createKindCluster() {
   setQuoteEscape();
 }
 
+async function imageExists(image) {
+  try {
+    await $`docker image inspect ${image}`;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function loadImages() {
   setNoQuoteEscape();
 
   for (const [image, tag] of IMAGES.entries()) {
-    LOG.blue(`pulling image ${image}`);
-    await $`docker pull ${image}`;
+    if (await imageExists(image)) {
+      LOG.blue(`image ${image} found locally, skipping pull`);
+    } else {
+      LOG.blue(`pulling image ${image}`);
+      await $`docker pull ${image}`;
+    }
     LOG.blue(`tagging image ${image} with ${tag}`);
     await $`docker tag ${image} ${tag}`;
     LOG.blue(`loading image tag ${tag}`);
