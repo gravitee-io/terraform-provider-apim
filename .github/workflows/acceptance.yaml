@@ -40,32 +40,32 @@ jobs:
       fail-fast: false
       matrix:
         env:
-          - name: Dev
-            url: ${{vars.TEST_SERVER_URL_MASTER}}
-          - name: Stable
-            url: ${{vars.TEST_SERVER_URL_STABLE}}
+          - name: Kind
+            url: http://localhost:30083/automation
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Create test cluster
+        run: make start-cluster
       - name: Setup builder
         uses: ./.github/actions/setup-go
       - name: Setup terraform
         uses: ./.github/actions/setup-terraform
         with:
           terraform_version: "latest"
-      - name: Run pre-tests using ${{ matrix.env.name }} - user ${{ vars.APIM_ADMIN_USERNAME }}
+      - name: Run pre-tests using ${{ matrix.env.name }} - user admin
         env:
           APIM_SERVER_URL: ${{ matrix.env.url }}
-          APIM_USERNAME: ${{ vars.APIM_ADMIN_USERNAME }}
-          APIM_PASSWORD: ${{ secrets.APIM_ADMIN_PASSWORD }}
+          APIM_USERNAME: admin
+          APIM_PASSWORD: admin
         run: make pre-test
-      - name: Run pre-tests using ${{ matrix.env.name }} - user ${{ vars.APIM_API1_USERNAME }}
+      - name: Run pre-tests using ${{ matrix.env.name }} - user api1
         env:
           APIM_SERVER_URL: ${{ matrix.env.url }}
-          APIM_USERNAME: ${{ vars.APIM_API1_USERNAME }}
-          APIM_PASSWORD: ${{ secrets.APIM_API1_PASSWORD }}
+          APIM_USERNAME: api1
+          APIM_PASSWORD: api1
         run: make pre-test
-      - name: Send slack notification on failure
+      - name: Send Slack notification on failure
         if: failure() && github.event.schedule != ''
         uses: ./.github/actions/send-slack-notification
         with:
@@ -83,13 +83,13 @@ jobs:
     strategy:
       matrix:
        env:
-          - name: Dev
-            url: ${{vars.TEST_SERVER_URL_MASTER}}
-          - name: Stable
-            url: ${{vars.TEST_SERVER_URL_STABLE}}
+          - name: Kind
+            url: http://localhost:30083/automation
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Create test cluster
+        run: make start-cluster
       - name: Setup go
         uses: ./.github/actions/setup-go
       - name: Setup terraform
@@ -106,10 +106,10 @@ jobs:
       - name: Run examples using ${{ matrix.env.url }}
         env:
           APIM_SERVER_URL: ${{ matrix.env.url }}
-          APIM_USERNAME: "${{ vars.APIM_ADMIN_USERNAME }}"
-          APIM_PASSWORD: "${{ secrets.APIM_ADMIN_PASSWORD }}"
+          APIM_USERNAME: admin
+          APIM_PASSWORD: admin
         run: make examples-tests
-      - name: Send slack notification
+      - name: Send Slack notification
         if: (failure() || success()) && github.event.schedule != ''
         uses: ./.github/actions/send-slack-notification
         with:
@@ -135,13 +135,13 @@ jobs:
           - "1.13.*"
           - "1.14.*"
         env:
-          - name: Dev
-            url: ${{vars.TEST_SERVER_URL_MASTER}}
-          - name: Stable
-            url: ${{vars.TEST_SERVER_URL_STABLE}}
+          - name: Kind
+            url: http://localhost:30083/automation
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Create test cluster
+        run: make start-cluster
       - name: Setup go
         uses: ./.github/actions/setup-go
       - name: Setup terraform
@@ -151,10 +151,10 @@ jobs:
       - name: Run acceptance tests using ${{ matrix.env.url }}
         env:
           APIM_SERVER_URL: ${{ matrix.env.url }}
-          APIM_USERNAME: ${{ vars.APIM_ADMIN_USERNAME }}
-          APIM_PASSWORD: ${{ secrets.APIM_ADMIN_PASSWORD }}
+          APIM_USERNAME: admin
+          APIM_PASSWORD: admin
         run: make acceptance-tests
-      - name: Send slack notification
+      - name: Send Slack notification
         if: (failure() || success()) && github.event.schedule != ''
         uses: ./.github/actions/send-slack-notification
         with:
@@ -162,6 +162,7 @@ jobs:
           job_status: ${{ job.status }}
           circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
           trigger: test_results_notification
+
   unit:
     name: Unit tests
     runs-on: ubuntu-latest
