@@ -1,0 +1,174 @@
+/**
+ * Copyright (C) 2015 The Gravitee team (http://gravitee.io)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { APIM } from "./lib/apim.mjs";
+import {
+  LOG,
+  PROJECT_DIR,
+  setNoQuoteEscape,
+  setQuoteEscape,
+  time,
+  toggleVerbosity,
+} from "./lib/index.mjs";
+
+const KIND_CONFIG = path.join(PROJECT_DIR, "hack", "kind");
+
+const APIM_IMAGE_REGISTRY = await getAPIMImageRegistry();
+const APIM_IMAGE_TAG = await getAPIMImageTag();
+const APIM_CHART_REGISTRY = await getAPIMChartRegistry();
+const APIM_CHART_VERSION = await getAPIMChartVersion();
+
+const APIM_VALUES = `${$.env.APIM_VALUES || "values.yaml"}`;
+
+const IMAGES = new Map([
+  [
+    `${APIM_IMAGE_REGISTRY}/apim-gateway:${APIM_IMAGE_TAG}`,
+    `gravitee-apim-gateway:dev`,
+  ],
+  [
+    `${APIM_IMAGE_REGISTRY}/apim-management-api:${APIM_IMAGE_TAG}`,
+    `gravitee-apim-management-api:dev`,
+  ],
+  [
+    `${APIM_IMAGE_REGISTRY}/apim-management-ui:${APIM_IMAGE_TAG}`,
+    `gravitee-apim-management-ui:dev`,
+  ],
+  [`mongo:7.0.23-jammy`, `mongo:7.0.23-jammy`],
+]);
+
+if (!argv.verbose) {
+  $.quiet = true;
+}
+
+toggleVerbosity(argv.verbose);
+
+async function getAPIMImageRegistry() {
+  if ($.env.APIM_IMAGE_REGISTRY) {
+    return $.env.APIM_IMAGE_REGISTRY;
+  }
+  return await APIM.getImageRegistry();
+}
+
+async function getAPIMImageTag() {
+  if ($.env.APIM_IMAGE_TAG) {
+    return $.env.APIM_IMAGE_TAG;
+  }
+  return await APIM.getImageTag();
+}
+
+async function getAPIMChartRegistry() {
+  if ($.env.APIM_CHART_REGISTRY) {
+    return $.env.APIM_CHART_REGISTRY;
+  }
+  return await APIM.getChartRegistry();
+}
+
+async function getAPIMChartVersion() {
+  if ($.env.APIM_CHART_VERSION) {
+    return $.env.APIM_CHART_VERSION;
+  }
+  return await APIM.getChartVersion();
+}
+
+async function createKindCluster() {
+  setNoQuoteEscape();
+  await $`kind create cluster --config ${KIND_CONFIG}/kind.yaml`;
+  setQuoteEscape();
+}
+
+async function loadImages() {
+  setNoQuoteEscape();
+
+  for (const [image, tag] of IMAGES.entries()) {
+    LOG.blue(`pulling image ${image}`);
+    await $`docker pull ${image}`;
+    LOG.blue(`tagging image ${image} with ${tag}`);
+    await $`docker tag ${image} ${tag}`;
+    LOG.blue(`loading image tag ${tag}`);
+    await $`kind load docker-image ${tag} --name gravitee`;
+  }
+
+  setQuoteEscape();
+}
+
+async function createGraviteeNamespace() {
+  await $`kubectl create ns gravitee`;
+}
+
+async function helmInstallAPIM() {
+  await $`helm repo add graviteeio https://helm.gravitee.io`;
+  await $`helm repo update graviteeio`;
+  await $`helm install apim ${APIM_CHART_REGISTRY} -f ${KIND_CONFIG}/apim/${APIM_VALUES} --version ${APIM_CHART_VERSION}`;
+}
+
+async function waitForApim() {
+  await $`kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=apim3 --timeout=360s`;
+}
+
+LOG.blue(`
+  ☸ Initializing kind cluster
+`);
+
+await time(createKindCluster);
+
+LOG.blue(`
+  🐳 Loading docker images
+`);
+
+await time(loadImages);
+
+LOG.blue(`
+  ☸ Creating gravitee namespace
+`);
+
+await time(createGraviteeNamespace);
+
+LOG.blue(`
+  ☸ Creating APIM gateway TLS secret
+`);
+
+await time(createTLSSecret);
+
+LOG.blue(`
+  ☸ Installing APIM
+`);
+
+await time(helmInstallAPIM);
+
+LOG.blue(`
+  ☸ Deploying httpbin
+`);
+
+await time(deployHTTPBin);
+
+LOG.magenta(`
+    APIM containers are starting ...
+
+    Version: ${APIM_IMAGE_TAG}
+
+    Available endpoints are:
+        Gateway             http://localhost:30082
+        Gateway with mTLS   https://localhost:30084
+        Management API      http://localhost:30083/management/organizations/DEFAULT
+        Console             http://localhost:30080
+`);
+
+LOG.blue(`Waiting for services to be ready ...
+    
+    Press ctrl+c to exit this script without waiting ...
+`);
+
+await time(waitForApim);
