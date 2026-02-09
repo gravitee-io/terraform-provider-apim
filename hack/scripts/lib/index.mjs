@@ -58,3 +58,11 @@ export function setQuoteEscape() {
 
 // Path to the project root directory
 export const PROJECT_DIR = path.join(__dirname, "..", "..");
+
+export function isNonEmptyString(str) {
+  return String(str) === str && str.trim().length > 0;
+}
+
+export function isEmptyString(str) {
+  return !isNonEmptyString(str);
+}

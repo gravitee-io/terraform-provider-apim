@@ -16,58 +16,53 @@ secrets:
   kubernetes:
     enabled: true
 
-es:
+mongodb:
+  enabled: true
+  image:
+    repository: mongo
+    tag: 7.0.23-jammy
+  architecture: standalone
+  persistence:
+    mountPath: /data/db
+
+elasticsearch:
   enabled: false
 
-api:
-  enabled: false
+mongo:
+  uri: mongodb://graviteeio-apim-mongodb-replicaset:27017/gravitee?connectTimeoutMS=30000
+
+es:
+  endpoints:
+    - http://graviteeio-apim-elasticsearch-master-hl:9200
 
 ui:
   enabled: false
 
 portal:
   enabled: false
-  
-ratelimit:
-  type: 
-    none
 
 gateway:
+  enabled: false
+
+api:
   image:
-    repository: gravitee-apim-gateway
+    repository: gravitee-apim-management-api
     tag: dev
     pullPolicy: IfNotPresent
-  autoscaling:
-    minReplicas: 1
   ingress:
     enabled: false
-  ingressController:
-    enabled: true
-  servers:
-    - type: http
-      port: 8082
-      service:
-        type: NodePort
-        nodePort: 30082
-        externalPort: 82
-    - type: http
-      port: 8084
-      service:
-        type: NodePort
-        nodePort: 30084
-        externalPort: 84
-      ssl:
-        keystore:
-          type: pem
-          secret: secret://kubernetes/tls-server
-        clientAuth: request
   service:
     type: NodePort
-  services:
-    sync:
-      kubernetes:
-        enabled: true
-  reporters:
-    elasticsearch:
-      enabled: false
-  dbLess: true
+    nodePort: 30083
+  env:
+    - name: ANALYTICS_TYPE
+      value: none
+    - name: MANAGEMENT_MONGODB_TRANSACTIONAL
+      value: "false"
+
+installation:
+  api:
+    url: http://localhost:30083
+    proxyPath:
+      management: /management
+      portal: /portal
