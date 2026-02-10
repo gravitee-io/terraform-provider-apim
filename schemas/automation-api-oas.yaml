@@ -517,7 +517,7 @@ components:
             maxLength: 64
           uniqueItems: true
           default: [ ]
-          examples:
+          examples: 
             - ["example"]
         metadata:
           type: array
@@ -749,7 +749,7 @@ components:
           items:
             type: string
           type: array
-          examples:
+          examples: 
             - [ "https://myapp.example.com/oauth/callback" ]
           default: []
         additionalClientMetadata:
@@ -943,6 +943,7 @@ components:
       enum:
         - REQUEST
         - RESPONSE
+        - ENTRYPOINT_CONNECT
         - INTERACT
         - CONNECT
         - PUBLISH
@@ -1126,15 +1127,15 @@ components:
                 maxLength: 32
               uniqueItems: true
               examples:
-                - ["mcp"]
-                - ["webhook"]
-                - ["http-proxy"]
-                - ["native-kafka"]
-                - ["http-post"]
-                - ["agent-to-agent"]
-                - ["tcp-proxy"]
-                - ["http-get"]
-                - ["websocket"]
+               - ["mcp"]
+               - ["webhook"]
+               - ["http-proxy"]
+               - ["native-kafka"]
+               - ["http-post"]
+               - ["agent-to-agent"]
+               - ["tcp-proxy"]
+               - ["http-get"]
+               - ["websocket"]
     ConditionSelector:
       description: Condition selector
       type: object
@@ -1171,21 +1172,21 @@ components:
           uniqueItems: true
         allowMethods:
           description: |
-            `Access-Control-Allow-Methods`: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource.
+           `Access-Control-Allow-Methods`: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource.
           uniqueItems: true
           type: array
           items:
             type: string
             enum:
-              - "*"
-              - GET
-              - DELETE
-              - PATCH
-              - POST
-              - PUT
-              - OPTIONS
-              - TRACE
-              - HEAD
+             - "*"
+             - GET
+             - DELETE
+             - PATCH
+             - POST
+             - PUT
+             - OPTIONS
+             - TRACE
+             - HEAD
         allowOrigin:
           uniqueItems: true
           description: |
@@ -1197,7 +1198,7 @@ components:
           examples:
             - ["*","http://api.acme\\.com", ".*\\.api\\.acme\\.com"]
         exposeHeaders:
-          description: |
+          description: | 
             `Access-Control-Expose-Headers`: This header lets a server whitelist headers that browsers are allowed to access.
           uniqueItems: true
           type: array
@@ -1250,7 +1251,7 @@ components:
           type: object
           description: JSON Configuration that replaces the shared configuration defined at the group level.
         services:
-          $ref: "#/components/schemas/EndpointServices"
+          $ref: "#/components/schemas/EndpointServices" 
         secondary:
           type: boolean
           description: Define this endpoint as fallback endpoint in case other endpoints are no longer responding.
@@ -1585,10 +1586,10 @@ components:
       properties:
         request:
           type: boolean
-          description: Enables logging durring request phase
+          description: Enables logging durring request phase 
         response:
           type: boolean
-          description: Enables logging durring response phase
+          description: Enables logging durring response phase 
     TracingV4:
       description: OpenTelemetry tracing (Not for native APIs)
       type: object
@@ -1689,7 +1690,7 @@ components:
         - SYSTEM_FOLDER
         - TRANSLATION
     PageSource:
-      description: |
+      description: | 
         Allow you to fetch pages from various external sources, 
         overriding page content each time the source is fetched.
       type: object
@@ -1714,7 +1715,7 @@ components:
       properties:
         host:
           type: string
-          description: Virtual host required to access this API. (`Host` or `:Authority` headers, remote address for websockets)
+          description: Virtual host required to access this API. (`Host` or `:Authority` headers, remote address for websockets) 
         path:
           type: string
           default: "/"
@@ -1785,7 +1786,7 @@ components:
         - STANDARD
         - PUSH
     PrimaryOwner:
-      description: User owner of this. Can perform all possible actions on it.
+      description: User owner of this. Can perform all possible actions on it. 
       type: object
       properties:
         id:
@@ -1911,7 +1912,7 @@ components:
             `TEMPORAL`: report one message at least every,
             `COUNT`: for every number of specified messages,
             `WINDOWED_COUNT`: x number of messages on a time windows,
-
+            
           enum:
             - PROBABILITY
             - TEMPORAL
@@ -2308,7 +2309,7 @@ components:
       schema:
         type: boolean
         default: false
-        examples:
+        examples: 
           - true
     hridParam:
       name: hrid
