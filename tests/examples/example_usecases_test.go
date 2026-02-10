@@ -29,7 +29,7 @@ func TestApplicationResource_Examples(t *testing.T) {
 					},
 				},
 			})
-
+			// Testing framework implicitly verifies resource delete.
 		})
 	}
 }

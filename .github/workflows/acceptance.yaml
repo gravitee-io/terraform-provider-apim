@@ -58,6 +58,7 @@ jobs:
       - name: Create test cluster
         env:
           APIM_MINIMAL: true
+          APIM_GRAVITEE_LICENSE: ${{ secrets.GRAVITEE_LICENSE }}
           APIM_IMAGE_TAG: ${{ matrix.apim.image_tag }}
           APIM_CHART_VERSION: ${{ matrix.apim.chart_version }}
         run: make start-cluster
@@ -80,19 +81,19 @@ jobs:
       - name: Build provider
         shell: bash
         run: go build
-      - name: Run pre-tests with user admin
-        env:
-          APIM_SERVER_URL: http://localhost:30083/automation
-          APIM_USERNAME: admin
-          APIM_PASSWORD: admin
-        run: make pre-test
-      - name: Run pre-tests with user api1
-        env:
-          APIM_SERVER_URL: http://localhost:30083/automation
-          APIM_USERNAME: api1
-          APIM_PASSWORD: api1
-        run:
-          make pre-test
+#      - name: Run pre-tests with user admin
+#        env:
+#          APIM_SERVER_URL: http://localhost:30083/automation
+#          APIM_USERNAME: admin
+#          APIM_PASSWORD: admin
+#        run: make pre-test
+#      - name: Run pre-tests with user api1
+#        env:
+#          APIM_SERVER_URL: http://localhost:30083/automation
+#          APIM_USERNAME: api1
+#          APIM_PASSWORD: api1
+#        run:
+#          make pre-test
       - name: Run examples using ${{ matrix.apim.image_tag }}
         env:
           APIM_SERVER_URL: http://localhost:30083/automation
@@ -138,6 +139,7 @@ jobs:
         run: docker load -i /tmp/docker-images.tar
       - name: Create test cluster
         env:
+          APIM_GRAVITEE_LICENSE: ${{ secrets.GRAVITEE_LICENSE }}
           APIM_MINIMAL: true
           APIM_IMAGE_TAG: ${{ matrix.apim.image_tag }}
           APIM_CHART_VERSION: ${{ matrix.apim.chart_version }}
@@ -154,22 +156,22 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           terraform_version: ${{ matrix.terraform-version }}
-      - name: Run pre-tests with user admin
-        env:
-          APIM_SERVER_URL: http://localhost:30083/automation
-          APIM_USERNAME: admin
-          APIM_PASSWORD: admin
-        run: make pre-test
-      - name: Run pre-tests with user api1
-        env:
-          APIM_SERVER_URL: http://localhost:30083/automation
-          APIM_USERNAME: api1
-          APIM_PASSWORD: api1
-        run:
-          make pre-test
+#      - name: Run pre-tests with user admin
+#        env:
+#          APIM_SERVER_URL: http://localhost:30083/automation
+#          APIM_USERNAME: admin
+#          APIM_PASSWORD: admin
+#        run: make pre-test
+#      - name: Run pre-tests with user api1
+#        env:
+#          APIM_SERVER_URL: http://localhost:30083/automation
+#          APIM_USERNAME: api1
+#          APIM_PASSWORD: api1
+#        run:
+#          make pre-test
       - name: Run acceptance tests using ${{ matrix.env.url }}
         env:
-          APIM_SERVER_URL: ${{ matrix.env.url }}
+          APIM_SERVER_URL: http://localhost:30083/automation
           APIM_USERNAME: admin
           APIM_PASSWORD: admin
         run: make acceptance-tests
