@@ -16,7 +16,7 @@ type PlanV4 struct {
 	Hrid                  types.String   `tfsdk:"hrid"`
 	Mode                  types.String   `tfsdk:"mode"`
 	Name                  types.String   `tfsdk:"name"`
-	Security              PlanSecurity   `tfsdk:"security"`
+	Security              *PlanSecurity  `tfsdk:"security"`
 	SelectionRule         types.String   `tfsdk:"selection_rule"`
 	Status                types.String   `tfsdk:"status"`
 	Tags                  []types.String `tfsdk:"tags"`
