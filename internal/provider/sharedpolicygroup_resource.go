@@ -129,11 +129,12 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 			},
 			"phase": schema.StringAttribute{
 				Required:    true,
-				Description: `The execution phase of a policy. must be one of ["REQUEST", "RESPONSE", "INTERACT", "CONNECT", "PUBLISH", "SUBSCRIBE"]`,
+				Description: `The execution phase of a policy. must be one of ["REQUEST", "RESPONSE", "ENTRYPOINT_CONNECT", "INTERACT", "CONNECT", "PUBLISH", "SUBSCRIBE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"REQUEST",
 						"RESPONSE",
+						"ENTRYPOINT_CONNECT",
 						"INTERACT",
 						"CONNECT",
 						"PUBLISH",
