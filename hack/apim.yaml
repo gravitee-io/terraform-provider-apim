@@ -16,7 +16,7 @@
 apim:
   image:
     registry: graviteeio.azurecr.io
-    version: 4.9.x-latest
+    version: master-latest
   chart:
     registry: oci://graviteeio.azurecr.io/helm/apim3
-    version: 4.9.*
+    version: 4.11.*
