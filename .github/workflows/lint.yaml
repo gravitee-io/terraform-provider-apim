@@ -20,7 +20,7 @@ jobs:
       - name: Verify OAS schema matches upstream
         run: |
           # Download the upstream OAS file
-          curl -sSL "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/main/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml" -o /tmp/upstream-oas.yaml
+          curl -sSL "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/master/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml" -o /tmp/upstream-oas.yaml
           
           # Compare the files ignoring whitespace differences
           if ! diff -wB schemas/automation-api-oas.yaml /tmp/upstream-oas.yaml > /dev/null; then
@@ -29,7 +29,7 @@ jobs:
             diff -wB schemas/automation-api-oas.yaml /tmp/upstream-oas.yaml || true
             echo ""
             echo "Please update schemas/automation-api-oas.yaml to match the upstream version:"
-            echo "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/main/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml"
+            echo "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/master/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml"
             exit 1
           else
             echo "✅ Local OAS schema matches upstream version (ignoring whitespace)"
