@@ -110,50 +110,90 @@ async function createGraviteeNamespace() {
 async function helmInstallAPIM() {
     await $`helm repo add graviteeio https://helm.gravitee.io`;
     await $`helm repo update graviteeio`;
-    await $`helm install apim ${APIM_CHART_REGISTRY} -f ${KIND_CONFIG}/apim/${APIM_VALUES} --version ${APIM_CHART_VERSION}`;
+    if ($.env.APIM_GRAVITEE_LICENSE) {
+        let lic = $.env.APIM_GRAVITEE_LICENSE
+        await $`helm install apim ${APIM_CHART_REGISTRY} -f ${KIND_CONFIG}/apim/${APIM_VALUES} --set license.key=${lic} --version ${APIM_CHART_VERSION}`;
+    } else {
+        await $`helm install apim ${APIM_CHART_REGISTRY} -f ${KIND_CONFIG}/apim/${APIM_VALUES} --version ${APIM_CHART_VERSION}`;
+    }
+
 }
 
 async function waitForApim() {
     await $`kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=apim3 --timeout=360s`;
 }
 
+async function configureAPIM() {
+    const apimConfig = path.join(PROJECT_DIR, "hack", "apim");
+    const settings = await fs.readFile(path.join(apimConfig, "settings.json"), "utf-8");
+    const dcr = await fs.readFile(path.join(apimConfig, "dcr.json"), "utf-8");
+
+    const adminAuth = "Basic " + Buffer.from("admin:admin").toString("base64");
+    const api1Auth = "Basic " + Buffer.from("api1:api1").toString("base64");
+    const baseUrl = "http://localhost:30083/management/organizations/DEFAULT/environments/DEFAULT";
+
+    let resp;
+
+    resp = await fetch(`${baseUrl}/settings`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": adminAuth,
+        },
+        body: settings,
+    });
+    if (resp.status >= 400) {
+        throw new Error(`PUT settings failed (${resp.status}): ${await resp.text()}`);
+    }
+
+    resp = await fetch(`${baseUrl}/configuration/applications/registration/providers`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": adminAuth,
+        },
+        body: dcr,
+    });
+    if (resp.status >= 400) {
+        throw new Error(`POST DCR provider failed (${resp.status}): ${await resp.text()}`);
+    }
+
+    resp = await fetch("http://localhost:30083/management/organizations/DEFAULT/environments", {
+        headers: {
+            "Authorization": api1Auth,
+        },
+    });
+    if (resp.status >= 400) {
+        throw new Error(`GET environments failed (${resp.status}): ${await resp.text()}`);
+    }
+}
+
+const steps = 6;
+let step = 1;
+
 LOG.blue(`
-  ☸ Initializing kind cluster
+  ☸ [${step++}/${steps}] Initializing kind cluster
 `);
 
 await time(createKindCluster);
 
 LOG.blue(`
-  🐳 Loading docker images
+  🐳 [${step++}/${steps}] Loading docker images
 `);
 
 await time(loadImages);
 
 LOG.blue(`
-  ☸ Creating gravitee namespace
+  ☸ [${step++}/${steps}] Creating gravitee namespace
 `);
 
 await time(createGraviteeNamespace);
 
 LOG.blue(`
-  ☸ Creating APIM gateway TLS secret
-`);
-
-await time(createTLSSecret);
-
-LOG.blue(`
-  ☸ Installing APIM
+  ☸ [${step++}/${steps}] Installing APIM
 `);
 
 await time(helmInstallAPIM);
-
-LOG.blue(`
-  ☸ Deploying httpbin
-`);
-
-if (!APIM_MINIMAL) {
-    await time(deployHTTPBin);
-}
 
 if (APIM_MINIMAL) {
     LOG.magenta(`
@@ -178,9 +218,14 @@ if (APIM_MINIMAL) {
         Console             http://localhost:30080
 `);
 }
-LOG.blue(`Waiting for services to be ready ...
-    
-    Press ctrl+c to exit this script without waiting ...
+LOG.blue(`
+  ⚙ [${step++}/${steps}] Waiting for services to be ready ...
 `);
 
 await time(waitForApim);
+
+LOG.blue(`
+  ⚙ [${step++}/${steps}] Configuring APIM
+`);
+
+await time(configureAPIM);
