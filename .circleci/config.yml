@@ -24,6 +24,9 @@ parameters:
     enum:
       - pass
       - fail
+  branch_name:
+    type: string
+    default: ""
   release_version:
     type: string
     default: ""
@@ -43,6 +46,7 @@ jobs:
             # Export the parameter value to BASH_ENV
             echo 'JOB="<< pipeline.parameters.job_name >>"' >> $BASH_ENV
             echo 'JOB_URL="<< pipeline.parameters.job_url >>"' >> $BASH_ENV
+            echo 'BRANCH_NAME="<< pipeline.parameters.branch_name >>"' >> $BASH_ENV
             
             if [[ "<< pipeline.parameters.job_status >>" == "pass" ]]; then
               echo 'STATUS=succeeded' >> $BASH_ENV
@@ -61,7 +65,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*Job ${STATUS}*. :${STATUS_ICON}:\n*Project*: :terraform: APIM Terraform provider\n*Job*: ${JOB}\n"
+                    "text": "*Job ${STATUS}*. :${STATUS_ICON}:\n*Project*: :terraform: APIM Terraform provider\n*Job*: ${JOB}\n*Branch*: ${BRANCH_NAME}\n"
                   }
                 },
                 {
