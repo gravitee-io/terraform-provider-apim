@@ -13,18 +13,21 @@ runs:
         # Upstream OAS URL (single source of truth)
         UPSTREAM_OAS_URL="https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/master/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml"
 
-        # Download the upstream OAS file
-        curl -sSL "$UPSTREAM_OAS_URL" -o /tmp/upstream-oas.yaml
+        # Download the upstream OAS file, failing if the download fails
+        if ! curl -fsSL "$UPSTREAM_OAS_URL" -o /tmp/upstream-oas.yaml; then
+          echo "❌ ERROR: Failed to download upstream OAS file from $UPSTREAM_OAS_URL"
+          exit 1
+        fi
         
         # Compare the files ignoring whitespace differences
-        if ! diff -wB schemas/automation-api-oas.yaml /tmp/upstream-oas.yaml > /dev/null; then
+        if diff_output=$(diff -wB schemas/automation-api-oas.yaml /tmp/upstream-oas.yaml); then
+          echo "✅ Local OAS schema matches upstream version (ignoring whitespace)"
+        else
           echo "❌ ERROR: Local schemas/automation-api-oas.yaml differs from upstream source"
           echo "Differences found (ignoring whitespace):"
-          diff -wB schemas/automation-api-oas.yaml /tmp/upstream-oas.yaml || true
+          echo "$diff_output"
           echo ""
           echo "Please update schemas/automation-api-oas.yaml to match the upstream version:"
           echo "$UPSTREAM_OAS_URL"
           exit 1
-        else
-          echo "✅ Local OAS schema matches upstream version (ignoring whitespace)"
         fi
