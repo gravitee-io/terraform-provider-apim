@@ -41,6 +41,8 @@ jobs:
         apim:
           - image_tag: master-latest
             chart_version: 4.11.*
+          - image_tag: 4.9.x-latest
+            chart_version: 4.9.*
           - image_tag: 4.10.x-latest
             chart_version: 4.10.*
     steps:
@@ -95,6 +97,8 @@ jobs:
         apim:
           - image_tag: master-latest
             chart_version: 4.11.*
+          - image_tag: 4.9.x-latest
+            chart_version: 4.9.*
           - image_tag: 4.10.x-latest
             chart_version: 4.10.*
     steps:
