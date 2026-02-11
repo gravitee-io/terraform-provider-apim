@@ -123,6 +123,21 @@ async function waitForApim() {
     await $`kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=apim3 --timeout=360s`;
 }
 
+async function fetchWithRetry(url, options, {retries = 10, baseDelay = 1000, maxDelay = 30000} = {}) {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            return await fetch(url, options);
+        } catch (err) {
+            if (attempt === retries) {
+                throw err;
+            }
+            const delay = Math.min(baseDelay * 2 ** (attempt - 1), maxDelay);
+            LOG.blue(`  fetch ${url} failed (${err.cause?.code || err.message}), retrying in ${delay / 1000}s (${attempt}/${retries})`);
+            await sleep(delay);
+        }
+    }
+}
+
 async function configureAPIM() {
     const apimConfig = path.join(PROJECT_DIR, "hack", "apim");
     const settings = await fs.readFile(path.join(apimConfig, "settings.json"), "utf-8");
@@ -134,7 +149,7 @@ async function configureAPIM() {
 
     let resp;
 
-    resp = await fetch(`${baseUrl}/settings`, {
+    resp = await fetchWithRetry(`${baseUrl}/settings`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -146,7 +161,7 @@ async function configureAPIM() {
         throw new Error(`POST settings failed (${resp.status}): ${await resp.text()}`);
     }
 
-    resp = await fetch(`${baseUrl}/configuration/applications/registration/providers`, {
+    resp = await fetchWithRetry(`${baseUrl}/configuration/applications/registration/providers`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -158,7 +173,7 @@ async function configureAPIM() {
         throw new Error(`POST DCR provider failed (${resp.status}): ${await resp.text()}`);
     }
 
-    resp = await fetch("http://localhost:30083/management/organizations/DEFAULT/environments", {
+    resp = await fetchWithRetry("http://localhost:30083/management/organizations/DEFAULT/environments", {
         headers: {
             "Authorization": api1Auth,
         },
