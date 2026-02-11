@@ -46,15 +46,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Cache Docker images
+      - name: Cache and restore Docker images
         id: docker-cache
-        uses: actions/cache@v4
-        with:
-          path: /tmp/docker-images.tar
-          key: docker-${{ runner.os }}-${{ hashFiles('hack/apim.yaml', 'hack/scripts/run-kind.mjs') }}
-      - name: Restore Docker images from cache
-        if: steps.docker-cache.outputs.cache-hit == 'true'
-        run: docker load -i /tmp/docker-images.tar
+        uses: ./.github/actions/docker-cache-restore
       - name: Create test cluster
         env:
           APIM_MINIMAL: true
@@ -128,15 +122,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Cache Docker images
+      - name: Cache and restore Docker images
         id: docker-cache
-        uses: actions/cache@v4
-        with:
-          path: /tmp/docker-images.tar
-          key: docker-${{ runner.os }}-${{ hashFiles('hack/apim.yaml', 'hack/scripts/run-kind.mjs') }}
-      - name: Restore Docker images from cache
-        if: steps.docker-cache.outputs.cache-hit == 'true'
-        run: docker load -i /tmp/docker-images.tar
+        uses: ./.github/actions/docker-cache-restore
       - name: Create test cluster
         env:
           APIM_GRAVITEE_LICENSE: ${{ secrets.GRAVITEE_LICENSE }}

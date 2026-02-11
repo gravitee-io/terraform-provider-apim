@@ -1,0 +1,19 @@
+name: docker-cache-restore
+description: Cache and restore Docker images used by the test cluster
+outputs:
+  cache-hit:
+    description: Whether the cache was hit
+    value: ${{ steps.docker-cache.outputs.cache-hit }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Cache Docker images
+      id: docker-cache
+      uses: actions/cache@v4
+      with:
+        path: /tmp/docker-images.tar
+        key: docker-${{ runner.os }}-${{ hashFiles('hack/apim.yaml', 'hack/scripts/run-kind.mjs') }}
+    - name: Restore Docker images from cache
+      if: steps.docker-cache.outputs.cache-hit == 'true'
+      shell: bash
+      run: docker load -i /tmp/docker-images.tar
