@@ -12,5 +12,5 @@ runs:
       shell: bash
       run: >
         docker images --format '{{.Repository}}:{{.Tag}}'
-        | grep -E '(mongo|go-httpbin)'
+        | grep 'mongo'
         | xargs docker save -o /tmp/docker-images.tar
