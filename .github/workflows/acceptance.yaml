@@ -50,12 +50,11 @@ jobs:
         id: docker-cache
         uses: ./.github/actions/docker-cache-restore
       - name: Create test cluster
-        env:
-          APIM_MINIMAL: true
-          APIM_GRAVITEE_LICENSE: ${{ secrets.GRAVITEE_LICENSE }}
-          APIM_IMAGE_TAG: ${{ matrix.apim.image_tag }}
-          APIM_CHART_VERSION: ${{ matrix.apim.chart_version }}
-        run: make start-cluster
+        uses: ./.github/actions/create-test-cluster
+        with:
+          gravitee-license: ${{ secrets.GRAVITEE_LICENSE }}
+          image-tag: ${{ matrix.apim.image_tag }}
+          chart-version: ${{ matrix.apim.chart_version }}
       - name: Save Docker images for cache
         uses: ./.github/actions/docker-cache-save
         with:
@@ -124,12 +123,11 @@ jobs:
         id: docker-cache
         uses: ./.github/actions/docker-cache-restore
       - name: Create test cluster
-        env:
-          APIM_GRAVITEE_LICENSE: ${{ secrets.GRAVITEE_LICENSE }}
-          APIM_MINIMAL: true
-          APIM_IMAGE_TAG: ${{ matrix.apim.image_tag }}
-          APIM_CHART_VERSION: ${{ matrix.apim.chart_version }}
-        run: make start-cluster
+        uses: ./.github/actions/create-test-cluster
+        with:
+          gravitee-license: ${{ secrets.GRAVITEE_LICENSE }}
+          image-tag: ${{ matrix.apim.image_tag }}
+          chart-version: ${{ matrix.apim.chart_version }}
       - name: Save Docker images for cache
         uses: ./.github/actions/docker-cache-save
         with:

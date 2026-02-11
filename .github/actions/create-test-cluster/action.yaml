@@ -1,0 +1,27 @@
+name: create-test-cluster
+description: Create a Kind test cluster running Gravitee APIM
+inputs:
+  gravitee-license:
+    description: Gravitee license key
+    required: true
+  image-tag:
+    description: APIM Docker image tag
+    required: true
+  chart-version:
+    description: APIM Helm chart version
+    required: true
+  minimal:
+    description: Use minimal APIM setup
+    required: false
+    default: 'true'
+runs:
+  using: 'composite'
+  steps:
+    - name: Create test cluster
+      env:
+        APIM_MINIMAL: ${{ inputs.minimal }}
+        APIM_GRAVITEE_LICENSE: ${{ inputs.gravitee-license }}
+        APIM_IMAGE_TAG: ${{ inputs.image-tag }}
+        APIM_CHART_VERSION: ${{ inputs.chart-version }}
+      shell: bash
+      run: make start-cluster
