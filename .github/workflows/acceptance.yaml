@@ -31,7 +31,58 @@ jobs:
           job_status: ${{ job.status }}
           circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
           trigger: test_results_notification
+
+  pull-images:
+    name: Pull Docker image (${{ matrix.image.cache_key }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+    strategy:
+      matrix:
+        image:
+          - name: apim-management-api
+            tag: master-latest
+            cache_key: apim-master-latest
+          - name: apim-management-api
+            tag: 4.9.x-latest
+            cache_key: apim-4.9.x-latest
+          - name: apim-management-api
+            tag: 4.10.x-latest
+            cache_key: apim-4.10.x-latest
+          - name: mongo
+            tag: 7.0.23-jammy
+            cache_key: mongo-7.0.23-jammy
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Resolve image reference
+        id: resolve
+        shell: bash
+        run: |
+          if [[ "${{ matrix.image.name }}" == "mongo" ]]; then
+            echo "ref=${{ matrix.image.name }}:${{ matrix.image.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            REGISTRY=$(yq '.apim.image.registry' hack/apim.yaml)
+            echo "ref=${REGISTRY}/${{ matrix.image.name }}:${{ matrix.image.tag }}" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Restore image cache
+        id: docker-cache
+        uses: ./.github/actions/docker-cache-restore
+        with:
+          cache-key: docker-${{ github.ref_name }}-${{ matrix.image.cache_key }}-${{ hashFiles('hack/apim.yaml', 'hack/scripts/run-kind.mjs') }}
+      - name: Pull image
+        if: steps.docker-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: docker pull "${{ steps.resolve.outputs.ref }}"
+      - name: Save image cache
+        uses: ./.github/actions/docker-cache-save
+        with:
+          cache-key: docker-${{ github.ref_name }}-${{ matrix.image.cache_key }}-${{ hashFiles('hack/apim.yaml', 'hack/scripts/run-kind.mjs') }}
+          images: ${{ steps.resolve.outputs.ref }}
+          cache-hit: ${{ steps.docker-cache.outputs.cache-hit }}
+
   examples:
+    needs: [pull-images]
     name: Run Terraform examples (Env ${{ matrix.apim.image_tag }} + Terraform/OpenTofu latest)
     runs-on: ubuntu-latest
     permissions:
@@ -48,19 +99,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Cache and restore Docker images
-        id: docker-cache
+      - name: Restore MongoDB cache
         uses: ./.github/actions/docker-cache-restore
+        with:
+          cache-key: docker-${{ github.ref_name }}-mongo-7.0.23-jammy-${{ hashFiles('hack/apim.yaml', 'hack/scripts/run-kind.mjs') }}
+      - name: Restore APIM image cache
+        uses: ./.github/actions/docker-cache-restore
+        with:
+          cache-key: docker-${{ github.ref_name }}-apim-${{ matrix.apim.image_tag }}-${{ hashFiles('hack/apim.yaml', 'hack/scripts/run-kind.mjs') }}
       - name: Create test cluster
         uses: ./.github/actions/create-test-cluster
         with:
           gravitee-license: ${{ secrets.GRAVITEE_LICENSE }}
           image-tag: ${{ matrix.apim.image_tag }}
           chart-version: ${{ matrix.apim.chart_version }}
-      - name: Save Docker images for cache
-        uses: ./.github/actions/docker-cache-save
-        with:
-          cache-hit: ${{ steps.docker-cache.outputs.cache-hit }}
       - name: Setup go
         uses: ./.github/actions/setup-go
       - name: Setup terraform
@@ -90,6 +142,7 @@ jobs:
           trigger: test_results_notification
 
   acceptance:
+    needs: [pull-images]
     name: Acceptance Tests - Version ${{ matrix.apim.image_tag }} - Terraform ${{ matrix.terraform-version }}
     runs-on: ubuntu-latest
     permissions:
@@ -110,19 +163,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Cache and restore Docker images
-        id: docker-cache
+      - name: Restore MongoDB cache
         uses: ./.github/actions/docker-cache-restore
+        with:
+          cache-key: docker-${{ github.ref_name }}-mongo-7.0.23-jammy-${{ hashFiles('hack/apim.yaml', 'hack/scripts/run-kind.mjs') }}
+      - name: Restore APIM image cache
+        uses: ./.github/actions/docker-cache-restore
+        with:
+          cache-key: docker-${{ github.ref_name }}-apim-${{ matrix.apim.image_tag }}-${{ hashFiles('hack/apim.yaml', 'hack/scripts/run-kind.mjs') }}
       - name: Create test cluster
         uses: ./.github/actions/create-test-cluster
         with:
           gravitee-license: ${{ secrets.GRAVITEE_LICENSE }}
           image-tag: ${{ matrix.apim.image_tag }}
           chart-version: ${{ matrix.apim.chart_version }}
-      - name: Save Docker images for cache
-        uses: ./.github/actions/docker-cache-save
-        with:
-          cache-hit: ${{ steps.docker-cache.outputs.cache-hit }}
       - name: Setup go
         uses: ./.github/actions/setup-go
       - name: Setup terraform

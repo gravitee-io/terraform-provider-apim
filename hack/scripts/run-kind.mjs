@@ -95,9 +95,6 @@ async function createKindCluster() {
 }
 
 async function imageExists(image) {
-    if (image.includes("gravitee") && image.includes("latest")) {
-        return false;
-    }
     try {
         await $`docker image inspect ${image}`;
         return true;
