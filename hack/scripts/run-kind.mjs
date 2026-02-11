@@ -143,7 +143,7 @@ async function configureAPIM() {
         body: settings,
     });
     if (resp.status >= 400) {
-        throw new Error(`PUT settings failed (${resp.status}): ${await resp.text()}`);
+        throw new Error(`POST settings failed (${resp.status}): ${await resp.text()}`);
     }
 
     resp = await fetch(`${baseUrl}/configuration/applications/registration/providers`, {
