@@ -17,3 +17,7 @@ runs:
       if: steps.docker-cache.outputs.cache-hit == 'true'
       shell: bash
       run: docker load -i /tmp/docker-images.tar
+    - name: List images
+      if: steps.docker-cache.outputs.cache-hit == 'true'
+      shell: bash
+      run: docker images
