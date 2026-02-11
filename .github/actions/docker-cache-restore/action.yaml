@@ -27,6 +27,6 @@ runs:
         key: ${{ inputs.cache-key }}
         lookup-only: ${{ inputs.lookup-only }}
     - name: Load Docker images from cache
-      if: steps.docker-cache.outputs.lookup-only != 'true' && steps.docker-cache.outputs.cache-hit != 'true'
+      if: inputs.lookup-only == 'false' && steps.docker-cache.outputs.cache-hit != 'true'
       shell: bash
       run: docker load -i ${{ inputs.cache-path }}
