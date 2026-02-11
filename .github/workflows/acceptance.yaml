@@ -117,7 +117,7 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           terraform_version: ${{ matrix.terraform-version }}
-      - name: Run acceptance tests using ${{ matrix.env.url }}
+      - name: Run acceptance tests
         env:
           APIM_SERVER_URL: http://localhost:30083/automation
           APIM_USERNAME: admin
