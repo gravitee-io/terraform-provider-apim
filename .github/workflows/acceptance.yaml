@@ -70,16 +70,17 @@ jobs:
         uses: ./.github/actions/docker-cache-restore
         with:
           cache-key: docker-${{ github.ref_name }}-${{ matrix.image.cache_key }}-${{ hashFiles('hack/apim.yaml', 'hack/scripts/run-kind.mjs') }}
+          lookup-only: 'true'
       - name: Pull image
         if: steps.docker-cache.outputs.cache-hit != 'true'
         shell: bash
         run: docker pull "${{ steps.resolve.outputs.ref }}"
       - name: Save image cache
+        if: steps.docker-cache.outputs.cache-hit != 'true'
         uses: ./.github/actions/docker-cache-save
         with:
           cache-key: docker-${{ github.ref_name }}-${{ matrix.image.cache_key }}-${{ hashFiles('hack/apim.yaml', 'hack/scripts/run-kind.mjs') }}
           images: ${{ steps.resolve.outputs.ref }}
-          cache-hit: ${{ steps.docker-cache.outputs.cache-hit }}
 
   examples:
     needs: [pull-images]

@@ -8,6 +8,10 @@ inputs:
     description: Path to the tar file
     required: false
     default: /tmp/docker-images.tar
+  lookup-only:
+    description: Only check if cache exists without downloading
+    required: false
+    default: 'false'
 outputs:
   cache-hit:
     description: Whether the cache was hit
@@ -21,7 +25,8 @@ runs:
       with:
         path: ${{ inputs.cache-path }}
         key: ${{ inputs.cache-key }}
+        lookup-only: ${{ inputs.lookup-only }}
     - name: Load Docker images from cache
-      if: steps.docker-cache.outputs.cache-hit == 'true'
+      if: steps.docker-cache.outputs.cache-hit != 'true'
       shell: bash
       run: docker load -i ${{ inputs.cache-path }}
