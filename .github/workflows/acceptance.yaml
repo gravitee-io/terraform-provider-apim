@@ -66,19 +66,6 @@ jobs:
       - name: Build provider
         shell: bash
         run: go build
-#      - name: Run pre-tests with user admin
-#        env:
-#          APIM_SERVER_URL: http://localhost:30083/automation
-#          APIM_USERNAME: admin
-#          APIM_PASSWORD: admin
-#        run: make pre-test
-#      - name: Run pre-tests with user api1
-#        env:
-#          APIM_SERVER_URL: http://localhost:30083/automation
-#          APIM_USERNAME: api1
-#          APIM_PASSWORD: api1
-#        run:
-#          make pre-test
       - name: Run examples using ${{ matrix.apim.image_tag }}
         env:
           APIM_SERVER_URL: http://localhost:30083/automation
@@ -126,19 +113,6 @@ jobs:
         uses: ./.github/actions/setup-terraform
         with:
           terraform_version: ${{ matrix.terraform-version }}
-#      - name: Run pre-tests with user admin
-#        env:
-#          APIM_SERVER_URL: http://localhost:30083/automation
-#          APIM_USERNAME: admin
-#          APIM_PASSWORD: admin
-#        run: make pre-test
-#      - name: Run pre-tests with user api1
-#        env:
-#          APIM_SERVER_URL: http://localhost:30083/automation
-#          APIM_USERNAME: api1
-#          APIM_PASSWORD: api1
-#        run:
-#          make pre-test
       - name: Run acceptance tests using ${{ matrix.env.url }}
         env:
           APIM_SERVER_URL: http://localhost:30083/automation
