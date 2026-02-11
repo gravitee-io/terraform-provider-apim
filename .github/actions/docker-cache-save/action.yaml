@@ -1,0 +1,16 @@
+name: docker-cache-save
+description: Save Docker images to cache if not already cached
+inputs:
+  cache-hit:
+    description: Whether the cache was already hit (from docker-cache-restore)
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Save Docker images for cache
+      if: inputs.cache-hit != 'true'
+      shell: bash
+      run: >
+        docker images --format '{{.Repository}}:{{.Tag}}'
+        | grep -E '(mongo|go-httpbin)'
+        | xargs docker save -o /tmp/docker-images.tar

@@ -57,11 +57,9 @@ jobs:
           APIM_CHART_VERSION: ${{ matrix.apim.chart_version }}
         run: make start-cluster
       - name: Save Docker images for cache
-        if: steps.docker-cache.outputs.cache-hit != 'true'
-        run: >
-          docker images --format '{{.Repository}}:{{.Tag}}'
-          | grep -E '(mongo|go-httpbin)'
-          | xargs docker save -o /tmp/docker-images.tar
+        uses: ./.github/actions/docker-cache-save
+        with:
+          cache-hit: ${{ steps.docker-cache.outputs.cache-hit }}
       - name: Setup go
         uses: ./.github/actions/setup-go
       - name: Setup terraform
@@ -133,11 +131,9 @@ jobs:
           APIM_CHART_VERSION: ${{ matrix.apim.chart_version }}
         run: make start-cluster
       - name: Save Docker images for cache
-        if: steps.docker-cache.outputs.cache-hit != 'true'
-        run: >
-          docker images --format '{{.Repository}}:{{.Tag}}'
-          | grep -E '(mongo|go-httpbin)'
-          | xargs docker save -o /tmp/docker-images.tar
+        uses: ./.github/actions/docker-cache-save
+        with:
+          cache-hit: ${{ steps.docker-cache.outputs.cache-hit }}
       - name: Setup go
         uses: ./.github/actions/setup-go
       - name: Setup terraform
