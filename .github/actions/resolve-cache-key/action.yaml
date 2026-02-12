@@ -1,0 +1,21 @@
+name: resolve-cache-key
+description: Resolve the full Docker cache key for an image. Includes image identity, run metadata, and a hash of infrastructure files.
+inputs:
+  image-name:
+    description: The Docker image name (e.g. apim, mongo)
+    required: true
+  image-tag:
+    description: The Docker image tag (e.g. master-latest, 4.9.x-latest)
+    required: true
+outputs:
+  value:
+    description: The full Docker cache key
+    value: ${{ steps.resolve.outputs.value }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Resolve cache key
+      id: resolve
+      shell: bash
+      run: |
+        echo "value=docker-${{ inputs.image-name }}-${{ inputs.image-tag }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ hashFiles('hack/apim.yaml', 'hack/scripts/run-kind.mjs') }}" >> "$GITHUB_OUTPUT"
