@@ -48,6 +48,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      # Docker Engine 29+ enables the containerd image store by default,
+      # which breaks `kind load docker-image`. Disable it as a workaround.
+      - name: Disable Docker containerd image store
+        uses: docker/setup-docker-action@v4
+        with:
+          daemon-config: |
+            { "features": { "containerd-snapshotter": false } }
       - name: Create test cluster
         env:
           APIM_MINIMAL: true
@@ -104,6 +111,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      # Docker Engine 29+ enables the containerd image store by default,
+      # which breaks `kind load docker-image`. Disable it as a workaround.
+      - name: Disable Docker containerd image store
+        uses: docker/setup-docker-action@v4
+        with:
+          daemon-config: |
+            { "features": { "containerd-snapshotter": false } }
       - name: Create test cluster
         env:
           APIM_GRAVITEE_LICENSE: ${{ secrets.GRAVITEE_LICENSE }}
