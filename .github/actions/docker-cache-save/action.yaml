@@ -1,0 +1,24 @@
+name: docker-cache-save
+description: Save Docker images to cache
+inputs:
+  cache-key:
+    description: Cache key to save
+    required: true
+  cache-path:
+    description: Path to the tar file
+    required: false
+    default: /tmp/docker-images.tar
+  images:
+    description: Space-separated list of Docker images to save
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Save Docker images to tar
+      shell: bash
+      run: docker save -o ${{ inputs.cache-path }} ${{ inputs.images }}
+    - name: Save Docker image cache
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ inputs.cache-path }}
+        key: ${{ inputs.cache-key }}

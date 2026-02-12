@@ -88,19 +88,54 @@ async function createKindCluster() {
     setQuoteEscape();
 }
 
-async function loadImages() {
-    setNoQuoteEscape();
+async function imageExists(image) {
+    try {
+        await $`docker image inspect ${image}`;
+        return true;
+    } catch {
+        return false;
+    }
+}
 
-  for (const [image, tag] of IMAGES.entries()) {
+function hasLatestTag(image) {
+    return /[:.-]latest\b/.test(image);
+}
+
+async function loadImageIfNotExist(image) {
+    if (await imageExists(image)) {
+        LOG.blue(`image ${image} found locally, skipping pull`);
+        return;
+    }
+
     LOG.blue(`pulling image ${image}`);
     await $`docker pull ${image}`;
-    LOG.blue(`tagging image ${image} with ${tag}`);
-    await $`docker tag ${image} ${tag}`;
-    LOG.blue(`loading image tag ${tag}`);
-    await $`kind load docker-image ${tag} --name gravitee`;
-  }
+}
 
-    setQuoteEscape();
+async function loadImages() {
+    const isCI = !!$.env.CI;
+
+    setNoQuoteEscape();
+
+    try {
+        for (const [image] of IMAGES.entries()) {
+            if (!isCI && hasLatestTag(image)) {
+                LOG.blue(`image ${image} has a mutable tag, re-pulling to ensure up-to-date`);
+                await $`docker pull ${image}`;
+                continue;
+            }
+
+            await loadImageIfNotExist(image);
+        }
+
+        for (const [image, tag] of IMAGES.entries()) {
+            LOG.blue(`re-tagging image ${image} with ${tag}`);
+            await $`docker tag ${image} ${tag}`;
+            LOG.blue(`loading image tag ${tag}`);
+            await $`kind load docker-image ${tag} --name gravitee`;
+        }
+    } finally {
+        setQuoteEscape();
+    }
 }
 
 async function createGraviteeNamespace() {
