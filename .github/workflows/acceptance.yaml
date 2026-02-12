@@ -8,8 +8,8 @@ on:
     - cron: 00 05 * * 1-5
 
 concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: false
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
 
 jobs:
   verify-oas:
