@@ -42,7 +42,7 @@ jobs:
       - name: Run unit tests
         run: make unit-tests
   examples:
-    name: Run Terraform examples (Env ${{ matrix.apim.image_tag }} + Terraform/OpenTofu latest)
+    name: Run Terraform examples - Version ${{ matrix.apim.image_tag }} - TF/Tofu latest
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
