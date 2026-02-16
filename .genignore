@@ -11,3 +11,4 @@ examples/resources/apim_application/import.sh
 examples/resources/apim_subscription/resource.tf
 examples/resources/apim_subscription/import-by-string-id.tf
 examples/resources/apim_subscription/import.sh
+CONTRIBUTING.md
