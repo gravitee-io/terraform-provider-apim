@@ -84,15 +84,15 @@ To change the default version for all local runs, edit this file directly.
 
 You can override the version without modifying any files by setting environment variables:
 
-| Variable              | Description                          | Default (from `hack/apim.yaml`)              |
-|-----------------------|--------------------------------------|----------------------------------------------|
-| `APIM_IMAGE_TAG`      | Docker image tag for APIM components | `master-latest`                              |
-| `APIM_IMAGE_REGISTRY` | Docker registry for APIM images      | `graviteeio.azurecr.io`                      |
-| `APIM_CHART_VERSION`  | Helm chart version                   | `4.11.*`                                     |
-| `APIM_CHART_REGISTRY` | Helm chart OCI registry              | `oci://graviteeio.azurecr.io/helm/apim3`    |
-| `APIM_MINIMAL`        | Use minimal deployment (`true`/`false`) | not set (full mode)                        |
-| `APIM_VALUES`         | Custom Helm values file name (in `hack/kind/apim/`) | `values.yaml`                  |
-| `APIM_GRAVITEE_LICENSE` | Gravitee license key (for enterprise features) | not set                         |
+| Variable              | Description                          | Default (from `hack/apim.yaml`)          |
+|-----------------------|--------------------------------------|------------------------------------------|
+| `APIM_IMAGE_TAG`      | Docker image tag for APIM components | `4.10.x-latest`                          |
+| `APIM_IMAGE_REGISTRY` | Docker registry for APIM images      | `graviteeio.azurecr.io`                  |
+| `APIM_CHART_VERSION`  | Helm chart version                   | `4.10.*`                                 |
+| `APIM_CHART_REGISTRY` | Helm chart OCI registry              | `oci://graviteeio.azurecr.io/helm/apim3` |
+| `APIM_MINIMAL`        | Use minimal deployment (`true`/`false`) | not set (full mode)                      |
+| `APIM_VALUES`         | Custom Helm values file name (in `hack/kind/apim/`) | `values.yaml`                            |
+| `APIM_GRAVITEE_LICENSE` | Gravitee license key (for enterprise features) | not set                                  |
 
 ### Examples
 
