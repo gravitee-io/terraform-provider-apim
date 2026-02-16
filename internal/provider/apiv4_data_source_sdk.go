@@ -846,7 +846,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			plans.Hrid = types.StringValue(plansItem.Hrid)
 			plans.Mode = types.StringValue(string(plansItem.Mode))
 			plans.Name = types.StringValue(plansItem.Name)
-			plans.Security = &tfTypes.PlanSecurity{}
 			if plansItem.Security.Configuration == nil {
 				plans.Security.Configuration = jsontypes.NewNormalizedNull()
 			} else {

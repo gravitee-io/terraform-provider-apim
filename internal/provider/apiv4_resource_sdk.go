@@ -846,7 +846,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			plans.Hrid = types.StringValue(plansItem.Hrid)
 			plans.Mode = types.StringValue(string(plansItem.Mode))
 			plans.Name = types.StringValue(plansItem.Name)
-			plans.Security = &tfTypes.PlanSecurity{}
 			if plansItem.Security.Configuration == nil {
 				plans.Security.Configuration = jsontypes.NewNormalizedNull()
 			} else {
@@ -873,24 +872,17 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 			r.Plans = append(r.Plans, plans)
 		}
-		propertiesPriorSlice := r.Properties
 		r.Properties = []tfTypes.Property{}
 
-		for propertiesIdx, propertiesItem := range resp.Properties {
+		for _, propertiesItem := range resp.Properties {
 			var properties tfTypes.Property
 
-			var propertiesPriorItem *tfTypes.Property
-			if propertiesIdx < len(propertiesPriorSlice) {
-				propertiesPriorItem = &propertiesPriorSlice[propertiesIdx]
-			}
-
+			propertiesPriorData := properties
 			properties.Dynamic = types.BoolPointerValue(propertiesItem.Dynamic)
 			properties.Encrypted = types.BoolPointerValue(propertiesItem.Encrypted)
 			properties.Key = types.StringValue(propertiesItem.Key)
 			properties.Value = types.StringValue(propertiesItem.Value)
-			if propertiesPriorItem != nil {
-				properties.Encryptable = propertiesPriorItem.Encryptable
-			}
+			properties.Encryptable = propertiesPriorData.Encryptable
 
 			r.Properties = append(r.Properties, properties)
 		}
