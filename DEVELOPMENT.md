@@ -96,13 +96,13 @@ You can override the version without modifying any files by setting environment 
 
 ### Examples
 
-Run a specific stable version:
+Run a specific released version:
 
 ```bash
-APIM_IMAGE_TAG=4.10.x-latest APIM_CHART_VERSION="4.10.*" make start-cluster
+APIM_IMAGE_REGISTRY=graviteeio APIM_IMAGE_TAG=4.10.5 APIM_CHART_REGISTRY="graviteeio/apim3" APIM_CHART_VERSION=4.10.5 make stop-cluster start-cluster
 ```
 
-Run an older version in minimal mode:
+Run an older version (using the latest commit) in minimal mode:
 
 ```bash
 APIM_IMAGE_TAG=4.9.x-latest APIM_CHART_VERSION="4.9.*" APIM_MINIMAL=true make start-cluster
