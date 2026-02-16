@@ -16,7 +16,6 @@ const (
 	FlowPhaseResponse          FlowPhase = "RESPONSE"
 	FlowPhaseEntrypointConnect FlowPhase = "ENTRYPOINT_CONNECT"
 	FlowPhaseInteract          FlowPhase = "INTERACT"
-	FlowPhaseConnect           FlowPhase = "CONNECT"
 	FlowPhasePublish           FlowPhase = "PUBLISH"
 	FlowPhaseSubscribe         FlowPhase = "SUBSCRIBE"
 )
@@ -37,8 +36,6 @@ func (e *FlowPhase) UnmarshalJSON(data []byte) error {
 	case "ENTRYPOINT_CONNECT":
 		fallthrough
 	case "INTERACT":
-		fallthrough
-	case "CONNECT":
 		fallthrough
 	case "PUBLISH":
 		fallthrough

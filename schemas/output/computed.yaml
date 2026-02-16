@@ -1054,7 +1054,6 @@ components:
         - RESPONSE
         - ENTRYPOINT_CONNECT
         - INTERACT
-        - CONNECT
         - PUBLISH
         - SUBSCRIBE
     PlanV4:
@@ -1551,9 +1550,9 @@ components:
             $ref: "#/components/schemas/StepV4"
           x-speakeasy-param-computed: true
           x-speakeasy-param-suppress-computed-diff: true
-        connect:
+        entrypointConnect:
           type: array
-          description: Connect flow steps used for NATIVE APIs
+          description: Entrypoint Connect flow steps used for NATIVE APIs
           items:
             $ref: "#/components/schemas/StepV4"
           x-speakeasy-param-computed: true
