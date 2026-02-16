@@ -612,18 +612,17 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						speakeasy_objectvalidators.NotNull(),
 					},
 					Attributes: map[string]schema.Attribute{
-						"connect": schema.ListNestedAttribute{
-							Computed: true,
+						"enabled": schema.BoolAttribute{
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(true),
+							Description: `Is the flow enabled. Default: true`,
+						},
+						"entrypoint_connect": schema.ListNestedAttribute{
 							Optional: true,
-							PlanModifiers: []planmodifier.List{
-								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
-								},
-								PlanModifiers: []planmodifier.Object{
-									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
@@ -675,13 +674,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
-							Description: `Connect flow steps used for NATIVE APIs`,
-						},
-						"enabled": schema.BoolAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     booldefault.StaticBool(true),
-							Description: `Is the flow enabled. Default: true`,
+							Description: `Entrypoint Connect flow steps used for NATIVE APIs`,
 						},
 						"interact": schema.ListNestedAttribute{
 							Computed: true,
@@ -2069,12 +2062,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
-									"connect": schema.ListNestedAttribute{
-										Computed: true,
+									"enabled": schema.BoolAttribute{
+										Computed:    true,
+										Optional:    true,
+										Default:     booldefault.StaticBool(true),
+										Description: `Is the flow enabled. Default: true`,
+									},
+									"entrypoint_connect": schema.ListNestedAttribute{
 										Optional: true,
-										PlanModifiers: []planmodifier.List{
-											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
@@ -2132,13 +2127,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 											},
 										},
-										Description: `Connect flow steps used for NATIVE APIs`,
-									},
-									"enabled": schema.BoolAttribute{
-										Computed:    true,
-										Optional:    true,
-										Default:     booldefault.StaticBool(true),
-										Description: `Is the flow enabled. Default: true`,
+										Description: `Entrypoint Connect flow steps used for NATIVE APIs`,
 									},
 									"interact": schema.ListNestedAttribute{
 										Computed: true,
