@@ -22,6 +22,7 @@ generation:
   schemas:
     allOfMergeStrategy: shallowMerge
   requestBodyFieldName: ""
+  versioningStrategy: automatic
   persistentEdits:
     enabled: "true"
   tests:
@@ -34,9 +35,11 @@ go:
     github.com/golang-jwt/jwt/v5: v5.3.0
 terraform:
   version: 0.4.0
+  additionalActions: []
   additionalDataSources: []
   additionalDependencies: {}
   additionalEphemeralResources: []
+  additionalFunctions: []
   additionalListResources: []
   additionalProviderAttributes:
     httpHeaders: ""
@@ -71,4 +74,5 @@ terraform:
   inferUnionDiscriminators: false
   packageName: apim
   respectRequiredFields: false
+  respectTitlesForPrimitiveUnionMembers: false
   unionStrategy: populated-fields
