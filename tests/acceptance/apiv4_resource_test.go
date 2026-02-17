@@ -441,7 +441,6 @@ func TestAPIV4Resource_apikey(t *testing.T) {
 					"name":            config.StringVariable(randomId + "-original"),
 					"organization_id": config.StringVariable(organizationId),
 				},
-				ExpectError: regexp.MustCompile("got: \"API_KEY\""),
 			},
 		},
 	})

@@ -1,0 +1,31 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="TestAPIV4Resource_apikey in github.com/gravitee-io/terraform-provider-apim/tests/acceptance" type="GoTestRunConfiguration" factoryName="Go Test" nameIsGenerated="true">
+    <module name="terraform-provider-apim" />
+    <working_directory value="$PROJECT_DIR$/tests/acceptance" />
+    <envs>
+      <env name="APIM_PASSWORD" value="admin" />
+      <env name="APIM_SERVER_URL" value="http://localhost:30083/automation" />
+      <env name="APIM_USERNAME" value="admin" />
+      <env name="TF_ACC" value="1" />
+      <env name="TF_LOG" value="debug" />
+    </envs>
+    <EXTENSION ID="net.ashald.envfile">
+      <option name="IS_ENABLED" value="false" />
+      <option name="IS_SUBST" value="false" />
+      <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+      <option name="IS_IGNORE_MISSING_FILES" value="false" />
+      <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+      <ENTRIES>
+        <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+      </ENTRIES>
+    </EXTENSION>
+    <root_directory value="$PROJECT_DIR$" />
+    <kind value="PACKAGE" />
+    <package value="github.com/gravitee-io/terraform-provider-apim/tests/acceptance" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$" />
+    <framework value="gotest" />
+    <pattern value="^\QTestAPIV4Resource_apikey\E$" />
+    <method v="2" />
+  </configuration>
+</component>
