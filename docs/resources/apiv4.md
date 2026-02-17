@@ -998,7 +998,7 @@ Optional:
 Optional:
 
 - `configuration` (String) JSON Object to configure specific attributes of a Plan. Parsed as JSON.
-- `type` (String) API Plan security implementation. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS"]
+- `type` (String) API Plan security implementation. Not Null; must be one of ["KEY_LESS", "API_KEY", "OAUTH2", "JWT", "MTLS"]
 
 
 
