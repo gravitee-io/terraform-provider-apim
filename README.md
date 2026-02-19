@@ -28,7 +28,6 @@ Checkout other sections to configure, authenticate and start working with Gravit
 ## Table of Contents
 <!-- $toc-max-depth=2 -->
 * [Gravitee - APIM Terraform Provider](#gravitee-apim-terraform-provider)
-  * [Issues](#issues)
   * [Installation](#installation)
   * [Authentication](#authentication)
   * [Available Resources and Data Sources](#available-resources-and-data-sources)
