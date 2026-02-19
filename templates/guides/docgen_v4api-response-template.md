@@ -1,5 +1,5 @@
 ---
-page_title: "Simple HTTP Proxy"
+page_title: "HTTP Proxy with CORS and response templates"
 subcategory: "V4 API"
 ---
 
