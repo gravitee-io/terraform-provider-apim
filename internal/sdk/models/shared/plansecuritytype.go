@@ -12,6 +12,7 @@ type PlanSecurityType string
 
 const (
 	PlanSecurityTypeKeyLess PlanSecurityType = "KEY_LESS"
+	PlanSecurityTypeAPIKey  PlanSecurityType = "API_KEY"
 	PlanSecurityTypeOauth2  PlanSecurityType = "OAUTH2"
 	PlanSecurityTypeJwt     PlanSecurityType = "JWT"
 	PlanSecurityTypeMtls    PlanSecurityType = "MTLS"
@@ -27,6 +28,8 @@ func (e *PlanSecurityType) UnmarshalJSON(data []byte) error {
 	}
 	switch v {
 	case "KEY_LESS":
+		fallthrough
+	case "API_KEY":
 		fallthrough
 	case "OAUTH2":
 		fallthrough
