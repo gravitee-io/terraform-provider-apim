@@ -15,6 +15,8 @@
 outputs:
  - template: {{ .RootDir }}/tmpl/v4api-simple.md.tmpl
    target: templates/guides/docgen_v4api-simple.md
+ - template: {{ .RootDir }}/tmpl/v4api-shared-endpoint-config.md.tmpl
+   target: templates/guides/docgen_v4api-shared-endpoint-config.md
  - template: {{ .RootDir }}/tmpl/v4api-response-template.md.tmpl
    target: templates/guides/docgen_v4api-response-template.md
  - template: {{ .RootDir }}/tmpl/v4api-native.md.tmpl
@@ -40,9 +42,13 @@ outputs:
  - template: {{ .RootDir }}/tmpl/resource-tutorial.md.tmpl
    target: templates/guides/docgen_resource-tutorial.md
 
+
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
     exportedAs: V4ApiSimple
+    required: true
+  - template: examples/use-cases/v4api-proxy_shared_endpoint_config/proxy-shared-endpoint-config.tf
+    exportedAs: V4ApiSharedEndpointConfig
     required: true
   - template: examples/use-cases/v4api-message/message-api.tf
     exportedAs: V4ApiMessage

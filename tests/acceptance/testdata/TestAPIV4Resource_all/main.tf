@@ -24,10 +24,6 @@ resource "apim_apiv4" "test" {
     "test",
     "all props"
   ]
-  # categories = [
-  #   "test",
-  #   "terraform"
-  # ]
   listeners = [
     {
       http = {

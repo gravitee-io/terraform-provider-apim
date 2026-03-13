@@ -28,7 +28,7 @@ lint-fix: ## Fix issues that can be found
 
 .PHONY: sync-oas
 sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-management
-	@cp ../gravitee-api-management/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml schemas/automation-api-oas.yaml
+	@curl -fsSL "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/master/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml" -o schemas/automation-api-oas.yaml
 
 PRE_TEST_DIR = "$(shell pwd)/examples/use-cases/application-simple"
 
@@ -70,3 +70,11 @@ doc-gen: ## Generate Terraform examples docs
 .PHONY: help
 help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+
+.PHONY: start-cluster
+start-cluster: ## Init and start a local cluster
+	@cd hack/scripts && npx zx run-kind.mjs
+
+.PHONY: stop-cluster
+stop-cluster: ## Delete the local kind cluster
+	@kind delete cluster --name gravitee

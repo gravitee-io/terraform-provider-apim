@@ -32,6 +32,7 @@ LOG.blue(`Triggering pipeline`);
 
 const parameters = {
     trigger: TRIGGER,
+    branch_name: BRANCH,
     job_name: JOB_NAME,
     job_status: JOB_STATUS,
     job_url: JOB_URL,

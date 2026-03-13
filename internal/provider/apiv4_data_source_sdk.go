@@ -198,27 +198,27 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		for _, flowsItem := range resp.Flows {
 			var flows tfTypes.FlowV4
 
-			flows.Connect = []tfTypes.StepV4{}
-
-			for _, connectItem := range flowsItem.Connect {
-				var connect tfTypes.StepV4
-
-				connect.Condition = types.StringPointerValue(connectItem.Condition)
-				if connectItem.Configuration == nil {
-					connect.Configuration = jsontypes.NewNormalizedNull()
-				} else {
-					configurationResult4, _ := json.Marshal(connectItem.Configuration)
-					connect.Configuration = jsontypes.NewNormalizedValue(string(configurationResult4))
-				}
-				connect.Description = types.StringPointerValue(connectItem.Description)
-				connect.Enabled = types.BoolPointerValue(connectItem.Enabled)
-				connect.MessageCondition = types.StringPointerValue(connectItem.MessageCondition)
-				connect.Name = types.StringPointerValue(connectItem.Name)
-				connect.Policy = types.StringValue(connectItem.Policy)
-
-				flows.Connect = append(flows.Connect, connect)
-			}
 			flows.Enabled = types.BoolPointerValue(flowsItem.Enabled)
+			flows.EntrypointConnect = []tfTypes.StepV4{}
+
+			for _, entrypointConnectItem := range flowsItem.EntrypointConnect {
+				var entrypointConnect tfTypes.StepV4
+
+				entrypointConnect.Condition = types.StringPointerValue(entrypointConnectItem.Condition)
+				if entrypointConnectItem.Configuration == nil {
+					entrypointConnect.Configuration = jsontypes.NewNormalizedNull()
+				} else {
+					configurationResult4, _ := json.Marshal(entrypointConnectItem.Configuration)
+					entrypointConnect.Configuration = jsontypes.NewNormalizedValue(string(configurationResult4))
+				}
+				entrypointConnect.Description = types.StringPointerValue(entrypointConnectItem.Description)
+				entrypointConnect.Enabled = types.BoolPointerValue(entrypointConnectItem.Enabled)
+				entrypointConnect.MessageCondition = types.StringPointerValue(entrypointConnectItem.MessageCondition)
+				entrypointConnect.Name = types.StringPointerValue(entrypointConnectItem.Name)
+				entrypointConnect.Policy = types.StringValue(entrypointConnectItem.Policy)
+
+				flows.EntrypointConnect = append(flows.EntrypointConnect, entrypointConnect)
+			}
 			flows.Interact = []tfTypes.StepV4{}
 
 			for _, interactItem := range flowsItem.Interact {
@@ -660,27 +660,27 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			for _, flowsItem1 := range plansItem.Flows {
 				var flows1 tfTypes.FlowV4
 
-				flows1.Connect = []tfTypes.StepV4{}
-
-				for _, connectItem1 := range flowsItem1.Connect {
-					var connect1 tfTypes.StepV4
-
-					connect1.Condition = types.StringPointerValue(connectItem1.Condition)
-					if connectItem1.Configuration == nil {
-						connect1.Configuration = jsontypes.NewNormalizedNull()
-					} else {
-						configurationResult15, _ := json.Marshal(connectItem1.Configuration)
-						connect1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult15))
-					}
-					connect1.Description = types.StringPointerValue(connectItem1.Description)
-					connect1.Enabled = types.BoolPointerValue(connectItem1.Enabled)
-					connect1.MessageCondition = types.StringPointerValue(connectItem1.MessageCondition)
-					connect1.Name = types.StringPointerValue(connectItem1.Name)
-					connect1.Policy = types.StringValue(connectItem1.Policy)
-
-					flows1.Connect = append(flows1.Connect, connect1)
-				}
 				flows1.Enabled = types.BoolPointerValue(flowsItem1.Enabled)
+				flows1.EntrypointConnect = []tfTypes.StepV4{}
+
+				for _, entrypointConnectItem1 := range flowsItem1.EntrypointConnect {
+					var entrypointConnect1 tfTypes.StepV4
+
+					entrypointConnect1.Condition = types.StringPointerValue(entrypointConnectItem1.Condition)
+					if entrypointConnectItem1.Configuration == nil {
+						entrypointConnect1.Configuration = jsontypes.NewNormalizedNull()
+					} else {
+						configurationResult15, _ := json.Marshal(entrypointConnectItem1.Configuration)
+						entrypointConnect1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult15))
+					}
+					entrypointConnect1.Description = types.StringPointerValue(entrypointConnectItem1.Description)
+					entrypointConnect1.Enabled = types.BoolPointerValue(entrypointConnectItem1.Enabled)
+					entrypointConnect1.MessageCondition = types.StringPointerValue(entrypointConnectItem1.MessageCondition)
+					entrypointConnect1.Name = types.StringPointerValue(entrypointConnectItem1.Name)
+					entrypointConnect1.Policy = types.StringValue(entrypointConnectItem1.Policy)
+
+					flows1.EntrypointConnect = append(flows1.EntrypointConnect, entrypointConnect1)
+				}
 				flows1.Interact = []tfTypes.StepV4{}
 
 				for _, interactItem1 := range flowsItem1.Interact {

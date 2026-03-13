@@ -8,14 +8,14 @@ import (
 )
 
 type FlowV4 struct {
-	Connect   []StepV4       `tfsdk:"connect"`
-	Enabled   types.Bool     `tfsdk:"enabled"`
-	Interact  []StepV4       `tfsdk:"interact"`
-	Name      types.String   `tfsdk:"name"`
-	Publish   []StepV4       `tfsdk:"publish"`
-	Request   []StepV4       `tfsdk:"request"`
-	Response  []StepV4       `tfsdk:"response"`
-	Selectors []Selector     `tfsdk:"selectors"`
-	Subscribe []StepV4       `tfsdk:"subscribe"`
-	Tags      []types.String `tfsdk:"tags"`
+	Enabled           types.Bool     `tfsdk:"enabled"`
+	EntrypointConnect []StepV4       `tfsdk:"entrypoint_connect"`
+	Interact          []StepV4       `tfsdk:"interact"`
+	Name              types.String   `tfsdk:"name"`
+	Publish           []StepV4       `tfsdk:"publish"`
+	Request           []StepV4       `tfsdk:"request"`
+	Response          []StepV4       `tfsdk:"response"`
+	Selectors         []Selector     `tfsdk:"selectors"`
+	Subscribe         []StepV4       `tfsdk:"subscribe"`
+	Tags              []types.String `tfsdk:"tags"`
 }

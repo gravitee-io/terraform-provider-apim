@@ -169,6 +169,11 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.FlowV4.properties.entrypointConnect
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.FlowV4.properties.interact
     description: Prevent empty array to create plan diff
     update:

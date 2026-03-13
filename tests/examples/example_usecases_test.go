@@ -13,6 +13,7 @@ func TestApplicationResource_Examples(t *testing.T) {
 	cases := createTestCases(directories)
 
 	cleanupTerraformStateFiles(directories)
+	t.Cleanup(func() { cleanupTerraformStateFiles(directories) })
 
 	providers := testProviders()
 
@@ -29,7 +30,7 @@ func TestApplicationResource_Examples(t *testing.T) {
 					},
 				},
 			})
-
+			// Testing framework implicitly verifies resource delete.
 		})
 	}
 }

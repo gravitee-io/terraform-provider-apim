@@ -17,6 +17,7 @@ func TestApplicationResource_Examples_OpenTofu(t *testing.T) {
 	cases := createTestCases(directories)
 
 	cleanupTerraformStateFiles(directories)
+	t.Cleanup(func() { cleanupTerraformStateFiles(directories) })
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
