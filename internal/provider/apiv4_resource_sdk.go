@@ -198,27 +198,27 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		for _, flowsItem := range resp.Flows {
 			var flows tfTypes.FlowV4
 
-			flows.Connect = []tfTypes.StepV4{}
-
-			for _, connectItem := range flowsItem.Connect {
-				var connect tfTypes.StepV4
-
-				connect.Condition = types.StringPointerValue(connectItem.Condition)
-				if connectItem.Configuration == nil {
-					connect.Configuration = jsontypes.NewNormalizedNull()
-				} else {
-					configurationResult4, _ := json.Marshal(connectItem.Configuration)
-					connect.Configuration = jsontypes.NewNormalizedValue(string(configurationResult4))
-				}
-				connect.Description = types.StringPointerValue(connectItem.Description)
-				connect.Enabled = types.BoolPointerValue(connectItem.Enabled)
-				connect.MessageCondition = types.StringPointerValue(connectItem.MessageCondition)
-				connect.Name = types.StringPointerValue(connectItem.Name)
-				connect.Policy = types.StringValue(connectItem.Policy)
-
-				flows.Connect = append(flows.Connect, connect)
-			}
 			flows.Enabled = types.BoolPointerValue(flowsItem.Enabled)
+			flows.EntrypointConnect = []tfTypes.StepV4{}
+
+			for _, entrypointConnectItem := range flowsItem.EntrypointConnect {
+				var entrypointConnect tfTypes.StepV4
+
+				entrypointConnect.Condition = types.StringPointerValue(entrypointConnectItem.Condition)
+				if entrypointConnectItem.Configuration == nil {
+					entrypointConnect.Configuration = jsontypes.NewNormalizedNull()
+				} else {
+					configurationResult4, _ := json.Marshal(entrypointConnectItem.Configuration)
+					entrypointConnect.Configuration = jsontypes.NewNormalizedValue(string(configurationResult4))
+				}
+				entrypointConnect.Description = types.StringPointerValue(entrypointConnectItem.Description)
+				entrypointConnect.Enabled = types.BoolPointerValue(entrypointConnectItem.Enabled)
+				entrypointConnect.MessageCondition = types.StringPointerValue(entrypointConnectItem.MessageCondition)
+				entrypointConnect.Name = types.StringPointerValue(entrypointConnectItem.Name)
+				entrypointConnect.Policy = types.StringValue(entrypointConnectItem.Policy)
+
+				flows.EntrypointConnect = append(flows.EntrypointConnect, entrypointConnect)
+			}
 			flows.Interact = []tfTypes.StepV4{}
 
 			for _, interactItem := range flowsItem.Interact {
@@ -660,27 +660,27 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			for _, flowsItem1 := range plansItem.Flows {
 				var flows1 tfTypes.FlowV4
 
-				flows1.Connect = []tfTypes.StepV4{}
-
-				for _, connectItem1 := range flowsItem1.Connect {
-					var connect1 tfTypes.StepV4
-
-					connect1.Condition = types.StringPointerValue(connectItem1.Condition)
-					if connectItem1.Configuration == nil {
-						connect1.Configuration = jsontypes.NewNormalizedNull()
-					} else {
-						configurationResult15, _ := json.Marshal(connectItem1.Configuration)
-						connect1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult15))
-					}
-					connect1.Description = types.StringPointerValue(connectItem1.Description)
-					connect1.Enabled = types.BoolPointerValue(connectItem1.Enabled)
-					connect1.MessageCondition = types.StringPointerValue(connectItem1.MessageCondition)
-					connect1.Name = types.StringPointerValue(connectItem1.Name)
-					connect1.Policy = types.StringValue(connectItem1.Policy)
-
-					flows1.Connect = append(flows1.Connect, connect1)
-				}
 				flows1.Enabled = types.BoolPointerValue(flowsItem1.Enabled)
+				flows1.EntrypointConnect = []tfTypes.StepV4{}
+
+				for _, entrypointConnectItem1 := range flowsItem1.EntrypointConnect {
+					var entrypointConnect1 tfTypes.StepV4
+
+					entrypointConnect1.Condition = types.StringPointerValue(entrypointConnectItem1.Condition)
+					if entrypointConnectItem1.Configuration == nil {
+						entrypointConnect1.Configuration = jsontypes.NewNormalizedNull()
+					} else {
+						configurationResult15, _ := json.Marshal(entrypointConnectItem1.Configuration)
+						entrypointConnect1.Configuration = jsontypes.NewNormalizedValue(string(configurationResult15))
+					}
+					entrypointConnect1.Description = types.StringPointerValue(entrypointConnectItem1.Description)
+					entrypointConnect1.Enabled = types.BoolPointerValue(entrypointConnectItem1.Enabled)
+					entrypointConnect1.MessageCondition = types.StringPointerValue(entrypointConnectItem1.MessageCondition)
+					entrypointConnect1.Name = types.StringPointerValue(entrypointConnectItem1.Name)
+					entrypointConnect1.Policy = types.StringValue(entrypointConnectItem1.Policy)
+
+					flows1.EntrypointConnect = append(flows1.EntrypointConnect, entrypointConnect1)
+				}
 				flows1.Interact = []tfTypes.StepV4{}
 
 				for _, interactItem1 := range flowsItem1.Interact {
@@ -2137,46 +2137,46 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					MessageCondition: messageCondition4,
 				})
 			}
-			connect := make([]shared.StepV4, 0, len(r.Plans[plansIndex].Flows[flowsIndex].Connect))
-			for connectIndex := range r.Plans[plansIndex].Flows[flowsIndex].Connect {
+			entrypointConnect := make([]shared.StepV4, 0, len(r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect))
+			for entrypointConnectIndex := range r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect {
 				name10 := new(string)
-				if !r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Name.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Name.IsNull() {
-					*name10 = r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Name.ValueString()
+				if !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Name.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Name.IsNull() {
+					*name10 = r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Name.ValueString()
 				} else {
 					name10 = nil
 				}
 				description6 := new(string)
-				if !r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Description.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Description.IsNull() {
-					*description6 = r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Description.ValueString()
+				if !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Description.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Description.IsNull() {
+					*description6 = r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Description.ValueString()
 				} else {
 					description6 = nil
 				}
 				enabled13 := new(bool)
-				if !r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Enabled.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Enabled.IsNull() {
-					*enabled13 = r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Enabled.ValueBool()
+				if !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Enabled.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Enabled.IsNull() {
+					*enabled13 = r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Enabled.ValueBool()
 				} else {
 					enabled13 = nil
 				}
 				var policy4 string
-				policy4 = r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Policy.ValueString()
+				policy4 = r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Policy.ValueString()
 
 				var configuration14 interface{}
-				if !r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Configuration.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Configuration.IsNull() {
-					_ = json.Unmarshal([]byte(r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Configuration.ValueString()), &configuration14)
+				if !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Configuration.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Configuration.IsNull() {
+					_ = json.Unmarshal([]byte(r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Configuration.ValueString()), &configuration14)
 				}
 				condition6 := new(string)
-				if !r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Condition.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Condition.IsNull() {
-					*condition6 = r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].Condition.ValueString()
+				if !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Condition.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Condition.IsNull() {
+					*condition6 = r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Condition.ValueString()
 				} else {
 					condition6 = nil
 				}
 				messageCondition5 := new(string)
-				if !r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].MessageCondition.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].MessageCondition.IsNull() {
-					*messageCondition5 = r.Plans[plansIndex].Flows[flowsIndex].Connect[connectIndex].MessageCondition.ValueString()
+				if !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].MessageCondition.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].MessageCondition.IsNull() {
+					*messageCondition5 = r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].MessageCondition.ValueString()
 				} else {
 					messageCondition5 = nil
 				}
-				connect = append(connect, shared.StepV4{
+				entrypointConnect = append(entrypointConnect, shared.StepV4{
 					Name:             name10,
 					Description:      description6,
 					Enabled:          enabled13,
@@ -2240,16 +2240,16 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				tags2 = append(tags2, r.Plans[plansIndex].Flows[flowsIndex].Tags[tagsIndex2].ValueString())
 			}
 			flows = append(flows, shared.FlowV4{
-				Name:      name5,
-				Enabled:   enabled8,
-				Selectors: selectors,
-				Request:   request1,
-				Response:  response1,
-				Subscribe: subscribe,
-				Publish:   publish,
-				Connect:   connect,
-				Interact:  interact,
-				Tags:      tags2,
+				Name:              name5,
+				Enabled:           enabled8,
+				Selectors:         selectors,
+				Request:           request1,
+				Response:          response1,
+				Subscribe:         subscribe,
+				Publish:           publish,
+				EntrypointConnect: entrypointConnect,
+				Interact:          interact,
+				Tags:              tags2,
 			})
 		}
 		mode1 := shared.PlanMode(r.Plans[plansIndex].Mode.ValueString())
@@ -2596,46 +2596,46 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				MessageCondition: messageCondition10,
 			})
 		}
-		connect1 := make([]shared.StepV4, 0, len(r.Flows[flowsIndex1].Connect))
-		for connectIndex1 := range r.Flows[flowsIndex1].Connect {
+		entrypointConnect1 := make([]shared.StepV4, 0, len(r.Flows[flowsIndex1].EntrypointConnect))
+		for entrypointConnectIndex1 := range r.Flows[flowsIndex1].EntrypointConnect {
 			name17 := new(string)
-			if !r.Flows[flowsIndex1].Connect[connectIndex1].Name.IsUnknown() && !r.Flows[flowsIndex1].Connect[connectIndex1].Name.IsNull() {
-				*name17 = r.Flows[flowsIndex1].Connect[connectIndex1].Name.ValueString()
+			if !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Name.IsUnknown() && !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Name.IsNull() {
+				*name17 = r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Name.ValueString()
 			} else {
 				name17 = nil
 			}
 			description12 := new(string)
-			if !r.Flows[flowsIndex1].Connect[connectIndex1].Description.IsUnknown() && !r.Flows[flowsIndex1].Connect[connectIndex1].Description.IsNull() {
-				*description12 = r.Flows[flowsIndex1].Connect[connectIndex1].Description.ValueString()
+			if !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Description.IsUnknown() && !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Description.IsNull() {
+				*description12 = r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Description.ValueString()
 			} else {
 				description12 = nil
 			}
 			enabled20 := new(bool)
-			if !r.Flows[flowsIndex1].Connect[connectIndex1].Enabled.IsUnknown() && !r.Flows[flowsIndex1].Connect[connectIndex1].Enabled.IsNull() {
-				*enabled20 = r.Flows[flowsIndex1].Connect[connectIndex1].Enabled.ValueBool()
+			if !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Enabled.IsUnknown() && !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Enabled.IsNull() {
+				*enabled20 = r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Enabled.ValueBool()
 			} else {
 				enabled20 = nil
 			}
 			var policy10 string
-			policy10 = r.Flows[flowsIndex1].Connect[connectIndex1].Policy.ValueString()
+			policy10 = r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Policy.ValueString()
 
 			var configuration20 interface{}
-			if !r.Flows[flowsIndex1].Connect[connectIndex1].Configuration.IsUnknown() && !r.Flows[flowsIndex1].Connect[connectIndex1].Configuration.IsNull() {
-				_ = json.Unmarshal([]byte(r.Flows[flowsIndex1].Connect[connectIndex1].Configuration.ValueString()), &configuration20)
+			if !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Configuration.IsUnknown() && !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Configuration.IsNull() {
+				_ = json.Unmarshal([]byte(r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Configuration.ValueString()), &configuration20)
 			}
 			condition13 := new(string)
-			if !r.Flows[flowsIndex1].Connect[connectIndex1].Condition.IsUnknown() && !r.Flows[flowsIndex1].Connect[connectIndex1].Condition.IsNull() {
-				*condition13 = r.Flows[flowsIndex1].Connect[connectIndex1].Condition.ValueString()
+			if !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Condition.IsUnknown() && !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Condition.IsNull() {
+				*condition13 = r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Condition.ValueString()
 			} else {
 				condition13 = nil
 			}
 			messageCondition11 := new(string)
-			if !r.Flows[flowsIndex1].Connect[connectIndex1].MessageCondition.IsUnknown() && !r.Flows[flowsIndex1].Connect[connectIndex1].MessageCondition.IsNull() {
-				*messageCondition11 = r.Flows[flowsIndex1].Connect[connectIndex1].MessageCondition.ValueString()
+			if !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].MessageCondition.IsUnknown() && !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].MessageCondition.IsNull() {
+				*messageCondition11 = r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].MessageCondition.ValueString()
 			} else {
 				messageCondition11 = nil
 			}
-			connect1 = append(connect1, shared.StepV4{
+			entrypointConnect1 = append(entrypointConnect1, shared.StepV4{
 				Name:             name17,
 				Description:      description12,
 				Enabled:          enabled20,
@@ -2699,16 +2699,16 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			tags3 = append(tags3, r.Flows[flowsIndex1].Tags[tagsIndex3].ValueString())
 		}
 		flows1 = append(flows1, shared.FlowV4{
-			Name:      name12,
-			Enabled:   enabled15,
-			Selectors: selectors1,
-			Request:   request2,
-			Response:  response2,
-			Subscribe: subscribe1,
-			Publish:   publish1,
-			Connect:   connect1,
-			Interact:  interact1,
-			Tags:      tags3,
+			Name:              name12,
+			Enabled:           enabled15,
+			Selectors:         selectors1,
+			Request:           request2,
+			Response:          response2,
+			Subscribe:         subscribe1,
+			Publish:           publish1,
+			EntrypointConnect: entrypointConnect1,
+			Interact:          interact1,
+			Tags:              tags3,
 		})
 	}
 	responseTemplates := make(map[string]map[string]shared.ResponseTemplate)

@@ -40,6 +40,7 @@ type ApimProviderModel struct {
 	BearerAuth     types.String `tfsdk:"bearer_auth"`
 	CloudAuth      types.String `tfsdk:"cloud_auth"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
+	HTTPHeaders    types.Map    `tfsdk:"http_headers"`
 	OrganizationID types.String `tfsdk:"organization_id"`
 	Password       types.String `tfsdk:"password"`
 	ServerURL      types.String `tfsdk:"server_url"`
@@ -66,6 +67,11 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			},
 			"environment_id": schema.StringAttribute{
 				Description: `environment ID`,
+				Optional:    true,
+			},
+			"http_headers": schema.MapAttribute{
+				Description: `HTTP headers to include in all requests`,
+				ElementType: types.StringType,
 				Optional:    true,
 			},
 			"organization_id": schema.StringAttribute{
@@ -180,6 +186,11 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),
 		Transport:  http.DefaultTransport,
+	}
+
+	resp.Diagnostics.Append(data.HTTPHeaders.ElementsAs(ctx, &providerHTTPTransportOpts.SetHeaders, false)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
 	httpClient := http.DefaultClient
