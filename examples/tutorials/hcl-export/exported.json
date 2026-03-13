@@ -11,7 +11,7 @@
         "type": "HTTP",
         "paths": [
           {
-            "path": "/automation-api/ready/",
+            "path": "/terraform/exported-example/",
             "overrideAccess": false
           }
         ],
@@ -105,7 +105,6 @@
         "tags": []
       }
     ],
-    "id": "1d5a2d23-df93-450c-9a2d-23df93950c33",
     "name": "Automation exportable",
     "description": "",
     "apiVersion": "1",
