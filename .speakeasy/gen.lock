@@ -5,12 +5,12 @@ management:
   docVersion: 1.0.0
   speakeasyVersion: 1.697.5
   generationVersion: 2.799.0
-  releaseVersion: 0.4.0
-  configChecksum: dd1027705b796843b174ae736adffeef
+  releaseVersion: 0.5.0
+  configChecksum: a23c41a5bcaf0d7b41dcaf3063c2dca8
 persistentEdits:
-  generation_id: 055fd488-30f5-4a94-826f-d46c21d995d1
-  pristine_commit_hash: ab4cba60c98920c9d2fde6098d09128932c84e0e
-  pristine_tree_hash: e8f23c815a649086a14721a8e9ca106a43fcacdc
+  generation_id: fa6b1776-3980-48c5-95be-7677d65bbe2b
+  pristine_commit_hash: 471ead3027d5c671da86e33a9a5b0b1271daeb3e
+  pristine_tree_hash: 523c44f23e939951d1c0f4a202e931ea00b5fa27
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -185,8 +185,8 @@ trackedFiles:
     pristine_git_object: cccd0b623e36b97069eb13ace96e86186667191a
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:c011b448c1be4f0eb8a6b8302850625793d208c7
-    pristine_git_object: 6f2dd00d8ac1f95579da17acb4b6db53cef843cf
+    last_write_checksum: sha1:510479d0f4cfcd3cc6daaa96b7a6afa004c56bf6
+    pristine_git_object: 330edf7a26080445b7e2b85e5e57202f66ea3217
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
     last_write_checksum: sha1:42e02d5e7e31b0a5d4e14deb739cf5020c79f2e0
@@ -493,8 +493,8 @@ trackedFiles:
     pristine_git_object: 35d8a1e2ad48a64702c6a654ac8880dabec053b0
   internal/sdk/graviteeapim.go:
     id: 1f2cf575c2fd
-    last_write_checksum: sha1:3aa2ef4b324f96fc28cdb3cd67a5633b3a3ddfe2
-    pristine_git_object: 48cc785bcffb354693536a9589f30241c2c6e87b
+    last_write_checksum: sha1:848e97d7d087221ca7f7db181c92cae824f76e9f
+    pristine_git_object: 371a9e6c3d62b7a5f3b7f31557f0cd125dce0969
   internal/sdk/internal/config/sdkconfiguration.go:
     id: 6af0bc8635d9
     last_write_checksum: sha1:95294a70d2db0500c6676cbf0936abc8887e68d4
