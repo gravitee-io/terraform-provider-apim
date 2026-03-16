@@ -41,6 +41,8 @@ outputs:
    target: templates/guides/docgen_v4api-mcp.md
  - template: {{ .RootDir }}/tmpl/resource-tutorial.md.tmpl
    target: templates/guides/docgen_resource-tutorial.md
+ - template: {{ .RootDir }}/tmpl/export-tutorial.md.tmpl
+   target: templates/guides/docgen_export-tutorial.md
 
 
 chunks:
@@ -97,4 +99,19 @@ chunks:
     required: true
   - template: examples/tutorials/v4api-shared-resource-local/main.tf
     exportedAs: ResourceTutorialMain
+    required: true
+  - template: examples/tutorials/hcl-export/main.tf
+    exportedAs: ExportTutorialProvider
+    required: true
+  - template: examples/tutorials/hcl-export/import.tf
+    exportedAs: ExportTutorialImport
+    required: true
+  - template: examples/tutorials/hcl-export/exported.json
+    exportedAs: ExportTutorialJSON
+    required: true
+  - template: examples/tutorials/hcl-export/exported.tf
+    exportedAs: ExportTutorialHCL
+    required: true
+  - template: examples/tutorials/hcl-export/exported-clean.tf
+    exportedAs: ExportTutorialHCLClean
     required: true
