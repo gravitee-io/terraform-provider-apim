@@ -28,7 +28,7 @@ Be aware that:
 
 ## Provider configuration
 
-The provider needs to express Gravitee API that `hrid`s need to be set, hence during the READ operation API UUID is used instead of the `hrid`.
+During export, the provider instructs the Gravitee API to generate hrid values for resources that don't have them. The import block uses the API UUID to identify which API to export.
 
 ```terraform
 terraform {
@@ -71,7 +71,7 @@ import {
 
 You now need to replace `<<API ID>>` with the actual API ID. You can find it in the API URL of the Gravitee console.
 
-The API URL is in the format `https://<<console URL>>/#!/<<environement>>/apis/30675173-378c-40c0-a751-73378c20c09c`.
+The API URL is in the format `https://<<console URL>>/#!/<<environment>>/apis/30675173-378c-40c0-a751-73378c20c09c`.
 
 ~> You may need to adapt environment and organization as well depending on your setup.
 
@@ -87,7 +87,7 @@ The generated HCL configuration will be saved in the `exported.tf` file.
 
 ## Clean up (experimental)
 
-In the tutorial directory you will a python script example to clean up the file after export.
+In the tutorial directory you will find a python script example to clean up the file after export.
 * Uses `jsonencode()` instead of JSON strings
 * Remove null values
 * Remove empty arrays
