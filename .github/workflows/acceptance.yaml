@@ -50,12 +50,12 @@ jobs:
       fail-fast: false
       matrix:
         apim:
-          - image_tag: master-latest
+          - image_tag: 4.11.x-latest
             chart_version: 4.11.*
-          - image_tag: 4.9.x-latest
-            chart_version: 4.9.*
           - image_tag: 4.10.x-latest
             chart_version: 4.10.*
+          - image_tag: 4.9.x-latest
+            chart_version: 4.9.*
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -113,12 +113,12 @@ jobs:
           - "1.9.*"
           - "1.14.*"
         apim:
-          - image_tag: master-latest
+          - image_tag: 4.11.x-latest
             chart_version: 4.11.*
-          - image_tag: 4.9.x-latest
-            chart_version: 4.9.*
           - image_tag: 4.10.x-latest
             chart_version: 4.10.*
+          - image_tag: 4.9.x-latest
+            chart_version: 4.9.*
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2

@@ -1,0 +1,101 @@
+---
+page_title: "Export API to HCL"
+subcategory: "Tutorials"
+---
+This tutorial demonstrates how to export an API to HCL configuration using the `terraform plan -generate-config-out` command.
+
+~> This feature is experimental from the Terraform standpoint. It is available from the `0.5.0` release and works with Terraform from version 1.5.
+
+It takes advantage of the READ operation during the plan to retrieve the API and then generates the HCL configuration.
+
+Applications, Subscriptions and API are identified by `hrid`. An existing API created with console, however, only has an ID and has no `hrid`.
+
+HRID are generated if no hrid is found from name where all that is not a letter or a number is replaced by a dash:
+* API: from the API name
+* Plan: from the plan name
+* Page: from the page name
+* Shared Policy Group: from the **step** name.
+
+Coherence is kept between pages and parents as well as between page and plan general conditions.
+
+Be aware that:
+* If the HRID is the same as another API in your configuration, it will be updated and the other API will have its content replaced by the exported one.
+* If page or plans do not have unique names, `hrid` won't be unique, which can lead to error when applying the API.
+* Share Policy Group binding will only work if the Shared Policy Group was created with Terraform.
+  Nevertheless, we create a HRID for SPG to avoid errors during export.
+
+~> All cited files in that tutorial are located in [examples/tutorials/hcl-export](https://github.com/gravitee-io/terraform-provider-apim/tree/main/examples/tutorials/hcl-export)
+
+## Provider configuration
+
+During export, the provider instructs the Gravitee API to generate hrid values for resources that don't have them. The import block uses the API UUID to identify which API to export.
+
+```terraform
+{{ .ExportTutorialProvider.Content }}
+```
+
+In this example the provider configuration does not contain any other configuration.
+It is assumed that APIM URL and credentials are already configured as environment variables.
+
+## Import file
+
+Terraform plan will do a READ operation to fulfill instruction in the import file that will eventually be written to a file.
+
+```terraform
+{{ .ExportTutorialImport.Content }}
+```
+
+You now need to replace `<<API ID>>` with the actual API ID. You can find it in the API URL of the Gravitee console.
+
+The API URL is in the format `https://<<console URL>>/#!/<<environment>>/apis/30675173-378c-40c0-a751-73378c20c09c`.
+
+~> You may need to adapt environment and organization as well depending on your setup.
+
+## Run the plan to export the API as HCL
+
+You can run the plan with the following command:
+
+```bash
+terraform plan -generate-config-out=exported.tf
+```
+
+The generated HCL configuration will be saved in the `exported.tf` file.
+
+## Clean up (experimental)
+
+In the tutorial directory you will find a python script example to clean up the file after export.
+* Uses `jsonencode()` instead of JSON strings
+* Remove null values
+* Remove empty arrays
+
+```bash
+python3 cleanup.py exported.tf exported-clean.tf
+```
+
+## Limitations
+
+1. It uses a Terraform experimental feature (`-generate-config-out`).
+2. It is limited to APIs
+3. You can only export APIs one at a time.
+
+## Example
+
+### API in exported format (for reference)
+
+This is what you would get from the standard export feature in the console.
+
+```json
+{{ .ExportTutorialJSON.Content }}
+```
+
+### API in HCL format (before cleanup)
+
+```terraform
+{{ .ExportTutorialHCL.Content }}
+```
+
+### API in HCL format (after cleanup)
+
+```terraform
+{{ .ExportTutorialHCLClean.Content }}
+```
