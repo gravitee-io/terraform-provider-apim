@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
@@ -109,6 +110,130 @@ func TestSubscriptionResource_update(t *testing.T) {
 					"hrid":            config.StringVariable(apiRandomId),
 					"ending_at":       config.StringVariable("2043-12-25T10:12:28+03:00"),
 					"organization_id": config.StringVariable(organizationId),
+				},
+			},
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
+// Verifies create with metadata, update metadata, and plan stability of the `apim_subscription` resource.
+func TestSubscriptionResource_metadata(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	apiRandomId := "test-" + acctest.RandString(10)
+
+	metadataCreate := config.MapVariable(map[string]config.Variable{
+		"key1": config.StringVariable("value1"),
+		"key2": config.StringVariable("value2"),
+	})
+
+	metadataUpdate := config.MapVariable(map[string]config.Variable{
+		"key1": config.StringVariable("updated"),
+		"key3": config.StringVariable("value3"),
+	})
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create with metadata.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(apiRandomId),
+					"organization_id": config.StringVariable(organizationId),
+					"metadata":        metadataCreate,
+				},
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PostApplyPostRefresh: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+			},
+			// Verifies resource update with different metadata.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(apiRandomId),
+					"organization_id": config.StringVariable(organizationId),
+					"metadata":        metadataUpdate,
+				},
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectNonEmptyPlan(),
+					},
+					PostApplyPostRefresh: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+			},
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
+// Verifies create, destroy, and recreate with metadata, checking plan stability.
+func TestSubscriptionResource_metadata_recreate(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	apiRandomId := "test-" + acctest.RandString(10)
+
+	metadata := config.MapVariable(map[string]config.Variable{
+		"key1": config.StringVariable("value1"),
+		"key2": config.StringVariable("value2"),
+	})
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create with metadata.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(apiRandomId),
+					"organization_id": config.StringVariable(organizationId),
+					"metadata":        metadata,
+				},
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PostApplyPostRefresh: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+			},
+			// Destroy all resources.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(apiRandomId),
+					"organization_id": config.StringVariable(organizationId),
+					"metadata":        metadata,
+				},
+				Destroy: true,
+			},
+			// Recreate with same metadata and verify plan stability.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(apiRandomId),
+					"organization_id": config.StringVariable(organizationId),
+					"metadata":        metadata,
+				},
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PostApplyPostRefresh: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
 				},
 			},
 			// Testing framework implicitly verifies resource delete.
