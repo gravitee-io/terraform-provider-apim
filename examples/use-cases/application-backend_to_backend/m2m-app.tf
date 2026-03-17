@@ -1,6 +1,6 @@
 resource "apim_application" "backend-to-backend" {
   # should match the resource name
-  hrid        = "test-b2b-app"
+  hrid        = "backend-to-backend"
   name        = "[Terraform] Application for Backend to Backend OAuth"
   description = "Demonstrates applications for OAuth with certificate can be created with Terraform"
   domain      = "example.com"

@@ -78,12 +78,13 @@ Available configuration:
 <!-- Start Available Resources and Data Sources [operations] -->
 ## Available Resources and Data Sources
 
-### Resources
+### Managed Resources
 
 * [apim_apiv4](docs/resources/apiv4.md)
 * [apim_application](docs/resources/application.md)
 * [apim_shared_policy_group](docs/resources/shared_policy_group.md)
 * [apim_subscription](docs/resources/subscription.md)
+
 ### Data Sources
 
 * [apim_apiv4](docs/data-sources/apiv4.md)

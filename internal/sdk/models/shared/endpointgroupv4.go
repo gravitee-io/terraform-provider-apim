@@ -60,3 +60,6 @@ func (e *EndpointGroupV4) GetServices() *EndpointGroupServices {
 	}
 	return e.Services
 }
+
+// #region class-body-endpointgroupv4
+// #endregion class-body-endpointgroupv4

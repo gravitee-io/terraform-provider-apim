@@ -10,8 +10,13 @@ variable "environment_id" {
   type = string
 }
 
-variable "client_certificate" {
-  type = string
+variable "client_certificates" {
+  type = list(object({
+    name      = string
+    content   = string
+    starts_at = string
+    ends_at   = string
+  }))
 }
 
 resource "apim_application" "test" {
@@ -37,7 +42,7 @@ resource "apim_application" "test" {
       type      = "backend to backend"
     }
     tls = {
-      client_certificate = var.client_certificate
+      client_certificates = var.client_certificates
     }
   }
   metadata = [

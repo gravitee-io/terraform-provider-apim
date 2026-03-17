@@ -106,7 +106,10 @@ paths:
           $ref: "#/components/responses/NotFound"
         default:
           $ref: "#/components/responses/Error"
-      x-speakeasy-entity-operation: APIV4#read
+      x-speakeasy-entity-operation:
+        - APIV4#read
+        - APIV4#create#2
+        - APIV4#update#2
       x-speakeasy-group: apis
       x-speakeasy-name-override: get
     delete:
@@ -201,7 +204,10 @@ paths:
           $ref: "#/components/responses/NotFound"
         default:
           $ref: "#/components/responses/Error"
-      x-speakeasy-entity-operation: Application#read
+      x-speakeasy-entity-operation:
+        - Application#read
+        - Application#create#2
+        - Application#update#2
       x-speakeasy-name-override: get
     delete:
       operationId: deleteApplication

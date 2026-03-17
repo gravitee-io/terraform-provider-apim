@@ -110,3 +110,6 @@ func (f *FlowV4) GetTags() []string {
 	}
 	return f.Tags
 }
+
+// #region class-body-flowv4
+// #endregion class-body-flowv4

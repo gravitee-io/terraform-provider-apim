@@ -4,6 +4,7 @@ on:
   push:
   schedule:
     - cron: 00 05 * * 1-5
+  workflow_dispatch:    
 
 concurrency:
   group: ${{ github.ref_name }}
@@ -148,6 +149,7 @@ jobs:
           APIM_SERVER_URL: http://localhost:30083/automation
           APIM_USERNAME: admin
           APIM_PASSWORD: admin
+          APIM_IMAGE_TAG: ${{ matrix.apim.image_tag }}
         run: make acceptance-tests
       - name: Send Slack notification
         if: (failure() || success()) && github.event.schedule != ''
