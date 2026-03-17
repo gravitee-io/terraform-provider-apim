@@ -346,7 +346,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 								Description:        `Application TLS client certificate. Deprecated: use clientCertificates instead for multiple certificate support.`,
 								Validators: []validator.String{
-									stringvalidator.ExactlyOneOf(path.Expressions{
+									stringvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtParent().AtName("client_certificates"),
 									}...),
 								},
@@ -392,7 +392,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								},
 								Description: `List of client certificates for mTLS authentication. Supports certificate rotation.`,
 								Validators: []validator.List{
-									listvalidator.ExactlyOneOf(path.Expressions{
+									listvalidator.ConflictsWith(path.Expressions{
 										path.MatchRelative().AtParent().AtParent().AtName("client_certificate"),
 									}...),
 								},
