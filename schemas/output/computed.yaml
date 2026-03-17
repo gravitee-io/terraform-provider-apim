@@ -937,6 +937,15 @@ components:
               - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
             schemaType: customtypes.RFC3339Type{}
             valueType: customtypes.RFC3339
+        metadata:
+          type: object
+          description: Key-value metadata for this subscription.
+          additionalProperties:
+            type: string
+          examples:
+            - key1: value1
+              key2: value2
+          x-speakeasy-param-computed: false
       required:
         - hrid
         - applicationHrid
