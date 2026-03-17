@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 8c1cdbba26a253b5fd8576b5177416cd
+  docChecksum: a588603ba138910bf810f5cd3626427c
   docVersion: 1.0.0
   speakeasyVersion: 1.697.5
   generationVersion: 2.799.0
   releaseVersion: 0.5.0
   configChecksum: a23c41a5bcaf0d7b41dcaf3063c2dca8
 persistentEdits:
-  generation_id: fa6b1776-3980-48c5-95be-7677d65bbe2b
-  pristine_commit_hash: 471ead3027d5c671da86e33a9a5b0b1271daeb3e
-  pristine_tree_hash: 523c44f23e939951d1c0f4a202e931ea00b5fa27
+  generation_id: fe49d4d8-c182-4d74-9dc4-74c11a063383
+  pristine_commit_hash: 454abee06f7e8889d97e7b715c021dc287b28582
+  pristine_tree_hash: a1de4708f045527beb2d8fd435acaccc74f617f4
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -261,20 +261,20 @@ trackedFiles:
     pristine_git_object: b34703f2b562880749e8fe35ca4ead507494d998
   internal/provider/subscription_data_source.go:
     id: 228db6b8d459
-    last_write_checksum: sha1:7d42eac258728f1e5b35f1e8b4020e8ed8da8b76
-    pristine_git_object: 093ca674f3079239b079b32e8f999651f075a769
+    last_write_checksum: sha1:5a4bbad5b13cf8d7bedb6d5112913360e5c89110
+    pristine_git_object: 3f93d9c772fb42f39d0611389432926edb062a81
   internal/provider/subscription_data_source_sdk.go:
     id: 7861a4c1da39
-    last_write_checksum: sha1:a21407ab3e0520b67f71a53ee332e42202263c38
-    pristine_git_object: 65ec990d26bf4789a3e5284d181c0750b4c603ae
+    last_write_checksum: sha1:37477a03c5294c036639ae1362cc2aa6d0523c29
+    pristine_git_object: cc4764dc1f260df8ca8fae85bad9e1e422cd32a5
   internal/provider/subscription_resource.go:
     id: 466e40c89aec
-    last_write_checksum: sha1:a67b00d78af88f8bbba4be2989a802a280a1953f
-    pristine_git_object: 2c6d4832269bed7bf5c0f5833ffe2ab52aba6275
+    last_write_checksum: sha1:ce4ae35a76543c7e43a4e17d357d49179c878061
+    pristine_git_object: 0dcfd9dea5e3089734d6ca491f1719a7e61c75fd
   internal/provider/subscription_resource_sdk.go:
     id: 9ba4a8b00592
-    last_write_checksum: sha1:7ee85966d7dc3ae5e80e29cdb62eae421c5dcfe7
-    pristine_git_object: adf749a024f874fa8dd92631393a5877f55cae7b
+    last_write_checksum: sha1:29401ea590309375e14ef67d5a691807109a27ff
+    pristine_git_object: 50b79e618fef3ef15452d37510b6cb47527f7dff
   internal/provider/typeconvert/date.go:
     id: dfe2bc95ad1b
     last_write_checksum: sha1:4971e80c6bd4ba24b66c738eff465316626cf2bf
@@ -913,12 +913,12 @@ trackedFiles:
     pristine_git_object: 2ddba90865b1235eff758f6871b80d9f5716a241
   internal/sdk/models/shared/subscriptionspec.go:
     id: c49f2cee2b6e
-    last_write_checksum: sha1:c8687cb9c155cd9c90396fb2a4befd3fa75c689e
-    pristine_git_object: 3866d5f5eaf29377f8ffb5a50ced14afe30d881a
+    last_write_checksum: sha1:a57979e5d9034a578b2b97852d16d4f412a2c8cd
+    pristine_git_object: 9943de98e78b7bb001bf96af4b7a7a4a6afb843b
   internal/sdk/models/shared/subscriptionstate.go:
     id: 79d3dde1d628
-    last_write_checksum: sha1:d62d37478b9aa0d7010cd114a370c5413f28a4ce
-    pristine_git_object: c89e2bb1b9a26e47fdb755124ac500df91211a78
+    last_write_checksum: sha1:28f69e739aeee5bb78aaa2d856d2dba72ab66f42
+    pristine_git_object: 5039c2c41c8a85fa76c12761b29bb37470a1aaba
   internal/sdk/models/shared/tcplistener.go:
     id: 3a59ed94fc76
     last_write_checksum: sha1:5b4246b380fa7d68036f66e4ca0a176e7ec02117
@@ -1223,10 +1223,10 @@ examples:
           envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
           apiHrid: "my_demo_api"
       requestBody:
-        application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z"}
+        application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "metadata": {"key1": "value1", "key2": "value2"}}
       responses:
         "200":
-          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "apiHrid": "demo-api", "startingAt": "2040-12-25T09:12:28+01:00"}
+          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "metadata": {"key1": "value1", "key2": "value2"}, "apiHrid": "demo-api", "startingAt": "2040-12-25T09:12:28+01:00"}
         "400":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:
@@ -1241,7 +1241,7 @@ examples:
           hrid: "my_demo_api"
       responses:
         "200":
-          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "apiHrid": "demo-api", "startingAt": "2040-12-25T09:12:28+01:00"}
+          application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "metadata": {"key1": "value1", "key2": "value2"}, "apiHrid": "demo-api", "startingAt": "2040-12-25T09:12:28+01:00"}
         "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:

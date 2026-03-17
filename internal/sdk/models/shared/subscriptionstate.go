@@ -17,6 +17,8 @@ type SubscriptionState struct {
 	// API plan's hrid
 	PlanHrid string     `json:"planHrid"`
 	EndingAt *time.Time `json:"endingAt,omitempty"`
+	// Key-value metadata for this subscription.
+	Metadata map[string]string `json:"metadata,omitempty"`
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
 	Errors *Errors `json:"errors,omitempty"`
 	// Subscription's uuid.
@@ -68,6 +70,13 @@ func (s *SubscriptionState) GetEndingAt() *time.Time {
 		return nil
 	}
 	return s.EndingAt
+}
+
+func (s *SubscriptionState) GetMetadata() map[string]string {
+	if s == nil {
+		return nil
+	}
+	return s.Metadata
 }
 
 func (s *SubscriptionState) GetErrors() *Errors {
