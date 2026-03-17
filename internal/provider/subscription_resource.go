@@ -46,15 +46,16 @@ type SubscriptionResource struct {
 
 // SubscriptionResourceModel describes the resource data model.
 type SubscriptionResourceModel struct {
-	APIHrid         types.String        `tfsdk:"api_hrid"`
-	ApplicationHrid types.String        `tfsdk:"application_hrid"`
-	EndingAt        customtypes.RFC3339 `tfsdk:"ending_at"`
-	EnvironmentID   types.String        `tfsdk:"environment_id"`
-	Hrid            types.String        `tfsdk:"hrid"`
-	ID              types.String        `tfsdk:"id"`
-	OrganizationID  types.String        `tfsdk:"organization_id"`
-	PlanHrid        types.String        `tfsdk:"plan_hrid"`
-	StartingAt      types.String        `tfsdk:"starting_at"`
+	APIHrid         types.String            `tfsdk:"api_hrid"`
+	ApplicationHrid types.String            `tfsdk:"application_hrid"`
+	EndingAt        customtypes.RFC3339     `tfsdk:"ending_at"`
+	EnvironmentID   types.String            `tfsdk:"environment_id"`
+	Hrid            types.String            `tfsdk:"hrid"`
+	ID              types.String            `tfsdk:"id"`
+	Metadata        map[string]types.String `tfsdk:"metadata"`
+	OrganizationID  types.String            `tfsdk:"organization_id"`
+	PlanHrid        types.String            `tfsdk:"plan_hrid"`
+	StartingAt      types.String            `tfsdk:"starting_at"`
 }
 
 func (r *SubscriptionResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -103,6 +104,11 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Subscription's uuid.`,
+			},
+			"metadata": schema.MapAttribute{
+				Optional:    true,
+				ElementType: types.StringType,
+				Description: `Key-value metadata for this subscription.`,
 			},
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
