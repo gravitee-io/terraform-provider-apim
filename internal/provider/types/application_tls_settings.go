@@ -8,5 +8,6 @@ import (
 )
 
 type ApplicationTLSSettings struct {
-	ClientCertificate customtypes.TrimmedString `tfsdk:"client_certificate"`
+	ClientCertificate  customtypes.TrimmedString `tfsdk:"client_certificate"`
+	ClientCertificates []ClientCertificate       `tfsdk:"client_certificates"`
 }

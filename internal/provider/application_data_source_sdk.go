@@ -6,6 +6,7 @@ package provider
 import (
 	"context"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+	"github.com/gravitee-io/terraform-provider-apim/internal/provider/typeconvert"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
@@ -91,9 +92,23 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 				r.Settings.TLS = nil
 			} else {
 				r.Settings.TLS = &tfTypes.ApplicationTLSSettings{}
-				clientCertificateValuable, clientCertificateDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringValue(resp.Settings.TLS.ClientCertificate))
+				clientCertificateValuable, clientCertificateDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringPointerValue(resp.Settings.TLS.ClientCertificate))
 				diags.Append(clientCertificateDiags...)
 				r.Settings.TLS.ClientCertificate = clientCertificateValuable.(customtypes.TrimmedString)
+				r.Settings.TLS.ClientCertificates = []tfTypes.ClientCertificate{}
+
+				for _, clientCertificatesItem := range resp.Settings.TLS.ClientCertificates {
+					var clientCertificates tfTypes.ClientCertificate
+
+					contentValuable, contentDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringValue(clientCertificatesItem.Content))
+					diags.Append(contentDiags...)
+					clientCertificates.Content = contentValuable.(customtypes.TrimmedString)
+					clientCertificates.EndsAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(clientCertificatesItem.EndsAt))
+					clientCertificates.Name = types.StringValue(clientCertificatesItem.Name)
+					clientCertificates.StartsAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(clientCertificatesItem.StartsAt))
+
+					r.Settings.TLS.ClientCertificates = append(r.Settings.TLS.ClientCertificates, clientCertificates)
+				}
 			}
 		}
 	}
