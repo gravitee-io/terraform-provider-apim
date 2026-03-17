@@ -172,6 +172,21 @@ func TestSubscriptionResource_metadata(t *testing.T) {
 					},
 				},
 			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(apiRandomId),
+					"organization_id": config.StringVariable(organizationId),
+					"metadata":        config.MapVariable(map[string]config.Variable{}),
+				},
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PostApplyPostRefresh: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+			},
 			// Testing framework implicitly verifies resource delete.
 		},
 	})
