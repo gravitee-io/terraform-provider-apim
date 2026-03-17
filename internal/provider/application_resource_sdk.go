@@ -6,11 +6,13 @@ package provider
 import (
 	"context"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+	"github.com/gravitee-io/terraform-provider-apim/internal/provider/typeconvert"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"time"
 )
 
 func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context.Context, resp *shared.ApplicationState) diag.Diagnostics {
@@ -91,9 +93,27 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 				r.Settings.TLS = nil
 			} else {
 				r.Settings.TLS = &tfTypes.ApplicationTLSSettings{}
-				clientCertificateValuable, clientCertificateDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringValue(resp.Settings.TLS.ClientCertificate))
+				clientCertificateValuable, clientCertificateDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringPointerValue(resp.Settings.TLS.ClientCertificate))
 				diags.Append(clientCertificateDiags...)
 				r.Settings.TLS.ClientCertificate = clientCertificateValuable.(customtypes.TrimmedString)
+				r.Settings.TLS.ClientCertificates = []tfTypes.ClientCertificate{}
+
+				for _, clientCertificatesItem := range resp.Settings.TLS.ClientCertificates {
+					var clientCertificates tfTypes.ClientCertificate
+
+					contentValuable, contentDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringValue(clientCertificatesItem.Content))
+					diags.Append(contentDiags...)
+					clientCertificates.Content = contentValuable.(customtypes.TrimmedString)
+					endsAtValuable, endsAtDiags := customtypes.RFC3339Type{}.ValueFromString(ctx, types.StringPointerValue(typeconvert.TimePointerToStringPointer(clientCertificatesItem.EndsAt)))
+					diags.Append(endsAtDiags...)
+					clientCertificates.EndsAt = endsAtValuable.(customtypes.RFC3339)
+					clientCertificates.Name = types.StringValue(clientCertificatesItem.Name)
+					startsAtValuable, startsAtDiags := customtypes.RFC3339Type{}.ValueFromString(ctx, types.StringPointerValue(typeconvert.TimePointerToStringPointer(clientCertificatesItem.StartsAt)))
+					diags.Append(startsAtDiags...)
+					clientCertificates.StartsAt = startsAtValuable.(customtypes.RFC3339)
+
+					r.Settings.TLS.ClientCertificates = append(r.Settings.TLS.ClientCertificates, clientCertificates)
+				}
 			}
 		}
 	}
@@ -274,11 +294,42 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		}
 		var tls *shared.ApplicationTLSSettings
 		if r.Settings.TLS != nil {
-			var clientCertificate string
-			clientCertificate = r.Settings.TLS.ClientCertificate.ValueString()
+			clientCertificate := new(string)
+			if !r.Settings.TLS.ClientCertificate.IsUnknown() && !r.Settings.TLS.ClientCertificate.IsNull() {
+				*clientCertificate = r.Settings.TLS.ClientCertificate.ValueString()
+			} else {
+				clientCertificate = nil
+			}
+			clientCertificates := make([]shared.ClientCertificate, 0, len(r.Settings.TLS.ClientCertificates))
+			for clientCertificatesIndex := range r.Settings.TLS.ClientCertificates {
+				var name1 string
+				name1 = r.Settings.TLS.ClientCertificates[clientCertificatesIndex].Name.ValueString()
 
+				var content string
+				content = r.Settings.TLS.ClientCertificates[clientCertificatesIndex].Content.ValueString()
+
+				startsAt := new(time.Time)
+				if !r.Settings.TLS.ClientCertificates[clientCertificatesIndex].StartsAt.IsUnknown() && !r.Settings.TLS.ClientCertificates[clientCertificatesIndex].StartsAt.IsNull() {
+					*startsAt, _ = time.Parse(time.RFC3339Nano, r.Settings.TLS.ClientCertificates[clientCertificatesIndex].StartsAt.ValueString())
+				} else {
+					startsAt = nil
+				}
+				endsAt := new(time.Time)
+				if !r.Settings.TLS.ClientCertificates[clientCertificatesIndex].EndsAt.IsUnknown() && !r.Settings.TLS.ClientCertificates[clientCertificatesIndex].EndsAt.IsNull() {
+					*endsAt, _ = time.Parse(time.RFC3339Nano, r.Settings.TLS.ClientCertificates[clientCertificatesIndex].EndsAt.ValueString())
+				} else {
+					endsAt = nil
+				}
+				clientCertificates = append(clientCertificates, shared.ClientCertificate{
+					Name:     name1,
+					Content:  content,
+					StartsAt: startsAt,
+					EndsAt:   endsAt,
+				})
+			}
 			tls = &shared.ApplicationTLSSettings{
-				ClientCertificate: clientCertificate,
+				ClientCertificate:  clientCertificate,
+				ClientCertificates: clientCertificates,
 			}
 		}
 		settings = &shared.ApplicationSettings{
@@ -295,8 +346,8 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		} else {
 			key = nil
 		}
-		var name1 string
-		name1 = r.Metadata[metadataIndex].Name.ValueString()
+		var name2 string
+		name2 = r.Metadata[metadataIndex].Name.ValueString()
 
 		format := shared.MetadataFormat(r.Metadata[metadataIndex].Format.ValueString())
 		value := new(string)
@@ -319,7 +370,7 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		}
 		metadata = append(metadata, shared.Metadata{
 			Key:          key,
-			Name:         name1,
+			Name:         name2,
 			Format:       format,
 			Value:        value,
 			DefaultValue: defaultValue,
