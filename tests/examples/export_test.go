@@ -10,14 +10,13 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
 )
 
 func TestExportHCL(t *testing.T) {
 
-	imageTag := os.Getenv("APIM_IMAGE_TAG")
-	if strings.HasPrefix(imageTag, "4.9") || strings.HasPrefix(imageTag, "4.10") {
-		t.Skip("Skipping test for image tag" + imageTag + " as it does not support HCL export")
-	}
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10)
 
 	// Create API in APIM
 	id := importAPI(t)

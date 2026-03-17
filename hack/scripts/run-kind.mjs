@@ -84,7 +84,12 @@ async function getAPIMChartVersion() {
 
 async function createKindCluster() {
     setNoQuoteEscape();
-    await $`kind create cluster --config ${KIND_CONFIG}/kind.yaml`;
+    const clusters = (await $`kind get clusters`).stdout.trim().split("\n");
+    if (clusters.includes("gravitee")) {
+        LOG.blue("  kind cluster 'gravitee' already exists, skipping creation");
+    } else {
+        await $`kind create cluster --config ${KIND_CONFIG}/kind.yaml`;
+    }
     setQuoteEscape();
 }
 
@@ -106,7 +111,7 @@ async function loadImages() {
 }
 
 async function createGraviteeNamespace() {
-    await $`kubectl create ns gravitee`;
+    await $`kubectl create ns gravitee --dry-run=client -o yaml | kubectl apply -f -`;
 }
 
 async function helmInstallAPIM() {
@@ -114,9 +119,9 @@ async function helmInstallAPIM() {
     await $`helm repo update graviteeio`;
     if ($.env.APIM_GRAVITEE_LICENSE) {
         let lic = $.env.APIM_GRAVITEE_LICENSE
-        await $`helm install apim ${APIM_CHART_REGISTRY} -f ${KIND_CONFIG}/apim/${APIM_VALUES} --set license.key=${lic} --version ${APIM_CHART_VERSION}`;
+        await $`helm upgrade --install apim ${APIM_CHART_REGISTRY} -f ${KIND_CONFIG}/apim/${APIM_VALUES} --set license.key=${lic} --version ${APIM_CHART_VERSION}`;
     } else {
-        await $`helm install apim ${APIM_CHART_REGISTRY} -f ${KIND_CONFIG}/apim/${APIM_VALUES} --version ${APIM_CHART_VERSION}`;
+        await $`helm upgrade --install apim ${APIM_CHART_REGISTRY} -f ${KIND_CONFIG}/apim/${APIM_VALUES} --version ${APIM_CHART_VERSION}`;
     }
 
 }

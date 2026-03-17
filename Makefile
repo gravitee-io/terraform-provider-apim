@@ -60,7 +60,7 @@ examples-tests: local-test-setup ## Run acceptance tests using examples
 
 .PHONY: unit-tests
 unit-tests: ## Run unit tests
-	@go test -count=1 ./internal/...
+	@go test -count=1 ./internal/... ./tests/utils/...
 
 
 .PHONY: doc-gen

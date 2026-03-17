@@ -11,7 +11,7 @@ runs:
       shell: bash
       run: |
         # Upstream OAS URL (single source of truth)
-        UPSTREAM_OAS_URL="https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/master/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml"
+        UPSTREAM_OAS_URL="https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/4.11.x/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml"
 
         # Download the upstream OAS file, failing if the download fails
         if ! curl -fsSL "$UPSTREAM_OAS_URL" -o /tmp/upstream-oas.yaml; then

@@ -1,0 +1,29 @@
+---
+page_title: "Certificate rotation"
+subcategory: "Tutorials"
+---
+
+This tutorial demonstrates how to perform mTLS certificates rotation.
+
+This is available starting with APIM 4.11
+
+## Provider configuration
+
+We use external local files, but content can be inlined.
+
+```terraform
+{{.CertRotationProvider.Content}}
+```
+
+## Resource
+
+In this state, `cert1` is active until the end of August and `cert2` will be active the 1 of July.
+
+```terraform
+{{.CertRotationConfig.Content}}
+```
+
+The rotation can be done "manually" (i.e., without dates) by adding the new cert (`cert2`) when it needs to be added.
+Applying the config will propagate this new cert and make it available to call APIM Gateway on top of `cert1`.
+
+Later one can remove `cert1` from the config file when all clients are using `cert2`, apply to eventually remove `cert1` from the APIM Gateway.

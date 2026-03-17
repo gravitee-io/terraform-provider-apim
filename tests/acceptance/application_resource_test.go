@@ -15,6 +15,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -217,6 +218,37 @@ func TestApplicationResource_overrideOrgIdAndEnvIdFromProvider(t *testing.T) {
 // Verifies the create, read, import, and delete lifecycle of the
 // `apim_application` resource with as many fields as possible
 func TestApplicationResource_all(t *testing.T) {
+
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10)
+
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId, certObj1, certObj2 := prepareMultiCertsVars(t)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":      config.StringVariable(environmentId),
+					"hrid":                config.StringVariable(randomId),
+					"organization_id":     config.StringVariable(organizationId),
+					"client_certificates": config.ListVariable(certObj1, certObj2),
+				},
+			},
+		},
+	})
+}
+
+// Verifies the create, read, and delete lifecycle of the
+// `apim_application` resource with as many fields as possible
+// this is for all versions of apim
+func TestApplicationResource_all_versions(t *testing.T) {
+
 	t.Parallel()
 
 	environmentId := "DEFAULT"
@@ -239,6 +271,97 @@ func TestApplicationResource_all(t *testing.T) {
 			},
 		},
 	})
+}
+
+// Verifies the create, read, import, and delete lifecycle of the
+// `apim_application` resource with as many fields as possible
+func TestApplicationResource_tlsLegacy(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId := "test-" + acctest.RandString(10)
+	cert := getClientTLSCert(t)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":     config.StringVariable(environmentId),
+					"hrid":               config.StringVariable(randomId),
+					"organization_id":    config.StringVariable(organizationId),
+					"client_certificate": config.StringVariable(cert),
+				},
+			},
+		},
+	})
+}
+
+// Verifies certificate rotation by creating an application with one certificate,
+// adding a second, then removing the first.
+func TestApplicationResource_certificateRotation(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10)
+
+	t.Parallel()
+
+	randomId, certObj1, certObj2 := prepareMultiCertsVars(t)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Step 1: Create with one certificate.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid":                config.StringVariable(randomId),
+					"client_certificates": config.ListVariable(certObj1),
+				},
+			},
+			// Step 2: Add a second certificate (both present).
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid":                config.StringVariable(randomId),
+					"client_certificates": config.ListVariable(certObj1, certObj2),
+				},
+			},
+			// Step 3: Remove the first certificate (rotation complete).
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid":                config.StringVariable(randomId),
+					"client_certificates": config.ListVariable(certObj2),
+				},
+			},
+		},
+	})
+}
+
+func prepareMultiCertsVars(t *testing.T) (string, config.Variable, config.Variable) {
+	randomId := "test-" + acctest.RandString(10)
+	cert1 := getClientTLSCert(t)
+	cert2 := getClientTLSCert(t)
+	yesterday := time.Now().Add(-24 * time.Hour).Format(time.RFC3339)
+	tomorrow := time.Now().Add(24 * time.Hour).Format(time.RFC3339)
+
+	certObj1 := config.ObjectVariable(config.Variables{
+		"name":      config.StringVariable("cert1"),
+		"content":   config.StringVariable(cert1),
+		"starts_at": config.StringVariable(yesterday),
+		"ends_at":   config.StringVariable(tomorrow),
+	})
+	certObj2 := config.ObjectVariable(config.Variables{
+		"name":      config.StringVariable("cert2"),
+		"content":   config.StringVariable(cert2),
+		"starts_at": config.StringVariable(yesterday),
+		"ends_at":   config.StringVariable(tomorrow),
+	})
+	return randomId, certObj1, certObj2
 }
 
 // Verifies the update the name of `apim_application` resource.

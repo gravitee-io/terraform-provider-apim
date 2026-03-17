@@ -1,0 +1,81 @@
+package utils
+
+import (
+	"os"
+	"testing"
+)
+
+func TestApimVersion_String(t *testing.T) {
+	tests := []struct {
+		v    ApimVersion
+		want string
+	}{
+		{ApimV4_9, "4.9"},
+		{ApimV4_10, "4.10"},
+		{ApimV4_11, "4.11"},
+		{ApimVersion(99), ""},
+	}
+	for _, tt := range tests {
+		t.Run(tt.want, func(t *testing.T) {
+			if got := tt.v.String(); got != tt.want {
+				t.Errorf("ApimVersion.String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSkipFor(t *testing.T) {
+	origEnv := os.Getenv("APIM_IMAGE_TAG")
+	defer os.Setenv("APIM_IMAGE_TAG", origEnv)
+
+	tests := []struct {
+		name        string
+		imageTag    string
+		skipFor     []ApimVersion
+		wantSkipped bool
+	}{
+		{
+			name:        "matches version 4.9",
+			imageTag:    "4.9.1",
+			skipFor:     []ApimVersion{ApimV4_9},
+			wantSkipped: true,
+		},
+		{
+			name:        "matches version 4.10",
+			imageTag:    "4.10.0-rc1",
+			skipFor:     []ApimVersion{ApimV4_10},
+			wantSkipped: true,
+		},
+		{
+			name:        "no match",
+			imageTag:    "4.12.0",
+			skipFor:     []ApimVersion{ApimV4_9, ApimV4_10, ApimV4_11},
+			wantSkipped: false,
+		},
+		{
+			name:        "empty tag",
+			imageTag:    "",
+			skipFor:     []ApimVersion{ApimV4_9},
+			wantSkipped: false,
+		},
+		{
+			name:        "multiple skip for, matches one",
+			imageTag:    "4.11.2",
+			skipFor:     []ApimVersion{ApimV4_9, ApimV4_11},
+			wantSkipped: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			os.Setenv("APIM_IMAGE_TAG", tt.imageTag)
+
+			t.Run("inner", func(st *testing.T) {
+				SkipFor(st, tt.skipFor...)
+				if st.Skipped() != tt.wantSkipped {
+					st.Errorf("SkipFor() skipped = %v, want %v", st.Skipped(), tt.wantSkipped)
+				}
+			})
+		})
+	}
+}

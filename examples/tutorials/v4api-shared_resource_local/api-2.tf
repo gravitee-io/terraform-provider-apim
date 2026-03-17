@@ -53,6 +53,7 @@ resource "apim_apiv4" "simple-api-shared-resource-2" {
             type          = "HTTP"
             path          = "/"
             path_operator = "STARTS_WITH"
+            methods       = ["GET"]
           }
         }
       ]

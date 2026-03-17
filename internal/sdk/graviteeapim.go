@@ -3,7 +3,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.0.0 and generator version 2.799.0
+// Generated from OpenAPI doc version 1.0.0 and generator version 2.866.2
 
 import (
 	"context"
@@ -77,7 +77,7 @@ type GraviteeApim struct {
 
 type SDKOption func(*GraviteeApim)
 
-// WithServerURL allows the overriding of the default server URL
+// WithServerURL allows providing an alternative server URL
 func WithServerURL(serverURL string) SDKOption {
 	return func(sdk *GraviteeApim) {
 		sdk.sdkConfiguration.ServerURL = serverURL
@@ -161,7 +161,7 @@ func New(opts ...SDKOption) *GraviteeApim {
 	sdk := &GraviteeApim{
 		SDKVersion: "0.5.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.5.0 2.799.0 1.0.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.5.0 2.866.2 1.0.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
 			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},

@@ -13,7 +13,10 @@ actions:
       x-speakeasy-entity-operation: Application#create,update
   - target: $.paths["/organizations/{orgId}/environments/{envId}/applications/{hrid}"].get
     update:
-      x-speakeasy-entity-operation: Application#read
+      x-speakeasy-entity-operation:
+        - Application#read
+        - Application#create#2
+        - Application#update#2
   - target: $.paths["/organizations/{orgId}/environments/{envId}/applications/{hrid}"].delete
     update:
       x-speakeasy-entity-operation: Application#delete
@@ -60,7 +63,7 @@ actions:
       x-speakeasy-plan-modifiers: IgnoreEmptyList
 
   - target: $.components.schemas.ApplicationTLSSettings.properties.clientCertificate
-    description: Using TrimmedString to make sure certs are  semantics equal regardless of trailing/leading spaced
+    description: Using TrimmedString to make sure certs are semantically equal regardless of trailing/leading spaces
     update:
       x-speakeasy-terraform-custom-type:
         imports:
@@ -68,17 +71,60 @@ actions:
         schemaType: customtypes.TrimmedStringType{}
         valueType: customtypes.TrimmedString
 
+  ## Mutual exclusion for TLS certificate fields (single vs list), both optional
+  - target: $.components.schemas.ApplicationTLSSettings.properties.clientCertificate
+    description: clientCertificate and clientCertificates are mutually exclusive
+    update:
+      x-speakeasy-conflicts-with:
+        - clientCertificates
+  - target: $.components.schemas.ApplicationTLSSettings.properties.clientCertificates
+    description: clientCertificates and clientCertificate are mutually exclusive
+    update:
+      x-speakeasy-conflicts-with:
+        - clientCertificate
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
 
+  ## TrimmedString for certificate content in the list variant
+  - target: $.components.schemas.ClientCertificate.properties.content
+    description: Using TrimmedString to make sure certs are semantically equal regardless of trailing/leading spaces
+    update:
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+        schemaType: customtypes.TrimmedStringType{}
+        valueType: customtypes.TrimmedString
+  - target: $.components.schemas.ClientCertificate.properties.endsAt
+    description: Using RFC3339Type to make sure dates are semantically equal regardless of timezones
+    update:
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+        schemaType: customtypes.RFC3339Type{}
+        valueType: customtypes.RFC3339
+  - target: $.components.schemas.ClientCertificate.properties.startsAt
+    description: Using RFC3339Type to make sure dates are semantically equal regardless of timezones
+    update:
+      x-speakeasy-terraform-custom-type:
+        imports:
+          - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+        schemaType: customtypes.RFC3339Type{}
+        valueType: customtypes.RFC3339
+
+
+  - target: $.components.schemas.ApplicationSettings.properties.oauth
+    description: Make sure it not computed
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.ApplicationOAuthClientSettings
+    description: Make sure it not computed
+    update:
+      x-speakeasy-param-computed: false
   ## Ignored for Terraform
   - target: $.components.schemas.ApplicationSpec.properties.status
     description: This property is not managed by Terraform as it is confusing and unnecessary for users.
     update:
       x-speakeasy-terraform-ignore: true
-
-  #  boolean 'false' defaulted
-#  - target: $.components.schemas.ApplicationSpec.properties.notifyMembers.default
-#    description: removing default "false" to avoid a computed value
-#    remove: true
 
   ## XOR for app settings
   - target: $.components.schemas.ApplicationSettings.properties.app

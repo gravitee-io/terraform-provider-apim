@@ -313,3 +313,6 @@ func (a *APIV4State) GetOrganizationID() *string {
 	}
 	return a.OrganizationID
 }
+
+// #region class-body-apiv4state
+// #endregion class-body-apiv4state

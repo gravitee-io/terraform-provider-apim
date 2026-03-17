@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -119,6 +120,9 @@ func TestSubscriptionResource_update(t *testing.T) {
 
 // Verifies create with metadata, update metadata, and plan stability of the `apim_subscription` resource.
 func TestSubscriptionResource_metadata(t *testing.T) {
+
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10)
+
 	t.Parallel()
 
 	environmentId := "DEFAULT"
@@ -194,6 +198,8 @@ func TestSubscriptionResource_metadata(t *testing.T) {
 
 // Verifies create, destroy, and recreate with metadata, checking plan stability.
 func TestSubscriptionResource_metadata_recreate(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10)
+
 	t.Parallel()
 
 	environmentId := "DEFAULT"
