@@ -14,6 +14,11 @@ import (
 
 func TestExportHCL(t *testing.T) {
 
+	imageTag := os.Getenv("APIM_IMAGE_TAG")
+	if strings.HasPrefix(imageTag, "4.9") || strings.HasPrefix(imageTag, "4.10") {
+		t.Skip("Skipping test for image tag" + imageTag + " as it does not support HCL export")
+	}
+
 	id := importAPI(t)
 
 	dir := prepareImport(t, id)
