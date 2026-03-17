@@ -758,7 +758,6 @@ components:
             - ACTIVE
           x-speakeasy-param-computed: false
           x-speakeasy-terraform-ignore: true
-          #  boolean 'false' defaulted
       required:
         - hrid
         - name
@@ -851,12 +850,15 @@ components:
         - applicationType
         - redirectUris
         - grantTypes
+      x-speakeasy-param-computed: false
     ApplicationTLSSettings:
       description: Application TLS settings
       properties:
         clientCertificate:
           type: string
-          description: Application TLS client certificate
+          deprecated: true
+          description: >-
+            Application TLS client certificate. Deprecated: use clientCertificates instead for multiple certificate support.
           examples:
             - |
               -----BEGIN CERTIFICATE-----
@@ -886,8 +888,58 @@ components:
               - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
             schemaType: customtypes.TrimmedStringType{}
             valueType: customtypes.TrimmedString
+          x-speakeasy-conflicts-with:
+            - clientCertificates
+        clientCertificates:
+          type: array
+          description: List of client certificates for mTLS authentication. Supports certificate rotation.
+          items:
+            $ref: '#/components/schemas/ClientCertificate'
+          x-speakeasy-param-computed: true
+          x-speakeasy-conflicts-with:
+            - clientCertificate
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
+    ClientCertificate:
+      description: A client certificate for mTLS authentication
+      type: object
+      properties:
+        name:
+          type: string
+          description: Certificate name for identification
+          maxLength: 255
+          x-speakeasy-param-computed: false
+        content:
+          type: string
+          description: Certificate in PEM format
+          x-speakeasy-param-computed: false
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+            schemaType: customtypes.TrimmedStringType{}
+            valueType: customtypes.TrimmedString
+        startsAt:
+          type: string
+          format: date-time
+          description: Date when this certificate becomes active
+          x-speakeasy-param-computed: false
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+            schemaType: customtypes.RFC3339Type{}
+            valueType: customtypes.RFC3339
+        endsAt:
+          type: string
+          format: date-time
+          description: Date when this certificate will be removed
+          x-speakeasy-param-computed: false
+          x-speakeasy-terraform-custom-type:
+            imports:
+              - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+            schemaType: customtypes.RFC3339Type{}
+            valueType: customtypes.RFC3339
       required:
-        - clientCertificate
+        - name
+        - content
     ApplicationState:
       description: Application state that has been created/updated
       allOf:

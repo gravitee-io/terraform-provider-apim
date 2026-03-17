@@ -15,6 +15,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	"github.com/gravitee-io/terraform-provider-apim/internal/validators"
 	speakeasy_listvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
@@ -286,7 +287,6 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `Simple application settings`,
 					},
 					"oauth": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"additional_client_metadata": schema.MapAttribute{
@@ -340,11 +340,66 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"client_certificate": schema.StringAttribute{
-								CustomType:  customtypes.TrimmedStringType{},
-								Optional:    true,
-								Description: `Application TLS client certificate. Not Null`,
+								CustomType:         customtypes.TrimmedStringType{},
+								Optional:           true,
+								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+								Description:        `Application TLS client certificate. Deprecated: use clientCertificates instead for multiple certificate support.`,
 								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
+									stringvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("client_certificates"),
+									}...),
+								},
+							},
+							"client_certificates": schema.ListNestedAttribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									custom_listplanmodifier.IgnoreEmptyList(),
+								},
+								NestedObject: schema.NestedAttributeObject{
+									Validators: []validator.Object{
+										speakeasy_objectvalidators.NotNull(),
+									},
+									Attributes: map[string]schema.Attribute{
+										"content": schema.StringAttribute{
+											CustomType:  customtypes.TrimmedStringType{},
+											Optional:    true,
+											Description: `Certificate in PEM format. Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+											},
+										},
+										"ends_at": schema.StringAttribute{
+											CustomType:  customtypes.RFC3339Type{},
+											Optional:    true,
+											Description: `Date when this certificate will be removed`,
+											Validators: []validator.String{
+												validators.IsRFC3339(),
+											},
+										},
+										"name": schema.StringAttribute{
+											Optional:    true,
+											Description: `Certificate name for identification. Not Null`,
+											Validators: []validator.String{
+												speakeasy_stringvalidators.NotNull(),
+												stringvalidator.UTF8LengthAtMost(255),
+											},
+										},
+										"starts_at": schema.StringAttribute{
+											CustomType:  customtypes.RFC3339Type{},
+											Optional:    true,
+											Description: `Date when this certificate becomes active`,
+											Validators: []validator.String{
+												validators.IsRFC3339(),
+											},
+										},
+									},
+								},
+								Description: `List of client certificates for mTLS authentication. Supports certificate rotation.`,
+								Validators: []validator.List{
+									listvalidator.ConflictsWith(path.Expressions{
+										path.MatchRelative().AtParent().AtName("client_certificate"),
+									}...),
 								},
 							},
 						},
