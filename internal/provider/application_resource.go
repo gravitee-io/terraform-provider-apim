@@ -100,11 +100,8 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"environment_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				Description: `environment ID`,
 			},
 			"groups": schema.ListAttribute{
@@ -259,11 +256,8 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					`Default: false`,
 			},
 			"organization_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				Description: `organization ID`,
 			},
 			"picture_url": schema.StringAttribute{
@@ -346,12 +340,8 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"client_certificate": schema.StringAttribute{
-								CustomType: customtypes.TrimmedStringType{},
-								Computed:   true,
-								Optional:   true,
-								PlanModifiers: []planmodifier.String{
-									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-								},
+								CustomType:         customtypes.TrimmedStringType{},
+								Optional:           true,
 								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 								Description:        `Application TLS client certificate. Deprecated: use clientCertificates instead for multiple certificate support.`,
 								Validators: []validator.String{
