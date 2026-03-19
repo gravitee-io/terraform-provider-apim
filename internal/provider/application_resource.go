@@ -11,7 +11,6 @@ import (
 	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
-	custom_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
@@ -351,7 +350,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Computed:   true,
 								Optional:   true,
 								PlanModifiers: []planmodifier.String{
-									custom_stringplanmodifier.SuppressUnlessCertListSet(),
+									speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 								},
 								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 								Description:        `Application TLS client certificate. Deprecated: use clientCertificates instead for multiple certificate support.`,
@@ -365,15 +364,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Computed: true,
 								Optional: true,
 								PlanModifiers: []planmodifier.List{
-									custom_listplanmodifier.MatchStateOrder(),
-									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									custom_listplanmodifier.IgnoreEmptyList(),
 								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
-									},
-									PlanModifiers: []planmodifier.Object{
-										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 									},
 									Attributes: map[string]schema.Attribute{
 										"content": schema.StringAttribute{
