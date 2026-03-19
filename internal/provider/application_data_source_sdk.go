@@ -92,6 +92,9 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 				r.Settings.TLS = nil
 			} else {
 				r.Settings.TLS = &tfTypes.ApplicationTLSSettings{}
+				clientCertificateValuable, clientCertificateDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringPointerValue(resp.Settings.TLS.ClientCertificate))
+				diags.Append(clientCertificateDiags...)
+				r.Settings.TLS.ClientCertificate = clientCertificateValuable.(customtypes.TrimmedString)
 				r.Settings.TLS.ClientCertificates = []tfTypes.ClientCertificate{}
 
 				for _, clientCertificatesItem := range resp.Settings.TLS.ClientCertificates {
