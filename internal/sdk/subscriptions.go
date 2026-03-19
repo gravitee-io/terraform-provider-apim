@@ -527,8 +527,8 @@ func (s *Subscriptions) Get(ctx context.Context, request operations.GetAPISubscr
 
 }
 
-// Delete one API
-// Delete an API using it's HRID
+// Delete an API subscription
+// Delete an API subscription using HRID
 func (s *Subscriptions) Delete(ctx context.Context, request operations.DeleteAPISubscriptionRequest, opts ...operations.Option) (*operations.DeleteAPISubscriptionResponse, error) {
 	globals := operations.DeleteAPISubscriptionGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
