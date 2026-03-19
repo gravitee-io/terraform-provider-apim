@@ -287,7 +287,6 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Description: `Simple application settings`,
 					},
 					"oauth": schema.SingleNestedAttribute{
-						Computed: true,
 						Optional: true,
 						Attributes: map[string]schema.Attribute{
 							"additional_client_metadata": schema.MapAttribute{
