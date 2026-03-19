@@ -104,9 +104,13 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 					contentValuable, contentDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringValue(clientCertificatesItem.Content))
 					diags.Append(contentDiags...)
 					clientCertificates.Content = contentValuable.(customtypes.TrimmedString)
-					clientCertificates.EndsAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(clientCertificatesItem.EndsAt))
+					endsAtValuable, endsAtDiags := customtypes.RFC3339Type{}.ValueFromString(ctx, types.StringPointerValue(typeconvert.TimePointerToStringPointer(clientCertificatesItem.EndsAt)))
+					diags.Append(endsAtDiags...)
+					clientCertificates.EndsAt = endsAtValuable.(customtypes.RFC3339)
 					clientCertificates.Name = types.StringValue(clientCertificatesItem.Name)
-					clientCertificates.StartsAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(clientCertificatesItem.StartsAt))
+					startsAtValuable, startsAtDiags := customtypes.RFC3339Type{}.ValueFromString(ctx, types.StringPointerValue(typeconvert.TimePointerToStringPointer(clientCertificatesItem.StartsAt)))
+					diags.Append(startsAtDiags...)
+					clientCertificates.StartsAt = startsAtValuable.(customtypes.RFC3339)
 
 					r.Settings.TLS.ClientCertificates = append(r.Settings.TLS.ClientCertificates, clientCertificates)
 				}

@@ -238,6 +238,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 											Description: `Certificate in PEM format`,
 										},
 										"ends_at": schema.StringAttribute{
+											CustomType:  customtypes.RFC3339Type{},
 											Computed:    true,
 											Description: `Date when this certificate will be removed`,
 										},
@@ -246,6 +247,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 											Description: `Certificate name for identification`,
 										},
 										"starts_at": schema.StringAttribute{
+											CustomType:  customtypes.RFC3339Type{},
 											Computed:    true,
 											Description: `Date when this certificate becomes active`,
 										},

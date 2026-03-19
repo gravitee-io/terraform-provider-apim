@@ -10,7 +10,7 @@ import (
 
 type ClientCertificate struct {
 	Content  customtypes.TrimmedString `tfsdk:"content"`
-	EndsAt   types.String              `tfsdk:"ends_at"`
+	EndsAt   customtypes.RFC3339       `tfsdk:"ends_at"`
 	Name     types.String              `tfsdk:"name"`
-	StartsAt types.String              `tfsdk:"starts_at"`
+	StartsAt customtypes.RFC3339       `tfsdk:"starts_at"`
 }

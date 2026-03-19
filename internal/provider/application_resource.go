@@ -367,6 +367,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 											},
 										},
 										"ends_at": schema.StringAttribute{
+											CustomType:  customtypes.RFC3339Type{},
 											Optional:    true,
 											Description: `Date when this certificate will be removed`,
 											Validators: []validator.String{
@@ -382,6 +383,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 											},
 										},
 										"starts_at": schema.StringAttribute{
+											CustomType:  customtypes.RFC3339Type{},
 											Optional:    true,
 											Description: `Date when this certificate becomes active`,
 											Validators: []validator.String{
