@@ -351,10 +351,18 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								},
 							},
 							"client_certificates": schema.ListNestedAttribute{
+								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									custom_listplanmodifier.MatchStateOrder(),
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
+									},
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 									},
 									Attributes: map[string]schema.Attribute{
 										"content": schema.StringAttribute{
