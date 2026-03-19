@@ -342,6 +342,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						Attributes: map[string]schema.Attribute{
 							"client_certificate": schema.StringAttribute{
 								CustomType:         customtypes.TrimmedStringType{},
+								Computed:           true,
 								Optional:           true,
 								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
 								Description:        `Application TLS client certificate. Deprecated: use clientCertificates instead for multiple certificate support.`,
