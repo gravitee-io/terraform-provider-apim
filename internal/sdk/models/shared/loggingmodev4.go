@@ -39,3 +39,6 @@ func (l *LoggingModeV4) GetEntrypoint() *bool {
 	}
 	return l.Entrypoint
 }
+
+// #region class-body-loggingmodev4
+// #endregion class-body-loggingmodev4

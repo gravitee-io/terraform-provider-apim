@@ -278,3 +278,6 @@ func (a *APIV4Spec) GetPages() []PageV4Input {
 	}
 	return a.Pages
 }
+
+// #region class-body-apiv4spec
+// #endregion class-body-apiv4spec
