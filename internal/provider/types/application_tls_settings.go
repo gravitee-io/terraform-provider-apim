@@ -3,11 +3,6 @@
 
 package types
 
-import (
-	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
-)
-
 type ApplicationTLSSettings struct {
-	ClientCertificate  customtypes.TrimmedString `tfsdk:"client_certificate"`
-	ClientCertificates []ClientCertificate       `tfsdk:"client_certificates"`
+	ClientCertificates []ClientCertificate `tfsdk:"client_certificates"`
 }

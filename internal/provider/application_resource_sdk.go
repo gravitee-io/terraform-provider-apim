@@ -93,9 +93,6 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 				r.Settings.TLS = nil
 			} else {
 				r.Settings.TLS = &tfTypes.ApplicationTLSSettings{}
-				clientCertificateValuable, clientCertificateDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringPointerValue(resp.Settings.TLS.ClientCertificate))
-				diags.Append(clientCertificateDiags...)
-				r.Settings.TLS.ClientCertificate = clientCertificateValuable.(customtypes.TrimmedString)
 				r.Settings.TLS.ClientCertificates = []tfTypes.ClientCertificate{}
 
 				for _, clientCertificatesItem := range resp.Settings.TLS.ClientCertificates {
@@ -294,12 +291,6 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		}
 		var tls *shared.ApplicationTLSSettings
 		if r.Settings.TLS != nil {
-			clientCertificate := new(string)
-			if !r.Settings.TLS.ClientCertificate.IsUnknown() && !r.Settings.TLS.ClientCertificate.IsNull() {
-				*clientCertificate = r.Settings.TLS.ClientCertificate.ValueString()
-			} else {
-				clientCertificate = nil
-			}
 			clientCertificates := make([]shared.ClientCertificate, 0, len(r.Settings.TLS.ClientCertificates))
 			for clientCertificatesIndex := range r.Settings.TLS.ClientCertificates {
 				var name1 string
@@ -328,7 +319,6 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 				})
 			}
 			tls = &shared.ApplicationTLSSettings{
-				ClientCertificate:  clientCertificate,
 				ClientCertificates: clientCertificates,
 			}
 		}
