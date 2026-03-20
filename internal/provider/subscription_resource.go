@@ -67,12 +67,19 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 		MarkdownDescription: "Subscription Resource",
 		Attributes: map[string]schema.Attribute{
 			"api_hrid": schema.StringAttribute{
-				Required:    true,
-				Description: `Human-readable ID of api`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Human-readable ID of api. Requires replacement if changed.`,
 			},
 			"application_hrid": schema.StringAttribute{
-				Required:    true,
-				Description: `Application's hrid selected to subscribe an API.`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `Application's hrid selected to subscribe an API. Requires replacement if changed.`,
 			},
 			"ending_at": schema.StringAttribute{
 				CustomType: customtypes.RFC3339Type{},
@@ -116,8 +123,11 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `organization ID`,
 			},
 			"plan_hrid": schema.StringAttribute{
-				Required:    true,
-				Description: `API plan's hrid`,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
+				},
+				Description: `API plan's hrid. Requires replacement if changed.`,
 			},
 			"starting_at": schema.StringAttribute{
 				Computed: true,
