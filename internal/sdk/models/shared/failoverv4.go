@@ -75,3 +75,6 @@ func (f *FailoverV4) GetPerSubscription() *bool {
 	}
 	return f.PerSubscription
 }
+
+// #region class-body-failoverv4
+// #endregion class-body-failoverv4

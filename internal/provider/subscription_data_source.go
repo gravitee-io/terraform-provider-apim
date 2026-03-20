@@ -39,15 +39,16 @@ type SubscriptionDataSource struct {
 
 // SubscriptionDataSourceModel describes the data model.
 type SubscriptionDataSourceModel struct {
-	APIHrid         types.String        `tfsdk:"api_hrid"`
-	ApplicationHrid types.String        `tfsdk:"application_hrid"`
-	EndingAt        customtypes.RFC3339 `tfsdk:"ending_at"`
-	EnvironmentID   types.String        `tfsdk:"environment_id"`
-	Hrid            types.String        `tfsdk:"hrid"`
-	ID              types.String        `tfsdk:"id"`
-	OrganizationID  types.String        `tfsdk:"organization_id"`
-	PlanHrid        types.String        `tfsdk:"plan_hrid"`
-	StartingAt      types.String        `tfsdk:"starting_at"`
+	APIHrid         types.String            `tfsdk:"api_hrid"`
+	ApplicationHrid types.String            `tfsdk:"application_hrid"`
+	EndingAt        customtypes.RFC3339     `tfsdk:"ending_at"`
+	EnvironmentID   types.String            `tfsdk:"environment_id"`
+	Hrid            types.String            `tfsdk:"hrid"`
+	ID              types.String            `tfsdk:"id"`
+	Metadata        map[string]types.String `tfsdk:"metadata"`
+	OrganizationID  types.String            `tfsdk:"organization_id"`
+	PlanHrid        types.String            `tfsdk:"plan_hrid"`
+	StartingAt      types.String            `tfsdk:"starting_at"`
 }
 
 // Metadata returns the data source type name.
@@ -89,6 +90,11 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Subscription's uuid.`,
+			},
+			"metadata": schema.MapAttribute{
+				Computed:    true,
+				ElementType: types.StringType,
+				Description: `Key-value metadata for this subscription.`,
 			},
 			"organization_id": schema.StringAttribute{
 				Computed:    true,

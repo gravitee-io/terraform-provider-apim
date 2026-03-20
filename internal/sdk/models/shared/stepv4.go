@@ -84,3 +84,6 @@ func (s *StepV4) GetMessageCondition() *string {
 	}
 	return s.MessageCondition
 }
+
+// #region class-body-stepv4
+// #endregion class-body-stepv4
