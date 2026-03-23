@@ -223,9 +223,37 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
 							"client_certificate": schema.StringAttribute{
-								CustomType:  customtypes.TrimmedStringType{},
-								Computed:    true,
-								Description: `Application TLS client certificate`,
+								CustomType:         customtypes.TrimmedStringType{},
+								Computed:           true,
+								DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+								Description:        `Application TLS client certificate. Deprecated: use clientCertificates instead for multiple certificate support.`,
+							},
+							"client_certificates": schema.ListNestedAttribute{
+								Computed: true,
+								NestedObject: schema.NestedAttributeObject{
+									Attributes: map[string]schema.Attribute{
+										"content": schema.StringAttribute{
+											CustomType:  customtypes.TrimmedStringType{},
+											Computed:    true,
+											Description: `Certificate in PEM format`,
+										},
+										"ends_at": schema.StringAttribute{
+											CustomType:  customtypes.RFC3339Type{},
+											Computed:    true,
+											Description: `Date when this certificate will be removed`,
+										},
+										"name": schema.StringAttribute{
+											Computed:    true,
+											Description: `Certificate name for identification`,
+										},
+										"starts_at": schema.StringAttribute{
+											CustomType:  customtypes.RFC3339Type{},
+											Computed:    true,
+											Description: `Date when this certificate becomes active`,
+										},
+									},
+								},
+								Description: `List of client certificates for mTLS authentication. Supports certificate rotation.`,
 							},
 						},
 						Description: `Application TLS settings`,

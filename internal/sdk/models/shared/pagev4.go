@@ -126,3 +126,6 @@ func (p *PageV4) GetParentHrid() *string {
 	}
 	return p.ParentHrid
 }
+
+// #region class-body-pagev4
+// #endregion class-body-pagev4

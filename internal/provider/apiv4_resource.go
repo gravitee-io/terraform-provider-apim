@@ -542,6 +542,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Optional:    true,
 						Default:     int32default.StaticInt32(2),
 						Description: `Limit the number of retry attempts before recording an error. Each attempt dynamically selects an endpoint based on the load balancing algorithm. Default: 2`,
+						Validators: []validator.Int32{
+							int32validator.AtLeast(0),
+						},
 					},
 					"open_state_duration": schema.Int64Attribute{
 						Computed:    true,
@@ -1256,7 +1259,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
+				Description: `Human-readable ID of a spec. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),

@@ -102,3 +102,6 @@ func (e *EndpointV4) GetTenants() []string {
 	}
 	return e.Tenants
 }
+
+// #region class-body-endpointv4
+// #endregion class-body-endpointv4
