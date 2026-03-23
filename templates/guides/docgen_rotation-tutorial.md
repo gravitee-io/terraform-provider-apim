@@ -41,9 +41,9 @@ data "local_file" "cert2" {
 In this state, `cert1` is active until the end of August and `cert2` will be active the 1 of July.
 
 ```terraform
-resource "apim_application" "backend-to-backend-certs" {
+resource "apim_application" "backend-to-backend-multi-certs" {
   # should match the resource name
-  hrid        = "backend-to-backend-certs"
+  hrid        = "backend-to-backend-multi-certs"
   name        = "[Terraform] Application for Backend to Backend OAuth"
   description = "Demonstrates applications for OAuth with certificate can be created with Terraform"
   domain      = "example.com"
