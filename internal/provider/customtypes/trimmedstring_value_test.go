@@ -16,6 +16,30 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 )
 
+func TestNewTrimmedStringPointerValue(t *testing.T) {
+	t.Parallel()
+
+	t.Run("nil pointer returns null", func(t *testing.T) {
+		t.Parallel()
+		result := customtypes.NewTrimmedStringPointerValue(nil)
+		if !result.IsNull() {
+			t.Errorf("Expected null TrimmedString for nil pointer, got: %s", result)
+		}
+	})
+
+	t.Run("non-nil pointer returns value", func(t *testing.T) {
+		t.Parallel()
+		s := "hello"
+		result := customtypes.NewTrimmedStringPointerValue(&s)
+		if result.IsNull() || result.IsUnknown() {
+			t.Errorf("Expected known TrimmedString, got null or unknown")
+		}
+		if result.ValueString() != "hello" {
+			t.Errorf("Expected value 'hello', got: %s", result.ValueString())
+		}
+	})
+}
+
 func TestTrimmedString_StringSemanticEquals(t *testing.T) {
 	t.Parallel()
 
@@ -25,6 +49,20 @@ func TestTrimmedString_StringSemanticEquals(t *testing.T) {
 		expectedMatch            bool
 		expectedDiags            diag.Diagnostics
 	}{
+		"error - not given TrimmedString value": {
+			currentTrimmedStringtime: customtypes.NewTrimmedStringValue("foo"),
+			givenTrimmedStringtime:   basetypes.NewStringValue("foo"),
+			expectedMatch:            false,
+			expectedDiags: diag.Diagnostics{
+				diag.NewErrorDiagnostic(
+					"Semantic Equality Check Error",
+					"An unexpected value type was received while performing semantic equality checks. "+
+						"Please report this to the provider developers.\n\n"+
+						"Expected Value Type: customtypes.TrimmedString\n"+
+						"Got Value Type: basetypes.StringValue",
+				),
+			},
+		},
 		"not equal - different string": {
 			currentTrimmedStringtime: customtypes.NewTrimmedStringValue("foo"),
 			givenTrimmedStringtime:   customtypes.NewTrimmedStringValue("bar"),

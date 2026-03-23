@@ -284,6 +284,45 @@ func TestRFC3339ValidateParameter(t *testing.T) {
 	}
 }
 
+func TestNewRFC3339PointerValue(t *testing.T) {
+	t.Parallel()
+
+	t.Run("nil pointer returns null", func(t *testing.T) {
+		t.Parallel()
+		result, diags := customtypes.NewRFC3339PointerValue(nil)
+		if diags.HasError() {
+			t.Fatalf("Unexpected error: %s", diags)
+		}
+		if !result.IsNull() {
+			t.Errorf("Expected null RFC3339 for nil pointer, got: %s", result)
+		}
+	})
+
+	t.Run("non-nil pointer returns value", func(t *testing.T) {
+		t.Parallel()
+		s := "2023-07-25T23:43:16Z"
+		result, diags := customtypes.NewRFC3339PointerValue(&s)
+		if diags.HasError() {
+			t.Fatalf("Unexpected error: %s", diags)
+		}
+		if result.IsNull() || result.IsUnknown() {
+			t.Errorf("Expected known RFC3339, got null or unknown")
+		}
+		if result.ValueString() != s {
+			t.Errorf("Expected value '%s', got: %s", s, result.ValueString())
+		}
+	})
+
+	t.Run("non-nil pointer with invalid value returns error", func(t *testing.T) {
+		t.Parallel()
+		s := "not-a-date"
+		_, diags := customtypes.NewRFC3339PointerValue(&s)
+		if !diags.HasError() {
+			t.Error("Expected error for invalid RFC3339 string, got none")
+		}
+	})
+}
+
 func TestRFC3339_ValueRFC3339Time(t *testing.T) {
 	t.Parallel()
 
