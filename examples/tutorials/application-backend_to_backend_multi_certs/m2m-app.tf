@@ -1,6 +1,6 @@
-resource "apim_application" "backend-to-backend-certs" {
+resource "apim_application" "backend-to-backend-multi-certs" {
   # should match the resource name
-  hrid        = "backend-to-backend-certs"
+  hrid        = "backend-to-backend-multi-certs"
   name        = "[Terraform] Application for Backend to Backend OAuth"
   description = "Demonstrates applications for OAuth with certificate can be created with Terraform"
   domain      = "example.com"

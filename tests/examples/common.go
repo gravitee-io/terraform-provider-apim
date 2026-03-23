@@ -1,31 +1,36 @@
 package examples_test
 
 import (
+	"bufio"
 	"fmt"
-	"github.com/gravitee-io/terraform-provider-apim/internal/provider"
-	"github.com/hashicorp/terraform-plugin-framework/providerserver"
-	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
-	"github.com/hashicorp/terraform-plugin-testing/config"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/gravitee-io/terraform-provider-apim/internal/provider"
+	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
+	"github.com/hashicorp/terraform-plugin-framework/providerserver"
+	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
+	"github.com/hashicorp/terraform-plugin-testing/config"
 )
 
 type directory string
 
 type testcase struct {
-	name            string
-	hrid            string
-	directory       directory
-	resourceAddress string
+	name         string
+	directory    directory
+	skipVersions []utils.ApimVersion
 }
+
+// Compile-time check to ensure directory.get implements config.TestStepConfigFunc
+var _ config.TestStepConfigFunc = directory("").get
 
 func (d directory) get(config.TestStepConfigRequest) string {
-	return string(examplesUseCasesPath + "/" + d)
+	return string(d)
 }
 
-const examplesUseCasesDir = "examples/use-cases"
-const examplesUseCasesPath = "../../" + examplesUseCasesDir
+const examplesUseCasesPath = "../../examples/use-cases"
+const examplesTutorialsPath = "../../examples/tutorials"
 
 func listTestDirectories(basePath string) []string {
 	var dirs []string
@@ -33,10 +38,12 @@ func listTestDirectories(basePath string) []string {
 		if err != nil {
 			return err
 		}
-		if info.IsDir() {
-			if _, err := os.Stat(filepath.Join(path, ".testignore")); os.IsNotExist(err) {
-				dirs = append(dirs, path)
+		if info.IsDir() && path != basePath {
+			if hasTestIgnoreWithoutVersions(path) {
+				fmt.Printf("Skipping directory %s, found empty .testignore", path)
+				return filepath.SkipDir
 			}
+			dirs = append(dirs, path)
 		}
 		return nil
 	})
@@ -46,34 +53,51 @@ func listTestDirectories(basePath string) []string {
 	return dirs
 }
 
+// hasTestIgnoreWithoutVersions returns true if the directory has a .testignore
+// file that contains no valid APIM version entries, meaning "skip entirely".
+func hasTestIgnoreWithoutVersions(dir string) bool {
+	path := filepath.Join(dir, ".testignore")
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return false
+	}
+	return parseTestIgnore(path) == nil
+}
+
 func createTestCases(directories []string) []testcase {
 	cases := make([]testcase, 0)
 	for _, dir := range directories {
-
-		if strings.HasSuffix(dir, examplesUseCasesDir) {
-			continue
-		}
-		testDir := filepath.Base(dir) // Get the parent directory name
-
-		// Extract resource type and id from the directory name
-		typeAndId := strings.Split(testDir, "-")
-		if len(typeAndId) != 2 {
-			panic("Invalid directory name: " + testDir + ". Should be of the form <type>-<id> where id does not contain spaces hyphens")
-		}
-
-		// Setup test case
-		hrid := typeAndId[1]
-		resourceAddress := "apim_" + typeAndId[0] + "." + hrid
+		testDir := filepath.Base(dir)
+		skipVersions := parseTestIgnore(filepath.Join(dir, ".testignore"))
 
 		cases = append(cases, testcase{
-			name:            testDir,
-			directory:       directory(testDir),
-			resourceAddress: resourceAddress,
-			hrid:            hrid,
+			name:         testDir,
+			directory:    directory(dir),
+			skipVersions: skipVersions,
 		})
-
 	}
 	return cases
+}
+
+// parseTestIgnore reads a .testignore file and returns the APIM versions to skip.
+// If the file does not exist or contains no valid versions, it returns nil (skip none).
+// If the file contains only unknown version strings, they are ignored.
+func parseTestIgnore(path string) []utils.ApimVersion {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil
+	}
+	defer f.Close()
+
+	var versions []utils.ApimVersion
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
+		versions = append(versions, utils.ParseApimVersion(line))
+	}
+	return versions
 }
 
 func cleanupTerraformStateFiles(directories []string) {

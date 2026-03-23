@@ -117,9 +117,9 @@ chunks:
   - template: examples/tutorials/hcl-export/exported-clean.tf
     exportedAs: ExportTutorialHCLClean
     required: true
-  - template: examples/tutorials/application-b2b_multi_certs/provider.tf
+  - template: examples/tutorials/application-backend_to_backend_multi_certs/provider.tf
     exportedAs: CertRotationProvider
     required: true
-  - template: examples/tutorials/application-b2b_multi_certs/m2m-app.tf
+  - template: examples/tutorials/application-backend_to_backend_multi_certs/m2m-app.tf
     exportedAs: CertRotationConfig
     required: true
