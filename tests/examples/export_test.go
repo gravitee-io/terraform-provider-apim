@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
 )
@@ -63,7 +64,7 @@ func importAPI(t *testing.T) string {
 	req.SetBasicAuth(username, password)
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{}
+	client := &http.Client{Timeout: 30 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
 		t.Fatalf("Failed to execute request: %v", err)
