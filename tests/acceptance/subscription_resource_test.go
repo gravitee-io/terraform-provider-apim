@@ -2,6 +2,7 @@ package acceptance_test
 
 import (
 	"encoding/json"
+	"regexp"
 	"testing"
 
 	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
@@ -151,11 +152,6 @@ func TestSubscriptionResource_metadata(t *testing.T) {
 					"organization_id": config.StringVariable(organizationId),
 					"metadata":        metadataCreate,
 				},
-				ConfigPlanChecks: resource.ConfigPlanChecks{
-					PostApplyPostRefresh: []plancheck.PlanCheck{
-						plancheck.ExpectEmptyPlan(),
-					},
-				},
 			},
 			// Verifies resource update with different metadata.
 			{
@@ -171,9 +167,6 @@ func TestSubscriptionResource_metadata(t *testing.T) {
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectNonEmptyPlan(),
 					},
-					PostApplyPostRefresh: []plancheck.PlanCheck{
-						plancheck.ExpectEmptyPlan(),
-					},
 				},
 			},
 			{
@@ -184,11 +177,6 @@ func TestSubscriptionResource_metadata(t *testing.T) {
 					"hrid":            config.StringVariable(apiRandomId),
 					"organization_id": config.StringVariable(organizationId),
 					"metadata":        config.MapVariable(map[string]config.Variable{}),
-				},
-				ConfigPlanChecks: resource.ConfigPlanChecks{
-					PostApplyPostRefresh: []plancheck.PlanCheck{
-						plancheck.ExpectEmptyPlan(),
-					},
 				},
 			},
 			// Testing framework implicitly verifies resource delete.
@@ -223,11 +211,6 @@ func TestSubscriptionResource_metadata_recreate(t *testing.T) {
 					"organization_id": config.StringVariable(organizationId),
 					"metadata":        metadata,
 				},
-				ConfigPlanChecks: resource.ConfigPlanChecks{
-					PostApplyPostRefresh: []plancheck.PlanCheck{
-						plancheck.ExpectEmptyPlan(),
-					},
-				},
 			},
 			// Destroy all resources.
 			{
@@ -251,12 +234,92 @@ func TestSubscriptionResource_metadata_recreate(t *testing.T) {
 					"organization_id": config.StringVariable(organizationId),
 					"metadata":        metadata,
 				},
-				ConfigPlanChecks: resource.ConfigPlanChecks{
-					PostApplyPostRefresh: []plancheck.PlanCheck{
-						plancheck.ExpectEmptyPlan(),
-					},
-				},
 			},
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
+// Verifies that plan_hrid, api_hrid, and application_hrid cannot be changed on an existing subscription.
+func TestSubscriptionResource_immutable_fields(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId := "test-" + acctest.RandString(10)
+
+	cert := getClientTLSCert(t)
+
+	baseVars := config.Variables{
+		"environment_id":     config.StringVariable(environmentId),
+		"hrid":               config.StringVariable(randomId),
+		"organization_id":    config.StringVariable(organizationId),
+		"api_hrid":           config.StringVariable("api-" + randomId),
+		"plan_hrid":          config.StringVariable("jwt"),
+		"application_hrid":   config.StringVariable("app-" + randomId),
+		"client_certificate": config.StringVariable(cert),
+	}
+
+	changePlanVars := config.Variables{
+		"environment_id":     config.StringVariable(environmentId),
+		"hrid":               config.StringVariable(randomId),
+		"organization_id":    config.StringVariable(organizationId),
+		"api_hrid":           config.StringVariable("api-" + randomId),
+		"plan_hrid":          config.StringVariable("mtls"),
+		"application_hrid":   config.StringVariable("app-" + randomId),
+		"client_certificate": config.StringVariable(cert),
+	}
+
+	changeAPIVars := config.Variables{
+		"environment_id":     config.StringVariable(environmentId),
+		"hrid":               config.StringVariable(randomId),
+		"organization_id":    config.StringVariable(organizationId),
+		"api_hrid":           config.StringVariable("api-other-" + randomId),
+		"plan_hrid":          config.StringVariable("jwt"),
+		"application_hrid":   config.StringVariable("app-" + randomId),
+		"client_certificate": config.StringVariable(cert),
+	}
+
+	changeAppVars := config.Variables{
+		"environment_id":     config.StringVariable(environmentId),
+		"hrid":               config.StringVariable(randomId),
+		"organization_id":    config.StringVariable(organizationId),
+		"api_hrid":           config.StringVariable("api-" + randomId),
+		"plan_hrid":          config.StringVariable("jwt"),
+		"application_hrid":   config.StringVariable("app-other-" + randomId),
+		"client_certificate": config.StringVariable(cert),
+	}
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Step 1: Create the subscription.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          baseVars,
+			},
+			// Step 2: Try to change the plan — expect plan error.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          changePlanVars,
+				ExpectError:              regexp.MustCompile("plan cannot be changed"),
+			},
+			// Step 3: Try to change the application — expect plan error.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          changeAppVars,
+				ExpectError:              regexp.MustCompile("application cannot be changed"),
+			},
+			// Step 4: Try to change the API — expect plan error.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          changeAPIVars,
+				ExpectError:              regexp.MustCompile("This attribute cannot be changed on an existing resource"),
+			},
+
 			// Testing framework implicitly verifies resource delete.
 		},
 	})

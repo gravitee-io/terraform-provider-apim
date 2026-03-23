@@ -35,6 +35,12 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
+  # Immutable fields: cannot be changed on an existing subscription
+  - target: $.components.schemas.SubscriptionState.allOf[?@.properties.apiHrid].properties.apiHrid
+    description: API cannot be changed on an existing subscription
+    update:
+      x-speakeasy-plan-modifiers: Immutable
+
   - target: $.components.schemas.SubscriptionSpec.properties.endingAt
     description: Using RFC3339 to make sure dates semantics equal
     update:
