@@ -286,7 +286,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						},
 						Description: `Simple application settings`,
 						Validators: []validator.Object{
-							objectvalidator.ExactlyOneOf(path.Expressions{
+							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("oauth"),
 							}...),
 						},
@@ -340,7 +340,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						},
 						Description: `Application OAuth client settings. This require Dynamic Client Registration to be enabled at the environment level.`,
 						Validators: []validator.Object{
-							objectvalidator.ExactlyOneOf(path.Expressions{
+							objectvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("app"),
 							}...),
 						},
