@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -119,6 +120,7 @@ func TestSubscriptionResource_update(t *testing.T) {
 
 // Verifies that plan_hrid, api_hrid, and application_hrid cannot be changed on an existing subscription.
 func TestSubscriptionResource_immutable_fields(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9)
 	t.Parallel()
 
 	environmentId := "DEFAULT"
