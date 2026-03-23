@@ -1,7 +1,6 @@
 package acceptance_test
 
 import (
-	"encoding/json"
 	"regexp"
 	"testing"
 
@@ -9,7 +8,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
-	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // Verifies the create, read, import, and delete lifecycle of a minimal
@@ -45,19 +43,7 @@ func TestAPIV4Resource_minimal(t *testing.T) {
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
-				ImportStateIdFunc: func(s *terraform.State) (string, error) {
-					importIDBytes, err := json.Marshal(struct {
-						EnvironmentId  string `json:"environment_id"`
-						Hrid           string `json:"hrid"`
-						OrganizationId string `json:"organization_id"`
-					}{
-						EnvironmentId:  s.RootModule().Resources[resourceAddress].Primary.Attributes["environment_id"],
-						Hrid:           s.RootModule().Resources[resourceAddress].Primary.Attributes["hrid"],
-						OrganizationId: s.RootModule().Resources[resourceAddress].Primary.Attributes["organization_id"],
-					})
-
-					return string(importIDBytes), err
-				},
+				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
@@ -102,19 +88,7 @@ func TestAPIV4Resource_all(t *testing.T) {
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
-				ImportStateIdFunc: func(s *terraform.State) (string, error) {
-					importIDBytes, err := json.Marshal(struct {
-						EnvironmentId  string `json:"environment_id"`
-						Hrid           string `json:"hrid"`
-						OrganizationId string `json:"organization_id"`
-					}{
-						EnvironmentId:  s.RootModule().Resources[resourceAddress].Primary.Attributes["environment_id"],
-						Hrid:           s.RootModule().Resources[resourceAddress].Primary.Attributes["hrid"],
-						OrganizationId: s.RootModule().Resources[resourceAddress].Primary.Attributes["organization_id"],
-					})
-
-					return string(importIDBytes), err
-				},
+				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
@@ -217,19 +191,7 @@ func TestAPIV4Resource_plans(t *testing.T) {
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
-				ImportStateIdFunc: func(s *terraform.State) (string, error) {
-					importIDBytes, err := json.Marshal(struct {
-						EnvironmentId  string `json:"environment_id"`
-						Hrid           string `json:"hrid"`
-						OrganizationId string `json:"organization_id"`
-					}{
-						EnvironmentId:  s.RootModule().Resources[resourceAddress].Primary.Attributes["environment_id"],
-						Hrid:           s.RootModule().Resources[resourceAddress].Primary.Attributes["hrid"],
-						OrganizationId: s.RootModule().Resources[resourceAddress].Primary.Attributes["organization_id"],
-					})
-
-					return string(importIDBytes), err
-				},
+				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
@@ -355,19 +317,7 @@ func TestAPIV4Resource_pages(t *testing.T) {
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
-				ImportStateIdFunc: func(s *terraform.State) (string, error) {
-					importIDBytes, err := json.Marshal(struct {
-						EnvironmentId  string `json:"environment_id"`
-						Hrid           string `json:"hrid"`
-						OrganizationId string `json:"organization_id"`
-					}{
-						EnvironmentId:  s.RootModule().Resources[resourceAddress].Primary.Attributes["environment_id"],
-						Hrid:           s.RootModule().Resources[resourceAddress].Primary.Attributes["hrid"],
-						OrganizationId: s.RootModule().Resources[resourceAddress].Primary.Attributes["organization_id"],
-					})
-
-					return string(importIDBytes), err
-				},
+				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
@@ -532,19 +482,7 @@ func TestAPIV4Resource_cors(t *testing.T) {
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
-				ImportStateIdFunc: func(s *terraform.State) (string, error) {
-					importIDBytes, err := json.Marshal(struct {
-						EnvironmentId  string `json:"environment_id"`
-						Hrid           string `json:"hrid"`
-						OrganizationId string `json:"organization_id"`
-					}{
-						EnvironmentId:  s.RootModule().Resources[resourceAddress].Primary.Attributes["environment_id"],
-						Hrid:           s.RootModule().Resources[resourceAddress].Primary.Attributes["hrid"],
-						OrganizationId: s.RootModule().Resources[resourceAddress].Primary.Attributes["organization_id"],
-					})
-
-					return string(importIDBytes), err
-				},
+				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
