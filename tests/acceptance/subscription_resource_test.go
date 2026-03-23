@@ -1,7 +1,6 @@
 package acceptance_test
 
 import (
-	"encoding/json"
 	"regexp"
 	"testing"
 
@@ -10,7 +9,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
-	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // Verifies the create, read, import, and delete lifecycle of the
@@ -46,21 +44,7 @@ func TestSubscriptionResource_minimal(t *testing.T) {
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
-				ImportStateIdFunc: func(s *terraform.State) (string, error) {
-					importIDBytes, err := json.Marshal(struct {
-						EnvironmentId  string `json:"environment_id"`
-						Hrid           string `json:"hrid"`
-						ApiHrid        string `json:"api_hrid"`
-						OrganizationId string `json:"organization_id"`
-					}{
-						EnvironmentId:  s.RootModule().Resources[resourceAddress].Primary.Attributes["environment_id"],
-						Hrid:           "test",
-						ApiHrid:        s.RootModule().Resources[resourceAddress].Primary.Attributes["api_hrid"],
-						OrganizationId: s.RootModule().Resources[resourceAddress].Primary.Attributes["organization_id"],
-					})
-
-					return string(importIDBytes), err
-				},
+				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "api_hrid", "organization_id"}, map[string]string{"hrid": "test"}),
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"starting_at",

@@ -7,7 +7,6 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"crypto/x509/pkix"
-	"encoding/json"
 	"encoding/pem"
 	"math/big"
 	"regexp"
@@ -19,7 +18,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
-	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // Verifies the create, read, import, and delete lifecycle of the
@@ -53,19 +51,7 @@ func TestApplicationResource_minimal(t *testing.T) {
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
-				ImportStateIdFunc: func(s *terraform.State) (string, error) {
-					importIDBytes, err := json.Marshal(struct {
-						EnvironmentId  string `json:"environment_id"`
-						Hrid           string `json:"hrid"`
-						OrganizationId string `json:"organization_id"`
-					}{
-						EnvironmentId:  s.RootModule().Resources[resourceAddress].Primary.Attributes["environment_id"],
-						Hrid:           s.RootModule().Resources[resourceAddress].Primary.Attributes["hrid"],
-						OrganizationId: s.RootModule().Resources[resourceAddress].Primary.Attributes["organization_id"],
-					})
-
-					return string(importIDBytes), err
-				},
+				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify: true,
 			},
 			// Testing framework implicitly verifies resource delete.
@@ -396,19 +382,7 @@ func TestApplicationResource_update(t *testing.T) {
 				},
 				ResourceName: resourceAddress,
 				ImportState:  true,
-				ImportStateIdFunc: func(s *terraform.State) (string, error) {
-					importIDBytes, err := json.Marshal(struct {
-						EnvironmentId  string `json:"environment_id"`
-						Hrid           string `json:"hrid"`
-						OrganizationId string `json:"organization_id"`
-					}{
-						EnvironmentId:  s.RootModule().Resources[resourceAddress].Primary.Attributes["environment_id"],
-						Hrid:           s.RootModule().Resources[resourceAddress].Primary.Attributes["hrid"],
-						OrganizationId: s.RootModule().Resources[resourceAddress].Primary.Attributes["organization_id"],
-					})
-
-					return string(importIDBytes), err
-				},
+				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify: true,
 			},
 			// Verifies resource update.
