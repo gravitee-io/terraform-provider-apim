@@ -961,6 +961,7 @@ components:
               type: string
               description: The API's Hrid.
               example: demo-api
+              x-speakeasy-plan-modifiers: Immutable
             environmentId:
               description: The environment ID of the Subscription.
               type: string
