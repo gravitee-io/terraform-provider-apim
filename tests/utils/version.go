@@ -31,12 +31,12 @@ func (v ApimVersion) String() string {
 }
 
 func ParseApimVersion(s string) ApimVersion {
-	switch strings.TrimSpace(s) {
-	case "4.9":
+	switch {
+	case strings.HasPrefix(s, "4.9"):
 		return ApimV4_9
-	case "4.10":
+	case strings.HasPrefix(s, "4.10"):
 		return ApimV4_10
-	case "4.11":
+	case strings.HasPrefix(s, "4.11"):
 		return ApimV4_11
 	default:
 		return ApimUnknown

@@ -90,12 +90,18 @@ func parseTestIgnore(path string) []utils.ApimVersion {
 
 	var versions []utils.ApimVersion
 	scanner := bufio.NewScanner(f)
+	var ln int
 	for scanner.Scan() {
+		ln++
 		line := strings.TrimSpace(scanner.Text())
 		if line == "" {
 			continue
 		}
-		versions = append(versions, utils.ParseApimVersion(line))
+		version := utils.ParseApimVersion(line)
+		if version == utils.ApimUnknown {
+			panic(fmt.Sprintf("Invalid APIM version '%s' in %s:%d", line, path, ln))
+		}
+		versions = append(versions, version)
 	}
 	return versions
 }
