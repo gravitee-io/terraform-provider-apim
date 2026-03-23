@@ -65,14 +65,14 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 			if resp.Settings.App == nil {
 				r.Settings.App = nil
 			} else {
-				r.Settings.App = &tfTypes.SimpleApplicationSettings{}
+				r.Settings.App = &tfTypes.App{}
 				r.Settings.App.ClientID = types.StringPointerValue(resp.Settings.App.ClientID)
 				r.Settings.App.Type = types.StringPointerValue(resp.Settings.App.Type)
 			}
 			if resp.Settings.Oauth == nil {
 				r.Settings.Oauth = nil
 			} else {
-				r.Settings.Oauth = &tfTypes.ApplicationOAuthClientSettings{}
+				r.Settings.Oauth = &tfTypes.Oauth{}
 				if len(resp.Settings.Oauth.AdditionalClientMetadata) > 0 {
 					r.Settings.Oauth.AdditionalClientMetadata = make(map[string]types.String, len(resp.Settings.Oauth.AdditionalClientMetadata))
 					for key, value := range resp.Settings.Oauth.AdditionalClientMetadata {
@@ -248,7 +248,7 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 	}
 	var settings *shared.ApplicationSettings
 	if r.Settings != nil {
-		var app *shared.SimpleApplicationSettings
+		var app *shared.App
 		if r.Settings.App != nil {
 			typeVar := new(string)
 			if !r.Settings.App.Type.IsUnknown() && !r.Settings.App.Type.IsNull() {
@@ -262,12 +262,12 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 			} else {
 				clientID = nil
 			}
-			app = &shared.SimpleApplicationSettings{
+			app = &shared.App{
 				Type:     typeVar,
 				ClientID: clientID,
 			}
 		}
-		var oauth *shared.ApplicationOAuthClientSettings
+		var oauth *shared.Oauth
 		if r.Settings.Oauth != nil {
 			applicationType := shared.ApplicationType(r.Settings.Oauth.ApplicationType.ValueString())
 			grantTypes := make([]shared.GrantType, 0, len(r.Settings.Oauth.GrantTypes))
@@ -285,7 +285,7 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 
 				additionalClientMetadata[additionalClientMetadataKey] = additionalClientMetadataInst
 			}
-			oauth = &shared.ApplicationOAuthClientSettings{
+			oauth = &shared.Oauth{
 				ApplicationType:          applicationType,
 				GrantTypes:               grantTypes,
 				RedirectUris:             redirectUris,

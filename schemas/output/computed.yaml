@@ -768,15 +768,19 @@ components:
       description: Application settings defines the configuration of consumers authentication. Depending on the control plane configuration some applications types may be restricted. `app` and `oauth` are mutually exclusive. If none is set it fallbacks to `app` without any property set.
       properties:
         app:
-          $ref: '#/components/schemas/SimpleApplicationSettings'
-          x-speakeasy-param-computed: false
-          x-speakeasy-xor-with:
-            - ../oauth
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
+          allOf:
+            - $ref: '#/components/schemas/SimpleApplicationSettings'
+          x-speakeasy-conflicts-with:
+            - oauth
         oauth:
-          $ref: '#/components/schemas/ApplicationOAuthClientSettings'
-          x-speakeasy-param-computed: false
-          x-speakeasy-xor-with:
-            - ../app
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
+          allOf:
+            - $ref: '#/components/schemas/ApplicationOAuthClientSettings'
+          x-speakeasy-conflicts-with:
+            - app
         tls:
           $ref: '#/components/schemas/ApplicationTLSSettings'
           x-speakeasy-param-computed: false
@@ -850,7 +854,6 @@ components:
         - applicationType
         - redirectUris
         - grantTypes
-      x-speakeasy-param-computed: false
     ApplicationTLSSettings:
       description: Application TLS settings
       properties:

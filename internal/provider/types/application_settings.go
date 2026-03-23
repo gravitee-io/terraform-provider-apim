@@ -4,7 +4,7 @@
 package types
 
 type ApplicationSettings struct {
-	App   *SimpleApplicationSettings      `tfsdk:"app"`
-	Oauth *ApplicationOAuthClientSettings `tfsdk:"oauth"`
-	TLS   *ApplicationTLSSettings         `tfsdk:"tls"`
+	App   *App                    `tfsdk:"app"`
+	Oauth *Oauth                  `tfsdk:"oauth"`
+	TLS   *ApplicationTLSSettings `tfsdk:"tls"`
 }

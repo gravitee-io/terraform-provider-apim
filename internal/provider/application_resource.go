@@ -20,6 +20,7 @@ import (
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
+	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -271,6 +272,9 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"app": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"client_id": schema.StringAttribute{
 								Optional:    true,
@@ -285,9 +289,18 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Simple application settings`,
+						Validators: []validator.Object{
+							objectvalidator.ConflictsWith(path.Expressions{
+								path.MatchRelative().AtParent().AtName("oauth"),
+							}...),
+						},
 					},
 					"oauth": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"additional_client_metadata": schema.MapAttribute{
 								Optional:    true,
@@ -334,6 +347,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							},
 						},
 						Description: `Application OAuth client settings. This require Dynamic Client Registration to be enabled at the environment level.`,
+						Validators: []validator.Object{
+							objectvalidator.ConflictsWith(path.Expressions{
+								path.MatchRelative().AtParent().AtName("app"),
+							}...),
+						},
 					},
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
