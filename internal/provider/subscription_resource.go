@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	custom_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
@@ -66,7 +67,10 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 		MarkdownDescription: "Subscription Resource",
 		Attributes: map[string]schema.Attribute{
 			"api_hrid": schema.StringAttribute{
-				Required:    true,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.Immutable(),
+				},
 				Description: `Human-readable ID of api`,
 			},
 			"application_hrid": schema.StringAttribute{
