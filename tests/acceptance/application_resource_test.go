@@ -400,3 +400,23 @@ func TestApplicationResource_update(t *testing.T) {
 		},
 	})
 }
+
+// Verifies that setting both app and oauth in settings produces a conflict error.
+func TestApplicationResource_settingsBothAppAndOAuth(t *testing.T) {
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid": config.StringVariable(randomId),
+				},
+				ExpectError: regexp.MustCompile(`cannot be specified when`),
+			},
+		},
+	})
+}

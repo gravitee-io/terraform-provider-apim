@@ -112,28 +112,39 @@ actions:
         valueType: customtypes.RFC3339
 
 
+  - target: $.components.schemas.ApplicationSettings.properties.app
+    description: Computed because API always returns app settings even when not explicitly configured
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.ApplicationSettings.properties.oauth
-    description: Make sure it not computed
+    description: Computed because API may return oauth settings even when not explicitly configured
     update:
-      x-speakeasy-param-computed: false
-  - target: $.components.schemas.ApplicationOAuthClientSettings
-    description: Make sure it not computed
-    update:
-      x-speakeasy-param-computed: false
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
   ## Ignored for Terraform
   - target: $.components.schemas.ApplicationSpec.properties.status
     description: This property is not managed by Terraform as it is confusing and unnecessary for users.
     update:
       x-speakeasy-terraform-ignore: true
 
-  ## XOR for app settings
+  ## Mutual exclusion for app settings
+  ## Wrap $ref in allOf so Speakeasy can apply conflicts-with on nested objects
+  - target: $.components.schemas.ApplicationSettings.properties.app['$ref']
+    remove: true
   - target: $.components.schemas.ApplicationSettings.properties.app
-    description:
+    description: app and oauth are mutually exclusive
     update:
-      x-speakeasy-xor-with:
-        - ../oauth
+      allOf:
+        - $ref: '#/components/schemas/SimpleApplicationSettings'
+      x-speakeasy-conflicts-with:
+        - oauth
+  - target: $.components.schemas.ApplicationSettings.properties.oauth['$ref']
+    remove: true
   - target: $.components.schemas.ApplicationSettings.properties.oauth
-    description:
+    description: oauth and app are mutually exclusive
     update:
-      x-speakeasy-xor-with:
-        - ../app
+      allOf:
+        - $ref: '#/components/schemas/ApplicationOAuthClientSettings'
+      x-speakeasy-conflicts-with:
+        - app
