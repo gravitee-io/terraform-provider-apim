@@ -270,7 +270,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"app": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"client_id": schema.StringAttribute{
 								Optional:    true,
@@ -292,7 +296,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 						},
 					},
 					"oauth": schema.SingleNestedAttribute{
+						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"additional_client_metadata": schema.MapAttribute{
 								Optional:    true,
