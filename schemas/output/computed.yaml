@@ -922,11 +922,13 @@ components:
           description: Application's hrid selected to subscribe an API.
           example: demo-app
           x-speakeasy-param-computed: false
+          x-speakeasy-plan-modifiers: Immutable
         planHrid:
           type: string
           description: API plan's hrid
           example: demo-plan
           x-speakeasy-param-computed: false
+          x-speakeasy-plan-modifiers: Immutable
         endingAt:
           type: string
           format: date-time
