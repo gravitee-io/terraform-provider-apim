@@ -69,3 +69,20 @@ func TestImmutable_Changed(t *testing.T) {
 		t.Fatalf("expected summary 'Immutable attribute', got '%s'", got)
 	}
 }
+
+func TestImmutable_UnknownPlanValue(t *testing.T) {
+	t.Parallel()
+
+	req := planmodifier.StringRequest{
+		Path:       path.Root("test"),
+		StateValue: types.StringValue("existing-api"),
+		PlanValue:  types.StringUnknown(), // computed, not yet resolved
+	}
+	resp := &planmodifier.StringResponse{}
+
+	stringplanmodifier.Immutable().PlanModifyString(context.Background(), req, resp)
+
+	if resp.Diagnostics.HasError() {
+		t.Fatalf("expected no error for unknown plan value on existing resource, got: %s", resp.Diagnostics.Errors())
+	}
+}

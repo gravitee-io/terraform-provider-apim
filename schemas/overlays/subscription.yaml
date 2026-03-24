@@ -40,6 +40,14 @@ actions:
     description: API cannot be changed on an existing subscription
     update:
       x-speakeasy-plan-modifiers: Immutable
+  - target: $.components.schemas.SubscriptionSpec.properties.planHrid
+    description: Plan cannot be changed on an existing subscription
+    update:
+      x-speakeasy-plan-modifiers: Immutable
+  - target: $.components.schemas.SubscriptionSpec.properties.applicationHrid
+    description: Application cannot be changed on an existing subscription
+    update:
+      x-speakeasy-plan-modifiers: Immutable
 
   - target: $.components.schemas.SubscriptionSpec.properties.endingAt
     description: Using RFC3339 to make sure dates semantics equal

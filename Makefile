@@ -51,7 +51,7 @@ pre-test: local-test-setup
 
 .PHONY: acceptance-tests
 acceptance-tests: ## Run acceptance tests
-	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD="$${APIM_PASSWORD}" APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -count=1 -v ./tests/acceptance
+	@APIM_USERNAME=${APIM_USERNAME} APIM_PASSWORD="$${APIM_PASSWORD}" APIM_SERVER_URL=${APIM_SERVER_URL} TF_ACC=1 go test -count=1 -p 2 -v ./tests/acceptance
 
 
 .PHONY: examples-tests

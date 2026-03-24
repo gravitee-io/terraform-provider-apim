@@ -304,14 +304,14 @@ func TestSubscriptionResource_immutable_fields(t *testing.T) {
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables:          changePlanVars,
-				ExpectError:              regexp.MustCompile("plan cannot be changed"),
+				ExpectError:              regexp.MustCompile("This attribute cannot be changed on an existing resource"),
 			},
 			// Step 3: Try to change the application — expect plan error.
 			{
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables:          changeAppVars,
-				ExpectError:              regexp.MustCompile("application cannot be changed"),
+				ExpectError:              regexp.MustCompile("This attribute cannot be changed on an existing resource"),
 			},
 			// Step 4: Try to change the API — expect plan error.
 			{
