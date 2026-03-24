@@ -125,14 +125,10 @@ func TestSkipFor(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			os.Setenv("APIM_IMAGE_TAG", tt.imageTag)
-
-			t.Run("inner", func(st *testing.T) {
-				SkipFor(st, tt.skipFor...)
-				if st.Skipped() != tt.wantSkipped {
-					st.Errorf("SkipFor() skipped = %v, want %v", st.Skipped(), tt.wantSkipped)
-				}
-			})
+			got := shouldSkipFor(tt.imageTag, tt.skipFor...)
+			if got != tt.wantSkipped {
+				t.Errorf("shouldSkipFor() = %v, want %v", got, tt.wantSkipped)
+			}
 		})
 	}
 }

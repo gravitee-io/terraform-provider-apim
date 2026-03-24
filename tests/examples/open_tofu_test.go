@@ -19,8 +19,12 @@ func TestApplicationResource_Examples_OpenTofu(t *testing.T) {
 	cleanupTerraformStateFiles(directories)
 	t.Cleanup(func() { cleanupTerraformStateFiles(directories) })
 
+	// running tests concurrently
+	semaphore := make(chan struct{}, 2)
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
+			<-semaphore
+			defer func() { semaphore <- struct{}{} }()
 			t.Logf("Running OpenTofu test case: %s", tc.name)
 
 			testDir := filepath.Join(examplesUseCasesPath, string(tc.directory))
