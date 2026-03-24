@@ -89,6 +89,7 @@ jobs:
           APIM_SERVER_URL: http://localhost:30083/automation
           APIM_USERNAME: admin
           APIM_PASSWORD: admin
+          APIM_IMAGE_TAG: ${{ matrix.apim.image_tag }}
         run: make acceptance-tests
       - name: Setup OpenTofu
         if: matrix.terraform-version == 'latest'
