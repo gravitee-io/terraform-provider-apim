@@ -75,7 +75,10 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `Human-readable ID of api`,
 			},
 			"application_hrid": schema.StringAttribute{
-				Required:    true,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.Immutable(),
+				},
 				Description: `Application's hrid selected to subscribe an API.`,
 			},
 			"ending_at": schema.StringAttribute{
@@ -120,7 +123,10 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `organization ID`,
 			},
 			"plan_hrid": schema.StringAttribute{
-				Required:    true,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.Immutable(),
+				},
 				Description: `API plan's hrid`,
 			},
 			"starting_at": schema.StringAttribute{

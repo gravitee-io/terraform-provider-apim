@@ -25,8 +25,12 @@ func runExampleTests(t *testing.T, basePath string) {
 
 	providers := testProviders()
 
+	// running tests concurrently
+	semaphore := make(chan struct{}, 2)
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
+			<-semaphore
+			defer func() { semaphore <- struct{}{} }()
 			if len(tc.skipVersions) > 0 {
 				utils.SkipFor(t, tc.skipVersions...)
 			}

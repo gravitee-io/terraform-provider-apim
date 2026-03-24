@@ -23,6 +23,11 @@ func (m immutable) MarkdownDescription(_ context.Context) string {
 }
 
 func (m immutable) PlanModifyString(_ context.Context, req planmodifier.StringRequest, resp *planmodifier.StringResponse) {
+
+	if req.PlanValue.IsUnknown() {
+		return
+	}
+
 	// Allow any value on creation.
 	if req.StateValue.IsNull() {
 		return
