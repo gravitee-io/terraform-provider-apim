@@ -6,7 +6,6 @@ package provider
 import (
 	"context"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
-	"github.com/gravitee-io/terraform-provider-apim/internal/provider/typeconvert"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
@@ -92,27 +91,9 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 				r.Settings.TLS = nil
 			} else {
 				r.Settings.TLS = &tfTypes.ApplicationTLSSettings{}
-				clientCertificateValuable, clientCertificateDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringPointerValue(resp.Settings.TLS.ClientCertificate))
+				clientCertificateValuable, clientCertificateDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringValue(resp.Settings.TLS.ClientCertificate))
 				diags.Append(clientCertificateDiags...)
 				r.Settings.TLS.ClientCertificate = clientCertificateValuable.(customtypes.TrimmedString)
-				r.Settings.TLS.ClientCertificates = []tfTypes.ClientCertificate{}
-
-				for _, clientCertificatesItem := range resp.Settings.TLS.ClientCertificates {
-					var clientCertificates tfTypes.ClientCertificate
-
-					contentValuable, contentDiags := customtypes.TrimmedStringType{}.ValueFromString(ctx, types.StringValue(clientCertificatesItem.Content))
-					diags.Append(contentDiags...)
-					clientCertificates.Content = contentValuable.(customtypes.TrimmedString)
-					endsAtValuable, endsAtDiags := customtypes.RFC3339Type{}.ValueFromString(ctx, types.StringPointerValue(typeconvert.TimePointerToStringPointer(clientCertificatesItem.EndsAt)))
-					diags.Append(endsAtDiags...)
-					clientCertificates.EndsAt = endsAtValuable.(customtypes.RFC3339)
-					clientCertificates.Name = types.StringValue(clientCertificatesItem.Name)
-					startsAtValuable, startsAtDiags := customtypes.RFC3339Type{}.ValueFromString(ctx, types.StringPointerValue(typeconvert.TimePointerToStringPointer(clientCertificatesItem.StartsAt)))
-					diags.Append(startsAtDiags...)
-					clientCertificates.StartsAt = startsAtValuable.(customtypes.RFC3339)
-
-					r.Settings.TLS.ClientCertificates = append(r.Settings.TLS.ClientCertificates, clientCertificates)
-				}
 			}
 		}
 	}

@@ -7,10 +7,8 @@ import (
 	"context"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
-	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
-	"github.com/hashicorp/terraform-plugin-framework/function"
 	"github.com/hashicorp/terraform-plugin-framework/list"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -21,9 +19,7 @@ import (
 )
 
 var _ provider.Provider = (*ApimProvider)(nil)
-var _ provider.ProviderWithActions = (*ApimProvider)(nil)
 var _ provider.ProviderWithEphemeralResources = (*ApimProvider)(nil)
-var _ provider.ProviderWithFunctions = (*ApimProvider)(nil)
 
 type ApimProvider struct {
 	// version is set to the provider version on release, "dev" when the
@@ -44,7 +40,6 @@ type ApimProviderModel struct {
 	BearerAuth     types.String `tfsdk:"bearer_auth"`
 	CloudAuth      types.String `tfsdk:"cloud_auth"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
-	HTTPHeaders    types.Map    `tfsdk:"http_headers"`
 	OrganizationID types.String `tfsdk:"organization_id"`
 	Password       types.String `tfsdk:"password"`
 	ServerURL      types.String `tfsdk:"server_url"`
@@ -71,11 +66,6 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			},
 			"environment_id": schema.StringAttribute{
 				Description: `environment ID`,
-				Optional:    true,
-			},
-			"http_headers": schema.MapAttribute{
-				Description: `HTTP headers to include in all requests`,
-				ElementType: types.StringType,
 				Optional:    true,
 			},
 			"organization_id": schema.StringAttribute{
@@ -192,11 +182,6 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		Transport:  http.DefaultTransport,
 	}
 
-	resp.Diagnostics.Append(data.HTTPHeaders.ElementsAs(ctx, &providerHTTPTransportOpts.SetHeaders, false)...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
 	httpClient := http.DefaultClient
 	httpClient.Transport = NewProviderHTTPTransport(providerHTTPTransportOpts)
 
@@ -221,19 +206,10 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		SDKClient:      client,
 	}
 
-	resp.ActionData = configureData
 	resp.DataSourceData = configureData
 	resp.EphemeralResourceData = configureData
 	resp.ListResourceData = configureData
 	resp.ResourceData = configureData
-}
-
-func (p *ApimProvider) Functions(_ context.Context) []func() function.Function {
-	return []func() function.Function{}
-}
-
-func (p *ApimProvider) Actions(_ context.Context) []func() action.Action {
-	return []func() action.Action{}
 }
 
 func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource {

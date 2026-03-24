@@ -12,12 +12,12 @@ import (
 type FlowPhase string
 
 const (
-	FlowPhaseRequest           FlowPhase = "REQUEST"
-	FlowPhaseResponse          FlowPhase = "RESPONSE"
-	FlowPhaseEntrypointConnect FlowPhase = "ENTRYPOINT_CONNECT"
-	FlowPhaseInteract          FlowPhase = "INTERACT"
-	FlowPhasePublish           FlowPhase = "PUBLISH"
-	FlowPhaseSubscribe         FlowPhase = "SUBSCRIBE"
+	FlowPhaseRequest   FlowPhase = "REQUEST"
+	FlowPhaseResponse  FlowPhase = "RESPONSE"
+	FlowPhaseInteract  FlowPhase = "INTERACT"
+	FlowPhaseConnect   FlowPhase = "CONNECT"
+	FlowPhasePublish   FlowPhase = "PUBLISH"
+	FlowPhaseSubscribe FlowPhase = "SUBSCRIBE"
 )
 
 func (e FlowPhase) ToPointer() *FlowPhase {
@@ -33,9 +33,9 @@ func (e *FlowPhase) UnmarshalJSON(data []byte) error {
 		fallthrough
 	case "RESPONSE":
 		fallthrough
-	case "ENTRYPOINT_CONNECT":
-		fallthrough
 	case "INTERACT":
+		fallthrough
+	case "CONNECT":
 		fallthrough
 	case "PUBLISH":
 		fallthrough

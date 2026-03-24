@@ -24,6 +24,3 @@ func (t *TracingV4) GetVerbose() *bool {
 	}
 	return t.Verbose
 }
-
-// #region class-body-tracingv4
-// #endregion class-body-tracingv4

@@ -66,6 +66,3 @@ func (l *LoggingContentV4) GetMessageMetadata() *bool {
 	}
 	return l.MessageMetadata
 }
-
-// #region class-body-loggingcontentv4
-// #endregion class-body-loggingcontentv4

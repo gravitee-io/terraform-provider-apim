@@ -416,11 +416,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"enabled": schema.BoolAttribute{
-							Computed:    true,
-							Description: `Is the flow enabled.`,
-						},
-						"entrypoint_connect": schema.ListNestedAttribute{
+						"connect": schema.ListNestedAttribute{
 							Computed: true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -455,7 +451,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 								},
 							},
-							Description: `Entrypoint Connect flow steps used for NATIVE APIs`,
+							Description: `Connect flow steps used for NATIVE APIs`,
+						},
+						"enabled": schema.BoolAttribute{
+							Computed:    true,
+							Description: `Is the flow enabled.`,
 						},
 						"interact": schema.ListNestedAttribute{
 							Computed: true,
@@ -1177,11 +1177,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed: true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
-									"enabled": schema.BoolAttribute{
-										Computed:    true,
-										Description: `Is the flow enabled.`,
-									},
-									"entrypoint_connect": schema.ListNestedAttribute{
+									"connect": schema.ListNestedAttribute{
 										Computed: true,
 										NestedObject: schema.NestedAttributeObject{
 											Attributes: map[string]schema.Attribute{
@@ -1216,7 +1212,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 												},
 											},
 										},
-										Description: `Entrypoint Connect flow steps used for NATIVE APIs`,
+										Description: `Connect flow steps used for NATIVE APIs`,
+									},
+									"enabled": schema.BoolAttribute{
+										Computed:    true,
+										Description: `Is the flow enabled.`,
 									},
 									"interact": schema.ListNestedAttribute{
 										Computed: true,

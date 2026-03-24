@@ -26,12 +26,6 @@ func (r *SubscriptionResourceModel) RefreshFromSharedSubscriptionState(ctx conte
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
-		if len(resp.Metadata) > 0 {
-			r.Metadata = make(map[string]types.String, len(resp.Metadata))
-			for key, value := range resp.Metadata {
-				r.Metadata[key] = types.StringValue(value)
-			}
-		}
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.PlanHrid = types.StringValue(resp.PlanHrid)
 		r.StartingAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.StartingAt))
@@ -155,19 +149,11 @@ func (r *SubscriptionResourceModel) ToSharedSubscriptionSpec(ctx context.Context
 	} else {
 		endingAt = nil
 	}
-	metadata := make(map[string]string)
-	for metadataKey := range r.Metadata {
-		var metadataInst string
-		metadataInst = r.Metadata[metadataKey].ValueString()
-
-		metadata[metadataKey] = metadataInst
-	}
 	out := shared.SubscriptionSpec{
 		Hrid:            hrid,
 		ApplicationHrid: applicationHrid,
 		PlanHrid:        planHrid,
 		EndingAt:        endingAt,
-		Metadata:        metadata,
 	}
 
 	return &out, diags

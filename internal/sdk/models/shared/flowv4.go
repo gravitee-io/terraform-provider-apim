@@ -22,8 +22,8 @@ type FlowV4 struct {
 	Subscribe []StepV4 `json:"subscribe,omitempty"`
 	// Publish flow steps used for MESSAGE and NATIVE APIs
 	Publish []StepV4 `json:"publish,omitempty"`
-	// Entrypoint Connect flow steps used for NATIVE APIs
-	EntrypointConnect []StepV4 `json:"entrypointConnect,omitempty"`
+	// Connect flow steps used for NATIVE APIs
+	Connect []StepV4 `json:"connect,omitempty"`
 	// Interact flow steps used for NATIVE APIs
 	Interact []StepV4 `json:"interact,omitempty"`
 	// Flow's informative tags.
@@ -90,11 +90,11 @@ func (f *FlowV4) GetPublish() []StepV4 {
 	return f.Publish
 }
 
-func (f *FlowV4) GetEntrypointConnect() []StepV4 {
+func (f *FlowV4) GetConnect() []StepV4 {
 	if f == nil {
 		return nil
 	}
-	return f.EntrypointConnect
+	return f.Connect
 }
 
 func (f *FlowV4) GetInteract() []StepV4 {
@@ -110,6 +110,3 @@ func (f *FlowV4) GetTags() []string {
 	}
 	return f.Tags
 }
-
-// #region class-body-flowv4
-// #endregion class-body-flowv4

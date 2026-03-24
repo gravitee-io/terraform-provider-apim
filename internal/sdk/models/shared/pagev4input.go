@@ -117,6 +117,3 @@ func (p *PageV4Input) GetParentHrid() *string {
 	}
 	return p.ParentHrid
 }
-
-// #region class-body-pagev4input
-// #endregion class-body-pagev4input

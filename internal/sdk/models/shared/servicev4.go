@@ -57,6 +57,3 @@ func (s *ServiceV4) GetType() string {
 	}
 	return s.Type
 }
-
-// #region class-body-servicev4
-// #endregion class-body-servicev4

@@ -47,6 +47,3 @@ func (p *PathV4) GetOverrideAccess() *bool {
 	}
 	return p.OverrideAccess
 }
-
-// #region class-body-pathv4
-// #endregion class-body-pathv4

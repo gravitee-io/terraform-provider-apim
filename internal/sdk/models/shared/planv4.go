@@ -152,6 +152,3 @@ func (p *PlanV4) GetGeneralConditionsHrid() *string {
 	}
 	return p.GeneralConditionsHrid
 }
-
-// #region class-body-planv4
-// #endregion class-body-planv4

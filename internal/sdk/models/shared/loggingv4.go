@@ -51,6 +51,3 @@ func (l *LoggingV4) GetMode() *LoggingModeV4 {
 	}
 	return l.Mode
 }
-
-// #region class-body-loggingv4
-// #endregion class-body-loggingv4

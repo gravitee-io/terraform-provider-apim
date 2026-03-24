@@ -25,12 +25,6 @@ func (r *SubscriptionDataSourceModel) RefreshFromSharedSubscriptionState(ctx con
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
-		if len(resp.Metadata) > 0 {
-			r.Metadata = make(map[string]types.String, len(resp.Metadata))
-			for key, value := range resp.Metadata {
-				r.Metadata[key] = types.StringValue(value)
-			}
-		}
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.PlanHrid = types.StringValue(resp.PlanHrid)
 		r.StartingAt = types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.StartingAt))

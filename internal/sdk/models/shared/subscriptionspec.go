@@ -17,8 +17,6 @@ type SubscriptionSpec struct {
 	// API plan's hrid
 	PlanHrid string     `json:"planHrid"`
 	EndingAt *time.Time `json:"endingAt,omitempty"`
-	// Key-value metadata for this subscription.
-	Metadata map[string]string `json:"metadata,omitempty"`
 }
 
 func (s SubscriptionSpec) MarshalJSON() ([]byte, error) {
@@ -58,11 +56,4 @@ func (s *SubscriptionSpec) GetEndingAt() *time.Time {
 		return nil
 	}
 	return s.EndingAt
-}
-
-func (s *SubscriptionSpec) GetMetadata() map[string]string {
-	if s == nil {
-		return nil
-	}
-	return s.Metadata
 }

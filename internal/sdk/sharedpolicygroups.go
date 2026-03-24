@@ -451,7 +451,6 @@ func (s *SharedPolicyGroups) Delete(ctx context.Context, request operations.Dele
 
 	switch {
 	case httpRes.StatusCode == 204:
-		utils.DrainBody(httpRes)
 	case httpRes.StatusCode == 401:
 		fallthrough
 	case httpRes.StatusCode == 403:

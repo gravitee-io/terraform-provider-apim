@@ -5,24 +5,13 @@ package shared
 
 // ApplicationTLSSettings - Application TLS settings
 type ApplicationTLSSettings struct {
-	// Application TLS client certificate. Deprecated: use clientCertificates instead for multiple certificate support.
-	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
-	ClientCertificate *string `json:"clientCertificate,omitempty"`
-	// List of client certificates for mTLS authentication. Supports certificate rotation.
-	ClientCertificates []ClientCertificate `json:"clientCertificates,omitempty"`
+	// Application TLS client certificate
+	ClientCertificate string `json:"clientCertificate"`
 }
 
-func (a *ApplicationTLSSettings) GetClientCertificate() *string {
+func (a *ApplicationTLSSettings) GetClientCertificate() string {
 	if a == nil {
-		return nil
+		return ""
 	}
 	return a.ClientCertificate
-}
-
-func (a *ApplicationTLSSettings) GetClientCertificates() []ClientCertificate {
-	if a == nil {
-		return nil
-	}
-	return a.ClientCertificates
 }
