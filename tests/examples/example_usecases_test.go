@@ -29,11 +29,11 @@ func runExampleTests(t *testing.T, basePath string) {
 	semaphore := make(chan struct{}, 2)
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			<-semaphore
-			defer func() { semaphore <- struct{}{} }()
 			if len(tc.skipVersions) > 0 {
 				utils.SkipFor(t, tc.skipVersions...)
 			}
+			semaphore <- struct{}{}
+			defer func() { <-semaphore }()
 
 			t.Logf("Running test case: %s", tc.name)
 
