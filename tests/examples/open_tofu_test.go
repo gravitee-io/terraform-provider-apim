@@ -23,8 +23,8 @@ func TestApplicationResource_Examples_OpenTofu(t *testing.T) {
 	semaphore := make(chan struct{}, 2)
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			<-semaphore
-			defer func() { semaphore <- struct{}{} }()
+			semaphore <- struct{}{}
+			defer func() { <-semaphore }()
 			t.Logf("Running OpenTofu test case: %s", tc.name)
 
 			testDir := filepath.Join(examplesUseCasesPath, string(tc.directory))
