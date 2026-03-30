@@ -33,18 +33,21 @@ func runExampleTests(t *testing.T, basePath string) {
 				utils.SkipFor(t, tc.skipVersions...)
 			}
 			semaphore <- struct{}{}
-			defer func() { <-semaphore }()
+			go func() {
+				defer func() { <-semaphore }()
 
-			t.Logf("Running test case: %s", tc.name)
+				t.Logf("Running test case: %s", tc.name)
 
-			resource.Test(t, resource.TestCase{
-				Steps: []resource.TestStep{
-					{
-						ProtoV6ProviderFactories: providers,
-						ConfigDirectory:          tc.directory.get,
+				resource.Test(t, resource.TestCase{
+					Steps: []resource.TestStep{
+						{
+							ProtoV6ProviderFactories: providers,
+							ConfigDirectory:          tc.directory.get,
+						},
 					},
-				},
-			})
+				})
+			}()
+
 		})
 	}
 }

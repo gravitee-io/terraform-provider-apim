@@ -24,24 +24,26 @@ func TestApplicationResource_Examples_OpenTofu(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			semaphore <- struct{}{}
-			defer func() { <-semaphore }()
-			t.Logf("Running OpenTofu test case: %s", tc.name)
+			go func() {
+				defer func() { <-semaphore }()
+				t.Logf("Running OpenTofu test case: %s", tc.name)
 
-			testDir := filepath.Join(examplesUseCasesPath, string(tc.directory))
+				testDir := filepath.Join(examplesUseCasesPath, string(tc.directory))
 
-			// Run OpenTofu apply
-			if err := runOpenTofuCommand(testDir, "apply", "-auto-approve"); err != nil {
-				t.Fatalf("OpenTofu apply failed: %v", err)
-			}
+				// Run OpenTofu apply
+				if err := runOpenTofuCommand(testDir, "apply", "-auto-approve"); err != nil {
+					t.Fatalf("OpenTofu apply failed: %v", err)
+				}
 
-			// Run OpenTofu to check plan
-			if err := runOpenTofuCommand(testDir, "plan", "-detailed-exitcode"); err != nil {
-				t.Fatalf("OpenTofu plan failed: %v", err)
-			}
-			// Clean up - destroy resources
-			if err := runOpenTofuCommand(testDir, "destroy", "-auto-approve"); err != nil {
-				t.Logf("OpenTofu destroy failed (non-fatal): %v", err)
-			}
+				// Run OpenTofu to check plan
+				if err := runOpenTofuCommand(testDir, "plan", "-detailed-exitcode"); err != nil {
+					t.Fatalf("OpenTofu plan failed: %v", err)
+				}
+				// Clean up - destroy resources
+				if err := runOpenTofuCommand(testDir, "destroy", "-auto-approve"); err != nil {
+					t.Logf("OpenTofu destroy failed (non-fatal): %v", err)
+				}
+			}()
 		})
 	}
 }
