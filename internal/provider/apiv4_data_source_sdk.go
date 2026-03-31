@@ -92,7 +92,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					endpoints.Configuration = jsontypes.NewNormalizedValue(string(configurationResult))
 				}
 				endpoints.InheritConfiguration = types.BoolPointerValue(endpointsItem.InheritConfiguration)
-				endpoints.Name = types.StringPointerValue(endpointsItem.Name)
+				endpoints.Name = types.StringValue(endpointsItem.Name)
 				endpoints.Secondary = types.BoolPointerValue(endpointsItem.Secondary)
 				if endpointsItem.Services == nil {
 					endpoints.Services = nil

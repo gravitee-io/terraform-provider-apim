@@ -10,7 +10,7 @@ import (
 // EndpointV4 - API endpoint
 type EndpointV4 struct {
 	// The name of the endpoint
-	Name *string `json:"name,omitempty"`
+	Name string `json:"name"`
 	// The type of endpoint
 	Type string `json:"type"`
 	// The weight of the endpoint for the load balancer algorythm.
@@ -40,9 +40,9 @@ func (e *EndpointV4) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (e *EndpointV4) GetName() *string {
+func (e *EndpointV4) GetName() string {
 	if e == nil {
-		return nil
+		return ""
 	}
 	return e.Name
 }
