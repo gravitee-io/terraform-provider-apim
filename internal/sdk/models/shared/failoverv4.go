@@ -21,6 +21,10 @@ type FailoverV4 struct {
 	MaxFailures *int `default:"5" json:"maxFailures"`
 	// If true, a circuit breaker breaker will be dedicated for each subscriber, else, one and only circuit breaker will be used for the API.
 	PerSubscription *bool `default:"true" json:"perSubscription"`
+	// An EL expression evaluated on the response to determine if it should be considered a failure (e.g. "{#response.status >= 500}"). If null, response content is not evaluated.
+	FailureCondition *string `json:"failureCondition,omitempty"`
+	// If true, on retry the next endpoint in the group is forced instead of relying on the shared load balancer. This ensures retries target different endpoints.
+	ForceNextEndpointOnFailure *bool `default:"false" json:"forceNextEndpointOnFailure"`
 }
 
 func (f FailoverV4) MarshalJSON() ([]byte, error) {
@@ -74,6 +78,20 @@ func (f *FailoverV4) GetPerSubscription() *bool {
 		return nil
 	}
 	return f.PerSubscription
+}
+
+func (f *FailoverV4) GetFailureCondition() *string {
+	if f == nil {
+		return nil
+	}
+	return f.FailureCondition
+}
+
+func (f *FailoverV4) GetForceNextEndpointOnFailure() *bool {
+	if f == nil {
+		return nil
+	}
+	return f.ForceNextEndpointOnFailure
 }
 
 // #region class-body-failoverv4

@@ -176,6 +176,8 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		} else {
 			r.Failover = &tfTypes.FailoverV4{}
 			r.Failover.Enabled = types.BoolPointerValue(resp.Failover.Enabled)
+			r.Failover.FailureCondition = types.StringPointerValue(resp.Failover.FailureCondition)
+			r.Failover.ForceNextEndpointOnFailure = types.BoolPointerValue(resp.Failover.ForceNextEndpointOnFailure)
 			r.Failover.MaxFailures = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Failover.MaxFailures))
 			r.Failover.MaxRetries = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Failover.MaxRetries))
 			r.Failover.OpenStateDuration = types.Int64PointerValue(resp.Failover.OpenStateDuration)
