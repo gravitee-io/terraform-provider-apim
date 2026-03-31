@@ -176,6 +176,8 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		} else {
 			r.Failover = &tfTypes.FailoverV4{}
 			r.Failover.Enabled = types.BoolPointerValue(resp.Failover.Enabled)
+			r.Failover.FailureCondition = types.StringPointerValue(resp.Failover.FailureCondition)
+			r.Failover.ForceNextEndpointOnFailure = types.BoolPointerValue(resp.Failover.ForceNextEndpointOnFailure)
 			r.Failover.MaxFailures = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Failover.MaxFailures))
 			r.Failover.MaxRetries = types.Int32PointerValue(typeconvert.IntPointerToInt32Pointer(resp.Failover.MaxRetries))
 			r.Failover.OpenStateDuration = types.Int64PointerValue(resp.Failover.OpenStateDuration)
@@ -1731,13 +1733,27 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			perSubscription = nil
 		}
+		failureCondition := new(string)
+		if !r.Failover.FailureCondition.IsUnknown() && !r.Failover.FailureCondition.IsNull() {
+			*failureCondition = r.Failover.FailureCondition.ValueString()
+		} else {
+			failureCondition = nil
+		}
+		forceNextEndpointOnFailure := new(bool)
+		if !r.Failover.ForceNextEndpointOnFailure.IsUnknown() && !r.Failover.ForceNextEndpointOnFailure.IsNull() {
+			*forceNextEndpointOnFailure = r.Failover.ForceNextEndpointOnFailure.ValueBool()
+		} else {
+			forceNextEndpointOnFailure = nil
+		}
 		failover = &shared.FailoverV4{
-			Enabled:           enabled6,
-			MaxRetries:        maxRetries,
-			SlowCallDuration:  slowCallDuration,
-			OpenStateDuration: openStateDuration,
-			MaxFailures:       maxFailures,
-			PerSubscription:   perSubscription,
+			Enabled:                    enabled6,
+			MaxRetries:                 maxRetries,
+			SlowCallDuration:           slowCallDuration,
+			OpenStateDuration:          openStateDuration,
+			MaxFailures:                maxFailures,
+			PerSubscription:            perSubscription,
+			FailureCondition:           failureCondition,
+			ForceNextEndpointOnFailure: forceNextEndpointOnFailure,
 		}
 	}
 	properties := make([]shared.PropertyInput, 0, len(r.Properties))

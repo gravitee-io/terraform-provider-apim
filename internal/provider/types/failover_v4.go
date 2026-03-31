@@ -8,10 +8,12 @@ import (
 )
 
 type FailoverV4 struct {
-	Enabled           types.Bool  `tfsdk:"enabled"`
-	MaxFailures       types.Int32 `tfsdk:"max_failures"`
-	MaxRetries        types.Int32 `tfsdk:"max_retries"`
-	OpenStateDuration types.Int64 `tfsdk:"open_state_duration"`
-	PerSubscription   types.Bool  `tfsdk:"per_subscription"`
-	SlowCallDuration  types.Int64 `tfsdk:"slow_call_duration"`
+	Enabled                    types.Bool   `tfsdk:"enabled"`
+	FailureCondition           types.String `tfsdk:"failure_condition"`
+	ForceNextEndpointOnFailure types.Bool   `tfsdk:"force_next_endpoint_on_failure"`
+	MaxFailures                types.Int32  `tfsdk:"max_failures"`
+	MaxRetries                 types.Int32  `tfsdk:"max_retries"`
+	OpenStateDuration          types.Int64  `tfsdk:"open_state_duration"`
+	PerSubscription            types.Bool   `tfsdk:"per_subscription"`
+	SlowCallDuration           types.Int64  `tfsdk:"slow_call_duration"`
 }
