@@ -64,14 +64,14 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 			if resp.Settings.App == nil {
 				r.Settings.App = nil
 			} else {
-				r.Settings.App = &tfTypes.SimpleApplicationSettings{}
+				r.Settings.App = &tfTypes.App{}
 				r.Settings.App.ClientID = types.StringPointerValue(resp.Settings.App.ClientID)
 				r.Settings.App.Type = types.StringPointerValue(resp.Settings.App.Type)
 			}
 			if resp.Settings.Oauth == nil {
 				r.Settings.Oauth = nil
 			} else {
-				r.Settings.Oauth = &tfTypes.ApplicationOAuthClientSettings{}
+				r.Settings.Oauth = &tfTypes.Oauth{}
 				if len(resp.Settings.Oauth.AdditionalClientMetadata) > 0 {
 					r.Settings.Oauth.AdditionalClientMetadata = make(map[string]types.String, len(resp.Settings.Oauth.AdditionalClientMetadata))
 					for key, value := range resp.Settings.Oauth.AdditionalClientMetadata {
