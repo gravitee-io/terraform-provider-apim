@@ -375,6 +375,14 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						Computed:    true,
 						Description: `Automatically redirects request to the next endpoint if the response is too slow.`,
 					},
+					"failure_condition": schema.StringAttribute{
+						Computed:    true,
+						Description: `An EL expression evaluated on the response to determine if it should be considered a failure (e.g. "{#response.status >= 500}"). If null, response content is not evaluated.`,
+					},
+					"force_next_endpoint_on_failure": schema.BoolAttribute{
+						Computed:    true,
+						Description: `If true, on retry the next endpoint in the group is forced instead of relying on the shared load balancer. This ensures retries target different endpoints.`,
+					},
 					"max_failures": schema.Int32Attribute{
 						Computed:    true,
 						Description: `The maximum number of failures allowed before the circuit breaker can calculate the error rate.`,
