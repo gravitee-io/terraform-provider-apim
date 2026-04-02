@@ -292,10 +292,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									"name": schema.StringAttribute{
 										Optional:    true,
-										Description: `The name of the endpoint. Not Null`,
-										Validators: []validator.String{
-											speakeasy_stringvalidators.NotNull(),
-										},
+										Description: `The name of the endpoint`,
 									},
 									"secondary": schema.BoolAttribute{
 										Computed:    true,
