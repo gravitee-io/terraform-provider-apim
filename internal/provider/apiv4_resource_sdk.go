@@ -92,7 +92,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					endpoints.Configuration = jsontypes.NewNormalizedValue(string(configurationResult))
 				}
 				endpoints.InheritConfiguration = types.BoolPointerValue(endpointsItem.InheritConfiguration)
-				endpoints.Name = types.StringPointerValue(endpointsItem.Name)
+				endpoints.Name = types.StringValue(endpointsItem.Name)
 				endpoints.Secondary = types.BoolPointerValue(endpointsItem.Secondary)
 				if endpointsItem.Services == nil {
 					endpoints.Services = nil
@@ -1396,12 +1396,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		}
 		endpoints := make([]shared.EndpointV4, 0, len(r.EndpointGroups[endpointGroupsIndex].Endpoints))
 		for endpointsIndex := range r.EndpointGroups[endpointGroupsIndex].Endpoints {
-			name2 := new(string)
-			if !r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Name.IsUnknown() && !r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Name.IsNull() {
-				*name2 = r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Name.ValueString()
-			} else {
-				name2 = nil
-			}
+			var name2 string
+			name2 = r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Name.ValueString()
+
 			var type6 string
 			type6 = r.EndpointGroups[endpointGroupsIndex].Endpoints[endpointsIndex].Type.ValueString()
 
