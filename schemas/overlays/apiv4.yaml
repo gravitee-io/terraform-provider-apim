@@ -320,6 +320,10 @@ actions:
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PathV4.properties.path
+    description: APIM normalizes paths by adding a trailing slash, suppress diff to prevent permanent drift (GKO-2621)
+    update:
+      x-speakeasy-plan-modifiers: NormalizePath
   - target: $.components.schemas.PathV4.properties.overrideAccess
     description: Prevent unknown values if unconfigured
     update:
