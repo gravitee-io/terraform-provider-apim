@@ -2044,6 +2044,7 @@ components:
           type: string
           default: "/"
           x-speakeasy-param-computed: false
+          x-speakeasy-plan-modifiers: NormalizePath
         overrideAccess:
           type: boolean
           description: Override default organization entrypoint with `host`
