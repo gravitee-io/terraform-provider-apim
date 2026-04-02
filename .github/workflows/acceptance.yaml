@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   verify-oas:
-    name: Verify OAS schema matches APIM main branch
+    name: Verify OAS schema matches APIM
     runs-on: ubuntu-latest
     continue-on-error: true
     permissions:
