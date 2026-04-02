@@ -77,6 +77,17 @@ Provider supports three auth methods (checked in order):
 2. Gravitee Cloud token (`APIM_CLOUD_TOKEN`)
 3. Basic auth (`APIM_USERNAME` / `APIM_PASSWORD`)
 
+## Changing Provider Schema Behavior
+
+**To change provider schema behavior** (plan modifiers, computed fields, validators, defaults, suppress diffs, etc.), add or update entries in `schemas/overlays/` and regenerate with `make speakeasy`. Never edit generated files directly.
+
+Key Speakeasy overlay annotations:
+- `x-speakeasy-param-computed: true` — mark a field as computed
+- `x-speakeasy-param-suppress-computed-diff: true` — add `SuppressDiff` plan modifier (only works for Unknown plan values)
+- `x-speakeasy-plan-modifiers: MyModifier` — reference a custom plan modifier function from `internal/planmodifiers/<type>planmodifier/`
+
+Custom plan modifiers, validators, and types in `internal/planmodifiers/`, `internal/validators/`, and `internal/customtypes/` are **non-generated** and can be edited freely.
+
 ## Key Conventions
 
 - Generated code is the majority of the codebase — custom changes go in marked regions or non-generated files
