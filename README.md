@@ -44,13 +44,13 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "0.5.0"
+      version = "0.5.1"
     }
   }
 }
 
 provider "apim" {
-  server_url = "..." # Optional - can use APIM_SERVER_URL environment variable
+  bearer_auth = "access-token"
 }
 ```
 <!-- End Installation [installation] -->

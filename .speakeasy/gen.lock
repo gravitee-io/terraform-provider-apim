@@ -3,21 +3,21 @@ id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
   docChecksum: 04cc1de0d4284ff4c410c542876c5540
   docVersion: 1.0.0
-  speakeasyVersion: 1.758.0
-  generationVersion: 2.866.2
-  releaseVersion: 0.5.0
-  configChecksum: fdc333758baf25835d67ec9efbdc8f5b
+  speakeasyVersion: 1.761.1
+  generationVersion: 2.879.6
+  releaseVersion: 0.5.1
+  configChecksum: fbe265a0ec15408adad6bd5f31025ce3
 persistentEdits:
-  generation_id: 2cbb9a45-8d32-4337-b250-6449c6988470
-  pristine_commit_hash: 580c530982b4f400ec4dbcd0abbf0563fbae1481
-  pristine_tree_hash: 2df46a8d05df42bc6d0d087f9066b7e5434d94d6
+  generation_id: ca5d347d-6fe9-4f54-99f4-e5970ef9a117
+  pristine_commit_hash: 0c1de7b13620e56f6c83cbe78e6cb1239ae3d7aa
+  pristine_tree_hash: 0829dfc0c370bca6fef9642aaed3f58a56bd35a5
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.2
-    core: 3.46.53
+    core: 3.47.2
     deprecations: 2.82.0
-    globalSecurity: 2.82.2
+    globalSecurity: 2.82.3
     globalServerURLs: 2.83.2
     globals: 3.0.5
     groups: 2.81.3
@@ -25,7 +25,7 @@ features:
     nameOverrides: 2.81.7
     retries: 2.81.4
     typeOverrides: 2.81.1
-    unions: 2.82.14
+    unions: 2.82.15
 trackedFiles:
   .gitattributes:
     id: 24139dae6567
@@ -56,10 +56,14 @@ trackedFiles:
     last_write_checksum: sha1:99fa082e08e2447307208b6a47349b92294eadee
     pristine_git_object: 7b6d309036caadf342e220760efa8897491c94cd
     deleted: true
+  examples/provider/provider.tf:
+    id: 954e955c0240
+    last_write_checksum: sha1:e1cf0256da283a7efffad04d6229cf6a7f0c41c2
+    pristine_git_object: 15a02e4eafbddd4c583585c42c8ff3cedad496ca
   go.mod:
     id: c47645c391ad
-    last_write_checksum: sha1:a4c42355ca4f2eaf39432bfa8387475b1aba1bf0
-    pristine_git_object: 669f09994bcf4a7037fd1248e58fb631ae572328
+    last_write_checksum: sha1:c44d59a16fdd9e9cf76fe176ae43e2e74799a2c4
+    pristine_git_object: 40470faa8b229311a0de098eec8f6a122116ab18
   internal/planmodifiers/boolplanmodifier/suppress_diff.go:
     id: 3cf85b98963e
     last_write_checksum: sha1:70b2947d6f36ee573a1b8668684abf94304b7ba7
@@ -556,8 +560,8 @@ trackedFiles:
     pristine_git_object: 748c4bab704e399fd73706ce2a0478fc4a298117
   internal/sdk/graviteeapim.go:
     id: 1f2cf575c2fd
-    last_write_checksum: sha1:110d55ff8e18564709beb53960d3d67408360609
-    pristine_git_object: 27bc2ef41cc3726421d7fa796dee4c6a31e85d9f
+    last_write_checksum: sha1:f65dadef5770868ed487198d0c6ac131f4251ac3
+    pristine_git_object: a09f4140e2e1f2dafbd6ac119296f85fcf504d75
   internal/sdk/internal/config/sdkconfiguration.go:
     id: 6af0bc8635d9
     last_write_checksum: sha1:95294a70d2db0500c6676cbf0936abc8887e68d4
@@ -588,8 +592,8 @@ trackedFiles:
     pristine_git_object: 8bd1d32e8fb5d79b6e732de289248bdd4a9c6f6b
   internal/sdk/internal/utils/json.go:
     id: 2231afac3add
-    last_write_checksum: sha1:0902f113ff4d1be66920f1b840e59457bc7836d4
-    pristine_git_object: 0f69ac6264ecf33f19ba7c2e84e3f4e76d866f7d
+    last_write_checksum: sha1:6a52ceaca1ffd2009ab3a351f670ef2a386921a4
+    pristine_git_object: 4d6709ba6fa58ddd09a157bf04ea32518b5e4091
   internal/sdk/internal/utils/pathparams.go:
     id: e7fec2afe4a6
     last_write_checksum: sha1:9d69759f63111ec8aa67534f5b97f7c16218f786
@@ -608,8 +612,8 @@ trackedFiles:
     pristine_git_object: 3bdf2a40d1271bd01b23d36e6a8a3c7a848ddcc2
   internal/sdk/internal/utils/security.go:
     id: 6ebe9eaeb99b
-    last_write_checksum: sha1:707f7e391b545844ecae37763ac2e5de61420ed9
-    pristine_git_object: a211be5afe597888b0b3523d70299450124ff5ae
+    last_write_checksum: sha1:1e48c45ce4c682b462fa9dbf8ad59900f75e6844
+    pristine_git_object: abb360775595d8f59ffb261cb3d362787bdd99cf
   internal/sdk/internal/utils/union.go:
     id: 183142835cfe
     last_write_checksum: sha1:a084a62c473e825d0b00a52cf26f9c96cb91c3ef
