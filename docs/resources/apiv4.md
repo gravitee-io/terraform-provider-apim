@@ -87,10 +87,10 @@ resource "apim_apiv4" "example" {
       selectors = [
         {
           http = {
-            type         = "HTTP"
-            path         = "/"
-            pathOperator = "STARTS_WITH"
-            methods      = []
+            type          = "HTTP"
+            path          = "/"
+            path_operator = "STARTS_WITH"
+            methods       = []
           }
         }
       ]
@@ -147,10 +147,10 @@ resource "apim_apiv4" "example" {
           selectors = [
             {
               http = {
-                type         = "HTTP"
-                path         = "/"
-                pathOperator = "STARTS_WITH"
-                methods      = []
+                type          = "HTTP"
+                path          = "/"
+                path_operator = "STARTS_WITH"
+                methods       = []
               }
             }
           ]
@@ -220,7 +220,7 @@ resource "apim_apiv4" "example" {
 ### Required
 
 - `endpoint_groups` (Attributes List) Common endpoints properties and container of endpoints specifying backends this API can call. (see [below for nested schema](#nestedatt--endpoint_groups))
-- `hrid` (String) A unique human readable id identifying this resource. Requires replacement if changed.
+- `hrid` (String) Human-readable ID of a spec. Requires replacement if changed.
 - `lifecycle_state` (String) The status of the API regarding the console. must be one of ["ARCHIVED", "CREATED", "DEPRECATED", "PUBLISHED", "UNPUBLISHED"]
 - `listeners` (Attributes List) The list of listeners defining how this API can be called. They depend on the API type. (see [below for nested schema](#nestedatt--listeners))
 - `name` (String) API's name. Duplicate names can exists.
@@ -280,7 +280,7 @@ Optional:
 
 - `configuration` (String) JSON Configuration specific to this endpoint that cannot be define at the group level. Parsed as JSON.
 - `inherit_configuration` (Boolean) Enables shared configuration inheritance. Default: false
-- `name` (String) The name of the endpoint
+- `name` (String) The name of the endpoint. Not Null
 - `secondary` (Boolean) Define this endpoint as fallback endpoint in case other endpoints are no longer responding. Default: false
 - `services` (Attributes) API Endpoint Services (see [below for nested schema](#nestedatt--endpoint_groups--endpoints--services))
 - `shared_configuration_override` (String) JSON Configuration that replaces the shared configuration defined at the group level. Parsed as JSON.
@@ -375,12 +375,13 @@ Optional:
 Optional:
 
 - `allow_credentials` (Boolean) `Access-Control-Allow-Credentials`: Indicates whether or not the response to the request can be exposed when the credentials flag is true.
-- `allow_headers` (List of String) `Access-Control-Allow-Headers`: Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request.
-- `allow_methods` (List of String) `Access-Control-Allow-Methods`: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource.
+- `allow_headers` (List of String) `Access-Control-Allow-Headers`: Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request. Default: []
+- `allow_methods` (List of String) `Access-Control-Allow-Methods`: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource. Default: []
 - `allow_origin` (List of String) `Access-Control-Allow-Origin`: The origin parameter specifies a URI that may access the resource. Scheme, domain and port are part of the same-origin definition.
 If you choose to enable '*' it means that is allows all requests, regardless of origin. URIs RegExp patterns that may access the resource
+Default: []
 - `enabled` (Boolean) Enable CORS
-- `expose_headers` (List of String) `Access-Control-Expose-Headers`: This header lets a server whitelist headers that browsers are allowed to access.
+- `expose_headers` (List of String) `Access-Control-Expose-Headers`: This header lets a server whitelist headers that browsers are allowed to access. Default: []
 - `max_age` (Number) How long (in seconds) the results of a preflight request can be cached (-1 if disabled). Default: -1
 - `run_policies` (Boolean) Allow the Gateway to run policies during in pre-flight request
 
@@ -531,11 +532,11 @@ Optional:
 
 Optional:
 
-- `headers` (Boolean) Enable to log request headers
-- `message_headers` (Boolean) Enable to log message headers (Message APIs only)
-- `message_metadata` (Boolean) Enable to log message metadata (Message APIs only)
-- `message_payload` (Boolean) Enable to log message headers (Message APIs only)
-- `payload` (Boolean) Enable to log request headers (Proxy APIs only)
+- `headers` (Boolean) Enable to log request headers. Default: false
+- `message_headers` (Boolean) Enable to log message headers (Message APIs only). Default: false
+- `message_metadata` (Boolean) Enable to log message metadata (Message APIs only). Default: false
+- `message_payload` (Boolean) Enable to log message headers (Message APIs only). Default: false
+- `payload` (Boolean) Enable to log request headers (Proxy APIs only). Default: false
 
 
 <a id="nestedatt--analytics--logging--mode"></a>
@@ -543,8 +544,8 @@ Optional:
 
 Optional:
 
-- `endpoint` (Boolean) Enables endpoint logging
-- `entrypoint` (Boolean) Enables entrypoint logging
+- `endpoint` (Boolean) Enables endpoint logging. Default: false
+- `entrypoint` (Boolean) Enables entrypoint logging. Default: false
 
 
 <a id="nestedatt--analytics--logging--phase"></a>
@@ -552,8 +553,8 @@ Optional:
 
 Optional:
 
-- `request` (Boolean) Enables logging durring request phase
-- `response` (Boolean) Enables logging durring response phase
+- `request` (Boolean) Enables logging durring request phase. Default: false
+- `response` (Boolean) Enables logging durring response phase. Default: false
 
 
 
@@ -593,6 +594,8 @@ Optional:
 Optional:
 
 - `enabled` (Boolean) Automatically redirects request to the next endpoint if the response is too slow. Default: false
+- `failure_condition` (String) An EL expression evaluated on the response to determine if it should be considered a failure (e.g. "{#response.status >= 500}"). If null, response content is not evaluated.
+- `force_next_endpoint_on_failure` (Boolean) If true, on retry the next endpoint in the group is forced instead of relying on the shared load balancer. This ensures retries target different endpoints. Default: false
 - `max_failures` (Number) The maximum number of failures allowed before the circuit breaker can calculate the error rate. Default: 5
 - `max_retries` (Number) Limit the number of retry attempts before recording an error. Each attempt dynamically selects an endpoint based on the load balancing algorithm. Default: 2
 - `open_state_duration` (Number) The duration in milliseconds to indicate how long the circuit breaker should stay open, before it switches to half open. Default: 10000
@@ -614,8 +617,8 @@ Optional:
 
 Optional:
 
-- `connect` (Attributes List) Connect flow steps used for NATIVE APIs (see [below for nested schema](#nestedatt--flows--connect))
 - `enabled` (Boolean) Is the flow enabled. Default: true
+- `entrypoint_connect` (Attributes List) Entrypoint Connect flow steps used for NATIVE APIs (see [below for nested schema](#nestedatt--flows--entrypoint_connect))
 - `interact` (Attributes List) Interact flow steps used for NATIVE APIs (see [below for nested schema](#nestedatt--flows--interact))
 - `name` (String) Flow's name.
 - `publish` (Attributes List) Publish flow steps used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--flows--publish))
@@ -625,8 +628,8 @@ Optional:
 - `subscribe` (Attributes List) Subscribe flow steps used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--flows--subscribe))
 - `tags` (List of String) Flow's informative tags. Default: []
 
-<a id="nestedatt--flows--connect"></a>
-### Nested Schema for `flows.connect`
+<a id="nestedatt--flows--entrypoint_connect"></a>
+### Nested Schema for `flows.entrypoint_connect`
 
 Optional:
 
@@ -844,8 +847,8 @@ Default: "AUTO"; must be one of ["AUTO", "MANUAL"]
 
 Optional:
 
-- `connect` (Attributes List) Connect flow steps used for NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--connect))
 - `enabled` (Boolean) Is the flow enabled. Default: true
+- `entrypoint_connect` (Attributes List) Entrypoint Connect flow steps used for NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--entrypoint_connect))
 - `interact` (Attributes List) Interact flow steps used for NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--interact))
 - `name` (String) Flow's name.
 - `publish` (Attributes List) Publish flow steps used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--publish))
@@ -855,8 +858,8 @@ Optional:
 - `subscribe` (Attributes List) Subscribe flow steps used for MESSAGE and NATIVE APIs (see [below for nested schema](#nestedatt--plans--flows--subscribe))
 - `tags` (List of String) Flow's informative tags. Default: []
 
-<a id="nestedatt--plans--flows--connect"></a>
-### Nested Schema for `plans.flows.connect`
+<a id="nestedatt--plans--flows--entrypoint_connect"></a>
+### Nested Schema for `plans.flows.entrypoint_connect`
 
 Optional:
 
@@ -998,7 +1001,7 @@ Optional:
 Optional:
 
 - `configuration` (String) JSON Object to configure specific attributes of a Plan. Parsed as JSON.
-- `type` (String) API Plan security implementation. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS"]
+- `type` (String) API Plan security implementation. Not Null; must be one of ["KEY_LESS", "API_KEY", "OAUTH2", "JWT", "MTLS"]
 
 
 

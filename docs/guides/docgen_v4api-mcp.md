@@ -16,7 +16,7 @@ It is ready to be used with you favorite AI agent.
 ```terraform
 resource "apim_apiv4" "mcp" {
   # should match the resource name
-  hrid            = "message"
+  hrid            = "mcp"
   name            = "[Terraform] Open Weather API With MCP"
   description     = "MCP API uses a API Open-Weather as tool."
   version         = "1,0"
@@ -107,7 +107,7 @@ resource "apim_apiv4" "mcp" {
         ]
         paths = [
           {
-            path = "/open-weatherapis/"
+            path = "/open-weather-apis/"
           }
         ]
       }
@@ -139,11 +139,11 @@ resource "apim_apiv4" "mcp" {
       selectors = [
         {
           type = "HTTP"
-          "http" : {
-            type         = "HTTP"
-            path         = "/v1/forecast"
-            pathOperator = "EQUALS"
-            methods      = ["GET"]
+          http : {
+            type          = "HTTP"
+            path          = "/v1/forecast"
+            path_operator = "EQUALS"
+            methods       = ["GET"]
           }
         }
       ]

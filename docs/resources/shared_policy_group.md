@@ -49,7 +49,7 @@ resource "apim_shared_policy_group" "example" {
 - `api_type` (String) API's type. must be one of ["A2A_PROXY", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]
 - `hrid` (String) A unique human readable id identifying this resource. Requires replacement if changed.
 - `name` (String) The name of the shared policy group
-- `phase` (String) The execution phase of a policy. must be one of ["REQUEST", "RESPONSE", "INTERACT", "CONNECT", "PUBLISH", "SUBSCRIBE"]
+- `phase` (String) The execution phase of a policy. must be one of ["REQUEST", "RESPONSE", "ENTRYPOINT_CONNECT", "INTERACT", "PUBLISH", "SUBSCRIBE"]
 
 ### Optional
 
@@ -61,7 +61,6 @@ resource "apim_shared_policy_group" "example" {
 
 ### Read-Only
 
-- `cross_id` (String) The Cross ID is used to identify a shared policy group that has been promoted from one environment to another.
 - `id` (String) The id of the shared policy group.
 
 <a id="nestedatt--steps"></a>

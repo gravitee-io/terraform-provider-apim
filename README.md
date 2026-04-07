@@ -19,9 +19,7 @@ You can manage with Terraform the following:
 
 [Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform) 
 
-Compatible with APIM 4.9 and above. The following features require APIM 4.11 or higher:
-* Subscription metadata
-* Application with multiple certificates
+Compatible with APIM 4.9 and above
 
 Checkout other sections to configure, authenticate and start working with Gravitee resources
 <!-- End Summary [summary] -->
@@ -46,13 +44,13 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "0.5.0"
+      version = "0.5.1"
     }
   }
 }
 
 provider "apim" {
-  server_url = "..." # Optional - can use APIM_SERVER_URL environment variable
+  bearer_auth = "access-token"
 }
 ```
 <!-- End Installation [installation] -->
