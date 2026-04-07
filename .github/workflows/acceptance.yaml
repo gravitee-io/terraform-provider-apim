@@ -56,6 +56,8 @@ jobs:
           - "1.9.*"
           - "latest"
         apim:
+          - image_tag: master-latest
+            chart_version: 4.12.*
           - image_tag: 4.11.x-latest
             chart_version: 4.11.*
           - image_tag: 4.10.x-latest
