@@ -3,6 +3,7 @@ APIM_PASSWORD ?= admin
 APIM_API1_USERNAME ?= api1
 APIM_API1_PASSWORD ?= api1
 APIM_SERVER_URL ?= http://localhost:30083/automation
+APIM_OAS_BRANCH=master
 
 .PHONY: speakeasy
 speakeasy: ## Run speakeasy generation with curated examples and docs
@@ -28,7 +29,7 @@ lint-fix: ## Fix issues that can be found
 
 .PHONY: sync-oas
 sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-management
-	@curl -fsSL "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/4.11.x/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml" -o schemas/automation-api-oas.yaml
+	curl -fsSL "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/${APIM_OAS_BRANCH}/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml" -o schemas/automation-api-oas.yaml
 
 PRE_TEST_DIR = "$(shell pwd)/examples/use-cases/application-simple"
 
