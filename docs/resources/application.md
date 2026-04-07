@@ -40,7 +40,7 @@ resource "apim_application" "example" {
 ### Required
 
 - `description` (String) This is where you can clearly state the API’s purpose and what problems it solves to help drive API discovery and adoption by making it easier for developers to find and understand the API’s capabilities.
-- `hrid` (String) A unique human readable id identifying this resource. Requires replacement if changed.
+- `hrid` (String) Human-readable ID of a spec. Requires replacement if changed.
 - `name` (String) Application's name. Duplicate names can exists.
 
 ### Optional
@@ -128,7 +128,18 @@ Not Null
 
 Optional:
 
-- `client_certificate` (String) Application TLS client certificate. Not Null
+- `client_certificate` (String, Deprecated) Application TLS client certificate. Deprecated: use clientCertificates instead for multiple certificate support.
+- `client_certificates` (Attributes List) List of client certificates for mTLS authentication. Supports certificate rotation. (see [below for nested schema](#nestedatt--settings--tls--client_certificates))
+
+<a id="nestedatt--settings--tls--client_certificates"></a>
+### Nested Schema for `settings.tls.client_certificates`
+
+Optional:
+
+- `content` (String) Certificate in PEM format. Not Null
+- `ends_at` (String) Date when this certificate will be removed
+- `name` (String) Certificate name for identification. Not Null
+- `starts_at` (String) Date when this certificate becomes active
 
 ## Import
 

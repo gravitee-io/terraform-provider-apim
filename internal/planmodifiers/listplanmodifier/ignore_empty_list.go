@@ -2,6 +2,7 @@ package listplanmodifier
 
 import (
 	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 )
 
@@ -12,7 +13,6 @@ func IgnoreEmptyList() planmodifier.List {
 
 // suppressDiff implements the plan modifier.
 type ignoreEmptyList struct {
-	strategy int
 }
 
 // Description returns a human-readable description of the plan modifier.

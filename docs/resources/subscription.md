@@ -36,6 +36,7 @@ resource "apim_subscription" "example" {
 
 - `ending_at` (String)
 - `environment_id` (String) environment ID
+- `metadata` (Map of String) Key-value metadata for this subscription.
 - `organization_id` (String) organization ID
 
 ### Read-Only

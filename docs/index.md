@@ -33,13 +33,13 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "0.3.1"
+      version = "0.5.1"
     }
   }
 }
 
 provider "apim" {
-  bearer_auth = "access-token"
+  server_url = "..." # Optional - can use APIM_SERVER_URL environment variable
 }
 ```
 
@@ -51,6 +51,7 @@ provider "apim" {
 - `bearer_auth` (String, Sensitive) Service account authentication. Configurable via environment variable `APIM_SA_TOKEN`.
 - `cloud_auth` (String, Sensitive) Gravitee Cloud Token authentication. Configurable via environment variable `APIM_CLOUD_TOKEN`.
 - `environment_id` (String) environment ID
+- `http_headers` (Map of String) HTTP headers to include in all requests
 - `organization_id` (String) organization ID
 - `password` (String, Sensitive) Basic authentication password. Configurable via environment variable `APIM_PASSWORD`.
 - `server_url` (String) Server URL (defaults to https://eu.cloudgate.gravitee.io/apim/automation)
