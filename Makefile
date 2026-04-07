@@ -11,8 +11,7 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 	@mv ~/.terraformrc ~/.terraformrc.keep 2>/dev/null || true
 	@terraform fmt -recursive > /dev/null
 	@make doc-gen
-	speakeasy run --output console --skip-versioning --skip-compile --skip-testing --skip-upload-spec
-	@go mod tidy
+	speakeasy run --output console --skip-versioning --skip-upload-spec
 	@rm -rf examples/data-sources docs/data-sources examples/README.md USAGE.md > /dev/null
 	@mv ~/.terraformrc.keep ~/.terraformrc 2>/dev/null || true
 	@go build
