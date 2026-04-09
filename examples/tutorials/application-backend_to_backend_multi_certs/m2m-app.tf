@@ -14,13 +14,13 @@ resource "apim_application" "backend-to-backend-multi-certs" {
     }
     tls = {
       client_certificates = [{
-        name : "cert1"
-        content : data.local_file.cert1.content
-        endsAt : "2026-08-01T00:00:00Z"
+        name    = "cert1"
+        content = data.local_file.cert1.content
+        ends_at = "2026-08-01T00:00:00Z"
         }, {
-        name : "cert2"
-        content : data.local_file.cert2.content
-        startsAt : "2026-07-01T00:00:00Z"
+        name      = "cert2"
+        content   = data.local_file.cert2.content
+        starts_at = "2026-04-01T00:00:00Z"
       }]
     }
   }

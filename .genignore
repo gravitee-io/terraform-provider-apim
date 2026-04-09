@@ -1,3 +1,4 @@
+examples/provider/provider.tf
 examples/resources/apim_apiv4/resource.tf
 examples/resources/apim_apiv4/import-by-string-id.tf
 examples/resources/apim_apiv4/import.sh
