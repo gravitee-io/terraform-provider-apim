@@ -13,6 +13,7 @@ func TestApimVersion_String(t *testing.T) {
 		{ApimV4_9, "4.9"},
 		{ApimV4_10, "4.10"},
 		{ApimV4_11, "4.11"},
+		{ApimMaster, "master"},
 		{ApimUnknown, "unknown"},
 		{ApimVersion(99), "unknown"},
 	}
@@ -55,6 +56,11 @@ func TestParseApimVersion(t *testing.T) {
 			name:    "parse 4.10 with rc",
 			version: "4.10.0-rc1",
 			want:    ApimV4_10,
+		},
+		{
+			name:    "parse master-latest",
+			version: "master-latest",
+			want:    ApimMaster,
 		},
 		{
 			name:    "parse unknown version",
