@@ -10,6 +10,7 @@ type ApimVersion int
 
 const (
 	ApimUnknown ApimVersion = iota
+	ApimMaster
 	ApimV4_9
 	ApimV4_10
 	ApimV4_11
@@ -17,6 +18,8 @@ const (
 
 func (v ApimVersion) String() string {
 	switch v {
+	case ApimMaster:
+		return "master"
 	case ApimV4_9:
 		return "4.9"
 	case ApimV4_10:
@@ -32,6 +35,8 @@ func (v ApimVersion) String() string {
 
 func ParseApimVersion(s string) ApimVersion {
 	switch {
+	case strings.HasPrefix(s, "master"):
+		return ApimMaster
 	case strings.HasPrefix(s, "4.9"):
 		return ApimV4_9
 	case strings.HasPrefix(s, "4.10"):
