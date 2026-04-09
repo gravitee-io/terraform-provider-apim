@@ -51,7 +51,7 @@ func ParseApimVersion(s string) ApimVersion {
 func SkipFor(t *testing.T, version ...ApimVersion) {
 	imageTag := os.Getenv("APIM_IMAGE_TAG")
 	if shouldSkipFor(imageTag, version...) {
-		t.Skip("Skipping test for image tag" + imageTag + " as it contains unsupported content")
+		t.Skip("Skipping test for image tag '" + imageTag + "' as it contains unsupported content")
 	}
 }
 

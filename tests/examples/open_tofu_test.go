@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
 )
 
 func TestApplicationResource_Examples_OpenTofu(t *testing.T) {
@@ -23,6 +25,9 @@ func TestApplicationResource_Examples_OpenTofu(t *testing.T) {
 	semaphore := make(chan struct{}, 2)
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
+			if len(tc.skipVersions) > 0 {
+				utils.SkipFor(t, tc.skipVersions...)
+			}
 			semaphore <- struct{}{}
 			defer func() { <-semaphore }()
 			t.Logf("Running OpenTofu test case: %s", tc.name)
@@ -40,7 +45,7 @@ func TestApplicationResource_Examples_OpenTofu(t *testing.T) {
 			}
 			// Clean up - destroy resources
 			if err := runOpenTofuCommand(testDir, "destroy", "-auto-approve"); err != nil {
-				t.Logf("OpenTofu destroy failed (non-fatal): %v", err)
+				t.Fatalf("OpenTofu destroy failed: %v", err)
 			}
 		})
 	}
