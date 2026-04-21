@@ -760,7 +760,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Description: `A unique human readable id identifying this resource`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{
@@ -1120,6 +1120,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"hrid": schema.StringAttribute{
 							Computed:    true,
 							Description: `A unique human readable id identifying this resource`,
+						},
+						"id": schema.StringAttribute{
+							Computed:           true,
+							DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+							Description:        `Legacy API Page GUID for backward compatibility with GKO`,
 						},
 						"name": schema.StringAttribute{
 							Computed: true,
@@ -1520,6 +1525,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"hrid": schema.StringAttribute{
 							Computed:    true,
 							Description: `A unique human readable id identifying this resource`,
+						},
+						"id": schema.StringAttribute{
+							Computed:           true,
+							DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+							Description:        `Legacy API Plan GUID for backward compatibility with GKO`,
 						},
 						"mode": schema.StringAttribute{
 							Computed:    true,

@@ -619,6 +619,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			pages.Content = types.StringPointerValue(pagesItem.Content)
 			pages.Homepage = types.BoolPointerValue(pagesItem.Homepage)
 			pages.Hrid = types.StringValue(pagesItem.Hrid)
+			pages.ID = types.StringPointerValue(pagesItem.ID)
 			pages.Name = types.StringValue(pagesItem.Name)
 			pages.ParentHrid = types.StringPointerValue(pagesItem.ParentHrid)
 			pages.Published = types.BoolPointerValue(pagesItem.Published)
@@ -846,6 +847,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			}
 			plans.GeneralConditionsHrid = types.StringPointerValue(plansItem.GeneralConditionsHrid)
 			plans.Hrid = types.StringValue(plansItem.Hrid)
+			plans.ID = types.StringPointerValue(plansItem.ID)
 			plans.Mode = types.StringValue(string(plansItem.Mode))
 			plans.Name = types.StringValue(plansItem.Name)
 			plans.Security = &tfTypes.PlanSecurity{}
@@ -1805,6 +1807,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	}
 	plans := make([]shared.PlanV4, 0, len(r.Plans))
 	for plansIndex := range r.Plans {
+		id := new(string)
+		if !r.Plans[plansIndex].ID.IsUnknown() && !r.Plans[plansIndex].ID.IsNull() {
+			*id = r.Plans[plansIndex].ID.ValueString()
+		} else {
+			id = nil
+		}
 		var hrid1 string
 		hrid1 = r.Plans[plansIndex].Hrid.ValueString()
 
@@ -2281,6 +2289,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			generalConditionsHrid = nil
 		}
 		plans = append(plans, shared.PlanV4{
+			ID:                    id,
 			Hrid:                  hrid1,
 			Name:                  name4,
 			Description:           description1,
@@ -2889,6 +2898,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	}
 	pages := make([]shared.PageV4Input, 0, len(r.Pages))
 	for pagesIndex := range r.Pages {
+		id1 := new(string)
+		if !r.Pages[pagesIndex].ID.IsUnknown() && !r.Pages[pagesIndex].ID.IsNull() {
+			*id1 = r.Pages[pagesIndex].ID.ValueString()
+		} else {
+			id1 = nil
+		}
 		var hrid2 string
 		hrid2 = r.Pages[pagesIndex].Hrid.ValueString()
 
@@ -2951,6 +2966,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			parentHrid = nil
 		}
 		pages = append(pages, shared.PageV4Input{
+			ID:            id1,
 			Hrid:          hrid2,
 			Name:          name20,
 			Type:          type9,

@@ -1276,7 +1276,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Human-readable ID of a spec. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{
@@ -1966,8 +1966,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 								stringvalidator.UTF8LengthAtMost(256),
-								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
+								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
 							},
+						},
+						"id": schema.StringAttribute{
+							Optional:           true,
+							DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+							Description:        `Legacy API Page GUID for backward compatibility with GKO`,
 						},
 						"name": schema.StringAttribute{
 							Optional: true,
@@ -2734,8 +2739,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 								stringvalidator.UTF8LengthAtMost(256),
-								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
+								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
 							},
+						},
+						"id": schema.StringAttribute{
+							Optional:           true,
+							DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
+							Description:        `Legacy API Plan GUID for backward compatibility with GKO`,
 						},
 						"mode": schema.StringAttribute{
 							Computed:    true,
@@ -2769,15 +2779,15 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `API Plan security implementation. Not Null; must be one of ["KEY_LESS", "API_KEY", "OAUTH2", "JWT", "MTLS"]`,
+									Description: `API Plan security implementation. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS", "API_KEY"]`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
 										stringvalidator.OneOf(
 											"KEY_LESS",
-											"API_KEY",
 											"OAUTH2",
 											"JWT",
 											"MTLS",
+											"API_KEY",
 										),
 									},
 								},
