@@ -5,12 +5,12 @@ management:
   docVersion: 1.0.0
   speakeasyVersion: 1.761.1
   generationVersion: 2.879.6
-  releaseVersion: 0.5.2
-  configChecksum: 1d579f6d5cf8398c26af85ab1d08af80
+  releaseVersion: 0.5.3
+  configChecksum: 35c64c35510d4a22ac7731e216de058b
 persistentEdits:
-  generation_id: 14532542-7873-482c-9490-0f8555900926
-  pristine_commit_hash: c1dda5a0e6bcf3782a7e5811e1f7906b4d97cf75
-  pristine_tree_hash: edd3698f47261879e529b11bd13d41272dcd2f70
+  generation_id: 2760edca-ba9e-4913-a486-9cb316bbbc02
+  pristine_commit_hash: b93b40fc4391cde1313b1dc6cb4d90ccaf411cba
+  pristine_tree_hash: b6315a676f144c1516f728f20b1cc555450d0e49
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -556,8 +556,8 @@ trackedFiles:
     pristine_git_object: 748c4bab704e399fd73706ce2a0478fc4a298117
   internal/sdk/graviteeapim.go:
     id: 1f2cf575c2fd
-    last_write_checksum: sha1:221dc94f9ca42e585226c78ae8ea9ef33180ff9d
-    pristine_git_object: 77b2940393d255d00edd6f5c1c0dfec5843edfe8
+    last_write_checksum: sha1:293f057bc090d46d3b82ac2d4f6cf03e961ef74e
+    pristine_git_object: 74a27aafeefbb9b8a517247a2f1ec44594837937
   internal/sdk/internal/config/sdkconfiguration.go:
     id: 6af0bc8635d9
     last_write_checksum: sha1:95294a70d2db0500c6676cbf0936abc8887e68d4
