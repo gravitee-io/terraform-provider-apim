@@ -120,6 +120,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+					speakeasy_stringplanmodifier.UseConfigValue(),
 				},
 				Description: `Human-readable ID of a spec. Requires replacement if changed.`,
 				Validators: []validator.String{

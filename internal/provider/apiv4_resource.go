@@ -1272,6 +1272,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+					speakeasy_stringplanmodifier.UseConfigValue(),
 				},
 				Description: `Human-readable ID of a spec. Requires replacement if changed.`,
 				Validators: []validator.String{

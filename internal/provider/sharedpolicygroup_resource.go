@@ -101,6 +101,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+					speakeasy_stringplanmodifier.UseConfigValue(),
 				},
 				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
 				Validators: []validator.String{
