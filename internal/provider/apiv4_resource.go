@@ -1969,11 +1969,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
 							},
 						},
-						"id": schema.StringAttribute{
-							Optional:           true,
-							DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-							Description:        `Legacy API Page GUID for backward compatibility with GKO`,
-						},
 						"name": schema.StringAttribute{
 							Optional: true,
 							MarkdownDescription: `This is the display name of the page in APIM and on the portal.` + "\n" +
@@ -2741,11 +2736,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								stringvalidator.UTF8LengthAtMost(256),
 								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
 							},
-						},
-						"id": schema.StringAttribute{
-							Optional:           true,
-							DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-							Description:        `Legacy API Plan GUID for backward compatibility with GKO`,
 						},
 						"mode": schema.StringAttribute{
 							Computed:    true,

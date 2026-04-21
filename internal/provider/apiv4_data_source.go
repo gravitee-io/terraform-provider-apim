@@ -1121,11 +1121,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed:    true,
 							Description: `A unique human readable id identifying this resource`,
 						},
-						"id": schema.StringAttribute{
-							Computed:           true,
-							DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-							Description:        `Legacy API Page GUID for backward compatibility with GKO`,
-						},
 						"name": schema.StringAttribute{
 							Computed: true,
 							MarkdownDescription: `This is the display name of the page in APIM and on the portal.` + "\n" +
@@ -1525,11 +1520,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"hrid": schema.StringAttribute{
 							Computed:    true,
 							Description: `A unique human readable id identifying this resource`,
-						},
-						"id": schema.StringAttribute{
-							Computed:           true,
-							DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-							Description:        `Legacy API Plan GUID for backward compatibility with GKO`,
 						},
 						"mode": schema.StringAttribute{
 							Computed:    true,
