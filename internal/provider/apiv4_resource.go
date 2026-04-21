@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	speakeasy_boolplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/boolplanmodifier"
 	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
@@ -39,6 +40,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+
 	"regexp"
 )
 
@@ -3234,6 +3237,13 @@ func (r *Apiv4Resource) Read(ctx context.Context, req resource.ReadRequest, resp
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
+
+	// temporary fix for GKO-2821 before we fix the API
+	if res.APIV4State.Hrid == "" {
+		tflog.Warn(ctx, "API returned null HRID; preserving existing state to prevent drift")
+		res.APIV4State.Hrid = data.Hrid.ValueString()
+	}
+
 	resp.Diagnostics.Append(data.RefreshFromSharedApiv4State(ctx, res.APIV4State)...)
 
 	if resp.Diagnostics.HasError() {
