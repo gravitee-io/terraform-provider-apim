@@ -18,6 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -95,9 +96,10 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 			"hrid": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplaceIfConfigured(),
 					speakeasy_stringplanmodifier.UseConfigValue(),
 				},
-				Description: `A unique human readable id identifying this resource`,
+				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_-]{2,}$`).String()),
