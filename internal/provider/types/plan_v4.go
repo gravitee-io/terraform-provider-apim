@@ -14,7 +14,6 @@ type PlanV4 struct {
 	Flows                 []FlowV4       `tfsdk:"flows"`
 	GeneralConditionsHrid types.String   `tfsdk:"general_conditions_hrid"`
 	Hrid                  types.String   `tfsdk:"hrid"`
-	ID                    types.String   `tfsdk:"id"`
 	Mode                  types.String   `tfsdk:"mode"`
 	Name                  types.String   `tfsdk:"name"`
 	Security              *PlanSecurity  `tfsdk:"security"`

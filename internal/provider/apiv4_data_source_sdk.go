@@ -619,7 +619,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			pages.Content = types.StringPointerValue(pagesItem.Content)
 			pages.Homepage = types.BoolPointerValue(pagesItem.Homepage)
 			pages.Hrid = types.StringValue(pagesItem.Hrid)
-			pages.ID = types.StringPointerValue(pagesItem.ID)
 			pages.Name = types.StringValue(pagesItem.Name)
 			pages.ParentHrid = types.StringPointerValue(pagesItem.ParentHrid)
 			pages.Published = types.BoolPointerValue(pagesItem.Published)
@@ -847,7 +846,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			}
 			plans.GeneralConditionsHrid = types.StringPointerValue(plansItem.GeneralConditionsHrid)
 			plans.Hrid = types.StringValue(plansItem.Hrid)
-			plans.ID = types.StringPointerValue(plansItem.ID)
 			plans.Mode = types.StringValue(string(plansItem.Mode))
 			plans.Name = types.StringValue(plansItem.Name)
 			plans.Security = &tfTypes.PlanSecurity{}
