@@ -12,6 +12,7 @@ type PageV4 struct {
 	Content       types.String            `tfsdk:"content"`
 	Homepage      types.Bool              `tfsdk:"homepage"`
 	Hrid          types.String            `tfsdk:"hrid"`
+	ID            types.String            `tfsdk:"id"`
 	Name          types.String            `tfsdk:"name"`
 	ParentHrid    types.String            `tfsdk:"parent_hrid"`
 	Published     types.Bool              `tfsdk:"published"`
