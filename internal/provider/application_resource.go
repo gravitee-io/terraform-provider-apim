@@ -16,11 +16,10 @@ import (
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	"github.com/gravitee-io/terraform-provider-apim/internal/validators"
-	speakeasy_listvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
-	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -269,86 +268,30 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
-					"app": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+					"app": schema.StringAttribute{
+						CustomType: jsontypes.NormalizedType{},
+						Computed:   true,
+						Optional:   true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Attributes: map[string]schema.Attribute{
-							"client_id": schema.StringAttribute{
-								Optional:    true,
-								Description: `Simple application client ID`,
-								Validators: []validator.String{
-									stringvalidator.UTF8LengthAtMost(300),
-								},
-							},
-							"type": schema.StringAttribute{
-								Optional:    true,
-								Description: `Simple application type, for information`,
-							},
-						},
-						Description: `Simple application settings`,
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
+						Description: `Parsed as JSON.`,
+						Validators: []validator.String{
+							stringvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("oauth"),
 							}...),
 						},
 					},
-					"oauth": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+					"oauth": schema.StringAttribute{
+						CustomType: jsontypes.NormalizedType{},
+						Computed:   true,
+						Optional:   true,
+						PlanModifiers: []planmodifier.String{
+							speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 						},
-						Attributes: map[string]schema.Attribute{
-							"additional_client_metadata": schema.MapAttribute{
-								Optional:    true,
-								ElementType: types.StringType,
-							},
-							"application_type": schema.StringAttribute{
-								Optional: true,
-								MarkdownDescription: `OAuth client application type: ` + "\n" +
-									`` + "`" + `browser` + "`" + ` for single page apps (SPA),` + "\n" +
-									`` + "`" + `web` + "`" + ` for regular web apps,` + "\n" +
-									`` + "`" + `native` + "`" + ` for smartphone apps,` + "\n" +
-									`` + "`" + `backend_to_backend` + "`" + ` for backend to backend.` + "\n" +
-									`Not Null; must be one of ["browser", "web", "native", "backend_to_backend"]`,
-								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
-									stringvalidator.OneOf(
-										"browser",
-										"web",
-										"native",
-										"backend_to_backend",
-									),
-								},
-							},
-							"grant_types": schema.ListAttribute{
-								Optional:    true,
-								ElementType: types.StringType,
-								MarkdownDescription: `OAuth client grant types. ` + "`" + `authorization_code` + "`" + ` is mandatory except when application type is ` + "`" + `backend_to_backend` + "`" + `.` + "\n" +
-									`` + "`" + `refresh_token` + "`" + ` can be used only application type is ` + "`" + `web` + "`" + ` and ` + "`" + `browser` + "`" + `.` + "\n" +
-									`` + "`" + `password` + "`" + ` (Resource Owner Password) only with applicationType ` + "`" + `native` + "`" + `.` + "\n" +
-									`` + "`" + `client_credentials` + "`" + ` only works  when application type is ` + "`" + `backend_to_backend` + "`" + `` + "\n" +
-									`Not Null`,
-								Validators: []validator.List{
-									speakeasy_listvalidators.NotNull(),
-									listvalidator.SizeAtLeast(1),
-									listvalidator.UniqueValues(),
-								},
-							},
-							"redirect_uris": schema.ListAttribute{
-								Computed:    true,
-								Optional:    true,
-								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-								ElementType: types.StringType,
-								Description: `OAuth client redirect Uris. Default: []`,
-							},
-						},
-						Description: `Application OAuth client settings. This require Dynamic Client Registration to be enabled at the environment level.`,
-						Validators: []validator.Object{
-							objectvalidator.ConflictsWith(path.Expressions{
+						Description: `Parsed as JSON.`,
+						Validators: []validator.String{
+							stringvalidator.ConflictsWith(path.Expressions{
 								path.MatchRelative().AtParent().AtName("app"),
 							}...),
 						},

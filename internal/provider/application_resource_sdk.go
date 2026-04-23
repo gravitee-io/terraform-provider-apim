@@ -5,11 +5,13 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/typeconvert"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"time"
@@ -63,31 +65,16 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 		} else {
 			r.Settings = &tfTypes.ApplicationSettings{}
 			if resp.Settings.App == nil {
-				r.Settings.App = nil
+				r.Settings.App = jsontypes.NewNormalizedNull()
 			} else {
-				r.Settings.App = &tfTypes.App{}
-				r.Settings.App.ClientID = types.StringPointerValue(resp.Settings.App.ClientID)
-				r.Settings.App.Type = types.StringPointerValue(resp.Settings.App.Type)
+				appResult, _ := json.Marshal(resp.Settings.App)
+				r.Settings.App = jsontypes.NewNormalizedValue(string(appResult))
 			}
 			if resp.Settings.Oauth == nil {
-				r.Settings.Oauth = nil
+				r.Settings.Oauth = jsontypes.NewNormalizedNull()
 			} else {
-				r.Settings.Oauth = &tfTypes.Oauth{}
-				if len(resp.Settings.Oauth.AdditionalClientMetadata) > 0 {
-					r.Settings.Oauth.AdditionalClientMetadata = make(map[string]types.String, len(resp.Settings.Oauth.AdditionalClientMetadata))
-					for key, value := range resp.Settings.Oauth.AdditionalClientMetadata {
-						r.Settings.Oauth.AdditionalClientMetadata[key] = types.StringValue(value)
-					}
-				}
-				r.Settings.Oauth.ApplicationType = types.StringValue(string(resp.Settings.Oauth.ApplicationType))
-				r.Settings.Oauth.GrantTypes = make([]types.String, 0, len(resp.Settings.Oauth.GrantTypes))
-				for _, v := range resp.Settings.Oauth.GrantTypes {
-					r.Settings.Oauth.GrantTypes = append(r.Settings.Oauth.GrantTypes, types.StringValue(string(v)))
-				}
-				r.Settings.Oauth.RedirectUris = make([]types.String, 0, len(resp.Settings.Oauth.RedirectUris))
-				for _, v := range resp.Settings.Oauth.RedirectUris {
-					r.Settings.Oauth.RedirectUris = append(r.Settings.Oauth.RedirectUris, types.StringValue(v))
-				}
+				oauthResult, _ := json.Marshal(resp.Settings.Oauth)
+				r.Settings.Oauth = jsontypes.NewNormalizedValue(string(oauthResult))
 			}
 			if resp.Settings.TLS == nil {
 				r.Settings.TLS = nil
@@ -248,49 +235,13 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 	}
 	var settings *shared.ApplicationSettings
 	if r.Settings != nil {
-		var app *shared.App
-		if r.Settings.App != nil {
-			typeVar := new(string)
-			if !r.Settings.App.Type.IsUnknown() && !r.Settings.App.Type.IsNull() {
-				*typeVar = r.Settings.App.Type.ValueString()
-			} else {
-				typeVar = nil
-			}
-			clientID := new(string)
-			if !r.Settings.App.ClientID.IsUnknown() && !r.Settings.App.ClientID.IsNull() {
-				*clientID = r.Settings.App.ClientID.ValueString()
-			} else {
-				clientID = nil
-			}
-			app = &shared.App{
-				Type:     typeVar,
-				ClientID: clientID,
-			}
+		var app interface{}
+		if !r.Settings.App.IsUnknown() && !r.Settings.App.IsNull() {
+			_ = json.Unmarshal([]byte(r.Settings.App.ValueString()), &app)
 		}
-		var oauth *shared.Oauth
-		if r.Settings.Oauth != nil {
-			applicationType := shared.ApplicationType(r.Settings.Oauth.ApplicationType.ValueString())
-			grantTypes := make([]shared.GrantType, 0, len(r.Settings.Oauth.GrantTypes))
-			for _, grantTypesItem := range r.Settings.Oauth.GrantTypes {
-				grantTypes = append(grantTypes, shared.GrantType(grantTypesItem.ValueString()))
-			}
-			redirectUris := make([]string, 0, len(r.Settings.Oauth.RedirectUris))
-			for redirectUrisIndex := range r.Settings.Oauth.RedirectUris {
-				redirectUris = append(redirectUris, r.Settings.Oauth.RedirectUris[redirectUrisIndex].ValueString())
-			}
-			additionalClientMetadata := make(map[string]string)
-			for additionalClientMetadataKey := range r.Settings.Oauth.AdditionalClientMetadata {
-				var additionalClientMetadataInst string
-				additionalClientMetadataInst = r.Settings.Oauth.AdditionalClientMetadata[additionalClientMetadataKey].ValueString()
-
-				additionalClientMetadata[additionalClientMetadataKey] = additionalClientMetadataInst
-			}
-			oauth = &shared.Oauth{
-				ApplicationType:          applicationType,
-				GrantTypes:               grantTypes,
-				RedirectUris:             redirectUris,
-				AdditionalClientMetadata: additionalClientMetadata,
-			}
+		var oauth interface{}
+		if !r.Settings.Oauth.IsUnknown() && !r.Settings.Oauth.IsNull() {
+			_ = json.Unmarshal([]byte(r.Settings.Oauth.ValueString()), &oauth)
 		}
 		var tls *shared.ApplicationTLSSettings
 		if r.Settings.TLS != nil {
