@@ -9,7 +9,6 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -175,15 +174,50 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 			"settings": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"app": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
-						Computed:    true,
-						Description: `Parsed as JSON.`,
+					"app": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"client_id": schema.StringAttribute{
+								Computed:    true,
+								Description: `Simple application client ID`,
+							},
+							"type": schema.StringAttribute{
+								Computed:    true,
+								Description: `Simple application type, for information`,
+							},
+						},
+						Description: `Simple application settings`,
 					},
-					"oauth": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
-						Computed:    true,
-						Description: `Parsed as JSON.`,
+					"oauth": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"additional_client_metadata": schema.MapAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+							},
+							"application_type": schema.StringAttribute{
+								Computed: true,
+								MarkdownDescription: `OAuth client application type: ` + "\n" +
+									`` + "`" + `browser` + "`" + ` for single page apps (SPA),` + "\n" +
+									`` + "`" + `web` + "`" + ` for regular web apps,` + "\n" +
+									`` + "`" + `native` + "`" + ` for smartphone apps,` + "\n" +
+									`` + "`" + `backend_to_backend` + "`" + ` for backend to backend.`,
+							},
+							"grant_types": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								MarkdownDescription: `OAuth client grant types. ` + "`" + `authorization_code` + "`" + ` is mandatory except when application type is ` + "`" + `backend_to_backend` + "`" + `.` + "\n" +
+									`` + "`" + `refresh_token` + "`" + ` can be used only application type is ` + "`" + `web` + "`" + ` and ` + "`" + `browser` + "`" + `.` + "\n" +
+									`` + "`" + `password` + "`" + ` (Resource Owner Password) only with applicationType ` + "`" + `native` + "`" + `.` + "\n" +
+									`` + "`" + `client_credentials` + "`" + ` only works  when application type is ` + "`" + `backend_to_backend` + "`" + ``,
+							},
+							"redirect_uris": schema.ListAttribute{
+								Computed:    true,
+								ElementType: types.StringType,
+								Description: `OAuth client redirect Uris`,
+							},
+						},
+						Description: `Application OAuth client settings. This require Dynamic Client Registration to be enabled at the environment level.`,
 					},
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,

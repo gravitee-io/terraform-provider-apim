@@ -3,22 +3,169 @@
 
 package shared
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
+// App - Simple application settings
+type App struct {
+	// Simple application type, for information
+	Type *string `json:"type,omitempty"`
+	// Simple application client ID
+	ClientID *string `json:"clientId,omitempty"`
+}
+
+func (a *App) GetType() *string {
+	if a == nil {
+		return nil
+	}
+	return a.Type
+}
+
+func (a *App) GetClientID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ClientID
+}
+
+// ApplicationType - OAuth client application type:
+// `browser` for single page apps (SPA),
+// `web` for regular web apps,
+// `native` for smartphone apps,
+// `backend_to_backend` for backend to backend.
+type ApplicationType string
+
+const (
+	ApplicationTypeBrowser          ApplicationType = "browser"
+	ApplicationTypeWeb              ApplicationType = "web"
+	ApplicationTypeNative           ApplicationType = "native"
+	ApplicationTypeBackendToBackend ApplicationType = "backend_to_backend"
+)
+
+func (e ApplicationType) ToPointer() *ApplicationType {
+	return &e
+}
+func (e *ApplicationType) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "browser":
+		fallthrough
+	case "web":
+		fallthrough
+	case "native":
+		fallthrough
+	case "backend_to_backend":
+		*e = ApplicationType(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ApplicationType: %v", v)
+	}
+}
+
+type GrantType string
+
+const (
+	GrantTypeAuthorizationCode GrantType = "authorization_code"
+	GrantTypeImplicit          GrantType = "implicit"
+	GrantTypeRefreshToken      GrantType = "refresh_token"
+	GrantTypePassword          GrantType = "password"
+	GrantTypeClientCredentials GrantType = "client_credentials"
+)
+
+func (e GrantType) ToPointer() *GrantType {
+	return &e
+}
+func (e *GrantType) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "authorization_code":
+		fallthrough
+	case "implicit":
+		fallthrough
+	case "refresh_token":
+		fallthrough
+	case "password":
+		fallthrough
+	case "client_credentials":
+		*e = GrantType(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for GrantType: %v", v)
+	}
+}
+
+// Oauth - Application OAuth client settings. This require Dynamic Client Registration to be enabled at the environment level.
+type Oauth struct {
+	// OAuth client application type:
+	// `browser` for single page apps (SPA),
+	// `web` for regular web apps,
+	// `native` for smartphone apps,
+	// `backend_to_backend` for backend to backend.
+	//
+	ApplicationType ApplicationType `json:"applicationType"`
+	// OAuth client grant types. `authorization_code` is mandatory except when application type is `backend_to_backend`.
+	// `refresh_token` can be used only application type is `web` and `browser`.
+	// `password` (Resource Owner Password) only with applicationType `native`.
+	// `client_credentials` only works  when application type is `backend_to_backend`
+	//
+	GrantTypes []GrantType `json:"grantTypes"`
+	// OAuth client redirect Uris
+	RedirectUris             []string          `json:"redirectUris,omitempty"`
+	AdditionalClientMetadata map[string]string `json:"additionalClientMetadata,omitempty"`
+}
+
+func (o *Oauth) GetApplicationType() ApplicationType {
+	if o == nil {
+		return ApplicationType("")
+	}
+	return o.ApplicationType
+}
+
+func (o *Oauth) GetGrantTypes() []GrantType {
+	if o == nil {
+		return []GrantType{}
+	}
+	return o.GrantTypes
+}
+
+func (o *Oauth) GetRedirectUris() []string {
+	if o == nil {
+		return nil
+	}
+	return o.RedirectUris
+}
+
+func (o *Oauth) GetAdditionalClientMetadata() map[string]string {
+	if o == nil {
+		return nil
+	}
+	return o.AdditionalClientMetadata
+}
+
 // ApplicationSettings - Application settings defines the configuration of consumers authentication. Depending on the control plane configuration some applications types may be restricted. `app` and `oauth` are mutually exclusive. If none is set it fallbacks to `app` without any property set.
 type ApplicationSettings struct {
-	App   any `json:"app,omitempty"`
-	Oauth any `json:"oauth,omitempty"`
+	App   *App   `json:"app,omitempty"`
+	Oauth *Oauth `json:"oauth,omitempty"`
 	// Application TLS settings
 	TLS *ApplicationTLSSettings `json:"tls,omitempty"`
 }
 
-func (a *ApplicationSettings) GetApp() any {
+func (a *ApplicationSettings) GetApp() *App {
 	if a == nil {
 		return nil
 	}
 	return a.App
 }
 
-func (a *ApplicationSettings) GetOauth() any {
+func (a *ApplicationSettings) GetOauth() *Oauth {
 	if a == nil {
 		return nil
 	}

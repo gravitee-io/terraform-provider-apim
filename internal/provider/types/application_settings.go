@@ -3,12 +3,8 @@
 
 package types
 
-import (
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
-)
-
 type ApplicationSettings struct {
-	App   jsontypes.Normalized    `tfsdk:"app"`
-	Oauth jsontypes.Normalized    `tfsdk:"oauth"`
+	App   *App                    `tfsdk:"app"`
+	Oauth *Oauth                  `tfsdk:"oauth"`
 	TLS   *ApplicationTLSSettings `tfsdk:"tls"`
 }

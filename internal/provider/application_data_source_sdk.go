@@ -5,13 +5,11 @@ package provider
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/typeconvert"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
-	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -64,16 +62,31 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 		} else {
 			r.Settings = &tfTypes.ApplicationSettings{}
 			if resp.Settings.App == nil {
-				r.Settings.App = jsontypes.NewNormalizedNull()
+				r.Settings.App = nil
 			} else {
-				appResult, _ := json.Marshal(resp.Settings.App)
-				r.Settings.App = jsontypes.NewNormalizedValue(string(appResult))
+				r.Settings.App = &tfTypes.App{}
+				r.Settings.App.ClientID = types.StringPointerValue(resp.Settings.App.ClientID)
+				r.Settings.App.Type = types.StringPointerValue(resp.Settings.App.Type)
 			}
 			if resp.Settings.Oauth == nil {
-				r.Settings.Oauth = jsontypes.NewNormalizedNull()
+				r.Settings.Oauth = nil
 			} else {
-				oauthResult, _ := json.Marshal(resp.Settings.Oauth)
-				r.Settings.Oauth = jsontypes.NewNormalizedValue(string(oauthResult))
+				r.Settings.Oauth = &tfTypes.Oauth{}
+				if len(resp.Settings.Oauth.AdditionalClientMetadata) > 0 {
+					r.Settings.Oauth.AdditionalClientMetadata = make(map[string]types.String, len(resp.Settings.Oauth.AdditionalClientMetadata))
+					for key, value := range resp.Settings.Oauth.AdditionalClientMetadata {
+						r.Settings.Oauth.AdditionalClientMetadata[key] = types.StringValue(value)
+					}
+				}
+				r.Settings.Oauth.ApplicationType = types.StringValue(string(resp.Settings.Oauth.ApplicationType))
+				r.Settings.Oauth.GrantTypes = make([]types.String, 0, len(resp.Settings.Oauth.GrantTypes))
+				for _, v := range resp.Settings.Oauth.GrantTypes {
+					r.Settings.Oauth.GrantTypes = append(r.Settings.Oauth.GrantTypes, types.StringValue(string(v)))
+				}
+				r.Settings.Oauth.RedirectUris = make([]types.String, 0, len(resp.Settings.Oauth.RedirectUris))
+				for _, v := range resp.Settings.Oauth.RedirectUris {
+					r.Settings.Oauth.RedirectUris = append(r.Settings.Oauth.RedirectUris, types.StringValue(v))
+				}
 			}
 			if resp.Settings.TLS == nil {
 				r.Settings.TLS = nil
