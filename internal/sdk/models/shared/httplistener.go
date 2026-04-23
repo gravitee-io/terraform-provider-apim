@@ -10,7 +10,7 @@ import (
 // HTTPListener - HTTP Listener
 type HTTPListener struct {
 	// Listener type.
-	Type ListenerType `json:"type"`
+	Type *ListenerType `json:"type,omitempty"`
 	// A list of possible entrypoint of the same type.
 	Entrypoints []Entrypoint `json:"entrypoints,omitempty"`
 	// Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
@@ -32,9 +32,9 @@ func (h *HTTPListener) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (h *HTTPListener) GetType() ListenerType {
+func (h *HTTPListener) GetType() *ListenerType {
 	if h == nil {
-		return ListenerType("")
+		return nil
 	}
 	return h.Type
 }

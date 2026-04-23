@@ -33,7 +33,7 @@ func CreateListenerHTTP(http HTTPListener) Listener {
 	typ := ListenerUnionTypeHTTP
 
 	typStr := ListenerType(typ)
-	http.Type = typStr
+	http.Type = &typStr
 
 	return Listener{
 		HTTPListener: &http,
@@ -45,7 +45,7 @@ func CreateListenerTCP(tcp TCPListener) Listener {
 	typ := ListenerUnionTypeTCP
 
 	typStr := ListenerType(typ)
-	tcp.Type = typStr
+	tcp.Type = &typStr
 
 	return Listener{
 		TCPListener: &tcp,
@@ -57,7 +57,7 @@ func CreateListenerSubscription(subscription SubscriptionListener) Listener {
 	typ := ListenerUnionTypeSubscription
 
 	typStr := ListenerType(typ)
-	subscription.Type = typStr
+	subscription.Type = &typStr
 
 	return Listener{
 		SubscriptionListener: &subscription,
@@ -69,7 +69,7 @@ func CreateListenerKafka(kafka KafkaListener) Listener {
 	typ := ListenerUnionTypeKafka
 
 	typStr := ListenerType(typ)
-	kafka.Type = typStr
+	kafka.Type = &typStr
 
 	return Listener{
 		KafkaListener: &kafka,

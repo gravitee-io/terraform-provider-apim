@@ -10,7 +10,7 @@ import (
 // SubscriptionListener - Subscription listener for message API.
 type SubscriptionListener struct {
 	// Listener type.
-	Type ListenerType `json:"type"`
+	Type *ListenerType `json:"type,omitempty"`
 	// A list of possible entrypoint of the same type.
 	Entrypoints []Entrypoint `json:"entrypoints,omitempty"`
 	// Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
@@ -28,9 +28,9 @@ func (s *SubscriptionListener) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (s *SubscriptionListener) GetType() ListenerType {
+func (s *SubscriptionListener) GetType() *ListenerType {
 	if s == nil {
-		return ListenerType("")
+		return nil
 	}
 	return s.Type
 }

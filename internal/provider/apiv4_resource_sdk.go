@@ -466,7 +466,11 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				for _, v := range listenersItem.HTTPListener.Servers {
 					listeners.HTTP.Servers = append(listeners.HTTP.Servers, types.StringValue(v))
 				}
-				listeners.HTTP.Type = types.StringValue(string(listenersItem.HTTPListener.Type))
+				if listenersItem.HTTPListener.Type != nil {
+					listeners.HTTP.Type = types.StringValue(string(*listenersItem.HTTPListener.Type))
+				} else {
+					listeners.HTTP.Type = types.StringNull()
+				}
 			}
 			if listenersItem.KafkaListener != nil {
 				listeners.Kafka = &tfTypes.KafkaListener{}
@@ -501,7 +505,11 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				for _, v := range listenersItem.KafkaListener.Servers {
 					listeners.Kafka.Servers = append(listeners.Kafka.Servers, types.StringValue(v))
 				}
-				listeners.Kafka.Type = types.StringValue(string(listenersItem.KafkaListener.Type))
+				if listenersItem.KafkaListener.Type != nil {
+					listeners.Kafka.Type = types.StringValue(string(*listenersItem.KafkaListener.Type))
+				} else {
+					listeners.Kafka.Type = types.StringNull()
+				}
 			}
 			if listenersItem.SubscriptionListener != nil {
 				listeners.Subscription = &tfTypes.SubscriptionListener{}
@@ -535,7 +543,11 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				for _, v := range listenersItem.SubscriptionListener.Servers {
 					listeners.Subscription.Servers = append(listeners.Subscription.Servers, types.StringValue(v))
 				}
-				listeners.Subscription.Type = types.StringValue(string(listenersItem.SubscriptionListener.Type))
+				if listenersItem.SubscriptionListener.Type != nil {
+					listeners.Subscription.Type = types.StringValue(string(*listenersItem.SubscriptionListener.Type))
+				} else {
+					listeners.Subscription.Type = types.StringNull()
+				}
 			}
 			if listenersItem.TCPListener != nil {
 				listeners.TCP = &tfTypes.TCPListener{}
@@ -573,7 +585,11 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				for _, v := range listenersItem.TCPListener.Servers {
 					listeners.TCP.Servers = append(listeners.TCP.Servers, types.StringValue(v))
 				}
-				listeners.TCP.Type = types.StringValue(string(listenersItem.TCPListener.Type))
+				if listenersItem.TCPListener.Type != nil {
+					listeners.TCP.Type = types.StringValue(string(*listenersItem.TCPListener.Type))
+				} else {
+					listeners.TCP.Type = types.StringNull()
+				}
 			}
 
 			r.Listeners = append(r.Listeners, listeners)
@@ -1081,7 +1097,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	listeners := make([]shared.Listener, 0, len(r.Listeners))
 	for listenersItem := range r.Listeners {
 		if r.Listeners[listenersItem].HTTP != nil {
-			typeVar1 := shared.ListenerType(r.Listeners[listenersItem].HTTP.Type.ValueString())
+			typeVar1 := new(shared.ListenerType)
+			if !r.Listeners[listenersItem].HTTP.Type.IsUnknown() && !r.Listeners[listenersItem].HTTP.Type.IsNull() {
+				*typeVar1 = shared.ListenerType(r.Listeners[listenersItem].HTTP.Type.ValueString())
+			} else {
+				typeVar1 = nil
+			}
 			entrypoints := make([]shared.Entrypoint, 0, len(r.Listeners[listenersItem].HTTP.Entrypoints))
 			for entrypointsIndex := range r.Listeners[listenersItem].HTTP.Entrypoints {
 				var type1 string
@@ -1211,7 +1232,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			})
 		}
 		if r.Listeners[listenersItem].Subscription != nil {
-			typeVar2 := shared.ListenerType(r.Listeners[listenersItem].Subscription.Type.ValueString())
+			typeVar2 := new(shared.ListenerType)
+			if !r.Listeners[listenersItem].Subscription.Type.IsUnknown() && !r.Listeners[listenersItem].Subscription.Type.IsNull() {
+				*typeVar2 = shared.ListenerType(r.Listeners[listenersItem].Subscription.Type.ValueString())
+			} else {
+				typeVar2 = nil
+			}
 			entrypoints1 := make([]shared.Entrypoint, 0, len(r.Listeners[listenersItem].Subscription.Entrypoints))
 			for entrypointsIndex1 := range r.Listeners[listenersItem].Subscription.Entrypoints {
 				var type2 string
@@ -1260,7 +1286,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			})
 		}
 		if r.Listeners[listenersItem].TCP != nil {
-			typeVar3 := shared.ListenerType(r.Listeners[listenersItem].TCP.Type.ValueString())
+			typeVar3 := new(shared.ListenerType)
+			if !r.Listeners[listenersItem].TCP.Type.IsUnknown() && !r.Listeners[listenersItem].TCP.Type.IsNull() {
+				*typeVar3 = shared.ListenerType(r.Listeners[listenersItem].TCP.Type.ValueString())
+			} else {
+				typeVar3 = nil
+			}
 			entrypoints2 := make([]shared.Entrypoint, 0, len(r.Listeners[listenersItem].TCP.Entrypoints))
 			for entrypointsIndex2 := range r.Listeners[listenersItem].TCP.Entrypoints {
 				var type3 string
@@ -1314,7 +1345,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			})
 		}
 		if r.Listeners[listenersItem].Kafka != nil {
-			typeVar4 := shared.ListenerType(r.Listeners[listenersItem].Kafka.Type.ValueString())
+			typeVar4 := new(shared.ListenerType)
+			if !r.Listeners[listenersItem].Kafka.Type.IsUnknown() && !r.Listeners[listenersItem].Kafka.Type.IsNull() {
+				*typeVar4 = shared.ListenerType(r.Listeners[listenersItem].Kafka.Type.ValueString())
+			} else {
+				typeVar4 = nil
+			}
 			entrypoints3 := make([]shared.Entrypoint, 0, len(r.Listeners[listenersItem].Kafka.Entrypoints))
 			for entrypointsIndex3 := range r.Listeners[listenersItem].Kafka.Entrypoints {
 				var type4 string

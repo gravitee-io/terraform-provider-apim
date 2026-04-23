@@ -1487,9 +1487,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Listener type. Not Null; must be one of ["HTTP", "SUBSCRIPTION", "TCP", "KAFKA"]`,
+									Description: `Listener type. must be one of ["HTTP", "SUBSCRIPTION", "TCP", "KAFKA"]`,
 									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
 										stringvalidator.OneOf(
 											"HTTP",
 											"SUBSCRIPTION",
@@ -1584,9 +1583,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Listener type. Not Null; must be one of ["HTTP", "SUBSCRIPTION", "TCP", "KAFKA"]`,
+									Description: `Listener type. must be one of ["HTTP", "SUBSCRIPTION", "TCP", "KAFKA"]`,
 									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
 										stringvalidator.OneOf(
 											"HTTP",
 											"SUBSCRIPTION",
@@ -1673,9 +1671,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Listener type. Not Null; must be one of ["HTTP", "SUBSCRIPTION", "TCP", "KAFKA"]`,
+									Description: `Listener type. must be one of ["HTTP", "SUBSCRIPTION", "TCP", "KAFKA"]`,
 									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
 										stringvalidator.OneOf(
 											"HTTP",
 											"SUBSCRIPTION",
@@ -1772,9 +1769,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `Listener type. Not Null; must be one of ["HTTP", "SUBSCRIPTION", "TCP", "KAFKA"]`,
+									Description: `Listener type. must be one of ["HTTP", "SUBSCRIPTION", "TCP", "KAFKA"]`,
 									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
 										stringvalidator.OneOf(
 											"HTTP",
 											"SUBSCRIPTION",

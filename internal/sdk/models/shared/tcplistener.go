@@ -10,7 +10,7 @@ import (
 // TCPListener - TCP listener
 type TCPListener struct {
 	// Listener type.
-	Type ListenerType `json:"type"`
+	Type *ListenerType `json:"type,omitempty"`
 	// A list of possible entrypoint of the same type.
 	Entrypoints []Entrypoint `json:"entrypoints,omitempty"`
 	// Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
@@ -30,9 +30,9 @@ func (t *TCPListener) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (t *TCPListener) GetType() ListenerType {
+func (t *TCPListener) GetType() *ListenerType {
 	if t == nil {
-		return ListenerType("")
+		return nil
 	}
 	return t.Type
 }

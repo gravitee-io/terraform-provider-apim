@@ -10,7 +10,7 @@ import (
 // KafkaListener - Kafka listener
 type KafkaListener struct {
 	// Listener type.
-	Type ListenerType `json:"type"`
+	Type *ListenerType `json:"type,omitempty"`
 	// A list of possible entrypoint of the same type.
 	Entrypoints []Entrypoint `json:"entrypoints,omitempty"`
 	// Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
@@ -30,9 +30,9 @@ func (k *KafkaListener) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (k *KafkaListener) GetType() ListenerType {
+func (k *KafkaListener) GetType() *ListenerType {
 	if k == nil {
-		return ListenerType("")
+		return nil
 	}
 	return k.Type
 }

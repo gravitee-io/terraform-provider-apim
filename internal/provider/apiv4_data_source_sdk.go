@@ -466,7 +466,11 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				for _, v := range listenersItem.HTTPListener.Servers {
 					listeners.HTTP.Servers = append(listeners.HTTP.Servers, types.StringValue(v))
 				}
-				listeners.HTTP.Type = types.StringValue(string(listenersItem.HTTPListener.Type))
+				if listenersItem.HTTPListener.Type != nil {
+					listeners.HTTP.Type = types.StringValue(string(*listenersItem.HTTPListener.Type))
+				} else {
+					listeners.HTTP.Type = types.StringNull()
+				}
 			}
 			if listenersItem.KafkaListener != nil {
 				listeners.Kafka = &tfTypes.KafkaListener{}
@@ -501,7 +505,11 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				for _, v := range listenersItem.KafkaListener.Servers {
 					listeners.Kafka.Servers = append(listeners.Kafka.Servers, types.StringValue(v))
 				}
-				listeners.Kafka.Type = types.StringValue(string(listenersItem.KafkaListener.Type))
+				if listenersItem.KafkaListener.Type != nil {
+					listeners.Kafka.Type = types.StringValue(string(*listenersItem.KafkaListener.Type))
+				} else {
+					listeners.Kafka.Type = types.StringNull()
+				}
 			}
 			if listenersItem.SubscriptionListener != nil {
 				listeners.Subscription = &tfTypes.SubscriptionListener{}
@@ -535,7 +543,11 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				for _, v := range listenersItem.SubscriptionListener.Servers {
 					listeners.Subscription.Servers = append(listeners.Subscription.Servers, types.StringValue(v))
 				}
-				listeners.Subscription.Type = types.StringValue(string(listenersItem.SubscriptionListener.Type))
+				if listenersItem.SubscriptionListener.Type != nil {
+					listeners.Subscription.Type = types.StringValue(string(*listenersItem.SubscriptionListener.Type))
+				} else {
+					listeners.Subscription.Type = types.StringNull()
+				}
 			}
 			if listenersItem.TCPListener != nil {
 				listeners.TCP = &tfTypes.TCPListener{}
@@ -573,7 +585,11 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				for _, v := range listenersItem.TCPListener.Servers {
 					listeners.TCP.Servers = append(listeners.TCP.Servers, types.StringValue(v))
 				}
-				listeners.TCP.Type = types.StringValue(string(listenersItem.TCPListener.Type))
+				if listenersItem.TCPListener.Type != nil {
+					listeners.TCP.Type = types.StringValue(string(*listenersItem.TCPListener.Type))
+				} else {
+					listeners.TCP.Type = types.StringNull()
+				}
 			}
 
 			r.Listeners = append(r.Listeners, listeners)
