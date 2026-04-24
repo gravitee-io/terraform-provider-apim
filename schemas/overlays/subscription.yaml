@@ -57,3 +57,8 @@ actions:
           - "github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
         schemaType: customtypes.RFC3339Type{}
         valueType: customtypes.RFC3339
+
+  - target: $.components.schemas.SubscriptionSpec.properties.customApiKey
+    description: Hide api key from outputs
+    update:
+      x-speakeasy-param-sensitive: true

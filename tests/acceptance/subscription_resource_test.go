@@ -42,12 +42,57 @@ func TestSubscriptionResource_minimal(t *testing.T) {
 					"hrid":            config.StringVariable(apiRandomId),
 					"organization_id": config.StringVariable(organizationId),
 				},
-				ResourceName: resourceAddress,
-				ImportState:  true,
+				ResourceName:      resourceAddress,
+				ImportState:       true,
 				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "api_hrid", "organization_id"}, map[string]string{"hrid": "test"}),
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"starting_at",
+				},
+			},
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
+// Verifies the create, read, import, and delete lifecycle of the
+// `apim_subscription` resource.
+func TestSubscriptionResource_apikey(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	apiRandomId := "test-" + acctest.RandString(10)
+	resourceAddress := "apim_subscription.test"
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(apiRandomId),
+					"organization_id": config.StringVariable(organizationId),
+				},
+			},
+			// Verifies resource import.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(apiRandomId),
+					"organization_id": config.StringVariable(organizationId),
+				},
+				ResourceName:      resourceAddress,
+				ImportState:       true,
+				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "api_hrid", "organization_id"}, map[string]string{"hrid": "test"}),
+				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{
+					"starting_at",
+					"custom_api_key",
 				},
 			},
 			// Testing framework implicitly verifies resource delete.
