@@ -1009,6 +1009,13 @@ components:
             - key1: value1
               key2: value2
           x-speakeasy-param-computed: false
+        customApiKey:
+          type: string
+          writeOnly: true
+          description: Custom API key to assign when creating API-KEY plan subscription.
+          example: my-custom-api-key
+          x-speakeasy-param-computed: false
+          x-speakeasy-param-sensitive: true
       required:
         - hrid
         - applicationHrid

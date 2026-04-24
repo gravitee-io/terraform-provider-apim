@@ -34,6 +34,7 @@ resource "apim_subscription" "example" {
 
 ### Optional
 
+- `custom_api_key` (String, Sensitive) Custom API key to assign when creating API-KEY plan subscription.
 - `ending_at` (String)
 - `environment_id` (String) environment ID
 - `metadata` (Map of String) Key-value metadata for this subscription.
