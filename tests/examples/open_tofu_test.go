@@ -14,7 +14,7 @@ import (
 
 func TestApplicationResource_Examples_OpenTofu(t *testing.T) {
 
-	directories := listTestDirectories(examplesUseCasesPath)
+	directories := listTestDirectoriesSkipping(examplesUseCasesPath, hasTestIgnoreOrTofuIgnoreWithoutVersion)
 
 	cases := createTestCases(directories)
 
