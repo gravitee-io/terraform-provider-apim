@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 23680a769c44fd24b24dc7f8c58c3540
+  docChecksum: beddd9d9e0f8575acc01a81c397a861e
   docVersion: 1.0.0
   speakeasyVersion: 1.761.9
   generationVersion: 2.881.4
   releaseVersion: 0.9.0
   configChecksum: aa624e0a77206f5ee2459c62bf0ba7d3
 persistentEdits:
-  generation_id: fb5a0327-72ee-4184-a2f3-225e205eee94
-  pristine_commit_hash: 44317fb54a1c5e83bd6dbf788c52556062fee9db
-  pristine_tree_hash: 81a4b1e7be7eff51562adca5ea785e3650a3f3ae
+  generation_id: 6ddec2bc-2cac-4f13-9bce-b02fe0392a8f
+  pristine_commit_hash: 61e02f4b2b968ad7d591e3fbee4d1e8d8b2242b5
+  pristine_tree_hash: 6a5811ce8f38ab34208158c98b8c4e04c4baeb78
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -62,8 +62,8 @@ trackedFiles:
     pristine_git_object: 796cc784978fa1d2b5ea70dc7ee42a6e596ecdf7
   go.mod:
     id: c47645c391ad
-    last_write_checksum: sha1:d247fc39aae0248758ee8ab03fd2fa5bad18ab85
-    pristine_git_object: 694594e6f6620b034b497d40046c75443fa41e76
+    last_write_checksum: sha1:41d16489d0f68b1f286dd4108cbbaef1891f2655
+    pristine_git_object: 37188d4266536a6ee236a273104f99ff712a7077
   internal/planmodifiers/boolplanmodifier/suppress_diff.go:
     id: 3cf85b98963e
     last_write_checksum: sha1:70b2947d6f36ee573a1b8668684abf94304b7ba7
@@ -322,12 +322,12 @@ trackedFiles:
     pristine_git_object: cc4764dc1f260df8ca8fae85bad9e1e422cd32a5
   internal/provider/subscription_resource.go:
     id: 466e40c89aec
-    last_write_checksum: sha1:6aeab13ab4d1f3bb06fb1dc1296b55f10081ce31
-    pristine_git_object: d703fd829e3593cf50be9619f34a92724a2a2d9c
+    last_write_checksum: sha1:6db0e38e33f4289c2d59482ed9e3fa7fc4bb41d9
+    pristine_git_object: f68be5ce72a407f249c735fa4f2f88993b8d3f02
   internal/provider/subscription_resource_sdk.go:
     id: 9ba4a8b00592
-    last_write_checksum: sha1:29401ea590309375e14ef67d5a691807109a27ff
-    pristine_git_object: 50b79e618fef3ef15452d37510b6cb47527f7dff
+    last_write_checksum: sha1:34ad6cf8777e044a073e383ffaef0ac0f27f1729
+    pristine_git_object: 27529de8d3e17eb0cfa13b5045825ee251276079
   internal/provider/typeconvert/date.go:
     id: dfe2bc95ad1b
     last_write_checksum: sha1:4971e80c6bd4ba24b66c738eff465316626cf2bf
@@ -986,8 +986,8 @@ trackedFiles:
     pristine_git_object: 2ddba90865b1235eff758f6871b80d9f5716a241
   internal/sdk/models/shared/subscriptionspec.go:
     id: c49f2cee2b6e
-    last_write_checksum: sha1:a57979e5d9034a578b2b97852d16d4f412a2c8cd
-    pristine_git_object: 9943de98e78b7bb001bf96af4b7a7a4a6afb843b
+    last_write_checksum: sha1:b4efad466b1a3e6a354ab22f81b2a4c032a941cc
+    pristine_git_object: b150487796791f779e931f22a2ae77d773fa0ee1
   internal/sdk/models/shared/subscriptionstate.go:
     id: 79d3dde1d628
     last_write_checksum: sha1:28f69e739aeee5bb78aaa2d856d2dba72ab66f42
@@ -1296,7 +1296,7 @@ examples:
           envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
           apiHrid: "my_demo_api"
       requestBody:
-        application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "metadata": {"key1": "value1", "key2": "value2"}}
+        application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "metadata": {"key1": "value1", "key2": "value2"}, "customApiKey": "my-custom-api-key"}
       responses:
         "200":
           application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "metadata": {"key1": "value1", "key2": "value2"}, "apiHrid": "demo-api", "startingAt": "2040-12-25T09:12:28+01:00"}

@@ -49,6 +49,7 @@ type SubscriptionResource struct {
 type SubscriptionResourceModel struct {
 	APIHrid         types.String            `tfsdk:"api_hrid"`
 	ApplicationHrid types.String            `tfsdk:"application_hrid"`
+	CustomAPIKey    types.String            `tfsdk:"custom_api_key"`
 	EndingAt        customtypes.RFC3339     `tfsdk:"ending_at"`
 	EnvironmentID   types.String            `tfsdk:"environment_id"`
 	Hrid            types.String            `tfsdk:"hrid"`
@@ -80,6 +81,11 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 					custom_stringplanmodifier.Immutable(),
 				},
 				Description: `Application's hrid selected to subscribe an API.`,
+			},
+			"custom_api_key": schema.StringAttribute{
+				Optional:    true,
+				Sensitive:   true,
+				Description: `Custom API key to assign when creating API-KEY plan subscription.`,
 			},
 			"ending_at": schema.StringAttribute{
 				CustomType: customtypes.RFC3339Type{},
