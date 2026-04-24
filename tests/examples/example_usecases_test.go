@@ -16,7 +16,7 @@ func TestTutorials(t *testing.T) {
 }
 
 func runExampleTests(t *testing.T, basePath string) {
-	directories := listTestDirectories(basePath)
+	directories := listTestDirectoriesSkipping(basePath, hasTestIgnoreOrTofuIgnoreWithoutVersion)
 
 	cases := createTestCases(directories)
 

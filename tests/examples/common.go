@@ -14,6 +14,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/config"
 )
 
+const testIgnoreFile = ".testignore"
+const tofuIgnoreFile = ".tofuignore"
+
 type directory string
 
 type testcase struct {
@@ -32,15 +35,15 @@ func (d directory) get(config.TestStepConfigRequest) string {
 const examplesUseCasesPath = "../../examples/use-cases"
 const examplesTutorialsPath = "../../examples/tutorials"
 
-func listTestDirectories(basePath string) []string {
+func listTestDirectoriesSkipping(basePath string, dirShouldBeSkipped func(string) bool) []string {
 	var dirs []string
 	err := filepath.Walk(basePath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 		if info.IsDir() && path != basePath {
-			if hasTestIgnoreWithoutVersions(path) {
-				fmt.Printf("Skipping directory %s, found empty .testignore", path)
+			if dirShouldBeSkipped(path) {
+				fmt.Printf("Skipping directory %s", path)
 				return filepath.SkipDir
 			}
 			dirs = append(dirs, path)
@@ -56,18 +59,31 @@ func listTestDirectories(basePath string) []string {
 // hasTestIgnoreWithoutVersions returns true if the directory has a .testignore
 // file that contains no valid APIM version entries, meaning "skip entirely".
 func hasTestIgnoreWithoutVersions(dir string) bool {
-	path := filepath.Join(dir, ".testignore")
+	path := filepath.Join(dir, testIgnoreFile)
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		return false
 	}
 	return parseTestIgnore(path) == nil
 }
 
+// hasTestIgnoreWithoutVersions returns true if the directory has a .testignore .tofuignore
+// file that contains no valid APIM version entries, meaning "skip entirely".
+func hasTestIgnoreOrTofuIgnoreWithoutVersion(dir string) bool {
+	if hasTestIgnoreWithoutVersions(dir) {
+		return true
+	}
+	path := filepath.Join(dir, tofuIgnoreFile)
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return false
+	}
+	return parseTestIgnore(filepath.Join(dir, tofuIgnoreFile)) == nil
+}
+
 func createTestCases(directories []string) []testcase {
 	cases := make([]testcase, 0)
 	for _, dir := range directories {
 		testDir := filepath.Base(dir)
-		skipVersions := parseTestIgnore(filepath.Join(dir, ".testignore"))
+		skipVersions := parseTestIgnore(filepath.Join(dir, testIgnoreFile))
 
 		cases = append(cases, testcase{
 			name:         testDir,
@@ -78,7 +94,7 @@ func createTestCases(directories []string) []testcase {
 	return cases
 }
 
-// parseTestIgnore reads a .testignore file and returns the APIM versions to skip.
+// parseTestIgnore reads a .testignore/.tofuignore file and returns the APIM versions to skip.
 // If the file does not exist or contains no valid versions, it returns nil (skip none).
 // If the file contains only unknown version strings, they are ignored.
 func parseTestIgnore(path string) []utils.ApimVersion {

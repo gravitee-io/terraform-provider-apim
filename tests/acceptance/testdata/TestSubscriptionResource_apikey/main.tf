@@ -88,5 +88,5 @@ resource "apim_subscription" "test" {
   api_hrid         = apim_apiv4.test.hrid
   plan_hrid        = apim_apiv4.test.plans[0].hrid
   application_hrid = apim_application.test.hrid
-  custom_api_key   = "foobar-api-key"
+  custom_api_key   = "foobar-api-key-${var.hrid}"
 }
