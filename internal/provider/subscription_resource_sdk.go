@@ -162,12 +162,19 @@ func (r *SubscriptionResourceModel) ToSharedSubscriptionSpec(ctx context.Context
 
 		metadata[metadataKey] = metadataInst
 	}
+	customAPIKey := new(string)
+	if !r.CustomAPIKey.IsUnknown() && !r.CustomAPIKey.IsNull() {
+		*customAPIKey = r.CustomAPIKey.ValueString()
+	} else {
+		customAPIKey = nil
+	}
 	out := shared.SubscriptionSpec{
 		Hrid:            hrid,
 		ApplicationHrid: applicationHrid,
 		PlanHrid:        planHrid,
 		EndingAt:        endingAt,
 		Metadata:        metadata,
+		CustomAPIKey:    customAPIKey,
 	}
 
 	return &out, diags

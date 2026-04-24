@@ -19,6 +19,8 @@ type SubscriptionSpec struct {
 	EndingAt *time.Time `json:"endingAt,omitempty"`
 	// Key-value metadata for this subscription.
 	Metadata map[string]string `json:"metadata,omitempty"`
+	// Custom API key to assign when creating API-KEY plan subscription.
+	CustomAPIKey *string `json:"customApiKey,omitempty"`
 }
 
 func (s SubscriptionSpec) MarshalJSON() ([]byte, error) {
@@ -65,4 +67,11 @@ func (s *SubscriptionSpec) GetMetadata() map[string]string {
 		return nil
 	}
 	return s.Metadata
+}
+
+func (s *SubscriptionSpec) GetCustomAPIKey() *string {
+	if s == nil {
+		return nil
+	}
+	return s.CustomAPIKey
 }
