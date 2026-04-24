@@ -31,6 +31,8 @@ outputs:
    target: templates/guides/docgen_spg-ratelimit.md
  - template: {{ .RootDir }}/tmpl/subscription.md.tmpl
    target: templates/guides/docgen_subscription.md
+ - template: {{ .RootDir }}/tmpl/subscription-apikey.md.tmpl
+   target: templates/guides/docgen_subscription-apikey.md
  - template: {{ .RootDir }}/tmpl/application-simple.md.tmpl
    target: templates/guides/docgen_application-simple.md
  - template: {{ .RootDir }}/tmpl/application-m2m.md.tmpl
@@ -71,6 +73,9 @@ chunks:
     required: true
   - template: examples/use-cases/subscription-api_app_subscription/api-app-subscription.tf
     exportedAs: Subscription
+    required: true
+  - template: examples/use-cases/subscription-api_app_subscription_apikey/api-app-subscription.tf
+    exportedAs: SubscriptionApiKey
     required: true
   - template: examples/use-cases/application-simple/simple-app.tf
     exportedAs: ApplicationSimple

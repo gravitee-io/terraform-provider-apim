@@ -1,0 +1,20 @@
+---
+page_title: "Subscription to an API with an API Key Plan"
+subcategory: "Subscription"
+---
+
+# Subscription to an API with an API Key Plan
+
+This example demonstrates how to create an API with an API Key Plan, set up an application, and configure a subscription that grants the application access to the API using a custom api key.
+
+
+```terraform
+{{ .SubscriptionApiKey.Content }}
+```
+
+This can be then accessed with the following `cURL` command:
+
+```
+curl -H "X-Gravitee-Api-Key: custom-api-key-123456789" http://[gateway host]:[gateway port]/simple-api-subscribed-apikey
+```
+
