@@ -89,6 +89,7 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						"key": schema.StringAttribute{
 							Required:    true,
+							Sensitive:   true,
 							Description: `The custom API key value.`,
 						},
 					},
