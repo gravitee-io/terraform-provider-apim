@@ -3,6 +3,7 @@ package acceptance_test
 import (
 	"regexp"
 	"testing"
+	"time"
 
 	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
 	"github.com/hashicorp/terraform-plugin-testing/config"
@@ -92,7 +93,68 @@ func TestSubscriptionResource_apikey(t *testing.T) {
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"starting_at",
-					"custom_api_key",
+					"api_keys",
+				},
+			},
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
+// Verifies the create, read, import, and delete lifecycle of the
+// `apim_subscription` resource.
+func TestSubscriptionResource_apikey_update(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	apiRandomId := "test-" + acctest.RandString(10)
+	key1 := config.ObjectVariable(map[string]config.Variable{
+		"key":       config.StringVariable(acctest.RandString(40)),
+		"expire_at": config.StringVariable(time.Now().Add(time.Hour).Format(time.RFC3339)),
+	})
+	key2 := config.ObjectVariable(map[string]config.Variable{
+		"key":       config.StringVariable(acctest.RandString(40)),
+		"expire_at": config.StringVariable(time.Now().Add(time.Hour).Format(time.RFC3339)),
+	})
+	key3 := config.ObjectVariable(map[string]config.Variable{
+		"key":       config.StringVariable(acctest.RandString(40)),
+		"expire_at": config.StringVariable(time.Now().Add(time.Hour).Format(time.RFC3339)),
+	})
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(apiRandomId),
+					"organization_id": config.StringVariable(organizationId),
+					"keys":            config.ListVariable(key1),
+				},
+			},
+			// add new key
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(apiRandomId),
+					"organization_id": config.StringVariable(organizationId),
+					"keys":            config.ListVariable(key1, key2),
+				},
+			},
+			// remove key1 and add key3
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(apiRandomId),
+					"organization_id": config.StringVariable(organizationId),
+					"keys":            config.ListVariable(key2, key3),
 				},
 			},
 			// Testing framework implicitly verifies resource delete.

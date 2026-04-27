@@ -58,7 +58,7 @@ actions:
         schemaType: customtypes.RFC3339Type{}
         valueType: customtypes.RFC3339
 
-  - target: $.components.schemas.SubscriptionSpec.properties.customApiKey
+  - target: $.components.schemas.ApiKeySpec.properties.key
     description: Hide api key from outputs
     update:
       x-speakeasy-param-sensitive: true
