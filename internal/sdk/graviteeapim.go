@@ -67,6 +67,8 @@ type GraviteeApim struct {
 	Apis       *Apis
 	// Everything about Applications
 	Applications *Applications
+	// Everything about Groups
+	Groups *Groups
 	// Everything about subscriptions
 	Subscriptions      *Subscriptions
 	SharedPolicyGroups *SharedPolicyGroups
@@ -185,6 +187,7 @@ func New(opts ...SDKOption) *GraviteeApim {
 
 	sdk.Apis = newApis(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Applications = newApplications(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Groups = newGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Subscriptions = newSubscriptions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.SharedPolicyGroups = newSharedPolicyGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
 

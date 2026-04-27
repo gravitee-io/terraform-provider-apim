@@ -11,6 +11,7 @@ import (
 	custom_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	"github.com/gravitee-io/terraform-provider-apim/internal/validators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -48,8 +49,8 @@ type SubscriptionResource struct {
 // SubscriptionResourceModel describes the resource data model.
 type SubscriptionResourceModel struct {
 	APIHrid         types.String            `tfsdk:"api_hrid"`
+	APIKeys         []tfTypes.APIKeySpec    `tfsdk:"api_keys"`
 	ApplicationHrid types.String            `tfsdk:"application_hrid"`
-	CustomAPIKey    types.String            `tfsdk:"custom_api_key"`
 	EndingAt        customtypes.RFC3339     `tfsdk:"ending_at"`
 	EnvironmentID   types.String            `tfsdk:"environment_id"`
 	Hrid            types.String            `tfsdk:"hrid"`
@@ -75,17 +76,31 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 				Description: `Human-readable ID of api`,
 			},
+			"api_keys": schema.ListNestedAttribute{
+				Optional: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"expire_at": schema.StringAttribute{
+							Optional:    true,
+							Description: `Optional expiry date for this API key.`,
+							Validators: []validator.String{
+								validators.IsRFC3339(),
+							},
+						},
+						"key": schema.StringAttribute{
+							Required:    true,
+							Description: `The custom API key value.`,
+						},
+					},
+				},
+				Description: `List of custom API keys with optional expiry dates. Used for API-KEY plan subscriptions.`,
+			},
 			"application_hrid": schema.StringAttribute{
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.Immutable(),
 				},
 				Description: `Application's hrid selected to subscribe an API.`,
-			},
-			"custom_api_key": schema.StringAttribute{
-				Optional:    true,
-				Sensitive:   true,
-				Description: `Custom API key to assign when creating API-KEY plan subscription.`,
 			},
 			"ending_at": schema.StringAttribute{
 				CustomType: customtypes.RFC3339Type{},
