@@ -1,16 +1,22 @@
 variable "environment_id" {
-  type    = string
-  default = "DEFAULT"
+  type = string
 }
 
 variable "hrid" {
-  default = "testtesttest"
-  type    = string
+  type = string
 }
 
 variable "organization_id" {
-  default = "DEFAULT"
-  type    = string
+  type = string
+}
+
+variable "keys" {
+  type = list(
+    object({
+      key       = string
+      expire_at = string
+    })
+  )
 }
 
 resource "apim_apiv4" "test" {
@@ -91,11 +97,5 @@ resource "apim_subscription" "test" {
   api_hrid         = apim_apiv4.test.hrid
   plan_hrid        = apim_apiv4.test.plans[0].hrid
   application_hrid = apim_application.test.hrid
-  api_keys = [
-    {
-      key       = "custom-user-typed-api-key-${var.hrid}"
-      expire_at = "2042-12-31T00:00:00Z"
-    }
-  ]
-
+  api_keys         = var.keys
 }
