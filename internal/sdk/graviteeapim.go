@@ -67,6 +67,8 @@ type GraviteeApim struct {
 	Apis       *Apis
 	// Everything about Applications
 	Applications *Applications
+	// Everything about Groups
+	Groups *Groups
 	// Everything about subscriptions
 	Subscriptions      *Subscriptions
 	SharedPolicyGroups *SharedPolicyGroups
@@ -159,9 +161,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *GraviteeApim {
 	sdk := &GraviteeApim{
-		SDKVersion: "0.9.0",
+		SDKVersion: "0.9.1",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.9.0 2.881.4 1.0.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.9.1 2.881.4 1.0.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
 			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},
@@ -185,6 +187,7 @@ func New(opts ...SDKOption) *GraviteeApim {
 
 	sdk.Apis = newApis(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Applications = newApplications(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Groups = newGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Subscriptions = newSubscriptions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.SharedPolicyGroups = newSharedPolicyGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
 

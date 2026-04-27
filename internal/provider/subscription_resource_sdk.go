@@ -162,11 +162,21 @@ func (r *SubscriptionResourceModel) ToSharedSubscriptionSpec(ctx context.Context
 
 		metadata[metadataKey] = metadataInst
 	}
-	customAPIKey := new(string)
-	if !r.CustomAPIKey.IsUnknown() && !r.CustomAPIKey.IsNull() {
-		*customAPIKey = r.CustomAPIKey.ValueString()
-	} else {
-		customAPIKey = nil
+	apiKeys := make([]shared.APIKeySpec, 0, len(r.APIKeys))
+	for apiKeysIndex := range r.APIKeys {
+		var key string
+		key = r.APIKeys[apiKeysIndex].Key.ValueString()
+
+		expireAt := new(time.Time)
+		if !r.APIKeys[apiKeysIndex].ExpireAt.IsUnknown() && !r.APIKeys[apiKeysIndex].ExpireAt.IsNull() {
+			*expireAt, _ = time.Parse(time.RFC3339Nano, r.APIKeys[apiKeysIndex].ExpireAt.ValueString())
+		} else {
+			expireAt = nil
+		}
+		apiKeys = append(apiKeys, shared.APIKeySpec{
+			Key:      key,
+			ExpireAt: expireAt,
+		})
 	}
 	out := shared.SubscriptionSpec{
 		Hrid:            hrid,
@@ -174,7 +184,7 @@ func (r *SubscriptionResourceModel) ToSharedSubscriptionSpec(ctx context.Context
 		PlanHrid:        planHrid,
 		EndingAt:        endingAt,
 		Metadata:        metadata,
-		CustomAPIKey:    customAPIKey,
+		APIKeys:         apiKeys,
 	}
 
 	return &out, diags

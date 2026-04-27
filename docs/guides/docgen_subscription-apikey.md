@@ -85,7 +85,12 @@ resource "apim_subscription" "simple-subscription-apikey" {
   api_hrid         = apim_apiv4.simple-api-subscribed-apikey.hrid
   plan_hrid        = apim_apiv4.simple-api-subscribed-apikey.plans[0].hrid
   application_hrid = apim_application.simple-app-subscribed-apikey.hrid
-  custom_api_key   = "custom-api-key-123456789"
+  api_keys = [
+    {
+      key       = "custom-user-typed-api-key-0123456789",
+      expire_at = "2042-12-31T00:00:00Z"
+    }
+  ]
 }
 
 ```

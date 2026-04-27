@@ -34,7 +34,7 @@ resource "apim_subscription" "example" {
 
 ### Optional
 
-- `custom_api_key` (String, Sensitive) Custom API key to assign when creating API-KEY plan subscription.
+- `api_keys` (Attributes List) List of custom API keys with optional expiry dates. Used for API-KEY plan subscriptions. (see [below for nested schema](#nestedatt--api_keys))
 - `ending_at` (String)
 - `environment_id` (String) environment ID
 - `metadata` (Map of String) Key-value metadata for this subscription.
@@ -44,6 +44,17 @@ resource "apim_subscription" "example" {
 
 - `id` (String) Subscription's uuid.
 - `starting_at` (String) Start validity date time of this Subscription
+
+<a id="nestedatt--api_keys"></a>
+### Nested Schema for `api_keys`
+
+Required:
+
+- `key` (String, Sensitive) The custom API key value.
+
+Optional:
+
+- `expire_at` (String) Optional expiry date for this API key.
 
 ## Import
 
