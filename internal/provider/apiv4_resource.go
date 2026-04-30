@@ -2758,7 +2758,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"security": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
@@ -2782,10 +2781,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
-							Description: `API plan security. Not Null`,
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
+							Description: `API plan security`,
 						},
 						"selection_rule": schema.StringAttribute{
 							Optional:    true,

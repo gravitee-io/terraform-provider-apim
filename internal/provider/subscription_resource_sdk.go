@@ -5,10 +5,13 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/typeconvert"
+	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"time"
@@ -20,6 +23,19 @@ func (r *SubscriptionResourceModel) RefreshFromSharedSubscriptionState(ctx conte
 	if resp != nil {
 		r.APIHrid = types.StringPointerValue(resp.APIHrid)
 		r.ApplicationHrid = types.StringValue(resp.ApplicationHrid)
+		if resp.ConsumerConfiguration == nil {
+			r.ConsumerConfiguration = nil
+		} else {
+			r.ConsumerConfiguration = &tfTypes.SubscriptionConsumerConfiguration{}
+			r.ConsumerConfiguration.Channel = types.StringPointerValue(resp.ConsumerConfiguration.Channel)
+			if resp.ConsumerConfiguration.EntrypointConfiguration == nil {
+				r.ConsumerConfiguration.EntrypointConfiguration = jsontypes.NewNormalizedNull()
+			} else {
+				entrypointConfigurationResult, _ := json.Marshal(resp.ConsumerConfiguration.EntrypointConfiguration)
+				r.ConsumerConfiguration.EntrypointConfiguration = jsontypes.NewNormalizedValue(string(entrypointConfigurationResult))
+			}
+			r.ConsumerConfiguration.EntrypointID = types.StringValue(resp.ConsumerConfiguration.EntrypointID)
+		}
 		endingAtValuable, endingAtDiags := customtypes.RFC3339Type{}.ValueFromString(ctx, types.StringPointerValue(typeconvert.TimePointerToStringPointer(resp.EndingAt)))
 		diags.Append(endingAtDiags...)
 		r.EndingAt = endingAtValuable.(customtypes.RFC3339)
@@ -178,13 +194,35 @@ func (r *SubscriptionResourceModel) ToSharedSubscriptionSpec(ctx context.Context
 			ExpireAt: expireAt,
 		})
 	}
+	var consumerConfiguration *shared.SubscriptionConsumerConfiguration
+	if r.ConsumerConfiguration != nil {
+		var entrypointID string
+		entrypointID = r.ConsumerConfiguration.EntrypointID.ValueString()
+
+		channel := new(string)
+		if !r.ConsumerConfiguration.Channel.IsUnknown() && !r.ConsumerConfiguration.Channel.IsNull() {
+			*channel = r.ConsumerConfiguration.Channel.ValueString()
+		} else {
+			channel = nil
+		}
+		var entrypointConfiguration interface{}
+		if !r.ConsumerConfiguration.EntrypointConfiguration.IsUnknown() && !r.ConsumerConfiguration.EntrypointConfiguration.IsNull() {
+			_ = json.Unmarshal([]byte(r.ConsumerConfiguration.EntrypointConfiguration.ValueString()), &entrypointConfiguration)
+		}
+		consumerConfiguration = &shared.SubscriptionConsumerConfiguration{
+			EntrypointID:            entrypointID,
+			Channel:                 channel,
+			EntrypointConfiguration: entrypointConfiguration,
+		}
+	}
 	out := shared.SubscriptionSpec{
-		Hrid:            hrid,
-		ApplicationHrid: applicationHrid,
-		PlanHrid:        planHrid,
-		EndingAt:        endingAt,
-		Metadata:        metadata,
-		APIKeys:         apiKeys,
+		Hrid:                  hrid,
+		ApplicationHrid:       applicationHrid,
+		PlanHrid:              planHrid,
+		EndingAt:              endingAt,
+		Metadata:              metadata,
+		APIKeys:               apiKeys,
+		ConsumerConfiguration: consumerConfiguration,
 	}
 
 	return &out, diags

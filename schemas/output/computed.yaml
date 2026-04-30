@@ -38,6 +38,8 @@ tags:
     description: Everything about Shared Policy Groups
   - name: Groups
     description: Everything about Groups
+  - name: Dictionaries
+    description: Everything about Dictionaries
   - name: Subscriptions
     description: Everything about subscriptions
 paths:
@@ -269,6 +271,7 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         default:
           $ref: "#/components/responses/Error"
+      x-speakeasy-name-override: createOrUpdate
   /organizations/{orgId}/environments/{envId}/groups/{hrid}:
     parameters:
       - $ref: "#/components/parameters/orgIdParam"
@@ -300,6 +303,7 @@ paths:
           $ref: "#/components/responses/NotFound"
         default:
           $ref: "#/components/responses/Error"
+      x-speakeasy-name-override: get
     delete:
       operationId: deleteGroup
       tags:
@@ -322,6 +326,100 @@ paths:
           $ref: "#/components/responses/NotFound"
         default:
           $ref: "#/components/responses/Error"
+      x-speakeasy-name-override: delete
+  # Dictionnaries
+  /organizations/{orgId}/environments/{envId}/dictionaries:
+    put:
+      operationId: createOrUpdateDictionaries
+      tags:
+        - Dictionaries
+      summary: Create or update Dictionaries from Dictionaries Spec
+      description: Create/update Dictionaries from Dictionaries Spec
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/dryRunQueryParam"
+      requestBody:
+        description: Dictionary specification
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/DictionarySpec"
+        required: true
+      responses:
+        "200":
+          description: State of the successfully created/updated Dictionary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DictionaryState"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+      x-speakeasy-entity-operation: Dictionary#create,update
+      x-speakeasy-name-override: createOrUpdate
+  /organizations/{orgId}/environments/{envId}/dictionaries/{hrid}:
+    parameters:
+      - $ref: "#/components/parameters/orgIdParam"
+      - $ref: "#/components/parameters/envIdParam"
+      - $ref: "#/components/parameters/hridParam"
+    get:
+      operationId: getDictionary
+      tags:
+        - Dictionaries
+      summary: Get one Dictionary
+      description: Get an Dictionary using HRID
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/hridParam"
+      responses:
+        "200":
+          description: Dictionary successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DictionaryState"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+      x-speakeasy-entity-operation: Dictionary#read
+      x-speakeasy-name-override: get
+    delete:
+      operationId: deleteDictionary
+      tags:
+        - Dictionaries
+      summary: Delete one Dictionary
+      description: Delete an Dictionary using HRID
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/hridParam"
+      responses:
+        "204":
+          description: Dictionary successfully deleted
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+      x-speakeasy-entity-operation: Dictionary#delete
+      x-speakeasy-name-override: delete
   # API Subscription
   /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions:
     put:
@@ -513,11 +611,13 @@ components:
       pattern: '^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$'
       description: A unique human readable id identifying this resource
       examples:
-        - my_demo_api
-        - simple_demo_app
+        - demo_api
+        - demo_app
         - keyless_demo_plan
+        - demo_page
         - demo_subscription
         - demo_shared_policy_groups
+        - demo_dictionary
       maxLength: 256
     ApiV4Spec:
       description: ApiV4DefinitionSpec defines the desired state of ApiDefinition.
@@ -1131,7 +1231,7 @@ components:
           examples:
             - 550e8400-e29b-41d4-a716-446655440000
           x-speakeasy-param-computed: false
-        members:
+        memberCount:
           type: integer
           format: int64
           description: Number of members in the group.
@@ -1143,14 +1243,196 @@ components:
           x-speakeasy-param-computed: false
     GroupState:
       description: Group state combining spec and status after creation/update.
+      allOf:
+        - $ref: "#/components/schemas/GroupSpec"
+        - $ref: "#/components/schemas/GroupStatus"
+    DictionaryState:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/DictionarySpec"
+        - type: object
+          properties:
+            id:
+              type: string
+              readOnly: true
+              x-speakeasy-param-suppress-computed-diff: true
+            environmentId:
+              type: string
+              description: The environment ID of the API.
+              readOnly: true
+              x-speakeasy-param-suppress-computed-diff: true
+            organizationId:
+              type: string
+              description: The organization ID of the API.
+              readOnly: true
+              x-speakeasy-param-suppress-computed-diff: true
+          required:
+            - id
+    DictionarySpec:
+      description: |
+        Specification of a dictionary resource. Allow users to create, update and delete dictionaries. Dictionaries
+        can the be used using Gravitee EL expression such `{#dictionaries['hrid'][#EL expression |'property key']`
       type: object
       properties:
-        spec:
-          $ref: "#/components/schemas/GroupSpec"
+        hrid:
+          $ref: "#/components/schemas/Hrid"
           x-speakeasy-param-computed: false
-        status:
-          $ref: "#/components/schemas/GroupStatus"
+        name:
+          type: string
+          description: Display name of the dictionary
           x-speakeasy-param-computed: false
+        deployed:
+          type: boolean
+          description: "If true, a `MANUAL` type dictionary is deployed in the gateway, a `DYNAMIC` type dictionary is started. \nChanging this value back to false will stop the dictionary or undeploy it.\n"
+          x-speakeasy-param-computed: false
+        description:
+          type: string
+          description: Detailed description of the dictionary
+          x-speakeasy-param-computed: false
+        type:
+          $ref: "#/components/schemas/DictionaryType"
+          x-speakeasy-param-computed: false
+        manual:
+          $ref: "#/components/schemas/ManualDictionarySpec"
+          x-speakeasy-param-computed: false
+          x-speakeasy-xor-with: ../dynamic
+        dynamic:
+          $ref: "#/components/schemas/DynamicDictionarySpec"
+          x-speakeasy-param-computed: false
+          x-speakeasy-xor-with: ../manual
+      required:
+        - hrid
+        - name
+        - type
+        - deployed
+      x-speakeasy-entity: Dictionary
+    ManualDictionarySpec:
+      description: A manual dictionary with static key/value properties.
+      properties:
+        properties:
+          type: object
+          description: Dictionary data are key/value pairs for `MANUAL` properties
+          additionalProperties:
+            type: string
+          x-speakeasy-param-computed: false
+      required:
+        - properties
+      x-speakeasy-param-computed: false
+    DynamicDictionarySpec:
+      description: A dynamic dictionary populated from an external provider on a schedule.
+      type: object
+      properties:
+        provider:
+          $ref: "#/components/schemas/DictionaryProvider"
+          x-speakeasy-param-computed: false
+        trigger:
+          $ref: "#/components/schemas/DictionaryTrigger"
+          x-speakeasy-param-computed: false
+      required:
+        - provider
+        - trigger
+      x-speakeasy-param-computed: false
+    DictionaryProvider:
+      description: Provider of a 'DYNAMIC' type dictionary
+      oneOf:
+        - $ref: "#/components/schemas/HttpDictionaryProvider"
+      discriminator:
+        propertyName: type
+        mapping:
+          HTTP: "#/components/schemas/HttpDictionaryProvider"
+    HttpDictionaryProvider:
+      type: object
+      description: HTTP dictionary provider configuration
+      properties:
+        type:
+          type: string
+          description: Type of dictionary provider.
+          enum:
+            - HTTP
+          x-speakeasy-param-computed: false
+        url:
+          type: string
+          format: uri
+          description: URL of the provider
+          x-speakeasy-param-computed: false
+          x-speakeasy-param-sensitive: true
+        specification:
+          type: string
+          description: "Transformation of the returned payload (JOLT Specification)"
+          x-speakeasy-param-computed: false
+        headers:
+          type: array
+          description: HTTP Headers
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Header name
+              value:
+                type: string
+                description: Header value
+            required:
+              - name
+              - value
+            additionalProperties: false
+          x-speakeasy-param-computed: false
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
+        useSystemProxy:
+          type: boolean
+          title: Use system proxy
+          x-speakeasy-param-computed: false
+        method:
+          type: string
+          title: HTTP Method
+          enum:
+            - GET
+            - POST
+            - PUT
+            - PATCH
+            - DELETE
+            - HEAD
+            - OPTIONS
+            - TRACE
+            - CONNECT
+          x-speakeasy-param-computed: false
+        body:
+          type: string
+          description: Optional request payload
+          x-speakeasy-param-computed: false
+      required:
+        - type
+        - url
+        - method
+        - specification
+      additionalProperties: false
+    DictionaryTrigger:
+      type: object
+      description: Renewal configuration for a 'DYNAMIC' dictionary
+      properties:
+        rate:
+          type: integer
+          format: int64
+          x-speakeasy-param-computed: false
+        unit:
+          type: string
+          enum:
+            - MICROSECONDS
+            - MILLISECONDS
+            - SECONDS
+            - MINUTES
+            - HOURS
+            - DAYS
+          x-speakeasy-param-computed: false
+      required:
+        - rate
+        - unit
+    DictionaryType:
+      type: string
+      description: Type of dictionary. MANUAL is to be updated manually, DYNAMIC is updated and deployed automatically.
+      enum:
+        - MANUAL
+        - DYNAMIC
     SubscriptionSpec:
       description: Subscription specification
       type: object
@@ -1196,6 +1478,9 @@ components:
           items:
             $ref: "#/components/schemas/ApiKeySpec"
           x-speakeasy-param-computed: false
+        consumerConfiguration:
+          $ref: "#/components/schemas/SubscriptionConsumerConfiguration"
+          x-speakeasy-param-computed: false
       required:
         - hrid
         - applicationHrid
@@ -1219,6 +1504,41 @@ components:
           x-speakeasy-param-computed: false
       required:
         - key
+    SubscriptionConsumerConfiguration:
+      type: object
+      description: Consumer configuration associated to the subscription in case it is attached to a push plan.
+      properties:
+        entrypointId:
+          type: string
+          description: The id of the targeted entrypoint
+          example: webhook
+          x-speakeasy-param-computed: false
+        channel:
+          type: string
+          description: The channel to consume
+          example: /channel1
+          x-speakeasy-param-computed: false
+        entrypointConfiguration:
+          type: object
+          description: The configuration to use at subscription time to push to the target service.
+          example: |
+            {
+                "callbackUrl": "https://webhook.site/aaaaaaaa-ffff-ffff-ffff-aaaaaaaa",
+                "headers": [
+                    {
+                        "name": "demoHeader",
+                        "value": "my-value"
+                    },
+                    {
+                        "name": "anotherHeader",
+                        "value": "my-value2"
+                    }
+                ]
+            }
+          x-speakeasy-param-computed: false
+          x-speakeasy-type-override: any
+      required: [entrypointId]
+      x-speakeasy-param-computed: false
     SubscriptionState:
       description: State of subscription that has been created/update
       allOf:
@@ -1419,7 +1739,6 @@ components:
         - type
         - mode
         - validation
-        - security
     Member:
       description: Users that can manage an object (API, Application, etc.)
       type: object
@@ -2284,6 +2603,7 @@ components:
           x-speakeasy-type-override: any
       required:
         - type
+      x-speakeasy-param-computed: false
     PlanSecurityType:
       type: string
       description: API Plan security implementation.

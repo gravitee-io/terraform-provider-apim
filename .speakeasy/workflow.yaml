@@ -12,6 +12,7 @@ sources:
             - location: schemas/overlays/shared-policy-group.yaml
             - location: schemas/overlays/application.yaml
             - location: schemas/overlays/subscription.yaml
+            - location: schemas/overlays/dictionary.yaml
             - location: .speakeasy/speakeasy-modifications-overlay.yaml
         output: schemas/output/computed.yaml
         registry:
