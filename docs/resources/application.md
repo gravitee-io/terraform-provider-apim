@@ -67,8 +67,8 @@ Default: false
 
 Optional:
 
-- `role` (String) The role of the user in regards of the managed oject (API, Application, etc.). Not Null
-- `source` (String) Where the memeber was created (system, idp, etc.). Not Null
+- `role` (String) The role of the user in regards of the managed object (API, Application, etc.). Not Null
+- `source` (String) Where the member was created (system, idp, etc.). Not Null
 - `source_id` (String) Id of the user in the source. Not Null
 
 

@@ -1813,14 +1813,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					Attributes: map[string]schema.Attribute{
 						"role": schema.StringAttribute{
 							Optional:    true,
-							Description: `The role of the user in regards of the managed oject (API, Application, etc.). Not Null`,
+							Description: `The role of the user in regards of the managed object (API, Application, etc.). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"source": schema.StringAttribute{
 							Optional:    true,
-							Description: `Where the memeber was created (system, idp, etc.). Not Null`,
+							Description: `Where the member was created (system, idp, etc.). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
@@ -2758,7 +2758,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"security": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
@@ -2782,10 +2781,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 							},
-							Description: `API plan security. Not Null`,
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
+							Description: `API plan security`,
 						},
 						"selection_rule": schema.StringAttribute{
 							Optional:    true,

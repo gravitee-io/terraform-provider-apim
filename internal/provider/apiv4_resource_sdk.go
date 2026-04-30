@@ -848,14 +848,18 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			plans.Hrid = types.StringValue(plansItem.Hrid)
 			plans.Mode = types.StringValue(string(plansItem.Mode))
 			plans.Name = types.StringValue(plansItem.Name)
-			plans.Security = &tfTypes.PlanSecurity{}
-			if plansItem.Security.Configuration == nil {
-				plans.Security.Configuration = jsontypes.NewNormalizedNull()
+			if plansItem.Security == nil {
+				plans.Security = nil
 			} else {
-				configurationResult21, _ := json.Marshal(plansItem.Security.Configuration)
-				plans.Security.Configuration = jsontypes.NewNormalizedValue(string(configurationResult21))
+				plans.Security = &tfTypes.PlanSecurity{}
+				if plansItem.Security.Configuration == nil {
+					plans.Security.Configuration = jsontypes.NewNormalizedNull()
+				} else {
+					configurationResult21, _ := json.Marshal(plansItem.Security.Configuration)
+					plans.Security.Configuration = jsontypes.NewNormalizedValue(string(configurationResult21))
+				}
+				plans.Security.Type = types.StringValue(string(plansItem.Security.Type))
 			}
-			plans.Security.Type = types.StringValue(string(plansItem.Security.Type))
 			plans.SelectionRule = types.StringPointerValue(plansItem.SelectionRule)
 			plans.Status = types.StringValue(string(plansItem.Status))
 			plans.Tags = make([]types.String, 0, len(plansItem.Tags))
@@ -1819,14 +1823,17 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			description1 = nil
 		}
-		typeVar10 := shared.PlanSecurityType(r.Plans[plansIndex].Security.Type.ValueString())
-		var configuration9 interface{}
-		if !r.Plans[plansIndex].Security.Configuration.IsUnknown() && !r.Plans[plansIndex].Security.Configuration.IsNull() {
-			_ = json.Unmarshal([]byte(r.Plans[plansIndex].Security.Configuration.ValueString()), &configuration9)
-		}
-		security := shared.PlanSecurity{
-			Type:          typeVar10,
-			Configuration: configuration9,
+		var security *shared.PlanSecurity
+		if r.Plans[plansIndex].Security != nil {
+			typeVar10 := shared.PlanSecurityType(r.Plans[plansIndex].Security.Type.ValueString())
+			var configuration9 interface{}
+			if !r.Plans[plansIndex].Security.Configuration.IsUnknown() && !r.Plans[plansIndex].Security.Configuration.IsNull() {
+				_ = json.Unmarshal([]byte(r.Plans[plansIndex].Security.Configuration.ValueString()), &configuration9)
+			}
+			security = &shared.PlanSecurity{
+				Type:          typeVar10,
+				Configuration: configuration9,
+			}
 		}
 		characteristics := make([]string, 0, len(r.Plans[plansIndex].Characteristics))
 		for characteristicsIndex := range r.Plans[plansIndex].Characteristics {

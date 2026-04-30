@@ -243,6 +243,8 @@ func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource
 	return []func() resource.Resource{
 		NewApiv4Resource,
 		NewApplicationResource,
+		NewDictionaryResource,
+		NewGroupResource,
 		NewSharedPolicyGroupResource,
 		NewSubscriptionResource,
 	}
@@ -252,6 +254,8 @@ func (p *ApimProvider) DataSources(ctx context.Context) []func() datasource.Data
 	return []func() datasource.DataSource{
 		NewApiv4DataSource,
 		NewApplicationDataSource,
+		NewDictionaryDataSource,
+		NewGroupDataSource,
 		NewSharedPolicyGroupDataSource,
 		NewSubscriptionDataSource,
 	}
