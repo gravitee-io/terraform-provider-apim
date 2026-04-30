@@ -113,6 +113,7 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 									},
 									"url": schema.StringAttribute{
 										Computed:    true,
+										Sensitive:   true,
 										Description: `URL of the provider`,
 									},
 									"use_system_proxy": schema.BoolAttribute{

@@ -155,6 +155,7 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 									},
 									"url": schema.StringAttribute{
 										Optional:    true,
+										Sensitive:   true,
 										Description: `URL of the provider. Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
