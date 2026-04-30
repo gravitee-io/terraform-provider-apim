@@ -144,7 +144,7 @@ This is what you would get from the standard export feature in the console.
         "loadBalancer": {
           "type": "ROUND_ROBIN"
         },
-        "sharedConfiguration": "{\"headers\":[{\"name\":\"Foo\",\"value\":\"Bar\"}],\"proxy\":{\"useSystemProxy\":false,\"enabled\":false},\"http\":{\"keepAliveTimeout\":30000,\"keepAlive\":true,\"propagateClientHost\":true,\"followRedirects\":false,\"readTimeout\":10000,\"idleTimeout\":0,\"connectTimeout\":3000,\"useCompression\":true,\"maxConcurrentConnections\":20,\"version\":\"HTTP_1_1\",\"pipelining\":false},\"ssl\":{\"keyStore\":{\"type\":\"\"},\"hostnameVerifier\":true,\"trustStore\":{\"type\":\"\"},\"trustAll\":false}}",
+        "sharedConfiguration": "{\"headers\":[{\"name\":\"Foo\",\"value\":\"Bar\"}],\"proxy\":{\"useSystemProxy\":false,\"enabled\":false},\"http\":{\"keepAliveTimeout\":30000,\"keepAlive\":true,\"propagateClientHost\":true,\"followRedirects\":false,\"readTimeout\":10000,\"idleTimeout\":0,\"connectTimeout\":3000,\"useCompression\":true,\"maxConcurrentConnections\":20,\"version\":\"HTTP_1_1\",\"pipelining\":false},\"hostnameVerifier\":true,\"trustAll\":false}}",
         "endpoints": [
           {
             "name": "Default HTTP proxy",

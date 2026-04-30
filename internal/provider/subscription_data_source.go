@@ -7,7 +7,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
+	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -39,16 +41,17 @@ type SubscriptionDataSource struct {
 
 // SubscriptionDataSourceModel describes the data model.
 type SubscriptionDataSourceModel struct {
-	APIHrid         types.String            `tfsdk:"api_hrid"`
-	ApplicationHrid types.String            `tfsdk:"application_hrid"`
-	EndingAt        customtypes.RFC3339     `tfsdk:"ending_at"`
-	EnvironmentID   types.String            `tfsdk:"environment_id"`
-	Hrid            types.String            `tfsdk:"hrid"`
-	ID              types.String            `tfsdk:"id"`
-	Metadata        map[string]types.String `tfsdk:"metadata"`
-	OrganizationID  types.String            `tfsdk:"organization_id"`
-	PlanHrid        types.String            `tfsdk:"plan_hrid"`
-	StartingAt      types.String            `tfsdk:"starting_at"`
+	APIHrid               types.String                               `tfsdk:"api_hrid"`
+	ApplicationHrid       types.String                               `tfsdk:"application_hrid"`
+	ConsumerConfiguration *tfTypes.SubscriptionConsumerConfiguration `tfsdk:"consumer_configuration"`
+	EndingAt              customtypes.RFC3339                        `tfsdk:"ending_at"`
+	EnvironmentID         types.String                               `tfsdk:"environment_id"`
+	Hrid                  types.String                               `tfsdk:"hrid"`
+	ID                    types.String                               `tfsdk:"id"`
+	Metadata              map[string]types.String                    `tfsdk:"metadata"`
+	OrganizationID        types.String                               `tfsdk:"organization_id"`
+	PlanHrid              types.String                               `tfsdk:"plan_hrid"`
+	StartingAt            types.String                               `tfsdk:"starting_at"`
 }
 
 // Metadata returns the data source type name.
@@ -69,6 +72,25 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 			"application_hrid": schema.StringAttribute{
 				Computed:    true,
 				Description: `Application's hrid selected to subscribe an API.`,
+			},
+			"consumer_configuration": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"channel": schema.StringAttribute{
+						Computed:    true,
+						Description: `The channel to consume`,
+					},
+					"entrypoint_configuration": schema.StringAttribute{
+						CustomType:  jsontypes.NormalizedType{},
+						Computed:    true,
+						Description: `The configuration to use at subscription time to push to the target service. Parsed as JSON.`,
+					},
+					"entrypoint_id": schema.StringAttribute{
+						Computed:    true,
+						Description: `The id of the targeted entrypoint`,
+					},
+				},
+				Description: `Consumer configuration associated to the subscription in case it is attached to a push plan.`,
 			},
 			"ending_at": schema.StringAttribute{
 				CustomType: customtypes.RFC3339Type{},

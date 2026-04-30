@@ -3,13 +3,13 @@
 
 package shared
 
-// GroupMember - A member of a group, identified by an external IDP source.
+// GroupMember - A member of a group, possibly identified by an external IDP source.
 type GroupMember struct {
 	// The identity provider source of the member.
 	Source string `json:"source"`
-	// The member's identifier in the identity provider.
+	// The member's identifier within the identity provider.
 	SourceID string `json:"sourceId"`
-	// Map of role scope to role name defining what the member can do.
+	// Map of scopes to role name defining what the member can do.
 	Roles map[string]string `json:"roles,omitempty"`
 }
 

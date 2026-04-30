@@ -35,6 +35,7 @@ resource "apim_subscription" "example" {
 ### Optional
 
 - `api_keys` (Attributes List) List of custom API keys with optional expiry dates. Used for API-KEY plan subscriptions. (see [below for nested schema](#nestedatt--api_keys))
+- `consumer_configuration` (Attributes) Consumer configuration associated to the subscription in case it is attached to a push plan. (see [below for nested schema](#nestedatt--consumer_configuration))
 - `ending_at` (String)
 - `environment_id` (String) environment ID
 - `metadata` (Map of String) Key-value metadata for this subscription.
@@ -55,6 +56,19 @@ Required:
 Optional:
 
 - `expire_at` (String) Optional expiry date for this API key.
+
+
+<a id="nestedatt--consumer_configuration"></a>
+### Nested Schema for `consumer_configuration`
+
+Required:
+
+- `entrypoint_id` (String) The id of the targeted entrypoint
+
+Optional:
+
+- `channel` (String) The channel to consume
+- `entrypoint_configuration` (String) The configuration to use at subscription time to push to the target service. Parsed as JSON.
 
 ## Import
 

@@ -3,26 +3,104 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // GroupState - Group state combining spec and status after creation/update.
 type GroupState struct {
-	// Defines the desired state of a Group.
-	// Groups allow organizing users and managing their access to APIs and applications collectively.
+	// A unique human readable id identifying this resource
+	Hrid string `json:"hrid"`
+	// Group's name.
+	Name string `json:"name"`
+	// Members of this group with their IDP source and role assignments.
+	// Members that do not already exist in the IDP will be ignored.
 	//
-	Spec *GroupSpec `json:"spec,omitempty"`
-	// Status information for a group after import.
-	Status *GroupStatus `json:"status,omitempty"`
+	Members []GroupMember `json:"members,omitempty"`
+	// If true, members will be notified when the group is synced with APIM.
+	NotifyMembers *bool `default:"true" json:"notifyMembers"`
+	// Group's uuid.
+	ID *string `json:"id,omitempty"`
+	// The environment ID of the API.
+	EnvironmentID *string `json:"environmentId,omitempty"`
+	// The organization ID of the API.
+	OrganizationID *string `json:"organizationId,omitempty"`
+	// Number of members in the group.
+	MemberCount *int64 `json:"memberCount,omitempty"`
+	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
+	Errors *Errors `json:"errors,omitempty"`
 }
 
-func (g *GroupState) GetSpec() *GroupSpec {
+func (g GroupState) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(g, "", false)
+}
+
+func (g *GroupState) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &g, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (g *GroupState) GetHrid() string {
+	if g == nil {
+		return ""
+	}
+	return g.Hrid
+}
+
+func (g *GroupState) GetName() string {
+	if g == nil {
+		return ""
+	}
+	return g.Name
+}
+
+func (g *GroupState) GetMembers() []GroupMember {
 	if g == nil {
 		return nil
 	}
-	return g.Spec
+	return g.Members
 }
 
-func (g *GroupState) GetStatus() *GroupStatus {
+func (g *GroupState) GetNotifyMembers() *bool {
 	if g == nil {
 		return nil
 	}
-	return g.Status
+	return g.NotifyMembers
+}
+
+func (g *GroupState) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
+}
+
+func (g *GroupState) GetEnvironmentID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.EnvironmentID
+}
+
+func (g *GroupState) GetOrganizationID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.OrganizationID
+}
+
+func (g *GroupState) GetMemberCount() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.MemberCount
+}
+
+func (g *GroupState) GetErrors() *Errors {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
 }

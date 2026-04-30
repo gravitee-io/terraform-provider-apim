@@ -21,6 +21,8 @@ type SubscriptionSpec struct {
 	Metadata map[string]string `json:"metadata,omitempty"`
 	// List of custom API keys with optional expiry dates. Used for API-KEY plan subscriptions.
 	APIKeys []APIKeySpec `json:"apiKeys,omitempty"`
+	// Consumer configuration associated to the subscription in case it is attached to a push plan.
+	ConsumerConfiguration *SubscriptionConsumerConfiguration `json:"consumerConfiguration,omitempty"`
 }
 
 func (s SubscriptionSpec) MarshalJSON() ([]byte, error) {
@@ -74,4 +76,11 @@ func (s *SubscriptionSpec) GetAPIKeys() []APIKeySpec {
 		return nil
 	}
 	return s.APIKeys
+}
+
+func (s *SubscriptionSpec) GetConsumerConfiguration() *SubscriptionConsumerConfiguration {
+	if s == nil {
+		return nil
+	}
+	return s.ConsumerConfiguration
 }
