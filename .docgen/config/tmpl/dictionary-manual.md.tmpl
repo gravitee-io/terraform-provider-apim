@@ -1,0 +1,17 @@
+---
+page_title: "Manual Dictionary"
+subcategory: "Dictionary"
+---
+
+# Manual Dictionary
+
+This example demonstrates how to use a manual dictionary. It is deployed once.
+
+There is what happens when this dictionary and API are applied:
+
+1. Properties are made available to the Gateway runtime
+1. API can resolve it and add a header via the `transform-headers` policy
+
+```terraform
+{{ .DictionaryManual.Content }}
+```

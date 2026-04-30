@@ -2,7 +2,7 @@ overlay: 1.0.0
 x-speakeasy-jsonpath: rfc9535
 info:
   title: Speakeasy Modifications
-  version: 0.0.5
+  version: 0.0.7
   x-speakeasy-metadata:
     after: ""
     before: ""
@@ -102,6 +102,7 @@ actions:
       after: sdk.subscriptions.get()
       before: sdk.Subscriptions.getSubscription()
       created_at: 1757432498236
+      reviewed_at: 1777898035817
       type: method-name
   - target: $["paths"]["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions/{hrid}"]["delete"]
     update:
@@ -110,6 +111,7 @@ actions:
       after: sdk.subscriptions.delete()
       before: sdk.Subscriptions.deleteSubscription()
       created_at: 1757432498236
+      reviewed_at: 1777898035817
       type: method-name
   - target: $["paths"]["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions"]["put"]
     update:
@@ -118,4 +120,59 @@ actions:
       after: sdk.subscriptions.update()
       before: sdk.Subscriptions.createOrUpdateSubscriptions()
       created_at: 1757432498236
+      reviewed_at: 1777898035817
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/dictionaries/{hrid}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.dictionaries.get()
+      before: sdk.Dictionaries.getDictionary()
+      created_at: 1777898028852
+      reviewed_at: 1777898035817
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/dictionaries/{hrid}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.dictionaries.delete()
+      before: sdk.Dictionaries.deleteDictionary()
+      created_at: 1777898028852
+      reviewed_at: 1777898035817
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/groups"]["put"]
+    update:
+      x-speakeasy-name-override: createOrUpdate
+    x-speakeasy-metadata:
+      after: sdk.groups.createOrUpdate()
+      before: sdk.Groups.createOrUpdateGroup()
+      created_at: 1777898028852
+      reviewed_at: 1777898035817
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/groups/{hrid}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.groups.get()
+      before: sdk.Groups.getGroup()
+      created_at: 1777898028852
+      reviewed_at: 1777898035817
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/groups/{hrid}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.groups.delete()
+      before: sdk.Groups.deleteGroup()
+      created_at: 1777898028852
+      reviewed_at: 1777898035817
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/dictionaries"]["put"]
+    update:
+      x-speakeasy-name-override: createOrUpdate
+    x-speakeasy-metadata:
+      after: sdk.dictionaries.createOrUpdate()
+      before: sdk.Dictionaries.createOrUpdateDictionaries()
+      created_at: 1777898028852
+      reviewed_at: 1777898035817
       type: method-name
