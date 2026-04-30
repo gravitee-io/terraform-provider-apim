@@ -38,6 +38,8 @@ tags:
     description: Everything about Shared Policy Groups
   - name: Groups
     description: Everything about Groups
+  - name: Dictionaries
+    description: Everything about Dictionaries
   - name: Subscriptions
     description: Everything about subscriptions
 paths:
@@ -304,6 +306,94 @@ paths:
         default:
           $ref: "#/components/responses/Error"
 
+  # Dictionnaries
+  /organizations/{orgId}/environments/{envId}/dictionaries:
+    put:
+      operationId: createOrUpdateDictionaries
+      tags:
+        - Dictionaries
+      summary: Create or update Dictionaries from Dictionaries Spec
+      description: Create/update Dictionaries from Dictionaries Spec
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/dryRunQueryParam"
+      requestBody:
+        description: Dictionary specification
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/DictionarySpec"
+        required: true
+      responses:
+        "200":
+          description: State of the successfully created/updated Dictionary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DictionaryState"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+  /organizations/{orgId}/environments/{envId}/dictionaries/{hrid}:
+    parameters:
+      - $ref: "#/components/parameters/orgIdParam"
+      - $ref: "#/components/parameters/envIdParam"
+      - $ref: "#/components/parameters/hridParam"
+    get:
+      operationId: getDictionary
+      tags:
+        - Dictionaries
+      summary: Get one Dictionary
+      description: Get an Dictionary using HRID
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/hridParam"
+      responses:
+        "200":
+          description: Dictionary successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DictionaryState"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+    delete:
+      operationId: deleteDictionary
+      tags:
+        - Dictionaries
+      summary: Delete one Dictionary
+      description: Delete an Dictionary using HRID
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/hridParam"
+      responses:
+        "204":
+          description: Dictionary successfully deleted
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+
   # API Subscription
   /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/subscriptions:
     put:
@@ -483,11 +573,13 @@ components:
       pattern: '^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$'
       description: A unique human readable id identifying this resource
       examples:
-        - my_demo_api
-        - simple_demo_app
+        - demo_api
+        - demo_app
         - keyless_demo_plan
+        - demo_page
         - demo_subscription
         - demo_shared_policy_groups
+        - demo_dictionary
       maxLength: 256
     ApiV4Spec:
       description: ApiV4DefinitionSpec defines the desired state of ApiDefinition.
@@ -1000,7 +1092,7 @@ components:
           description: Group's uuid.
           examples:
             - 550e8400-e29b-41d4-a716-446655440000
-        members:
+        memberCount:
           type: integer
           format: int64
           description: Number of members in the group.
@@ -1010,12 +1102,170 @@ components:
           $ref: "#/components/schemas/Errors"
     GroupState:
       description: Group state combining spec and status after creation/update.
+      allOf:
+        - $ref: "#/components/schemas/GroupSpec"
+        - $ref: "#/components/schemas/GroupStatus"
+
+    DictionaryState:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/DictionarySpec"
+        - type: object
+          properties:
+            id:
+              type: string
+              readOnly: true
+            environmentId:
+              type: string
+              description: The environment ID of the API.
+              readOnly: true
+            organizationId:
+              type: string
+              description: The organization ID of the API.
+              readOnly: true
+          required:
+            - id
+    DictionarySpec:
+      description: |
+        Specification of a dictionary resource. Allow users to create, update and delete dictionaries. Dictionaries
+        can the be used using Gravitee EL expression such `{#dictionaries['hrid'][#EL expression |'property key']`
       type: object
       properties:
-        spec:
-          $ref: "#/components/schemas/GroupSpec"
-        status:
-          $ref: "#/components/schemas/GroupStatus"
+        hrid:
+          $ref: "#/components/schemas/Hrid"
+        name:
+          type: string
+          description: Display name of the dictionary
+        deployed:
+          type: boolean
+          description: |
+            If true, a `MANUAL` type dictionary is deployed in the gateway, a `DYNAMIC` type dictionary is started. 
+            Changing this value back to false will stop the dictionary or undeploy it.
+        description:
+          type: string
+          description: Detailed description of the dictionary
+        type:
+          $ref: "#/components/schemas/DictionaryType"
+        manual:
+          $ref: "#/components/schemas/ManualDictionarySpec"
+        dynamic:
+          $ref: "#/components/schemas/DynamicDictionarySpec"
+      required:
+        - hrid
+        - name
+        - type
+        - deployed
+    ManualDictionarySpec:
+      description: A manual dictionary with static key/value properties.
+      properties:
+        properties:
+          type: object
+          description: Dictionary data are key/value pairs for `MANUAL` properties
+          additionalProperties:
+            type: string
+      required:
+        - properties
+    DynamicDictionarySpec:
+      description: A dynamic dictionary populated from an external provider on a schedule.
+      type: object
+      properties:
+        provider:
+          $ref: "#/components/schemas/DictionaryProvider"
+        trigger:
+          $ref: "#/components/schemas/DictionaryTrigger"
+      required:
+        - provider
+        - trigger
+    DictionaryProvider:
+      description: Provider of a 'DYNAMIC' type dictionary
+      oneOf:
+        - $ref: "#/components/schemas/HttpDictionaryProvider"
+      discriminator:
+        propertyName: type
+        mapping:
+          HTTP: "#/components/schemas/HttpDictionaryProvider"
+    HttpDictionaryProvider:
+      type: object
+      description: HTTP dictionary provider configuration
+      properties:
+        type:
+          type: string
+          description: Type of dictionary provider.
+          enum:
+            - HTTP
+        url:
+          type: string
+          format: uri
+          description: URL of the provider
+        specification:
+          type: string
+          description: "Transformation of the returned payload (JOLT Specification)"
+        headers:
+          type: array
+          description: HTTP Headers
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Header name
+              value:
+                type: string
+                description: Header value
+            required:
+              - name
+              - value
+            additionalProperties: false
+        useSystemProxy:
+          type: boolean
+          title: Use system proxy
+        method:
+          type: string
+          title: HTTP Method
+          enum:
+            - GET
+            - POST
+            - PUT
+            - PATCH
+            - DELETE
+            - HEAD
+            - OPTIONS
+            - TRACE
+            - CONNECT
+        body:
+          type: string
+          description: Optional request payload
+      required:
+        - type
+        - url
+        - method
+        - specification
+      additionalProperties: false
+    DictionaryTrigger:
+      type: object
+      description: Renewal configuration for a 'DYNAMIC' dictionary
+      properties:
+        rate:
+          type: integer
+          format: int64
+        unit:
+          type: string
+          enum:
+            - MICROSECONDS
+            - MILLISECONDS
+            - SECONDS
+            - MINUTES
+            - HOURS
+            - DAYS
+      required:
+        - rate
+        - unit
+    DictionaryType:
+      type: string
+      description: Type of dictionary. MANUAL is to be updated manually, DYNAMIC is updated and deployed automatically.
+      enum:
+        - MANUAL
+        - DYNAMIC
 
     SubscriptionSpec:
       description: Subscription specification
@@ -1049,6 +1299,8 @@ components:
           description: List of custom API keys with optional expiry dates. Used for API-KEY plan subscriptions.
           items:
             $ref: "#/components/schemas/ApiKeySpec"
+        consumerConfiguration:
+          $ref: "#/components/schemas/SubscriptionConsumerConfiguration"
       required:
         - hrid
         - applicationHrid
@@ -1069,6 +1321,37 @@ components:
           example: "2040-12-25T09:12:28Z"
       required:
         - key
+
+    SubscriptionConsumerConfiguration:
+      type: object
+      description: Consumer configuration associated to the subscription in case it is attached to a push plan.
+      properties:
+        entrypointId:
+          type: string
+          description: The id of the targeted entrypoint
+          example: webhook
+        channel:
+          type: string
+          description: The channel to consume
+          example: /channel1
+        entrypointConfiguration:
+          type: object
+          description: The configuration to use at subscription time to push to the target service.
+          example: |
+            {
+                "callbackUrl": "https://webhook.site/aaaaaaaa-ffff-ffff-ffff-aaaaaaaa",
+                "headers": [
+                    {
+                        "name": "demoHeader",
+                        "value": "my-value"
+                    },
+                    {
+                        "name": "anotherHeader",
+                        "value": "my-value2"
+                    }
+                ]
+            }
+      required: [entrypointId]
 
     SubscriptionState:
       description: State of subscription that has been created/update
@@ -1241,7 +1524,6 @@ components:
         - type
         - mode
         - validation
-        - security
 
     Member:
       description: Users that can manage an object (API, Application, etc.)
