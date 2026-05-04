@@ -14,7 +14,6 @@ import (
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	"github.com/gravitee-io/terraform-provider-apim/internal/validators"
-	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -106,7 +105,6 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `Application's hrid selected to subscribe an API.`,
 			},
 			"consumer_configuration": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"channel": schema.StringAttribute{
@@ -118,11 +116,8 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 						Description: `The configuration to use at subscription time to push to the target service.`,
 					},
 					"entrypoint_id": schema.StringAttribute{
-						Optional:    true,
-						Description: `The id of the targeted entrypoint. Not Null`,
-						Validators: []validator.String{
-							speakeasy_stringvalidators.NotNull(),
-						},
+						Required:    true,
+						Description: `The id of the targeted entrypoint`,
 					},
 				},
 				Description: `Consumer configuration associated to the subscription in case it is attached to a push plan.`,
