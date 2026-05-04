@@ -48,7 +48,6 @@ func (r *DictionaryDataSourceModel) RefreshFromSharedDictionaryState(ctx context
 			r.Dynamic.Trigger.Rate = types.Int64Value(resp.Dynamic.Trigger.Rate)
 			r.Dynamic.Trigger.Unit = types.StringValue(string(resp.Dynamic.Trigger.Unit))
 		}
-		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringValue(resp.ID)
 		if resp.Manual == nil {
@@ -63,7 +62,6 @@ func (r *DictionaryDataSourceModel) RefreshFromSharedDictionaryState(ctx context
 			}
 		}
 		r.Name = types.StringValue(resp.Name)
-		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.Type = types.StringValue(string(resp.Type))
 	}
 
