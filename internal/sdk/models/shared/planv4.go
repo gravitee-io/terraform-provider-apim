@@ -20,7 +20,7 @@ type PlanV4 struct {
 	// A description for this plan.
 	Description *string `json:"description,omitempty"`
 	// API plan security
-	Security PlanSecurity `json:"security"`
+	Security *PlanSecurity `json:"security,omitempty"`
 	// Plan informative characteristics
 	Characteristics []string `json:"characteristics,omitempty"`
 	// Access-control, UUID of groups excluded from this plan
@@ -87,9 +87,9 @@ func (p *PlanV4) GetDescription() *string {
 	return p.Description
 }
 
-func (p *PlanV4) GetSecurity() PlanSecurity {
+func (p *PlanV4) GetSecurity() *PlanSecurity {
 	if p == nil {
-		return PlanSecurity{}
+		return nil
 	}
 	return p.Security
 }

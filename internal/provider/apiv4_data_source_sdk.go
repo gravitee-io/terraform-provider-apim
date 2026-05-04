@@ -848,17 +848,17 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			plans.Hrid = types.StringValue(plansItem.Hrid)
 			plans.Mode = types.StringValue(string(plansItem.Mode))
 			plans.Name = types.StringValue(plansItem.Name)
-			plans.Security = &tfTypes.PlanSecurity{}
-			if plansItem.Security.Configuration == nil {
-				plans.Security.Configuration = jsontypes.NewNormalizedNull()
+			if plansItem.Security == nil {
+				plans.Security = nil
 			} else {
-				configurationResult21, _ := json.Marshal(plansItem.Security.Configuration)
-				plans.Security.Configuration = jsontypes.NewNormalizedValue(string(configurationResult21))
-			}
-			if plansItem.Security.Type != nil {
-				plans.Security.Type = types.StringValue(string(*plansItem.Security.Type))
-			} else {
-				plans.Security.Type = types.StringNull()
+				plans.Security = &tfTypes.PlanSecurity{}
+				if plansItem.Security.Configuration == nil {
+					plans.Security.Configuration = jsontypes.NewNormalizedNull()
+				} else {
+					configurationResult21, _ := json.Marshal(plansItem.Security.Configuration)
+					plans.Security.Configuration = jsontypes.NewNormalizedValue(string(configurationResult21))
+				}
+				plans.Security.Type = types.StringValue(string(plansItem.Security.Type))
 			}
 			plans.SelectionRule = types.StringPointerValue(plansItem.SelectionRule)
 			plans.Status = types.StringValue(string(plansItem.Status))
