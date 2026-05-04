@@ -19,6 +19,8 @@ type SubscriptionState struct {
 	EndingAt *time.Time `json:"endingAt,omitempty"`
 	// Key-value metadata for this subscription.
 	Metadata map[string]string `json:"metadata,omitempty"`
+	// Consumer configuration associated to the subscription in case it is attached to a push plan.
+	ConsumerConfiguration *SubscriptionConsumerConfiguration `json:"consumerConfiguration,omitempty"`
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
 	Errors *Errors `json:"errors,omitempty"`
 	// Subscription's uuid.
@@ -77,6 +79,13 @@ func (s *SubscriptionState) GetMetadata() map[string]string {
 		return nil
 	}
 	return s.Metadata
+}
+
+func (s *SubscriptionState) GetConsumerConfiguration() *SubscriptionConsumerConfiguration {
+	if s == nil {
+		return nil
+	}
+	return s.ConsumerConfiguration
 }
 
 func (s *SubscriptionState) GetErrors() *Errors {

@@ -14,6 +14,7 @@ import (
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	"github.com/gravitee-io/terraform-provider-apim/internal/validators"
+	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -48,17 +49,18 @@ type SubscriptionResource struct {
 
 // SubscriptionResourceModel describes the resource data model.
 type SubscriptionResourceModel struct {
-	APIHrid         types.String            `tfsdk:"api_hrid"`
-	APIKeys         []tfTypes.APIKeySpec    `tfsdk:"api_keys"`
-	ApplicationHrid types.String            `tfsdk:"application_hrid"`
-	EndingAt        customtypes.RFC3339     `tfsdk:"ending_at"`
-	EnvironmentID   types.String            `tfsdk:"environment_id"`
-	Hrid            types.String            `tfsdk:"hrid"`
-	ID              types.String            `tfsdk:"id"`
-	Metadata        map[string]types.String `tfsdk:"metadata"`
-	OrganizationID  types.String            `tfsdk:"organization_id"`
-	PlanHrid        types.String            `tfsdk:"plan_hrid"`
-	StartingAt      types.String            `tfsdk:"starting_at"`
+	APIHrid               types.String                               `tfsdk:"api_hrid"`
+	APIKeys               []tfTypes.APIKeySpec                       `tfsdk:"api_keys"`
+	ApplicationHrid       types.String                               `tfsdk:"application_hrid"`
+	ConsumerConfiguration *tfTypes.SubscriptionConsumerConfiguration `tfsdk:"consumer_configuration"`
+	EndingAt              customtypes.RFC3339                        `tfsdk:"ending_at"`
+	EnvironmentID         types.String                               `tfsdk:"environment_id"`
+	Hrid                  types.String                               `tfsdk:"hrid"`
+	ID                    types.String                               `tfsdk:"id"`
+	Metadata              map[string]types.String                    `tfsdk:"metadata"`
+	OrganizationID        types.String                               `tfsdk:"organization_id"`
+	PlanHrid              types.String                               `tfsdk:"plan_hrid"`
+	StartingAt            types.String                               `tfsdk:"starting_at"`
 }
 
 func (r *SubscriptionResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -102,6 +104,28 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 					custom_stringplanmodifier.Immutable(),
 				},
 				Description: `Application's hrid selected to subscribe an API.`,
+			},
+			"consumer_configuration": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"channel": schema.StringAttribute{
+						Optional:    true,
+						Description: `The channel to consume`,
+					},
+					"entrypoint_configuration": schema.SingleNestedAttribute{
+						Optional:    true,
+						Description: `The configuration to use at subscription time to push to the target service.`,
+					},
+					"entrypoint_id": schema.StringAttribute{
+						Optional:    true,
+						Description: `The id of the targeted entrypoint. Not Null`,
+						Validators: []validator.String{
+							speakeasy_stringvalidators.NotNull(),
+						},
+					},
+				},
+				Description: `Consumer configuration associated to the subscription in case it is attached to a push plan.`,
 			},
 			"ending_at": schema.StringAttribute{
 				CustomType: customtypes.RFC3339Type{},
