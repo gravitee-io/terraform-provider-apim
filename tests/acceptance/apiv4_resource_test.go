@@ -4,6 +4,7 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -41,8 +42,8 @@ func TestAPIV4Resource_minimal(t *testing.T) {
 					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 				},
-				ResourceName: resourceAddress,
-				ImportState:  true,
+				ResourceName:      resourceAddress,
+				ImportState:       true,
 				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
@@ -86,8 +87,8 @@ func TestAPIV4Resource_all(t *testing.T) {
 					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 				},
-				ResourceName: resourceAddress,
-				ImportState:  true,
+				ResourceName:      resourceAddress,
+				ImportState:       true,
 				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
@@ -189,8 +190,8 @@ func TestAPIV4Resource_plans(t *testing.T) {
 					"hrid":            config.StringVariable(randomId),
 					"plans":           plans,
 				},
-				ResourceName: resourceAddress,
-				ImportState:  true,
+				ResourceName:      resourceAddress,
+				ImportState:       true,
 				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
@@ -315,8 +316,8 @@ func TestAPIV4Resource_pages(t *testing.T) {
 					"hrid":            config.StringVariable(randomId),
 					"pages":           pages,
 				},
-				ResourceName: resourceAddress,
-				ImportState:  true,
+				ResourceName:      resourceAddress,
+				ImportState:       true,
 				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
@@ -480,8 +481,8 @@ func TestAPIV4Resource_cors(t *testing.T) {
 					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 				},
-				ResourceName: resourceAddress,
-				ImportState:  true,
+				ResourceName:      resourceAddress,
+				ImportState:       true,
 				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
@@ -672,6 +673,27 @@ func TestAPIV4Resource_path_idempotency(t *testing.T) {
 					},
 				},
 			},
+		},
+	})
+}
+
+func TestAPIV4Resource_webhook(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid": config.StringVariable(randomId),
+				},
+			},
+			// Testing framework implicitly verifies resource delete.
 		},
 	})
 }
