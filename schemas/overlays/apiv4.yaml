@@ -59,7 +59,7 @@ actions:
       default: [ ]
 
 
-  ## Don't use computed when not needed (beyond the global stuff)
+  ## Compensate for $ref usage that does not allow set computed=false everywhere
   - target: $.components.schemas.EndpointV4.properties.*
     description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
     update:
@@ -117,6 +117,10 @@ actions:
     update:
       x-speakeasy-param-computed: false
   - target: $.components.schemas.LoggingModeV4
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.PlanSecurity
     description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
     update:
       x-speakeasy-param-computed: false
