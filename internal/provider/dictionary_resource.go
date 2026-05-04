@@ -215,6 +215,9 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"id": schema.StringAttribute{
 				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 			},
 			"manual": schema.SingleNestedAttribute{
 				Optional: true,
