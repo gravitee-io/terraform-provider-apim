@@ -12,8 +12,6 @@ import (
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
-	speakeasy_int64validators "github.com/gravitee-io/terraform-provider-apim/internal/validators/int64validators"
-	speakeasy_mapvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/mapvalidators"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -80,12 +78,10 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `Detailed description of the dictionary`,
 			},
 			"dynamic": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"provider": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
+						Required: true,
 						Attributes: map[string]schema.Attribute{
 							"http": schema.SingleNestedAttribute{
 								Optional: true,
@@ -172,27 +168,18 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 								Description: `HTTP dictionary provider configuration`,
 							},
 						},
-						Description: `Provider of a 'DYNAMIC' type dictionary. Not Null`,
-						Validators: []validator.Object{
-							speakeasy_objectvalidators.NotNull(),
-						},
+						Description: `Provider of a 'DYNAMIC' type dictionary`,
 					},
 					"trigger": schema.SingleNestedAttribute{
-						Computed: true,
-						Optional: true,
+						Required: true,
 						Attributes: map[string]schema.Attribute{
 							"rate": schema.Int64Attribute{
-								Optional:    true,
-								Description: `Not Null`,
-								Validators: []validator.Int64{
-									speakeasy_int64validators.NotNull(),
-								},
+								Required: true,
 							},
 							"unit": schema.StringAttribute{
-								Optional:    true,
-								Description: `Not Null; must be one of ["MICROSECONDS", "MILLISECONDS", "SECONDS", "MINUTES", "HOURS", "DAYS"]`,
+								Required:    true,
+								Description: `must be one of ["MICROSECONDS", "MILLISECONDS", "SECONDS", "MINUTES", "HOURS", "DAYS"]`,
 								Validators: []validator.String{
-									speakeasy_stringvalidators.NotNull(),
 									stringvalidator.OneOf(
 										"MICROSECONDS",
 										"MILLISECONDS",
@@ -204,10 +191,7 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 								},
 							},
 						},
-						Description: `Renewal configuration for a 'DYNAMIC' dictionary. Not Null`,
-						Validators: []validator.Object{
-							speakeasy_objectvalidators.NotNull(),
-						},
+						Description: `Renewal configuration for a 'DYNAMIC' dictionary`,
 					},
 				},
 				Description: `A dynamic dictionary populated from an external provider on a schedule.`,
@@ -233,16 +217,12 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed: true,
 			},
 			"manual": schema.SingleNestedAttribute{
-				Computed: true,
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"properties": schema.MapAttribute{
-						Optional:    true,
+						Required:    true,
 						ElementType: types.StringType,
-						Description: `Dictionary data are key/value pairs for ` + "`" + `MANUAL` + "`" + ` properties. Not Null`,
-						Validators: []validator.Map{
-							speakeasy_mapvalidators.NotNull(),
-						},
+						Description: `Dictionary data are key/value pairs for ` + "`" + `MANUAL` + "`" + ` properties`,
 					},
 				},
 				Description: `A manual dictionary with static key/value properties.`,
