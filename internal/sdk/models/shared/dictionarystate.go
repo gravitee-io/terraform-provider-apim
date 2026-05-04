@@ -23,6 +23,10 @@ type DictionaryState struct {
 	// A dynamic dictionary populated from an external provider on a schedule.
 	Dynamic *DynamicDictionarySpec `json:"dynamic,omitempty"`
 	ID      string                 `json:"id"`
+	// The environment ID of the API.
+	EnvironmentID *string `json:"environmentId,omitempty"`
+	// The organization ID of the API.
+	OrganizationID *string `json:"organizationId,omitempty"`
 }
 
 func (d *DictionaryState) GetHrid() string {
@@ -79,4 +83,18 @@ func (d *DictionaryState) GetID() string {
 		return ""
 	}
 	return d.ID
+}
+
+func (d *DictionaryState) GetEnvironmentID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.EnvironmentID
+}
+
+func (d *DictionaryState) GetOrganizationID() *string {
+	if d == nil {
+		return nil
+	}
+	return d.OrganizationID
 }
