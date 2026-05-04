@@ -3,10 +3,6 @@
 
 package shared
 
-// EntrypointConfiguration - The configuration to use at subscription time to push to the target service.
-type EntrypointConfiguration struct {
-}
-
 // SubscriptionConsumerConfiguration - Consumer configuration associated to the subscription in case it is attached to a push plan.
 type SubscriptionConsumerConfiguration struct {
 	// The id of the targeted entrypoint
@@ -14,7 +10,7 @@ type SubscriptionConsumerConfiguration struct {
 	// The channel to consume
 	Channel *string `json:"channel,omitempty"`
 	// The configuration to use at subscription time to push to the target service.
-	EntrypointConfiguration *EntrypointConfiguration `json:"entrypointConfiguration,omitempty"`
+	EntrypointConfiguration any `json:"entrypointConfiguration,omitempty"`
 }
 
 func (s *SubscriptionConsumerConfiguration) GetEntrypointID() string {
@@ -31,7 +27,7 @@ func (s *SubscriptionConsumerConfiguration) GetChannel() *string {
 	return s.Channel
 }
 
-func (s *SubscriptionConsumerConfiguration) GetEntrypointConfiguration() *EntrypointConfiguration {
+func (s *SubscriptionConsumerConfiguration) GetEntrypointConfiguration() any {
 	if s == nil {
 		return nil
 	}

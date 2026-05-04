@@ -9,6 +9,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -79,9 +80,10 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 						Computed:    true,
 						Description: `The channel to consume`,
 					},
-					"entrypoint_configuration": schema.SingleNestedAttribute{
+					"entrypoint_configuration": schema.StringAttribute{
+						CustomType:  jsontypes.NormalizedType{},
 						Computed:    true,
-						Description: `The configuration to use at subscription time to push to the target service.`,
+						Description: `The configuration to use at subscription time to push to the target service. Parsed as JSON.`,
 					},
 					"entrypoint_id": schema.StringAttribute{
 						Computed:    true,

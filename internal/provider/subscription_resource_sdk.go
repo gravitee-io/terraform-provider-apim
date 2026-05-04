@@ -5,11 +5,13 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/typeconvert"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"time"
@@ -27,9 +29,10 @@ func (r *SubscriptionResourceModel) RefreshFromSharedSubscriptionState(ctx conte
 			r.ConsumerConfiguration = &tfTypes.SubscriptionConsumerConfiguration{}
 			r.ConsumerConfiguration.Channel = types.StringPointerValue(resp.ConsumerConfiguration.Channel)
 			if resp.ConsumerConfiguration.EntrypointConfiguration == nil {
-				r.ConsumerConfiguration.EntrypointConfiguration = nil
+				r.ConsumerConfiguration.EntrypointConfiguration = jsontypes.NewNormalizedNull()
 			} else {
-				r.ConsumerConfiguration.EntrypointConfiguration = &tfTypes.EntrypointConfiguration{}
+				entrypointConfigurationResult, _ := json.Marshal(resp.ConsumerConfiguration.EntrypointConfiguration)
+				r.ConsumerConfiguration.EntrypointConfiguration = jsontypes.NewNormalizedValue(string(entrypointConfigurationResult))
 			}
 			r.ConsumerConfiguration.EntrypointID = types.StringValue(resp.ConsumerConfiguration.EntrypointID)
 		}
@@ -202,9 +205,9 @@ func (r *SubscriptionResourceModel) ToSharedSubscriptionSpec(ctx context.Context
 		} else {
 			channel = nil
 		}
-		var entrypointConfiguration *shared.EntrypointConfiguration
-		if r.ConsumerConfiguration.EntrypointConfiguration != nil {
-			entrypointConfiguration = &shared.EntrypointConfiguration{}
+		var entrypointConfiguration interface{}
+		if !r.ConsumerConfiguration.EntrypointConfiguration.IsUnknown() && !r.ConsumerConfiguration.EntrypointConfiguration.IsNull() {
+			_ = json.Unmarshal([]byte(r.ConsumerConfiguration.EntrypointConfiguration.ValueString()), &entrypointConfiguration)
 		}
 		consumerConfiguration = &shared.SubscriptionConsumerConfiguration{
 			EntrypointID:            entrypointID,

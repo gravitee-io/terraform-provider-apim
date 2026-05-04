@@ -5,11 +5,13 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/typeconvert"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/operations"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -26,9 +28,10 @@ func (r *SubscriptionDataSourceModel) RefreshFromSharedSubscriptionState(ctx con
 			r.ConsumerConfiguration = &tfTypes.SubscriptionConsumerConfiguration{}
 			r.ConsumerConfiguration.Channel = types.StringPointerValue(resp.ConsumerConfiguration.Channel)
 			if resp.ConsumerConfiguration.EntrypointConfiguration == nil {
-				r.ConsumerConfiguration.EntrypointConfiguration = nil
+				r.ConsumerConfiguration.EntrypointConfiguration = jsontypes.NewNormalizedNull()
 			} else {
-				r.ConsumerConfiguration.EntrypointConfiguration = &tfTypes.EntrypointConfiguration{}
+				entrypointConfigurationResult, _ := json.Marshal(resp.ConsumerConfiguration.EntrypointConfiguration)
+				r.ConsumerConfiguration.EntrypointConfiguration = jsontypes.NewNormalizedValue(string(entrypointConfigurationResult))
 			}
 			r.ConsumerConfiguration.EntrypointID = types.StringValue(resp.ConsumerConfiguration.EntrypointID)
 		}

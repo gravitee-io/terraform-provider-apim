@@ -4,11 +4,12 @@
 package types
 
 import (
+	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 type SubscriptionConsumerConfiguration struct {
-	Channel                 types.String             `tfsdk:"channel"`
-	EntrypointConfiguration *EntrypointConfiguration `tfsdk:"entrypoint_configuration"`
-	EntrypointID            types.String             `tfsdk:"entrypoint_id"`
+	Channel                 types.String         `tfsdk:"channel"`
+	EntrypointConfiguration jsontypes.Normalized `tfsdk:"entrypoint_configuration"`
+	EntrypointID            types.String         `tfsdk:"entrypoint_id"`
 }
