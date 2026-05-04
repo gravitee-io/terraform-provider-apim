@@ -238,7 +238,7 @@ func (r *DictionaryDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Dictionaries.GetDictionary(ctx, *request)
+	res, err := r.client.Dictionaries.Get(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

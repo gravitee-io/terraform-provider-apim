@@ -32,9 +32,9 @@ func newGroups(rootSDK *GraviteeApim, sdkConfig config.SDKConfiguration, hooks *
 	}
 }
 
-// CreateOrUpdateGroup - Create or update a Group from an automation GroupSpec
+// CreateOrUpdate - Create or update a Group from an automation GroupSpec
 // Create/update a Group from an automation Group Spec
-func (s *Groups) CreateOrUpdateGroup(ctx context.Context, request operations.CreateOrUpdateGroupRequest, opts ...operations.Option) (*operations.CreateOrUpdateGroupResponse, error) {
+func (s *Groups) CreateOrUpdate(ctx context.Context, request operations.CreateOrUpdateGroupRequest, opts ...operations.Option) (*operations.CreateOrUpdateGroupResponse, error) {
 	globals := operations.CreateOrUpdateGroupGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -287,9 +287,9 @@ func (s *Groups) CreateOrUpdateGroup(ctx context.Context, request operations.Cre
 
 }
 
-// GetGroup - Get one Group
+// Get one Group
 // Get a Group using HRID
-func (s *Groups) GetGroup(ctx context.Context, request operations.GetGroupRequest, opts ...operations.Option) (*operations.GetGroupResponse, error) {
+func (s *Groups) Get(ctx context.Context, request operations.GetGroupRequest, opts ...operations.Option) (*operations.GetGroupResponse, error) {
 	globals := operations.GetGroupGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -535,9 +535,9 @@ func (s *Groups) GetGroup(ctx context.Context, request operations.GetGroupReques
 
 }
 
-// DeleteGroup - Delete one Group
+// Delete one Group
 // Delete a Group using HRID
-func (s *Groups) DeleteGroup(ctx context.Context, request operations.DeleteGroupRequest, opts ...operations.Option) (*operations.DeleteGroupResponse, error) {
+func (s *Groups) Delete(ctx context.Context, request operations.DeleteGroupRequest, opts ...operations.Option) (*operations.DeleteGroupResponse, error) {
 	globals := operations.DeleteGroupGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,

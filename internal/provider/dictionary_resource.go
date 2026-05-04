@@ -313,7 +313,7 @@ func (r *DictionaryResource) Create(ctx context.Context, req resource.CreateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Dictionaries.CreateOrUpdateDictionaries(ctx, *request)
+	res, err := r.client.Dictionaries.CreateOrUpdate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -373,7 +373,7 @@ func (r *DictionaryResource) Read(ctx context.Context, req resource.ReadRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Dictionaries.GetDictionary(ctx, *request)
+	res, err := r.client.Dictionaries.Get(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -435,7 +435,7 @@ func (r *DictionaryResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Dictionaries.CreateOrUpdateDictionaries(ctx, *request)
+	res, err := r.client.Dictionaries.CreateOrUpdate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -503,7 +503,7 @@ func (r *DictionaryResource) Delete(ctx context.Context, req resource.DeleteRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.Dictionaries.DeleteDictionary(ctx, *request)
+	res, err := r.client.Dictionaries.Delete(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {

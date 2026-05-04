@@ -32,9 +32,9 @@ func newDictionaries(rootSDK *GraviteeApim, sdkConfig config.SDKConfiguration, h
 	}
 }
 
-// CreateOrUpdateDictionaries - Create or update Dictionaries from Dictionaries Spec
+// CreateOrUpdate - Create or update Dictionaries from Dictionaries Spec
 // Create/update Dictionaries from Dictionaries Spec
-func (s *Dictionaries) CreateOrUpdateDictionaries(ctx context.Context, request operations.CreateOrUpdateDictionariesRequest, opts ...operations.Option) (*operations.CreateOrUpdateDictionariesResponse, error) {
+func (s *Dictionaries) CreateOrUpdate(ctx context.Context, request operations.CreateOrUpdateDictionariesRequest, opts ...operations.Option) (*operations.CreateOrUpdateDictionariesResponse, error) {
 	globals := operations.CreateOrUpdateDictionariesGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -289,9 +289,9 @@ func (s *Dictionaries) CreateOrUpdateDictionaries(ctx context.Context, request o
 
 }
 
-// GetDictionary - Get one Dictionary
+// Get one Dictionary
 // Get an Dictionary using HRID
-func (s *Dictionaries) GetDictionary(ctx context.Context, request operations.GetDictionaryRequest, opts ...operations.Option) (*operations.GetDictionaryResponse, error) {
+func (s *Dictionaries) Get(ctx context.Context, request operations.GetDictionaryRequest, opts ...operations.Option) (*operations.GetDictionaryResponse, error) {
 	globals := operations.GetDictionaryGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
@@ -533,9 +533,9 @@ func (s *Dictionaries) GetDictionary(ctx context.Context, request operations.Get
 
 }
 
-// DeleteDictionary - Delete one Dictionary
+// Delete one Dictionary
 // Delete an Dictionary using HRID
-func (s *Dictionaries) DeleteDictionary(ctx context.Context, request operations.DeleteDictionaryRequest, opts ...operations.Option) (*operations.DeleteDictionaryResponse, error) {
+func (s *Dictionaries) Delete(ctx context.Context, request operations.DeleteDictionaryRequest, opts ...operations.Option) (*operations.DeleteDictionaryResponse, error) {
 	globals := operations.DeleteDictionaryGlobals{
 		OrganizationID: s.sdkConfiguration.Globals.OrganizationID,
 		EnvironmentID:  s.sdkConfiguration.Globals.EnvironmentID,
