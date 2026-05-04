@@ -855,7 +855,11 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 				configurationResult21, _ := json.Marshal(plansItem.Security.Configuration)
 				plans.Security.Configuration = jsontypes.NewNormalizedValue(string(configurationResult21))
 			}
-			plans.Security.Type = types.StringValue(string(plansItem.Security.Type))
+			if plansItem.Security.Type != nil {
+				plans.Security.Type = types.StringValue(string(*plansItem.Security.Type))
+			} else {
+				plans.Security.Type = types.StringNull()
+			}
 			plans.SelectionRule = types.StringPointerValue(plansItem.SelectionRule)
 			plans.Status = types.StringValue(string(plansItem.Status))
 			plans.Tags = make([]types.String, 0, len(plansItem.Tags))

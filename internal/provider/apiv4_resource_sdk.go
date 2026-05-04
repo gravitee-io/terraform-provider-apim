@@ -855,7 +855,11 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 				configurationResult21, _ := json.Marshal(plansItem.Security.Configuration)
 				plans.Security.Configuration = jsontypes.NewNormalizedValue(string(configurationResult21))
 			}
-			plans.Security.Type = types.StringValue(string(plansItem.Security.Type))
+			if plansItem.Security.Type != nil {
+				plans.Security.Type = types.StringValue(string(*plansItem.Security.Type))
+			} else {
+				plans.Security.Type = types.StringNull()
+			}
 			plans.SelectionRule = types.StringPointerValue(plansItem.SelectionRule)
 			plans.Status = types.StringValue(string(plansItem.Status))
 			plans.Tags = make([]types.String, 0, len(plansItem.Tags))
@@ -1819,7 +1823,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			description1 = nil
 		}
-		typeVar10 := shared.PlanSecurityType(r.Plans[plansIndex].Security.Type.ValueString())
+		typeVar10 := new(shared.PlanSecurityType)
+		if !r.Plans[plansIndex].Security.Type.IsUnknown() && !r.Plans[plansIndex].Security.Type.IsNull() {
+			*typeVar10 = shared.PlanSecurityType(r.Plans[plansIndex].Security.Type.ValueString())
+		} else {
+			typeVar10 = nil
+		}
 		var configuration9 interface{}
 		if !r.Plans[plansIndex].Security.Configuration.IsUnknown() && !r.Plans[plansIndex].Security.Configuration.IsNull() {
 			_ = json.Unmarshal([]byte(r.Plans[plansIndex].Security.Configuration.ValueString()), &configuration9)

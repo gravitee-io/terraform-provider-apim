@@ -2769,9 +2769,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								"type": schema.StringAttribute{
 									Computed:    true,
 									Optional:    true,
-									Description: `API Plan security implementation. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS", "API_KEY"]`,
+									Description: `API Plan security implementation. must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS", "API_KEY"]`,
 									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
 										stringvalidator.OneOf(
 											"KEY_LESS",
 											"OAUTH2",
