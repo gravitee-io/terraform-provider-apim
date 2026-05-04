@@ -19,7 +19,7 @@ func TestSubscriptionResource_minimal(t *testing.T) {
 
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
-	apiRandomId := "test-" + acctest.RandString(10)
+	randomId := "test-" + acctest.RandString(10)
 	resourceAddress := "apim_subscription.test"
 
 	resource.Test(t, resource.TestCase{
@@ -30,7 +30,7 @@ func TestSubscriptionResource_minimal(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 				},
 			},
@@ -40,7 +40,7 @@ func TestSubscriptionResource_minimal(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 				},
 				ResourceName:      resourceAddress,
@@ -63,7 +63,7 @@ func TestSubscriptionResource_apikey(t *testing.T) {
 
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
-	apiRandomId := "test-" + acctest.RandString(10)
+	randomId := "test-" + acctest.RandString(10)
 	resourceAddress := "apim_subscription.test"
 
 	resource.Test(t, resource.TestCase{
@@ -74,7 +74,7 @@ func TestSubscriptionResource_apikey(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 				},
 			},
@@ -84,7 +84,7 @@ func TestSubscriptionResource_apikey(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 				},
 				ResourceName:      resourceAddress,
@@ -108,7 +108,7 @@ func TestSubscriptionResource_apikey_update(t *testing.T) {
 
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
-	apiRandomId := "test-" + acctest.RandString(10)
+	randomId := "test-" + acctest.RandString(10)
 	key1 := config.ObjectVariable(map[string]config.Variable{
 		"key":       config.StringVariable(acctest.RandString(40)),
 		"expire_at": config.StringVariable(time.Now().Add(time.Hour).Format(time.RFC3339)),
@@ -130,7 +130,7 @@ func TestSubscriptionResource_apikey_update(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 					"keys":            config.ListVariable(key1),
 				},
@@ -141,7 +141,7 @@ func TestSubscriptionResource_apikey_update(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 					"keys":            config.ListVariable(key1, key2),
 				},
@@ -152,7 +152,7 @@ func TestSubscriptionResource_apikey_update(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 					"keys":            config.ListVariable(key2, key3),
 				},
@@ -168,7 +168,7 @@ func TestSubscriptionResource_update(t *testing.T) {
 
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
-	apiRandomId := "test-" + acctest.RandString(10)
+	randomId := "test-" + acctest.RandString(10)
 
 	resource.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -178,7 +178,7 @@ func TestSubscriptionResource_update(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"ending_at":       config.StringVariable("2040-12-25T09:12:28Z"),
 					"organization_id": config.StringVariable(organizationId),
 				},
@@ -189,7 +189,7 @@ func TestSubscriptionResource_update(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"ending_at":       config.StringVariable("2042-12-25T09:12:28Z"),
 					"organization_id": config.StringVariable(organizationId),
 				},
@@ -200,7 +200,7 @@ func TestSubscriptionResource_update(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"ending_at":       config.StringVariable("2043-12-25T10:12:28+03:00"),
 					"organization_id": config.StringVariable(organizationId),
 				},
@@ -219,7 +219,7 @@ func TestSubscriptionResource_metadata(t *testing.T) {
 
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
-	apiRandomId := "test-" + acctest.RandString(10)
+	randomId := "test-" + acctest.RandString(10)
 
 	metadataCreate := config.MapVariable(map[string]config.Variable{
 		"key1": config.StringVariable("value1"),
@@ -239,7 +239,7 @@ func TestSubscriptionResource_metadata(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 					"metadata":        metadataCreate,
 				},
@@ -250,7 +250,7 @@ func TestSubscriptionResource_metadata(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 					"metadata":        metadataUpdate,
 				},
@@ -265,7 +265,7 @@ func TestSubscriptionResource_metadata(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 					"metadata":        config.MapVariable(map[string]config.Variable{}),
 				},
@@ -283,7 +283,7 @@ func TestSubscriptionResource_metadata_recreate(t *testing.T) {
 
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
-	apiRandomId := "test-" + acctest.RandString(10)
+	randomId := "test-" + acctest.RandString(10)
 
 	metadata := config.MapVariable(map[string]config.Variable{
 		"key1": config.StringVariable("value1"),
@@ -298,7 +298,7 @@ func TestSubscriptionResource_metadata_recreate(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 					"metadata":        metadata,
 				},
@@ -309,7 +309,7 @@ func TestSubscriptionResource_metadata_recreate(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 					"metadata":        metadata,
 				},
@@ -321,7 +321,7 @@ func TestSubscriptionResource_metadata_recreate(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables: config.Variables{
 					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(apiRandomId),
+					"hrid":            config.StringVariable(randomId),
 					"organization_id": config.StringVariable(organizationId),
 					"metadata":        metadata,
 				},
@@ -412,6 +412,26 @@ func TestSubscriptionResource_immutable_fields(t *testing.T) {
 				ExpectError:              regexp.MustCompile("This attribute cannot be changed on an existing resource"),
 			},
 
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
+func TestSubscriptionResource_push(t *testing.T) {
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid": config.StringVariable(randomId),
+				},
+			},
 			// Testing framework implicitly verifies resource delete.
 		},
 	})
