@@ -1,6 +1,6 @@
 resource "apim_apiv4" "webhook" {
   # should match the resource name
-  hrid    = "proxy"
+  hrid    = "webhook"
   name    = "[Terraform] Simple Webhook API"
   version = "1.0"
   # API type
