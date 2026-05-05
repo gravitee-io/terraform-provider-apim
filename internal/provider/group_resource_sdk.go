@@ -58,12 +58,6 @@ func (r *GroupResourceModel) ToOperationsCreateOrUpdateGroupRequest(ctx context.
 	} else {
 		environmentID = nil
 	}
-	hridContainsUUID := new(bool)
-	if !r.HridContainsUUID.IsUnknown() && !r.HridContainsUUID.IsNull() {
-		*hridContainsUUID = r.HridContainsUUID.ValueBool()
-	} else {
-		hridContainsUUID = nil
-	}
 	groupSpec, groupSpecDiags := r.ToSharedGroupSpec(ctx)
 	diags.Append(groupSpecDiags...)
 
@@ -72,10 +66,9 @@ func (r *GroupResourceModel) ToOperationsCreateOrUpdateGroupRequest(ctx context.
 	}
 
 	out := operations.CreateOrUpdateGroupRequest{
-		OrganizationID:   organizationID,
-		EnvironmentID:    environmentID,
-		HridContainsUUID: hridContainsUUID,
-		GroupSpec:        *groupSpec,
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		GroupSpec:      *groupSpec,
 	}
 
 	return &out, diags
@@ -99,17 +92,10 @@ func (r *GroupResourceModel) ToOperationsDeleteGroupRequest(ctx context.Context)
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
-	hridContainsUUID := new(bool)
-	if !r.HridContainsUUID.IsUnknown() && !r.HridContainsUUID.IsNull() {
-		*hridContainsUUID = r.HridContainsUUID.ValueBool()
-	} else {
-		hridContainsUUID = nil
-	}
 	out := operations.DeleteGroupRequest{
-		OrganizationID:   organizationID,
-		EnvironmentID:    environmentID,
-		Hrid:             hrid,
-		HridContainsUUID: hridContainsUUID,
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		Hrid:           hrid,
 	}
 
 	return &out, diags
@@ -133,17 +119,10 @@ func (r *GroupResourceModel) ToOperationsGetGroupRequest(ctx context.Context) (*
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
-	hridContainsUUID := new(bool)
-	if !r.HridContainsUUID.IsUnknown() && !r.HridContainsUUID.IsNull() {
-		*hridContainsUUID = r.HridContainsUUID.ValueBool()
-	} else {
-		hridContainsUUID = nil
-	}
 	out := operations.GetGroupRequest{
-		OrganizationID:   organizationID,
-		EnvironmentID:    environmentID,
-		Hrid:             hrid,
-		HridContainsUUID: hridContainsUUID,
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		Hrid:           hrid,
 	}
 
 	return &out, diags

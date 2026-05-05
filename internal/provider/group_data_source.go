@@ -39,14 +39,13 @@ type GroupDataSource struct {
 
 // GroupDataSourceModel describes the data model.
 type GroupDataSourceModel struct {
-	EnvironmentID    types.String          `tfsdk:"environment_id"`
-	Hrid             types.String          `tfsdk:"hrid"`
-	HridContainsUUID types.Bool            `queryParam:"style=form,explode=true,name=hridContainsUUID" tfsdk:"hrid_contains_uuid"`
-	ID               types.String          `tfsdk:"id"`
-	Members          []tfTypes.GroupMember `tfsdk:"members"`
-	Name             types.String          `tfsdk:"name"`
-	NotifyMembers    types.Bool            `tfsdk:"notify_members"`
-	OrganizationID   types.String          `tfsdk:"organization_id"`
+	EnvironmentID  types.String          `tfsdk:"environment_id"`
+	Hrid           types.String          `tfsdk:"hrid"`
+	ID             types.String          `tfsdk:"id"`
+	Members        []tfTypes.GroupMember `tfsdk:"members"`
+	Name           types.String          `tfsdk:"name"`
+	NotifyMembers  types.Bool            `tfsdk:"notify_members"`
+	OrganizationID types.String          `tfsdk:"organization_id"`
 }
 
 // Metadata returns the data source type name.
@@ -72,12 +71,6 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
 				},
-			},
-			"hrid_contains_uuid": schema.BoolAttribute{
-				Optional: true,
-				MarkdownDescription: `When true, the HRID path or spec value is treated as an existing UUID rather than` + "\n" +
-					`a human-readable identifier. This is to support backward compatibility for resources` + "\n" +
-					`created before migration to the automation API and should not be used for new resources.`,
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,

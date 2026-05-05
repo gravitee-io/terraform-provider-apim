@@ -1,7 +1,6 @@
 resource "apim_group" "my_group" {
-  environment_id     = "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
-  hrid               = "demo_api"
-  hrid_contains_uuid = false
+  environment_id = "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+  hrid           = "demo_api"
   members = [
     {
       roles = {

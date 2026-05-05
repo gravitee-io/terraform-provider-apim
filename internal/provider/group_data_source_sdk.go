@@ -61,17 +61,10 @@ func (r *GroupDataSourceModel) ToOperationsGetGroupRequest(ctx context.Context) 
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
-	hridContainsUUID := new(bool)
-	if !r.HridContainsUUID.IsUnknown() && !r.HridContainsUUID.IsNull() {
-		*hridContainsUUID = r.HridContainsUUID.ValueBool()
-	} else {
-		hridContainsUUID = nil
-	}
 	out := operations.GetGroupRequest{
-		OrganizationID:   organizationID,
-		EnvironmentID:    environmentID,
-		Hrid:             hrid,
-		HridContainsUUID: hridContainsUUID,
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		Hrid:           hrid,
 	}
 
 	return &out, diags
