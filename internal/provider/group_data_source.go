@@ -83,7 +83,7 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						"roles": schema.MapAttribute{
 							Computed:    true,
 							ElementType: types.StringType,
-							Description: `Map of role scope to role name defining what the member can do.`,
+							Description: `Map of scopes to role name defining what the member can do.`,
 						},
 						"source": schema.StringAttribute{
 							Computed:    true,
@@ -91,11 +91,12 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 						"source_id": schema.StringAttribute{
 							Computed:    true,
-							Description: `The member's identifier in the identity provider.`,
+							Description: `The member's identifier within the identity provider.`,
 						},
 					},
 				},
-				Description: `Members of this group with their IDP source and role assignments.`,
+				MarkdownDescription: `Members of this group with their IDP source and role assignments.` + "\n" +
+					`Members that do not already exist in the IDP will be ignored.`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,

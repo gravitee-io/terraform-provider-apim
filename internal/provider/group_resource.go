@@ -108,7 +108,7 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
 							},
 							ElementType: types.StringType,
-							Description: `Map of role scope to role name defining what the member can do.`,
+							Description: `Map of scopes to role name defining what the member can do.`,
 						},
 						"source": schema.StringAttribute{
 							Optional:    true,
@@ -119,14 +119,15 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						"source_id": schema.StringAttribute{
 							Optional:    true,
-							Description: `The member's identifier in the identity provider. Not Null`,
+							Description: `The member's identifier within the identity provider. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 					},
 				},
-				Description: `Members of this group with their IDP source and role assignments.`,
+				MarkdownDescription: `Members of this group with their IDP source and role assignments.` + "\n" +
+					`Members that do not already exist in the IDP will be ignored.`,
 			},
 			"name": schema.StringAttribute{
 				Required:    true,

@@ -5,11 +5,11 @@ package shared
 
 // Member - Users that can manage an object (API, Application, etc.)
 type Member struct {
-	// Where the memeber was created (system, idp, etc.)
+	// Where the member was created (system, idp, etc.)
 	Source string `json:"source"`
 	// Id of the user in the source
 	SourceID string `json:"sourceId"`
-	// The role of the user in regards of the managed oject (API, Application, etc.)
+	// The role of the user in regards of the managed object (API, Application, etc.)
 	Role string `json:"role"`
 }
 

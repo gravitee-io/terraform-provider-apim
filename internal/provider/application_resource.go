@@ -150,14 +150,14 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					Attributes: map[string]schema.Attribute{
 						"role": schema.StringAttribute{
 							Optional:    true,
-							Description: `The role of the user in regards of the managed oject (API, Application, etc.). Not Null`,
+							Description: `The role of the user in regards of the managed object (API, Application, etc.). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
 						},
 						"source": schema.StringAttribute{
 							Optional:    true,
-							Description: `Where the memeber was created (system, idp, etc.). Not Null`,
+							Description: `Where the member was created (system, idp, etc.). Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},

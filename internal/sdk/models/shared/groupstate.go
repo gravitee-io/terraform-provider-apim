@@ -14,6 +14,8 @@ type GroupState struct {
 	// Group's name.
 	Name string `json:"name"`
 	// Members of this group with their IDP source and role assignments.
+	// Members that do not already exist in the IDP will be ignored.
+	//
 	Members []GroupMember `json:"members,omitempty"`
 	// If true, members will be notified when the group is synced with APIM.
 	NotifyMembers *bool `default:"true" json:"notifyMembers"`

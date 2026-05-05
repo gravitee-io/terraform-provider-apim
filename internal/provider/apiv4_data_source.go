@@ -1045,11 +1045,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 					Attributes: map[string]schema.Attribute{
 						"role": schema.StringAttribute{
 							Computed:    true,
-							Description: `The role of the user in regards of the managed oject (API, Application, etc.)`,
+							Description: `The role of the user in regards of the managed object (API, Application, etc.)`,
 						},
 						"source": schema.StringAttribute{
 							Computed:    true,
-							Description: `Where the memeber was created (system, idp, etc.)`,
+							Description: `Where the member was created (system, idp, etc.)`,
 						},
 						"source_id": schema.StringAttribute{
 							Computed:    true,
