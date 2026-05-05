@@ -2758,7 +2758,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"security": schema.SingleNestedAttribute{
-							Computed: true,
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
