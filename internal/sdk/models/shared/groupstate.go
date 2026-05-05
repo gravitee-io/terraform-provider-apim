@@ -19,6 +19,10 @@ type GroupState struct {
 	NotifyMembers *bool `default:"true" json:"notifyMembers"`
 	// Group's uuid.
 	ID *string `json:"id,omitempty"`
+	// The environment ID of the API.
+	EnvironmentID *string `json:"environmentId,omitempty"`
+	// The organization ID of the API.
+	OrganizationID *string `json:"organizationId,omitempty"`
 	// Number of members in the group.
 	MemberCount *int64 `json:"memberCount,omitempty"`
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
@@ -69,6 +73,20 @@ func (g *GroupState) GetID() *string {
 		return nil
 	}
 	return g.ID
+}
+
+func (g *GroupState) GetEnvironmentID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.EnvironmentID
+}
+
+func (g *GroupState) GetOrganizationID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.OrganizationID
 }
 
 func (g *GroupState) GetMemberCount() *int64 {

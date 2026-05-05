@@ -16,6 +16,7 @@ func (r *GroupDataSourceModel) RefreshFromSharedGroupState(ctx context.Context, 
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.Members = []tfTypes.GroupMember{}
@@ -36,6 +37,7 @@ func (r *GroupDataSourceModel) RefreshFromSharedGroupState(ctx context.Context, 
 		}
 		r.Name = types.StringValue(resp.Name)
 		r.NotifyMembers = types.BoolPointerValue(resp.NotifyMembers)
+		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 	}
 
 	return diags
