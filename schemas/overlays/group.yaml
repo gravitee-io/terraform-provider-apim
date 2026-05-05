@@ -1,0 +1,56 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Group overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.components.schemas.GroupSpec
+    update:
+      x-speakeasy-entity:
+        Group
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/groups"].put
+    update:
+      x-speakeasy-entity-operation: Group#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/groups/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: Group#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/groups/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: Group#delete
+
+  # Ignore diff
+  - target: $.components.schemas.GroupSpec.properties.members
+    description: Ignore diff when API returns empty list
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-plan-modifiers: IgnoreEmptyList
+
+  # Status management
+  ## Ids to ignore
+  - target: $.components.schemas.GroupStatus.properties.id
+    description: API return them but ignore to avoid plan diffs
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.GroupStatus.properties.organizationId
+    description: API return them but ignore to avoid plan diffs
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.GroupStatus.properties.environmentId
+    description: API return them but ignore to avoid plan diffs
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+
+  ## Not required by the provider
+  - target: $.components.schemas.GroupStatus.properties.errors
+    description: Not required by the provider
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.GroupStatus.properties.memberCount
+    description: Not required by the provider
+    update:
+      x-speakeasy-terraform-ignore: true
