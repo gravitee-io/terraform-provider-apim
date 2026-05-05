@@ -8,7 +8,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	speakeasy_mapplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/mapplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
@@ -102,11 +101,7 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"roles": schema.MapAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Map{
-								speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
-							},
+							Optional:    true,
 							ElementType: types.StringType,
 							Description: `Map of scopes to role name defining what the member can do.`,
 						},
