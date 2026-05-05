@@ -1,0 +1,15 @@
+---
+page_title: "Simple Group"
+subcategory: "Group"
+---
+
+# Simple Group
+
+This example demonstrates how to use manage groups of user.
+It allows assigning roles (pre-defined or custom) to members (allowing them can do) on given scopes (API, APPLICATION...).
+
+In this example, `api1` an "In Memory" user, has the `OWNER` role to manage API but only a simple `USER` role for Applications and Integration.
+
+```terraform
+{{ .Group.Content }}
+```

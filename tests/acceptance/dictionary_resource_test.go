@@ -10,7 +10,7 @@ import (
 )
 
 // Verifies the create, read, import, and delete lifecycle of the
-// `apim_application` resource.
+// `apim_dictionary` resource.
 func TestDictionaryResource_manual_minimal(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
 	t.Parallel()
@@ -96,7 +96,7 @@ func TestDictionaryResource_manual_update(t *testing.T) {
 }
 
 // Verifies the create, read, import, and delete lifecycle of the
-// `apim_application` resource.
+// `apim_dictionary` resource.
 func TestDictionaryResource_dynamic_minimal(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
 	t.Parallel()
