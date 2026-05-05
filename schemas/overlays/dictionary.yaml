@@ -1,0 +1,65 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Dictionary overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.components.schemas.DictionarySpec
+    update:
+      x-speakeasy-entity:
+        Dictionary
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/dictionaries"].put
+    update:
+      x-speakeasy-entity-operation: Dictionary#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/dictionaries/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: Dictionary#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/dictionaries/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: Dictionary#delete
+
+  # Ids to ignore
+  - target: $.components.schemas.DictionaryState.allOf[?@.properties.id].properties.id
+    description: API them but ignore to avoid plan diffs
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.DictionaryState.allOf[?@.properties.organizationId].properties.organizationId
+    description: API them but ignore to avoid plan diffs
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.DictionaryState.allOf[?@.properties.environmentId].properties.environmentId
+    description: API them but ignore to avoid plan diffs
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
+  # Sensitive parameter handling
+  - target: $.components.schemas.HttpDictionaryProvider.properties.url
+    update:
+      x-speakeasy-param-sensitive: true
+  - target: $.components.schemas.HttpDictionaryProvider.properties.headers.properties.value
+    update:
+      x-speakeasy-param-sensitive: true
+
+  # Force apply not computed values on $ref
+  - target: $.components.schemas.ManualDictionarySpec
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.DynamicDictionarySpec
+    update:
+      x-speakeasy-param-computed: false
+
+  # Xor handling
+  - target: $.components.schemas.DictionarySpec.properties.manual
+    update:
+      x-speakeasy-xor-with: ../dynamic
+  - target: $.components.schemas.DictionarySpec.properties.dynamic
+    update:
+      x-speakeasy-xor-with: ../manual
+
+  # Empty list handling
+  - target: $.components.schemas.HttpDictionaryProvider.properties.headers
+    description: HTTP headers when unset are returned as empty list
+    update:
+      x-speakeasy-plan-modifiers: IgnoreEmptyList

@@ -1,4 +1,4 @@
-speakeasyVersion: 1.761.9
+speakeasyVersion: 1.761.11
 sources:
     Gravitee.io - Automation API:
         sourceNamespace: gravitee-io-gko---automation-api
@@ -9,8 +9,8 @@ sources:
             - 0.2.0
     automation-api:
         sourceNamespace: gravitee-io-gko---automation-api
-        sourceRevisionDigest: sha256:2fe0f2d05c22a175b913e8b61f4a6f90e3269735073e13d6153696c28e7535bc
-        sourceBlobDigest: sha256:2ae30ccc53358bc2f61c8873189ca91ce53fa588f8d7e9752e5c5cf97e08011a
+        sourceRevisionDigest: sha256:0977413445b779f4205a2ab44ead2d17713a972b1bcc4dcc1c90aae20eb41f87
+        sourceBlobDigest: sha256:e5734c511ed09de5596f58942635754e2507256776e9e7dfc21ab2aadfef0b04
         tags:
             - latest
             - 1.0.0
@@ -18,8 +18,8 @@ targets:
     apim:
         source: automation-api
         sourceNamespace: gravitee-io-gko---automation-api
-        sourceRevisionDigest: sha256:2fe0f2d05c22a175b913e8b61f4a6f90e3269735073e13d6153696c28e7535bc
-        sourceBlobDigest: sha256:2ae30ccc53358bc2f61c8873189ca91ce53fa588f8d7e9752e5c5cf97e08011a
+        sourceRevisionDigest: sha256:0977413445b779f4205a2ab44ead2d17713a972b1bcc4dcc1c90aae20eb41f87
+        sourceBlobDigest: sha256:e5734c511ed09de5596f58942635754e2507256776e9e7dfc21ab2aadfef0b04
     gravitee-apim:
         source: Gravitee.io - Automation API
         sourceNamespace: gravitee-io-gko---automation-api
@@ -27,7 +27,7 @@ targets:
         sourceBlobDigest: sha256:e5bdd28116e0660af601a098573e8a5044ef09f829e56844984aec28f40ca240
 workflow:
     workflowVersion: 1.0.0
-    speakeasyVersion: 1.761.9
+    speakeasyVersion: 1.761.11
     sources:
         automation-api:
             inputs:
@@ -40,6 +40,7 @@ workflow:
                 - location: schemas/overlays/shared-policy-group.yaml
                 - location: schemas/overlays/application.yaml
                 - location: schemas/overlays/subscription.yaml
+                - location: schemas/overlays/dictionary.yaml
                 - location: .speakeasy/speakeasy-modifications-overlay.yaml
             output: schemas/output/computed.yaml
             registry:

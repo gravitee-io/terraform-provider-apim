@@ -1,0 +1,22 @@
+---
+page_title: "Webhook"
+subcategory: "V4 API"
+---
+
+# Create a v4 API to POST messages to a webhook endpoint.
+
+This example demonstrates how to configure a webhook API with Gravitee.
+This API is not to be called but subscribed. With this kind of API an endpoint emitting messages (Kafka, MQTT, Solace ...) can be posted to a webhook endpoint.
+
+This example contains an API, a simple Application and a Subscription
+
+* API type is `MESSAGE`
+* Listener type is `subscription`
+* Entrypoint type is `webhook`
+* The endpoint type is `mock`: it emits a string identical message every 5 seconds exactly 10 times.
+* Plan mode is `PUSH`, it is a specific plan for subscription listeners that contains no security.
+* The subscription contains consumer configuration to identify the entrypoint and configure the callback URL with options (auth, headers, TLS, headers).
+
+```terraform
+{{ .V4ApiWebhook.Content }}
+```

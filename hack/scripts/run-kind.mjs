@@ -152,6 +152,7 @@ async function configureAPIM() {
 
     const adminAuth = "Basic " + Buffer.from("admin:admin").toString("base64");
     const api1Auth = "Basic " + Buffer.from("api1:api1").toString("base64");
+    const application11Auth = "Basic " + Buffer.from("application1:application1").toString("base64");
     const baseUrl = "http://localhost:30083/management/organizations/DEFAULT/environments/DEFAULT";
 
     let resp;
@@ -186,7 +187,16 @@ async function configureAPIM() {
         },
     });
     if (resp.status >= 400) {
-        throw new Error(`GET environments failed (${resp.status}): ${await resp.text()}`);
+        throw new Error(`GET environments failed with api1 user (${resp.status}): ${await resp.text()}`);
+    }
+
+    resp = await fetchWithRetry("http://localhost:30083/management/organizations/DEFAULT/environments", {
+        headers: {
+            "Authorization": application11Auth,
+        },
+    });
+    if (resp.status >= 400) {
+        throw new Error(`GET environments failed with application1 user (${resp.status}): ${await resp.text()}`);
     }
 }
 

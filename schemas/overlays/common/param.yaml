@@ -8,6 +8,10 @@ actions:
     description: Not necessary in Terraform context
     update:
       x-speakeasy-terraform-ignore: true
+  - target: $.components.parameters.hridContainsUUIDQueryParam
+    description: Not necessary in Terraform context
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.parameters.envIdParam
     description: Align parameter naming with property naming so envId is not a separate attribute
     update:

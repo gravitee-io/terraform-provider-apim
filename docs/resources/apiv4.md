@@ -833,7 +833,7 @@ same on the reponse, which means API reponse flows will always run last. (see [b
 - `hrid` (String) A unique human readable id identifying this resource. Not Null
 - `mode` (String) The behavioural mode of the Plan (Standard for classical plan, Push for subscription plan). Not Null; must be one of ["STANDARD", "PUSH"]
 - `name` (String) Name of the plan. Not Null
-- `security` (Attributes) API plan security. Not Null (see [below for nested schema](#nestedatt--plans--security))
+- `security` (Attributes) API plan security (see [below for nested schema](#nestedatt--plans--security))
 - `selection_rule` (String) An EL expression that must return a boolean to enable the flow based on the request.
 - `status` (String) Plan status, only `PUBLISHED` makes the plan available at runtime. Not Null; must be one of ["STAGING", "PUBLISHED", "DEPRECATED", "CLOSED"]
 - `tags` (List of String) Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list. Default: []

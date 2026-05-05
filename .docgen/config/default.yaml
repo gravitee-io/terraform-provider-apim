@@ -47,8 +47,14 @@ outputs:
    target: templates/guides/docgen_export-tutorial.md
  - template: {{ .RootDir }}/tmpl/cert-rotation-tutorial.md.tmpl
    target: templates/guides/docgen_rotation-tutorial.md
-
-
+ - template: {{ .RootDir }}/tmpl/dictionary-dynamic.md.tmpl
+   target: templates/guides/docgen_dictionary-dynamic.md
+ - template: {{ .RootDir }}/tmpl/dictionary-manual.md.tmpl
+   target: templates/guides/docgen_dictionary-manual.md
+ - template: {{ .RootDir }}/tmpl/group.md.tmpl
+   target: templates/guides/docgen_group.md
+ - template: {{ .RootDir }}/tmpl/v4api-webhook.md.tmpl
+   target: templates/guides/docgen_v4api-webhook.md
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
     exportedAs: V4ApiSimple
@@ -127,4 +133,16 @@ chunks:
     required: true
   - template: examples/tutorials/application-backend_to_backend_multi_certs/m2m-app.tf
     exportedAs: CertRotationConfig
+    required: true
+  - template: examples/use-cases/dictionary-dynamic/dictionary-and-api.tf
+    exportedAs: DictionaryDynamic
+    required: true
+  - template: examples/use-cases/dictionary-manual/dictionary-and-api.tf
+    exportedAs: DictionaryManual
+    required: true
+  - template: examples/use-cases/v4api-webhook/api-app-sub.tf
+    exportedAs: V4ApiWebhook
+    required: true
+  - template: examples/use-cases/group-developers/group.tf
+    exportedAs: Group
     required: true
