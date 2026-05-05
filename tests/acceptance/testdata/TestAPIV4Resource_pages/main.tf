@@ -68,14 +68,8 @@ resource "apim_apiv4" "test" {
           pipelining               = false
         }
         ssl = {
-          keyStore = {
-            type = ""
-          }
           hostnameVerifier = false
-          trustStore = {
-            type = ""
-          }
-          trustAll = false
+          trustAll         = false
         }
       })
       endpoints = [
