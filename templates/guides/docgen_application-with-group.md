@@ -14,9 +14,9 @@ This ensures the group is created before the application, without requiring an e
 When the resources are destroyed, Terraform reverses the order: the application is removed first, then the group.
 
 ```terraform
-resource "apim_application" "with-group" {
+resource "apim_application" "with_group" {
   # should match the resource name
-  hrid        = "with-group"
+  hrid        = "with_group"
   name        = "[Terraform] Application bound to a group"
   description = "Demonstrate an application with a group"
   settings = {

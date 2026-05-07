@@ -16,7 +16,7 @@ When the resources are destroyed, Terraform reverses the order: the API is remov
 ```terraform
 resource "apim_apiv4" "with_group" {
   # should match the resource name
-  hrid            = "with-group"
+  hrid            = "with_group"
   name            = "[Terraform] API With a group"
   version         = "1.0"
   type            = "PROXY"

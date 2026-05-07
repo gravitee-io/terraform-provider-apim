@@ -1,19 +1,3 @@
----
-page_title: "API with a Group"
-subcategory: "Group"
----
-
-# Binding a Group to an API
-
-This example demonstrates how to associate a group with a V4 API using the `groups` attribute.
-
-By referencing `apim_group.api-developers.hrid` in the API's `groups` list,
-Terraform automatically infers a dependency between the two resources.
-This ensures the group is created before the API, without requiring an explicit `depends_on` block.
-
-When the resources are destroyed, Terraform reverses the order: the API is removed first, then the group.
-
-```terraform
 resource "apim_apiv4" "with_group" {
   # should match the resource name
   hrid            = "with_group"
@@ -99,5 +83,3 @@ resource "apim_group" "api-developers" {
   ]
 }
 
-
-```
