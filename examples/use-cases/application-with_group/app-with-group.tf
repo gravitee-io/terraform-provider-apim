@@ -1,19 +1,3 @@
----
-page_title: "Application with a Group"
-subcategory: "Group"
----
-
-# Binding a Group to an Application
-
-This example demonstrates how to associate a group with an application using the `groups` attribute.
-
-By referencing `apim_group.developers.hrid` in the application's `groups` list,
-Terraform automatically infers a dependency between the two resources.
-This ensures the group is created before the application, without requiring an explicit `depends_on` block.
-
-When the resources are destroyed, Terraform reverses the order: the application is removed first, then the group.
-
-```terraform
 resource "apim_application" "with_group" {
   # should match the resource name
   hrid        = "with_group"
@@ -48,5 +32,3 @@ resource "apim_group" "developers" {
     }
   ]
 }
-
-```

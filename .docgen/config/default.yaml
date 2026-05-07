@@ -55,6 +55,10 @@ outputs:
    target: templates/guides/docgen_group.md
  - template: {{ .RootDir }}/tmpl/v4api-webhook.md.tmpl
    target: templates/guides/docgen_v4api-webhook.md
+ - template: {{ .RootDir }}/tmpl/application-with-group.md.tmpl
+   target: templates/guides/docgen_application-with-group.md
+ - template: {{ .RootDir }}/tmpl/v4api-with-group.md.tmpl
+   target: templates/guides/docgen_v4api-with-group.md
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
     exportedAs: V4ApiSimple
@@ -145,4 +149,10 @@ chunks:
     required: true
   - template: examples/use-cases/group-developers/group.tf
     exportedAs: Group
+    required: true
+  - template: examples/use-cases/application-with_group/app-with-group.tf
+    exportedAs: ApplicationWithGroup
+    required: true
+  - template: examples/use-cases/v4api-with_group/api-with-group.tf
+    exportedAs: V4ApiWithGroup
     required: true
