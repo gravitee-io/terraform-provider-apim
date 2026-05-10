@@ -140,6 +140,12 @@ actions:
     update:
       x-speakeasy-param-suppress-computed-diff: true
 
+  ## GET response omits `encrypted`; suppress the resulting Unknown diff for existing resources
+  - target: $.components.schemas.Property.properties.encrypted
+    description: APIM GET does not return encrypted field; suppress computed diff to prevent perpetual plan noise
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+
   ## API returns non-empty defaults for these
   - target: $.components.schemas.ApiV4Spec.properties.metadata
     description: API return some stuff, need to ignore

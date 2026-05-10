@@ -677,6 +677,48 @@ func TestAPIV4Resource_path_idempotency(t *testing.T) {
 	})
 }
 
+// Verifies that the `encrypted` computed field on properties does not cause
+// perpetual plan drift after create (GKO-XXXX). APIM's GET response omits
+// `encrypted`, which previously caused it to be stored as null and then shown
+// as "(known after apply)" on every subsequent plan.
+func TestAPIV4Resource_encrypted_property_idempotency(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Create with an encryptable property.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"organization_id": config.StringVariable(organizationId),
+				},
+			},
+			// Re-apply: plan must be empty — `encrypted` must not drift.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"organization_id": config.StringVariable(organizationId),
+				},
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+			},
+		},
+	})
+}
+
 func TestAPIV4Resource_webhook(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
 	t.Parallel()
