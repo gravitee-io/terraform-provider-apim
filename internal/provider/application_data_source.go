@@ -87,7 +87,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 			"groups": schema.ListAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
-				Description: `List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM.`,
+				Description: `List of groups associated with the Application. This groups are names, HRIDs or UUIDs of existing groups in APIM.`,
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,

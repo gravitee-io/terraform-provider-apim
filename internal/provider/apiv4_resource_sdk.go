@@ -74,6 +74,19 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		for _, v := range resp.Categories {
 			r.Categories = append(r.Categories, types.StringValue(v))
 		}
+		if resp.ConsoleNotification == nil {
+			r.ConsoleNotification = nil
+		} else {
+			r.ConsoleNotification = &tfTypes.APIV4SpecConsoleNotification{}
+			r.ConsoleNotification.Events = make([]types.String, 0, len(resp.ConsoleNotification.Events))
+			for _, v := range resp.ConsoleNotification.Events {
+				r.ConsoleNotification.Events = append(r.ConsoleNotification.Events, types.StringValue(string(v)))
+			}
+			r.ConsoleNotification.Groups = make([]types.String, 0, len(resp.ConsoleNotification.Groups))
+			for _, v := range resp.ConsoleNotification.Groups {
+				r.ConsoleNotification.Groups = append(r.ConsoleNotification.Groups, types.StringValue(v))
+			}
+		}
 		r.Description = types.StringPointerValue(resp.Description)
 		r.EndpointGroups = []tfTypes.EndpointGroupV4{}
 
@@ -2976,34 +2989,50 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			ParentHrid:    parentHrid,
 		})
 	}
+	var consoleNotification *shared.APIV4SpecConsoleNotification
+	if r.ConsoleNotification != nil {
+		groups1 := make([]string, 0, len(r.ConsoleNotification.Groups))
+		for groupsIndex1 := range r.ConsoleNotification.Groups {
+			groups1 = append(groups1, r.ConsoleNotification.Groups[groupsIndex1].ValueString())
+		}
+		events := make([]shared.APIV4SpecEvent, 0, len(r.ConsoleNotification.Events))
+		for _, eventsItem := range r.ConsoleNotification.Events {
+			events = append(events, shared.APIV4SpecEvent(eventsItem.ValueString()))
+		}
+		consoleNotification = &shared.APIV4SpecConsoleNotification{
+			Groups: groups1,
+			Events: events,
+		}
+	}
 	out := shared.APIV4Spec{
-		Hrid:              hrid,
-		Name:              name,
-		Version:           version,
-		Type:              typeVar,
-		Description:       description,
-		Tags:              tags,
-		Listeners:         listeners,
-		EndpointGroups:    endpointGroups,
-		Analytics:         analytics,
-		Failover:          failover,
-		Properties:        properties,
-		Resources:         resources,
-		Plans:             plans,
-		FlowExecution:     flowExecution,
-		Flows:             flows1,
-		ResponseTemplates: responseTemplates,
-		Services:          services2,
-		Groups:            groups,
-		Visibility:        visibility,
-		State:             state,
-		Labels:            labels,
-		Metadata:          metadata,
-		LifecycleState:    lifecycleState,
-		Categories:        categories,
-		Members:           members,
-		NotifyMembers:     notifyMembers,
-		Pages:             pages,
+		Hrid:                hrid,
+		Name:                name,
+		Version:             version,
+		Type:                typeVar,
+		Description:         description,
+		Tags:                tags,
+		Listeners:           listeners,
+		EndpointGroups:      endpointGroups,
+		Analytics:           analytics,
+		Failover:            failover,
+		Properties:          properties,
+		Resources:           resources,
+		Plans:               plans,
+		FlowExecution:       flowExecution,
+		Flows:               flows1,
+		ResponseTemplates:   responseTemplates,
+		Services:            services2,
+		Groups:              groups,
+		Visibility:          visibility,
+		State:               state,
+		Labels:              labels,
+		Metadata:            metadata,
+		LifecycleState:      lifecycleState,
+		Categories:          categories,
+		Members:             members,
+		NotifyMembers:       notifyMembers,
+		Pages:               pages,
+		ConsoleNotification: consoleNotification,
 	}
 
 	return &out, diags
