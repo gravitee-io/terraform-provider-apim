@@ -264,13 +264,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"events": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Events on which a notification is created`,
 					},
 					"groups": schema.ListAttribute{
-						Computed:    true,
 						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Name, HRID or UUIDs of existing groups (of users) targeted by notifications.`,
