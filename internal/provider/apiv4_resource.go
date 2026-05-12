@@ -269,7 +269,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Description: `Events on which a notification is created`,
 					},
 					"groups": schema.ListAttribute{
-						Optional:    true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							custom_listplanmodifier.IgnoreEmptyList(),
+						},
 						ElementType: types.StringType,
 						Description: `Name, HRID or UUIDs of existing groups (of users) targeted by notifications.`,
 					},
