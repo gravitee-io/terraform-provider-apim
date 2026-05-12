@@ -677,6 +677,69 @@ func TestAPIV4Resource_path_idempotency(t *testing.T) {
 	})
 }
 
+func TestAPIV4Resource_console_notification(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+	groupHrid := randomId + "-notif-group"
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Create with notification group and events.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid":                config.StringVariable(randomId),
+					"notification_groups": config.ListVariable(config.StringVariable(groupHrid)),
+					"events": config.ListVariable(
+						config.StringVariable("API_STARTED"),
+						config.StringVariable("API_STOPPED"),
+					),
+				},
+			},
+			// Update: swap one event and change order.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid":                config.StringVariable(randomId),
+					"notification_groups": config.ListVariable(config.StringVariable(groupHrid)),
+					"events": config.ListVariable(
+						config.StringVariable("API_DEPLOYED"),
+						config.StringVariable("API_STARTED"),
+					),
+				},
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectNonEmptyPlan(),
+					},
+				},
+			},
+			// Update: remove the notification group.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid":                config.StringVariable(randomId),
+					"notification_groups": config.ListVariable(),
+					"events": config.ListVariable(
+						config.StringVariable("API_DEPLOYED"),
+						config.StringVariable("API_STARTED"),
+					),
+				},
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectNonEmptyPlan(),
+					},
+				},
+			},
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
 func TestAPIV4Resource_webhook(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
 	t.Parallel()

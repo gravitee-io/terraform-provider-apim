@@ -59,6 +59,8 @@ outputs:
    target: templates/guides/docgen_application-with-group.md
  - template: {{ .RootDir }}/tmpl/v4api-with-group.md.tmpl
    target: templates/guides/docgen_v4api-with-group.md
+ - template: {{ .RootDir }}/tmpl/v4api-with-notifications.md.tmpl
+   target: templates/guides/docgen_v4api-with-notifications.md
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
     exportedAs: V4ApiSimple
@@ -155,4 +157,7 @@ chunks:
     required: true
   - template: examples/use-cases/v4api-with_group/api-with-group.tf
     exportedAs: V4ApiWithGroup
+    required: true
+  - template: examples/use-cases/v4api-with_notifications/api-with-notif.tf
+    exportedAs: V4ApiWithNotifications
     required: true
