@@ -18,6 +18,12 @@ import (
 func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, resp *shared.APIV4State) diag.Diagnostics {
 	var diags diag.Diagnostics
 
+	// Capture prior Plans/Flows before the generated code overwrites them so that
+	// write-only policy configuration fields omitted by the Gravitee GET response
+	// (e.g. data-cache timeToLiveSeconds) can be merged back afterward.
+	priorPlans := r.Plans
+	priorFlows := r.Flows
+
 	if resp != nil {
 		if resp.Analytics == nil {
 			r.Analytics = nil
@@ -971,6 +977,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		}
 	}
 
+	r.preserveWriteOnlyConfigs(priorPlans, priorFlows)
 	return diags
 }
 
