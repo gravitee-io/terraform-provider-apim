@@ -50,7 +50,7 @@ type ApplicationSpec struct {
 	Description string `json:"description"`
 	// Application's domain.
 	Domain *string `json:"domain,omitempty"`
-	// List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM.
+	// List of groups associated with the Application. This groups are names, HRIDs or UUIDs of existing groups in APIM.
 	Groups []string `json:"groups,omitempty"`
 	// Application's picture Url.
 	PictureURL *string `json:"pictureUrl,omitempty"`
