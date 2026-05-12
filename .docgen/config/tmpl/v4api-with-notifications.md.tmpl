@@ -1,0 +1,26 @@
+---
+page_title: "API with Console Notifications"
+subcategory: "V4 API"
+---
+
+# Setting up Console Notifications on an API
+
+This example demonstrates how to configure console notifications on a V4 API using the `console_notification` attribute.
+
+## Notification groups must belong to the API
+
+The groups listed in `console_notification.groups` must be a subset of the groups assigned to the API via its `groups` attribute.
+This is because APIM uses the API's group membership to resolve which users should receive notifications.
+
+In the example below, `apim_group.api-developers` is referenced in both `groups` and `console_notification.groups`,
+ensuring that members of this group will receive notifications when the API is started or stopped.
+
+## Terraform dependency management
+
+Because `apim_apiv4.with_notif` references `apim_group.api-developers.hrid` in both `groups` and `console_notification.groups`,
+Terraform automatically infers a dependency between the two resources.
+This guarantees the group is fully created before the API, without requiring an explicit `depends_on` block.
+
+```terraform
+{{ .V4ApiWithNotifications.Content }}
+```

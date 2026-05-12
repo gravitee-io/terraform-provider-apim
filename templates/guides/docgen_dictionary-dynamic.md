@@ -220,14 +220,12 @@ Into this structure that Gravitee can use to resolve properties in the `transfor
         "key":"accept-encoding",
         "value":"deflate, gzip"
     }
-]```
+]
+```
 
 ## Calling the API
 
 Calling `GET /proxy-with-dyn-dictionary/` will return the following API response:
-
-```JSON
-:
 
 ```JSON
 {
