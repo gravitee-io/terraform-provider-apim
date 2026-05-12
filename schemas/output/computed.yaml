@@ -745,7 +745,7 @@ components:
           x-speakeasy-param-suppress-computed-diff: true
         groups:
           type: array
-          description: Name or UUIDs of existing groups (of users) associated with this API.
+          description: Name, HRID or UUIDs of existing groups (of users) associated with this API.
           items:
             type: string
           default: []
@@ -819,6 +819,49 @@ components:
           default: []
           x-speakeasy-param-computed: true
           x-speakeasy-plan-modifiers: IgnoreEmptyList
+        consoleNotification:
+          type: object
+          description: Console notification configuration.
+          properties:
+            groups:
+              description: Name, HRID or UUIDs of existing groups (of users) targeted by notifications.
+              type: array
+              items:
+                type: string
+              x-speakeasy-param-computed: false
+              x-speakeasy-plan-modifiers: IgnoreEmptyList
+            events:
+              description: Events on which a notification is created
+              type: array
+              items:
+                type: string
+                enum:
+                  - APIKEY_EXPIRED
+                  - APIKEY_RENEWED
+                  - APIKEY_REVOKED
+                  - SUBSCRIPTION_NEW
+                  - SUBSCRIPTION_ACCEPTED
+                  - SUBSCRIPTION_CLOSED
+                  - SUBSCRIPTION_PAUSED
+                  - SUBSCRIPTION_RESUMED
+                  - SUBSCRIPTION_REJECTED
+                  - SUBSCRIPTION_TRANSFERRED
+                  - SUBSCRIPTION_FAILED
+                  - NEW_SUPPORT_TICKET
+                  - API_STARTED
+                  - API_STOPPED
+                  - API_UPDATED
+                  - API_DEPLOYED
+                  - NEW_RATING
+                  - NEW_RATING_ANSWER
+                  - MESSAGE
+                  - ASK_FOR_REVIEW
+                  - REVIEW_OK
+                  - REQUEST_FOR_CHANGES
+                  - API_DEPRECATED
+                  - NEW_SPEC_GENERATED
+              x-speakeasy-param-computed: false
+          x-speakeasy-param-computed: false
       required:
         - hrid
         - name
@@ -889,7 +932,7 @@ components:
         groups:
           type: array
           description: >-
-            List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM.
+            List of groups associated with the Application. This groups are names, HRIDs or UUIDs of existing groups in APIM.
           items:
             type: string
           default: []

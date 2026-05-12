@@ -64,36 +64,37 @@ type Apiv4Resource struct {
 
 // Apiv4ResourceModel describes the resource data model.
 type Apiv4ResourceModel struct {
-	Analytics         *tfTypes.Analytics                             `tfsdk:"analytics"`
-	Categories        []types.String                                 `tfsdk:"categories"`
-	Description       types.String                                   `tfsdk:"description"`
-	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
-	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
-	Failover          *tfTypes.FailoverV4                            `tfsdk:"failover"`
-	FlowExecution     *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
-	Flows             []tfTypes.FlowV4                               `tfsdk:"flows"`
-	Groups            []types.String                                 `tfsdk:"groups"`
-	Hrid              types.String                                   `tfsdk:"hrid"`
-	ID                types.String                                   `tfsdk:"id"`
-	Labels            []types.String                                 `tfsdk:"labels"`
-	LifecycleState    types.String                                   `tfsdk:"lifecycle_state"`
-	Listeners         []tfTypes.Listener                             `tfsdk:"listeners"`
-	Members           []tfTypes.Member                               `tfsdk:"members"`
-	Metadata          []tfTypes.Metadata                             `tfsdk:"metadata"`
-	Name              types.String                                   `tfsdk:"name"`
-	NotifyMembers     types.Bool                                     `tfsdk:"notify_members"`
-	OrganizationID    types.String                                   `tfsdk:"organization_id"`
-	Pages             []tfTypes.PageV4                               `tfsdk:"pages"`
-	Plans             []tfTypes.PlanV4                               `tfsdk:"plans"`
-	Properties        []tfTypes.Property                             `tfsdk:"properties"`
-	Resources         []tfTypes.APIResource                          `tfsdk:"resources"`
-	ResponseTemplates map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
-	Services          *tfTypes.APIServices                           `tfsdk:"services"`
-	State             types.String                                   `tfsdk:"state"`
-	Tags              []types.String                                 `tfsdk:"tags"`
-	Type              types.String                                   `tfsdk:"type"`
-	Version           types.String                                   `tfsdk:"version"`
-	Visibility        types.String                                   `tfsdk:"visibility"`
+	Analytics           *tfTypes.Analytics                             `tfsdk:"analytics"`
+	Categories          []types.String                                 `tfsdk:"categories"`
+	ConsoleNotification *tfTypes.APIV4SpecConsoleNotification          `tfsdk:"console_notification"`
+	Description         types.String                                   `tfsdk:"description"`
+	EndpointGroups      []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
+	EnvironmentID       types.String                                   `tfsdk:"environment_id"`
+	Failover            *tfTypes.FailoverV4                            `tfsdk:"failover"`
+	FlowExecution       *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
+	Flows               []tfTypes.FlowV4                               `tfsdk:"flows"`
+	Groups              []types.String                                 `tfsdk:"groups"`
+	Hrid                types.String                                   `tfsdk:"hrid"`
+	ID                  types.String                                   `tfsdk:"id"`
+	Labels              []types.String                                 `tfsdk:"labels"`
+	LifecycleState      types.String                                   `tfsdk:"lifecycle_state"`
+	Listeners           []tfTypes.Listener                             `tfsdk:"listeners"`
+	Members             []tfTypes.Member                               `tfsdk:"members"`
+	Metadata            []tfTypes.Metadata                             `tfsdk:"metadata"`
+	Name                types.String                                   `tfsdk:"name"`
+	NotifyMembers       types.Bool                                     `tfsdk:"notify_members"`
+	OrganizationID      types.String                                   `tfsdk:"organization_id"`
+	Pages               []tfTypes.PageV4                               `tfsdk:"pages"`
+	Plans               []tfTypes.PlanV4                               `tfsdk:"plans"`
+	Properties          []tfTypes.Property                             `tfsdk:"properties"`
+	Resources           []tfTypes.APIResource                          `tfsdk:"resources"`
+	ResponseTemplates   map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
+	Services            *tfTypes.APIServices                           `tfsdk:"services"`
+	State               types.String                                   `tfsdk:"state"`
+	Tags                []types.String                                 `tfsdk:"tags"`
+	Type                types.String                                   `tfsdk:"type"`
+	Version             types.String                                   `tfsdk:"version"`
+	Visibility          types.String                                   `tfsdk:"visibility"`
 }
 
 func (r *Apiv4Resource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -258,6 +259,25 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
 				Description: `The list of category names (or UUID) associated with this API. Default: []`,
+			},
+			"console_notification": schema.SingleNestedAttribute{
+				Optional: true,
+				Attributes: map[string]schema.Attribute{
+					"events": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+						Description: `Events on which a notification is created`,
+					},
+					"groups": schema.ListAttribute{
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							custom_listplanmodifier.IgnoreEmptyList(),
+						},
+						ElementType: types.StringType,
+						Description: `Name, HRID or UUIDs of existing groups (of users) targeted by notifications.`,
+					},
+				},
+				Description: `Console notification configuration.`,
 			},
 			"description": schema.StringAttribute{
 				Optional:    true,
@@ -1265,7 +1285,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Optional:    true,
 				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				ElementType: types.StringType,
-				Description: `Name or UUIDs of existing groups (of users) associated with this API. Default: []`,
+				Description: `Name, HRID or UUIDs of existing groups (of users) associated with this API. Default: []`,
 			},
 			"hrid": schema.StringAttribute{
 				Required: true,

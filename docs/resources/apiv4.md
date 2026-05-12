@@ -231,12 +231,13 @@ resource "apim_apiv4" "example" {
 
 - `analytics` (Attributes) API analytics configuration to enable/disable what can be observed. (see [below for nested schema](#nestedatt--analytics))
 - `categories` (List of String) The list of category names (or UUID) associated with this API. Default: []
+- `console_notification` (Attributes) Console notification configuration. (see [below for nested schema](#nestedatt--console_notification))
 - `description` (String) Basic API documentation to describe what this API does.
 - `environment_id` (String) environment ID
 - `failover` (Attributes) Defines the failover behavior to bypass endpoints when some are slow. (see [below for nested schema](#nestedatt--failover))
 - `flow_execution` (Attributes) Flow execution enablement (Not applicable for Native API) (see [below for nested schema](#nestedatt--flow_execution))
 - `flows` (Attributes List) Common flows for the API where traffic policies are configured. (see [below for nested schema](#nestedatt--flows))
-- `groups` (List of String) Name or UUIDs of existing groups (of users) associated with this API. Default: []
+- `groups` (List of String) Name, HRID or UUIDs of existing groups (of users) associated with this API. Default: []
 - `labels` (List of String) Informative labels for this API. Default: []
 - `members` (Attributes List) Users that can access or manage the API (depending on their roles). (see [below for nested schema](#nestedatt--members))
 - `metadata` (Attributes List) The list of API's metadata. (see [below for nested schema](#nestedatt--metadata))
@@ -586,6 +587,15 @@ Optional:
 - `enabled` (Boolean) Enable OpenTelemetry tracing
 - `verbose` (Boolean) Enable technical tracing to get more details on request execution. Be careful this settings can generate more noise and can impact performance.
 
+
+
+<a id="nestedatt--console_notification"></a>
+### Nested Schema for `console_notification`
+
+Optional:
+
+- `events` (List of String) Events on which a notification is created
+- `groups` (List of String) Name, HRID or UUIDs of existing groups (of users) targeted by notifications.
 
 
 <a id="nestedatt--failover"></a>

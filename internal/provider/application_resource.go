@@ -113,7 +113,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					custom_listplanmodifier.IgnoreEmptyList(),
 				},
 				ElementType: types.StringType,
-				Description: `List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM. Default: []`,
+				Description: `List of groups associated with the Application. This groups are names, HRIDs or UUIDs of existing groups in APIM. Default: []`,
 			},
 			"hrid": schema.StringAttribute{
 				Required: true,

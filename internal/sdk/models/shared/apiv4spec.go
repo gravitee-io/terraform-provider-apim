@@ -4,8 +4,127 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
+
+type APIV4SpecEvent string
+
+const (
+	APIV4SpecEventApikeyExpired           APIV4SpecEvent = "APIKEY_EXPIRED"
+	APIV4SpecEventApikeyRenewed           APIV4SpecEvent = "APIKEY_RENEWED"
+	APIV4SpecEventApikeyRevoked           APIV4SpecEvent = "APIKEY_REVOKED"
+	APIV4SpecEventSubscriptionNew         APIV4SpecEvent = "SUBSCRIPTION_NEW"
+	APIV4SpecEventSubscriptionAccepted    APIV4SpecEvent = "SUBSCRIPTION_ACCEPTED"
+	APIV4SpecEventSubscriptionClosed      APIV4SpecEvent = "SUBSCRIPTION_CLOSED"
+	APIV4SpecEventSubscriptionPaused      APIV4SpecEvent = "SUBSCRIPTION_PAUSED"
+	APIV4SpecEventSubscriptionResumed     APIV4SpecEvent = "SUBSCRIPTION_RESUMED"
+	APIV4SpecEventSubscriptionRejected    APIV4SpecEvent = "SUBSCRIPTION_REJECTED"
+	APIV4SpecEventSubscriptionTransferred APIV4SpecEvent = "SUBSCRIPTION_TRANSFERRED"
+	APIV4SpecEventSubscriptionFailed      APIV4SpecEvent = "SUBSCRIPTION_FAILED"
+	APIV4SpecEventNewSupportTicket        APIV4SpecEvent = "NEW_SUPPORT_TICKET"
+	APIV4SpecEventAPIStarted              APIV4SpecEvent = "API_STARTED"
+	APIV4SpecEventAPIStopped              APIV4SpecEvent = "API_STOPPED"
+	APIV4SpecEventAPIUpdated              APIV4SpecEvent = "API_UPDATED"
+	APIV4SpecEventAPIDeployed             APIV4SpecEvent = "API_DEPLOYED"
+	APIV4SpecEventNewRating               APIV4SpecEvent = "NEW_RATING"
+	APIV4SpecEventNewRatingAnswer         APIV4SpecEvent = "NEW_RATING_ANSWER"
+	APIV4SpecEventMessage                 APIV4SpecEvent = "MESSAGE"
+	APIV4SpecEventAskForReview            APIV4SpecEvent = "ASK_FOR_REVIEW"
+	APIV4SpecEventReviewOk                APIV4SpecEvent = "REVIEW_OK"
+	APIV4SpecEventRequestForChanges       APIV4SpecEvent = "REQUEST_FOR_CHANGES"
+	APIV4SpecEventAPIDeprecated           APIV4SpecEvent = "API_DEPRECATED"
+	APIV4SpecEventNewSpecGenerated        APIV4SpecEvent = "NEW_SPEC_GENERATED"
+)
+
+func (e APIV4SpecEvent) ToPointer() *APIV4SpecEvent {
+	return &e
+}
+func (e *APIV4SpecEvent) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "APIKEY_EXPIRED":
+		fallthrough
+	case "APIKEY_RENEWED":
+		fallthrough
+	case "APIKEY_REVOKED":
+		fallthrough
+	case "SUBSCRIPTION_NEW":
+		fallthrough
+	case "SUBSCRIPTION_ACCEPTED":
+		fallthrough
+	case "SUBSCRIPTION_CLOSED":
+		fallthrough
+	case "SUBSCRIPTION_PAUSED":
+		fallthrough
+	case "SUBSCRIPTION_RESUMED":
+		fallthrough
+	case "SUBSCRIPTION_REJECTED":
+		fallthrough
+	case "SUBSCRIPTION_TRANSFERRED":
+		fallthrough
+	case "SUBSCRIPTION_FAILED":
+		fallthrough
+	case "NEW_SUPPORT_TICKET":
+		fallthrough
+	case "API_STARTED":
+		fallthrough
+	case "API_STOPPED":
+		fallthrough
+	case "API_UPDATED":
+		fallthrough
+	case "API_DEPLOYED":
+		fallthrough
+	case "NEW_RATING":
+		fallthrough
+	case "NEW_RATING_ANSWER":
+		fallthrough
+	case "MESSAGE":
+		fallthrough
+	case "ASK_FOR_REVIEW":
+		fallthrough
+	case "REVIEW_OK":
+		fallthrough
+	case "REQUEST_FOR_CHANGES":
+		fallthrough
+	case "API_DEPRECATED":
+		fallthrough
+	case "NEW_SPEC_GENERATED":
+		*e = APIV4SpecEvent(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for APIV4SpecEvent: %v", v)
+	}
+}
+
+// APIV4SpecConsoleNotification - Console notification configuration.
+type APIV4SpecConsoleNotification struct {
+	// Name, HRID or UUIDs of existing groups (of users) targeted by notifications.
+	Groups []string `json:"groups,omitempty"`
+	// Events on which a notification is created
+	Events []APIV4SpecEvent `json:"events,omitempty"`
+}
+
+func (a *APIV4SpecConsoleNotification) GetGroups() []string {
+	if a == nil {
+		return nil
+	}
+	return a.Groups
+}
+
+func (a *APIV4SpecConsoleNotification) GetEvents() []APIV4SpecEvent {
+	if a == nil {
+		return nil
+	}
+	return a.Events
+}
+
+// #region class-body-apiv4specconsolenotification
+// #endregion class-body-apiv4specconsolenotification
 
 // APIV4Spec - ApiV4DefinitionSpec defines the desired state of ApiDefinition.
 type APIV4Spec struct {
@@ -47,7 +166,7 @@ type APIV4Spec struct {
 	ResponseTemplates map[string]map[string]ResponseTemplate `json:"responseTemplates,omitempty"`
 	// Api services (dynamic properties)
 	Services *APIServices `json:"services,omitempty"`
-	// Name or UUIDs of existing groups (of users) associated with this API.
+	// Name, HRID or UUIDs of existing groups (of users) associated with this API.
 	Groups []string `json:"groups,omitempty"`
 	// The visibility of the entity regarding the portal.
 	Visibility *Visibility `default:"PUBLIC" json:"visibility"`
@@ -70,6 +189,8 @@ type APIV4Spec struct {
 	NotifyMembers *bool `default:"true" json:"notifyMembers"`
 	// Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.
 	Pages []PageV4Input `json:"pages,omitempty"`
+	// Console notification configuration.
+	ConsoleNotification *APIV4SpecConsoleNotification `json:"consoleNotification,omitempty"`
 }
 
 func (a APIV4Spec) MarshalJSON() ([]byte, error) {
@@ -277,6 +398,13 @@ func (a *APIV4Spec) GetPages() []PageV4Input {
 		return nil
 	}
 	return a.Pages
+}
+
+func (a *APIV4Spec) GetConsoleNotification() *APIV4SpecConsoleNotification {
+	if a == nil {
+		return nil
+	}
+	return a.ConsoleNotification
 }
 
 // #region class-body-apiv4spec

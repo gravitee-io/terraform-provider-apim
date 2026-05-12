@@ -4,8 +4,127 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
+
+type APIV4StateEvent string
+
+const (
+	APIV4StateEventApikeyExpired           APIV4StateEvent = "APIKEY_EXPIRED"
+	APIV4StateEventApikeyRenewed           APIV4StateEvent = "APIKEY_RENEWED"
+	APIV4StateEventApikeyRevoked           APIV4StateEvent = "APIKEY_REVOKED"
+	APIV4StateEventSubscriptionNew         APIV4StateEvent = "SUBSCRIPTION_NEW"
+	APIV4StateEventSubscriptionAccepted    APIV4StateEvent = "SUBSCRIPTION_ACCEPTED"
+	APIV4StateEventSubscriptionClosed      APIV4StateEvent = "SUBSCRIPTION_CLOSED"
+	APIV4StateEventSubscriptionPaused      APIV4StateEvent = "SUBSCRIPTION_PAUSED"
+	APIV4StateEventSubscriptionResumed     APIV4StateEvent = "SUBSCRIPTION_RESUMED"
+	APIV4StateEventSubscriptionRejected    APIV4StateEvent = "SUBSCRIPTION_REJECTED"
+	APIV4StateEventSubscriptionTransferred APIV4StateEvent = "SUBSCRIPTION_TRANSFERRED"
+	APIV4StateEventSubscriptionFailed      APIV4StateEvent = "SUBSCRIPTION_FAILED"
+	APIV4StateEventNewSupportTicket        APIV4StateEvent = "NEW_SUPPORT_TICKET"
+	APIV4StateEventAPIStarted              APIV4StateEvent = "API_STARTED"
+	APIV4StateEventAPIStopped              APIV4StateEvent = "API_STOPPED"
+	APIV4StateEventAPIUpdated              APIV4StateEvent = "API_UPDATED"
+	APIV4StateEventAPIDeployed             APIV4StateEvent = "API_DEPLOYED"
+	APIV4StateEventNewRating               APIV4StateEvent = "NEW_RATING"
+	APIV4StateEventNewRatingAnswer         APIV4StateEvent = "NEW_RATING_ANSWER"
+	APIV4StateEventMessage                 APIV4StateEvent = "MESSAGE"
+	APIV4StateEventAskForReview            APIV4StateEvent = "ASK_FOR_REVIEW"
+	APIV4StateEventReviewOk                APIV4StateEvent = "REVIEW_OK"
+	APIV4StateEventRequestForChanges       APIV4StateEvent = "REQUEST_FOR_CHANGES"
+	APIV4StateEventAPIDeprecated           APIV4StateEvent = "API_DEPRECATED"
+	APIV4StateEventNewSpecGenerated        APIV4StateEvent = "NEW_SPEC_GENERATED"
+)
+
+func (e APIV4StateEvent) ToPointer() *APIV4StateEvent {
+	return &e
+}
+func (e *APIV4StateEvent) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "APIKEY_EXPIRED":
+		fallthrough
+	case "APIKEY_RENEWED":
+		fallthrough
+	case "APIKEY_REVOKED":
+		fallthrough
+	case "SUBSCRIPTION_NEW":
+		fallthrough
+	case "SUBSCRIPTION_ACCEPTED":
+		fallthrough
+	case "SUBSCRIPTION_CLOSED":
+		fallthrough
+	case "SUBSCRIPTION_PAUSED":
+		fallthrough
+	case "SUBSCRIPTION_RESUMED":
+		fallthrough
+	case "SUBSCRIPTION_REJECTED":
+		fallthrough
+	case "SUBSCRIPTION_TRANSFERRED":
+		fallthrough
+	case "SUBSCRIPTION_FAILED":
+		fallthrough
+	case "NEW_SUPPORT_TICKET":
+		fallthrough
+	case "API_STARTED":
+		fallthrough
+	case "API_STOPPED":
+		fallthrough
+	case "API_UPDATED":
+		fallthrough
+	case "API_DEPLOYED":
+		fallthrough
+	case "NEW_RATING":
+		fallthrough
+	case "NEW_RATING_ANSWER":
+		fallthrough
+	case "MESSAGE":
+		fallthrough
+	case "ASK_FOR_REVIEW":
+		fallthrough
+	case "REVIEW_OK":
+		fallthrough
+	case "REQUEST_FOR_CHANGES":
+		fallthrough
+	case "API_DEPRECATED":
+		fallthrough
+	case "NEW_SPEC_GENERATED":
+		*e = APIV4StateEvent(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for APIV4StateEvent: %v", v)
+	}
+}
+
+// APIV4StateConsoleNotification - Console notification configuration.
+type APIV4StateConsoleNotification struct {
+	// Name, HRID or UUIDs of existing groups (of users) targeted by notifications.
+	Groups []string `json:"groups,omitempty"`
+	// Events on which a notification is created
+	Events []APIV4StateEvent `json:"events,omitempty"`
+}
+
+func (a *APIV4StateConsoleNotification) GetGroups() []string {
+	if a == nil {
+		return nil
+	}
+	return a.Groups
+}
+
+func (a *APIV4StateConsoleNotification) GetEvents() []APIV4StateEvent {
+	if a == nil {
+		return nil
+	}
+	return a.Events
+}
+
+// #region class-body-apiv4stateconsolenotification
+// #endregion class-body-apiv4stateconsolenotification
 
 // APIV4State - API state
 type APIV4State struct {
@@ -47,7 +166,7 @@ type APIV4State struct {
 	ResponseTemplates map[string]map[string]ResponseTemplate `json:"responseTemplates,omitempty"`
 	// Api services (dynamic properties)
 	Services *APIServices `json:"services,omitempty"`
-	// Name or UUIDs of existing groups (of users) associated with this API.
+	// Name, HRID or UUIDs of existing groups (of users) associated with this API.
 	Groups []string `json:"groups,omitempty"`
 	// The visibility of the entity regarding the portal.
 	Visibility *Visibility `default:"PUBLIC" json:"visibility"`
@@ -67,6 +186,8 @@ type APIV4State struct {
 	Members []Member `json:"members,omitempty"`
 	// Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.
 	Pages []PageV4 `json:"pages,omitempty"`
+	// Console notification configuration.
+	ConsoleNotification *APIV4StateConsoleNotification `json:"consoleNotification,omitempty"`
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
 	Errors *Errors `json:"errors,omitempty"`
 	// API's uuid.
@@ -277,6 +398,13 @@ func (a *APIV4State) GetPages() []PageV4 {
 		return nil
 	}
 	return a.Pages
+}
+
+func (a *APIV4State) GetConsoleNotification() *APIV4StateConsoleNotification {
+	if a == nil {
+		return nil
+	}
+	return a.ConsoleNotification
 }
 
 func (a *APIV4State) GetErrors() *Errors {

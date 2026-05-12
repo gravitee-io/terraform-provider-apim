@@ -74,6 +74,19 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		for _, v := range resp.Categories {
 			r.Categories = append(r.Categories, types.StringValue(v))
 		}
+		if resp.ConsoleNotification == nil {
+			r.ConsoleNotification = nil
+		} else {
+			r.ConsoleNotification = &tfTypes.APIV4StateConsoleNotification{}
+			r.ConsoleNotification.Events = make([]types.String, 0, len(resp.ConsoleNotification.Events))
+			for _, v := range resp.ConsoleNotification.Events {
+				r.ConsoleNotification.Events = append(r.ConsoleNotification.Events, types.StringValue(string(v)))
+			}
+			r.ConsoleNotification.Groups = make([]types.String, 0, len(resp.ConsoleNotification.Groups))
+			for _, v := range resp.ConsoleNotification.Groups {
+				r.ConsoleNotification.Groups = append(r.ConsoleNotification.Groups, types.StringValue(v))
+			}
+		}
 		r.Description = types.StringPointerValue(resp.Description)
 		r.EndpointGroups = []tfTypes.EndpointGroupV4{}
 

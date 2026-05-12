@@ -41,35 +41,36 @@ type Apiv4DataSource struct {
 
 // Apiv4DataSourceModel describes the data model.
 type Apiv4DataSourceModel struct {
-	Analytics         *tfTypes.Analytics                             `tfsdk:"analytics"`
-	Categories        []types.String                                 `tfsdk:"categories"`
-	Description       types.String                                   `tfsdk:"description"`
-	EndpointGroups    []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
-	EnvironmentID     types.String                                   `tfsdk:"environment_id"`
-	Failover          *tfTypes.FailoverV4                            `tfsdk:"failover"`
-	FlowExecution     *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
-	Flows             []tfTypes.FlowV4                               `tfsdk:"flows"`
-	Groups            []types.String                                 `tfsdk:"groups"`
-	Hrid              types.String                                   `tfsdk:"hrid"`
-	ID                types.String                                   `tfsdk:"id"`
-	Labels            []types.String                                 `tfsdk:"labels"`
-	LifecycleState    types.String                                   `tfsdk:"lifecycle_state"`
-	Listeners         []tfTypes.Listener                             `tfsdk:"listeners"`
-	Members           []tfTypes.Member                               `tfsdk:"members"`
-	Metadata          []tfTypes.Metadata                             `tfsdk:"metadata"`
-	Name              types.String                                   `tfsdk:"name"`
-	OrganizationID    types.String                                   `tfsdk:"organization_id"`
-	Pages             []tfTypes.PageV4                               `tfsdk:"pages"`
-	Plans             []tfTypes.PlanV4                               `tfsdk:"plans"`
-	Properties        []tfTypes.Property1                            `tfsdk:"properties"`
-	Resources         []tfTypes.APIResource                          `tfsdk:"resources"`
-	ResponseTemplates map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
-	Services          *tfTypes.APIServices                           `tfsdk:"services"`
-	State             types.String                                   `tfsdk:"state"`
-	Tags              []types.String                                 `tfsdk:"tags"`
-	Type              types.String                                   `tfsdk:"type"`
-	Version           types.String                                   `tfsdk:"version"`
-	Visibility        types.String                                   `tfsdk:"visibility"`
+	Analytics           *tfTypes.Analytics                             `tfsdk:"analytics"`
+	Categories          []types.String                                 `tfsdk:"categories"`
+	ConsoleNotification *tfTypes.APIV4StateConsoleNotification         `tfsdk:"console_notification"`
+	Description         types.String                                   `tfsdk:"description"`
+	EndpointGroups      []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
+	EnvironmentID       types.String                                   `tfsdk:"environment_id"`
+	Failover            *tfTypes.FailoverV4                            `tfsdk:"failover"`
+	FlowExecution       *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
+	Flows               []tfTypes.FlowV4                               `tfsdk:"flows"`
+	Groups              []types.String                                 `tfsdk:"groups"`
+	Hrid                types.String                                   `tfsdk:"hrid"`
+	ID                  types.String                                   `tfsdk:"id"`
+	Labels              []types.String                                 `tfsdk:"labels"`
+	LifecycleState      types.String                                   `tfsdk:"lifecycle_state"`
+	Listeners           []tfTypes.Listener                             `tfsdk:"listeners"`
+	Members             []tfTypes.Member                               `tfsdk:"members"`
+	Metadata            []tfTypes.Metadata                             `tfsdk:"metadata"`
+	Name                types.String                                   `tfsdk:"name"`
+	OrganizationID      types.String                                   `tfsdk:"organization_id"`
+	Pages               []tfTypes.PageV4                               `tfsdk:"pages"`
+	Plans               []tfTypes.PlanV4                               `tfsdk:"plans"`
+	Properties          []tfTypes.Property1                            `tfsdk:"properties"`
+	Resources           []tfTypes.APIResource                          `tfsdk:"resources"`
+	ResponseTemplates   map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
+	Services            *tfTypes.APIServices                           `tfsdk:"services"`
+	State               types.String                                   `tfsdk:"state"`
+	Tags                []types.String                                 `tfsdk:"tags"`
+	Type                types.String                                   `tfsdk:"type"`
+	Version             types.String                                   `tfsdk:"version"`
+	Visibility          types.String                                   `tfsdk:"visibility"`
 }
 
 // Metadata returns the data source type name.
@@ -203,6 +204,22 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Computed:    true,
 				ElementType: types.StringType,
 				Description: `The list of category names (or UUID) associated with this API.`,
+			},
+			"console_notification": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"events": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Events on which a notification is created`,
+					},
+					"groups": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						Description: `Name, HRID or UUIDs of existing groups (of users) targeted by notifications.`,
+					},
+				},
+				Description: `Console notification configuration.`,
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,
@@ -753,7 +770,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"groups": schema.ListAttribute{
 				Computed:    true,
 				ElementType: types.StringType,
-				Description: `Name or UUIDs of existing groups (of users) associated with this API.`,
+				Description: `Name, HRID or UUIDs of existing groups (of users) associated with this API.`,
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,

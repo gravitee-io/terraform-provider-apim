@@ -48,7 +48,7 @@ resource "apim_application" "example" {
 - `background` (String) Application's background url
 - `domain` (String) Application's domain.
 - `environment_id` (String) environment ID
-- `groups` (List of String) List of groups associated with the Application. This groups are names or UUIDs of existing groups in APIM. Default: []
+- `groups` (List of String) List of groups associated with the Application. This groups are names, HRIDs or UUIDs of existing groups in APIM. Default: []
 - `members` (Attributes List) Users that can access or manage this application (depending on their roles). (see [below for nested schema](#nestedatt--members))
 - `metadata` (Attributes List) The list of Application's metadata. (see [below for nested schema](#nestedatt--metadata))
 - `notify_members` (Boolean) If true, new members added to the Application spec will
