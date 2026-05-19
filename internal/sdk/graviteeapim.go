@@ -74,6 +74,8 @@ type GraviteeApim struct {
 	// Everything about subscriptions
 	Subscriptions      *Subscriptions
 	SharedPolicyGroups *SharedPolicyGroups
+	// Mock document storage for testing
+	MockDocuments *MockDocuments
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -193,6 +195,7 @@ func New(opts ...SDKOption) *GraviteeApim {
 	sdk.Dictionaries = newDictionaries(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Subscriptions = newSubscriptions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.SharedPolicyGroups = newSharedPolicyGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.MockDocuments = newMockDocuments(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

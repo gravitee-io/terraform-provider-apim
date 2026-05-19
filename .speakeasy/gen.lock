@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 6b0d0f124b0893880d31671fca31b66d
+  docChecksum: adde8019d9a01a13c34b673ad06c24e8
   docVersion: 1.0.0
   speakeasyVersion: 1.762.0
   generationVersion: 2.882.0
   releaseVersion: 0.9.3
   configChecksum: f0f7c96e49ef1c9dc320b0429aa16c4e
 persistentEdits:
-  generation_id: 6b684804-5221-4269-9251-4d9ce01b3da0
-  pristine_commit_hash: 61a711c45b5b361f1a1084c4b1edf63714fc91f1
-  pristine_tree_hash: ef439d62a116f711bd46103da386dae78ee5b6af
+  generation_id: 664902f3-cdeb-492a-aacc-88f46c193649
+  pristine_commit_hash: 29f2632cd54e22ab9e3d2a956e72ddc626f14853
+  pristine_tree_hash: 5e57893e77ec9b7d4e4fcc834411e372daca6761
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -82,6 +82,10 @@ trackedFiles:
     id: 7437ba27c18b
     last_write_checksum: sha1:e6f274900415fdc06f844c2f18cb751e6401bea7
     pristine_git_object: 61c8795f8d113867da78d3095a87072eb05a15c1
+  examples/resources/apim_document/resource.tf:
+    id: de9c039ae524
+    last_write_checksum: sha1:d2d5fb4ccd564a1d9fd69791ad69ad52b8279e99
+    pristine_git_object: 619188d071dfac6d25013067132441daa2aef395
   go.mod:
     id: c47645c391ad
     last_write_checksum: sha1:41d16489d0f68b1f286dd4108cbbaef1891f2655
@@ -274,6 +278,14 @@ trackedFiles:
     id: 1dc3aa1cf6a1
     last_write_checksum: sha1:33f48dfd4e7cd68e4c87262013291ffd916f98d3
     pristine_git_object: e15c6de3cd1c60d59d6a684dfc7b88c11604466e
+  internal/provider/document_resource.go:
+    id: 46717bd6a9db
+    last_write_checksum: sha1:d65341b19e948d870cf376e4400d32de9f8c9339
+    pristine_git_object: fedcdeaf103d605354da0cdc719928b06d920562
+  internal/provider/document_resource_sdk.go:
+    id: 1a0887f4be59
+    last_write_checksum: sha1:3f6cd3d1a905c91359b553776d9057fce7c0ba40
+    pristine_git_object: 13423f7ae500d41d17f548f8078230ae80acdc45
   internal/provider/group_data_source.go:
     id: 42985a05e298
     last_write_checksum: sha1:bd0f0111d6e08bc0a05fe049142763710a06424f
@@ -292,8 +304,8 @@ trackedFiles:
     pristine_git_object: 82a8266240c0a51f132fcb29c88ec4679649ad08
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:b08fb9675b44ad7883eb97ac3365af7a8d78b6e1
-    pristine_git_object: 093744eb8f3df696615159aed3850fbeca05a910
+    last_write_checksum: sha1:a4c76ddfb09ca3f27dfdcb9a762b3508e939fc47
+    pristine_git_object: f415d4176c482742d04a073231980194c713d6de
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
     last_write_checksum: sha1:42e02d5e7e31b0a5d4e14deb739cf5020c79f2e0
@@ -662,8 +674,8 @@ trackedFiles:
     pristine_git_object: 748c4bab704e399fd73706ce2a0478fc4a298117
   internal/sdk/graviteeapim.go:
     id: 1f2cf575c2fd
-    last_write_checksum: sha1:3910eeeb1787cb9f00f341d87d4217d8904ab4cd
-    pristine_git_object: 949e216aa3521e168beed50046df2158659c8276
+    last_write_checksum: sha1:93c1290c96fd73181222ca1f29a179cbc7288de5
+    pristine_git_object: c6af471ca4f9a52b3fd1a4e8fcec2c1ba63afffa
   internal/sdk/groups.go:
     id: 2bfe17bcb000
     last_write_checksum: sha1:709108650e6e2f0612bad64fe38a49f88aefd495
@@ -732,10 +744,18 @@ trackedFiles:
     id: feefcdf75dbd
     last_write_checksum: sha1:2fe9f3d0d42c8f3df89a8b57bd5d76e087099bdf
     pristine_git_object: 19a84be9ece852a3fbc754939a2959c1dc59ce90
+  internal/sdk/mockdocuments.go:
+    id: d32045e180a4
+    last_write_checksum: sha1:d029a8b6475ef449e07322cbc756c60ea70e680f
+    pristine_git_object: f02f1ec4ec3527b689d437e284742d1b6a125138
   internal/sdk/models/errors/apierror.go:
     id: bf281d768352
     last_write_checksum: sha1:48baa200e233c2bfe77fb5b39ab9bbd257e9c36d
     pristine_git_object: aac3bd31bc35ca9cfa535f71be8a234594bd6762
+  internal/sdk/models/operations/createorupdateapimockdocument.go:
+    id: 2f38417a3f04
+    last_write_checksum: sha1:d5ecf4c6321da2765bd9109e470e26817831c2bb
+    pristine_git_object: cfa4c98408b6149e2308518e33b67d3c7106c373
   internal/sdk/models/operations/createorupdateapis.go:
     id: 5d2f4552edfd
     last_write_checksum: sha1:cb004468c3bbe665fba3f02bfb428531a4343dec
@@ -744,6 +764,10 @@ trackedFiles:
     id: 92e4a5c690b3
     last_write_checksum: sha1:26b7b26978cf96ac19048895be794b11da0254cf
     pristine_git_object: 24ec74f9848350fb6296493855f8cdfb986d3d05
+  internal/sdk/models/operations/createorupdateapplicationmockdocument.go:
+    id: 72c0ac5e6df6
+    last_write_checksum: sha1:2049dd180e5634113e7e27c979fef363df3edb0f
+    pristine_git_object: 95f7f281cfcb9dd10d98ab89f608269c76d2a5ab
   internal/sdk/models/operations/createorupdateapplications.go:
     id: abfc8c92b8d2
     last_write_checksum: sha1:d25c9c1b5310cd5d5eaf089c5fb0c028b7cfa95a
@@ -764,6 +788,10 @@ trackedFiles:
     id: 452cbeb96903
     last_write_checksum: sha1:a57932627943b24d800810a177eaccfd2b0eb9fc
     pristine_git_object: e957bb59d08083954a309ce2fcf8b16c1ec7c1fd
+  internal/sdk/models/operations/deleteapimockdocument.go:
+    id: 1d7168cece2c
+    last_write_checksum: sha1:812820560c885123c6eb279f6c51de352d37d8ee
+    pristine_git_object: 41848ef688882cf4e443199d63589438538a8b0f
   internal/sdk/models/operations/deleteapisubscription.go:
     id: 97bf06ebebf1
     last_write_checksum: sha1:383e218c620f6d0cada2da80cfa0d13c0eeec621
@@ -772,6 +800,10 @@ trackedFiles:
     id: 2a25b08fb4aa
     last_write_checksum: sha1:6c7b6836f47e5d87b1cf339dd155aa5a3221c424
     pristine_git_object: 97531ad386bbcd940f589cac2c8856f8621e3f11
+  internal/sdk/models/operations/deleteapplicationmockdocument.go:
+    id: b1eabf711d90
+    last_write_checksum: sha1:4064f0269902182be313055a627cd7711cd5e893
+    pristine_git_object: 698b96575c546035c6f2323caaf6ef5a9f305cbf
   internal/sdk/models/operations/deletedictionary.go:
     id: d0f9b192c80e
     last_write_checksum: sha1:9efc39a8d5680bc3609ce75b951c6e748184bb84
@@ -788,6 +820,10 @@ trackedFiles:
     id: 802d9b66b302
     last_write_checksum: sha1:e12bfd3e480c8172415c6e69a3e96b27eb5abe1b
     pristine_git_object: 404778622ca6f35c5ef0aab74b50082e34297928
+  internal/sdk/models/operations/getapimockdocument.go:
+    id: 16c9d537d0e6
+    last_write_checksum: sha1:4a71ad47c181faa14b7dd625381b6cb95e1a77d0
+    pristine_git_object: 3dc168f76bcfe9209f31e252b75b46620fbf7057
   internal/sdk/models/operations/getapisubscription.go:
     id: 1397776d0e22
     last_write_checksum: sha1:e43bcf217f7002b54e47d5e51fa3cf4b186064e6
@@ -796,6 +832,10 @@ trackedFiles:
     id: 42beb30dc36f
     last_write_checksum: sha1:f2935b21b0f7ad3d3c82021dd0c635ccf76a74a9
     pristine_git_object: 79cf43c46a48ffc392e3908acea6239ba58a3101
+  internal/sdk/models/operations/getapplicationmockdocument.go:
+    id: 5a11473fc34f
+    last_write_checksum: sha1:616019115fadc190c9007d0500b02a0e5c3ed518
+    pristine_git_object: 6a82a155170eaae05fa52f113a3a7ef51a7a40e3
   internal/sdk/models/operations/getdictionary.go:
     id: b7634c97510d
     last_write_checksum: sha1:48faf778ea2eba62cd431f8b89e6338abdc8d4cb
@@ -905,6 +945,14 @@ trackedFiles:
     id: 2b1ca3730442
     last_write_checksum: sha1:af45b073a200a42a5717c73aa54122e2c6ae9a04
     pristine_git_object: 6f97e426a59d8354f94b841e40d27fca77628233
+  internal/sdk/models/shared/documentspec.go:
+    id: 2df8527f09c7
+    last_write_checksum: sha1:9b4b784decaab696d7f7818ebd14ab787cdad0eb
+    pristine_git_object: ab487b9bd4ae4e225b9894b3f77fd3ff547f272e
+  internal/sdk/models/shared/documentstate.go:
+    id: cbde6af66854
+    last_write_checksum: sha1:f9280d8f16da1fc3714a512ea80f89d688cc3cc4
+    pristine_git_object: 43945c36517d8a16da5114375e83e09667e8e6d0
   internal/sdk/models/shared/dynamicdictionaryspec.go:
     id: d7c948965a7a
     last_write_checksum: sha1:aa22359c6654e548ea749af9a231c279d2a27169
@@ -1602,6 +1650,94 @@ examples:
           hrid: "my_demo_api"
       responses:
         "401":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  createOrUpdateApiMockDocument:
+    speakeasy-default-create-or-update-api-mock-document:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          apiHrid: "my_demo_api"
+      requestBody:
+        application/json: {"hrid": "my_mock_document", "name": "My Mock Document", "content": "Some content here"}
+      responses:
+        "200":
+          application/json: {"hrid": "my_mock_document", "name": "My Mock Document", "content": "Some content here"}
+        "400":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  getApiMockDocument:
+    speakeasy-default-get-api-mock-document:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          apiHrid: "my_demo_api"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "my_mock_document", "name": "My Mock Document", "content": "Some content here"}
+        "404":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  deleteApiMockDocument:
+    speakeasy-default-delete-api-mock-document:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          apiHrid: "my_demo_api"
+          hrid: "my_demo_api"
+      responses:
+        "404":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  createOrUpdateApplicationMockDocument:
+    speakeasy-default-create-or-update-application-mock-document:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          appHrid: "simple_demo_app"
+      requestBody:
+        application/json: {"hrid": "my_mock_document", "name": "My Mock Document", "content": "Some content here"}
+      responses:
+        "200":
+          application/json: {"hrid": "my_mock_document", "name": "My Mock Document", "content": "Some content here"}
+        "400":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  getApplicationMockDocument:
+    speakeasy-default-get-application-mock-document:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          appHrid: "simple_demo_app"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "my_mock_document", "name": "My Mock Document", "content": "Some content here"}
+        "404":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  deleteApplicationMockDocument:
+    speakeasy-default-delete-application-mock-document:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          appHrid: "simple_demo_app"
+          hrid: "my_demo_api"
+      responses:
+        "404":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
         default:
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}

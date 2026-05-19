@@ -14,6 +14,7 @@ sources:
             - location: schemas/overlays/subscription.yaml
             - location: schemas/overlays/dictionary.yaml
             - location: schemas/overlays/group.yaml
+            - location: schemas/overlays/mock.yaml
             - location: .speakeasy/speakeasy-modifications-overlay.yaml
         output: schemas/output/computed.yaml
         registry:

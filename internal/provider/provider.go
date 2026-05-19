@@ -244,6 +244,7 @@ func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewApiv4Resource,
 		NewApplicationResource,
 		NewDictionaryResource,
+		NewDocumentResource,
 		NewGroupResource,
 		NewSharedPolicyGroupResource,
 		NewSubscriptionResource,

@@ -1,0 +1,51 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Mock overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.components.schemas.DocumentSpec
+    update:
+      x-speakeasy-entity:
+        Document
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/mock"].put
+    update:
+      x-speakeasy-entity-operation: Document#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/applications/{appHrid}/mock"].put
+    update:
+      x-speakeasy-entity-operation:
+        - Document#create#2
+        - Document#update#2
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/mock"].get
+    update:
+      x-speakeasy-entity-operation: Document#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/applications/{appHrid}/mock{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: Document#read#2
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/mock/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: Document#delete
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/applications/{appHrid}/mock/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: Document#delete#2
+
+
+  # Status management
+  ## Ids to ignore
+  - target: $.components.schemas.DocumentState.allOf[?@.properties.id].properties.id
+    description: API return some stuff, need to ignore
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.DocumentState.allOf[?@.properties.organizationId].properties.organizationId
+    description: API return some stuff, need to ignore
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.DocumentState.allOf[?@.properties.environmentId].properties.environmentId
+    description: API return some stuff, need to ignore
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
