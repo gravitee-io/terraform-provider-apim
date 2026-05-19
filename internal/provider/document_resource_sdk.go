@@ -158,6 +158,37 @@ func (r *DocumentResourceModel) ToOperationsDeleteApplicationMockDocumentRequest
 	return &out, diags
 }
 
+func (r *DocumentResourceModel) ToOperationsGetApplicationMockDocumentRequest(ctx context.Context) (*operations.GetApplicationMockDocumentRequest, diag.Diagnostics) {
+	var diags diag.Diagnostics
+
+	organizationID := new(string)
+	if !r.OrganizationID.IsUnknown() && !r.OrganizationID.IsNull() {
+		*organizationID = r.OrganizationID.ValueString()
+	} else {
+		organizationID = nil
+	}
+	environmentID := new(string)
+	if !r.EnvironmentID.IsUnknown() && !r.EnvironmentID.IsNull() {
+		*environmentID = r.EnvironmentID.ValueString()
+	} else {
+		environmentID = nil
+	}
+	var appHrid string
+	appHrid = r.AppHrid.ValueString()
+
+	var hrid string
+	hrid = r.Hrid.ValueString()
+
+	out := operations.GetApplicationMockDocumentRequest{
+		OrganizationID: organizationID,
+		EnvironmentID:  environmentID,
+		AppHrid:        appHrid,
+		Hrid:           hrid,
+	}
+
+	return &out, diags
+}
+
 func (r *DocumentResourceModel) ToSharedDocumentSpec(ctx context.Context) (*shared.DocumentSpec, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
