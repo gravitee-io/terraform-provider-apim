@@ -256,6 +256,7 @@ func (p *ApimProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewApiv4DataSource,
 		NewApplicationDataSource,
 		NewDictionaryDataSource,
+		NewDocumentDataSource,
 		NewGroupDataSource,
 		NewSharedPolicyGroupDataSource,
 		NewSubscriptionDataSource,

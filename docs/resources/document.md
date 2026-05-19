@@ -29,13 +29,13 @@ resource "apim_document" "my_document" {
 
 ### Required
 
-- `api_hrid` (String) Human-readable ID of api
-- `app_hrid` (String) Human-readable ID of application
 - `hrid` (String) Human-readable ID of the document. Requires replacement if changed.
 - `name` (String) Name of the document
 
 ### Optional
 
+- `api_hrid` (String) Human-readable ID of api
+- `app_hrid` (String) Human-readable ID of application
 - `content` (String) Content of the document
 - `environment_id` (String) environment ID
 - `organization_id` (String) organization ID
@@ -43,3 +43,28 @@ resource "apim_document" "my_document" {
 ### Read-Only
 
 - `id` (String) API's uuid.
+
+## Import
+
+Import is supported using the following syntax:
+
+In Terraform v1.5.0 and later, the [`import` block](https://developer.hashicorp.com/terraform/language/import) can be used with the `id` attribute, for example:
+
+```terraform
+import {
+  to = apim_document.my_apim_document
+  id = jsonencode({
+    api_hrid        = "my_demo_api"
+    app_hrid        = "simple_demo_app"
+    environment_id  = "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+    hrid            = "my_demo_api"
+    organization_id = "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+  })
+}
+```
+
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
+```shell
+terraform import apim_document.my_apim_document '{"api_hrid": "my_demo_api", "app_hrid": "simple_demo_app", "environment_id": "a44e0d1b-9fa9-4d64-8b76-3634623a2e27", "hrid": "my_demo_api", "organization_id": "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"}'
+```

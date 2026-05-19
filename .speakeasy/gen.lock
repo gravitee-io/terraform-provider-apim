@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: adde8019d9a01a13c34b673ad06c24e8
+  docChecksum: 66d26494e69db91262aff2b869f64f12
   docVersion: 1.0.0
   speakeasyVersion: 1.762.0
   generationVersion: 2.882.0
   releaseVersion: 0.9.3
   configChecksum: f0f7c96e49ef1c9dc320b0429aa16c4e
 persistentEdits:
-  generation_id: 664902f3-cdeb-492a-aacc-88f46c193649
-  pristine_commit_hash: 29f2632cd54e22ab9e3d2a956e72ddc626f14853
-  pristine_tree_hash: 5e57893e77ec9b7d4e4fcc834411e372daca6761
+  generation_id: 1eee5497-2e03-4ae0-9c25-5f11a3244404
+  pristine_commit_hash: 7dbb8e938539ef8f91d8b23d586823c054947e3c
+  pristine_tree_hash: f4e77333a908ed51519ab19e091ba34c5d5c01c4
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -51,6 +51,11 @@ trackedFiles:
     last_write_checksum: sha1:701c3445663ec80c9140e153fa2280fd80aadae1
     pristine_git_object: 57bd460758ad87bb4d314eca7398971e25f4b7c9
     deleted: true
+  examples/data-sources/apim_document/data-source.tf:
+    id: eb9477c20061
+    last_write_checksum: sha1:86477a67a2ea6b442faa97aa2aa252a90cfbf981
+    pristine_git_object: 769ff2d0f8a3aac21c20fd62daba29b3c25e89b3
+    deleted: true
   examples/data-sources/apim_group/data-source.tf:
     id: 98b93d66233a
     last_write_checksum: sha1:89a08eb7ad4ea01cb4c4b494a44a674f8eae13c2
@@ -82,6 +87,14 @@ trackedFiles:
     id: 7437ba27c18b
     last_write_checksum: sha1:e6f274900415fdc06f844c2f18cb751e6401bea7
     pristine_git_object: 61c8795f8d113867da78d3095a87072eb05a15c1
+  examples/resources/apim_document/import-by-string-id.tf:
+    id: d4f99b3e4de1
+    last_write_checksum: sha1:1e332ef755f5870f14a3aa43f3498345f4d73978
+    pristine_git_object: daca72d995d071d38d8c8d43a938b991be9ce034
+  examples/resources/apim_document/import.sh:
+    id: 6113c72527c5
+    last_write_checksum: sha1:755bb1c7cf9049e21ac2d1bb5ef33ab7d9b05d18
+    pristine_git_object: d52f01b9894c2bccaf64eaa8d2ed1354068c6d15
   examples/resources/apim_document/resource.tf:
     id: de9c039ae524
     last_write_checksum: sha1:d2d5fb4ccd564a1d9fd69791ad69ad52b8279e99
@@ -278,14 +291,22 @@ trackedFiles:
     id: 1dc3aa1cf6a1
     last_write_checksum: sha1:33f48dfd4e7cd68e4c87262013291ffd916f98d3
     pristine_git_object: e15c6de3cd1c60d59d6a684dfc7b88c11604466e
+  internal/provider/document_data_source.go:
+    id: 28614c89b037
+    last_write_checksum: sha1:1721832fe465f9bb187da6c19fce51a1b799bec2
+    pristine_git_object: 485f64914dac9f1bf3022ee0d306b1c81c67db9c
+  internal/provider/document_data_source_sdk.go:
+    id: ed6f42ff44d2
+    last_write_checksum: sha1:59c0f1e58613b9df8c2b64f3a23aba712e9e66d0
+    pristine_git_object: 05d1c26760b6fdec839df16797f9689cf0b6df35
   internal/provider/document_resource.go:
     id: 46717bd6a9db
-    last_write_checksum: sha1:d65341b19e948d870cf376e4400d32de9f8c9339
-    pristine_git_object: fedcdeaf103d605354da0cdc719928b06d920562
+    last_write_checksum: sha1:172556c2eca8ddc842f11727e8155854e5cea529
+    pristine_git_object: 75f98f75aa1154cc206bd0c13daa245186a370ea
   internal/provider/document_resource_sdk.go:
     id: 1a0887f4be59
-    last_write_checksum: sha1:3f6cd3d1a905c91359b553776d9057fce7c0ba40
-    pristine_git_object: 13423f7ae500d41d17f548f8078230ae80acdc45
+    last_write_checksum: sha1:6ff90d9af079ab1d265d7c83a1852e3a6bef28a9
+    pristine_git_object: 1afc14492fe047e5b5f14393649d795c6e59d246
   internal/provider/group_data_source.go:
     id: 42985a05e298
     last_write_checksum: sha1:bd0f0111d6e08bc0a05fe049142763710a06424f
@@ -304,8 +325,8 @@ trackedFiles:
     pristine_git_object: 82a8266240c0a51f132fcb29c88ec4679649ad08
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:a4c76ddfb09ca3f27dfdcb9a762b3508e939fc47
-    pristine_git_object: f415d4176c482742d04a073231980194c713d6de
+    last_write_checksum: sha1:a86c3c7a24cff740da38de2d78b3f10ae61c80c2
+    pristine_git_object: b43eb0b7cab18f2fa90ec38262c38e857a5060e1
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
     last_write_checksum: sha1:42e02d5e7e31b0a5d4e14deb739cf5020c79f2e0

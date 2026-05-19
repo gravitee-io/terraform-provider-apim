@@ -18,10 +18,10 @@ actions:
       x-speakeasy-entity-operation:
         - Document#create#2
         - Document#update#2
-  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/mock"].get
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/mock/{hrid}"].get
     update:
       x-speakeasy-entity-operation: Document#read
-  - target: $.paths["/organizations/{orgId}/environments/{envId}/applications/{appHrid}/mock{hrid}"].get
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/applications/{appHrid}/mock/{hrid}"].get
     update:
       x-speakeasy-entity-operation: Document#read#2
   - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/mock/{hrid}"].delete

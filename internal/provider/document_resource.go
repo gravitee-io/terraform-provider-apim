@@ -4,9 +4,13 @@
 package provider
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -56,11 +60,11 @@ func (r *DocumentResource) Schema(ctx context.Context, req resource.SchemaReques
 		MarkdownDescription: "Document Resource",
 		Attributes: map[string]schema.Attribute{
 			"api_hrid": schema.StringAttribute{
-				Required:    true,
+				Optional:    true,
 				Description: `Human-readable ID of api`,
 			},
 			"app_hrid": schema.StringAttribute{
-				Required:    true,
+				Optional:    true,
 				Description: `Human-readable ID of application`,
 			},
 			"content": schema.StringAttribute{
@@ -144,79 +148,83 @@ func (r *DocumentResource) Create(ctx context.Context, req resource.CreateReques
 		data.OrganizationID = r.OrganizationID
 	}
 
-	request, requestDiags := data.ToOperationsCreateOrUpdateAPIMockDocumentRequest(ctx)
-	resp.Diagnostics.Append(requestDiags...)
+	if !data.APIHrid.IsNull() {
+		request, requestDiags := data.ToOperationsCreateOrUpdateAPIMockDocumentRequest(ctx)
+		resp.Diagnostics.Append(requestDiags...)
 
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res, err := r.client.MockDocuments.CreateOrUpdateAPIMockDocument(ctx, *request)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res != nil && res.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		if resp.Diagnostics.HasError() {
+			return
 		}
-		return
-	}
-	if res == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-		return
-	}
-	if res.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
-		return
-	}
-	if !(res.DocumentState != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res.DocumentState)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsCreateOrUpdateApplicationMockDocumentRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.MockDocuments.CreateOrUpdateApplicationMockDocument(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		res, err := r.client.MockDocuments.CreateOrUpdateAPIMockDocument(ctx, *request)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			if res != nil && res.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+			}
+			return
 		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.DocumentState != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res1.DocumentState)...)
+		if res == nil {
+			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+			return
+		}
+		if res.StatusCode != 200 {
+			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+			return
+		}
+		if !(res.DocumentState != nil) {
+			resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+			return
+		}
+		resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res.DocumentState)...)
 
-	if resp.Diagnostics.HasError() {
-		return
-	}
+		if resp.Diagnostics.HasError() {
+			return
+		}
 
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+		resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
-	if resp.Diagnostics.HasError() {
-		return
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	} else if !data.AppHrid.IsNull() {
+
+		request1, request1Diags := data.ToOperationsCreateOrUpdateApplicationMockDocumentRequest(ctx)
+		resp.Diagnostics.Append(request1Diags...)
+
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		res1, err := r.client.MockDocuments.CreateOrUpdateApplicationMockDocument(ctx, *request1)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			if res1 != nil && res1.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+			}
+			return
+		}
+		if res1 == nil {
+			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+			return
+		}
+		if res1.StatusCode != 200 {
+			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+			return
+		}
+		if !(res1.DocumentState != nil) {
+			resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+			return
+		}
+		resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res1.DocumentState)...)
+
+		if resp.Diagnostics.HasError() {
+			return
+		}
+
+		resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	// Save updated data into Terraform state
@@ -240,11 +248,91 @@ func (r *DocumentResource) Read(ctx context.Context, req resource.ReadRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
+	if isAPIBound(data) {
+		request, requestDiags := data.ToOperationsGetAPIMockDocumentRequest(ctx)
+		resp.Diagnostics.Append(requestDiags...)
 
-	// Not Implemented; we rely entirely on CREATE API request response
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		res, err := r.client.MockDocuments.GetAPIMockDocument(ctx, *request)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			if res != nil && res.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+			}
+			return
+		}
+		if res == nil {
+			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+			return
+		}
+		if res.StatusCode == 404 {
+			resp.State.RemoveResource(ctx)
+			return
+		}
+		if res.StatusCode != 200 {
+			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+			return
+		}
+		if !(res.DocumentState != nil) {
+			resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+			return
+		}
+		resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res.DocumentState)...)
+
+		if resp.Diagnostics.HasError() {
+			return
+		}
+
+	} else if isApplicationBound(data) {
+		request1, request1Diags := data.ToOperationsGetApplicationMockDocumentRequest(ctx)
+		resp.Diagnostics.Append(request1Diags...)
+
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		res1, err := r.client.MockDocuments.GetApplicationMockDocument(ctx, *request1)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			if res1 != nil && res1.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+			}
+			return
+		}
+		if res1 == nil {
+			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+			return
+		}
+		if res1.StatusCode == 404 {
+			resp.State.RemoveResource(ctx)
+			return
+		}
+		if res1.StatusCode != 200 {
+			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+			return
+		}
+		if !(res1.DocumentState != nil) {
+			resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+			return
+		}
+		resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res1.DocumentState)...)
+
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+}
+
+func isApplicationBound(data *DocumentResourceModel) bool {
+	return data.APIHrid.IsNull() && !data.AppHrid.IsNull()
+}
+
+func isAPIBound(data *DocumentResourceModel) bool {
+	return !data.APIHrid.IsNull() && data.AppHrid.IsNull()
 }
 
 func (r *DocumentResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
@@ -269,79 +357,85 @@ func (r *DocumentResource) Update(ctx context.Context, req resource.UpdateReques
 		data.OrganizationID = r.OrganizationID
 	}
 
-	request, requestDiags := data.ToOperationsCreateOrUpdateAPIMockDocumentRequest(ctx)
-	resp.Diagnostics.Append(requestDiags...)
+	// Gravitee added
+	if isAPIBound(data) {
 
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res, err := r.client.MockDocuments.CreateOrUpdateAPIMockDocument(ctx, *request)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res != nil && res.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		request, requestDiags := data.ToOperationsCreateOrUpdateAPIMockDocumentRequest(ctx)
+		resp.Diagnostics.Append(requestDiags...)
+
+		if resp.Diagnostics.HasError() {
+			return
 		}
-		return
-	}
-	if res == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-		return
-	}
-	if res.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
-		return
-	}
-	if !(res.DocumentState != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res.DocumentState)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	request1, request1Diags := data.ToOperationsCreateOrUpdateApplicationMockDocumentRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.MockDocuments.CreateOrUpdateApplicationMockDocument(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		res, err := r.client.MockDocuments.CreateOrUpdateAPIMockDocument(ctx, *request)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			if res != nil && res.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+			}
+			return
 		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	if res1.StatusCode != 200 {
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
-	}
-	if !(res1.DocumentState != nil) {
-		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
-		return
-	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res1.DocumentState)...)
+		if res == nil {
+			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+			return
+		}
+		if res.StatusCode != 200 {
+			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+			return
+		}
+		if !(res.DocumentState != nil) {
+			resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
+			return
+		}
+		resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res.DocumentState)...)
 
-	if resp.Diagnostics.HasError() {
-		return
-	}
+		if resp.Diagnostics.HasError() {
+			return
+		}
 
-	resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+		resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
 
-	if resp.Diagnostics.HasError() {
-		return
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	} else if isApplicationBound(data) {
+
+		request1, request1Diags := data.ToOperationsCreateOrUpdateApplicationMockDocumentRequest(ctx)
+		resp.Diagnostics.Append(request1Diags...)
+
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		res1, err := r.client.MockDocuments.CreateOrUpdateApplicationMockDocument(ctx, *request1)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			if res1 != nil && res1.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+			}
+			return
+		}
+		if res1 == nil {
+			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+			return
+		}
+		if res1.StatusCode != 200 {
+			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+			return
+		}
+		if !(res1.DocumentState != nil) {
+			resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+			return
+		}
+		resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res1.DocumentState)...)
+
+		if resp.Diagnostics.HasError() {
+			return
+		}
+
+		resp.Diagnostics.Append(refreshPlan(ctx, plan, &data)...)
+
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	// Save updated data into Terraform state
@@ -373,60 +467,111 @@ func (r *DocumentResource) Delete(ctx context.Context, req resource.DeleteReques
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
+	if isAPIBound(data) {
+		request, requestDiags := data.ToOperationsDeleteAPIMockDocumentRequest(ctx)
+		resp.Diagnostics.Append(requestDiags...)
 
-	request, requestDiags := data.ToOperationsDeleteAPIMockDocumentRequest(ctx)
-	resp.Diagnostics.Append(requestDiags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res, err := r.client.MockDocuments.DeleteAPIMockDocument(ctx, *request)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res != nil && res.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+		if resp.Diagnostics.HasError() {
+			return
 		}
-		return
-	}
-	if res == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
-		return
-	}
-	switch res.StatusCode {
-	case 204, 404:
-		break
-	default:
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
-		return
-	}
-	request1, request1Diags := data.ToOperationsDeleteApplicationMockDocumentRequest(ctx)
-	resp.Diagnostics.Append(request1Diags...)
-
-	if resp.Diagnostics.HasError() {
-		return
-	}
-	res1, err := r.client.MockDocuments.DeleteApplicationMockDocument(ctx, *request1)
-	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
-		if res1 != nil && res1.RawResponse != nil {
-			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		res, err := r.client.MockDocuments.DeleteAPIMockDocument(ctx, *request)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			if res != nil && res.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
+			}
+			return
 		}
-		return
-	}
-	if res1 == nil {
-		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
-		return
-	}
-	switch res1.StatusCode {
-	case 204, 404:
-		break
-	default:
-		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
-		return
+		if res == nil {
+			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res))
+			return
+		}
+		switch res.StatusCode {
+		case 204, 404:
+			break
+		default:
+			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
+			return
+		}
+	} else if isApplicationBound(data) {
+		request1, request1Diags := data.ToOperationsDeleteApplicationMockDocumentRequest(ctx)
+		resp.Diagnostics.Append(request1Diags...)
+
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		res1, err := r.client.MockDocuments.DeleteApplicationMockDocument(ctx, *request1)
+		if err != nil {
+			resp.Diagnostics.AddError("failure to invoke API", err.Error())
+			if res1 != nil && res1.RawResponse != nil {
+				resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+			}
+			return
+		}
+		if res1 == nil {
+			resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+			return
+		}
+		switch res1.StatusCode {
+		case 204, 404:
+			break
+		default:
+			resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+			return
+		}
 	}
 
 }
 
 func (r *DocumentResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.AddError("Not Implemented", "No available import state operation is available for resource document.")
+	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
+	dec.DisallowUnknownFields()
+	var data struct {
+		APIHrid        string  `json:"api_hrid"`
+		AppHrid        string  `json:"app_hrid"`
+		EnvironmentID  *string `json:"environment_id"`
+		Hrid           string  `json:"hrid"`
+		OrganizationID *string `json:"organization_id"`
+	}
+
+	if err := dec.Decode(&data); err != nil {
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"api_hrid": "my_demo_api", "app_hrid": "simple_demo_app", "environment_id": "a44e0d1b-9fa9-4d64-8b76-3634623a2e27", "hrid": "my_demo_api", "organization_id": "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"}': `+err.Error())
+		return
+	}
+
+	if len(data.APIHrid) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field api_hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"my_demo_api"'`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("api_hrid"), data.APIHrid)...)
+	if len(data.AppHrid) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field app_hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"simple_demo_app"'`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("app_hrid"), data.AppHrid)...)
+	if data.EnvironmentID == nil {
+		if !r.EnvironmentID.IsUnknown() {
+			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
+		}
+		if data.EnvironmentID == nil {
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"'`)
+			return
+		}
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
+	if len(data.Hrid) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"my_demo_api"'`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("hrid"), data.Hrid)...)
+	if data.OrganizationID == nil {
+		if !r.OrganizationID.IsUnknown() {
+			data.OrganizationID = r.OrganizationID.ValueStringPointer()
+		}
+		if data.OrganizationID == nil {
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"'`)
+			return
+		}
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)
 }

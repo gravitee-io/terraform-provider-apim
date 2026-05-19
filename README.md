@@ -93,6 +93,7 @@ Available configuration:
 * [apim_apiv4](docs/data-sources/apiv4.md)
 * [apim_application](docs/data-sources/application.md)
 * [apim_dictionary](docs/data-sources/dictionary.md)
+* [apim_document](docs/data-sources/document.md)
 * [apim_group](docs/data-sources/group.md)
 * [apim_shared_policy_group](docs/data-sources/shared_policy_group.md)
 * [apim_subscription](docs/data-sources/subscription.md)
