@@ -35,6 +35,7 @@ type DocumentDataSource struct {
 
 // DocumentDataSourceModel describes the data model.
 type DocumentDataSourceModel struct {
+	APIHrid        types.String `tfsdk:"api_hrid"`
 	AppHrid        types.String `tfsdk:"app_hrid"`
 	Content        types.String `tfsdk:"content"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
@@ -55,6 +56,10 @@ func (r *DocumentDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 		MarkdownDescription: "Document DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"api_hrid": schema.StringAttribute{
+				Required:    true,
+				Description: `Human-readable ID of api`,
+			},
 			"app_hrid": schema.StringAttribute{
 				Required:    true,
 				Description: `Human-readable ID of application`,
@@ -137,13 +142,13 @@ func (r *DocumentDataSource) Read(ctx context.Context, req datasource.ReadReques
 		data.OrganizationID = r.OrganizationID
 	}
 
-	request, requestDiags := data.ToOperationsGetApplicationMockDocumentRequest(ctx)
+	request, requestDiags := data.ToOperationsGetAPIMockDocumentRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.MockDocuments.GetApplicationMockDocument(ctx, *request)
+	res, err := r.client.MockDocuments.GetAPIMockDocument(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -164,6 +169,37 @@ func (r *DocumentDataSource) Read(ctx context.Context, req datasource.ReadReques
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res.DocumentState)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetApplicationMockDocumentRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.MockDocuments.GetApplicationMockDocument(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.DocumentState != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res1.DocumentState)...)
 
 	if resp.Diagnostics.HasError() {
 		return

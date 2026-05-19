@@ -244,13 +244,13 @@ func (r *DocumentResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetApplicationMockDocumentRequest(ctx)
+	request, requestDiags := data.ToOperationsGetAPIMockDocumentRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.MockDocuments.GetApplicationMockDocument(ctx, *request)
+	res, err := r.client.MockDocuments.GetAPIMockDocument(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -275,6 +275,41 @@ func (r *DocumentResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 	resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res.DocumentState)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	request1, request1Diags := data.ToOperationsGetApplicationMockDocumentRequest(ctx)
+	resp.Diagnostics.Append(request1Diags...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	res1, err := r.client.MockDocuments.GetApplicationMockDocument(ctx, *request1)
+	if err != nil {
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		if res1 != nil && res1.RawResponse != nil {
+			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
+		}
+		return
+	}
+	if res1 == nil {
+		resp.Diagnostics.AddError("unexpected response from API", fmt.Sprintf("%v", res1))
+		return
+	}
+	if res1.StatusCode == 404 {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+	if res1.StatusCode != 200 {
+		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
+		return
+	}
+	if !(res1.DocumentState != nil) {
+		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
+		return
+	}
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentState(ctx, res1.DocumentState)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -468,6 +503,7 @@ func (r *DocumentResource) ImportState(ctx context.Context, req resource.ImportS
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
+		APIHrid        string  `json:"api_hrid"`
 		AppHrid        string  `json:"app_hrid"`
 		EnvironmentID  *string `json:"environment_id"`
 		Hrid           string  `json:"hrid"`
@@ -475,10 +511,15 @@ func (r *DocumentResource) ImportState(ctx context.Context, req resource.ImportS
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"app_hrid": "simple_demo_app", "environment_id": "a44e0d1b-9fa9-4d64-8b76-3634623a2e27", "hrid": "my_demo_api", "organization_id": "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"api_hrid": "my_demo_api", "app_hrid": "simple_demo_app", "environment_id": "a44e0d1b-9fa9-4d64-8b76-3634623a2e27", "hrid": "my_demo_api", "organization_id": "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"}': `+err.Error())
 		return
 	}
 
+	if len(data.APIHrid) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field api_hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"my_demo_api"'`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("api_hrid"), data.APIHrid)...)
 	if len(data.AppHrid) == 0 {
 		resp.Diagnostics.AddError("Missing required field", `The field app_hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"simple_demo_app"'`)
 		return
