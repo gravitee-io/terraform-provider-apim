@@ -197,8 +197,11 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `A dynamic dictionary populated from an external provider on a schedule.`,
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `environment ID`,
 			},
 			"hrid": schema.StringAttribute{
@@ -236,8 +239,11 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Description: `Display name of the dictionary`,
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `organization ID`,
 			},
 			"type": schema.StringAttribute{
