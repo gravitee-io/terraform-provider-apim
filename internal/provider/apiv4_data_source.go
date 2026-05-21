@@ -383,7 +383,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The environment ID of the API.`,
+				Description: `The environment ID.`,
 			},
 			"failover": schema.SingleNestedAttribute{
 				Computed: true,
@@ -782,7 +782,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
-				Description: `API's uuid.`,
+				Description: `Resource UUID.`,
 			},
 			"labels": schema.ListAttribute{
 				Computed:    true,
@@ -1115,7 +1115,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The organization ID of the API.`,
+				Description: `The organization ID.`,
 			},
 			"pages": schema.ListNestedAttribute{
 				Computed: true,

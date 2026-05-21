@@ -132,7 +132,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Application's uuid.`,
+				Description: `Resource UUID.`,
 			},
 			"members": schema.ListNestedAttribute{
 				Computed: true,

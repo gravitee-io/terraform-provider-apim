@@ -113,7 +113,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `The id of the shared policy group.`,
+				Description: `Resource UUID.`,
 			},
 			"name": schema.StringAttribute{
 				Required:    true,

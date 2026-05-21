@@ -66,11 +66,8 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 		MarkdownDescription: "Group Resource",
 		Attributes: map[string]schema.Attribute{
 			"environment_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				Description: `environment ID`,
 			},
 			"hrid": schema.StringAttribute{
@@ -90,7 +87,7 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Group's uuid.`,
+				Description: `Resource UUID.`,
 			},
 			"members": schema.ListNestedAttribute{
 				Computed: true,
@@ -138,11 +135,8 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `If true, members will be notified when the group is synced with APIM. Default: true`,
 			},
 			"organization_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				Description: `organization ID`,
 			},
 		},

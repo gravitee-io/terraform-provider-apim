@@ -153,7 +153,7 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Subscription's uuid.`,
+				Description: `Resource UUID.`,
 			},
 			"metadata": schema.MapAttribute{
 				Optional:    true,

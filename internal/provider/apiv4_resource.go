@@ -532,11 +532,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"environment_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				Description: `environment ID`,
 			},
 			"failover": schema.SingleNestedAttribute{
@@ -1304,7 +1301,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `API's uuid.`,
+				Description: `Resource UUID.`,
 			},
 			"labels": schema.ListAttribute{
 				Computed:    true,
@@ -1946,11 +1943,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					`Default: true`,
 			},
 			"organization_id": schema.StringAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.String{
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
-				},
+				Computed:    true,
+				Optional:    true,
 				Description: `organization ID`,
 			},
 			"pages": schema.ListNestedAttribute{
