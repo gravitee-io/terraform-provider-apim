@@ -47,15 +47,6 @@ actions:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
 
-  ### Application State
-  - target: $.components.schemas.ApplicationState.allOf[?@.properties.id].properties.id
-    description: Not returned by the API, so prevent null values during refresh
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.ApplicationState.allOf[?@.properties.crossId].properties.crossId
-    description: Not returned by the API, so prevent null values during refresh
-    update:
-      x-speakeasy-terraform-ignore: true
   - target: $.components.schemas.ApplicationSpec.properties.metadata
     description: Prevent empty array to create plan diff
     update:
