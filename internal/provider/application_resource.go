@@ -8,8 +8,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
-	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
@@ -22,12 +20,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
-	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -109,14 +105,9 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `environment ID`,
 			},
 			"groups": schema.ListAttribute{
-				Computed: true,
-				Optional: true,
-				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
-				PlanModifiers: []planmodifier.List{
-					custom_listplanmodifier.IgnoreEmptyList(),
-				},
+				Optional:    true,
 				ElementType: types.StringType,
-				Description: `List of groups associated with the Application. This groups are names, HRIDs or UUIDs of existing groups in APIM. Default: []`,
+				Description: `List of groups associated with the Application. This groups are names, HRIDs or UUIDs of existing groups in APIM.`,
 			},
 			"hrid": schema.StringAttribute{
 				Required: true,
@@ -138,17 +129,10 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Resource UUID.`,
 			},
 			"members": schema.ListNestedAttribute{
-				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
-				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
-					},
-					PlanModifiers: []planmodifier.Object{
-						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 					},
 					Attributes: map[string]schema.Attribute{
 						"role": schema.StringAttribute{
@@ -180,11 +164,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"metadata": schema.ListNestedAttribute{
-				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					custom_listplanmodifier.IgnoreEmptyList(),
-				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
@@ -345,11 +325,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								},
 							},
 							"redirect_uris": schema.ListAttribute{
-								Computed:    true,
 								Optional:    true,
-								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								ElementType: types.StringType,
-								Description: `OAuth client redirect Uris. Default: []`,
+								Description: `OAuth client redirect Uris. Not Null`,
+								Validators: []validator.List{
+									speakeasy_listvalidators.NotNull(),
+								},
 							},
 						},
 						Description: `Application OAuth client settings. This require Dynamic Client Registration to be enabled at the environment level.`,
@@ -377,9 +358,6 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"client_certificates": schema.ListNestedAttribute{
 								Computed: true,
 								Optional: true,
-								PlanModifiers: []planmodifier.List{
-									custom_listplanmodifier.IgnoreEmptyList(),
-								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
