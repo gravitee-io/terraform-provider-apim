@@ -36,3 +36,26 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
+
+  # BaseStatus: suppress diffs for API-returned IDs
+  - target: $.components.schemas.BaseStatus.properties.id
+    description: API-assigned UUID, computed and suppress diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.BaseStatus.properties.organizationId
+    description: API-returned org ID, suppress diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.BaseStatus.properties.environmentId
+    description: API-returned env ID, suppress diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+
+  # CrossIdStatus: crossId not relevant for Terraform
+  - target: $.components.schemas.CrossIdStatus.allOf[?@.properties.crossId].properties.crossId
+    description: Cross-environment promotion ID, ignored in Terraform
+    update:
+      x-speakeasy-terraform-ignore: true

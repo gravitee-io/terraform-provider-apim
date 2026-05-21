@@ -20,20 +20,6 @@ actions:
     update:
       x-speakeasy-entity-operation: Dictionary#delete
 
-  # Ids to ignore
-  - target: $.components.schemas.DictionaryState.allOf[?@.properties.id].properties.id
-    description: API them but ignore to avoid plan diffs
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.DictionaryState.allOf[?@.properties.organizationId].properties.organizationId
-    description: API them but ignore to avoid plan diffs
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-  - target: $.components.schemas.DictionaryState.allOf[?@.properties.environmentId].properties.environmentId
-    description: API them but ignore to avoid plan diffs
-    update:
-      x-speakeasy-param-suppress-computed-diff: true
-
   # Sensitive parameter handling
   - target: $.components.schemas.HttpDictionaryProvider.properties.url
     update:
