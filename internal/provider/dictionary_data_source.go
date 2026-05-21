@@ -143,7 +143,7 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The environment ID of the API.`,
+				Description: `The environment ID.`,
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
@@ -154,7 +154,8 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 				},
 			},
 			"id": schema.StringAttribute{
-				Computed: true,
+				Computed:    true,
+				Description: `Resource UUID.`,
 			},
 			"manual": schema.SingleNestedAttribute{
 				Computed: true,
@@ -174,7 +175,7 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The organization ID of the API.`,
+				Description: `The organization ID.`,
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,

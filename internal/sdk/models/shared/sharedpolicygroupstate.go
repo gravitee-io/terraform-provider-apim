@@ -5,6 +5,16 @@ package shared
 
 // SharedPolicyGroupState - State of Shared Policy Groups that has been created/updated
 type SharedPolicyGroupState struct {
+	// Resource UUID.
+	ID *string `json:"id,omitempty"`
+	// The environment ID.
+	EnvironmentID *string `json:"environmentId,omitempty"`
+	// The organization ID.
+	OrganizationID *string `json:"organizationId,omitempty"`
+	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
+	Errors *Errors `json:"errors,omitempty"`
+	// Identifier used to track this resource across environment promotions.
+	CrossID *string `json:"crossId,omitempty"`
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
 	// API's type.
@@ -19,16 +29,41 @@ type SharedPolicyGroupState struct {
 	Phase FlowPhase `json:"phase"`
 	// SharedPolicyGroup Steps
 	Steps []StepV4 `json:"steps,omitempty"`
-	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
-	Errors *Errors `json:"errors,omitempty"`
-	// The id of the shared policy group.
-	ID *string `json:"id,omitempty"`
-	// The Cross ID is used to identify a shared policy group that has been promoted from one environment to another.
-	CrossID *string `json:"crossId,omitempty"`
-	// The environment ID of the shared policy group.
-	EnvironmentID *string `json:"environmentId,omitempty"`
-	// The organization ID of the shared policy group.
-	OrganizationID *string `json:"organizationId,omitempty"`
+}
+
+func (s *SharedPolicyGroupState) GetID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.ID
+}
+
+func (s *SharedPolicyGroupState) GetEnvironmentID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.EnvironmentID
+}
+
+func (s *SharedPolicyGroupState) GetOrganizationID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.OrganizationID
+}
+
+func (s *SharedPolicyGroupState) GetErrors() *Errors {
+	if s == nil {
+		return nil
+	}
+	return s.Errors
+}
+
+func (s *SharedPolicyGroupState) GetCrossID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.CrossID
 }
 
 func (s *SharedPolicyGroupState) GetHrid() string {
@@ -78,39 +113,4 @@ func (s *SharedPolicyGroupState) GetSteps() []StepV4 {
 		return nil
 	}
 	return s.Steps
-}
-
-func (s *SharedPolicyGroupState) GetErrors() *Errors {
-	if s == nil {
-		return nil
-	}
-	return s.Errors
-}
-
-func (s *SharedPolicyGroupState) GetID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.ID
-}
-
-func (s *SharedPolicyGroupState) GetCrossID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.CrossID
-}
-
-func (s *SharedPolicyGroupState) GetEnvironmentID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.EnvironmentID
-}
-
-func (s *SharedPolicyGroupState) GetOrganizationID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.OrganizationID
 }

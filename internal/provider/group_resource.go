@@ -90,7 +90,7 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Group's uuid.`,
+				Description: `Resource UUID.`,
 			},
 			"members": schema.ListNestedAttribute{
 				Computed: true,

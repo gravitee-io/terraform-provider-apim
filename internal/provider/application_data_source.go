@@ -82,7 +82,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The environment ID of the Application.`,
+				Description: `The environment ID.`,
 			},
 			"groups": schema.ListAttribute{
 				Computed:    true,
@@ -99,7 +99,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
-				Description: `Application's uuid.`,
+				Description: `Resource UUID.`,
 			},
 			"members": schema.ListNestedAttribute{
 				Computed: true,
@@ -133,10 +133,6 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 							Computed:    true,
 							Description: `The format of the metadata.`,
 						},
-						"hidden": schema.BoolAttribute{
-							Computed:    true,
-							Description: `if this metadata should be hidden`,
-						},
 						"key": schema.StringAttribute{
 							Computed:    true,
 							Description: `The key of the metadata if different from sanitized name (lowercase + hyphens).`,
@@ -165,7 +161,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The organization ID of the Application.`,
+				Description: `The organization ID.`,
 			},
 			"picture_url": schema.StringAttribute{
 				Computed:    true,

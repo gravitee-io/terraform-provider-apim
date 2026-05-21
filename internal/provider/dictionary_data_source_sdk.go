@@ -50,7 +50,7 @@ func (r *DictionaryDataSourceModel) RefreshFromSharedDictionaryState(ctx context
 		}
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
-		r.ID = types.StringValue(resp.ID)
+		r.ID = types.StringPointerValue(resp.ID)
 		if resp.Manual == nil {
 			r.Manual = nil
 		} else {

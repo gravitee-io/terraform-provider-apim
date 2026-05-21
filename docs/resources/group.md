@@ -48,7 +48,7 @@ Members that do not already exist in the IDP will be ignored. (see [below for ne
 
 ### Read-Only
 
-- `id` (String) Group's uuid.
+- `id` (String) Resource UUID.
 
 <a id="nestedatt--members"></a>
 ### Nested Schema for `members`

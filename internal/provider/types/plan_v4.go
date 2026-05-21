@@ -8,6 +8,9 @@ import (
 )
 
 type PlanV4 struct {
+	BootstrapPort         types.Int64    `tfsdk:"bootstrap_port"`
+	BrokerRangeEnd        types.Int64    `tfsdk:"broker_range_end"`
+	BrokerRangeStart      types.Int64    `tfsdk:"broker_range_start"`
 	Characteristics       []types.String `tfsdk:"characteristics"`
 	Description           types.String   `tfsdk:"description"`
 	ExcludedGroups        []types.String `tfsdk:"excluded_groups"`

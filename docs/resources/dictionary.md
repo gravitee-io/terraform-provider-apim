@@ -72,7 +72,7 @@ Changing this value back to false will stop the dictionary or undeploy it.
 
 ### Read-Only
 
-- `id` (String) The ID of this resource.
+- `id` (String) Resource UUID.
 
 <a id="nestedatt--dynamic"></a>
 ### Nested Schema for `dynamic`

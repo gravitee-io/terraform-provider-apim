@@ -97,17 +97,17 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 				Sensitive:           true,
 			},
 		},
-		MarkdownDescription: `Gravitee: Gravitee API Management Terraform Provider (beta)` + "\n" +
+		MarkdownDescription: `Gravitee: Gravitee API Management Terraform Provider` + "\n" +
 			`` + "\n" +
 			`You can manage with Terraform the following:` + "\n" +
-			`* APIs` + "\n" +
+			`* APIs (V4 of all types)` + "\n" +
 			`* Shared Policy Groups` + "\n" +
 			`* Applications` + "\n" +
 			`* Subscriptions` + "\n" +
+			`* Group` + "\n" +
+			`* Dictionaries` + "\n" +
 			`` + "\n" +
-			`[Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform) ` + "\n" +
-			`` + "\n" +
-			`Compatible with APIM 4.9 and above` + "\n" +
+			`[Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)` + "\n" +
 			`` + "\n" +
 			`Checkout other sections to configure, authenticate and start working with Gravitee resources`,
 	}

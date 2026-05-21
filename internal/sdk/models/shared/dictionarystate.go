@@ -3,8 +3,7 @@
 
 package shared
 
-// DictionaryState - Specification of a dictionary resource. Allow users to create, update and delete dictionaries. Dictionaries
-// can the be used using Gravitee EL expression such `{#dictionaries['hrid'][#EL expression |'property key']`
+// DictionaryState - Dictionary state
 type DictionaryState struct {
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
@@ -22,11 +21,14 @@ type DictionaryState struct {
 	Manual *ManualDictionarySpec `json:"manual,omitempty"`
 	// A dynamic dictionary populated from an external provider on a schedule.
 	Dynamic *DynamicDictionarySpec `json:"dynamic,omitempty"`
-	ID      string                 `json:"id"`
-	// The environment ID of the API.
+	// Resource UUID.
+	ID *string `json:"id,omitempty"`
+	// The environment ID.
 	EnvironmentID *string `json:"environmentId,omitempty"`
-	// The organization ID of the API.
+	// The organization ID.
 	OrganizationID *string `json:"organizationId,omitempty"`
+	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
+	Errors *Errors `json:"errors,omitempty"`
 }
 
 func (d *DictionaryState) GetHrid() string {
@@ -78,9 +80,9 @@ func (d *DictionaryState) GetDynamic() *DynamicDictionarySpec {
 	return d.Dynamic
 }
 
-func (d *DictionaryState) GetID() string {
+func (d *DictionaryState) GetID() *string {
 	if d == nil {
-		return ""
+		return nil
 	}
 	return d.ID
 }
@@ -97,4 +99,11 @@ func (d *DictionaryState) GetOrganizationID() *string {
 		return nil
 	}
 	return d.OrganizationID
+}
+
+func (d *DictionaryState) GetErrors() *Errors {
+	if d == nil {
+		return nil
+	}
+	return d.Errors
 }

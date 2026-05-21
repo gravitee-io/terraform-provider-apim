@@ -189,6 +189,10 @@ type APIV4Spec struct {
 	NotifyMembers *bool `default:"true" json:"notifyMembers"`
 	// Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.
 	Pages []PageV4Input `json:"pages,omitempty"`
+	// Indicates whether this API is allowed to be used in API Products. Only applicable for V4 HTTP Proxy APIs.
+	AllowedInAPIProducts *bool `default:"false" json:"allowedInApiProducts"`
+	// Allow an application to subscribe to more than one JWT/OAuth2 plan (V4 only).
+	AllowMultiJwtOauth2Subscriptions *bool `default:"false" json:"allowMultiJwtOauth2Subscriptions"`
 	// Console notification configuration.
 	ConsoleNotification *APIV4SpecConsoleNotification `json:"consoleNotification,omitempty"`
 }
@@ -398,6 +402,20 @@ func (a *APIV4Spec) GetPages() []PageV4Input {
 		return nil
 	}
 	return a.Pages
+}
+
+func (a *APIV4Spec) GetAllowedInAPIProducts() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.AllowedInAPIProducts
+}
+
+func (a *APIV4Spec) GetAllowMultiJwtOauth2Subscriptions() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.AllowMultiJwtOauth2Subscriptions
 }
 
 func (a *APIV4Spec) GetConsoleNotification() *APIV4SpecConsoleNotification {

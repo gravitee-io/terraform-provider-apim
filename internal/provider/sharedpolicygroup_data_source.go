@@ -74,7 +74,7 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The environment ID of the shared policy group.`,
+				Description: `The environment ID.`,
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
@@ -86,7 +86,7 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
-				Description: `The id of the shared policy group.`,
+				Description: `Resource UUID.`,
 			},
 			"name": schema.StringAttribute{
 				Computed:    true,
@@ -95,7 +95,7 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The organization ID of the shared policy group.`,
+				Description: `The organization ID.`,
 			},
 			"phase": schema.StringAttribute{
 				Computed:    true,

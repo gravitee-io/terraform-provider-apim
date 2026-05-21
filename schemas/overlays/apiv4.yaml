@@ -104,6 +104,10 @@ actions:
     description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
     update:
       x-speakeasy-param-computed: false
+  - target: $.components.schemas.OtelLogsV4
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
   - target: $.components.schemas.TracingV4
     description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
     update:
