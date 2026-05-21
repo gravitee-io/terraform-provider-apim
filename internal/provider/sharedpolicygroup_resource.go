@@ -72,10 +72,11 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 		Attributes: map[string]schema.Attribute{
 			"api_type": schema.StringAttribute{
 				Required:    true,
-				Description: `API's type. must be one of ["A2A_PROXY", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
+				Description: `API's type. must be one of ["A2A_PROXY", "EDGE", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"A2A_PROXY",
+						"EDGE",
 						"LLM_PROXY",
 						"MCP_PROXY",
 						"MESSAGE",
@@ -92,8 +93,11 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				},
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `environment ID`,
 			},
 			"hrid": schema.StringAttribute{
@@ -113,7 +117,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `The id of the shared policy group.`,
+				Description: `Resource UUID.`,
 			},
 			"name": schema.StringAttribute{
 				Required:    true,
@@ -123,8 +127,11 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 				},
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `organization ID`,
 			},
 			"phase": schema.StringAttribute{

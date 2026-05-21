@@ -132,8 +132,11 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				},
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `environment ID`,
 			},
 			"hrid": schema.StringAttribute{
@@ -153,7 +156,7 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `Subscription's uuid.`,
+				Description: `Resource UUID.`,
 			},
 			"metadata": schema.MapAttribute{
 				Optional:    true,
@@ -161,8 +164,11 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 				Description: `Key-value metadata for this subscription.`,
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `organization ID`,
 			},
 			"plan_hrid": schema.StringAttribute{

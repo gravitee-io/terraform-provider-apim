@@ -31,7 +31,6 @@ resource "apim_apiv4" "kafka_native" {
           },
         ]
         host = "kafka.local"
-        port = 9092
       }
     }
   ]
@@ -80,6 +79,9 @@ resource "apim_apiv4" "kafka_native" {
       ]
     },
   ]
+  analytics = {
+    enabled = true
+  }
   plans = [
     {
       hrid       = "KeyLess"
@@ -94,4 +96,5 @@ resource "apim_apiv4" "kafka_native" {
     }
   ]
 }
+
 ```

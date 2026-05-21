@@ -46,7 +46,7 @@ resource "apim_shared_policy_group" "example" {
 
 ### Required
 
-- `api_type` (String) API's type. must be one of ["A2A_PROXY", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]
+- `api_type` (String) API's type. must be one of ["A2A_PROXY", "EDGE", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]
 - `hrid` (String) A unique human readable id identifying this resource. Requires replacement if changed.
 - `name` (String) The name of the shared policy group
 - `phase` (String) The execution phase of a policy. must be one of ["REQUEST", "RESPONSE", "ENTRYPOINT_CONNECT", "INTERACT", "PUBLISH", "SUBSCRIBE"]
@@ -61,7 +61,7 @@ resource "apim_shared_policy_group" "example" {
 
 ### Read-Only
 
-- `id` (String) The id of the shared policy group.
+- `id` (String) Resource UUID.
 
 <a id="nestedatt--steps"></a>
 ### Nested Schema for `steps`

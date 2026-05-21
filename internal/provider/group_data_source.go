@@ -62,7 +62,7 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The environment ID of the API.`,
+				Description: `The environment ID.`,
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
@@ -74,7 +74,7 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
-				Description: `Group's uuid.`,
+				Description: `Resource UUID.`,
 			},
 			"members": schema.ListNestedAttribute{
 				Computed: true,
@@ -109,7 +109,7 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The organization ID of the API.`,
+				Description: `The organization ID.`,
 			},
 		},
 	}

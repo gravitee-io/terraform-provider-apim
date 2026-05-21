@@ -221,6 +221,7 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
+				Description: `Resource UUID.`,
 			},
 			"manual": schema.SingleNestedAttribute{
 				Optional: true,

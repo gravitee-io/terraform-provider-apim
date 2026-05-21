@@ -19,6 +19,8 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.AllowedInAPIProducts = types.BoolPointerValue(resp.AllowedInAPIProducts)
+		r.AllowMultiJwtOauth2Subscriptions = types.BoolPointerValue(resp.AllowMultiJwtOauth2Subscriptions)
 		if resp.Analytics == nil {
 			r.Analytics = nil
 		} else {
@@ -55,6 +57,13 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					r.Analytics.Logging.Phase.Response = types.BoolPointerValue(resp.Analytics.Logging.Phase.Response)
 				}
 			}
+			if resp.Analytics.OtelLogs == nil {
+				r.Analytics.OtelLogs = nil
+			} else {
+				r.Analytics.OtelLogs = &tfTypes.OtelLogsV4{}
+				r.Analytics.OtelLogs.Enabled = types.BoolPointerValue(resp.Analytics.OtelLogs.Enabled)
+			}
+			r.Analytics.ReporterMetricsEnabled = types.BoolPointerValue(resp.Analytics.ReporterMetricsEnabled)
 			if resp.Analytics.Sampling == nil {
 				r.Analytics.Sampling = nil
 			} else {
@@ -510,6 +519,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					listeners.Kafka.Entrypoints = append(listeners.Kafka.Entrypoints, entrypoints1)
 				}
 				listeners.Kafka.Host = types.StringValue(listenersItem.KafkaListener.Host)
+				listeners.Kafka.Port = types.Int64PointerValue(listenersItem.KafkaListener.Port)
 				listeners.Kafka.Servers = make([]types.String, 0, len(listenersItem.KafkaListener.Servers))
 				for _, v := range listenersItem.KafkaListener.Servers {
 					listeners.Kafka.Servers = append(listeners.Kafka.Servers, types.StringValue(v))
@@ -609,7 +619,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 
 			metadata.DefaultValue = types.StringPointerValue(metadataItem.DefaultValue)
 			metadata.Format = types.StringValue(string(metadataItem.Format))
-			metadata.Hidden = types.BoolPointerValue(metadataItem.Hidden)
 			metadata.Key = types.StringPointerValue(metadataItem.Key)
 			metadata.Name = types.StringValue(metadataItem.Name)
 			metadata.Value = types.StringPointerValue(metadataItem.Value)
@@ -661,6 +670,9 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		for _, plansItem := range resp.Plans {
 			var plans tfTypes.PlanV4
 
+			plans.BootstrapPort = types.Int64PointerValue(plansItem.BootstrapPort)
+			plans.BrokerRangeEnd = types.Int64PointerValue(plansItem.BrokerRangeEnd)
+			plans.BrokerRangeStart = types.Int64PointerValue(plansItem.BrokerRangeStart)
 			plans.Characteristics = make([]types.String, 0, len(plansItem.Characteristics))
 			for _, v := range plansItem.Characteristics {
 				plans.Characteristics = append(plans.Characteristics, types.StringValue(v))

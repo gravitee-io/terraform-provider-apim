@@ -3,7 +3,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.0.0 and generator version 2.882.0
+// Generated from OpenAPI doc version 1.0.0 and generator version 2.885.0
 
 import (
 	"context"
@@ -49,17 +49,17 @@ func Float64(f float64) *float64 { return &f }
 // Pointer provides a helper function to return a pointer to a type
 func Pointer[T any](v T) *T { return &v }
 
-// GraviteeApim - Gravitee: Gravitee API Management Terraform Provider (beta)
+// GraviteeApim - Gravitee: Gravitee API Management Terraform Provider
 //
 // You can manage with Terraform the following:
-// * APIs
+// * APIs (V4 of all types)
 // * Shared Policy Groups
 // * Applications
 // * Subscriptions
+// * Group
+// * Dictionaries
 //
-// [Go to our documentation web site for more about configuration, capabilities and examples](https://documentation.gravitee.io/apim/terraform)
-//
-// # Compatible with APIM 4.9 and above
+// [Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)
 //
 // Checkout other sections to configure, authenticate and start working with Gravitee resources
 type GraviteeApim struct {
@@ -165,7 +165,7 @@ func New(opts ...SDKOption) *GraviteeApim {
 	sdk := &GraviteeApim{
 		SDKVersion: "0.9.3",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.9.3 2.882.0 1.0.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 0.9.3 2.885.0 1.0.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
 			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},

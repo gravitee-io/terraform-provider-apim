@@ -60,7 +60,7 @@ Default: false
 
 ### Read-Only
 
-- `id` (String) Application's uuid.
+- `id` (String) Resource UUID.
 
 <a id="nestedatt--members"></a>
 ### Nested Schema for `members`
@@ -79,7 +79,6 @@ Optional:
 
 - `default_value` (String) The default value of the metadata if the value is not set.
 - `format` (String) The format of the metadata. Not Null; must be one of ["STRING", "NUMERIC", "BOOLEAN", "DATE", "MAIL", "URL"]
-- `hidden` (Boolean) if this metadata should be hidden. Default: false
 - `key` (String) The key of the metadata if different from sanitized name (lowercase + hyphens).
 - `name` (String) The name of the metadata. Not Null
 - `value` (String) The value of the metadata.

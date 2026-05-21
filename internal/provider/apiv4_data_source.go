@@ -41,36 +41,38 @@ type Apiv4DataSource struct {
 
 // Apiv4DataSourceModel describes the data model.
 type Apiv4DataSourceModel struct {
-	Analytics           *tfTypes.Analytics                             `tfsdk:"analytics"`
-	Categories          []types.String                                 `tfsdk:"categories"`
-	ConsoleNotification *tfTypes.APIV4StateConsoleNotification         `tfsdk:"console_notification"`
-	Description         types.String                                   `tfsdk:"description"`
-	EndpointGroups      []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
-	EnvironmentID       types.String                                   `tfsdk:"environment_id"`
-	Failover            *tfTypes.FailoverV4                            `tfsdk:"failover"`
-	FlowExecution       *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
-	Flows               []tfTypes.FlowV4                               `tfsdk:"flows"`
-	Groups              []types.String                                 `tfsdk:"groups"`
-	Hrid                types.String                                   `tfsdk:"hrid"`
-	ID                  types.String                                   `tfsdk:"id"`
-	Labels              []types.String                                 `tfsdk:"labels"`
-	LifecycleState      types.String                                   `tfsdk:"lifecycle_state"`
-	Listeners           []tfTypes.Listener                             `tfsdk:"listeners"`
-	Members             []tfTypes.Member                               `tfsdk:"members"`
-	Metadata            []tfTypes.Metadata                             `tfsdk:"metadata"`
-	Name                types.String                                   `tfsdk:"name"`
-	OrganizationID      types.String                                   `tfsdk:"organization_id"`
-	Pages               []tfTypes.PageV4                               `tfsdk:"pages"`
-	Plans               []tfTypes.PlanV4                               `tfsdk:"plans"`
-	Properties          []tfTypes.Property1                            `tfsdk:"properties"`
-	Resources           []tfTypes.APIResource                          `tfsdk:"resources"`
-	ResponseTemplates   map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
-	Services            *tfTypes.APIServices                           `tfsdk:"services"`
-	State               types.String                                   `tfsdk:"state"`
-	Tags                []types.String                                 `tfsdk:"tags"`
-	Type                types.String                                   `tfsdk:"type"`
-	Version             types.String                                   `tfsdk:"version"`
-	Visibility          types.String                                   `tfsdk:"visibility"`
+	AllowedInAPIProducts             types.Bool                                     `tfsdk:"allowed_in_api_products"`
+	AllowMultiJwtOauth2Subscriptions types.Bool                                     `tfsdk:"allow_multi_jwt_oauth2_subscriptions"`
+	Analytics                        *tfTypes.Analytics                             `tfsdk:"analytics"`
+	Categories                       []types.String                                 `tfsdk:"categories"`
+	ConsoleNotification              *tfTypes.APIV4StateConsoleNotification         `tfsdk:"console_notification"`
+	Description                      types.String                                   `tfsdk:"description"`
+	EndpointGroups                   []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
+	EnvironmentID                    types.String                                   `tfsdk:"environment_id"`
+	Failover                         *tfTypes.FailoverV4                            `tfsdk:"failover"`
+	FlowExecution                    *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
+	Flows                            []tfTypes.FlowV4                               `tfsdk:"flows"`
+	Groups                           []types.String                                 `tfsdk:"groups"`
+	Hrid                             types.String                                   `tfsdk:"hrid"`
+	ID                               types.String                                   `tfsdk:"id"`
+	Labels                           []types.String                                 `tfsdk:"labels"`
+	LifecycleState                   types.String                                   `tfsdk:"lifecycle_state"`
+	Listeners                        []tfTypes.Listener                             `tfsdk:"listeners"`
+	Members                          []tfTypes.Member                               `tfsdk:"members"`
+	Metadata                         []tfTypes.Metadata                             `tfsdk:"metadata"`
+	Name                             types.String                                   `tfsdk:"name"`
+	OrganizationID                   types.String                                   `tfsdk:"organization_id"`
+	Pages                            []tfTypes.PageV4                               `tfsdk:"pages"`
+	Plans                            []tfTypes.PlanV4                               `tfsdk:"plans"`
+	Properties                       []tfTypes.Property1                            `tfsdk:"properties"`
+	Resources                        []tfTypes.APIResource                          `tfsdk:"resources"`
+	ResponseTemplates                map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
+	Services                         *tfTypes.APIServices                           `tfsdk:"services"`
+	State                            types.String                                   `tfsdk:"state"`
+	Tags                             []types.String                                 `tfsdk:"tags"`
+	Type                             types.String                                   `tfsdk:"type"`
+	Version                          types.String                                   `tfsdk:"version"`
+	Visibility                       types.String                                   `tfsdk:"visibility"`
 }
 
 // Metadata returns the data source type name.
@@ -84,6 +86,14 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 		MarkdownDescription: "Apiv4 DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"allow_multi_jwt_oauth2_subscriptions": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Allow an application to subscribe to more than one JWT/OAuth2 plan (V4 only).`,
+			},
+			"allowed_in_api_products": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Indicates whether this API is allowed to be used in API Products. Only applicable for V4 HTTP Proxy APIs.`,
+			},
 			"analytics": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
@@ -158,6 +168,21 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							},
 						},
 						Description: `API logging configuration (Not for native APIs)`,
+					},
+					"otel_logs": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Enable OpenTelemetry log export for this API (payload capture with traceId/spanId correlation).`,
+							},
+						},
+					},
+					"reporter_metrics_enabled": schema.BoolAttribute{
+						Computed: true,
+						MarkdownDescription: `Enable the connection-metrics reporter on the gateway. Only applicable to Native v4 APIs; ignored on HTTP v4 requests and omitted from HTTP v4 responses.` + "\n" +
+							`Server-side default for Native v4 on create is ` + "`" + `true` + "`" + `.` + "\n" +
+							`Independent of the parent ` + "`" + `enabled` + "`" + ` flag: event-metrics reporting and the connection-metrics reporter are gated separately.`,
 					},
 					"sampling": schema.SingleNestedAttribute{
 						Computed: true,
@@ -383,7 +408,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The environment ID of the API.`,
+				Description: `The environment ID.`,
 			},
 			"failover": schema.SingleNestedAttribute{
 				Computed: true,
@@ -782,7 +807,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
-				Description: `API's uuid.`,
+				Description: `Resource UUID.`,
 			},
 			"labels": schema.ListAttribute{
 				Computed:    true,
@@ -943,6 +968,10 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Computed:    true,
 									Description: `A hostname for which the API will match against SNI.`,
 								},
+								"port": schema.Int64Attribute{
+									Computed:    true,
+									Description: `The port of the listener`,
+								},
 								"servers": schema.ListAttribute{
 									Computed:    true,
 									ElementType: types.StringType,
@@ -1088,10 +1117,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed:    true,
 							Description: `The format of the metadata.`,
 						},
-						"hidden": schema.BoolAttribute{
-							Computed:    true,
-							Description: `if this metadata should be hidden`,
-						},
 						"key": schema.StringAttribute{
 							Computed:    true,
 							Description: `The key of the metadata if different from sanitized name (lowercase + hyphens).`,
@@ -1115,7 +1140,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The organization ID of the API.`,
+				Description: `The organization ID.`,
 			},
 			"pages": schema.ListNestedAttribute{
 				Computed: true,
@@ -1184,6 +1209,18 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"bootstrap_port": schema.Int64Attribute{
+							Computed:    true,
+							Description: `Bootstrap port for port-based routing (native Kafka APIs only). Null in host/SNI routing mode.`,
+						},
+						"broker_range_end": schema.Int64Attribute{
+							Computed:    true,
+							Description: `End of broker port range for port-based routing (native Kafka APIs only). Must be greater than start port.`,
+						},
+						"broker_range_start": schema.Int64Attribute{
+							Computed:    true,
+							Description: `Start of broker port range for port-based routing (native Kafka APIs only).`,
+						},
 						"characteristics": schema.ListAttribute{
 							Computed:    true,
 							ElementType: types.StringType,

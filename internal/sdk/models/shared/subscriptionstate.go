@@ -8,8 +8,20 @@ import (
 	"time"
 )
 
-// SubscriptionState - State of subscription that has been created/update
+// SubscriptionState - State of subscription that has been created/updated
 type SubscriptionState struct {
+	// Resource UUID.
+	ID *string `json:"id,omitempty"`
+	// The environment ID.
+	EnvironmentID *string `json:"environmentId,omitempty"`
+	// The organization ID.
+	OrganizationID *string `json:"organizationId,omitempty"`
+	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
+	Errors *Errors `json:"errors,omitempty"`
+	// The API's Hrid.
+	APIHrid *string `json:"apiHrid,omitempty"`
+	// Start validity date time of this Subscription
+	StartingAt *time.Time `json:"startingAt,omitempty"`
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
 	// Application's hrid selected to subscribe an API.
@@ -21,18 +33,6 @@ type SubscriptionState struct {
 	Metadata map[string]string `json:"metadata,omitempty"`
 	// Consumer configuration associated to the subscription in case it is attached to a push plan.
 	ConsumerConfiguration *SubscriptionConsumerConfiguration `json:"consumerConfiguration,omitempty"`
-	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
-	Errors *Errors `json:"errors,omitempty"`
-	// Subscription's uuid.
-	ID *string `json:"id,omitempty"`
-	// The API's Hrid.
-	APIHrid *string `json:"apiHrid,omitempty"`
-	// The environment ID of the Subscription.
-	EnvironmentID *string `json:"environmentId,omitempty"`
-	// The organization ID of the Subscription.
-	OrganizationID *string `json:"organizationId,omitempty"`
-	// Start validity date time of this Subscription
-	StartingAt *time.Time `json:"startingAt,omitempty"`
 }
 
 func (s SubscriptionState) MarshalJSON() ([]byte, error) {
@@ -44,6 +44,48 @@ func (s *SubscriptionState) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (s *SubscriptionState) GetID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.ID
+}
+
+func (s *SubscriptionState) GetEnvironmentID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.EnvironmentID
+}
+
+func (s *SubscriptionState) GetOrganizationID() *string {
+	if s == nil {
+		return nil
+	}
+	return s.OrganizationID
+}
+
+func (s *SubscriptionState) GetErrors() *Errors {
+	if s == nil {
+		return nil
+	}
+	return s.Errors
+}
+
+func (s *SubscriptionState) GetAPIHrid() *string {
+	if s == nil {
+		return nil
+	}
+	return s.APIHrid
+}
+
+func (s *SubscriptionState) GetStartingAt() *time.Time {
+	if s == nil {
+		return nil
+	}
+	return s.StartingAt
 }
 
 func (s *SubscriptionState) GetHrid() string {
@@ -86,46 +128,4 @@ func (s *SubscriptionState) GetConsumerConfiguration() *SubscriptionConsumerConf
 		return nil
 	}
 	return s.ConsumerConfiguration
-}
-
-func (s *SubscriptionState) GetErrors() *Errors {
-	if s == nil {
-		return nil
-	}
-	return s.Errors
-}
-
-func (s *SubscriptionState) GetID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.ID
-}
-
-func (s *SubscriptionState) GetAPIHrid() *string {
-	if s == nil {
-		return nil
-	}
-	return s.APIHrid
-}
-
-func (s *SubscriptionState) GetEnvironmentID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.EnvironmentID
-}
-
-func (s *SubscriptionState) GetOrganizationID() *string {
-	if s == nil {
-		return nil
-	}
-	return s.OrganizationID
-}
-
-func (s *SubscriptionState) GetStartingAt() *time.Time {
-	if s == nil {
-		return nil
-	}
-	return s.StartingAt
 }

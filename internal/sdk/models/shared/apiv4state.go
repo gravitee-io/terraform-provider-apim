@@ -128,6 +128,16 @@ func (a *APIV4StateConsoleNotification) GetEvents() []APIV4StateEvent {
 
 // APIV4State - API state
 type APIV4State struct {
+	// Resource UUID.
+	ID *string `json:"id,omitempty"`
+	// The environment ID.
+	EnvironmentID *string `json:"environmentId,omitempty"`
+	// The organization ID.
+	OrganizationID *string `json:"organizationId,omitempty"`
+	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
+	Errors *Errors `json:"errors,omitempty"`
+	// Identifier used to track this resource across environment promotions.
+	CrossID *string `json:"crossId,omitempty"`
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
 	// API's name. Duplicate names can exists.
@@ -186,18 +196,12 @@ type APIV4State struct {
 	Members []Member `json:"members,omitempty"`
 	// Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.
 	Pages []PageV4 `json:"pages,omitempty"`
+	// Indicates whether this API is allowed to be used in API Products. Only applicable for V4 HTTP Proxy APIs.
+	AllowedInAPIProducts *bool `default:"false" json:"allowedInApiProducts"`
+	// Allow an application to subscribe to more than one JWT/OAuth2 plan (V4 only).
+	AllowMultiJwtOauth2Subscriptions *bool `default:"false" json:"allowMultiJwtOauth2Subscriptions"`
 	// Console notification configuration.
 	ConsoleNotification *APIV4StateConsoleNotification `json:"consoleNotification,omitempty"`
-	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
-	Errors *Errors `json:"errors,omitempty"`
-	// API's uuid.
-	ID *string `json:"id,omitempty"`
-	// When promoting an API from one environment to the other, this ID identifies the API across those different environments.
-	CrossID *string `json:"crossId,omitempty"`
-	// The environment ID of the API.
-	EnvironmentID *string `json:"environmentId,omitempty"`
-	// The organization ID of the API.
-	OrganizationID *string `json:"organizationId,omitempty"`
 }
 
 func (a APIV4State) MarshalJSON() ([]byte, error) {
@@ -209,6 +213,41 @@ func (a *APIV4State) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (a *APIV4State) GetID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.ID
+}
+
+func (a *APIV4State) GetEnvironmentID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.EnvironmentID
+}
+
+func (a *APIV4State) GetOrganizationID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.OrganizationID
+}
+
+func (a *APIV4State) GetErrors() *Errors {
+	if a == nil {
+		return nil
+	}
+	return a.Errors
+}
+
+func (a *APIV4State) GetCrossID() *string {
+	if a == nil {
+		return nil
+	}
+	return a.CrossID
 }
 
 func (a *APIV4State) GetHrid() string {
@@ -400,46 +439,25 @@ func (a *APIV4State) GetPages() []PageV4 {
 	return a.Pages
 }
 
+func (a *APIV4State) GetAllowedInAPIProducts() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.AllowedInAPIProducts
+}
+
+func (a *APIV4State) GetAllowMultiJwtOauth2Subscriptions() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.AllowMultiJwtOauth2Subscriptions
+}
+
 func (a *APIV4State) GetConsoleNotification() *APIV4StateConsoleNotification {
 	if a == nil {
 		return nil
 	}
 	return a.ConsoleNotification
-}
-
-func (a *APIV4State) GetErrors() *Errors {
-	if a == nil {
-		return nil
-	}
-	return a.Errors
-}
-
-func (a *APIV4State) GetID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.ID
-}
-
-func (a *APIV4State) GetCrossID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.CrossID
-}
-
-func (a *APIV4State) GetEnvironmentID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.EnvironmentID
-}
-
-func (a *APIV4State) GetOrganizationID() *string {
-	if a == nil {
-		return nil
-	}
-	return a.OrganizationID
 }
 
 // #region class-body-apiv4state

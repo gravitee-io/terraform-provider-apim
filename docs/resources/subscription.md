@@ -43,7 +43,7 @@ resource "apim_subscription" "example" {
 
 ### Read-Only
 
-- `id` (String) Subscription's uuid.
+- `id` (String) Resource UUID.
 - `starting_at` (String) Start validity date time of this Subscription
 
 <a id="nestedatt--api_keys"></a>

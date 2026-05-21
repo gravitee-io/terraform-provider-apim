@@ -224,11 +224,13 @@ resource "apim_apiv4" "example" {
 - `lifecycle_state` (String) The status of the API regarding the console. must be one of ["ARCHIVED", "CREATED", "DEPRECATED", "PUBLISHED", "UNPUBLISHED"]
 - `listeners` (Attributes List) The list of listeners defining how this API can be called. They depend on the API type. (see [below for nested schema](#nestedatt--listeners))
 - `name` (String) API's name. Duplicate names can exists.
-- `type` (String) API's type. must be one of ["A2A_PROXY", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]
+- `type` (String) API's type. must be one of ["A2A_PROXY", "EDGE", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]
 - `version` (String) API's version. It's a simple string only used to help manage API versioning.
 
 ### Optional
 
+- `allow_multi_jwt_oauth2_subscriptions` (Boolean) Allow an application to subscribe to more than one JWT/OAuth2 plan (V4 only). Default: false
+- `allowed_in_api_products` (Boolean) Indicates whether this API is allowed to be used in API Products. Only applicable for V4 HTTP Proxy APIs. Default: false
 - `analytics` (Attributes) API analytics configuration to enable/disable what can be observed. (see [below for nested schema](#nestedatt--analytics))
 - `categories` (List of String) The list of category names (or UUID) associated with this API. Default: []
 - `console_notification` (Attributes) Console notification configuration. (see [below for nested schema](#nestedatt--console_notification))
@@ -260,7 +262,7 @@ Key of the map is the error code.
 
 ### Read-Only
 
-- `id` (String) API's uuid.
+- `id` (String) Resource UUID.
 
 <a id="nestedatt--endpoint_groups"></a>
 ### Nested Schema for `endpoint_groups`
@@ -424,6 +426,7 @@ Optional:
 
 - `entrypoints` (Attributes List) A list of possible entrypoint of the same type. (see [below for nested schema](#nestedatt--listeners--kafka--entrypoints))
 - `host` (String) A hostname for which the API will match against SNI. Not Null
+- `port` (Number) The port of the listener
 - `servers` (List of String) Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
 - `type` (String) Listener type. Not Null; must be one of ["HTTP", "SUBSCRIPTION", "TCP", "KAFKA"]
 
@@ -514,6 +517,11 @@ Optional:
 
 - `enabled` (Boolean) Whether or not analytics are enabled.
 - `logging` (Attributes) API logging configuration (Not for native APIs) (see [below for nested schema](#nestedatt--analytics--logging))
+- `otel_logs` (Attributes) (see [below for nested schema](#nestedatt--analytics--otel_logs))
+- `reporter_metrics_enabled` (Boolean) Enable the connection-metrics reporter on the gateway. Only applicable to Native v4 APIs; ignored on HTTP v4 requests and omitted from HTTP v4 responses.
+Server-side default for Native v4 on create is `true`.
+Independent of the parent `enabled` flag: event-metrics reporting and the connection-metrics reporter are gated separately.
+Default: true
 - `sampling` (Attributes) API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink. (see [below for nested schema](#nestedatt--analytics--sampling))
 - `tracing` (Attributes) OpenTelemetry tracing (Not for native APIs) (see [below for nested schema](#nestedatt--analytics--tracing))
 
@@ -557,6 +565,14 @@ Optional:
 - `request` (Boolean) Enables logging durring request phase. Default: false
 - `response` (Boolean) Enables logging durring response phase. Default: false
 
+
+
+<a id="nestedatt--analytics--otel_logs"></a>
+### Nested Schema for `analytics.otel_logs`
+
+Optional:
+
+- `enabled` (Boolean) Enable OpenTelemetry log export for this API (payload capture with traceId/spanId correlation).
 
 
 <a id="nestedatt--analytics--sampling"></a>
@@ -792,7 +808,6 @@ Optional:
 
 - `default_value` (String) The default value of the metadata if the value is not set.
 - `format` (String) The format of the metadata. Not Null; must be one of ["STRING", "NUMERIC", "BOOLEAN", "DATE", "MAIL", "URL"]
-- `hidden` (Boolean) if this metadata should be hidden. Default: false
 - `key` (String) The key of the metadata if different from sanitized name (lowercase + hyphens).
 - `name` (String) The name of the metadata. Not Null
 - `value` (String) The value of the metadata.
@@ -833,6 +848,9 @@ Optional:
 
 Optional:
 
+- `bootstrap_port` (Number) Bootstrap port for port-based routing (native Kafka APIs only). Null in host/SNI routing mode.
+- `broker_range_end` (Number) End of broker port range for port-based routing (native Kafka APIs only). Must be greater than start port.
+- `broker_range_start` (Number) Start of broker port range for port-based routing (native Kafka APIs only).
 - `characteristics` (List of String) Plan informative characteristics. Default: []
 - `description` (String) A description for this plan.
 - `excluded_groups` (List of String) Access-control, UUID of groups excluded from this plan. Default: []

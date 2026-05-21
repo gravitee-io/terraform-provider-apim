@@ -67,6 +67,10 @@ resource "apim_apiv4" "kafka_native" {
       ]
     },
   ]
+  analytics = {
+    enabled                  = true
+    reporter_metrics_enabled = false
+  }
   plans = [
     {
       hrid       = "KeyLess"
@@ -78,6 +82,9 @@ resource "apim_apiv4" "kafka_native" {
       security = {
         type = "KEY_LESS"
       }
+      bootstrap_port     = 9002
+      broker_range_start = 9003
+      broker_range_end   = 9010
     }
   ]
 }

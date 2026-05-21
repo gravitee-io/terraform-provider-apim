@@ -65,14 +65,14 @@ type ApplicationState struct {
 	Members []Member `json:"members,omitempty"`
 	// Application are either ACTIVE or ARCHIVED never actually deleted.
 	Status *ApplicationStateStatus `default:"ACTIVE" json:"status"`
+	// Resource UUID.
+	ID *string `json:"id,omitempty"`
+	// The environment ID.
+	EnvironmentID *string `json:"environmentId,omitempty"`
+	// The organization ID.
+	OrganizationID *string `json:"organizationId,omitempty"`
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
 	Errors *Errors `json:"errors,omitempty"`
-	// Application's uuid.
-	ID *string `json:"id,omitempty"`
-	// The environment ID of the Application.
-	EnvironmentID *string `default:"DEFAULT" json:"environmentId"`
-	// The organization ID of the Application.
-	OrganizationID *string `default:"DEFAULT" json:"organizationId"`
 }
 
 func (a ApplicationState) MarshalJSON() ([]byte, error) {
@@ -177,13 +177,6 @@ func (a *ApplicationState) GetStatus() *ApplicationStateStatus {
 	return a.Status
 }
 
-func (a *ApplicationState) GetErrors() *Errors {
-	if a == nil {
-		return nil
-	}
-	return a.Errors
-}
-
 func (a *ApplicationState) GetID() *string {
 	if a == nil {
 		return nil
@@ -203,4 +196,11 @@ func (a *ApplicationState) GetOrganizationID() *string {
 		return nil
 	}
 	return a.OrganizationID
+}
+
+func (a *ApplicationState) GetErrors() *Errors {
+	if a == nil {
+		return nil
+	}
+	return a.Errors
 }

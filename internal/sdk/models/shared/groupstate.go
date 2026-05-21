@@ -9,6 +9,16 @@ import (
 
 // GroupState - Group state combining spec and status after creation/update.
 type GroupState struct {
+	// Resource UUID.
+	ID *string `json:"id,omitempty"`
+	// The environment ID.
+	EnvironmentID *string `json:"environmentId,omitempty"`
+	// The organization ID.
+	OrganizationID *string `json:"organizationId,omitempty"`
+	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
+	Errors *Errors `json:"errors,omitempty"`
+	// Number of members in the group.
+	MemberCount *int64 `json:"memberCount,omitempty"`
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
 	// Group's name.
@@ -19,16 +29,6 @@ type GroupState struct {
 	Members []GroupMember `json:"members,omitempty"`
 	// If true, members will be notified when the group is synced with APIM.
 	NotifyMembers *bool `default:"true" json:"notifyMembers"`
-	// Group's uuid.
-	ID *string `json:"id,omitempty"`
-	// The environment ID of the API.
-	EnvironmentID *string `json:"environmentId,omitempty"`
-	// The organization ID of the API.
-	OrganizationID *string `json:"organizationId,omitempty"`
-	// Number of members in the group.
-	MemberCount *int64 `json:"memberCount,omitempty"`
-	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
-	Errors *Errors `json:"errors,omitempty"`
 }
 
 func (g GroupState) MarshalJSON() ([]byte, error) {
@@ -40,6 +40,41 @@ func (g *GroupState) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (g *GroupState) GetID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.ID
+}
+
+func (g *GroupState) GetEnvironmentID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.EnvironmentID
+}
+
+func (g *GroupState) GetOrganizationID() *string {
+	if g == nil {
+		return nil
+	}
+	return g.OrganizationID
+}
+
+func (g *GroupState) GetErrors() *Errors {
+	if g == nil {
+		return nil
+	}
+	return g.Errors
+}
+
+func (g *GroupState) GetMemberCount() *int64 {
+	if g == nil {
+		return nil
+	}
+	return g.MemberCount
 }
 
 func (g *GroupState) GetHrid() string {
@@ -68,39 +103,4 @@ func (g *GroupState) GetNotifyMembers() *bool {
 		return nil
 	}
 	return g.NotifyMembers
-}
-
-func (g *GroupState) GetID() *string {
-	if g == nil {
-		return nil
-	}
-	return g.ID
-}
-
-func (g *GroupState) GetEnvironmentID() *string {
-	if g == nil {
-		return nil
-	}
-	return g.EnvironmentID
-}
-
-func (g *GroupState) GetOrganizationID() *string {
-	if g == nil {
-		return nil
-	}
-	return g.OrganizationID
-}
-
-func (g *GroupState) GetMemberCount() *int64 {
-	if g == nil {
-		return nil
-	}
-	return g.MemberCount
-}
-
-func (g *GroupState) GetErrors() *Errors {
-	if g == nil {
-		return nil
-	}
-	return g.Errors
 }

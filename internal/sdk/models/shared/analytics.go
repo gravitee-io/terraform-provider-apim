@@ -3,10 +3,19 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // Analytics - API analytics configuration to enable/disable what can be observed.
 type Analytics struct {
 	// Whether or not analytics are enabled.
 	Enabled *bool `json:"enabled,omitempty"`
+	// Enable the connection-metrics reporter on the gateway. Only applicable to Native v4 APIs; ignored on HTTP v4 requests and omitted from HTTP v4 responses.
+	// Server-side default for Native v4 on create is `true`.
+	// Independent of the parent `enabled` flag: event-metrics reporting and the connection-metrics reporter are gated separately.
+	ReporterMetricsEnabled *bool       `default:"true" json:"reporterMetricsEnabled"`
+	OtelLogs               *OtelLogsV4 `json:"otelLogs,omitempty"`
 	// API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.
 	Sampling *Sampling `json:"sampling,omitempty"`
 	// API logging configuration (Not for native APIs)
@@ -15,11 +24,36 @@ type Analytics struct {
 	Tracing *TracingV4 `json:"tracing,omitempty"`
 }
 
+func (a Analytics) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *Analytics) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (a *Analytics) GetEnabled() *bool {
 	if a == nil {
 		return nil
 	}
 	return a.Enabled
+}
+
+func (a *Analytics) GetReporterMetricsEnabled() *bool {
+	if a == nil {
+		return nil
+	}
+	return a.ReporterMetricsEnabled
+}
+
+func (a *Analytics) GetOtelLogs() *OtelLogsV4 {
+	if a == nil {
+		return nil
+	}
+	return a.OtelLogs
 }
 
 func (a *Analytics) GetSampling() *Sampling {

@@ -64,37 +64,39 @@ type Apiv4Resource struct {
 
 // Apiv4ResourceModel describes the resource data model.
 type Apiv4ResourceModel struct {
-	Analytics           *tfTypes.Analytics                             `tfsdk:"analytics"`
-	Categories          []types.String                                 `tfsdk:"categories"`
-	ConsoleNotification *tfTypes.APIV4SpecConsoleNotification          `tfsdk:"console_notification"`
-	Description         types.String                                   `tfsdk:"description"`
-	EndpointGroups      []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
-	EnvironmentID       types.String                                   `tfsdk:"environment_id"`
-	Failover            *tfTypes.FailoverV4                            `tfsdk:"failover"`
-	FlowExecution       *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
-	Flows               []tfTypes.FlowV4                               `tfsdk:"flows"`
-	Groups              []types.String                                 `tfsdk:"groups"`
-	Hrid                types.String                                   `tfsdk:"hrid"`
-	ID                  types.String                                   `tfsdk:"id"`
-	Labels              []types.String                                 `tfsdk:"labels"`
-	LifecycleState      types.String                                   `tfsdk:"lifecycle_state"`
-	Listeners           []tfTypes.Listener                             `tfsdk:"listeners"`
-	Members             []tfTypes.Member                               `tfsdk:"members"`
-	Metadata            []tfTypes.Metadata                             `tfsdk:"metadata"`
-	Name                types.String                                   `tfsdk:"name"`
-	NotifyMembers       types.Bool                                     `tfsdk:"notify_members"`
-	OrganizationID      types.String                                   `tfsdk:"organization_id"`
-	Pages               []tfTypes.PageV4                               `tfsdk:"pages"`
-	Plans               []tfTypes.PlanV4                               `tfsdk:"plans"`
-	Properties          []tfTypes.Property                             `tfsdk:"properties"`
-	Resources           []tfTypes.APIResource                          `tfsdk:"resources"`
-	ResponseTemplates   map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
-	Services            *tfTypes.APIServices                           `tfsdk:"services"`
-	State               types.String                                   `tfsdk:"state"`
-	Tags                []types.String                                 `tfsdk:"tags"`
-	Type                types.String                                   `tfsdk:"type"`
-	Version             types.String                                   `tfsdk:"version"`
-	Visibility          types.String                                   `tfsdk:"visibility"`
+	AllowedInAPIProducts             types.Bool                                     `tfsdk:"allowed_in_api_products"`
+	AllowMultiJwtOauth2Subscriptions types.Bool                                     `tfsdk:"allow_multi_jwt_oauth2_subscriptions"`
+	Analytics                        *tfTypes.Analytics                             `tfsdk:"analytics"`
+	Categories                       []types.String                                 `tfsdk:"categories"`
+	ConsoleNotification              *tfTypes.APIV4SpecConsoleNotification          `tfsdk:"console_notification"`
+	Description                      types.String                                   `tfsdk:"description"`
+	EndpointGroups                   []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
+	EnvironmentID                    types.String                                   `tfsdk:"environment_id"`
+	Failover                         *tfTypes.FailoverV4                            `tfsdk:"failover"`
+	FlowExecution                    *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
+	Flows                            []tfTypes.FlowV4                               `tfsdk:"flows"`
+	Groups                           []types.String                                 `tfsdk:"groups"`
+	Hrid                             types.String                                   `tfsdk:"hrid"`
+	ID                               types.String                                   `tfsdk:"id"`
+	Labels                           []types.String                                 `tfsdk:"labels"`
+	LifecycleState                   types.String                                   `tfsdk:"lifecycle_state"`
+	Listeners                        []tfTypes.Listener                             `tfsdk:"listeners"`
+	Members                          []tfTypes.Member                               `tfsdk:"members"`
+	Metadata                         []tfTypes.Metadata                             `tfsdk:"metadata"`
+	Name                             types.String                                   `tfsdk:"name"`
+	NotifyMembers                    types.Bool                                     `tfsdk:"notify_members"`
+	OrganizationID                   types.String                                   `tfsdk:"organization_id"`
+	Pages                            []tfTypes.PageV4                               `tfsdk:"pages"`
+	Plans                            []tfTypes.PlanV4                               `tfsdk:"plans"`
+	Properties                       []tfTypes.Property                             `tfsdk:"properties"`
+	Resources                        []tfTypes.APIResource                          `tfsdk:"resources"`
+	ResponseTemplates                map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
+	Services                         *tfTypes.APIServices                           `tfsdk:"services"`
+	State                            types.String                                   `tfsdk:"state"`
+	Tags                             []types.String                                 `tfsdk:"tags"`
+	Type                             types.String                                   `tfsdk:"type"`
+	Version                          types.String                                   `tfsdk:"version"`
+	Visibility                       types.String                                   `tfsdk:"visibility"`
 }
 
 func (r *Apiv4Resource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -105,6 +107,18 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Apiv4 Resource",
 		Attributes: map[string]schema.Attribute{
+			"allow_multi_jwt_oauth2_subscriptions": schema.BoolAttribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     booldefault.StaticBool(false),
+				Description: `Allow an application to subscribe to more than one JWT/OAuth2 plan (V4 only). Default: false`,
+			},
+			"allowed_in_api_products": schema.BoolAttribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     booldefault.StaticBool(false),
+				Description: `Indicates whether this API is allowed to be used in API Products. Only applicable for V4 HTTP Proxy APIs. Default: false`,
+			},
 			"analytics": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
@@ -201,6 +215,24 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						Description: `API logging configuration (Not for native APIs)`,
+					},
+					"otel_logs": schema.SingleNestedAttribute{
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Optional:    true,
+								Description: `Enable OpenTelemetry log export for this API (payload capture with traceId/spanId correlation).`,
+							},
+						},
+					},
+					"reporter_metrics_enabled": schema.BoolAttribute{
+						Computed: true,
+						Optional: true,
+						Default:  booldefault.StaticBool(true),
+						MarkdownDescription: `Enable the connection-metrics reporter on the gateway. Only applicable to Native v4 APIs; ignored on HTTP v4 requests and omitted from HTTP v4 responses.` + "\n" +
+							`Server-side default for Native v4 on create is ` + "`" + `true` + "`" + `.` + "\n" +
+							`Independent of the parent ` + "`" + `enabled` + "`" + ` flag: event-metrics reporting and the connection-metrics reporter are gated separately.` + "\n" +
+							`Default: true`,
 					},
 					"sampling": schema.SingleNestedAttribute{
 						Optional: true,
@@ -1304,7 +1336,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				PlanModifiers: []planmodifier.String{
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
-				Description: `API's uuid.`,
+				Description: `Resource UUID.`,
 			},
 			"labels": schema.ListAttribute{
 				Computed:    true,
@@ -1585,11 +1617,17 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"host": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `A hostname for which the API will match against SNI. Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
+									},
+								},
+								"port": schema.Int64Attribute{
+									Optional:    true,
+									Description: `The port of the listener`,
+									Validators: []validator.Int64{
+										int64validator.AtLeast(0),
 									},
 								},
 								"servers": schema.ListAttribute{
@@ -1892,12 +1930,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								),
 							},
 						},
-						"hidden": schema.BoolAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     booldefault.StaticBool(false),
-							Description: `if this metadata should be hidden. Default: false`,
-						},
 						"key": schema.StringAttribute{
 							Computed: true,
 							Optional: true,
@@ -2076,6 +2108,18 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						speakeasy_objectvalidators.NotNull(),
 					},
 					Attributes: map[string]schema.Attribute{
+						"bootstrap_port": schema.Int64Attribute{
+							Optional:    true,
+							Description: `Bootstrap port for port-based routing (native Kafka APIs only). Null in host/SNI routing mode.`,
+						},
+						"broker_range_end": schema.Int64Attribute{
+							Optional:    true,
+							Description: `End of broker port range for port-based routing (native Kafka APIs only). Must be greater than start port.`,
+						},
+						"broker_range_start": schema.Int64Attribute{
+							Optional:    true,
+							Description: `Start of broker port range for port-based routing (native Kafka APIs only).`,
+						},
 						"characteristics": schema.ListAttribute{
 							Computed:    true,
 							Optional:    true,
@@ -3040,10 +3084,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			},
 			"type": schema.StringAttribute{
 				Required:    true,
-				Description: `API's type. must be one of ["A2A_PROXY", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
+				Description: `API's type. must be one of ["A2A_PROXY", "EDGE", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"A2A_PROXY",
+						"EDGE",
 						"LLM_PROXY",
 						"MCP_PROXY",
 						"MESSAGE",
