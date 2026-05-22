@@ -638,7 +638,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Is the flow enabled. Default: true`,
 						},
 						"entrypoint_connect": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
 								custom_listplanmodifier.IgnoreEmptyList(),
@@ -700,7 +699,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Entrypoint Connect flow steps used for NATIVE APIs`,
 						},
 						"interact": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
 								custom_listplanmodifier.IgnoreEmptyList(),
@@ -769,7 +767,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"publish": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
 								custom_listplanmodifier.IgnoreEmptyList(),
@@ -831,7 +828,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Publish flow steps used for MESSAGE and NATIVE APIs`,
 						},
 						"request": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
 								custom_listplanmodifier.IgnoreEmptyList(),
@@ -893,7 +889,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Request flow steps used for PROXY and MESSAGE APIs`,
 						},
 						"response": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
 								custom_listplanmodifier.IgnoreEmptyList(),
@@ -958,11 +953,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
-								custom_listplanmodifier.IgnoreEmptyList(),
+								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
+								},
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"channel": schema.SingleNestedAttribute{
@@ -1163,7 +1161,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"subscribe": schema.ListNestedAttribute{
-							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
 								custom_listplanmodifier.IgnoreEmptyList(),
@@ -1225,7 +1222,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Subscribe flow steps used for MESSAGE and NATIVE APIs`,
 						},
 						"tags": schema.ListAttribute{
-							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
 								custom_listplanmodifier.IgnoreEmptyList(),
@@ -2051,10 +2047,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
 								custom_listplanmodifier.IgnoreEmptyList(),
+								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
+								},
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"enabled": schema.BoolAttribute{
@@ -2064,7 +2064,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Is the flow enabled. Default: true`,
 									},
 									"entrypoint_connect": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											custom_listplanmodifier.IgnoreEmptyList(),
@@ -2072,6 +2071,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
@@ -2126,7 +2128,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Entrypoint Connect flow steps used for NATIVE APIs`,
 									},
 									"interact": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											custom_listplanmodifier.IgnoreEmptyList(),
@@ -2134,6 +2135,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
@@ -2195,7 +2199,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"publish": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											custom_listplanmodifier.IgnoreEmptyList(),
@@ -2203,6 +2206,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
@@ -2257,7 +2263,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Publish flow steps used for MESSAGE and NATIVE APIs`,
 									},
 									"request": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											custom_listplanmodifier.IgnoreEmptyList(),
@@ -2265,6 +2270,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
@@ -2319,7 +2327,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Request flow steps used for PROXY and MESSAGE APIs`,
 									},
 									"response": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											custom_listplanmodifier.IgnoreEmptyList(),
@@ -2327,6 +2334,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
@@ -2384,11 +2394,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
-											custom_listplanmodifier.IgnoreEmptyList(),
+											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"channel": schema.SingleNestedAttribute{
@@ -2589,7 +2602,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"subscribe": schema.ListNestedAttribute{
-										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											custom_listplanmodifier.IgnoreEmptyList(),
@@ -2597,6 +2609,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 											},
 											Attributes: map[string]schema.Attribute{
 												"condition": schema.StringAttribute{
@@ -2651,7 +2666,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Subscribe flow steps used for MESSAGE and NATIVE APIs`,
 									},
 									"tags": schema.ListAttribute{
-										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
 											custom_listplanmodifier.IgnoreEmptyList(),
