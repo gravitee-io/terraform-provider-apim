@@ -1600,7 +1600,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"host": schema.StringAttribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `A hostname for which the API will match against SNI. Not Null`,
 									Validators: []validator.String{
@@ -1608,7 +1607,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"port": schema.Int64Attribute{
-									Computed:    true,
 									Optional:    true,
 									Description: `The port of the listener. Not Null`,
 									Validators: []validator.Int64{
