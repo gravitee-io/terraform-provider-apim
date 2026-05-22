@@ -48,6 +48,10 @@ actions:
     description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
     update:
       x-speakeasy-param-computed: false
+  - target: $.components.schemas.KafkaListener.allOf[*].properties.*
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
   - target: $.components.schemas.ApiV4Spec.properties.services
     description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
     update:
@@ -96,10 +100,7 @@ actions:
     description: Ignored by speakeasy because embedded
     update:
       x-speakeasy-param-computed: false
-  - target: $.components.schemas.ApiV4Spec.properties.consoleNotification.properties.groups
-    description: Ignored by speakeasy because embedded
-    update:
-      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  
 
   ## API returns non-empty defaults for these
   - target: $.components.schemas.ApiV4Spec.properties.metadata
@@ -184,6 +185,10 @@ actions:
     description: Prevent empty array to create plan diff
     update:
       x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.ApiV4Spec.properties.consoleNotification.properties.groups
+    description: Prevent empty array to create plan diff
+    update:
       x-speakeasy-plan-modifiers: IgnoreEmptyList
   - target: $.components.schemas.ApiV4Spec.properties.resources
     description: Prevent empty array to create plan diff
@@ -347,10 +352,6 @@ actions:
     update:
       x-speakeasy-type-override: any
   - target: $.components.schemas.ServiceV4.properties.configuration
-    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
-    update:
-      x-speakeasy-type-override: any
-  - target: $.components.schemas.PageSource.properties.configuration
     description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
     update:
       x-speakeasy-type-override: any

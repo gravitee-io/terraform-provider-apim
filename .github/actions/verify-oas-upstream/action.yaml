@@ -2,7 +2,7 @@ name: Verify OAS schema matches upstream
 
 description: |
   Downloads upstream OpenAPI schema and verifies it matches the local
-  schemas/automation-api-oas.yaml, ignoring whitespace differences.
+  automation-api-oas.yaml, ignoring whitespace differences.
 
 runs:
   using: composite
@@ -14,7 +14,7 @@ runs:
       shell: bash
       run: |
         if [[ -n "$(git status --porcelain)" ]]; then
-            echo "❌ ERROR: Local schemas/automation-api-oas.yaml differs from upstream source"
+            echo "❌ ERROR: Local automation-api-oas.yaml differs from upstream source"
             export PAGER= # don't let `git diff` invoke `less`
             git diff --cached        
             exit 1
