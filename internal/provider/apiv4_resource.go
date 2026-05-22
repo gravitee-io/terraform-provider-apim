@@ -659,11 +659,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
-								custom_listplanmodifier.IgnoreEmptyList(),
+								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
+								},
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
@@ -721,11 +724,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
-								custom_listplanmodifier.IgnoreEmptyList(),
+								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
+								},
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
@@ -790,11 +796,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
-								custom_listplanmodifier.IgnoreEmptyList(),
+								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
+								},
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
@@ -852,11 +861,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
-								custom_listplanmodifier.IgnoreEmptyList(),
+								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
+								},
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
@@ -914,11 +926,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
-								custom_listplanmodifier.IgnoreEmptyList(),
+								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
+								},
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
@@ -1187,11 +1202,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Computed: true,
 							Optional: true,
 							PlanModifiers: []planmodifier.List{
-								custom_listplanmodifier.IgnoreEmptyList(),
+								speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
+								},
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 								},
 								Attributes: map[string]schema.Attribute{
 									"condition": schema.StringAttribute{
@@ -2095,7 +2113,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
-											custom_listplanmodifier.IgnoreEmptyList(),
 											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
@@ -2161,7 +2178,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
-											custom_listplanmodifier.IgnoreEmptyList(),
 											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
@@ -2234,7 +2250,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
-											custom_listplanmodifier.IgnoreEmptyList(),
 											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
@@ -2300,7 +2315,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
-											custom_listplanmodifier.IgnoreEmptyList(),
 											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
@@ -2366,7 +2380,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
-											custom_listplanmodifier.IgnoreEmptyList(),
 											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
@@ -2643,7 +2656,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Computed: true,
 										Optional: true,
 										PlanModifiers: []planmodifier.List{
-											custom_listplanmodifier.IgnoreEmptyList(),
 											speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 										},
 										NestedObject: schema.NestedAttributeObject{
