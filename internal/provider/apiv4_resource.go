@@ -3011,10 +3011,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"tags": schema.ListAttribute{
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					custom_listplanmodifier.IgnoreEmptyList(),
-				},
+				Optional:    true,
 				ElementType: types.StringType,
 				Description: `Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy".`,
 				Validators: []validator.List{
