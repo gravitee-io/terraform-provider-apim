@@ -22,9 +22,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/objectvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/listdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -108,11 +110,12 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 			"groups": schema.ListAttribute{
 				Computed: true,
 				Optional: true,
+				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				PlanModifiers: []planmodifier.List{
 					custom_listplanmodifier.IgnoreEmptyList(),
 				},
 				ElementType: types.StringType,
-				Description: `List of groups associated with the Application. This groups are names, HRIDs or UUIDs of existing groups in APIM.`,
+				Description: `List of groups associated with the Application. This groups are names, HRIDs or UUIDs of existing groups in APIM. Default: []`,
 			},
 			"hrid": schema.StringAttribute{
 				Required: true,
@@ -332,12 +335,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								},
 							},
 							"redirect_uris": schema.ListAttribute{
+								Computed:    true,
 								Optional:    true,
+								Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 								ElementType: types.StringType,
-								Description: `OAuth client redirect Uris. Not Null`,
-								Validators: []validator.List{
-									speakeasy_listvalidators.NotNull(),
-								},
+								Description: `OAuth client redirect Uris. Default: []`,
 							},
 						},
 						Description: `Application OAuth client settings. This require Dynamic Client Registration to be enabled at the environment level.`,
