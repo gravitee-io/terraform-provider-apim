@@ -10,7 +10,7 @@ import (
 // FailoverV4 - Defines the failover behavior to bypass endpoints when some are slow.
 type FailoverV4 struct {
 	// Automatically redirects request to the next endpoint if the response is too slow.
-	Enabled *bool `default:"false" json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// Limit the number of retry attempts before recording an error. Each attempt dynamically selects an endpoint based on the load balancing algorithm.
 	MaxRetries *int `default:"2" json:"maxRetries"`
 	// Define a threshold for slow responses. Requests exceeding this duration are recorded as slow.
@@ -24,7 +24,7 @@ type FailoverV4 struct {
 	// An EL expression evaluated on the response to determine if it should be considered a failure (e.g. "{#response.status >= 500}"). If null, response content is not evaluated.
 	FailureCondition *string `json:"failureCondition,omitempty"`
 	// If true, on retry the next endpoint in the group is forced instead of relying on the shared load balancer. This ensures retries target different endpoints.
-	ForceNextEndpointOnFailure *bool `default:"false" json:"forceNextEndpointOnFailure"`
+	ForceNextEndpointOnFailure *bool `json:"forceNextEndpointOnFailure,omitempty"`
 }
 
 func (f FailoverV4) MarshalJSON() ([]byte, error) {

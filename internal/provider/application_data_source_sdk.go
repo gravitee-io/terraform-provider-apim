@@ -46,7 +46,6 @@ func (r *ApplicationDataSourceModel) RefreshFromSharedApplicationState(ctx conte
 
 			metadata.DefaultValue = types.StringPointerValue(metadataItem.DefaultValue)
 			metadata.Format = types.StringValue(string(metadataItem.Format))
-			metadata.Hidden = types.BoolPointerValue(metadataItem.Hidden)
 			metadata.Key = types.StringPointerValue(metadataItem.Key)
 			metadata.Name = types.StringValue(metadataItem.Name)
 			metadata.Value = types.StringPointerValue(metadataItem.Value)

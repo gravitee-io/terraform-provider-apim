@@ -12,7 +12,7 @@ type FlowExecution struct {
 	// DEFAULT : all flows that match the conditions are executed in the order they are defined BEST_MATCH: only the best matching flow will be executed
 	Mode *FlowMode `default:"DEFAULT" json:"mode"`
 	// To indicate failure if no flow matches the request.
-	MatchRequired *bool `default:"false" json:"matchRequired"`
+	MatchRequired *bool `json:"matchRequired,omitempty"`
 }
 
 func (f FlowExecution) MarshalJSON() ([]byte, error) {

@@ -24,7 +24,7 @@ type PageV4Input struct {
 	// The content of the page, if any.
 	Content *string `json:"content,omitempty"`
 	// If true, the page will be accessible from the portal (default is false)
-	Published *bool `default:"false" json:"published"`
+	Published *bool `json:"published,omitempty"`
 	// The visibility of the entity regarding the portal.
 	Visibility *Visibility `default:"PUBLIC" json:"visibility"`
 	// Allow you to fetch pages from various external sources,

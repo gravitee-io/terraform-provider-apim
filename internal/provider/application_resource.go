@@ -8,6 +8,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
+	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	"github.com/gravitee-io/terraform-provider-apim/internal/provider/customtypes"
@@ -23,7 +25,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -105,7 +106,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `environment ID`,
 			},
 			"groups": schema.ListAttribute{
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
+				},
 				ElementType: types.StringType,
 				Description: `List of groups associated with the Application. This groups are names, HRIDs or UUIDs of existing groups in APIM.`,
 			},
@@ -129,10 +134,17 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Resource UUID.`,
 			},
 			"members": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
+					},
+					PlanModifiers: []planmodifier.Object{
+						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 					},
 					Attributes: map[string]schema.Attribute{
 						"role": schema.StringAttribute{
@@ -164,7 +176,11 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"metadata": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
@@ -188,12 +204,6 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 									"URL",
 								),
 							},
-						},
-						"hidden": schema.BoolAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     booldefault.StaticBool(false),
-							Description: `if this metadata should be hidden. Default: false`,
 						},
 						"key": schema.StringAttribute{
 							Computed: true,
@@ -232,12 +242,9 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"notify_members": schema.BoolAttribute{
-				Computed: true,
 				Optional: true,
-				Default:  booldefault.StaticBool(false),
 				MarkdownDescription: `If true, new members added to the Application spec will` + "\n" +
-					`be notified when the Application is synced with APIM.` + "\n" +
-					`Default: false`,
+					`be notified when the Application is synced with APIM.`,
 			},
 			"organization_id": schema.StringAttribute{
 				Computed: true,
@@ -358,6 +365,9 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"client_certificates": schema.ListNestedAttribute{
 								Computed: true,
 								Optional: true,
+								PlanModifiers: []planmodifier.List{
+									custom_listplanmodifier.IgnoreEmptyList(),
+								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),

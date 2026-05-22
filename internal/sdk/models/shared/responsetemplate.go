@@ -3,10 +3,6 @@
 
 package shared
 
-import (
-	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
-)
-
 // ResponseTemplate - API response template
 type ResponseTemplate struct {
 	// HTTP Status to return
@@ -16,18 +12,7 @@ type ResponseTemplate struct {
 	// Response body (use `Content-Type` header to specify the content type)
 	Body *string `json:"body,omitempty"`
 	// Log the key associated with this response template
-	PropagateErrorKeyToLogs *bool `default:"false" json:"propagateErrorKeyToLogs"`
-}
-
-func (r ResponseTemplate) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(r, "", false)
-}
-
-func (r *ResponseTemplate) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &r, "", false, nil); err != nil {
-		return err
-	}
-	return nil
+	PropagateErrorKeyToLogs *bool `json:"propagateErrorKeyToLogs,omitempty"`
 }
 
 func (r *ResponseTemplate) GetStatus() int64 {

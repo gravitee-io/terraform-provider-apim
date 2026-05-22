@@ -47,7 +47,6 @@ func (r *ApplicationResourceModel) RefreshFromSharedApplicationState(ctx context
 
 			metadata.DefaultValue = types.StringPointerValue(metadataItem.DefaultValue)
 			metadata.Format = types.StringValue(string(metadataItem.Format))
-			metadata.Hidden = types.BoolPointerValue(metadataItem.Hidden)
 			metadata.Key = types.StringPointerValue(metadataItem.Key)
 			metadata.Name = types.StringValue(metadataItem.Name)
 			metadata.Value = types.StringPointerValue(metadataItem.Value)
@@ -362,19 +361,12 @@ func (r *ApplicationResourceModel) ToSharedApplicationSpec(ctx context.Context) 
 		} else {
 			defaultValue = nil
 		}
-		hidden := new(bool)
-		if !r.Metadata[metadataIndex].Hidden.IsUnknown() && !r.Metadata[metadataIndex].Hidden.IsNull() {
-			*hidden = r.Metadata[metadataIndex].Hidden.ValueBool()
-		} else {
-			hidden = nil
-		}
 		metadata = append(metadata, shared.Metadata{
 			Key:          key,
 			Name:         name2,
 			Format:       format,
 			Value:        value,
 			DefaultValue: defaultValue,
-			Hidden:       hidden,
 		})
 	}
 	members := make([]shared.Member, 0, len(r.Members))

@@ -10,7 +10,7 @@ import (
 // ServiceV4 - Specifies an API property fetch using an external source.
 type ServiceV4 struct {
 	// When the configuration overrides an inherited configuration.
-	OverrideConfiguration *bool `default:"false" json:"overrideConfiguration"`
+	OverrideConfiguration *bool `json:"overrideConfiguration,omitempty"`
 	// JSON configuration of the service.
 	Configuration any `json:"configuration"`
 	// Is the service enabled or not.

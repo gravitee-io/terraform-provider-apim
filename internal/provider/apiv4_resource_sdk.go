@@ -609,7 +609,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 			metadata.DefaultValue = types.StringPointerValue(metadataItem.DefaultValue)
 			metadata.Format = types.StringValue(string(metadataItem.Format))
-			metadata.Hidden = types.BoolPointerValue(metadataItem.Hidden)
 			metadata.Key = types.StringPointerValue(metadataItem.Key)
 			metadata.Name = types.StringValue(metadataItem.Name)
 			metadata.Value = types.StringPointerValue(metadataItem.Value)
@@ -2867,19 +2866,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			defaultValue = nil
 		}
-		hidden := new(bool)
-		if !r.Metadata[metadataIndex].Hidden.IsUnknown() && !r.Metadata[metadataIndex].Hidden.IsNull() {
-			*hidden = r.Metadata[metadataIndex].Hidden.ValueBool()
-		} else {
-			hidden = nil
-		}
 		metadata = append(metadata, shared.Metadata{
 			Key:          key2,
 			Name:         name19,
 			Format:       format,
 			Value:        value2,
 			DefaultValue: defaultValue,
-			Hidden:       hidden,
 		})
 	}
 	lifecycleState := shared.APILifecycleState(r.LifecycleState.ValueString())

@@ -52,7 +52,7 @@ type GetGroupRequest struct {
 	// a human-readable identifier. This is to support backward compatibility for resources
 	// created before migration to the automation API and should not be used for new resources.
 	//
-	HridContainsUUID *bool `default:"false" queryParam:"style=form,explode=true,name=hridContainsUUID"`
+	HridContainsUUID *bool `queryParam:"style=form,explode=true,name=hridContainsUUID"`
 }
 
 func (g GetGroupRequest) MarshalJSON() ([]byte, error) {

@@ -49,7 +49,7 @@ type CreateOrUpdateApisRequest struct {
 	// For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting
 	// the state of the underlying spec.
 	//
-	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
+	DryRun *bool `queryParam:"style=form,explode=true,name=dryRun"`
 	// API Specification
 	APIV4Spec shared.APIV4Spec `request:"mediaType=application/json"`
 }

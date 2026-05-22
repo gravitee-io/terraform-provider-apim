@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	speakeasy_boolplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/boolplanmodifier"
+	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	custom_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
@@ -265,7 +266,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						Description: `Events on which a notification is created`,
 					},
 					"groups": schema.ListAttribute{
-						Optional:    true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							custom_listplanmodifier.IgnoreEmptyList(),
+						},
 						ElementType: types.StringType,
 						Description: `Name, HRID or UUIDs of existing groups (of users) targeted by notifications.`,
 					},
@@ -299,10 +303,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `JSON Configuration specific to this endpoint that cannot be define at the group level. Parsed as JSON.`,
 									},
 									"inherit_configuration": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Enables shared configuration inheritance. Default: false`,
+										Description: `Enables shared configuration inheritance.`,
 									},
 									"name": schema.StringAttribute{
 										Optional:    true,
@@ -312,10 +314,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"secondary": schema.BoolAttribute{
-										Computed:    true,
 										Optional:    true,
-										Default:     booldefault.StaticBool(false),
-										Description: `Define this endpoint as fallback endpoint in case other endpoints are no longer responding. Default: false`,
+										Description: `Define this endpoint as fallback endpoint in case other endpoints are no longer responding.`,
 									},
 									"services": schema.SingleNestedAttribute{
 										Computed: true,
@@ -346,10 +346,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 														Description: `Is the service enabled or not. Default: true`,
 													},
 													"override_configuration": schema.BoolAttribute{
-														Computed:    true,
 														Optional:    true,
-														Default:     booldefault.StaticBool(false),
-														Description: `When the configuration overrides an inherited configuration. Default: false`,
+														Description: `When the configuration overrides an inherited configuration.`,
 													},
 													"type": schema.StringAttribute{
 														Optional:    true,
@@ -370,7 +368,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `JSON Configuration that replaces the shared configuration defined at the group level. Parsed as JSON.`,
 									},
 									"tenants": schema.ListAttribute{
-										Optional:    true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											custom_listplanmodifier.IgnoreEmptyList(),
+										},
 										ElementType: types.StringType,
 										Description: `The list of Getaway's tenants on which the endpoint can be used.`,
 									},
@@ -448,10 +449,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											Description: `Is the service enabled or not. Default: true`,
 										},
 										"override_configuration": schema.BoolAttribute{
-											Computed:    true,
 											Optional:    true,
-											Default:     booldefault.StaticBool(false),
-											Description: `When the configuration overrides an inherited configuration. Default: false`,
+											Description: `When the configuration overrides an inherited configuration.`,
 										},
 										"type": schema.StringAttribute{
 											Optional:    true,
@@ -485,10 +484,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											Description: `Is the service enabled or not. Default: true`,
 										},
 										"override_configuration": schema.BoolAttribute{
-											Computed:    true,
 											Optional:    true,
-											Default:     booldefault.StaticBool(false),
-											Description: `When the configuration overrides an inherited configuration. Default: false`,
+											Description: `When the configuration overrides an inherited configuration.`,
 										},
 										"type": schema.StringAttribute{
 											Optional:    true,
@@ -538,20 +535,16 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `Automatically redirects request to the next endpoint if the response is too slow. Default: false`,
+						Description: `Automatically redirects request to the next endpoint if the response is too slow.`,
 					},
 					"failure_condition": schema.StringAttribute{
 						Optional:    true,
 						Description: `An EL expression evaluated on the response to determine if it should be considered a failure (e.g. "{#response.status >= 500}"). If null, response content is not evaluated.`,
 					},
 					"force_next_endpoint_on_failure": schema.BoolAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `If true, on retry the next endpoint in the group is forced instead of relying on the shared load balancer. This ensures retries target different endpoints. Default: false`,
+						Description: `If true, on retry the next endpoint in the group is forced instead of relying on the shared load balancer. This ensures retries target different endpoints.`,
 					},
 					"max_failures": schema.Int32Attribute{
 						Computed:    true,
@@ -606,10 +599,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 				Attributes: map[string]schema.Attribute{
 					"match_required": schema.BoolAttribute{
-						Computed:    true,
 						Optional:    true,
-						Default:     booldefault.StaticBool(false),
-						Description: `To indicate failure if no flow matches the request. Default: false`,
+						Description: `To indicate failure if no flow matches the request.`,
 					},
 					"mode": schema.StringAttribute{
 						Computed: true,
@@ -630,7 +621,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Flow execution enablement (Not applicable for Native API)`,
 			},
 			"flows": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
@@ -643,7 +638,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Is the flow enabled. Default: true`,
 						},
 						"entrypoint_connect": schema.ListNestedAttribute{
+							Computed: true,
 							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
@@ -701,7 +700,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Entrypoint Connect flow steps used for NATIVE APIs`,
 						},
 						"interact": schema.ListNestedAttribute{
+							Computed: true,
 							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
@@ -766,7 +769,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"publish": schema.ListNestedAttribute{
+							Computed: true,
 							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
@@ -824,7 +831,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Publish flow steps used for MESSAGE and NATIVE APIs`,
 						},
 						"request": schema.ListNestedAttribute{
+							Computed: true,
 							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
@@ -882,7 +893,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Request flow steps used for PROXY and MESSAGE APIs`,
 						},
 						"response": schema.ListNestedAttribute{
+							Computed: true,
 							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
@@ -940,7 +955,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Response flow steps used for PROXY and MESSAGE APIs`,
 						},
 						"selectors": schema.ListNestedAttribute{
+							Computed: true,
 							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
@@ -1144,7 +1163,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"subscribe": schema.ListNestedAttribute{
+							Computed: true,
 							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
@@ -1202,7 +1225,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Subscribe flow steps used for MESSAGE and NATIVE APIs`,
 						},
 						"tags": schema.ListAttribute{
-							Optional:    true,
+							Computed: true,
+							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							ElementType: types.StringType,
 							Description: `Flow's informative tags.`,
 							Validators: []validator.List{
@@ -1276,7 +1303,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											Description: `` + "`" + `Access-Control-Allow-Credentials` + "`" + `: Indicates whether or not the response to the request can be exposed when the credentials flag is true.`,
 										},
 										"allow_headers": schema.ListAttribute{
-											Optional:    true,
+											Optional: true,
+											PlanModifiers: []planmodifier.List{
+												custom_listplanmodifier.IgnoreEmptyList(),
+											},
 											ElementType: types.StringType,
 											Description: `` + "`" + `Access-Control-Allow-Headers` + "`" + `: Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request.`,
 											Validators: []validator.List{
@@ -1284,7 +1314,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 										},
 										"allow_methods": schema.ListAttribute{
-											Optional:    true,
+											Optional: true,
+											PlanModifiers: []planmodifier.List{
+												custom_listplanmodifier.IgnoreEmptyList(),
+											},
 											ElementType: types.StringType,
 											Description: `` + "`" + `Access-Control-Allow-Methods` + "`" + `: Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request. HTTP methods that are allow to access the resource.`,
 											Validators: []validator.List{
@@ -1292,7 +1325,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											},
 										},
 										"allow_origin": schema.ListAttribute{
-											Optional:    true,
+											Optional: true,
+											PlanModifiers: []planmodifier.List{
+												custom_listplanmodifier.IgnoreEmptyList(),
+											},
 											ElementType: types.StringType,
 											MarkdownDescription: `` + "`" + `Access-Control-Allow-Origin` + "`" + `: The origin parameter specifies a URI that may access the resource. Scheme, domain and port are part of the same-origin definition.` + "\n" +
 												`If you choose to enable '*' it means that is allows all requests, regardless of origin. URIs RegExp patterns that may access the resource`,
@@ -1305,7 +1341,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											Description: `Enable CORS`,
 										},
 										"expose_headers": schema.ListAttribute{
-											Optional:    true,
+											Optional: true,
+											PlanModifiers: []planmodifier.List{
+												custom_listplanmodifier.IgnoreEmptyList(),
+											},
 											ElementType: types.StringType,
 											Description: `` + "`" + `Access-Control-Expose-Headers` + "`" + `: This header lets a server whitelist headers that browsers are allowed to access.`,
 											Validators: []validator.List{
@@ -1393,11 +1432,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 											"override_access": schema.BoolAttribute{
 												Computed: true,
 												Optional: true,
-												Default:  booldefault.StaticBool(false),
 												PlanModifiers: []planmodifier.Bool{
 													speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
 												},
-												Description: `Override default organization entrypoint with ` + "`" + `host` + "`" + `. Default: false`,
+												Description: `Override default organization entrypoint with ` + "`" + `host` + "`" + ``,
 											},
 											"path": schema.StringAttribute{
 												Computed: true,
@@ -1416,7 +1454,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									ElementType: types.StringType,
 									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
 								},
@@ -1509,7 +1551,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									ElementType: types.StringType,
 									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
 								},
@@ -1594,7 +1640,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									ElementType: types.StringType,
 									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
 								},
@@ -1689,7 +1739,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"servers": schema.ListAttribute{
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									ElementType: types.StringType,
 									Description: `Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).`,
 								},
@@ -1725,7 +1779,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"members": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
@@ -1792,12 +1850,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								),
 							},
 						},
-						"hidden": schema.BoolAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     booldefault.StaticBool(false),
-							Description: `if this metadata should be hidden. Default: false`,
-						},
 						"key": schema.StringAttribute{
 							Computed: true,
 							Optional: true,
@@ -1854,7 +1906,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `organization ID`,
 			},
 			"pages": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
@@ -1901,10 +1957,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								`into APIM by making the page a child of this folder.`,
 						},
 						"published": schema.BoolAttribute{
-							Computed:    true,
 							Optional:    true,
-							Default:     booldefault.StaticBool(false),
-							Description: `If true, the page will be accessible from the portal (default is false). Default: false`,
+							Description: `If true, the page will be accessible from the portal (default is false)`,
 						},
 						"source": schema.SingleNestedAttribute{
 							Optional: true,
@@ -1962,14 +2016,21 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.`,
 			},
 			"plans": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
 					},
 					Attributes: map[string]schema.Attribute{
 						"characteristics": schema.ListAttribute{
-							Optional:    true,
+							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							ElementType: types.StringType,
 							Description: `Plan informative characteristics`,
 						},
@@ -1978,12 +2039,19 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `A description for this plan.`,
 						},
 						"excluded_groups": schema.ListAttribute{
-							Optional:    true,
+							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							ElementType: types.StringType,
 							Description: `Access-control, UUID of groups excluded from this plan`,
 						},
 						"flows": schema.ListNestedAttribute{
+							Computed: true,
 							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							NestedObject: schema.NestedAttributeObject{
 								Validators: []validator.Object{
 									speakeasy_objectvalidators.NotNull(),
@@ -1996,7 +2064,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Is the flow enabled. Default: true`,
 									},
 									"entrypoint_connect": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											custom_listplanmodifier.IgnoreEmptyList(),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
@@ -2054,7 +2126,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Entrypoint Connect flow steps used for NATIVE APIs`,
 									},
 									"interact": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											custom_listplanmodifier.IgnoreEmptyList(),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
@@ -2119,7 +2195,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"publish": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											custom_listplanmodifier.IgnoreEmptyList(),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
@@ -2177,7 +2257,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Publish flow steps used for MESSAGE and NATIVE APIs`,
 									},
 									"request": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											custom_listplanmodifier.IgnoreEmptyList(),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
@@ -2235,7 +2319,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Request flow steps used for PROXY and MESSAGE APIs`,
 									},
 									"response": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											custom_listplanmodifier.IgnoreEmptyList(),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
@@ -2293,7 +2381,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Response flow steps used for PROXY and MESSAGE APIs`,
 									},
 									"selectors": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											custom_listplanmodifier.IgnoreEmptyList(),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
@@ -2497,7 +2589,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"subscribe": schema.ListNestedAttribute{
+										Computed: true,
 										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											custom_listplanmodifier.IgnoreEmptyList(),
+										},
 										NestedObject: schema.NestedAttributeObject{
 											Validators: []validator.Object{
 												speakeasy_objectvalidators.NotNull(),
@@ -2555,7 +2651,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `Subscribe flow steps used for MESSAGE and NATIVE APIs`,
 									},
 									"tags": schema.ListAttribute{
-										Optional:    true,
+										Computed: true,
+										Optional: true,
+										PlanModifiers: []planmodifier.List{
+											custom_listplanmodifier.IgnoreEmptyList(),
+										},
 										ElementType: types.StringType,
 										Description: `Flow's informative tags.`,
 										Validators: []validator.List{
@@ -2650,7 +2750,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							},
 						},
 						"tags": schema.ListAttribute{
-							Optional:    true,
+							Optional: true,
+							PlanModifiers: []planmodifier.List{
+								custom_listplanmodifier.IgnoreEmptyList(),
+							},
 							ElementType: types.StringType,
 							Description: `Sharding tags that restrict deployment to Gateways having those tags on. No tags means "always deploy". This tags list must be a subset of the API's tags list.`,
 							Validators: []validator.List{
@@ -2688,7 +2791,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `. Plans are prioritized by their position in the list, with earlier entries having higher priority.`,
 			},
 			"properties": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
@@ -2725,7 +2832,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Properties usable using EL.`,
 			},
 			"resources": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
@@ -2811,10 +2922,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								Description: `Is the service enabled or not. Default: true`,
 							},
 							"override_configuration": schema.BoolAttribute{
-								Computed:    true,
 								Optional:    true,
-								Default:     booldefault.StaticBool(false),
-								Description: `When the configuration overrides an inherited configuration. Default: false`,
+								Description: `When the configuration overrides an inherited configuration.`,
 							},
 							"type": schema.StringAttribute{
 								Optional:    true,
@@ -2853,10 +2962,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			},
 			"type": schema.StringAttribute{
 				Required:    true,
-				Description: `API's type. must be one of ["A2A_PROXY", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
+				Description: `API's type. must be one of ["A2A_PROXY", "EDGE", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"A2A_PROXY",
+						"EDGE",
 						"LLM_PROXY",
 						"MCP_PROXY",
 						"MESSAGE",

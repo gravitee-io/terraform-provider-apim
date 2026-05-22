@@ -49,7 +49,7 @@ type CreateOrUpdateDictionariesRequest struct {
 	// For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting
 	// the state of the underlying spec.
 	//
-	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
+	DryRun *bool `queryParam:"style=form,explode=true,name=dryRun"`
 	// Dictionary specification
 	DictionarySpec shared.DictionarySpec `request:"mediaType=application/json"`
 }

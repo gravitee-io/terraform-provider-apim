@@ -609,7 +609,6 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 
 			metadata.DefaultValue = types.StringPointerValue(metadataItem.DefaultValue)
 			metadata.Format = types.StringValue(string(metadataItem.Format))
-			metadata.Hidden = types.BoolPointerValue(metadataItem.Hidden)
 			metadata.Key = types.StringPointerValue(metadataItem.Key)
 			metadata.Name = types.StringValue(metadataItem.Name)
 			metadata.Value = types.StringPointerValue(metadataItem.Value)

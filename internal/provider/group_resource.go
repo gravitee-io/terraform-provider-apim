@@ -93,6 +93,7 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Resource UUID.`,
 			},
 			"members": schema.ListNestedAttribute{
+				Computed: true,
 				Optional: true,
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
