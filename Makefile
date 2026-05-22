@@ -18,7 +18,7 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 
 .PHONY: lint
 lint: ## Run speakeasy lint accepting no error or warning
-	@speakeasy lint openapi --schema schemas/automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
+	@speakeasy lint openapi --schema automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
 	@grep "// BEGIN GRAVITEE CLOUD INIT" internal/provider/provider.go > /dev/null || (echo "Cloud initializer code snippet appear to be missing" && exit 1)
 	@terraform fmt -recursive -check || (echo "Error: Above terraform files are not properly formatted. Please run 'terraform fmt -recursive' to fix formatting issues" && exit 1)
 
@@ -28,7 +28,7 @@ lint-fix: ## Fix issues that can be found
 
 .PHONY: sync-oas
 sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-management
-	curl -fsSL "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/${APIM_OAS_BRANCH}/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml" -o schemas/automation-api-oas.yaml
+	curl -fsSL "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/${APIM_OAS_BRANCH}/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml" -o automation-api-oas.yaml
 
 PRE_TEST_DIR = "$(shell pwd)/examples/use-cases/application-simple"
 

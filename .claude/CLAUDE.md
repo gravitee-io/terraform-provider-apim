@@ -47,7 +47,7 @@ make stop-cluster
 ## Architecture
 
 ### Code Generation Flow
-1. OpenAPI spec lives in `schemas/automation-api-oas.yaml` (with overlays in `schemas/overlays/`)
+1. OpenAPI spec lives in `schemas/automation-api-oas.yaml` (with overlays in `.speakeasy/overlays/`)
 2. Speakeasy generates SDK (`internal/sdk/`) and provider code (`internal/provider/`)
 3. Config: `.speakeasy/gen.yaml` and `.speakeasy/gen.lock`
 
@@ -79,7 +79,7 @@ Provider supports three auth methods (checked in order):
 
 ## Changing Provider Schema Behavior
 
-**To change provider schema behavior** (plan modifiers, computed fields, validators, defaults, suppress diffs, etc.), add or update entries in `schemas/overlays/` and regenerate with `make speakeasy`. Never edit generated files directly.
+**To change provider schema behavior** (plan modifiers, computed fields, validators, defaults, suppress diffs, etc.), add or update entries in `.speakeasy/overlays/` and regenerate with `make speakeasy`. Never edit generated files directly.
 
 Key Speakeasy overlay annotations:
 - `x-speakeasy-param-computed: true` — mark a field as computed
