@@ -16,7 +16,7 @@ type EndpointV4 struct {
 	// The weight of the endpoint for the load balancer algorythm.
 	Weight *int `default:"1" json:"weight"`
 	// Enables shared configuration inheritance.
-	InheritConfiguration *bool `json:"inheritConfiguration,omitempty"`
+	InheritConfiguration *bool `default:"false" json:"inheritConfiguration"`
 	// JSON Configuration specific to this endpoint that cannot be define at the group level.
 	Configuration any `json:"configuration,omitempty"`
 	// JSON Configuration that replaces the shared configuration defined at the group level.
@@ -24,7 +24,7 @@ type EndpointV4 struct {
 	// API Endpoint Services
 	Services *EndpointServices `json:"services,omitempty"`
 	// Define this endpoint as fallback endpoint in case other endpoints are no longer responding.
-	Secondary *bool `json:"secondary,omitempty"`
+	Secondary *bool `default:"false" json:"secondary"`
 	// The list of Getaway's tenants on which the endpoint can be used.
 	Tenants []string `json:"tenants,omitempty"`
 }

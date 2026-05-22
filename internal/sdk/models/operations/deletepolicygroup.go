@@ -51,7 +51,7 @@ type DeletePolicyGroupRequest struct {
 	// For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting
 	// the state of the underlying spec.
 	//
-	DryRun *bool `queryParam:"style=form,explode=true,name=dryRun"`
+	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
 }
 
 func (d DeletePolicyGroupRequest) MarshalJSON() ([]byte, error) {

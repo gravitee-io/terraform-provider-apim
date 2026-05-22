@@ -306,8 +306,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `JSON Configuration specific to this endpoint that cannot be define at the group level. Parsed as JSON.`,
 									},
 									"inherit_configuration": schema.BoolAttribute{
+										Computed:    true,
 										Optional:    true,
-										Description: `Enables shared configuration inheritance.`,
+										Default:     booldefault.StaticBool(false),
+										Description: `Enables shared configuration inheritance. Default: false`,
 									},
 									"name": schema.StringAttribute{
 										Optional:    true,
@@ -317,8 +319,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"secondary": schema.BoolAttribute{
+										Computed:    true,
 										Optional:    true,
-										Description: `Define this endpoint as fallback endpoint in case other endpoints are no longer responding.`,
+										Default:     booldefault.StaticBool(false),
+										Description: `Define this endpoint as fallback endpoint in case other endpoints are no longer responding. Default: false`,
 									},
 									"services": schema.SingleNestedAttribute{
 										Computed: true,
@@ -537,16 +541,20 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 				Attributes: map[string]schema.Attribute{
 					"enabled": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
-						Description: `Automatically redirects request to the next endpoint if the response is too slow.`,
+						Default:     booldefault.StaticBool(false),
+						Description: `Automatically redirects request to the next endpoint if the response is too slow. Default: false`,
 					},
 					"failure_condition": schema.StringAttribute{
 						Optional:    true,
 						Description: `An EL expression evaluated on the response to determine if it should be considered a failure (e.g. "{#response.status >= 500}"). If null, response content is not evaluated.`,
 					},
 					"force_next_endpoint_on_failure": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
-						Description: `If true, on retry the next endpoint in the group is forced instead of relying on the shared load balancer. This ensures retries target different endpoints.`,
+						Default:     booldefault.StaticBool(false),
+						Description: `If true, on retry the next endpoint in the group is forced instead of relying on the shared load balancer. This ensures retries target different endpoints. Default: false`,
 					},
 					"max_failures": schema.Int32Attribute{
 						Computed:    true,
@@ -601,8 +609,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 				Attributes: map[string]schema.Attribute{
 					"match_required": schema.BoolAttribute{
+						Computed:    true,
 						Optional:    true,
-						Description: `To indicate failure if no flow matches the request.`,
+						Default:     booldefault.StaticBool(false),
+						Description: `To indicate failure if no flow matches the request. Default: false`,
 					},
 					"mode": schema.StringAttribute{
 						Computed: true,
@@ -1964,8 +1974,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								`into APIM by making the page a child of this folder.`,
 						},
 						"published": schema.BoolAttribute{
+							Computed:    true,
 							Optional:    true,
-							Description: `If true, the page will be accessible from the portal (default is false)`,
+							Default:     booldefault.StaticBool(false),
+							Description: `If true, the page will be accessible from the portal (default is false). Default: false`,
 						},
 						"source": schema.SingleNestedAttribute{
 							Optional: true,

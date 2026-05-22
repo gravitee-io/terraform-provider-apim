@@ -49,7 +49,7 @@ type CreateOrUpdatePolicyGroupRequest struct {
 	// For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting
 	// the state of the underlying spec.
 	//
-	DryRun *bool `queryParam:"style=form,explode=true,name=dryRun"`
+	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
 	// Shared Policy Group Specification
 	SharedPolicyGroupSpec shared.SharedPolicyGroupSpec `request:"mediaType=application/json"`
 }

@@ -49,7 +49,7 @@ type CreateOrUpdateGroupRequest struct {
 	// For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting
 	// the state of the underlying spec.
 	//
-	DryRun *bool `queryParam:"style=form,explode=true,name=dryRun"`
+	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
 	// When true, the HRID path or spec value is treated as an existing UUID rather than
 	// a human-readable identifier. This is to support backward compatibility for resources
 	// created before migration to the automation API and should not be used for new resources.
