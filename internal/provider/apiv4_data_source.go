@@ -1088,10 +1088,6 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							Computed:    true,
 							Description: `The format of the metadata.`,
 						},
-						"hidden": schema.BoolAttribute{
-							Computed:    true,
-							Description: `if this metadata should be hidden`,
-						},
 						"key": schema.StringAttribute{
 							Computed:    true,
 							Description: `The key of the metadata if different from sanitized name (lowercase + hyphens).`,

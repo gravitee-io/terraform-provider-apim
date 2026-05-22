@@ -209,12 +209,6 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								),
 							},
 						},
-						"hidden": schema.BoolAttribute{
-							Computed:    true,
-							Optional:    true,
-							Default:     booldefault.StaticBool(false),
-							Description: `if this metadata should be hidden. Default: false`,
-						},
 						"key": schema.StringAttribute{
 							Computed: true,
 							Optional: true,
