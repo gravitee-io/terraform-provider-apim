@@ -19,6 +19,8 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.AllowedInAPIProducts = types.BoolPointerValue(resp.AllowedInAPIProducts)
+		r.AllowMultiJwtOauth2Subscriptions = types.BoolPointerValue(resp.AllowMultiJwtOauth2Subscriptions)
 		if resp.Analytics == nil {
 			r.Analytics = nil
 		} else {
@@ -510,6 +512,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					listeners.Kafka.Entrypoints = append(listeners.Kafka.Entrypoints, entrypoints1)
 				}
 				listeners.Kafka.Host = types.StringValue(listenersItem.KafkaListener.Host)
+				listeners.Kafka.Port = types.Int64Value(listenersItem.KafkaListener.Port)
 				listeners.Kafka.Servers = make([]types.String, 0, len(listenersItem.KafkaListener.Servers))
 				for _, v := range listenersItem.KafkaListener.Servers {
 					listeners.Kafka.Servers = append(listeners.Kafka.Servers, types.StringValue(v))
@@ -1372,11 +1375,15 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			var host1 string
 			host1 = r.Listeners[listenersItem].Kafka.Host.ValueString()
 
+			var port int64
+			port = r.Listeners[listenersItem].Kafka.Port.ValueInt64()
+
 			kafkaListener := shared.KafkaListener{
 				Type:        typeVar4,
 				Entrypoints: entrypoints3,
 				Servers:     servers3,
 				Host:        host1,
+				Port:        port,
 			}
 			listeners = append(listeners, shared.Listener{
 				KafkaListener: &kafkaListener,
@@ -2981,6 +2988,18 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			ParentHrid:    parentHrid,
 		})
 	}
+	allowedInAPIProducts := new(bool)
+	if !r.AllowedInAPIProducts.IsUnknown() && !r.AllowedInAPIProducts.IsNull() {
+		*allowedInAPIProducts = r.AllowedInAPIProducts.ValueBool()
+	} else {
+		allowedInAPIProducts = nil
+	}
+	allowMultiJwtOauth2Subscriptions := new(bool)
+	if !r.AllowMultiJwtOauth2Subscriptions.IsUnknown() && !r.AllowMultiJwtOauth2Subscriptions.IsNull() {
+		*allowMultiJwtOauth2Subscriptions = r.AllowMultiJwtOauth2Subscriptions.ValueBool()
+	} else {
+		allowMultiJwtOauth2Subscriptions = nil
+	}
 	var consoleNotification *shared.APIV4SpecConsoleNotification
 	if r.ConsoleNotification != nil {
 		groups1 := make([]string, 0, len(r.ConsoleNotification.Groups))
@@ -2997,34 +3016,36 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		}
 	}
 	out := shared.APIV4Spec{
-		Hrid:                hrid,
-		Name:                name,
-		Version:             version,
-		Type:                typeVar,
-		Description:         description,
-		Tags:                tags,
-		Listeners:           listeners,
-		EndpointGroups:      endpointGroups,
-		Analytics:           analytics,
-		Failover:            failover,
-		Properties:          properties,
-		Resources:           resources,
-		Plans:               plans,
-		FlowExecution:       flowExecution,
-		Flows:               flows1,
-		ResponseTemplates:   responseTemplates,
-		Services:            services2,
-		Groups:              groups,
-		Visibility:          visibility,
-		State:               state,
-		Labels:              labels,
-		Metadata:            metadata,
-		LifecycleState:      lifecycleState,
-		Categories:          categories,
-		Members:             members,
-		NotifyMembers:       notifyMembers,
-		Pages:               pages,
-		ConsoleNotification: consoleNotification,
+		Hrid:                             hrid,
+		Name:                             name,
+		Version:                          version,
+		Type:                             typeVar,
+		Description:                      description,
+		Tags:                             tags,
+		Listeners:                        listeners,
+		EndpointGroups:                   endpointGroups,
+		Analytics:                        analytics,
+		Failover:                         failover,
+		Properties:                       properties,
+		Resources:                        resources,
+		Plans:                            plans,
+		FlowExecution:                    flowExecution,
+		Flows:                            flows1,
+		ResponseTemplates:                responseTemplates,
+		Services:                         services2,
+		Groups:                           groups,
+		Visibility:                       visibility,
+		State:                            state,
+		Labels:                           labels,
+		Metadata:                         metadata,
+		LifecycleState:                   lifecycleState,
+		Categories:                       categories,
+		Members:                          members,
+		NotifyMembers:                    notifyMembers,
+		Pages:                            pages,
+		AllowedInAPIProducts:             allowedInAPIProducts,
+		AllowMultiJwtOauth2Subscriptions: allowMultiJwtOauth2Subscriptions,
+		ConsoleNotification:              consoleNotification,
 	}
 
 	return &out, diags

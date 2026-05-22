@@ -16,6 +16,7 @@ import (
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	speakeasy_int64validators "github.com/gravitee-io/terraform-provider-apim/internal/validators/int64validators"
 	speakeasy_listvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
@@ -64,37 +65,39 @@ type Apiv4Resource struct {
 
 // Apiv4ResourceModel describes the resource data model.
 type Apiv4ResourceModel struct {
-	Analytics           *tfTypes.Analytics                             `tfsdk:"analytics"`
-	Categories          []types.String                                 `tfsdk:"categories"`
-	ConsoleNotification *tfTypes.APIV4SpecConsoleNotification          `tfsdk:"console_notification"`
-	Description         types.String                                   `tfsdk:"description"`
-	EndpointGroups      []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
-	EnvironmentID       types.String                                   `tfsdk:"environment_id"`
-	Failover            *tfTypes.FailoverV4                            `tfsdk:"failover"`
-	FlowExecution       *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
-	Flows               []tfTypes.FlowV4                               `tfsdk:"flows"`
-	Groups              []types.String                                 `tfsdk:"groups"`
-	Hrid                types.String                                   `tfsdk:"hrid"`
-	ID                  types.String                                   `tfsdk:"id"`
-	Labels              []types.String                                 `tfsdk:"labels"`
-	LifecycleState      types.String                                   `tfsdk:"lifecycle_state"`
-	Listeners           []tfTypes.Listener                             `tfsdk:"listeners"`
-	Members             []tfTypes.Member                               `tfsdk:"members"`
-	Metadata            []tfTypes.Metadata                             `tfsdk:"metadata"`
-	Name                types.String                                   `tfsdk:"name"`
-	NotifyMembers       types.Bool                                     `tfsdk:"notify_members"`
-	OrganizationID      types.String                                   `tfsdk:"organization_id"`
-	Pages               []tfTypes.PageV4                               `tfsdk:"pages"`
-	Plans               []tfTypes.PlanV4                               `tfsdk:"plans"`
-	Properties          []tfTypes.Property                             `tfsdk:"properties"`
-	Resources           []tfTypes.APIResource                          `tfsdk:"resources"`
-	ResponseTemplates   map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
-	Services            *tfTypes.APIServices                           `tfsdk:"services"`
-	State               types.String                                   `tfsdk:"state"`
-	Tags                []types.String                                 `tfsdk:"tags"`
-	Type                types.String                                   `tfsdk:"type"`
-	Version             types.String                                   `tfsdk:"version"`
-	Visibility          types.String                                   `tfsdk:"visibility"`
+	AllowedInAPIProducts             types.Bool                                     `tfsdk:"allowed_in_api_products"`
+	AllowMultiJwtOauth2Subscriptions types.Bool                                     `tfsdk:"allow_multi_jwt_oauth2_subscriptions"`
+	Analytics                        *tfTypes.Analytics                             `tfsdk:"analytics"`
+	Categories                       []types.String                                 `tfsdk:"categories"`
+	ConsoleNotification              *tfTypes.APIV4SpecConsoleNotification          `tfsdk:"console_notification"`
+	Description                      types.String                                   `tfsdk:"description"`
+	EndpointGroups                   []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
+	EnvironmentID                    types.String                                   `tfsdk:"environment_id"`
+	Failover                         *tfTypes.FailoverV4                            `tfsdk:"failover"`
+	FlowExecution                    *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
+	Flows                            []tfTypes.FlowV4                               `tfsdk:"flows"`
+	Groups                           []types.String                                 `tfsdk:"groups"`
+	Hrid                             types.String                                   `tfsdk:"hrid"`
+	ID                               types.String                                   `tfsdk:"id"`
+	Labels                           []types.String                                 `tfsdk:"labels"`
+	LifecycleState                   types.String                                   `tfsdk:"lifecycle_state"`
+	Listeners                        []tfTypes.Listener                             `tfsdk:"listeners"`
+	Members                          []tfTypes.Member                               `tfsdk:"members"`
+	Metadata                         []tfTypes.Metadata                             `tfsdk:"metadata"`
+	Name                             types.String                                   `tfsdk:"name"`
+	NotifyMembers                    types.Bool                                     `tfsdk:"notify_members"`
+	OrganizationID                   types.String                                   `tfsdk:"organization_id"`
+	Pages                            []tfTypes.PageV4                               `tfsdk:"pages"`
+	Plans                            []tfTypes.PlanV4                               `tfsdk:"plans"`
+	Properties                       []tfTypes.Property                             `tfsdk:"properties"`
+	Resources                        []tfTypes.APIResource                          `tfsdk:"resources"`
+	ResponseTemplates                map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
+	Services                         *tfTypes.APIServices                           `tfsdk:"services"`
+	State                            types.String                                   `tfsdk:"state"`
+	Tags                             []types.String                                 `tfsdk:"tags"`
+	Type                             types.String                                   `tfsdk:"type"`
+	Version                          types.String                                   `tfsdk:"version"`
+	Visibility                       types.String                                   `tfsdk:"visibility"`
 }
 
 func (r *Apiv4Resource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -105,6 +108,18 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Apiv4 Resource",
 		Attributes: map[string]schema.Attribute{
+			"allow_multi_jwt_oauth2_subscriptions": schema.BoolAttribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     booldefault.StaticBool(false),
+				Description: `Allow an application to subscribe to more than one JWT/OAuth2 plan (V4 only). Default: false`,
+			},
+			"allowed_in_api_products": schema.BoolAttribute{
+				Computed:    true,
+				Optional:    true,
+				Default:     booldefault.StaticBool(false),
+				Description: `Indicates whether this API is allowed to be used in API Products. Only applicable for V4 HTTP Proxy APIs. Default: false`,
+			},
 			"analytics": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
@@ -1590,6 +1605,15 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									Description: `A hostname for which the API will match against SNI. Not Null`,
 									Validators: []validator.String{
 										speakeasy_stringvalidators.NotNull(),
+									},
+								},
+								"port": schema.Int64Attribute{
+									Computed:    true,
+									Optional:    true,
+									Description: `The port of the listener. Not Null`,
+									Validators: []validator.Int64{
+										speakeasy_int64validators.NotNull(),
+										int64validator.AtLeast(0),
 									},
 								},
 								"servers": schema.ListAttribute{

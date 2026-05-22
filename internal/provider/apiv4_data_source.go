@@ -41,36 +41,38 @@ type Apiv4DataSource struct {
 
 // Apiv4DataSourceModel describes the data model.
 type Apiv4DataSourceModel struct {
-	Analytics           *tfTypes.Analytics                             `tfsdk:"analytics"`
-	Categories          []types.String                                 `tfsdk:"categories"`
-	ConsoleNotification *tfTypes.APIV4StateConsoleNotification         `tfsdk:"console_notification"`
-	Description         types.String                                   `tfsdk:"description"`
-	EndpointGroups      []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
-	EnvironmentID       types.String                                   `tfsdk:"environment_id"`
-	Failover            *tfTypes.FailoverV4                            `tfsdk:"failover"`
-	FlowExecution       *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
-	Flows               []tfTypes.FlowV4                               `tfsdk:"flows"`
-	Groups              []types.String                                 `tfsdk:"groups"`
-	Hrid                types.String                                   `tfsdk:"hrid"`
-	ID                  types.String                                   `tfsdk:"id"`
-	Labels              []types.String                                 `tfsdk:"labels"`
-	LifecycleState      types.String                                   `tfsdk:"lifecycle_state"`
-	Listeners           []tfTypes.Listener                             `tfsdk:"listeners"`
-	Members             []tfTypes.Member                               `tfsdk:"members"`
-	Metadata            []tfTypes.Metadata                             `tfsdk:"metadata"`
-	Name                types.String                                   `tfsdk:"name"`
-	OrganizationID      types.String                                   `tfsdk:"organization_id"`
-	Pages               []tfTypes.PageV4                               `tfsdk:"pages"`
-	Plans               []tfTypes.PlanV4                               `tfsdk:"plans"`
-	Properties          []tfTypes.Property1                            `tfsdk:"properties"`
-	Resources           []tfTypes.APIResource                          `tfsdk:"resources"`
-	ResponseTemplates   map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
-	Services            *tfTypes.APIServices                           `tfsdk:"services"`
-	State               types.String                                   `tfsdk:"state"`
-	Tags                []types.String                                 `tfsdk:"tags"`
-	Type                types.String                                   `tfsdk:"type"`
-	Version             types.String                                   `tfsdk:"version"`
-	Visibility          types.String                                   `tfsdk:"visibility"`
+	AllowedInAPIProducts             types.Bool                                     `tfsdk:"allowed_in_api_products"`
+	AllowMultiJwtOauth2Subscriptions types.Bool                                     `tfsdk:"allow_multi_jwt_oauth2_subscriptions"`
+	Analytics                        *tfTypes.Analytics                             `tfsdk:"analytics"`
+	Categories                       []types.String                                 `tfsdk:"categories"`
+	ConsoleNotification              *tfTypes.APIV4StateConsoleNotification         `tfsdk:"console_notification"`
+	Description                      types.String                                   `tfsdk:"description"`
+	EndpointGroups                   []tfTypes.EndpointGroupV4                      `tfsdk:"endpoint_groups"`
+	EnvironmentID                    types.String                                   `tfsdk:"environment_id"`
+	Failover                         *tfTypes.FailoverV4                            `tfsdk:"failover"`
+	FlowExecution                    *tfTypes.FlowExecution                         `tfsdk:"flow_execution"`
+	Flows                            []tfTypes.FlowV4                               `tfsdk:"flows"`
+	Groups                           []types.String                                 `tfsdk:"groups"`
+	Hrid                             types.String                                   `tfsdk:"hrid"`
+	ID                               types.String                                   `tfsdk:"id"`
+	Labels                           []types.String                                 `tfsdk:"labels"`
+	LifecycleState                   types.String                                   `tfsdk:"lifecycle_state"`
+	Listeners                        []tfTypes.Listener                             `tfsdk:"listeners"`
+	Members                          []tfTypes.Member                               `tfsdk:"members"`
+	Metadata                         []tfTypes.Metadata                             `tfsdk:"metadata"`
+	Name                             types.String                                   `tfsdk:"name"`
+	OrganizationID                   types.String                                   `tfsdk:"organization_id"`
+	Pages                            []tfTypes.PageV4                               `tfsdk:"pages"`
+	Plans                            []tfTypes.PlanV4                               `tfsdk:"plans"`
+	Properties                       []tfTypes.Property1                            `tfsdk:"properties"`
+	Resources                        []tfTypes.APIResource                          `tfsdk:"resources"`
+	ResponseTemplates                map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
+	Services                         *tfTypes.APIServices                           `tfsdk:"services"`
+	State                            types.String                                   `tfsdk:"state"`
+	Tags                             []types.String                                 `tfsdk:"tags"`
+	Type                             types.String                                   `tfsdk:"type"`
+	Version                          types.String                                   `tfsdk:"version"`
+	Visibility                       types.String                                   `tfsdk:"visibility"`
 }
 
 // Metadata returns the data source type name.
@@ -84,6 +86,14 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 		MarkdownDescription: "Apiv4 DataSource",
 
 		Attributes: map[string]schema.Attribute{
+			"allow_multi_jwt_oauth2_subscriptions": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Allow an application to subscribe to more than one JWT/OAuth2 plan (V4 only).`,
+			},
+			"allowed_in_api_products": schema.BoolAttribute{
+				Computed:    true,
+				Description: `Indicates whether this API is allowed to be used in API Products. Only applicable for V4 HTTP Proxy APIs.`,
+			},
 			"analytics": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
@@ -942,6 +952,10 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								"host": schema.StringAttribute{
 									Computed:    true,
 									Description: `A hostname for which the API will match against SNI.`,
+								},
+								"port": schema.Int64Attribute{
+									Computed:    true,
+									Description: `The port of the listener`,
 								},
 								"servers": schema.ListAttribute{
 									Computed:    true,

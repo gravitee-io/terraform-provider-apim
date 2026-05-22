@@ -17,6 +17,8 @@ type KafkaListener struct {
 	Servers []string `json:"servers,omitempty"`
 	// A hostname for which the API will match against SNI.
 	Host string `json:"host"`
+	// The port of the listener
+	Port int64 `json:"port"`
 }
 
 func (k KafkaListener) MarshalJSON() ([]byte, error) {
@@ -56,4 +58,11 @@ func (k *KafkaListener) GetHost() string {
 		return ""
 	}
 	return k.Host
+}
+
+func (k *KafkaListener) GetPort() int64 {
+	if k == nil {
+		return 0
+	}
+	return k.Port
 }
