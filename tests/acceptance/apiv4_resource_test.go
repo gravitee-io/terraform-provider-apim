@@ -760,3 +760,45 @@ func TestAPIV4Resource_webhook(t *testing.T) {
 		},
 	})
 }
+
+func TestAPIV4Resource_kafka_native(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid": config.StringVariable(randomId),
+				},
+			},
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
+func TestAPIV4Resource_allow_fields(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies resource create and read.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid": config.StringVariable(randomId),
+				},
+			},
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}

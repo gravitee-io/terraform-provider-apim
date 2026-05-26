@@ -55,6 +55,9 @@ resource "apim_apiv4" "test" {
   }
   analytics = {
     enabled = false
+    otel_logs = {
+      enabled = true
+    }
   }
   plans = [
     {

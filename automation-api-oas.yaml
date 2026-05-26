@@ -1484,6 +1484,18 @@ components:
         generalConditionsHrid:
           type: string
           description: API page `hrid` that serves as general conditions documentation of this plan
+        bootstrapPort:
+          type: integer
+          description: Bootstrap port for port-based routing (native Kafka APIs only). Null in host/SNI routing mode.
+          example: 9092
+        brokerRangeStart:
+          type: integer
+          description: Start of broker port range for port-based routing (native Kafka APIs only).
+          example: 9100
+        brokerRangeEnd:
+          type: integer
+          description: End of broker port range for port-based routing (native Kafka APIs only). Must be greater than start port.
+          example: 9102
       required:
         - hrid
         - name
@@ -1526,6 +1538,14 @@ components:
           type: boolean
           description: Whether or not analytics are enabled.
           default: true
+        reporterMetricsEnabled:
+          type: boolean
+          description: |-
+            Enable the connection-metrics reporter on the gateway. Only applicable to Native v4 APIs; ignored on HTTP v4 requests and omitted from HTTP v4 responses.
+            Server-side default for Native v4 on create is `true`.
+            Independent of the parent `enabled` flag: event-metrics reporting and the connection-metrics reporter are gated separately.
+        otelLogs:
+          $ref: "#/components/schemas/OtelLogsV4"
         sampling:
           $ref: "#/components/schemas/Sampling"
         logging:
@@ -2424,6 +2444,12 @@ components:
             `WINDOWED_COUNT`: x/<ISO-8601 duration> cannot exceed 1 message per second
       required:
         - type
+    OtelLogsV4:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: Enable OpenTelemetry log export for this API (payload capture with traceId/spanId correlation).
     MembershipMemberType:
       type: string
       description: The type of membership
@@ -2588,8 +2614,7 @@ components:
               minimum: 0
               description: The port of the listener
           required:
-            - "host"
-            - "port"
+            - host
     FailoverV4:
       description: Defines the failover behavior to bypass endpoints when some are slow.
       type: object

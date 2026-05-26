@@ -365,6 +365,9 @@ actions:
   ## Defaults
   - target: $.components.schemas.Analytics.properties.enabled.default
     remove: true
+  - target: $.components.schemas.Analytics.properties.reporterMetricsEnabled
+    update:
+      default: true
   - target: $.components.schemas.PageV4.properties.homepage
     description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
     update:
