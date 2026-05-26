@@ -1,6 +1,14 @@
-resource "apim_apiv4" "kafka_native" {
-  # should match the resource name
-  hrid            = "kafka_native"
+provider "apim" {
+  organization_id = "DEFAULT"
+  environment_id  = "DEFAULT"
+}
+
+variable "hrid" {
+  type = string
+}
+
+resource "apim_apiv4" "test" {
+  hrid            = var.hrid
   name            = "[Terraform] Kafka Native proxy API"
   description     = "Connect to a local kafka cluster with a simple flow"
   version         = "1,0"
@@ -18,6 +26,7 @@ resource "apim_apiv4" "kafka_native" {
           },
         ]
         host = "kafka.local"
+        port = 9092
       }
     }
   ]
@@ -67,7 +76,12 @@ resource "apim_apiv4" "kafka_native" {
     },
   ]
   analytics = {
-    enabled = true
+    enabled                  = true
+    reporter_metrics_enabled = false
+    tracing = {
+      enabled = true
+      verbose = false
+    }
   }
   plans = [
     {
@@ -80,6 +94,9 @@ resource "apim_apiv4" "kafka_native" {
       security = {
         type = "KEY_LESS"
       }
+      bootstrap_port     = 9002
+      broker_range_start = 9003
+      broker_range_end   = 9010
     }
   ]
 }
