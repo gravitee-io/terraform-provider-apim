@@ -663,6 +663,9 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 		for _, plansItem := range resp.Plans {
 			var plans tfTypes.PlanV4
 
+			plans.BootstrapPort = types.Int64PointerValue(plansItem.BootstrapPort)
+			plans.BrokerRangeEnd = types.Int64PointerValue(plansItem.BrokerRangeEnd)
+			plans.BrokerRangeStart = types.Int64PointerValue(plansItem.BrokerRangeStart)
 			plans.Characteristics = make([]types.String, 0, len(plansItem.Characteristics))
 			for _, v := range plansItem.Characteristics {
 				plans.Characteristics = append(plans.Characteristics, types.StringValue(v))
@@ -1828,7 +1831,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	}
 	plans := make([]shared.PlanV4, 0, len(r.Plans))
 	for plansIndex := range r.Plans {
-		// APIV4#create,update.plans.idAPIV4#create,update.plans.id impedance mismatch: string != array
+		// APIV4#create,update.plans.idAPIV4#create,update.plans.id impedance mismatch: string != integer
 		var id *string
 		var hrid1 string
 		hrid1 = r.Plans[plansIndex].Hrid.ValueString()
@@ -2308,6 +2311,24 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			generalConditionsHrid = nil
 		}
+		bootstrapPort := new(int64)
+		if !r.Plans[plansIndex].BootstrapPort.IsUnknown() && !r.Plans[plansIndex].BootstrapPort.IsNull() {
+			*bootstrapPort = r.Plans[plansIndex].BootstrapPort.ValueInt64()
+		} else {
+			bootstrapPort = nil
+		}
+		brokerRangeStart := new(int64)
+		if !r.Plans[plansIndex].BrokerRangeStart.IsUnknown() && !r.Plans[plansIndex].BrokerRangeStart.IsNull() {
+			*brokerRangeStart = r.Plans[plansIndex].BrokerRangeStart.ValueInt64()
+		} else {
+			brokerRangeStart = nil
+		}
+		brokerRangeEnd := new(int64)
+		if !r.Plans[plansIndex].BrokerRangeEnd.IsUnknown() && !r.Plans[plansIndex].BrokerRangeEnd.IsNull() {
+			*brokerRangeEnd = r.Plans[plansIndex].BrokerRangeEnd.ValueInt64()
+		} else {
+			brokerRangeEnd = nil
+		}
 		plans = append(plans, shared.PlanV4{
 			ID:                    id,
 			Hrid:                  hrid1,
@@ -2324,6 +2345,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Flows:                 flows,
 			Mode:                  mode1,
 			GeneralConditionsHrid: generalConditionsHrid,
+			BootstrapPort:         bootstrapPort,
+			BrokerRangeStart:      brokerRangeStart,
+			BrokerRangeEnd:        brokerRangeEnd,
 		})
 	}
 	var flowExecution *shared.FlowExecution

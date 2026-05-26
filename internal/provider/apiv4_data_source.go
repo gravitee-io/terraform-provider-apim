@@ -1194,6 +1194,18 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Computed: true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"bootstrap_port": schema.Int64Attribute{
+							Computed:    true,
+							Description: `Bootstrap port for port-based routing (native Kafka APIs only). Null in host/SNI routing mode.`,
+						},
+						"broker_range_end": schema.Int64Attribute{
+							Computed:    true,
+							Description: `End of broker port range for port-based routing (native Kafka APIs only). Must be greater than start port.`,
+						},
+						"broker_range_start": schema.Int64Attribute{
+							Computed:    true,
+							Description: `Start of broker port range for port-based routing (native Kafka APIs only).`,
+						},
 						"characteristics": schema.ListAttribute{
 							Computed:    true,
 							ElementType: types.StringType,

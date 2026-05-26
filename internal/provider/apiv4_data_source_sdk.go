@@ -663,6 +663,9 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 		for _, plansItem := range resp.Plans {
 			var plans tfTypes.PlanV4
 
+			plans.BootstrapPort = types.Int64PointerValue(plansItem.BootstrapPort)
+			plans.BrokerRangeEnd = types.Int64PointerValue(plansItem.BrokerRangeEnd)
+			plans.BrokerRangeStart = types.Int64PointerValue(plansItem.BrokerRangeStart)
 			plans.Characteristics = make([]types.String, 0, len(plansItem.Characteristics))
 			for _, v := range plansItem.Characteristics {
 				plans.Characteristics = append(plans.Characteristics, types.StringValue(v))
