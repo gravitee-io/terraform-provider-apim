@@ -46,6 +46,12 @@ type PlanV4 struct {
 	Mode PlanMode `json:"mode"`
 	// API page `hrid` that serves as general conditions documentation of this plan
 	GeneralConditionsHrid *string `json:"generalConditionsHrid,omitempty"`
+	// Bootstrap port for port-based routing (native Kafka APIs only). Null in host/SNI routing mode.
+	BootstrapPort *int64 `json:"bootstrapPort,omitempty"`
+	// Start of broker port range for port-based routing (native Kafka APIs only).
+	BrokerRangeStart *int64 `json:"brokerRangeStart,omitempty"`
+	// End of broker port range for port-based routing (native Kafka APIs only). Must be greater than start port.
+	BrokerRangeEnd *int64 `json:"brokerRangeEnd,omitempty"`
 }
 
 func (p PlanV4) MarshalJSON() ([]byte, error) {
@@ -162,6 +168,27 @@ func (p *PlanV4) GetGeneralConditionsHrid() *string {
 		return nil
 	}
 	return p.GeneralConditionsHrid
+}
+
+func (p *PlanV4) GetBootstrapPort() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.BootstrapPort
+}
+
+func (p *PlanV4) GetBrokerRangeStart() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.BrokerRangeStart
+}
+
+func (p *PlanV4) GetBrokerRangeEnd() *int64 {
+	if p == nil {
+		return nil
+	}
+	return p.BrokerRangeEnd
 }
 
 // #region class-body-planv4
