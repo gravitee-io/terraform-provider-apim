@@ -8,35 +8,92 @@ on:
         required: false
         type: boolean
         default: true
+  push:
+    branches:
+      - main
+      - '1.*.x'
+    paths:
+      - '.speakeasy/gen.lock'
+      - '.speakeasy/gen.yaml'
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
-# Releases need permission to read and write the repository contents.
-# GitHub considers creating releases and uploading assets as writing content.
 permissions:
   contents: write
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.check-release.outputs.should_release }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Check if this is a release commit
+        id: check-release
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "should_release=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          COMMIT_MSG=$(git log -1 --pretty=%s)
+          VERSION=$(yq '.management.releaseVersion' .speakeasy/gen.lock)
+          if [[ "$COMMIT_MSG" =~ ^release:\ ([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            MSG_VERSION="${BASH_REMATCH[1]}"
+            if [ "$MSG_VERSION" = "$VERSION" ]; then
+              echo "should_release=true" >> $GITHUB_OUTPUT
+            else
+              echo "::warning::Release subject ($MSG_VERSION) does not match gen.lock ($VERSION); skipping release"
+              echo "should_release=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "should_release=false" >> $GITHUB_OUTPUT
+          fi
+
   goreleaser:
+    needs: check
+    if: needs.check.outputs.should_release == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          # Allow GoReleaser to access older tag information.
           fetch-depth: 0
-      - uses: actions/setup-go@4d34df0c2316fe8122ab82dc22947d607c0c91f9 # v4.0.0
+      - uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6
         with:
           go-version-file: 'go.mod'
-          cache: true
-      - name: Read current version + create tag
+      - name: Determine dry run
+        id: config
         run: |
-          TAG=$(yq '.management.releaseVersion' .speakeasy/gen.lock)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "dry_run=${{ inputs.dry_run }}" >> $GITHUB_OUTPUT
+          else
+            echo "dry_run=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Read release version
+        id: release-version
+        run: |
+          VERSION=$(yq '.management.releaseVersion' .speakeasy/gen.lock)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "RELEASE_VERSION=v$VERSION" >> $GITHUB_ENV
+          echo "Release version: $VERSION"
+      - name: Verify tag does not exist
+        run: |
+          VERSION="${{ steps.release-version.outputs.version }}"
+          if git tag -l "v$VERSION" | grep -q .; then
+            echo "::error::Tag v$VERSION already exists"
+            exit 1
+          fi
+      - name: Create and push tag
+        if: steps.config.outputs.dry_run == 'false'
+        run: |
+          VERSION="${{ steps.release-version.outputs.version }}"
 
           git config --global user.email "teamgko@graviteesource.com"
           git config --global user.name "Team GKO"
 
-          git tag -a v$TAG -m "Release v$TAG"
-          git push origin v$TAG
-          echo "RELEASE_VERSION=v$TAG" >> $GITHUB_ENV
+          git tag -a "v$VERSION" -m "Release v$VERSION"
+          git push origin "v$VERSION"
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@111c56156bcc6918c056dbef52164cfa583dc549 # v5.2.0
         id: import_gpg
@@ -46,16 +103,31 @@ jobs:
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@286f3b13b1b49da4ac219696163fb8c1c93e1200 # v6.0.0
         with:
-          args: ${{ inputs.dry_run && 'release --skip-publish' || 'release --clean' }}
+          args: ${{ steps.config.outputs.dry_run == 'true' && 'release --snapshot --skip-publish' || 'release --clean' }}
         env:
-          # GitHub sets the GITHUB_TOKEN secret automatically.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+      - name: Read changelog path
+        id: changelog
+        if: steps.config.outputs.dry_run == 'false'
+        run: |
+          CHANGELOG_PATH=$(yq '.apim.doc.changelog' hack/apim.yaml)
+          echo "path=$CHANGELOG_PATH" >> $GITHUB_OUTPUT
       - name: Send slack notification release
-        if: ${{ !inputs.dry_run }}
+        if: steps.config.outputs.dry_run == 'false'
         uses: ./.github/actions/send-slack-notification
         with:
           job_name: ${{ github.job }} - Release ${{ env.RELEASE_VERSION }}
           circleci_token: ${{ secrets.CIRCLECI_TOKEN }}
           trigger: release_notification
           release_version: ${{ env.RELEASE_VERSION }}
+      - name: Publish changelog to docs repo
+        if: steps.config.outputs.dry_run == 'false'
+        working-directory: hack/scripts
+        env:
+          CIRCLECI_TOKEN: ${{ secrets.CIRCLECI_TOKEN }}
+        run: |
+          npm ci
+          npx zx trigger-publish-changelog.mjs \
+            --release-version "${{ env.RELEASE_VERSION }}" \
+            --changelog-path "${{ steps.changelog.outputs.path }}"

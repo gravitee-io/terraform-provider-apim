@@ -21,10 +21,12 @@ runs:
   using: 'composite'
   steps:
     - shell: bash
+      working-directory: hack/scripts
       env:
         CIRCLECI_TOKEN: ${{ inputs.circleci_token }}
       run: |
         echo "🧪 Triggering pipeline"
         JOB_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/job/${{ job.check_run_id }}"
-        npx zx hack/scripts/trigger-slack-notification.mjs --trigger "${{inputs.trigger}}" --branch "${{ github.ref_name }}" --job-name "${{ inputs.job_name }}" --job-status "${{ inputs.job_status == 'success' && 'pass' || 'fail'}}" --job-url "${JOB_URL}" --release-version "${{inputs.release_version}}"  
+        npm ci
+        npx zx trigger-slack-notification.mjs --trigger "${{inputs.trigger}}" --branch "${{ github.ref_name }}" --job-name "${{ inputs.job_name }}" --job-status "${{ inputs.job_status == 'success' && 'pass' || 'fail'}}" --job-url "${JOB_URL}" --release-version "${{inputs.release_version}}"
 

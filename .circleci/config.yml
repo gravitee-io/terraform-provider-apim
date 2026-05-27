@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   keeper: gravitee-io/keeper@0.7.0
   slack: circleci/slack@6.1.1
+  gh: circleci/github-cli@2.7.2
 
 parameters:
   trigger:
@@ -11,7 +12,11 @@ parameters:
     enum:
       - test_results_notification
       - release_notification
+      - publish_changelog
       - none
+  changelog_path:
+    type: string
+    default: ""
   job_name:
     type: string
     default: ""
@@ -121,6 +126,108 @@ jobs:
               "text": ":terraform: Terraform provider - Version ${VERSION} released! :ramen:"
             }
 
+  publish-changelog-to-docs:
+    docker:
+      - image: cimg/base:stable
+    resource_class: small
+    steps:
+      - run:
+          name: Validate pipeline parameters
+          command: |
+            RELEASE_VERSION="<< pipeline.parameters.release_version >>"
+            CHANGELOG_PATH="<< pipeline.parameters.changelog_path >>"
+
+            if [[ -z "$RELEASE_VERSION" ]]; then
+              echo "release_version parameter is empty"
+              exit 1
+            fi
+            if [[ ! "$RELEASE_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              echo "release_version must be a semver tag with v prefix (e.g. v1.5.0)"
+              exit 1
+            fi
+            if [[ -z "$CHANGELOG_PATH" ]]; then
+              echo "changelog_path parameter is empty"
+              exit 1
+            fi
+            if [[ ! "$CHANGELOG_PATH" =~ ^docs/apim/ ]]; then
+              echo "changelog_path must start with docs/apim/"
+              exit 1
+            fi
+      - keeper/env-export:
+          secret-url: keeper://TIlcGPFq4rN5GvgnZb9hng/field/password
+          var-name: GITHUB_TOKEN
+      - keeper/env-export:
+          secret-url: keeper://ZOz4db245GNaETVwmPBk8w/field/password
+          var-name: SLACK_ACCESS_TOKEN
+      - gh/setup
+      - run:
+          name: Extract changelog from GitHub Release
+          command: |
+            gh release view "<< pipeline.parameters.release_version >>" \
+              --repo gravitee-io/terraform-provider-apim \
+              --json body -q .body > /tmp/changelog.md
+
+            if [[ ! -s /tmp/changelog.md ]]; then
+              echo "GitHub Release body is empty for << pipeline.parameters.release_version >>"
+              exit 1
+            fi
+      - run:
+          name: Clone docs repo and create PR
+          command: |
+            git clone --depth 1 --single-branch --no-tags --filter=blob:none --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/gravitee-io/gravitee-platform-docs.git" /tmp/docs-repo
+            cd /tmp/docs-repo
+
+            RELEASE_VERSION="<< pipeline.parameters.release_version >>"
+            CHANGELOG_FILE="<< pipeline.parameters.changelog_path >>"
+            BRANCH="terraform-changelog-${RELEASE_VERSION}"
+
+            EXISTING_PR=$(gh pr list \
+              --repo gravitee-io/gravitee-platform-docs \
+              --head "${BRANCH}" \
+              --state all \
+              --json number \
+              -q '.[0].number' || true)
+            if [[ -n "$EXISTING_PR" ]]; then
+              echo "Docs PR #${EXISTING_PR} already exists for ${RELEASE_VERSION}, skipping"
+              exit 0
+            fi
+
+            CHANGELOG_DIR="$(dirname "${CHANGELOG_FILE}")"
+            git sparse-checkout init --cone
+            git sparse-checkout set "${CHANGELOG_DIR}"
+            git checkout main
+            git switch -c "${BRANCH}"
+
+            TEMP_FILE=$(mktemp)
+            echo "## ${RELEASE_VERSION}" > "${TEMP_FILE}"
+            echo "" >> "${TEMP_FILE}"
+            cat /tmp/changelog.md >> "${TEMP_FILE}"
+            echo "" >> "${TEMP_FILE}"
+
+            if [ -f "${CHANGELOG_FILE}" ]; then
+              cat "${CHANGELOG_FILE}" >> "${TEMP_FILE}"
+            fi
+            mkdir -p "${CHANGELOG_DIR}"
+            mv "${TEMP_FILE}" "${CHANGELOG_FILE}"
+
+            git config user.email "teamgko@graviteesource.com"
+            git config user.name "Team GKO"
+            git add "${CHANGELOG_FILE}"
+            git commit -m "docs: APIM Terraform provider ${RELEASE_VERSION} changelog"
+            git push origin "${BRANCH}"
+            gh pr create \
+              --repo gravitee-io/gravitee-platform-docs \
+              --title "docs: APIM Terraform provider ${RELEASE_VERSION} changelog" \
+              --body "Automated PR from terraform-provider-apim release ${RELEASE_VERSION}" \
+              --base main
+      - slack/notify:
+          event: fail
+          channel: C0A2R4W3MLM
+          custom: |
+            {
+              "text": ":terraform: Terraform provider changelog publish *failed* for version << pipeline.parameters.release_version >>"
+            }
+
 workflows:
   send-notification:
     when:
@@ -140,4 +247,14 @@ workflows:
     jobs:
       - notify-release:
           name: Send release notification
+          context: cicd-orchestrator
+
+  publish-changelog:
+    when:
+      equal:
+        - << pipeline.parameters.trigger >>
+        - publish_changelog
+    jobs:
+      - publish-changelog-to-docs:
+          name: Publish changelog to docs
           context: cicd-orchestrator
