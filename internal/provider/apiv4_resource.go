@@ -16,7 +16,6 @@ import (
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
-	speakeasy_int64validators "github.com/gravitee-io/terraform-provider-apim/internal/validators/int64validators"
 	speakeasy_listvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/listvalidators"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
@@ -1627,9 +1626,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								"port": schema.Int64Attribute{
 									Optional:    true,
-									Description: `The port of the listener. Not Null`,
+									Description: `The port of the listener`,
 									Validators: []validator.Int64{
-										speakeasy_int64validators.NotNull(),
 										int64validator.AtLeast(0),
 									},
 								},

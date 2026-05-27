@@ -519,7 +519,7 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					listeners.Kafka.Entrypoints = append(listeners.Kafka.Entrypoints, entrypoints1)
 				}
 				listeners.Kafka.Host = types.StringValue(listenersItem.KafkaListener.Host)
-				listeners.Kafka.Port = types.Int64Value(listenersItem.KafkaListener.Port)
+				listeners.Kafka.Port = types.Int64PointerValue(listenersItem.KafkaListener.Port)
 				listeners.Kafka.Servers = make([]types.String, 0, len(listenersItem.KafkaListener.Servers))
 				for _, v := range listenersItem.KafkaListener.Servers {
 					listeners.Kafka.Servers = append(listeners.Kafka.Servers, types.StringValue(v))
@@ -1385,9 +1385,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			var host1 string
 			host1 = r.Listeners[listenersItem].Kafka.Host.ValueString()
 
-			var port int64
-			port = r.Listeners[listenersItem].Kafka.Port.ValueInt64()
-
+			port := new(int64)
+			if !r.Listeners[listenersItem].Kafka.Port.IsUnknown() && !r.Listeners[listenersItem].Kafka.Port.IsNull() {
+				*port = r.Listeners[listenersItem].Kafka.Port.ValueInt64()
+			} else {
+				port = nil
+			}
 			kafkaListener := shared.KafkaListener{
 				Type:        typeVar4,
 				Entrypoints: entrypoints3,

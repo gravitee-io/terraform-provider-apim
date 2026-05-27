@@ -519,7 +519,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					listeners.Kafka.Entrypoints = append(listeners.Kafka.Entrypoints, entrypoints1)
 				}
 				listeners.Kafka.Host = types.StringValue(listenersItem.KafkaListener.Host)
-				listeners.Kafka.Port = types.Int64Value(listenersItem.KafkaListener.Port)
+				listeners.Kafka.Port = types.Int64PointerValue(listenersItem.KafkaListener.Port)
 				listeners.Kafka.Servers = make([]types.String, 0, len(listenersItem.KafkaListener.Servers))
 				for _, v := range listenersItem.KafkaListener.Servers {
 					listeners.Kafka.Servers = append(listeners.Kafka.Servers, types.StringValue(v))
