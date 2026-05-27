@@ -62,4 +62,19 @@ release:
   # If you want to manually examine the release before it goes live, uncomment this line:
   # draft: true
 changelog:
-  disable: true
+  sort: asc
+  groups:
+    - title: "Features"
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: "Bug Fixes"
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: "Other"
+      order: 999
+  filters:
+    include:
+      - "^fix:"
+      - "^feat:"
+      - "^test:"
+      - "^docs:"

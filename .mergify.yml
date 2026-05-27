@@ -1,0 +1,27 @@
+# Backport via dash-style labels (same pattern as gravitee-kubernetes-operator).
+# Add one rule per maintenance branch when it is created (see RELEASING.md).
+pull_request_rules:
+  - name: Apply commits on `1.4.x`
+    conditions:
+      - label=apply-on-1-4-x
+    actions:
+      backport:
+        branches:
+          - 1.4.x
+        assignees:
+          - "{{ author }}"
+        title: "[1.4.x] {{ title }}"
+        body: >
+          This is an automatic copy of pull request #{{number}} done by
+          [Mergify](https://mergify.com).
+
+
+          ----
+
+
+          {{ body }}
+
+
+          ----
+
+          {{ cherry_pick_error }}

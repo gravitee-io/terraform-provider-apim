@@ -35,6 +35,10 @@ async function getChartRegistry() {
   return MANIFEST.apim.chart.registry;
 }
 
+async function getDocChangelog() {
+  return MANIFEST.apim.doc.changelog;
+}
+
 async function parseManifest() {
   const manifestFilePath = path.join(PROJECT_DIR, "hack", "apim.yaml");
   const manifestFile = await fs.readFile(manifestFilePath, "utf8");
@@ -46,4 +50,5 @@ export const APIM = {
   getChartRegistry,
   getImageTag,
   getImageRegistry,
+  getDocChangelog,
 };
