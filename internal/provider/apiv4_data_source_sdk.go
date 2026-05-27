@@ -57,6 +57,13 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					r.Analytics.Logging.Phase.Response = types.BoolPointerValue(resp.Analytics.Logging.Phase.Response)
 				}
 			}
+			if resp.Analytics.OtelLogs == nil {
+				r.Analytics.OtelLogs = nil
+			} else {
+				r.Analytics.OtelLogs = &tfTypes.OtelLogsV4{}
+				r.Analytics.OtelLogs.Enabled = types.BoolPointerValue(resp.Analytics.OtelLogs.Enabled)
+			}
+			r.Analytics.ReporterMetricsEnabled = types.BoolPointerValue(resp.Analytics.ReporterMetricsEnabled)
 			if resp.Analytics.Sampling == nil {
 				r.Analytics.Sampling = nil
 			} else {

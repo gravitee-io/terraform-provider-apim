@@ -57,6 +57,13 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					r.Analytics.Logging.Phase.Response = types.BoolPointerValue(resp.Analytics.Logging.Phase.Response)
 				}
 			}
+			if resp.Analytics.OtelLogs == nil {
+				r.Analytics.OtelLogs = nil
+			} else {
+				r.Analytics.OtelLogs = &tfTypes.OtelLogsV4{}
+				r.Analytics.OtelLogs.Enabled = types.BoolPointerValue(resp.Analytics.OtelLogs.Enabled)
+			}
+			r.Analytics.ReporterMetricsEnabled = types.BoolPointerValue(resp.Analytics.ReporterMetricsEnabled)
 			if resp.Analytics.Sampling == nil {
 				r.Analytics.Sampling = nil
 			} else {
@@ -1578,6 +1585,24 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			enabled4 = nil
 		}
+		reporterMetricsEnabled := new(bool)
+		if !r.Analytics.ReporterMetricsEnabled.IsUnknown() && !r.Analytics.ReporterMetricsEnabled.IsNull() {
+			*reporterMetricsEnabled = r.Analytics.ReporterMetricsEnabled.ValueBool()
+		} else {
+			reporterMetricsEnabled = nil
+		}
+		var otelLogs *shared.OtelLogsV4
+		if r.Analytics.OtelLogs != nil {
+			enabled5 := new(bool)
+			if !r.Analytics.OtelLogs.Enabled.IsUnknown() && !r.Analytics.OtelLogs.Enabled.IsNull() {
+				*enabled5 = r.Analytics.OtelLogs.Enabled.ValueBool()
+			} else {
+				enabled5 = nil
+			}
+			otelLogs = &shared.OtelLogsV4{
+				Enabled: enabled5,
+			}
+		}
 		var sampling *shared.Sampling
 		if r.Analytics.Sampling != nil {
 			typeVar9 := shared.SamplingType(r.Analytics.Sampling.Type.ValueString())
@@ -1694,11 +1719,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		}
 		var tracing *shared.TracingV4
 		if r.Analytics.Tracing != nil {
-			enabled5 := new(bool)
+			enabled6 := new(bool)
 			if !r.Analytics.Tracing.Enabled.IsUnknown() && !r.Analytics.Tracing.Enabled.IsNull() {
-				*enabled5 = r.Analytics.Tracing.Enabled.ValueBool()
+				*enabled6 = r.Analytics.Tracing.Enabled.ValueBool()
 			} else {
-				enabled5 = nil
+				enabled6 = nil
 			}
 			verbose := new(bool)
 			if !r.Analytics.Tracing.Verbose.IsUnknown() && !r.Analytics.Tracing.Verbose.IsNull() {
@@ -1707,24 +1732,26 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				verbose = nil
 			}
 			tracing = &shared.TracingV4{
-				Enabled: enabled5,
+				Enabled: enabled6,
 				Verbose: verbose,
 			}
 		}
 		analytics = &shared.Analytics{
-			Enabled:  enabled4,
-			Sampling: sampling,
-			Logging:  logging,
-			Tracing:  tracing,
+			Enabled:                enabled4,
+			ReporterMetricsEnabled: reporterMetricsEnabled,
+			OtelLogs:               otelLogs,
+			Sampling:               sampling,
+			Logging:                logging,
+			Tracing:                tracing,
 		}
 	}
 	var failover *shared.FailoverV4
 	if r.Failover != nil {
-		enabled6 := new(bool)
+		enabled7 := new(bool)
 		if !r.Failover.Enabled.IsUnknown() && !r.Failover.Enabled.IsNull() {
-			*enabled6 = r.Failover.Enabled.ValueBool()
+			*enabled7 = r.Failover.Enabled.ValueBool()
 		} else {
-			enabled6 = nil
+			enabled7 = nil
 		}
 		maxRetries := new(int)
 		if !r.Failover.MaxRetries.IsUnknown() && !r.Failover.MaxRetries.IsNull() {
@@ -1769,7 +1796,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			forceNextEndpointOnFailure = nil
 		}
 		failover = &shared.FailoverV4{
-			Enabled:                    enabled6,
+			Enabled:                    enabled7,
 			MaxRetries:                 maxRetries,
 			SlowCallDuration:           slowCallDuration,
 			OpenStateDuration:          openStateDuration,
@@ -1816,17 +1843,17 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 
 		var configuration8 interface{}
 		_ = json.Unmarshal([]byte(r.Resources[resourcesIndex].Configuration.ValueString()), &configuration8)
-		enabled7 := new(bool)
+		enabled8 := new(bool)
 		if !r.Resources[resourcesIndex].Enabled.IsUnknown() && !r.Resources[resourcesIndex].Enabled.IsNull() {
-			*enabled7 = r.Resources[resourcesIndex].Enabled.ValueBool()
+			*enabled8 = r.Resources[resourcesIndex].Enabled.ValueBool()
 		} else {
-			enabled7 = nil
+			enabled8 = nil
 		}
 		resources = append(resources, shared.APIResource{
 			Name:          name3,
 			Type:          type7,
 			Configuration: configuration8,
-			Enabled:       enabled7,
+			Enabled:       enabled8,
 		})
 	}
 	plans := make([]shared.PlanV4, 0, len(r.Plans))
@@ -1896,11 +1923,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				name5 = nil
 			}
-			enabled8 := new(bool)
+			enabled9 := new(bool)
 			if !r.Plans[plansIndex].Flows[flowsIndex].Enabled.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Enabled.IsNull() {
-				*enabled8 = r.Plans[plansIndex].Flows[flowsIndex].Enabled.ValueBool()
+				*enabled9 = r.Plans[plansIndex].Flows[flowsIndex].Enabled.ValueBool()
 			} else {
-				enabled8 = nil
+				enabled9 = nil
 			}
 			selectors := make([]shared.Selector, 0, len(r.Plans[plansIndex].Flows[flowsIndex].Selectors))
 			for selectorsItem := range r.Plans[plansIndex].Flows[flowsIndex].Selectors {
@@ -2007,11 +2034,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					description2 = nil
 				}
-				enabled9 := new(bool)
+				enabled10 := new(bool)
 				if !r.Plans[plansIndex].Flows[flowsIndex].Request[requestIndex].Enabled.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Request[requestIndex].Enabled.IsNull() {
-					*enabled9 = r.Plans[plansIndex].Flows[flowsIndex].Request[requestIndex].Enabled.ValueBool()
+					*enabled10 = r.Plans[plansIndex].Flows[flowsIndex].Request[requestIndex].Enabled.ValueBool()
 				} else {
-					enabled9 = nil
+					enabled10 = nil
 				}
 				var policy string
 				policy = r.Plans[plansIndex].Flows[flowsIndex].Request[requestIndex].Policy.ValueString()
@@ -2035,7 +2062,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				request1 = append(request1, shared.StepV4{
 					Name:             name6,
 					Description:      description2,
-					Enabled:          enabled9,
+					Enabled:          enabled10,
 					Policy:           policy,
 					Configuration:    configuration10,
 					Condition:        condition2,
@@ -2056,11 +2083,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					description3 = nil
 				}
-				enabled10 := new(bool)
+				enabled11 := new(bool)
 				if !r.Plans[plansIndex].Flows[flowsIndex].Response[responseIndex].Enabled.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Response[responseIndex].Enabled.IsNull() {
-					*enabled10 = r.Plans[plansIndex].Flows[flowsIndex].Response[responseIndex].Enabled.ValueBool()
+					*enabled11 = r.Plans[plansIndex].Flows[flowsIndex].Response[responseIndex].Enabled.ValueBool()
 				} else {
-					enabled10 = nil
+					enabled11 = nil
 				}
 				var policy1 string
 				policy1 = r.Plans[plansIndex].Flows[flowsIndex].Response[responseIndex].Policy.ValueString()
@@ -2084,7 +2111,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				response1 = append(response1, shared.StepV4{
 					Name:             name7,
 					Description:      description3,
-					Enabled:          enabled10,
+					Enabled:          enabled11,
 					Policy:           policy1,
 					Configuration:    configuration11,
 					Condition:        condition3,
@@ -2105,11 +2132,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					description4 = nil
 				}
-				enabled11 := new(bool)
+				enabled12 := new(bool)
 				if !r.Plans[plansIndex].Flows[flowsIndex].Subscribe[subscribeIndex].Enabled.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Subscribe[subscribeIndex].Enabled.IsNull() {
-					*enabled11 = r.Plans[plansIndex].Flows[flowsIndex].Subscribe[subscribeIndex].Enabled.ValueBool()
+					*enabled12 = r.Plans[plansIndex].Flows[flowsIndex].Subscribe[subscribeIndex].Enabled.ValueBool()
 				} else {
-					enabled11 = nil
+					enabled12 = nil
 				}
 				var policy2 string
 				policy2 = r.Plans[plansIndex].Flows[flowsIndex].Subscribe[subscribeIndex].Policy.ValueString()
@@ -2133,7 +2160,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				subscribe = append(subscribe, shared.StepV4{
 					Name:             name8,
 					Description:      description4,
-					Enabled:          enabled11,
+					Enabled:          enabled12,
 					Policy:           policy2,
 					Configuration:    configuration12,
 					Condition:        condition4,
@@ -2154,11 +2181,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					description5 = nil
 				}
-				enabled12 := new(bool)
+				enabled13 := new(bool)
 				if !r.Plans[plansIndex].Flows[flowsIndex].Publish[publishIndex].Enabled.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Publish[publishIndex].Enabled.IsNull() {
-					*enabled12 = r.Plans[plansIndex].Flows[flowsIndex].Publish[publishIndex].Enabled.ValueBool()
+					*enabled13 = r.Plans[plansIndex].Flows[flowsIndex].Publish[publishIndex].Enabled.ValueBool()
 				} else {
-					enabled12 = nil
+					enabled13 = nil
 				}
 				var policy3 string
 				policy3 = r.Plans[plansIndex].Flows[flowsIndex].Publish[publishIndex].Policy.ValueString()
@@ -2182,7 +2209,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				publish = append(publish, shared.StepV4{
 					Name:             name9,
 					Description:      description5,
-					Enabled:          enabled12,
+					Enabled:          enabled13,
 					Policy:           policy3,
 					Configuration:    configuration13,
 					Condition:        condition5,
@@ -2203,11 +2230,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					description6 = nil
 				}
-				enabled13 := new(bool)
+				enabled14 := new(bool)
 				if !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Enabled.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Enabled.IsNull() {
-					*enabled13 = r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Enabled.ValueBool()
+					*enabled14 = r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Enabled.ValueBool()
 				} else {
-					enabled13 = nil
+					enabled14 = nil
 				}
 				var policy4 string
 				policy4 = r.Plans[plansIndex].Flows[flowsIndex].EntrypointConnect[entrypointConnectIndex].Policy.ValueString()
@@ -2231,7 +2258,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				entrypointConnect = append(entrypointConnect, shared.StepV4{
 					Name:             name10,
 					Description:      description6,
-					Enabled:          enabled13,
+					Enabled:          enabled14,
 					Policy:           policy4,
 					Configuration:    configuration14,
 					Condition:        condition6,
@@ -2252,11 +2279,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					description7 = nil
 				}
-				enabled14 := new(bool)
+				enabled15 := new(bool)
 				if !r.Plans[plansIndex].Flows[flowsIndex].Interact[interactIndex].Enabled.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Interact[interactIndex].Enabled.IsNull() {
-					*enabled14 = r.Plans[plansIndex].Flows[flowsIndex].Interact[interactIndex].Enabled.ValueBool()
+					*enabled15 = r.Plans[plansIndex].Flows[flowsIndex].Interact[interactIndex].Enabled.ValueBool()
 				} else {
-					enabled14 = nil
+					enabled15 = nil
 				}
 				var policy5 string
 				policy5 = r.Plans[plansIndex].Flows[flowsIndex].Interact[interactIndex].Policy.ValueString()
@@ -2280,7 +2307,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				interact = append(interact, shared.StepV4{
 					Name:             name11,
 					Description:      description7,
-					Enabled:          enabled14,
+					Enabled:          enabled15,
 					Policy:           policy5,
 					Configuration:    configuration15,
 					Condition:        condition7,
@@ -2293,7 +2320,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			}
 			flows = append(flows, shared.FlowV4{
 				Name:              name5,
-				Enabled:           enabled8,
+				Enabled:           enabled9,
 				Selectors:         selectors,
 				Request:           request1,
 				Response:          response1,
@@ -2377,11 +2404,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			name12 = nil
 		}
-		enabled15 := new(bool)
+		enabled16 := new(bool)
 		if !r.Flows[flowsIndex1].Enabled.IsUnknown() && !r.Flows[flowsIndex1].Enabled.IsNull() {
-			*enabled15 = r.Flows[flowsIndex1].Enabled.ValueBool()
+			*enabled16 = r.Flows[flowsIndex1].Enabled.ValueBool()
 		} else {
-			enabled15 = nil
+			enabled16 = nil
 		}
 		selectors1 := make([]shared.Selector, 0, len(r.Flows[flowsIndex1].Selectors))
 		for selectorsItem1 := range r.Flows[flowsIndex1].Selectors {
@@ -2488,11 +2515,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				description8 = nil
 			}
-			enabled16 := new(bool)
+			enabled17 := new(bool)
 			if !r.Flows[flowsIndex1].Request[requestIndex1].Enabled.IsUnknown() && !r.Flows[flowsIndex1].Request[requestIndex1].Enabled.IsNull() {
-				*enabled16 = r.Flows[flowsIndex1].Request[requestIndex1].Enabled.ValueBool()
+				*enabled17 = r.Flows[flowsIndex1].Request[requestIndex1].Enabled.ValueBool()
 			} else {
-				enabled16 = nil
+				enabled17 = nil
 			}
 			var policy6 string
 			policy6 = r.Flows[flowsIndex1].Request[requestIndex1].Policy.ValueString()
@@ -2516,7 +2543,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			request2 = append(request2, shared.StepV4{
 				Name:             name13,
 				Description:      description8,
-				Enabled:          enabled16,
+				Enabled:          enabled17,
 				Policy:           policy6,
 				Configuration:    configuration16,
 				Condition:        condition9,
@@ -2537,11 +2564,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				description9 = nil
 			}
-			enabled17 := new(bool)
+			enabled18 := new(bool)
 			if !r.Flows[flowsIndex1].Response[responseIndex1].Enabled.IsUnknown() && !r.Flows[flowsIndex1].Response[responseIndex1].Enabled.IsNull() {
-				*enabled17 = r.Flows[flowsIndex1].Response[responseIndex1].Enabled.ValueBool()
+				*enabled18 = r.Flows[flowsIndex1].Response[responseIndex1].Enabled.ValueBool()
 			} else {
-				enabled17 = nil
+				enabled18 = nil
 			}
 			var policy7 string
 			policy7 = r.Flows[flowsIndex1].Response[responseIndex1].Policy.ValueString()
@@ -2565,7 +2592,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			response2 = append(response2, shared.StepV4{
 				Name:             name14,
 				Description:      description9,
-				Enabled:          enabled17,
+				Enabled:          enabled18,
 				Policy:           policy7,
 				Configuration:    configuration17,
 				Condition:        condition10,
@@ -2586,11 +2613,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				description10 = nil
 			}
-			enabled18 := new(bool)
+			enabled19 := new(bool)
 			if !r.Flows[flowsIndex1].Subscribe[subscribeIndex1].Enabled.IsUnknown() && !r.Flows[flowsIndex1].Subscribe[subscribeIndex1].Enabled.IsNull() {
-				*enabled18 = r.Flows[flowsIndex1].Subscribe[subscribeIndex1].Enabled.ValueBool()
+				*enabled19 = r.Flows[flowsIndex1].Subscribe[subscribeIndex1].Enabled.ValueBool()
 			} else {
-				enabled18 = nil
+				enabled19 = nil
 			}
 			var policy8 string
 			policy8 = r.Flows[flowsIndex1].Subscribe[subscribeIndex1].Policy.ValueString()
@@ -2614,7 +2641,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			subscribe1 = append(subscribe1, shared.StepV4{
 				Name:             name15,
 				Description:      description10,
-				Enabled:          enabled18,
+				Enabled:          enabled19,
 				Policy:           policy8,
 				Configuration:    configuration18,
 				Condition:        condition11,
@@ -2635,11 +2662,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				description11 = nil
 			}
-			enabled19 := new(bool)
+			enabled20 := new(bool)
 			if !r.Flows[flowsIndex1].Publish[publishIndex1].Enabled.IsUnknown() && !r.Flows[flowsIndex1].Publish[publishIndex1].Enabled.IsNull() {
-				*enabled19 = r.Flows[flowsIndex1].Publish[publishIndex1].Enabled.ValueBool()
+				*enabled20 = r.Flows[flowsIndex1].Publish[publishIndex1].Enabled.ValueBool()
 			} else {
-				enabled19 = nil
+				enabled20 = nil
 			}
 			var policy9 string
 			policy9 = r.Flows[flowsIndex1].Publish[publishIndex1].Policy.ValueString()
@@ -2663,7 +2690,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			publish1 = append(publish1, shared.StepV4{
 				Name:             name16,
 				Description:      description11,
-				Enabled:          enabled19,
+				Enabled:          enabled20,
 				Policy:           policy9,
 				Configuration:    configuration19,
 				Condition:        condition12,
@@ -2684,11 +2711,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				description12 = nil
 			}
-			enabled20 := new(bool)
+			enabled21 := new(bool)
 			if !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Enabled.IsUnknown() && !r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Enabled.IsNull() {
-				*enabled20 = r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Enabled.ValueBool()
+				*enabled21 = r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Enabled.ValueBool()
 			} else {
-				enabled20 = nil
+				enabled21 = nil
 			}
 			var policy10 string
 			policy10 = r.Flows[flowsIndex1].EntrypointConnect[entrypointConnectIndex1].Policy.ValueString()
@@ -2712,7 +2739,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			entrypointConnect1 = append(entrypointConnect1, shared.StepV4{
 				Name:             name17,
 				Description:      description12,
-				Enabled:          enabled20,
+				Enabled:          enabled21,
 				Policy:           policy10,
 				Configuration:    configuration20,
 				Condition:        condition13,
@@ -2733,11 +2760,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				description13 = nil
 			}
-			enabled21 := new(bool)
+			enabled22 := new(bool)
 			if !r.Flows[flowsIndex1].Interact[interactIndex1].Enabled.IsUnknown() && !r.Flows[flowsIndex1].Interact[interactIndex1].Enabled.IsNull() {
-				*enabled21 = r.Flows[flowsIndex1].Interact[interactIndex1].Enabled.ValueBool()
+				*enabled22 = r.Flows[flowsIndex1].Interact[interactIndex1].Enabled.ValueBool()
 			} else {
-				enabled21 = nil
+				enabled22 = nil
 			}
 			var policy11 string
 			policy11 = r.Flows[flowsIndex1].Interact[interactIndex1].Policy.ValueString()
@@ -2761,7 +2788,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			interact1 = append(interact1, shared.StepV4{
 				Name:             name18,
 				Description:      description13,
-				Enabled:          enabled21,
+				Enabled:          enabled22,
 				Policy:           policy11,
 				Configuration:    configuration21,
 				Condition:        condition14,
@@ -2774,7 +2801,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		}
 		flows1 = append(flows1, shared.FlowV4{
 			Name:              name12,
-			Enabled:           enabled15,
+			Enabled:           enabled16,
 			Selectors:         selectors1,
 			Request:           request2,
 			Response:          response2,
@@ -2833,11 +2860,11 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			}
 			var configuration22 interface{}
 			_ = json.Unmarshal([]byte(r.Services.DynamicProperty.Configuration.ValueString()), &configuration22)
-			enabled22 := new(bool)
+			enabled23 := new(bool)
 			if !r.Services.DynamicProperty.Enabled.IsUnknown() && !r.Services.DynamicProperty.Enabled.IsNull() {
-				*enabled22 = r.Services.DynamicProperty.Enabled.ValueBool()
+				*enabled23 = r.Services.DynamicProperty.Enabled.ValueBool()
 			} else {
-				enabled22 = nil
+				enabled23 = nil
 			}
 			var typeVar19 string
 			typeVar19 = r.Services.DynamicProperty.Type.ValueString()
@@ -2845,7 +2872,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			dynamicProperty = &shared.ServiceV4{
 				OverrideConfiguration: overrideConfiguration3,
 				Configuration:         configuration22,
-				Enabled:               enabled22,
+				Enabled:               enabled23,
 				Type:                  typeVar19,
 			}
 		}

@@ -169,6 +169,21 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 						Description: `API logging configuration (Not for native APIs)`,
 					},
+					"otel_logs": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"enabled": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Enable OpenTelemetry log export for this API (payload capture with traceId/spanId correlation).`,
+							},
+						},
+					},
+					"reporter_metrics_enabled": schema.BoolAttribute{
+						Computed: true,
+						MarkdownDescription: `Enable the connection-metrics reporter on the gateway. Only applicable to Native v4 APIs; ignored on HTTP v4 requests and omitted from HTTP v4 responses.` + "\n" +
+							`Server-side default for Native v4 on create is ` + "`" + `true` + "`" + `.` + "\n" +
+							`Independent of the parent ` + "`" + `enabled` + "`" + ` flag: event-metrics reporting and the connection-metrics reporter are gated separately.`,
+					},
 					"sampling": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
