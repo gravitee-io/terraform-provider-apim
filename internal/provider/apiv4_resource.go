@@ -226,10 +226,13 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 					},
 					"reporter_metrics_enabled": schema.BoolAttribute{
+						Computed: true,
 						Optional: true,
+						Default:  booldefault.StaticBool(true),
 						MarkdownDescription: `Enable the connection-metrics reporter on the gateway. Only applicable to Native v4 APIs; ignored on HTTP v4 requests and omitted from HTTP v4 responses.` + "\n" +
 							`Server-side default for Native v4 on create is ` + "`" + `true` + "`" + `.` + "\n" +
-							`Independent of the parent ` + "`" + `enabled` + "`" + ` flag: event-metrics reporting and the connection-metrics reporter are gated separately.`,
+							`Independent of the parent ` + "`" + `enabled` + "`" + ` flag: event-metrics reporting and the connection-metrics reporter are gated separately.` + "\n" +
+							`Default: true`,
 					},
 					"sampling": schema.SingleNestedAttribute{
 						Optional: true,
