@@ -3,19 +3,19 @@ id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
   docChecksum: 4c55138f59d17c126a8b2fb86b4a50aa
   docVersion: 1.0.0
-  speakeasyVersion: 1.764.0
-  generationVersion: 2.885.0
-  releaseVersion: 0.9.3
-  configChecksum: f0f7c96e49ef1c9dc320b0429aa16c4e
+  speakeasyVersion: 1.786.1
+  generationVersion: 2.913.3
+  releaseVersion: 1.0.0
+  configChecksum: e4e0dd4531b872006ef64c6bc4d96ead
 persistentEdits:
-  generation_id: c589c243-4c79-42f7-a2ca-1cb68b02444f
-  pristine_commit_hash: cbc69771b05e5db41c672695b421d3ae24daa48c
-  pristine_tree_hash: 9043b9e1b397d4991928ba5774d55433fc01e6d9
+  generation_id: 869727c8-f6a6-4883-8626-3ec7fce7df7c
+  pristine_commit_hash: f3b8dcebad9130cf287da3cc50072e5f618e0b40
+  pristine_tree_hash: d5410224ae83c3a70af4cee0b6980a6288ed226b
 features:
   terraform:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.3.2
-    core: 3.47.6
+    core: 3.47.9
     deprecations: 2.82.0
     globalSecurity: 2.82.3
     globalServerURLs: 2.83.2
@@ -23,7 +23,7 @@ features:
     groups: 2.81.3
     inputOutputModels: 2.83.0
     nameOverrides: 2.81.7
-    retries: 2.81.4
+    retries: 2.81.5
     typeOverrides: 2.81.1
     unions: 2.82.15
 trackedFiles:
@@ -68,8 +68,8 @@ trackedFiles:
     deleted: true
   examples/provider/provider.tf:
     id: 954e955c0240
-    last_write_checksum: sha1:9d5ba45885d22c88c37be3f3be200533932eebdb
-    pristine_git_object: fdea4a893bdcac73dcc874603a75c3d523f200f4
+    last_write_checksum: sha1:39d294c9b291aab7a0f02f6af5671425d3093733
+    pristine_git_object: db191d6dc05789e9b346befb38bd082942db83a9
   examples/resources/apim_dictionary/import-by-string-id.tf:
     id: fca6a77866a2
     last_write_checksum: sha1:89ad645d4877d71e58e412972d25d4369d478906
@@ -84,8 +84,8 @@ trackedFiles:
     pristine_git_object: 61c8795f8d113867da78d3095a87072eb05a15c1
   go.mod:
     id: c47645c391ad
-    last_write_checksum: sha1:b27593e702eb1a4896deab1d946734dd02c93f3b
-    pristine_git_object: 5a94a6ab9c790c123bca91554b2f5b752922b903
+    last_write_checksum: sha1:73eb3d1c863d81c9b5993254763d2b29392c4bea
+    pristine_git_object: ea2eda343c8e25526be14b9879d330612bc1d486
   internal/planmodifiers/boolplanmodifier/suppress_diff.go:
     id: 3cf85b98963e
     last_write_checksum: sha1:70b2947d6f36ee573a1b8668684abf94304b7ba7
@@ -292,7 +292,7 @@ trackedFiles:
     pristine_git_object: 82a8266240c0a51f132fcb29c88ec4679649ad08
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:dd0c04e006646bfbc47d66e190491506713350e3
+    last_write_checksum: sha1:45c95fc474a4b5c710849a16808448d0fc9409aa
     pristine_git_object: c2778feb2568c75764140322353ef7d5dd0506d8
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
@@ -666,8 +666,8 @@ trackedFiles:
     pristine_git_object: 748c4bab704e399fd73706ce2a0478fc4a298117
   internal/sdk/graviteeapim.go:
     id: 1f2cf575c2fd
-    last_write_checksum: sha1:ca9ec37214eda6116e709e3696ff5a9cc00e50b9
-    pristine_git_object: 9eb1b3947572e91d4d672946a21aa82d237b7d79
+    last_write_checksum: sha1:b882a78272aabb4756acf28bd594fc8dd373738d
+    pristine_git_object: 52f4a99576c06708c28d5c1b0fa79696466777cf
   internal/sdk/groups.go:
     id: 2bfe17bcb000
     last_write_checksum: sha1:709108650e6e2f0612bad64fe38a49f88aefd495
@@ -1208,8 +1208,8 @@ trackedFiles:
     pristine_git_object: 1a9bcd0cc4a56f4034599c5a32058b0490dd17f8
   internal/sdk/retry/config.go:
     id: 7ea5fa9128b6
-    last_write_checksum: sha1:1cdb99de13f9db4dbcd610122cef47332cf02ec7
-    pristine_git_object: c9fb2a2267b398e2bcabbb199d6636ef8887d004
+    last_write_checksum: sha1:22068a7fd6e154053ff85678a7fdb6a0d02ac790
+    pristine_git_object: 225f89fa83232afd070195744a60dbcf308996a7
   internal/sdk/sharedpolicygroups.go:
     id: b191c7e7c928
     last_write_checksum: sha1:6a1994627f4f1fb2850ad35302df1f9c7906af10

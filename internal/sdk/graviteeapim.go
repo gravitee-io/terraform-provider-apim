@@ -3,7 +3,7 @@
 
 package sdk
 
-// Generated from OpenAPI doc version 1.0.0 and generator version 2.885.0
+// Generated from OpenAPI doc version 1.0.0 and generator version 2.913.3
 
 import (
 	"context"
@@ -163,9 +163,9 @@ func WithTimeout(timeout time.Duration) SDKOption {
 // New creates a new instance of the SDK with the provided options
 func New(opts ...SDKOption) *GraviteeApim {
 	sdk := &GraviteeApim{
-		SDKVersion: "0.9.3",
+		SDKVersion: "1.0.0",
 		sdkConfiguration: config.SDKConfiguration{
-			UserAgent:  "speakeasy-sdk/terraform 0.9.3 2.885.0 1.0.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
+			UserAgent:  "speakeasy-sdk/terraform 1.0.0 2.913.3 1.0.0 github.com/gravitee-io/terraform-provider-apim/internal/sdk",
 			Globals:    globals.Globals{},
 			ServerList: ServerList,
 		},

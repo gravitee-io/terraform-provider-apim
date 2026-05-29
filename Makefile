@@ -3,7 +3,7 @@ APIM_PASSWORD ?= admin
 APIM_API1_USERNAME ?= api1
 APIM_API1_PASSWORD ?= api1
 APIM_SERVER_URL ?= http://localhost:30083/automation
-APIM_OAS_BRANCH=master
+APIM_OAS_BRANCH=4.12.x
 
 .PHONY: speakeasy
 speakeasy: ## Run speakeasy generation with curated examples and docs
