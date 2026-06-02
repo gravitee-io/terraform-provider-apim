@@ -65,7 +65,7 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 		Attributes: map[string]schema.Attribute{
 			"api_type": schema.StringAttribute{
 				Computed:    true,
-				Description: `API's type.`,
+				Description: `API type compatible with a shared policy group.`,
 			},
 			"description": schema.StringAttribute{
 				Computed:    true,
@@ -99,7 +99,7 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 			},
 			"phase": schema.StringAttribute{
 				Computed:    true,
-				Description: `The execution phase of a policy.`,
+				Description: `The execution phase of a shared policy group policy. Only phases compatible with PROXY and MESSAGE API types are supported.`,
 			},
 			"prerequisite_message": schema.StringAttribute{
 				Computed:    true,
