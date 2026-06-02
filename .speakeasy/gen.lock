@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 3718e3fdcea6cd5079181cea5a83acee
+  docChecksum: 4c55138f59d17c126a8b2fb86b4a50aa
   docVersion: 1.0.0
   speakeasyVersion: 1.764.0
   generationVersion: 2.885.0
   releaseVersion: 0.9.3
   configChecksum: f0f7c96e49ef1c9dc320b0429aa16c4e
 persistentEdits:
-  generation_id: 9c469427-c110-4897-b18b-231f88fba38e
-  pristine_commit_hash: 1578129e904a8625d72d8fa43b017acc34f17ec8
-  pristine_tree_hash: 506607e388f4e1b9c6cc2ed98badea1300723467
+  generation_id: c589c243-4c79-42f7-a2ca-1cb68b02444f
+  pristine_commit_hash: cbc69771b05e5db41c672695b421d3ae24daa48c
+  pristine_tree_hash: 9043b9e1b397d4991928ba5774d55433fc01e6d9
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -236,8 +236,8 @@ trackedFiles:
     pristine_git_object: 22355e514c392cfa9df4645bef9d3cc7eb3cb308
   internal/provider/apiv4_resource.go:
     id: 333e3a57e1ff
-    last_write_checksum: sha1:bd865d62b947bf8b9c38cb33e4b3f7dd9fcb4e53
-    pristine_git_object: ab77bac75bc7eabcd56505ae5ae1d0ace3faad95
+    last_write_checksum: sha1:80f6ca62643c7eaaa6cfb36efa7e40212bb3db1c
+    pristine_git_object: 220fa2cdcdd7290d23c56945453ed1e5783de4ef
   internal/provider/apiv4_resource_sdk.go:
     id: ba8026d69f87
     last_write_checksum: sha1:8371082b7f6e75d791c61b51326617183024fe7b
@@ -292,7 +292,7 @@ trackedFiles:
     pristine_git_object: 82a8266240c0a51f132fcb29c88ec4679649ad08
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:45c95fc474a4b5c710849a16808448d0fc9409aa
+    last_write_checksum: sha1:dd0c04e006646bfbc47d66e190491506713350e3
     pristine_git_object: c2778feb2568c75764140322353ef7d5dd0506d8
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
@@ -352,20 +352,20 @@ trackedFiles:
     pristine_git_object: 2e7d63a4864472f1837e48f18da0524ea87f3c3b
   internal/provider/sharedpolicygroup_data_source.go:
     id: 46320b35e95c
-    last_write_checksum: sha1:616c982389cea34d4dbfb4503d24ef09dad1614a
-    pristine_git_object: 035efe493a23980d0225cafb28a8d4e6de5408f4
+    last_write_checksum: sha1:fc607be78c22b5d7a3d55b679923288f74b9e8c9
+    pristine_git_object: 1932bf518ebecd935fe36bfb8ce267e4d0cdc85f
   internal/provider/sharedpolicygroup_data_source_sdk.go:
     id: 7431f78d34d8
     last_write_checksum: sha1:dc94897c4ae5509d3c01fad0a413f7c041fb9095
     pristine_git_object: bac7bf763b4395f5e0a689fc2390ce72a8940a98
   internal/provider/sharedpolicygroup_resource.go:
     id: b8d307a6ab72
-    last_write_checksum: sha1:e97ec7a89aea4db03aeb718bf308208b216255ef
-    pristine_git_object: b08ffa5ff3847b3a78f7c0b0ffe21694378aaad8
+    last_write_checksum: sha1:95536aba578c4f02cc91e48f6d9ece2c6c58f654
+    pristine_git_object: dd7539798e207310dd016904a4492a53bae699b2
   internal/provider/sharedpolicygroup_resource_sdk.go:
     id: d0406f2ae70c
-    last_write_checksum: sha1:d52454347761156fe5089f243ea02b1cf00f1023
-    pristine_git_object: b34703f2b562880749e8fe35ca4ead507494d998
+    last_write_checksum: sha1:b82d6fa67258f3176e7a5dcafabe93084f3d239e
+    pristine_git_object: 03b6a225fe3875902bb1eb4dbd04ce8b58d851ca
   internal/provider/subscription_data_source.go:
     id: 228db6b8d459
     last_write_checksum: sha1:58570a68302084e91e928159885afc3846ed88f6
@@ -838,8 +838,8 @@ trackedFiles:
     pristine_git_object: 6faf6b5f6c944eb81acb584721ba59e7ba06f80f
   internal/sdk/models/shared/apitype.go:
     id: 7cff1db49d5d
-    last_write_checksum: sha1:2899b7071044592e305587c8fdc7baf0b21c452a
-    pristine_git_object: eab28ff49afe1fb6d0388aaac3630fd9fe70d2f1
+    last_write_checksum: sha1:c5db35fd080364b4834d76e7b3e392655698e6de
+    pristine_git_object: 08eca538c139501030f08d534a0371a9ccc3bd2c
   internal/sdk/models/shared/apiv4spec.go:
     id: 6c5c5a09f889
     last_write_checksum: sha1:014a6b2bc64476d0f3a6ac32e95824114fe43fb7
@@ -955,8 +955,8 @@ trackedFiles:
     pristine_git_object: fefba2d4bf9abf509256d95d3074f2bbb9079ac4
   internal/sdk/models/shared/flowphase.go:
     id: 8ed0fc2417ea
-    last_write_checksum: sha1:bb5dd775a36b7940fd3e2d6f19b296861d5eb1ad
-    pristine_git_object: 1b3875d2666f01b5dae1d7094da7e09de4301cdc
+    last_write_checksum: sha1:69f73acef2539173b0276d7094f0d62f2c1b936a
+    pristine_git_object: 900b01fedc79f98f63be96c5aad3c535c27fdbc3
   internal/sdk/models/shared/flowv4.go:
     id: 622c6a05d318
     last_write_checksum: sha1:5053ddbf1660e2b4d56cdcb09fb4fea118f8cd64
@@ -1149,14 +1149,18 @@ trackedFiles:
     id: 02c134ec8b53
     last_write_checksum: sha1:f299af44a0408647bc675372fce00463c0d83efd
     pristine_git_object: 4aee8f7d29c1dc833d7bbbdf84a07f1385a9aea8
+  internal/sdk/models/shared/sharedpolicygroupapitype.go:
+    id: 46c2eacc7d77
+    last_write_checksum: sha1:5625aebb0669a245fbf1421ddf439c1714ec98c8
+    pristine_git_object: 0308d3cc3098e36d0ef9211004807a524fb6525f
   internal/sdk/models/shared/sharedpolicygroupspec.go:
     id: 71c3eb97410e
-    last_write_checksum: sha1:081594f28857618050ba1ad95225234378b6f94e
-    pristine_git_object: 3b7f3763a9866b0dff368e4c031c7d10a0623934
+    last_write_checksum: sha1:7a339e75a22f976e4b8f118e94c4630b87962889
+    pristine_git_object: 9b27fc8e6912282823a354990d9cc0050fcf1802
   internal/sdk/models/shared/sharedpolicygroupstate.go:
     id: f7cf17b664f1
-    last_write_checksum: sha1:98e706f7fe0394670f4073a5d175999bb6e8db7b
-    pristine_git_object: ef66ea21e365951b6024e41c3806515d378bafa0
+    last_write_checksum: sha1:49910d0864c6cbd363704fbad4d28872cef44659
+    pristine_git_object: 21e48124276cc00ffd231036605f0d77184226b2
   internal/sdk/models/shared/simpleapplicationsettings.go:
     id: dd7aed778b5d
     last_write_checksum: sha1:56bae5e9b85acdc7fd3440d441018362e8884215
@@ -1473,7 +1477,7 @@ examples:
         application/json: {"hrid": "my_demo_api", "apiType": "MESSAGE", "description": "this is a shared policy group", "prerequisiteMessage": "the resource cache \"my-cache\" is required", "name": "My Shared Policy Group", "phase": "RESPONSE"}
       responses:
         "200":
-          application/json: {"hrid": "my_demo_api", "apiType": "MESSAGE", "description": "this is a shared policy group", "prerequisiteMessage": "the resource cache \"my-cache\" is required", "name": "My Shared Policy Group", "phase": "INTERACT"}
+          application/json: {"hrid": "my_demo_api", "apiType": "MESSAGE", "description": "this is a shared policy group", "prerequisiteMessage": "the resource cache \"my-cache\" is required", "name": "My Shared Policy Group", "phase": "REQUEST"}
         "400":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:

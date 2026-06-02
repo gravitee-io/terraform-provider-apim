@@ -3084,11 +3084,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			},
 			"type": schema.StringAttribute{
 				Required:    true,
-				Description: `API's type. must be one of ["A2A_PROXY", "EDGE", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
+				Description: `API's type. must be one of ["A2A_PROXY", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"A2A_PROXY",
-						"EDGE",
 						"LLM_PROXY",
 						"MCP_PROXY",
 						"MESSAGE",

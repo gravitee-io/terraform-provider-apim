@@ -1585,7 +1585,7 @@ components:
           $ref: "#/components/schemas/Hrid"
           x-speakeasy-param-computed: false
         apiType:
-          $ref: "#/components/schemas/ApiType"
+          $ref: "#/components/schemas/SharedPolicyGroupApiType"
           x-speakeasy-param-computed: false
         description:
           type: string
@@ -1624,14 +1624,18 @@ components:
         - name
         - phase
       x-speakeasy-entity: SharedPolicyGroup
+    SharedPolicyGroupApiType:
+      type: string
+      description: API type compatible with a shared policy group.
+      enum:
+        - PROXY
+        - MESSAGE
     FlowPhase:
       type: string
-      description: The execution phase of a policy.
+      description: The execution phase of a shared policy group policy. Only phases compatible with PROXY and MESSAGE API types are supported.
       enum:
         - REQUEST
         - RESPONSE
-        - ENTRYPOINT_CONNECT
-        - INTERACT
         - PUBLISH
         - SUBSCRIBE
     PlanV4:
@@ -1819,7 +1823,6 @@ components:
         - MESSAGE
       enum:
         - A2A_PROXY
-        - EDGE
         - LLM_PROXY
         - MCP_PROXY
         - MESSAGE

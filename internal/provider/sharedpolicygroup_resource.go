@@ -72,16 +72,11 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 		Attributes: map[string]schema.Attribute{
 			"api_type": schema.StringAttribute{
 				Required:    true,
-				Description: `API's type. must be one of ["A2A_PROXY", "EDGE", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]`,
+				Description: `API type compatible with a shared policy group. must be one of ["PROXY", "MESSAGE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
-						"A2A_PROXY",
-						"EDGE",
-						"LLM_PROXY",
-						"MCP_PROXY",
-						"MESSAGE",
 						"PROXY",
-						"NATIVE",
+						"MESSAGE",
 					),
 				},
 			},
@@ -136,13 +131,11 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 			},
 			"phase": schema.StringAttribute{
 				Required:    true,
-				Description: `The execution phase of a policy. must be one of ["REQUEST", "RESPONSE", "ENTRYPOINT_CONNECT", "INTERACT", "PUBLISH", "SUBSCRIBE"]`,
+				Description: `The execution phase of a shared policy group policy. Only phases compatible with PROXY and MESSAGE API types are supported. must be one of ["REQUEST", "RESPONSE", "PUBLISH", "SUBSCRIBE"]`,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"REQUEST",
 						"RESPONSE",
-						"ENTRYPOINT_CONNECT",
-						"INTERACT",
 						"PUBLISH",
 						"SUBSCRIBE",
 					),

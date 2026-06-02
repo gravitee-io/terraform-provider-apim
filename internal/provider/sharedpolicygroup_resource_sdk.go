@@ -143,7 +143,7 @@ func (r *SharedPolicyGroupResourceModel) ToSharedSharedPolicyGroupSpec(ctx conte
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
-	apiType := shared.APIType(r.APIType.ValueString())
+	apiType := shared.SharedPolicyGroupAPIType(r.APIType.ValueString())
 	description := new(string)
 	if !r.Description.IsUnknown() && !r.Description.IsNull() {
 		*description = r.Description.ValueString()

@@ -46,10 +46,10 @@ resource "apim_shared_policy_group" "example" {
 
 ### Required
 
-- `api_type` (String) API's type. must be one of ["A2A_PROXY", "EDGE", "LLM_PROXY", "MCP_PROXY", "MESSAGE", "PROXY", "NATIVE"]
+- `api_type` (String) API type compatible with a shared policy group. must be one of ["PROXY", "MESSAGE"]
 - `hrid` (String) A unique human readable id identifying this resource. Requires replacement if changed.
 - `name` (String) The name of the shared policy group
-- `phase` (String) The execution phase of a policy. must be one of ["REQUEST", "RESPONSE", "ENTRYPOINT_CONNECT", "INTERACT", "PUBLISH", "SUBSCRIBE"]
+- `phase` (String) The execution phase of a shared policy group policy. Only phases compatible with PROXY and MESSAGE API types are supported. must be one of ["REQUEST", "RESPONSE", "PUBLISH", "SUBSCRIBE"]
 
 ### Optional
 
