@@ -13,7 +13,6 @@ type APIType string
 
 const (
 	APITypeA2AProxy APIType = "A2A_PROXY"
-	APITypeEdge     APIType = "EDGE"
 	APITypeLlmProxy APIType = "LLM_PROXY"
 	APITypeMcpProxy APIType = "MCP_PROXY"
 	APITypeMessage  APIType = "MESSAGE"
@@ -31,8 +30,6 @@ func (e *APIType) UnmarshalJSON(data []byte) error {
 	}
 	switch v {
 	case "A2A_PROXY":
-		fallthrough
-	case "EDGE":
 		fallthrough
 	case "LLM_PROXY":
 		fallthrough
