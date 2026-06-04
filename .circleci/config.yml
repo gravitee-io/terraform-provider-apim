@@ -134,9 +134,11 @@ jobs:
       - run:
           name: Validate pipeline parameters
           command: |
+            # Pipeline is triggered manually/with params from trigger-publish-changelog.mjs
             RELEASE_VERSION="<< pipeline.parameters.release_version >>"
             CHANGELOG_PATH="<< pipeline.parameters.changelog_path >>"
 
+            # release_version: GitHub tag (e.g. v1.5.0) used to fetch the release body
             if [[ -z "$RELEASE_VERSION" ]]; then
               echo "release_version parameter is empty"
               exit 1
@@ -145,10 +147,12 @@ jobs:
               echo "release_version must be a semver tag with v prefix (e.g. v1.5.0)"
               exit 1
             fi
+            # changelog_path: target file in gravitee-platform-docs (from hack/apim.yaml)
             if [[ -z "$CHANGELOG_PATH" ]]; then
               echo "changelog_path parameter is empty"
               exit 1
             fi
+            # Restrict path so we only touch APIM docs under docs/apim/
             if [[ ! "$CHANGELOG_PATH" =~ ^docs/apim/ ]]; then
               echo "changelog_path must start with docs/apim/"
               exit 1
@@ -163,6 +167,7 @@ jobs:
       - run:
           name: Extract changelog from GitHub Release
           command: |
+            # GoReleaser writes the release notes; we reuse that body for the docs changelog
             gh release view "<< pipeline.parameters.release_version >>" \
               --repo gravitee-io/terraform-provider-apim \
               --json body -q .body > /tmp/changelog.md
@@ -174,6 +179,7 @@ jobs:
       - run:
           name: Clone docs repo and create PR
           command: |
+            # Shallow clone without checkout; sparse-checkout below fetches only the changelog dir
             git clone --depth 1 --single-branch --no-tags --filter=blob:none --no-checkout "https://x-access-token:${GITHUB_TOKEN}@github.com/gravitee-io/gravitee-platform-docs.git" /tmp/docs-repo
             cd /tmp/docs-repo
 
@@ -181,6 +187,7 @@ jobs:
             CHANGELOG_FILE="<< pipeline.parameters.changelog_path >>"
             BRANCH="terraform-changelog-${RELEASE_VERSION}"
 
+            # Idempotent: one PR per release version (re-runs must not open duplicates)
             EXISTING_PR=$(gh pr list \
               --repo gravitee-io/gravitee-platform-docs \
               --head "${BRANCH}" \
@@ -189,37 +196,84 @@ jobs:
               -q '.[0].number' || true)
             if [[ -n "$EXISTING_PR" ]]; then
               echo "Docs PR #${EXISTING_PR} already exists for ${RELEASE_VERSION}, skipping"
-              exit 0
+              # Success without a new PR — halt so the review Slack step does not run
+              circleci-agent step halt
             fi
 
+            # Checkout only the changelog directory (keeps clone small and fast)
             CHANGELOG_DIR="$(dirname "${CHANGELOG_FILE}")"
             git sparse-checkout init --cone
             git sparse-checkout set "${CHANGELOG_DIR}"
             git checkout main
             git switch -c "${BRANCH}"
 
-            TEMP_FILE=$(mktemp)
-            echo "## ${RELEASE_VERSION}" > "${TEMP_FILE}"
-            echo "" >> "${TEMP_FILE}"
-            cat /tmp/changelog.md >> "${TEMP_FILE}"
-            echo "" >> "${TEMP_FILE}"
+            # Docs changelog.md contains <!--INSERT_BELOW-->; new releases are inserted after it
+            INSERT_MARKER='<!--INSERT_BELOW-->'
+
+            # Block to append into changelog.md (version heading + GitHub release body)
+            NEW_ENTRY=$(mktemp)
+            {
+              echo "## ${RELEASE_VERSION}"
+              echo ""
+              cat /tmp/changelog.md
+              echo ""
+            } > "${NEW_ENTRY}"
 
             if [ -f "${CHANGELOG_FILE}" ]; then
-              cat "${CHANGELOG_FILE}" >> "${TEMP_FILE}"
+              if ! grep -qF "${INSERT_MARKER}" "${CHANGELOG_FILE}"; then
+                echo "Marker ${INSERT_MARKER} not found in ${CHANGELOG_FILE}"
+                exit 1
+              fi
+              # sed 'r' reads NEW_ENTRY after the marker line; marker and older entries stay in place
+              sed -i "/${INSERT_MARKER}/r ${NEW_ENTRY}" "${CHANGELOG_FILE}"
+            else
+              # First-time bootstrap if the file does not exist yet in docs
+              mkdir -p "${CHANGELOG_DIR}"
+              cat "${NEW_ENTRY}" > "${CHANGELOG_FILE}"
             fi
-            mkdir -p "${CHANGELOG_DIR}"
-            mv "${TEMP_FILE}" "${CHANGELOG_FILE}"
 
+            # Open a docs PR for Team GKO to review and merge
             git config user.email "teamgko@graviteesource.com"
             git config user.name "Team GKO"
             git add "${CHANGELOG_FILE}"
             git commit -m "docs: APIM Terraform provider ${RELEASE_VERSION} changelog"
             git push origin "${BRANCH}"
-            gh pr create \
+            DOCS_PR_URL=$(gh pr create \
               --repo gravitee-io/gravitee-platform-docs \
               --title "docs: APIM Terraform provider ${RELEASE_VERSION} changelog" \
               --body "Automated PR from terraform-provider-apim release ${RELEASE_VERSION}" \
-              --base main
+              --base main)
+            echo "DOCS_PR_URL=${DOCS_PR_URL}" >> $BASH_ENV
+            echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $BASH_ENV
+      - slack/notify:
+          event: pass
+          channel: C0A2R4W3MLM
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":terraform: Terraform provider changelog PR for *${RELEASE_VERSION}* is ready for review."
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Review docs PR",
+                        "emoji": true
+                      },
+                      "url": "${DOCS_PR_URL}"
+                    }
+                  ]
+                }
+              ]
+            }
       - slack/notify:
           event: fail
           channel: C0A2R4W3MLM
