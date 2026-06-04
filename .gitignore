@@ -13,3 +13,4 @@ docs/data-sources/
 examples/data-sources/
 __debug_bin*
 .claude/settings.local.json
+node_modules/

@@ -17,10 +17,25 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 	@go build
 
 .PHONY: lint
-lint: ## Run speakeasy lint accepting no error or warning
+lint: lint-commits ## Run speakeasy lint accepting no error or warning
+	@echo "Check OAS"
 	@speakeasy lint openapi --schema automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
 	@grep "// BEGIN GRAVITEE CLOUD INIT" internal/provider/provider.go > /dev/null || (echo "Cloud initializer code snippet appear to be missing" && exit 1)
 	@terraform fmt -recursive -check || (echo "Error: Above terraform files are not properly formatted. Please run 'terraform fmt -recursive' to fix formatting issues" && exit 1)
+
+.PHONY: lint-commits
+lint-commits: node_modules ## Validate commit messages on the current branch (same range as CI)
+	@echo "Check commitlint"
+	@git fetch origin main 2>/dev/null || true
+	@FROM=$$(git merge-base origin/main HEAD 2>/dev/null || git merge-base main HEAD 2>/dev/null); \
+	if [ -z "$$FROM" ]; then \
+	  echo "Could not find merge base with main; run: git fetch origin main"; \
+	  exit 1; \
+	fi; \
+	npm exec -- commitlint --from "$$FROM" --to HEAD
+
+node_modules: package.json package-lock.json
+	@npm ci
 
 .PHONY: lint-fix
 lint-fix: ## Fix issues that can be found
