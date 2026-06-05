@@ -8,16 +8,14 @@ import (
 	"fmt"
 )
 
-// FlowPhase - The execution phase of a policy.
+// FlowPhase - The execution phase of a shared policy group policy. Only phases compatible with PROXY and MESSAGE API types are supported.
 type FlowPhase string
 
 const (
-	FlowPhaseRequest           FlowPhase = "REQUEST"
-	FlowPhaseResponse          FlowPhase = "RESPONSE"
-	FlowPhaseEntrypointConnect FlowPhase = "ENTRYPOINT_CONNECT"
-	FlowPhaseInteract          FlowPhase = "INTERACT"
-	FlowPhasePublish           FlowPhase = "PUBLISH"
-	FlowPhaseSubscribe         FlowPhase = "SUBSCRIBE"
+	FlowPhaseRequest   FlowPhase = "REQUEST"
+	FlowPhaseResponse  FlowPhase = "RESPONSE"
+	FlowPhasePublish   FlowPhase = "PUBLISH"
+	FlowPhaseSubscribe FlowPhase = "SUBSCRIBE"
 )
 
 func (e FlowPhase) ToPointer() *FlowPhase {
@@ -32,10 +30,6 @@ func (e *FlowPhase) UnmarshalJSON(data []byte) error {
 	case "REQUEST":
 		fallthrough
 	case "RESPONSE":
-		fallthrough
-	case "ENTRYPOINT_CONNECT":
-		fallthrough
-	case "INTERACT":
 		fallthrough
 	case "PUBLISH":
 		fallthrough

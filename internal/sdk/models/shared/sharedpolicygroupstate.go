@@ -17,15 +17,15 @@ type SharedPolicyGroupState struct {
 	CrossID *string `json:"crossId,omitempty"`
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
-	// API's type.
-	APIType APIType `json:"apiType"`
+	// API type compatible with a shared policy group.
+	APIType SharedPolicyGroupAPIType `json:"apiType"`
 	// The description of the shared policy group
 	Description *string `json:"description,omitempty"`
 	// The prerequisite message of the shared policy group. This message is displayed to the user to help understand the prerequisite to use the shared policy group.
 	PrerequisiteMessage *string `json:"prerequisiteMessage,omitempty"`
 	// The name of the shared policy group
 	Name string `json:"name"`
-	// The execution phase of a policy.
+	// The execution phase of a shared policy group policy. Only phases compatible with PROXY and MESSAGE API types are supported.
 	Phase FlowPhase `json:"phase"`
 	// SharedPolicyGroup Steps
 	Steps []StepV4 `json:"steps,omitempty"`
@@ -73,9 +73,9 @@ func (s *SharedPolicyGroupState) GetHrid() string {
 	return s.Hrid
 }
 
-func (s *SharedPolicyGroupState) GetAPIType() APIType {
+func (s *SharedPolicyGroupState) GetAPIType() SharedPolicyGroupAPIType {
 	if s == nil {
-		return APIType("")
+		return SharedPolicyGroupAPIType("")
 	}
 	return s.APIType
 }
