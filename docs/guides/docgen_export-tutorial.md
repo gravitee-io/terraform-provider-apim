@@ -444,7 +444,6 @@ resource "apim_apiv4" "export" {
     {
       default_value = "support@change.me"
       format        = "MAIL"
-      hidden        = false
       key           = "email-support"
       name          = "email-support"
       value         = "$${(api.primaryOwner.email)!''}"
