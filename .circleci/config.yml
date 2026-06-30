@@ -131,6 +131,7 @@ jobs:
       - image: cimg/base:stable
     resource_class: small
     steps:
+      - checkout
       - run:
           name: Validate pipeline parameters
           command: |
@@ -167,15 +168,19 @@ jobs:
       - run:
           name: Extract changelog from GitHub Release
           command: |
-            # GoReleaser writes the release notes; we reuse that body for the docs changelog
+            # GoReleaser writes the release notes; strip hashes and conventional-commit prefixes for docs
             gh release view "<< pipeline.parameters.release_version >>" \
               --repo gravitee-io/terraform-provider-apim \
-              --json body -q .body > /tmp/changelog.md
+              --json body -q .body > /tmp/changelog-raw.md
 
-            if [[ ! -s /tmp/changelog.md ]]; then
+            if [[ ! -s /tmp/changelog-raw.md ]]; then
               echo "GitHub Release body is empty for << pipeline.parameters.release_version >>"
               exit 1
             fi
+
+            awk -v version="<< pipeline.parameters.release_version >>" \
+              -f hack/scripts/format-release-changelog.awk \
+              /tmp/changelog-raw.md > /tmp/changelog.md
       - run:
           name: Clone docs repo and create PR
           command: |
@@ -210,14 +215,10 @@ jobs:
             # Docs changelog.md contains <!--INSERT_BELOW-->; new releases are inserted after it
             INSERT_MARKER='<!--INSERT_BELOW-->'
 
-            # Block to append into changelog.md (version heading + GitHub release body)
+            # /tmp/changelog.md already starts with ## ${RELEASE_VERSION} (formatted for docs)
             NEW_ENTRY=$(mktemp)
-            {
-              echo "## ${RELEASE_VERSION}"
-              echo ""
-              cat /tmp/changelog.md
-              echo ""
-            } > "${NEW_ENTRY}"
+            cat /tmp/changelog.md > "${NEW_ENTRY}"
+            echo "" >> "${NEW_ENTRY}"
 
             if [ -f "${CHANGELOG_FILE}" ]; then
               if ! grep -qF "${INSERT_MARKER}" "${CHANGELOG_FILE}"; then
@@ -240,7 +241,7 @@ jobs:
             git push origin "${BRANCH}"
             DOCS_PR_URL=$(gh pr create \
               --repo gravitee-io/gravitee-platform-docs \
-              --head "${BRANCH}"
+              --head "${BRANCH}" \
               --title "docs: APIM Terraform provider ${RELEASE_VERSION} changelog" \
               --body "Automated PR from terraform-provider-apim release ${RELEASE_VERSION}" \
               --base main)
