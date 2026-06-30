@@ -187,12 +187,17 @@ type APIV4Spec struct {
 	// If true, new members added to the API spec will
 	// be notified when the API is synced with APIM.
 	NotifyMembers *bool `default:"true" json:"notifyMembers"`
-	// Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.
+	// Pages for the API (classic portal). Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.
 	Pages []PageV4Input `json:"pages,omitempty"`
 	// Indicates whether this API is allowed to be used in API Products. Only applicable for V4 HTTP Proxy APIs.
 	AllowedInAPIProducts *bool `default:"false" json:"allowedInApiProducts"`
 	// Allow an application to subscribe to more than one JWT/OAuth2 plan (V4 only).
 	AllowMultiJwtOauth2Subscriptions *bool `default:"false" json:"allowMultiJwtOauth2Subscriptions"`
+	// The API's internal documentation navigation tree for the next-gen portal.
+	// Paths are ordered — the order in the list is preserved.
+	// Intermediate folders are implicitly created if not listed explicitly.
+	//
+	PortalNavigation []NavigationPath `json:"portalNavigation,omitempty"`
 	// Console notification configuration.
 	ConsoleNotification *APIV4SpecConsoleNotification `json:"consoleNotification,omitempty"`
 }
@@ -416,6 +421,13 @@ func (a *APIV4Spec) GetAllowMultiJwtOauth2Subscriptions() *bool {
 		return nil
 	}
 	return a.AllowMultiJwtOauth2Subscriptions
+}
+
+func (a *APIV4Spec) GetPortalNavigation() []NavigationPath {
+	if a == nil {
+		return nil
+	}
+	return a.PortalNavigation
 }
 
 func (a *APIV4Spec) GetConsoleNotification() *APIV4SpecConsoleNotification {
