@@ -240,6 +240,7 @@ jobs:
             git push origin "${BRANCH}"
             DOCS_PR_URL=$(gh pr create \
               --repo gravitee-io/gravitee-platform-docs \
+              --head "${BRANCH}"
               --title "docs: APIM Terraform provider ${RELEASE_VERSION} changelog" \
               --body "Automated PR from terraform-provider-apim release ${RELEASE_VERSION}" \
               --base main)
