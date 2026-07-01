@@ -47,13 +47,15 @@ make stop-cluster
 ## Architecture
 
 ### Code Generation Flow
-1. OpenAPI spec lives in `schemas/automation-api-oas.yaml` (with overlays in `.speakeasy/overlays/`)
-2. Speakeasy generates SDK (`internal/sdk/`) and provider code (`internal/provider/`)
-3. Config: `.speakeasy/gen.yaml` and `.speakeasy/gen.lock`
+1. OpenAPI spec lives at the repo root: `automation-api-oas.yaml` (synced from upstream APIM via `make sync-oas`)
+2. Overlays in `.speakeasy/overlays/` (one file per resource: `apiv4.yaml`, `application.yaml`, `dictionary.yaml`, `group.yaml`, `shared-policy-group.yaml`, `subscription.yaml`, plus `common/`) tweak the spec before generation
+3. Speakeasy generates SDK (`internal/sdk/`) and provider code (`internal/provider/`)
+4. Config: `.speakeasy/gen.yaml` and `.speakeasy/gen.lock`
+5. `make speakeasy` also runs `make doc-gen`, which regenerates `docs/` via `graviteeio/doc-gen` (config in `.docgen/config/`) — never hand-edit files under `docs/`
 
 ### Provider Structure (`internal/provider/`)
-- **Resources** (4): `apim_apiv4`, `apim_application`, `apim_shared_policy_group`, `apim_subscription`
-- **Data sources** (4): mirror resources for read-only access
+- **Resources** (6): `apim_apiv4`, `apim_application`, `apim_dictionary`, `apim_group`, `apim_shared_policy_group`, `apim_subscription`
+- **Data sources** (6): mirror resources for read-only access
 - Each resource has: `*_resource.go` (CRUD), `*_resource_sdk.go` (type mapping)
 - `provider.go` — provider config, auth (bearer/cloud/basic), schema
 - `utils.go` — HTTP logging, state merging, plan refresh helpers
@@ -63,7 +65,7 @@ make stop-cluster
 - `customtypes/` — RFC3339 datetime, trimmed string types
 
 ### SDK (`internal/sdk/`)
-- Generated Go client: `apis.go`, `applications.go`, `subscriptions.go`, `sharedpolicygroups.go`
+- Generated Go client, one file per API group: `apis.go`, `applications.go`, `dictionaries.go`, `groups.go`, `sharedpolicygroups.go`, `subscriptions.go` (entrypoint: `graviteeapim.go`)
 - Models in `models/operations/` and `models/components/`
 
 ### Tests (`tests/`)
@@ -93,5 +95,5 @@ Custom plan modifiers, validators, and types in `internal/planmodifiers/`, `inte
 - Generated code is the majority of the codebase — custom changes go in marked regions or non-generated files
 - Import IDs are JSON-encoded composite keys (see test files for format)
 - APIM compatibility: 4.9+
-- CI runs acceptance tests across a matrix of Terraform versions (1.9, 1.14) × APIM versions (4.9, 4.10, 4.11)
+- CI runs acceptance tests across a matrix of Terraform versions (1.9.x, latest) × APIM versions (4.9.x, 4.10.x, 4.11.x, master-latest/4.12.x)
 - Issues tracked at github.com/gravitee-io/issues with tag `project: GKO`
