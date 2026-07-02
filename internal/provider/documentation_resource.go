@@ -66,7 +66,7 @@ func (r *DocumentationResource) Schema(ctx context.Context, req resource.SchemaR
 		MarkdownDescription: "Documentation Resource",
 		Attributes: map[string]schema.Attribute{
 			"api_hrid": schema.StringAttribute{
-				Computed:    true,
+				Required:    true,
 				Description: `Human-readable ID of api`,
 			},
 			"content": schema.StringAttribute{
@@ -85,7 +85,6 @@ func (r *DocumentationResource) Schema(ctx context.Context, req resource.SchemaR
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
-					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
 				Validators: []validator.String{
@@ -209,11 +208,11 @@ func (r *DocumentationResource) Create(ctx context.Context, req resource.CreateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DocumentationState != nil) {
+	if !(res.BaseStatus != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationState(ctx, res.DocumentationState)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedBaseStatus(ctx, res.BaseStatus)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -246,11 +245,11 @@ func (r *DocumentationResource) Create(ctx context.Context, req resource.CreateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DocumentationState != nil) {
+	if !(res1.BaseStatus != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationState(ctx, res1.DocumentationState)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedBaseStatus(ctx, res1.BaseStatus)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -310,11 +309,11 @@ func (r *DocumentationResource) Read(ctx context.Context, req resource.ReadReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DocumentationState != nil) {
+	if !(res.BaseStatus != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationState(ctx, res.DocumentationState)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedBaseStatus(ctx, res.BaseStatus)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -345,11 +344,11 @@ func (r *DocumentationResource) Read(ctx context.Context, req resource.ReadReque
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DocumentationState != nil) {
+	if !(res1.BaseStatus != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationState(ctx, res1.DocumentationState)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedBaseStatus(ctx, res1.BaseStatus)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -403,11 +402,11 @@ func (r *DocumentationResource) Update(ctx context.Context, req resource.UpdateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DocumentationState != nil) {
+	if !(res.BaseStatus != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationState(ctx, res.DocumentationState)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedBaseStatus(ctx, res.BaseStatus)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -440,11 +439,11 @@ func (r *DocumentationResource) Update(ctx context.Context, req resource.UpdateR
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res1.StatusCode), debugResponse(res1.RawResponse))
 		return
 	}
-	if !(res1.DocumentationState != nil) {
+	if !(res1.BaseStatus != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res1.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationState(ctx, res1.DocumentationState)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedBaseStatus(ctx, res1.BaseStatus)...)
 
 	if resp.Diagnostics.HasError() {
 		return
