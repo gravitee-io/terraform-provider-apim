@@ -72,7 +72,7 @@ func (s *APIDocumentations) CreateOrUpdate(ctx context.Context, request operatio
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DocumentationSpec", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DocumentationAPISpec", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
