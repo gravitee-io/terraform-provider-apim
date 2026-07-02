@@ -13,6 +13,10 @@ type DocumentationState struct {
 	OrganizationID *string `json:"organizationId,omitempty"`
 	// When a resource has been created regardless of errors, this field is used to persist the error message encountered during validation
 	Errors *Errors `json:"errors,omitempty"`
+	// The HRID of the portal this documentation page belongs to (when attached to a portal).
+	PortalHrid *string `json:"portalHrid,omitempty"`
+	// The HRID of the API this documentation page belongs to (when attached to an API).
+	APIHrid *string `json:"apiHrid,omitempty"`
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`
 	// Display name of the documentation page
@@ -54,6 +58,20 @@ func (d *DocumentationState) GetErrors() *Errors {
 		return nil
 	}
 	return d.Errors
+}
+
+func (d *DocumentationState) GetPortalHrid() *string {
+	if d == nil {
+		return nil
+	}
+	return d.PortalHrid
+}
+
+func (d *DocumentationState) GetAPIHrid() *string {
+	if d == nil {
+		return nil
+	}
+	return d.APIHrid
 }
 
 func (d *DocumentationState) GetHrid() string {

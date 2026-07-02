@@ -15,6 +15,7 @@ func (r *DocumentationResourceModel) RefreshFromSharedDocumentationState(ctx con
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.APIHrid = types.StringPointerValue(resp.APIHrid)
 		r.Content = types.StringValue(resp.Content)
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
@@ -23,6 +24,7 @@ func (r *DocumentationResourceModel) RefreshFromSharedDocumentationState(ctx con
 		r.Name = types.StringValue(resp.Name)
 		r.Order = types.Int64PointerValue(resp.Order)
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
+		r.PortalHrid = types.StringPointerValue(resp.PortalHrid)
 		r.Type = types.StringValue(string(resp.Type))
 	}
 

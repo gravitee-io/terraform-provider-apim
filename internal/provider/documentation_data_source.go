@@ -64,7 +64,7 @@ func (r *DocumentationDataSource) Schema(ctx context.Context, req datasource.Sch
 		Attributes: map[string]schema.Attribute{
 			"api_hrid": schema.StringAttribute{
 				Required:    true,
-				Description: `Human-readable ID of api`,
+				Description: `The HRID of the API this documentation page belongs to (when attached to an API).`,
 			},
 			"content": schema.StringAttribute{
 				Computed:    true,
@@ -106,7 +106,7 @@ func (r *DocumentationDataSource) Schema(ctx context.Context, req datasource.Sch
 			},
 			"portal_hrid": schema.StringAttribute{
 				Required:    true,
-				Description: `Human-readable ID of a portal`,
+				Description: `The HRID of the portal this documentation page belongs to (when attached to a portal).`,
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,

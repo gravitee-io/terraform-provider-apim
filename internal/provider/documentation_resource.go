@@ -66,7 +66,7 @@ func (r *DocumentationResource) Schema(ctx context.Context, req resource.SchemaR
 		MarkdownDescription: "Documentation Resource",
 		Attributes: map[string]schema.Attribute{
 			"api_hrid": schema.StringAttribute{
-				Required:    true,
+				Computed:    true,
 				Description: `Human-readable ID of api`,
 			},
 			"content": schema.StringAttribute{
