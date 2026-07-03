@@ -14,6 +14,7 @@ const (
 	ApimV4_9
 	ApimV4_10
 	ApimV4_11
+	ApimV4_12
 )
 
 func (v ApimVersion) String() string {
@@ -26,6 +27,8 @@ func (v ApimVersion) String() string {
 		return "4.10"
 	case ApimV4_11:
 		return "4.11"
+	case ApimV4_12:
+		return "4.12"
 	case ApimUnknown:
 		fallthrough
 	default:
@@ -43,6 +46,8 @@ func ParseApimVersion(s string) ApimVersion {
 		return ApimV4_10
 	case strings.HasPrefix(s, "4.11"):
 		return ApimV4_11
+	case strings.HasPrefix(s, "4.12"):
+		return ApimV4_12
 	default:
 		return ApimUnknown
 	}
