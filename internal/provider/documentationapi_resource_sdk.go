@@ -11,19 +11,25 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *DocumentationAPIResourceModel) RefreshFromSharedBaseStatus(ctx context.Context, resp *shared.BaseStatus) diag.Diagnostics {
+func (r *DocumentationAPIResourceModel) RefreshFromSharedDocumentationState(ctx context.Context, resp *shared.DocumentationState) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.Content = types.StringValue(resp.Content)
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
+		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
+		r.Location = types.StringPointerValue(resp.Location)
+		r.Name = types.StringValue(resp.Name)
+		r.Order = types.Int64PointerValue(resp.Order)
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
+		r.Type = types.StringValue(string(resp.Type))
 	}
 
 	return diags
 }
 
-func (r *DocumentationAPIResourceModel) ToOperationsCreateOrUpdateAPIDocumentationRequest(ctx context.Context) (*operations.CreateOrUpdateAPIDocumentationRequest, diag.Diagnostics) {
+func (r *DocumentationAPIResourceModel) ToOperationsCreateOrUpdatePortalDocumentationRequest(ctx context.Context) (*operations.CreateOrUpdatePortalDocumentationRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	organizationID := new(string)
@@ -38,27 +44,23 @@ func (r *DocumentationAPIResourceModel) ToOperationsCreateOrUpdateAPIDocumentati
 	} else {
 		environmentID = nil
 	}
-	var apiHrid string
-	apiHrid = r.APIHrid.ValueString()
-
-	documentationAPISpec, documentationAPISpecDiags := r.ToSharedDocumentationAPISpec(ctx)
-	diags.Append(documentationAPISpecDiags...)
+	documentationSpec, documentationSpecDiags := r.ToSharedDocumentationSpec(ctx)
+	diags.Append(documentationSpecDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
-	out := operations.CreateOrUpdateAPIDocumentationRequest{
-		OrganizationID:       organizationID,
-		EnvironmentID:        environmentID,
-		APIHrid:              apiHrid,
-		DocumentationAPISpec: *documentationAPISpec,
+	out := operations.CreateOrUpdatePortalDocumentationRequest{
+		OrganizationID:    organizationID,
+		EnvironmentID:     environmentID,
+		DocumentationSpec: *documentationSpec,
 	}
 
 	return &out, diags
 }
 
-func (r *DocumentationAPIResourceModel) ToOperationsDeleteAPIDocumentationRequest(ctx context.Context) (*operations.DeleteAPIDocumentationRequest, diag.Diagnostics) {
+func (r *DocumentationAPIResourceModel) ToOperationsDeletePortalDocumentationRequest(ctx context.Context) (*operations.DeletePortalDocumentationRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	organizationID := new(string)
@@ -73,23 +75,19 @@ func (r *DocumentationAPIResourceModel) ToOperationsDeleteAPIDocumentationReques
 	} else {
 		environmentID = nil
 	}
-	var apiHrid string
-	apiHrid = r.APIHrid.ValueString()
-
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
-	out := operations.DeleteAPIDocumentationRequest{
+	out := operations.DeletePortalDocumentationRequest{
 		OrganizationID: organizationID,
 		EnvironmentID:  environmentID,
-		APIHrid:        apiHrid,
 		Hrid:           hrid,
 	}
 
 	return &out, diags
 }
 
-func (r *DocumentationAPIResourceModel) ToOperationsGetAPIDocumentationRequest(ctx context.Context) (*operations.GetAPIDocumentationRequest, diag.Diagnostics) {
+func (r *DocumentationAPIResourceModel) ToOperationsGetPortalDocumentationRequest(ctx context.Context) (*operations.GetPortalDocumentationRequest, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	organizationID := new(string)
@@ -104,23 +102,19 @@ func (r *DocumentationAPIResourceModel) ToOperationsGetAPIDocumentationRequest(c
 	} else {
 		environmentID = nil
 	}
-	var apiHrid string
-	apiHrid = r.APIHrid.ValueString()
-
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
-	out := operations.GetAPIDocumentationRequest{
+	out := operations.GetPortalDocumentationRequest{
 		OrganizationID: organizationID,
 		EnvironmentID:  environmentID,
-		APIHrid:        apiHrid,
 		Hrid:           hrid,
 	}
 
 	return &out, diags
 }
 
-func (r *DocumentationAPIResourceModel) ToSharedDocumentationAPISpec(ctx context.Context) (*shared.DocumentationAPISpec, diag.Diagnostics) {
+func (r *DocumentationAPIResourceModel) ToSharedDocumentationSpec(ctx context.Context) (*shared.DocumentationSpec, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var hrid string
@@ -145,7 +139,7 @@ func (r *DocumentationAPIResourceModel) ToSharedDocumentationAPISpec(ctx context
 	} else {
 		order = nil
 	}
-	out := shared.DocumentationAPISpec{
+	out := shared.DocumentationSpec{
 		Hrid:     hrid,
 		Name:     name,
 		Type:     typeVar,

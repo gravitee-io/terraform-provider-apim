@@ -99,7 +99,7 @@ type GetPortalDocumentationResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Documentation successfully retrieved
-	BaseStatus *shared.BaseStatus
+	DocumentationState *shared.DocumentationState
 	// Unauthenticated
 	HTTPError *shared.HTTPError
 	// Default error
@@ -127,11 +127,11 @@ func (g *GetPortalDocumentationResponse) GetRawResponse() *http.Response {
 	return g.RawResponse
 }
 
-func (g *GetPortalDocumentationResponse) GetBaseStatus() *shared.BaseStatus {
+func (g *GetPortalDocumentationResponse) GetDocumentationState() *shared.DocumentationState {
 	if g == nil {
 		return nil
 	}
-	return g.BaseStatus
+	return g.DocumentationState
 }
 
 func (g *GetPortalDocumentationResponse) GetHTTPError() *shared.HTTPError {

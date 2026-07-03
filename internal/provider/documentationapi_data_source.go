@@ -7,10 +7,13 @@ import (
 	"context"
 	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
+	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"regexp"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -35,11 +38,15 @@ type DocumentationAPIDataSource struct {
 
 // DocumentationAPIDataSourceModel describes the data model.
 type DocumentationAPIDataSourceModel struct {
-	APIHrid        types.String `tfsdk:"api_hrid"`
+	Content        types.String `tfsdk:"content"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	Hrid           types.String `tfsdk:"hrid"`
 	ID             types.String `tfsdk:"id"`
+	Location       types.String `tfsdk:"location"`
+	Name           types.String `tfsdk:"name"`
+	Order          types.Int64  `tfsdk:"order"`
 	OrganizationID types.String `tfsdk:"organization_id"`
+	Type           types.String `tfsdk:"type"`
 }
 
 // Metadata returns the data source type name.
@@ -53,9 +60,9 @@ func (r *DocumentationAPIDataSource) Schema(ctx context.Context, req datasource.
 		MarkdownDescription: "DocumentationAPI DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"api_hrid": schema.StringAttribute{
-				Required:    true,
-				Description: `Human-readable ID of api`,
+			"content": schema.StringAttribute{
+				Computed:    true,
+				Description: `The content of the documentation page`,
 			},
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
@@ -64,16 +71,36 @@ func (r *DocumentationAPIDataSource) Schema(ctx context.Context, req datasource.
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
-				Description: `Human-readable ID of a spec`,
+				Description: `A unique human readable id identifying this resource`,
+				Validators: []validator.String{
+					stringvalidator.UTF8LengthAtMost(256),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+				},
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,
 				Description: `Resource UUID.`,
 			},
+			"location": schema.StringAttribute{
+				Computed:    true,
+				Description: `The path in the navigation hierarchy where this page should appear.`,
+			},
+			"name": schema.StringAttribute{
+				Computed:    true,
+				Description: `Display name of the documentation page`,
+			},
+			"order": schema.Int64Attribute{
+				Computed:    true,
+				Description: `Display order relative to siblings at the same location`,
+			},
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
 				Description: `The organization ID.`,
+			},
+			"type": schema.StringAttribute{
+				Computed:    true,
+				Description: `The type of documentation page`,
 			},
 		},
 	}
@@ -127,13 +154,13 @@ func (r *DocumentationAPIDataSource) Read(ctx context.Context, req datasource.Re
 		data.OrganizationID = r.OrganizationID
 	}
 
-	request, requestDiags := data.ToOperationsGetAPIDocumentationRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPortalDocumentationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.APIDocumentations.Get(ctx, *request)
+	res, err := r.client.PortalDocumentations.Get(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -149,11 +176,11 @@ func (r *DocumentationAPIDataSource) Read(ctx context.Context, req datasource.Re
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.BaseStatus != nil) {
+	if !(res.DocumentationState != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedBaseStatus(ctx, res.BaseStatus)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationState(ctx, res.DocumentationState)...)
 
 	if resp.Diagnostics.HasError() {
 		return

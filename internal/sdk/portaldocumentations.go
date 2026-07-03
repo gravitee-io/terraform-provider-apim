@@ -222,12 +222,12 @@ func (s *PortalDocumentations) CreateOrUpdate(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out shared.BaseStatus
+			var out shared.DocumentationState
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.BaseStatus = &out
+			res.DocumentationState = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -466,12 +466,12 @@ func (s *PortalDocumentations) Get(ctx context.Context, request operations.GetPo
 				return nil, err
 			}
 
-			var out shared.BaseStatus
+			var out shared.DocumentationState
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.BaseStatus = &out
+			res.DocumentationState = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {

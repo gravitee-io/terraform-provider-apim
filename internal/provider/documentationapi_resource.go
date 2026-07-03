@@ -44,7 +44,6 @@ type DocumentationAPIResource struct {
 
 // DocumentationAPIResourceModel describes the resource data model.
 type DocumentationAPIResourceModel struct {
-	APIHrid        types.String `tfsdk:"api_hrid"`
 	Content        types.String `tfsdk:"content"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	Hrid           types.String `tfsdk:"hrid"`
@@ -64,10 +63,6 @@ func (r *DocumentationAPIResource) Schema(ctx context.Context, req resource.Sche
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "DocumentationAPI Resource",
 		Attributes: map[string]schema.Attribute{
-			"api_hrid": schema.StringAttribute{
-				Required:    true,
-				Description: `Human-readable ID of api`,
-			},
 			"content": schema.StringAttribute{
 				Required:    true,
 				Description: `The content of the documentation page`,
@@ -84,6 +79,7 @@ func (r *DocumentationAPIResource) Schema(ctx context.Context, req resource.Sche
 				Required: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplaceIfConfigured(),
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
 				Validators: []validator.String{
@@ -181,13 +177,13 @@ func (r *DocumentationAPIResource) Create(ctx context.Context, req resource.Crea
 		data.OrganizationID = r.OrganizationID
 	}
 
-	request, requestDiags := data.ToOperationsCreateOrUpdateAPIDocumentationRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateOrUpdatePortalDocumentationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.APIDocumentations.CreateOrUpdate(ctx, *request)
+	res, err := r.client.PortalDocumentations.CreateOrUpdate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -203,11 +199,11 @@ func (r *DocumentationAPIResource) Create(ctx context.Context, req resource.Crea
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.BaseStatus != nil) {
+	if !(res.DocumentationState != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedBaseStatus(ctx, res.BaseStatus)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationState(ctx, res.DocumentationState)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -241,13 +237,13 @@ func (r *DocumentationAPIResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 
-	request, requestDiags := data.ToOperationsGetAPIDocumentationRequest(ctx)
+	request, requestDiags := data.ToOperationsGetPortalDocumentationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.APIDocumentations.Get(ctx, *request)
+	res, err := r.client.PortalDocumentations.Get(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -267,11 +263,11 @@ func (r *DocumentationAPIResource) Read(ctx context.Context, req resource.ReadRe
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.BaseStatus != nil) {
+	if !(res.DocumentationState != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedBaseStatus(ctx, res.BaseStatus)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationState(ctx, res.DocumentationState)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -303,13 +299,13 @@ func (r *DocumentationAPIResource) Update(ctx context.Context, req resource.Upda
 		data.OrganizationID = r.OrganizationID
 	}
 
-	request, requestDiags := data.ToOperationsCreateOrUpdateAPIDocumentationRequest(ctx)
+	request, requestDiags := data.ToOperationsCreateOrUpdatePortalDocumentationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.APIDocumentations.CreateOrUpdate(ctx, *request)
+	res, err := r.client.PortalDocumentations.CreateOrUpdate(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -325,11 +321,11 @@ func (r *DocumentationAPIResource) Update(ctx context.Context, req resource.Upda
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.BaseStatus != nil) {
+	if !(res.DocumentationState != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedBaseStatus(ctx, res.BaseStatus)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationState(ctx, res.DocumentationState)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -371,13 +367,13 @@ func (r *DocumentationAPIResource) Delete(ctx context.Context, req resource.Dele
 		data.OrganizationID = r.OrganizationID
 	}
 
-	request, requestDiags := data.ToOperationsDeleteAPIDocumentationRequest(ctx)
+	request, requestDiags := data.ToOperationsDeletePortalDocumentationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	res, err := r.client.APIDocumentations.Delete(ctx, *request)
+	res, err := r.client.PortalDocumentations.Delete(ctx, *request)
 	if err != nil {
 		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
@@ -403,22 +399,17 @@ func (r *DocumentationAPIResource) ImportState(ctx context.Context, req resource
 	dec := json.NewDecoder(bytes.NewReader([]byte(req.ID)))
 	dec.DisallowUnknownFields()
 	var data struct {
-		APIHrid        string  `json:"api_hrid"`
 		EnvironmentID  *string `json:"environment_id"`
 		Hrid           string  `json:"hrid"`
 		OrganizationID *string `json:"organization_id"`
+		PortalHrid     string  `json:"portal_hrid"`
 	}
 
 	if err := dec.Decode(&data); err != nil {
-		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"api_hrid": "my_demo_api", "environment_id": "a44e0d1b-9fa9-4d64-8b76-3634623a2e27", "hrid": "my_demo_api", "organization_id": "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"}': `+err.Error())
+		resp.Diagnostics.AddError("Invalid ID", `The import ID is not valid. It is expected to be a JSON object string with the format: '{"environment_id": "a44e0d1b-9fa9-4d64-8b76-3634623a2e27", "hrid": "my_demo_api", "organization_id": "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145", "portal_hrid": "default-portal"}': `+err.Error())
 		return
 	}
 
-	if len(data.APIHrid) == 0 {
-		resp.Diagnostics.AddError("Missing required field", `The field api_hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"my_demo_api"'`)
-		return
-	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("api_hrid"), data.APIHrid)...)
 	if data.EnvironmentID == nil {
 		if !r.EnvironmentID.IsUnknown() {
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
@@ -444,4 +435,9 @@ func (r *DocumentationAPIResource) ImportState(ctx context.Context, req resource
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)
+	if len(data.PortalHrid) == 0 {
+		resp.Diagnostics.AddError("Missing required field", `The field portal_hrid is required but was not found in the json encoded ID. It's expected to be a value alike '"default-portal"'`)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("portal_hrid"), data.PortalHrid)...)
 }
