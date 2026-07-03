@@ -41,11 +41,11 @@ type DocumentationPortalDataSourceModel struct {
 	Content        types.String `tfsdk:"content"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	Hrid           types.String `tfsdk:"hrid"`
-	ID             types.String `tfsdk:"id"`
 	Location       types.String `tfsdk:"location"`
 	Name           types.String `tfsdk:"name"`
 	Order          types.Int64  `tfsdk:"order"`
 	OrganizationID types.String `tfsdk:"organization_id"`
+	PortalHrid     types.String `tfsdk:"portal_hrid"`
 	Type           types.String `tfsdk:"type"`
 }
 
@@ -67,7 +67,7 @@ func (r *DocumentationPortalDataSource) Schema(ctx context.Context, req datasour
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The environment ID.`,
+				Description: `environment ID`,
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
@@ -76,10 +76,6 @@ func (r *DocumentationPortalDataSource) Schema(ctx context.Context, req datasour
 					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
 				},
-			},
-			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: `Resource UUID.`,
 			},
 			"location": schema.StringAttribute{
 				Computed:    true,
@@ -96,7 +92,11 @@ func (r *DocumentationPortalDataSource) Schema(ctx context.Context, req datasour
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `The organization ID.`,
+				Description: `organization ID`,
+			},
+			"portal_hrid": schema.StringAttribute{
+				Required:    true,
+				Description: `Human-readable ID of a portal`,
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,
@@ -176,11 +176,11 @@ func (r *DocumentationPortalDataSource) Read(ctx context.Context, req datasource
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DocumentationState != nil) {
+	if !(res.DocumentationAPISpec != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationState(ctx, res.DocumentationState)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationAPISpec(ctx, res.DocumentationAPISpec)...)
 
 	if resp.Diagnostics.HasError() {
 		return

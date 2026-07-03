@@ -11,18 +11,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *DocumentationAPIDataSourceModel) RefreshFromSharedDocumentationState(ctx context.Context, resp *shared.DocumentationState) diag.Diagnostics {
+func (r *DocumentationAPIDataSourceModel) RefreshFromSharedDocumentationAPISpec(ctx context.Context, resp *shared.DocumentationAPISpec) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.Content = types.StringValue(resp.Content)
-		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
-		r.ID = types.StringPointerValue(resp.ID)
 		r.Location = types.StringPointerValue(resp.Location)
 		r.Name = types.StringValue(resp.Name)
 		r.Order = types.Int64PointerValue(resp.Order)
-		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.Type = types.StringValue(string(resp.Type))
 	}
 
@@ -44,12 +41,16 @@ func (r *DocumentationAPIDataSourceModel) ToOperationsGetAPIDocumentationRequest
 	} else {
 		environmentID = nil
 	}
+	var apiHrid string
+	apiHrid = r.APIHrid.ValueString()
+
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
 	out := operations.GetAPIDocumentationRequest{
 		OrganizationID: organizationID,
 		EnvironmentID:  environmentID,
+		APIHrid:        apiHrid,
 		Hrid:           hrid,
 	}
 
