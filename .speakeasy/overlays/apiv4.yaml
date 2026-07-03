@@ -205,6 +205,11 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.ApiV4Spec.properties.portalNavigation
+    description: Next-gen portal navigation is API-computed and should not create plan diffs
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
   - target: $.components.schemas.ApiV4Spec.properties.flows
     description: Prevent empty array to create plan diff
     update:

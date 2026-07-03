@@ -61,6 +61,8 @@ outputs:
    target: templates/guides/docgen_v4api-with-group.md
  - template: {{ .RootDir }}/tmpl/v4api-with-notifications.md.tmpl
    target: templates/guides/docgen_v4api-with-notifications.md
+ - template: {{ .RootDir }}/tmpl/v4api-portal-navigation.md.tmpl
+   target: templates/guides/docgen_v4api-portal-navigation.md
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
     exportedAs: V4ApiSimple
@@ -160,4 +162,13 @@ chunks:
     required: true
   - template: examples/use-cases/v4api-with_notifications/api-with-notif.tf
     exportedAs: V4ApiWithNotifications
+    required: true
+  - template: examples/use-cases/v4api-portal-navigation/v4api-portal-navigation.tf
+    exportedAs: V4ApiPortalNavigation
+    required: true
+    exportedAs: PortalNextGenPortal
+    required: true
+    exportedAs: PortalNextGenDocumentations
+    required: true
+    exportedAs: PortalNextGenAPI
     required: true
