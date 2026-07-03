@@ -1,0 +1,30 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Documentation API overlay
+  version: 0.0.1
+actions:
+
+  - target: $.components.schemas
+    update:
+      DocumentationApiSpec:
+        $ref: "#/components/schemas/DocumentationSpec"
+  - target: $.components.schemas.DocumentationApiSpec
+    update:
+      x-speakeasy-entity: DocumentationApi
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/documentations"].put.requestBody.content["application/json"].schema
+    update:
+      $ref: "#/components/schemas/DocumentationApiSpec"
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/documentations"].put
+    update:
+      x-speakeasy-entity-operation: DocumentationApi#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/documentations/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: DocumentationApi#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/documentations/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: DocumentationApi#delete
+
+  - target: $.components.schemas.DocumentationStatus.allOf[?@.properties.apiHrid].properties.apiHrid
+    update:
+      x-speakeasy-plan-modifiers: Immutable
