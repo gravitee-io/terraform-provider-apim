@@ -20,13 +20,12 @@ func (r *PortalResourceModel) RefreshFromSharedPortalState(ctx context.Context, 
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
-		r.Navigation = []tfTypes.NavigationPath{}
+		r.Navigation = []tfTypes.PortalNavigationPath{}
 
 		for _, navigationItem := range resp.Navigation {
-			var navigation tfTypes.NavigationPath
+			var navigation tfTypes.PortalNavigationPath
 
 			navigation.DisplayName = types.StringPointerValue(navigationItem.DisplayName)
-			navigation.Order = types.Int64PointerValue(navigationItem.Order)
 			navigation.Path = types.StringValue(navigationItem.Path)
 
 			r.Navigation = append(r.Navigation, navigation)
@@ -131,7 +130,7 @@ func (r *PortalResourceModel) ToSharedPortalSpec(ctx context.Context) (*shared.P
 	var name string
 	name = r.Name.ValueString()
 
-	navigation := make([]shared.NavigationPath, 0, len(r.Navigation))
+	navigation := make([]shared.PortalNavigationPath, 0, len(r.Navigation))
 	for navigationIndex := range r.Navigation {
 		var path string
 		path = r.Navigation[navigationIndex].Path.ValueString()
@@ -142,16 +141,9 @@ func (r *PortalResourceModel) ToSharedPortalSpec(ctx context.Context) (*shared.P
 		} else {
 			displayName = nil
 		}
-		order := new(int64)
-		if !r.Navigation[navigationIndex].Order.IsUnknown() && !r.Navigation[navigationIndex].Order.IsNull() {
-			*order = r.Navigation[navigationIndex].Order.ValueInt64()
-		} else {
-			order = nil
-		}
-		navigation = append(navigation, shared.NavigationPath{
+		navigation = append(navigation, shared.PortalNavigationPath{
 			Path:        path,
 			DisplayName: displayName,
-			Order:       order,
 		})
 	}
 	out := shared.PortalSpec{

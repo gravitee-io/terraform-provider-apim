@@ -13,7 +13,7 @@ type PortalState struct {
 	// Paths are ordered — the order in the list is preserved.
 	// Intermediate folders are implicitly created if not listed explicitly.
 	//
-	Navigation []NavigationPath `json:"navigation,omitempty"`
+	Navigation []PortalNavigationPath `json:"navigation,omitempty"`
 	// Resource UUID.
 	ID *string `json:"id,omitempty"`
 	// The environment ID.
@@ -38,7 +38,7 @@ func (p *PortalState) GetName() string {
 	return p.Name
 }
 
-func (p *PortalState) GetNavigation() []NavigationPath {
+func (p *PortalState) GetNavigation() []PortalNavigationPath {
 	if p == nil {
 		return nil
 	}

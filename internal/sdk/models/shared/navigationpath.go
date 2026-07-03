@@ -3,7 +3,7 @@
 
 package shared
 
-// NavigationPath - A path entry in a portal or API navigation hierarchy.
+// NavigationPath - A path entry in an API navigation hierarchy.
 type NavigationPath struct {
 	// A slash-separated path defining the navigation hierarchy.
 	// Intermediate folders are implicitly created if not listed explicitly.

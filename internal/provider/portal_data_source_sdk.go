@@ -20,13 +20,12 @@ func (r *PortalDataSourceModel) RefreshFromSharedPortalState(ctx context.Context
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
-		r.Navigation = []tfTypes.NavigationPath{}
+		r.Navigation = []tfTypes.PortalNavigationPath{}
 
 		for _, navigationItem := range resp.Navigation {
-			var navigation tfTypes.NavigationPath
+			var navigation tfTypes.PortalNavigationPath
 
 			navigation.DisplayName = types.StringPointerValue(navigationItem.DisplayName)
-			navigation.Order = types.Int64PointerValue(navigationItem.Order)
 			navigation.Path = types.StringValue(navigationItem.Path)
 
 			r.Navigation = append(r.Navigation, navigation)

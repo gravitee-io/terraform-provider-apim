@@ -39,12 +39,12 @@ type PortalDataSource struct {
 
 // PortalDataSourceModel describes the data model.
 type PortalDataSourceModel struct {
-	EnvironmentID  types.String             `tfsdk:"environment_id"`
-	Hrid           types.String             `tfsdk:"hrid"`
-	ID             types.String             `tfsdk:"id"`
-	Name           types.String             `tfsdk:"name"`
-	Navigation     []tfTypes.NavigationPath `tfsdk:"navigation"`
-	OrganizationID types.String             `tfsdk:"organization_id"`
+	EnvironmentID  types.String                   `tfsdk:"environment_id"`
+	Hrid           types.String                   `tfsdk:"hrid"`
+	ID             types.String                   `tfsdk:"id"`
+	Name           types.String                   `tfsdk:"name"`
+	Navigation     []tfTypes.PortalNavigationPath `tfsdk:"navigation"`
+	OrganizationID types.String                   `tfsdk:"organization_id"`
 }
 
 // Metadata returns the data source type name.
@@ -87,11 +87,6 @@ func (r *PortalDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							Computed: true,
 							MarkdownDescription: `Optional human-friendly label for this path node.` + "\n" +
 								`Listing a path explicitly is the only way to attach a displayName.`,
-						},
-						"order": schema.Int64Attribute{
-							Computed: true,
-							MarkdownDescription: `Optional display order of this node relative to its siblings at the same level.` + "\n" +
-								`Listing a path explicitly is the only way to attach an order.`,
 						},
 						"path": schema.StringAttribute{
 							Computed: true,

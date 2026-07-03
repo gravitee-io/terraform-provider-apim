@@ -48,12 +48,12 @@ type PortalResource struct {
 
 // PortalResourceModel describes the resource data model.
 type PortalResourceModel struct {
-	EnvironmentID  types.String             `tfsdk:"environment_id"`
-	Hrid           types.String             `tfsdk:"hrid"`
-	ID             types.String             `tfsdk:"id"`
-	Name           types.String             `tfsdk:"name"`
-	Navigation     []tfTypes.NavigationPath `tfsdk:"navigation"`
-	OrganizationID types.String             `tfsdk:"organization_id"`
+	EnvironmentID  types.String                   `tfsdk:"environment_id"`
+	Hrid           types.String                   `tfsdk:"hrid"`
+	ID             types.String                   `tfsdk:"id"`
+	Name           types.String                   `tfsdk:"name"`
+	Navigation     []tfTypes.PortalNavigationPath `tfsdk:"navigation"`
+	OrganizationID types.String                   `tfsdk:"organization_id"`
 }
 
 func (r *PortalResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -110,11 +110,6 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Optional: true,
 							MarkdownDescription: `Optional human-friendly label for this path node.` + "\n" +
 								`Listing a path explicitly is the only way to attach a displayName.`,
-						},
-						"order": schema.Int64Attribute{
-							Optional: true,
-							MarkdownDescription: `Optional display order of this node relative to its siblings at the same level.` + "\n" +
-								`Listing a path explicitly is the only way to attach an order.`,
 						},
 						"path": schema.StringAttribute{
 							Optional: true,

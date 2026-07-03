@@ -13,7 +13,7 @@ type PortalSpec struct {
 	// Paths are ordered — the order in the list is preserved.
 	// Intermediate folders are implicitly created if not listed explicitly.
 	//
-	Navigation []NavigationPath `json:"navigation,omitempty"`
+	Navigation []PortalNavigationPath `json:"navigation,omitempty"`
 }
 
 func (p *PortalSpec) GetHrid() string {
@@ -30,7 +30,7 @@ func (p *PortalSpec) GetName() string {
 	return p.Name
 }
 
-func (p *PortalSpec) GetNavigation() []NavigationPath {
+func (p *PortalSpec) GetNavigation() []PortalNavigationPath {
 	if p == nil {
 		return nil
 	}
