@@ -18,6 +18,9 @@ You can manage with Terraform the following:
 * Subscriptions
 * Group
 * Dictionaries
+* Portals
+* Portal Listings
+* Documentations
 
 [Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)
 
@@ -83,7 +86,11 @@ Available configuration:
 * [apim_apiv4](docs/resources/apiv4.md)
 * [apim_application](docs/resources/application.md)
 * [apim_dictionary](docs/resources/dictionary.md)
+* [apim_documentation_api](docs/resources/documentation_api.md)
+* [apim_documentation_portal](docs/resources/documentation_portal.md)
 * [apim_group](docs/resources/group.md)
+* [apim_portal](docs/resources/portal.md)
+* [apim_portal_listing](docs/resources/portal_listing.md)
 * [apim_shared_policy_group](docs/resources/shared_policy_group.md)
 * [apim_subscription](docs/resources/subscription.md)
 
@@ -92,7 +99,11 @@ Available configuration:
 * [apim_apiv4](docs/data-sources/apiv4.md)
 * [apim_application](docs/data-sources/application.md)
 * [apim_dictionary](docs/data-sources/dictionary.md)
+* [apim_documentation_api](docs/data-sources/documentation_api.md)
+* [apim_documentation_portal](docs/data-sources/documentation_portal.md)
 * [apim_group](docs/data-sources/group.md)
+* [apim_portal](docs/data-sources/portal.md)
+* [apim_portal_listing](docs/data-sources/portal_listing.md)
 * [apim_shared_policy_group](docs/data-sources/shared_policy_group.md)
 * [apim_subscription](docs/data-sources/subscription.md)
 <!-- End Available Resources and Data Sources [operations] -->
