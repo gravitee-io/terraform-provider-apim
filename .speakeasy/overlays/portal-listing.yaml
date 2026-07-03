@@ -1,0 +1,27 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Portal Listing overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.components.schemas.PortalListingSpec
+    update:
+      x-speakeasy-entity:
+        PortalListing
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{portalHrid}/listings"].put
+    update:
+      x-speakeasy-entity-operation: PortalListing#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{portalHrid}/listings/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: PortalListing#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{portalHrid}/listings/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: PortalListing#delete
+
+  # Parent portal cannot change on an existing listing
+  - target: $.components.schemas.PortalListingStatus.allOf[?@.properties.portalHrid].properties.portalHrid
+    description: Portal cannot be changed on an existing listing
+    update:
+      x-speakeasy-plan-modifiers: Immutable
