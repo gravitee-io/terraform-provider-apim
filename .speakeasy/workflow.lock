@@ -42,6 +42,10 @@ workflow:
                 - location: .speakeasy/overlays/subscription.yaml
                 - location: .speakeasy/overlays/dictionary.yaml
                 - location: .speakeasy/overlays/group.yaml
+                - location: .speakeasy/overlays/portal.yaml
+                - location: .speakeasy/overlays/portal-listing.yaml
+                - location: .speakeasy/overlays/documentation-portal.yaml
+                - location: .speakeasy/overlays/documentation-api.yaml
                 - location: .speakeasy/speakeasy-modifications-overlay.yaml
             output: .speakeasy/output/computed.yaml
             registry:

@@ -88,6 +88,7 @@ type Apiv4ResourceModel struct {
 	OrganizationID                   types.String                                   `tfsdk:"organization_id"`
 	Pages                            []tfTypes.PageV4                               `tfsdk:"pages"`
 	Plans                            []tfTypes.PlanV4                               `tfsdk:"plans"`
+	PortalNavigation                 []tfTypes.NavigationPath                       `tfsdk:"portal_navigation"`
 	Properties                       []tfTypes.Property                             `tfsdk:"properties"`
 	Resources                        []tfTypes.APIResource                          `tfsdk:"resources"`
 	ResponseTemplates                map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
@@ -2095,7 +2096,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 					},
 				},
-				Description: `Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.`,
+				Description: `Pages for the API (classic portal). Elements positioned earlier in the list are displayed first, with subsequent elements appearing below.`,
 			},
 			"plans": schema.ListNestedAttribute{
 				Computed: true,
@@ -2907,6 +2908,42 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 				},
 				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `. Plans are prioritized by their position in the list, with earlier entries having higher priority.`,
+			},
+			"portal_navigation": schema.ListNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
+				},
+				NestedObject: schema.NestedAttributeObject{
+					Validators: []validator.Object{
+						speakeasy_objectvalidators.NotNull(),
+					},
+					Attributes: map[string]schema.Attribute{
+						"display_name": schema.StringAttribute{
+							Optional: true,
+							MarkdownDescription: `Optional human-friendly label for this path node.` + "\n" +
+								`Listing a path explicitly is the only way to attach a displayName.`,
+						},
+						"order": schema.Int64Attribute{
+							Optional: true,
+							MarkdownDescription: `Optional display order of this node relative to its siblings at the same level.` + "\n" +
+								`Listing a path explicitly is the only way to attach an order.`,
+						},
+						"path": schema.StringAttribute{
+							Optional: true,
+							MarkdownDescription: `A slash-separated path defining the navigation hierarchy.` + "\n" +
+								`Intermediate folders are implicitly created if not listed explicitly.` + "\n" +
+								`Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
+						},
+					},
+				},
+				MarkdownDescription: `The API's internal documentation navigation tree for the next-gen portal.` + "\n" +
+					`Paths are ordered — the order in the list is preserved.` + "\n" +
+					`Intermediate folders are implicitly created if not listed explicitly.`,
 			},
 			"properties": schema.ListNestedAttribute{
 				Computed: true,

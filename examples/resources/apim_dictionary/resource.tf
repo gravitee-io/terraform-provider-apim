@@ -1,36 +1,43 @@
-resource "apim_dictionary" "my_dictionary" {
-  deployed    = false
-  description = "...my_description..."
+resource "apim_dictionary" "dynamic" {
+  hrid        = "dynamic"
+  name        = "[Terraform] Dynamic dictionary"
+  description = "Expose all headers of Gravitee echo API as properties"
+  deployed    = true
+  type        = "DYNAMIC"
   dynamic = {
     provider = {
       http = {
-        body = "...my_body..."
+        type   = "HTTP"
+        url    = "https://api.gravitee.io/echo"
+        method = "GET"
+        # This header will returned and then used
+        # as a property in the API policy
         headers = [
           {
-            name  = "...my_name..."
-            value = "...my_value..."
+            name  = "X-Test-Specific"
+            value = "ABCDEF"
           }
         ]
-        method           = "CONNECT"
-        specification    = "...my_specification..."
-        type             = "HTTP"
-        url              = "https://cautious-futon.com/"
-        use_system_proxy = false
+        specification = <<-EOT
+        [
+          {
+            "operation": "shift",
+            "spec": {
+              "headers": {
+                "*": {
+                  "$": "[#2].key",
+                  "@": "[#2].value"
+                }
+              }
+            }
+          }
+        ]
+        EOT
       }
     }
     trigger = {
-      rate = 4
-      unit = "MILLISECONDS"
+      rate = 5
+      unit = "SECONDS"
     }
   }
-  environment_id = "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
-  hrid           = "demo_api"
-  manual = {
-    properties = {
-      key = "value"
-    }
-  }
-  name            = "...my_name..."
-  organization_id = "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
-  type            = "DYNAMIC"
 }

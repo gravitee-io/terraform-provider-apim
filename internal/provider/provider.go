@@ -106,6 +106,9 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			`* Subscriptions` + "\n" +
 			`* Group` + "\n" +
 			`* Dictionaries` + "\n" +
+			`* Portals` + "\n" +
+			`* Portal Listings` + "\n" +
+			`* Documentations` + "\n" +
 			`` + "\n" +
 			`[Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)` + "\n" +
 			`` + "\n" +
@@ -244,7 +247,11 @@ func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewApiv4Resource,
 		NewApplicationResource,
 		NewDictionaryResource,
+		NewDocumentationAPIResource,
+		NewDocumentationPortalResource,
 		NewGroupResource,
+		NewPortalResource,
+		NewPortalListingResource,
 		NewSharedPolicyGroupResource,
 		NewSubscriptionResource,
 	}
@@ -255,7 +262,11 @@ func (p *ApimProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewApiv4DataSource,
 		NewApplicationDataSource,
 		NewDictionaryDataSource,
+		NewDocumentationAPIDataSource,
+		NewDocumentationPortalDataSource,
 		NewGroupDataSource,
+		NewPortalDataSource,
+		NewPortalListingDataSource,
 		NewSharedPolicyGroupDataSource,
 		NewSubscriptionDataSource,
 	}

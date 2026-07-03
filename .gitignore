@@ -9,6 +9,7 @@
 .vscode
 .idea/
 terraform-provider-apim
+*.test
 docs/data-sources/
 examples/data-sources/
 __debug_bin*

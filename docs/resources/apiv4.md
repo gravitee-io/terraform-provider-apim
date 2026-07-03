@@ -247,8 +247,11 @@ resource "apim_apiv4" "example" {
 be notified when the API is synced with APIM.
 Default: true
 - `organization_id` (String) organization ID
-- `pages` (Attributes List) Pages for the API. Elements positioned earlier in the list are displayed first, with subsequent elements appearing below. (see [below for nested schema](#nestedatt--pages))
+- `pages` (Attributes List) Pages for the API (classic portal). Elements positioned earlier in the list are displayed first, with subsequent elements appearing below. (see [below for nested schema](#nestedatt--pages))
 - `plans` (Attributes List) Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority. (see [below for nested schema](#nestedatt--plans))
+- `portal_navigation` (Attributes List) The API's internal documentation navigation tree for the next-gen portal.
+Paths are ordered — the order in the list is preserved.
+Intermediate folders are implicitly created if not listed explicitly. (see [below for nested schema](#nestedatt--portal_navigation))
 - `properties` (Attributes List) Properties usable using EL. (see [below for nested schema](#nestedatt--properties))
 - `resources` (Attributes List) Data resources usable in policy to access (mostly) external data (authentication, cache, registries...). (see [below for nested schema](#nestedatt--resources))
 - `response_templates` (Map of Map of Object) Map of content-type dependent Response Templates for the API (Not applicable for Native
@@ -1031,6 +1034,20 @@ Optional:
 - `configuration` (String) JSON Object to configure specific attributes of a Plan. Parsed as JSON.
 - `type` (String) API Plan security implementation. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS", "API_KEY"]
 
+
+
+<a id="nestedatt--portal_navigation"></a>
+### Nested Schema for `portal_navigation`
+
+Optional:
+
+- `display_name` (String) Optional human-friendly label for this path node.
+Listing a path explicitly is the only way to attach a displayName.
+- `order` (Number) Optional display order of this node relative to its siblings at the same level.
+Listing a path explicitly is the only way to attach an order.
+- `path` (String) A slash-separated path defining the navigation hierarchy.
+Intermediate folders are implicitly created if not listed explicitly.
+Not Null
 
 
 <a id="nestedatt--properties"></a>

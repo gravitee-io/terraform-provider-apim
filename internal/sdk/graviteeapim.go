@@ -58,6 +58,9 @@ func Pointer[T any](v T) *T { return &v }
 // * Subscriptions
 // * Group
 // * Dictionaries
+// * Portals
+// * Portal Listings
+// * Documentations
 //
 // [Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)
 //
@@ -74,6 +77,14 @@ type GraviteeApim struct {
 	// Everything about subscriptions
 	Subscriptions      *Subscriptions
 	SharedPolicyGroups *SharedPolicyGroups
+	// Everything about Portals (next-gen developer portal)
+	Portals *Portals
+	// Everything about Portal Listings (publishing APIs to a portal)
+	PortalListings *PortalListings
+	// Everything about Portal Documentations
+	PortalDocumentations *PortalDocumentations
+	// Everything about API Documentations (next-gen portal)
+	APIDocumentations *APIDocumentations
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -193,6 +204,10 @@ func New(opts ...SDKOption) *GraviteeApim {
 	sdk.Dictionaries = newDictionaries(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Subscriptions = newSubscriptions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.SharedPolicyGroups = newSharedPolicyGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Portals = newPortals(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.PortalListings = newPortalListings(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.PortalDocumentations = newPortalDocumentations(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APIDocumentations = newAPIDocumentations(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

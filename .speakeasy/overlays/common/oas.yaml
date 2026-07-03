@@ -44,6 +44,9 @@ actions:
         * Subscriptions
         * Group
         * Dictionaries
+        * Portals
+        * Portal Listings
+        * Documentations
         
         [Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)
         
