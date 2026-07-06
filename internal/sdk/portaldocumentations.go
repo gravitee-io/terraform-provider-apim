@@ -72,7 +72,7 @@ func (s *PortalDocumentations) CreateOrUpdate(ctx context.Context, request opera
 		OAuth2Scopes:     nil,
 		SecuritySource:   s.sdkConfiguration.Security,
 	}
-	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DocumentationSpec", "json", `request:"mediaType=application/json"`)
+	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request, false, false, "DocumentationAPISpec", "json", `request:"mediaType=application/json"`)
 	if err != nil {
 		return nil, err
 	}
@@ -222,12 +222,12 @@ func (s *PortalDocumentations) CreateOrUpdate(ctx context.Context, request opera
 				return nil, err
 			}
 
-			var out shared.DocumentationAPISpec
+			var out shared.DocumentationPortalSpec
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.DocumentationAPISpec = &out
+			res.DocumentationPortalSpec = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -466,12 +466,12 @@ func (s *PortalDocumentations) Get(ctx context.Context, request operations.GetPo
 				return nil, err
 			}
 
-			var out shared.DocumentationAPISpec
+			var out shared.DocumentationPortalSpec
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.DocumentationAPISpec = &out
+			res.DocumentationPortalSpec = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {

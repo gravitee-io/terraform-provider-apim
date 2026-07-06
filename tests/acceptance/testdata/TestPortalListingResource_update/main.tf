@@ -1,6 +1,6 @@
 variable "apis" {
   type = list(object({
-    api_hrid = string
+    api      = string
     location = string
     order    = number
   }))
@@ -164,7 +164,12 @@ resource "apim_apiv4" "second" {
 resource "apim_portal_listing" "test" {
   environment_id  = var.environment_id
   organization_id = var.organization_id
-  portal_hrid     = var.portal_hrid
+  portal_hrid     = apim_portal.primary.hrid
   hrid            = var.hrid
-  apis            = var.apis
+  apis = [for entry in var.apis : {
+    # looks odd, but we do this so that we have stable test where the API will be created first without "depends on"
+    api_hrid = entry.api == "first" ? apim_apiv4.first.hrid : apim_apiv4.second.hrid
+    location = entry.location
+    order    = entry.order
+  }]
 }

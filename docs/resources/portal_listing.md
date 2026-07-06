@@ -20,15 +20,14 @@ resource "apim_portal" "developer-portal" {
     {
       path         = "/apis"
       display_name = "APIs"
-      order        = 1
     }
   ]
 }
 
 resource "apim_apiv4" "pets" {
-  // other properties ommited for simplicity
+  // other properties omitted for simplicity
   hrid = "pets"
-  # rest is ommited for simplicity
+  # rest is omitted for simplicity
 }
 
 resource "apim_portal_listing" "public-apis" {

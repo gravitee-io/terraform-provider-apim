@@ -5,7 +5,6 @@ resource "apim_portal" "developer-portal" {
     {
       path         = "/docs/getting-started"
       display_name = "Getting Started"
-      order        = 1
     }
   ]
 }

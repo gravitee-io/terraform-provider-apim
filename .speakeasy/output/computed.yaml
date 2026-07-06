@@ -825,7 +825,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DocumentationState"
+                $ref: "#/components/schemas/DocumentationPortalState"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -854,7 +854,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DocumentationState"
+                $ref: "#/components/schemas/DocumentationPortalState"
         "401":
           $ref: "#/components/responses/Unauthenticated"
         "403":
@@ -910,7 +910,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DocumentationState"
+                $ref: "#/components/schemas/DocumentationApiState"
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -939,7 +939,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DocumentationState"
+                $ref: "#/components/schemas/DocumentationApiState"
         "401":
           $ref: "#/components/responses/Unauthenticated"
         "403":
@@ -3805,12 +3805,10 @@ components:
               type: string
               description: The HRID of the portal this documentation page belongs to (when attached to a portal).
               readOnly: true
-              x-speakeasy-plan-modifiers: Immutable
             apiHrid:
               type: string
               description: The HRID of the API this documentation page belongs to (when attached to an API).
               readOnly: true
-              x-speakeasy-plan-modifiers: Immutable
     DocumentationState:
       description: State of a Documentation page that has been created/updated.
       allOf:
@@ -3819,9 +3817,41 @@ components:
     DocumentationPortalSpec:
       $ref: "#/components/schemas/DocumentationSpec"
       x-speakeasy-entity: DocumentationPortal
+    DocumentationPortalStatus:
+      description: Status information for a Portal Documentation page after import.
+      allOf:
+        - $ref: "#/components/schemas/BaseStatus"
+        - type: object
+          properties:
+            portalHrid:
+              type: string
+              description: The HRID of the portal this documentation page belongs to.
+              readOnly: true
+              x-speakeasy-plan-modifiers: Immutable
+    DocumentationPortalState:
+      description: State of a Portal Documentation page that has been created/updated.
+      allOf:
+        - $ref: "#/components/schemas/DocumentationPortalSpec"
+        - $ref: "#/components/schemas/DocumentationPortalStatus"
     DocumentationApiSpec:
       $ref: "#/components/schemas/DocumentationSpec"
       x-speakeasy-entity: DocumentationApi
+    DocumentationApiStatus:
+      description: Status information for an API Documentation page after import.
+      allOf:
+        - $ref: "#/components/schemas/BaseStatus"
+        - type: object
+          properties:
+            apiHrid:
+              type: string
+              description: The HRID of the API this documentation page belongs to.
+              readOnly: true
+              x-speakeasy-plan-modifiers: Immutable
+    DocumentationApiState:
+      description: State of an API Documentation page that has been created/updated.
+      allOf:
+        - $ref: "#/components/schemas/DocumentationApiSpec"
+        - $ref: "#/components/schemas/DocumentationApiStatus"
   responses:
     NotFound:
       description: Resource not found

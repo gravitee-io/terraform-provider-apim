@@ -84,7 +84,7 @@ resource "apim_apiv4" "api" {
 }
 
 resource "apim_documentation_api" "test" {
-  api_hrid = var.api_hrid
+  api_hrid = apim_apiv4.api.hrid
   hrid     = var.hrid
   name     = var.name
   type     = "GRAVITEE_MARKDOWN"

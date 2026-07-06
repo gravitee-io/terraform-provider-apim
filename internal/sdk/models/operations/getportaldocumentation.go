@@ -99,7 +99,7 @@ type GetPortalDocumentationResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// Documentation successfully retrieved
-	DocumentationAPISpec *shared.DocumentationAPISpec
+	DocumentationPortalSpec *shared.DocumentationPortalSpec
 	// Unauthenticated
 	HTTPError *shared.HTTPError
 	// Default error
@@ -127,11 +127,11 @@ func (g *GetPortalDocumentationResponse) GetRawResponse() *http.Response {
 	return g.RawResponse
 }
 
-func (g *GetPortalDocumentationResponse) GetDocumentationAPISpec() *shared.DocumentationAPISpec {
+func (g *GetPortalDocumentationResponse) GetDocumentationPortalSpec() *shared.DocumentationPortalSpec {
 	if g == nil {
 		return nil
 	}
-	return g.DocumentationAPISpec
+	return g.DocumentationPortalSpec
 }
 
 func (g *GetPortalDocumentationResponse) GetHTTPError() *shared.HTTPError {

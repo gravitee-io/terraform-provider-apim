@@ -15,7 +15,7 @@ DocumentationAPI Resource
 ```terraform
 resource "apim_apiv4" "pets-api" {
   hrid = "pets-api"
-  // other properties ommited for simplicity
+  // other properties omitted for simplicity
 }
 
 resource "apim_documentation_api" "api-docs" {

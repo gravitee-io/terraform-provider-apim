@@ -176,11 +176,11 @@ func (r *DocumentationPortalDataSource) Read(ctx context.Context, req datasource
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DocumentationAPISpec != nil) {
+	if !(res.DocumentationPortalSpec != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationAPISpec(ctx, res.DocumentationAPISpec)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationPortalSpec(ctx, res.DocumentationPortalSpec)...)
 
 	if resp.Diagnostics.HasError() {
 		return
