@@ -61,7 +61,7 @@ info:
   description: The famous Pets API
   version: 1.0.0
 servers:
-  - url: "ttps://petstore.swagger.io/v2/s"
+  - url: "https://petstore.swagger.io/v2"
 tags:
   - name: Pets
 paths:

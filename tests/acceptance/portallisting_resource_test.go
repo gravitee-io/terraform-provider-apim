@@ -57,31 +57,31 @@ func TestPortalListingResource_update(t *testing.T) {
 
 	apisInitial := config.ListVariable(
 		config.ObjectVariable(config.Variables{
-			"api_hrid": config.StringVariable("api-a-" + randomId),
+			"api":      config.StringVariable("first"),
 			"location": config.StringVariable("/apis" + randomId),
 			"order":    config.IntegerVariable(1),
 		}),
 		config.ObjectVariable(config.Variables{
-			"api_hrid": config.StringVariable("api-b-" + randomId),
+			"api":      config.StringVariable("second"),
 			"location": config.StringVariable("/apis" + randomId),
 			"order":    config.IntegerVariable(2),
 		}),
 	)
 	apisUpdated := config.ListVariable(
 		config.ObjectVariable(config.Variables{
-			"api_hrid": config.StringVariable("api-b-" + randomId),
+			"api":      config.StringVariable("second"),
 			"location": config.StringVariable("/apis" + randomId),
 			"order":    config.IntegerVariable(1),
 		}),
 		config.ObjectVariable(config.Variables{
-			"api_hrid": config.StringVariable("api-a-" + randomId),
+			"api":      config.StringVariable("first"),
 			"location": config.StringVariable("/apis" + randomId + "/featured" + randomId),
 			"order":    config.IntegerVariable(2),
 		}),
 	)
 	apisReduced := config.ListVariable(
 		config.ObjectVariable(config.Variables{
-			"api_hrid": config.StringVariable("api-a-" + randomId),
+			"api":      config.StringVariable("first"),
 			"location": config.StringVariable("/apis" + randomId + "/featured" + randomId),
 			"order":    config.IntegerVariable(1),
 		}),

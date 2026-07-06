@@ -1,7 +1,7 @@
 resource "apim_portal" "developer-portal" {
   hrid = "developer-portal"
   name = "[Terraform] Developer Portal"
-  # will displayed in that order
+  # will be displayed in that order
   navigation = [
     {
       path         = "/apis"

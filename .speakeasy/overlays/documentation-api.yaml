@@ -25,6 +25,29 @@ actions:
     update:
       x-speakeasy-entity-operation: DocumentationApi#delete
 
-  - target: $.components.schemas.DocumentationStatus.allOf[?@.properties.apiHrid].properties.apiHrid
+  - target: $.components.schemas
+    update:
+      DocumentationApiStatus:
+        description: Status information for an API Documentation page after import.
+        allOf:
+          - $ref: "#/components/schemas/BaseStatus"
+          - type: object
+            properties:
+              apiHrid:
+                type: string
+                description: The HRID of the API this documentation page belongs to.
+                readOnly: true
+      DocumentationApiState:
+        description: State of an API Documentation page that has been created/updated.
+        allOf:
+          - $ref: "#/components/schemas/DocumentationApiSpec"
+          - $ref: "#/components/schemas/DocumentationApiStatus"
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/documentations"].put.responses["200"].content["application/json"].schema
+    update:
+      $ref: "#/components/schemas/DocumentationApiState"
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/documentations/{hrid}"].get.responses["200"].content["application/json"].schema
+    update:
+      $ref: "#/components/schemas/DocumentationApiState"
+  - target: $.components.schemas.DocumentationApiStatus.allOf[?@.properties.apiHrid].properties.apiHrid
     update:
       x-speakeasy-plan-modifiers: Immutable

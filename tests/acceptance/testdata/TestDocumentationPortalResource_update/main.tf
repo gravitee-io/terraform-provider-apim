@@ -37,7 +37,7 @@ resource "apim_portal" "portal" {
 }
 
 resource "apim_documentation_portal" "test" {
-  portal_hrid = var.portal_hrid
+  portal_hrid = apim_portal.portal.hrid
   hrid        = var.hrid
   name        = var.name
   type        = "GRAVITEE_MARKDOWN"

@@ -190,11 +190,11 @@ func (r *DocumentationPortalResource) Create(ctx context.Context, req resource.C
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DocumentationAPISpec != nil) {
+	if !(res.DocumentationPortalSpec != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationAPISpec(ctx, res.DocumentationAPISpec)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationPortalSpec(ctx, res.DocumentationPortalSpec)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -254,11 +254,11 @@ func (r *DocumentationPortalResource) Read(ctx context.Context, req resource.Rea
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DocumentationAPISpec != nil) {
+	if !(res.DocumentationPortalSpec != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationAPISpec(ctx, res.DocumentationAPISpec)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationPortalSpec(ctx, res.DocumentationPortalSpec)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -312,11 +312,11 @@ func (r *DocumentationPortalResource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DocumentationAPISpec != nil) {
+	if !(res.DocumentationPortalSpec != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationAPISpec(ctx, res.DocumentationAPISpec)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationPortalSpec(ctx, res.DocumentationPortalSpec)...)
 
 	if resp.Diagnostics.HasError() {
 		return
