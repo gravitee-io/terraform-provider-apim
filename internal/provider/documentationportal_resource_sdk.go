@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *DocumentationPortalResourceModel) RefreshFromSharedDocumentationAPISpec(ctx context.Context, resp *shared.DocumentationAPISpec) diag.Diagnostics {
+func (r *DocumentationPortalResourceModel) RefreshFromSharedDocumentationPortalSpec(ctx context.Context, resp *shared.DocumentationPortalSpec) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
@@ -44,18 +44,18 @@ func (r *DocumentationPortalResourceModel) ToOperationsCreateOrUpdatePortalDocum
 	var portalHrid string
 	portalHrid = r.PortalHrid.ValueString()
 
-	documentationSpec, documentationSpecDiags := r.ToSharedDocumentationSpec(ctx)
-	diags.Append(documentationSpecDiags...)
+	documentationAPISpec, documentationAPISpecDiags := r.ToSharedDocumentationAPISpec(ctx)
+	diags.Append(documentationAPISpecDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
 	out := operations.CreateOrUpdatePortalDocumentationRequest{
-		OrganizationID:    organizationID,
-		EnvironmentID:     environmentID,
-		PortalHrid:        portalHrid,
-		DocumentationSpec: *documentationSpec,
+		OrganizationID:       organizationID,
+		EnvironmentID:        environmentID,
+		PortalHrid:           portalHrid,
+		DocumentationAPISpec: *documentationAPISpec,
 	}
 
 	return &out, diags
@@ -123,7 +123,7 @@ func (r *DocumentationPortalResourceModel) ToOperationsGetPortalDocumentationReq
 	return &out, diags
 }
 
-func (r *DocumentationPortalResourceModel) ToSharedDocumentationSpec(ctx context.Context) (*shared.DocumentationSpec, diag.Diagnostics) {
+func (r *DocumentationPortalResourceModel) ToSharedDocumentationAPISpec(ctx context.Context) (*shared.DocumentationAPISpec, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var hrid string
@@ -148,7 +148,7 @@ func (r *DocumentationPortalResourceModel) ToSharedDocumentationSpec(ctx context
 	} else {
 		order = nil
 	}
-	out := shared.DocumentationSpec{
+	out := shared.DocumentationAPISpec{
 		Hrid:     hrid,
 		Name:     name,
 		Type:     typeVar,

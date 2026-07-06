@@ -3,8 +3,8 @@
 
 package shared
 
-// DocumentationAPISpec - Status information for a Documentation page after import.
-// Exactly one of `portalHrid` / `apiHrid` is populated depending on the parent endpoint used.
+// DocumentationAPISpec - Specification of a Documentation page.
+// Can be attached to either a portal or an API (determined by the endpoint used).
 type DocumentationAPISpec struct {
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`

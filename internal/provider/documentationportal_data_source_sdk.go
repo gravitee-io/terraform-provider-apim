@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *DocumentationPortalDataSourceModel) RefreshFromSharedDocumentationAPISpec(ctx context.Context, resp *shared.DocumentationAPISpec) diag.Diagnostics {
+func (r *DocumentationPortalDataSourceModel) RefreshFromSharedDocumentationPortalSpec(ctx context.Context, resp *shared.DocumentationPortalSpec) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
