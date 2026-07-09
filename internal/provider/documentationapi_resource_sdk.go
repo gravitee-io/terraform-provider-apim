@@ -11,15 +11,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *DocumentationAPIResourceModel) RefreshFromSharedDocumentationAPISpec(ctx context.Context, resp *shared.DocumentationAPISpec) diag.Diagnostics {
+func (r *DocumentationAPIResourceModel) RefreshFromSharedDocumentationAPIState(ctx context.Context, resp *shared.DocumentationAPIState) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.APIHrid = types.StringPointerValue(resp.APIHrid)
 		r.Content = types.StringValue(resp.Content)
+		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Location = types.StringPointerValue(resp.Location)
 		r.Name = types.StringValue(resp.Name)
 		r.Order = types.Int64PointerValue(resp.Order)
+		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		r.Type = types.StringValue(string(resp.Type))
 	}
 

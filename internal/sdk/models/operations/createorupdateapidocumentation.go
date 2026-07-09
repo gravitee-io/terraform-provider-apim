@@ -110,7 +110,7 @@ type CreateOrUpdateAPIDocumentationResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// State of the successfully created/updated Documentation
-	DocumentationAPISpec *shared.DocumentationAPISpec
+	DocumentationAPIState *shared.DocumentationAPIState
 	// Request is invalid
 	HTTPError *shared.HTTPError
 	// Default error
@@ -138,11 +138,11 @@ func (c *CreateOrUpdateAPIDocumentationResponse) GetRawResponse() *http.Response
 	return c.RawResponse
 }
 
-func (c *CreateOrUpdateAPIDocumentationResponse) GetDocumentationAPISpec() *shared.DocumentationAPISpec {
+func (c *CreateOrUpdateAPIDocumentationResponse) GetDocumentationAPIState() *shared.DocumentationAPIState {
 	if c == nil {
 		return nil
 	}
-	return c.DocumentationAPISpec
+	return c.DocumentationAPIState
 }
 
 func (c *CreateOrUpdateAPIDocumentationResponse) GetHTTPError() *shared.HTTPError {

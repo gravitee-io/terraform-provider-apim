@@ -53,7 +53,7 @@ type CreateOrUpdatePortalDocumentationRequest struct {
 	//
 	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
 	// Documentation specification
-	DocumentationAPISpec shared.DocumentationAPISpec `request:"mediaType=application/json"`
+	DocumentationPortalSpec shared.DocumentationPortalSpec `request:"mediaType=application/json"`
 }
 
 func (c CreateOrUpdatePortalDocumentationRequest) MarshalJSON() ([]byte, error) {
@@ -95,11 +95,11 @@ func (c *CreateOrUpdatePortalDocumentationRequest) GetDryRun() *bool {
 	return c.DryRun
 }
 
-func (c *CreateOrUpdatePortalDocumentationRequest) GetDocumentationAPISpec() shared.DocumentationAPISpec {
+func (c *CreateOrUpdatePortalDocumentationRequest) GetDocumentationPortalSpec() shared.DocumentationPortalSpec {
 	if c == nil {
-		return shared.DocumentationAPISpec{}
+		return shared.DocumentationPortalSpec{}
 	}
-	return c.DocumentationAPISpec
+	return c.DocumentationPortalSpec
 }
 
 type CreateOrUpdatePortalDocumentationResponse struct {
@@ -110,7 +110,7 @@ type CreateOrUpdatePortalDocumentationResponse struct {
 	// Raw HTTP response; suitable for custom response parsing
 	RawResponse *http.Response
 	// State of the successfully created/updated Documentation
-	DocumentationPortalSpec *shared.DocumentationPortalSpec
+	DocumentationPortalState *shared.DocumentationPortalState
 	// Request is invalid
 	HTTPError *shared.HTTPError
 	// Default error
@@ -138,11 +138,11 @@ func (c *CreateOrUpdatePortalDocumentationResponse) GetRawResponse() *http.Respo
 	return c.RawResponse
 }
 
-func (c *CreateOrUpdatePortalDocumentationResponse) GetDocumentationPortalSpec() *shared.DocumentationPortalSpec {
+func (c *CreateOrUpdatePortalDocumentationResponse) GetDocumentationPortalState() *shared.DocumentationPortalState {
 	if c == nil {
 		return nil
 	}
-	return c.DocumentationPortalSpec
+	return c.DocumentationPortalState
 }
 
 func (c *CreateOrUpdatePortalDocumentationResponse) GetHTTPError() *shared.HTTPError {

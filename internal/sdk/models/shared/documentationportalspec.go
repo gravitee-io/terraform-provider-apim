@@ -3,7 +3,7 @@
 
 package shared
 
-// DocumentationPortalSpec - Status information for a Portal Documentation page after import.
+// DocumentationPortalSpec - Specification of a Portal Documentation page.
 type DocumentationPortalSpec struct {
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`

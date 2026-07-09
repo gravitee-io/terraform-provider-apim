@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	custom_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -47,6 +48,7 @@ type DocumentationPortalResourceModel struct {
 	Content        types.String `tfsdk:"content"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	Hrid           types.String `tfsdk:"hrid"`
+	ID             types.String `tfsdk:"id"`
 	Location       types.String `tfsdk:"location"`
 	Name           types.String `tfsdk:"name"`
 	Order          types.Int64  `tfsdk:"order"`
@@ -68,8 +70,11 @@ func (r *DocumentationPortalResource) Schema(ctx context.Context, req resource.S
 				Description: `The content of the documentation page`,
 			},
 			"environment_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `environment ID`,
 			},
 			"hrid": schema.StringAttribute{
@@ -84,7 +89,15 @@ func (r *DocumentationPortalResource) Schema(ctx context.Context, req resource.S
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
+			"id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
+				Description: `Resource UUID.`,
+			},
 			"location": schema.StringAttribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `The path in the navigation hierarchy where this page should appear.`,
 			},
@@ -93,16 +106,23 @@ func (r *DocumentationPortalResource) Schema(ctx context.Context, req resource.S
 				Description: `Display name of the documentation page`,
 			},
 			"order": schema.Int64Attribute{
+				Computed:    true,
 				Optional:    true,
 				Description: `Display order relative to siblings at the same location`,
 			},
 			"organization_id": schema.StringAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.String{
+					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
+				},
 				Description: `organization ID`,
 			},
 			"portal_hrid": schema.StringAttribute{
-				Required:    true,
+				Required: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.Immutable(),
+				},
 				Description: `Human-readable ID of a portal`,
 			},
 			"type": schema.StringAttribute{
@@ -190,11 +210,11 @@ func (r *DocumentationPortalResource) Create(ctx context.Context, req resource.C
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DocumentationPortalSpec != nil) {
+	if !(res.DocumentationPortalState != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationPortalSpec(ctx, res.DocumentationPortalSpec)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationPortalState(ctx, res.DocumentationPortalState)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -254,11 +274,11 @@ func (r *DocumentationPortalResource) Read(ctx context.Context, req resource.Rea
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DocumentationPortalSpec != nil) {
+	if !(res.DocumentationPortalState != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationPortalSpec(ctx, res.DocumentationPortalSpec)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationPortalState(ctx, res.DocumentationPortalState)...)
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -312,11 +332,11 @@ func (r *DocumentationPortalResource) Update(ctx context.Context, req resource.U
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DocumentationPortalSpec != nil) {
+	if !(res.DocumentationPortalState != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationPortalSpec(ctx, res.DocumentationPortalSpec)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationPortalState(ctx, res.DocumentationPortalState)...)
 
 	if resp.Diagnostics.HasError() {
 		return

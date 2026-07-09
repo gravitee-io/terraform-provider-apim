@@ -3,8 +3,7 @@
 
 package shared
 
-// DocumentationAPISpec - Specification of a Documentation page.
-// Can be attached to either a portal or an API (determined by the endpoint used).
+// DocumentationAPISpec - Specification of an API Documentation page.
 type DocumentationAPISpec struct {
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`

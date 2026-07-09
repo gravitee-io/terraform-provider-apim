@@ -42,6 +42,7 @@ type DocumentationAPIDataSourceModel struct {
 	Content        types.String `tfsdk:"content"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	Hrid           types.String `tfsdk:"hrid"`
+	ID             types.String `tfsdk:"id"`
 	Location       types.String `tfsdk:"location"`
 	Name           types.String `tfsdk:"name"`
 	Order          types.Int64  `tfsdk:"order"`
@@ -62,7 +63,7 @@ func (r *DocumentationAPIDataSource) Schema(ctx context.Context, req datasource.
 		Attributes: map[string]schema.Attribute{
 			"api_hrid": schema.StringAttribute{
 				Required:    true,
-				Description: `Human-readable ID of api`,
+				Description: `The HRID of the API this documentation page belongs to.`,
 			},
 			"content": schema.StringAttribute{
 				Computed:    true,
@@ -71,7 +72,7 @@ func (r *DocumentationAPIDataSource) Schema(ctx context.Context, req datasource.
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `environment ID`,
+				Description: `The environment ID.`,
 			},
 			"hrid": schema.StringAttribute{
 				Required:    true,
@@ -80,6 +81,10 @@ func (r *DocumentationAPIDataSource) Schema(ctx context.Context, req datasource.
 					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
 				},
+			},
+			"id": schema.StringAttribute{
+				Computed:    true,
+				Description: `Resource UUID.`,
 			},
 			"location": schema.StringAttribute{
 				Computed:    true,
@@ -96,7 +101,7 @@ func (r *DocumentationAPIDataSource) Schema(ctx context.Context, req datasource.
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
-				Description: `organization ID`,
+				Description: `The organization ID.`,
 			},
 			"type": schema.StringAttribute{
 				Computed:    true,
@@ -176,11 +181,11 @@ func (r *DocumentationAPIDataSource) Read(ctx context.Context, req datasource.Re
 		resp.Diagnostics.AddError(fmt.Sprintf("unexpected response from API. Got an unexpected response code %v", res.StatusCode), debugResponse(res.RawResponse))
 		return
 	}
-	if !(res.DocumentationAPISpec != nil) {
+	if !(res.DocumentationAPIState != nil) {
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationAPISpec(ctx, res.DocumentationAPISpec)...)
+	resp.Diagnostics.Append(data.RefreshFromSharedDocumentationAPIState(ctx, res.DocumentationAPIState)...)
 
 	if resp.Diagnostics.HasError() {
 		return

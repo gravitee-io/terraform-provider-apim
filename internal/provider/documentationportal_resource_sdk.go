@@ -11,15 +11,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
-func (r *DocumentationPortalResourceModel) RefreshFromSharedDocumentationPortalSpec(ctx context.Context, resp *shared.DocumentationPortalSpec) diag.Diagnostics {
+func (r *DocumentationPortalResourceModel) RefreshFromSharedDocumentationPortalState(ctx context.Context, resp *shared.DocumentationPortalState) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if resp != nil {
 		r.Content = types.StringValue(resp.Content)
+		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
+		r.ID = types.StringPointerValue(resp.ID)
 		r.Location = types.StringPointerValue(resp.Location)
 		r.Name = types.StringValue(resp.Name)
 		r.Order = types.Int64PointerValue(resp.Order)
+		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
+		r.PortalHrid = types.StringPointerValue(resp.PortalHrid)
 		r.Type = types.StringValue(string(resp.Type))
 	}
 
@@ -44,18 +48,18 @@ func (r *DocumentationPortalResourceModel) ToOperationsCreateOrUpdatePortalDocum
 	var portalHrid string
 	portalHrid = r.PortalHrid.ValueString()
 
-	documentationAPISpec, documentationAPISpecDiags := r.ToSharedDocumentationAPISpec(ctx)
-	diags.Append(documentationAPISpecDiags...)
+	documentationPortalSpec, documentationPortalSpecDiags := r.ToSharedDocumentationPortalSpec(ctx)
+	diags.Append(documentationPortalSpecDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
 	out := operations.CreateOrUpdatePortalDocumentationRequest{
-		OrganizationID:       organizationID,
-		EnvironmentID:        environmentID,
-		PortalHrid:           portalHrid,
-		DocumentationAPISpec: *documentationAPISpec,
+		OrganizationID:          organizationID,
+		EnvironmentID:           environmentID,
+		PortalHrid:              portalHrid,
+		DocumentationPortalSpec: *documentationPortalSpec,
 	}
 
 	return &out, diags
@@ -123,7 +127,7 @@ func (r *DocumentationPortalResourceModel) ToOperationsGetPortalDocumentationReq
 	return &out, diags
 }
 
-func (r *DocumentationPortalResourceModel) ToSharedDocumentationAPISpec(ctx context.Context) (*shared.DocumentationAPISpec, diag.Diagnostics) {
+func (r *DocumentationPortalResourceModel) ToSharedDocumentationPortalSpec(ctx context.Context) (*shared.DocumentationPortalSpec, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var hrid string
@@ -148,7 +152,7 @@ func (r *DocumentationPortalResourceModel) ToSharedDocumentationAPISpec(ctx cont
 	} else {
 		order = nil
 	}
-	out := shared.DocumentationAPISpec{
+	out := shared.DocumentationPortalSpec{
 		Hrid:     hrid,
 		Name:     name,
 		Type:     typeVar,

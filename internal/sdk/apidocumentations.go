@@ -222,12 +222,12 @@ func (s *APIDocumentations) CreateOrUpdate(ctx context.Context, request operatio
 				return nil, err
 			}
 
-			var out shared.DocumentationAPISpec
+			var out shared.DocumentationAPIState
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.DocumentationAPISpec = &out
+			res.DocumentationAPIState = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
@@ -466,12 +466,12 @@ func (s *APIDocumentations) Get(ctx context.Context, request operations.GetAPIDo
 				return nil, err
 			}
 
-			var out shared.DocumentationAPISpec
+			var out shared.DocumentationAPIState
 			if err := utils.UnmarshalJsonFromResponseBody(bytes.NewBuffer(rawBody), &out, ""); err != nil {
 				return nil, err
 			}
 
-			res.DocumentationAPISpec = &out
+			res.DocumentationAPIState = &out
 		default:
 			rawBody, err := utils.ConsumeRawBody(httpRes)
 			if err != nil {
