@@ -817,7 +817,8 @@ paths:
         content:
           "application/json":
             schema:
-              $ref: "#/components/schemas/DocumentationSpec"
+              $ref: "#/components/schemas/DocumentationPortalSpec"
+              x-speakeasy-entity: DocumentationPortal
         required: true
       responses:
         "200":
@@ -3816,6 +3817,7 @@ components:
         - $ref: "#/components/schemas/DocumentationStatus"
     DocumentationPortalSpec:
       $ref: "#/components/schemas/DocumentationSpec"
+      description: Specification for a Portal Documentation page.
       x-speakeasy-entity: DocumentationPortal
     DocumentationPortalStatus:
       description: Status information for a Portal Documentation page after import.
@@ -3834,6 +3836,7 @@ components:
         - $ref: "#/components/schemas/DocumentationPortalSpec"
         - $ref: "#/components/schemas/DocumentationPortalStatus"
     DocumentationApiSpec:
+      description: Specification for an API Documentation page.
       $ref: "#/components/schemas/DocumentationSpec"
       x-speakeasy-entity: DocumentationApi
     DocumentationApiStatus:
