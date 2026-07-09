@@ -6,12 +6,12 @@ info:
 actions:
 
   - target: $.components.schemas
+    description: Create an alias to a specific type
     update:
       DocumentationApiSpec:
+        description: Specification for an API Documentation page.
         $ref: "#/components/schemas/DocumentationSpec"
-  - target: $.components.schemas.DocumentationApiSpec
-    update:
-      x-speakeasy-entity: DocumentationApi
+        x-speakeasy-entity: DocumentationApi
   - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/documentations"].put.requestBody.content["application/json"].schema
     update:
       $ref: "#/components/schemas/DocumentationApiSpec"

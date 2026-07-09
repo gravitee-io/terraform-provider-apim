@@ -5,11 +5,15 @@ info:
   version: 0.0.1
 actions:
   - target: $.components.schemas
+    description: Create an alias to a specific type
     update:
       DocumentationPortalSpec:
         $ref: "#/components/schemas/DocumentationSpec"
-  - target: $.components.schemas.DocumentationPortalSpec
+        description: Specification for a Portal Documentation page.
+        x-speakeasy-entity: DocumentationPortal
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{portalHrid}/documentations"].put.requestBody.content["application/json"].schema
     update:
+      $ref: "#/components/schemas/DocumentationPortalSpec"
       x-speakeasy-entity: DocumentationPortal
   - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{portalHrid}/documentations"].put
     update:
