@@ -34,7 +34,7 @@ resource "apim_dictionary" "dynamic" {
         type   = "HTTP"
         url    = "https://api.gravitee.io/echo"
         method = "GET"
-        # This header will returned and then used
+        # This header will be returned and then used
         # as a property in the API policy
         headers = [
           {
