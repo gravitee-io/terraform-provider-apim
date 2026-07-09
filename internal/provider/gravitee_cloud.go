@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"slices"
@@ -9,22 +10,41 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
 	tfp "github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
 const cloudGateUrlTemplate = "https://%s.cloudgate.gravitee.io/apim/automation"
 
 var defaultCloudUrl = fmt.Sprintf(cloudGateUrlTemplate, "eu")
 
-// CloudInitializer setup url/env/org if required. Keeps non default value intact
-func CloudInitializer(auth shared.Security, serverUrl string, data *ApimProviderModel, resp *tfp.ConfigureResponse) string {
+// CloudInitResult holds provider configuration derived from a Gravitee Cloud token.
+type CloudInitResult struct {
+	ServerURL string
+	Claims    *CloudTokenClaimsData
+}
+
+type orgEnv struct {
+	Org string
+	Env string
+}
+
+func fromData(data *ApimProviderModel) orgEnv {
+	return orgEnv{
+		Org: data.OrganizationID.ValueString(),
+		Env: data.EnvironmentID.ValueString(),
+	}
+}
+
+// CloudInitializer setup url/env/org if required. Keeps non default value intact.
+func CloudInitializer(ctx context.Context, auth shared.Security, serverUrl string, data *ApimProviderModel, resp *tfp.ConfigureResponse) CloudInitResult {
 	if auth.CloudAuth == nil {
-		return serverUrl
+		return CloudInitResult{ServerURL: serverUrl}
 	}
 
 	jwtData, err := extractCloudTokenData(*auth.CloudAuth)
 	if err != nil {
 		resp.Diagnostics.AddError("Cloud Token invalid", err.Error())
-		return serverUrl
+		return CloudInitResult{ServerURL: serverUrl}
 	}
 
 	if configuredEnvID := data.EnvironmentID.ValueString(); configuredEnvID == "DEFAULT" {
@@ -34,33 +54,52 @@ func CloudInitializer(auth shared.Security, serverUrl string, data *ApimProvider
 			resp.Diagnostics.AddError(
 				"Cloud Token incompatible",
 				fmt.Sprintf("cloud token contains more than one environment (%d): environment_id is required in that case", len(jwtData.Envs)))
-			return serverUrl
+			return CloudInitResult{ServerURL: serverUrl}
 		}
 		data.EnvironmentID = basetypes.NewStringValue(jwtData.Envs[0])
-	} else if !slices.Contains(jwtData.Envs, configuredEnvID) {
-		// if set, check env in token
-		resp.Diagnostics.AddError("Cloud Token misconfiguration",
-			fmt.Sprintf("cloud token does not contain environment [%s], it must be one of: %s", configuredEnvID, jwtData.Envs))
-		return serverUrl
+	} else if err := validateCloudScope(jwtData, fromData(data)); err != nil {
+		tflog.Error(ctx, "cloud token scope violation", map[string]interface{}{
+			"error": err,
+		})
+		resp.Diagnostics.AddError("Cloud Token misconfiguration", err.Error())
+		return CloudInitResult{ServerURL: serverUrl}
 	}
 
 	// Set if unset
 	if configuredOrgID := data.OrganizationID.ValueString(); configuredOrgID == "DEFAULT" {
 		data.OrganizationID = basetypes.NewStringValue(jwtData.Org)
-	} else if configuredOrgID != jwtData.Org {
-		// if set, check env in token
-		resp.Diagnostics.AddError("Cloud Token misconfiguration",
-			fmt.Sprintf("cloud token specifies organization [%s] you cannot use [%s] for organization_id value", jwtData.Org, configuredOrgID))
-		return serverUrl
+	} else if err := validateCloudScope(jwtData, fromData(data)); err != nil {
+		tflog.Error(ctx, "cloud token scope violation", map[string]interface{}{
+			"error": err,
+		})
+		resp.Diagnostics.AddError("Cloud Token misconfiguration", err.Error())
+		return CloudInitResult{ServerURL: serverUrl}
+	}
+
+	claims := jwtData
+	result := CloudInitResult{
+		ServerURL: serverUrl,
+		Claims:    &claims,
 	}
 
 	// Return user defined URL
 	if serverUrl != defaultCloudUrl {
-		return serverUrl
+		return result
 	}
 
 	// returned computed URL
-	return jwtData.baseUrl()
+	result.ServerURL = jwtData.baseUrl()
+	return result
+}
+
+func validateCloudScope(claims CloudTokenClaimsData, orgEnv orgEnv) error {
+	if orgEnv.Env != "" && orgEnv.Env != "DEFAULT" && !slices.Contains(claims.Envs, orgEnv.Env) {
+		return fmt.Errorf("cloud token does not contain environment [%s], it must be one of: %s", orgEnv.Env, claims.Envs)
+	}
+	if orgEnv.Org != "" && orgEnv.Org != "DEFAULT" && orgEnv.Org != claims.Org {
+		return fmt.Errorf("cloud token specifies organization [%s], you cannot use [%s] for organization_id value", claims.Org, orgEnv.Org)
+	}
+	return nil
 }
 
 func extractCloudTokenData(jwtToken string) (CloudTokenClaimsData, error) {

@@ -191,7 +191,8 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	}
 
 	// BEGIN GRAVITEE CLOUD INIT
-	serverUrl = CloudInitializer(security, serverUrl, &data, resp)
+	cloudInit := CloudInitializer(ctx, security, serverUrl, &data, resp)
+	serverUrl = cloudInit.ServerURL
 	// END GRAVITEE CLOUD INIT
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),
@@ -204,7 +205,10 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	}
 
 	httpClient := http.DefaultClient
-	httpClient.Transport = NewProviderHTTPTransport(providerHTTPTransportOpts)
+	httpClient.Transport = NewCloudScopeTransport(
+		NewProviderHTTPTransport(providerHTTPTransportOpts),
+		cloudInit.Claims,
+	)
 
 	opts := []sdk.SDKOption{
 		sdk.WithServerURL(serverUrl),
