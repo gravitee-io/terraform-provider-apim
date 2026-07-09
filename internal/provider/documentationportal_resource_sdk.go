@@ -44,18 +44,18 @@ func (r *DocumentationPortalResourceModel) ToOperationsCreateOrUpdatePortalDocum
 	var portalHrid string
 	portalHrid = r.PortalHrid.ValueString()
 
-	documentationAPISpec, documentationAPISpecDiags := r.ToSharedDocumentationAPISpec(ctx)
-	diags.Append(documentationAPISpecDiags...)
+	documentationPortalSpec, documentationPortalSpecDiags := r.ToSharedDocumentationPortalSpec(ctx)
+	diags.Append(documentationPortalSpecDiags...)
 
 	if diags.HasError() {
 		return nil, diags
 	}
 
 	out := operations.CreateOrUpdatePortalDocumentationRequest{
-		OrganizationID:       organizationID,
-		EnvironmentID:        environmentID,
-		PortalHrid:           portalHrid,
-		DocumentationAPISpec: *documentationAPISpec,
+		OrganizationID:          organizationID,
+		EnvironmentID:           environmentID,
+		PortalHrid:              portalHrid,
+		DocumentationPortalSpec: *documentationPortalSpec,
 	}
 
 	return &out, diags
@@ -123,7 +123,7 @@ func (r *DocumentationPortalResourceModel) ToOperationsGetPortalDocumentationReq
 	return &out, diags
 }
 
-func (r *DocumentationPortalResourceModel) ToSharedDocumentationAPISpec(ctx context.Context) (*shared.DocumentationAPISpec, diag.Diagnostics) {
+func (r *DocumentationPortalResourceModel) ToSharedDocumentationPortalSpec(ctx context.Context) (*shared.DocumentationPortalSpec, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	var hrid string
@@ -148,7 +148,7 @@ func (r *DocumentationPortalResourceModel) ToSharedDocumentationAPISpec(ctx cont
 	} else {
 		order = nil
 	}
-	out := shared.DocumentationAPISpec{
+	out := shared.DocumentationPortalSpec{
 		Hrid:     hrid,
 		Name:     name,
 		Type:     typeVar,

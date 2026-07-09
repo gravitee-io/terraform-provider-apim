@@ -53,7 +53,7 @@ type CreateOrUpdatePortalDocumentationRequest struct {
 	//
 	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
 	// Documentation specification
-	DocumentationAPISpec shared.DocumentationAPISpec `request:"mediaType=application/json"`
+	DocumentationPortalSpec shared.DocumentationPortalSpec `request:"mediaType=application/json"`
 }
 
 func (c CreateOrUpdatePortalDocumentationRequest) MarshalJSON() ([]byte, error) {
@@ -95,11 +95,11 @@ func (c *CreateOrUpdatePortalDocumentationRequest) GetDryRun() *bool {
 	return c.DryRun
 }
 
-func (c *CreateOrUpdatePortalDocumentationRequest) GetDocumentationAPISpec() shared.DocumentationAPISpec {
+func (c *CreateOrUpdatePortalDocumentationRequest) GetDocumentationPortalSpec() shared.DocumentationPortalSpec {
 	if c == nil {
-		return shared.DocumentationAPISpec{}
+		return shared.DocumentationPortalSpec{}
 	}
-	return c.DocumentationAPISpec
+	return c.DocumentationPortalSpec
 }
 
 type CreateOrUpdatePortalDocumentationResponse struct {
