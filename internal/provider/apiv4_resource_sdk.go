@@ -939,24 +939,24 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			r.Resources = append(r.Resources, resources)
 		}
 		if len(resp.ResponseTemplates) > 0 {
-			r.ResponseTemplates = make(map[string]map[string]tfTypes.APIV4SpecResponseTemplates, len(resp.ResponseTemplates))
+			r.ResponseTemplates = make(map[string]map[string]tfTypes.ResponseTemplate, len(resp.ResponseTemplates))
 			for responseTemplatesKey, responseTemplatesValue := range resp.ResponseTemplates {
-				var responseTemplatesResult map[string]tfTypes.APIV4SpecResponseTemplates
+				var responseTemplatesResult map[string]tfTypes.ResponseTemplate
 				if len(responseTemplatesValue) > 0 {
-					responseTemplatesResult = make(map[string]tfTypes.APIV4SpecResponseTemplates, len(responseTemplatesValue))
-					for apiV4SpecResponseTemplatesKey, apiV4SpecResponseTemplatesValue := range responseTemplatesValue {
-						var apiV4SpecResponseTemplatesResult tfTypes.APIV4SpecResponseTemplates
-						apiV4SpecResponseTemplatesResult.Body = types.StringPointerValue(apiV4SpecResponseTemplatesValue.Body)
-						if len(apiV4SpecResponseTemplatesValue.Headers) > 0 {
-							apiV4SpecResponseTemplatesResult.Headers = make(map[string]types.String, len(apiV4SpecResponseTemplatesValue.Headers))
-							for key1, value1 := range apiV4SpecResponseTemplatesValue.Headers {
-								apiV4SpecResponseTemplatesResult.Headers[key1] = types.StringValue(value1)
+					responseTemplatesResult = make(map[string]tfTypes.ResponseTemplate, len(responseTemplatesValue))
+					for responseTemplateKey, responseTemplateValue := range responseTemplatesValue {
+						var responseTemplateResult tfTypes.ResponseTemplate
+						responseTemplateResult.Body = types.StringPointerValue(responseTemplateValue.Body)
+						if len(responseTemplateValue.Headers) > 0 {
+							responseTemplateResult.Headers = make(map[string]types.String, len(responseTemplateValue.Headers))
+							for key1, value1 := range responseTemplateValue.Headers {
+								responseTemplateResult.Headers[key1] = types.StringValue(value1)
 							}
 						}
-						apiV4SpecResponseTemplatesResult.PropagateErrorKeyToLogs = types.BoolPointerValue(apiV4SpecResponseTemplatesValue.PropagateErrorKeyToLogs)
-						apiV4SpecResponseTemplatesResult.Status = types.Int64Value(apiV4SpecResponseTemplatesValue.Status)
+						responseTemplateResult.PropagateErrorKeyToLogs = types.BoolPointerValue(responseTemplateValue.PropagateErrorKeyToLogs)
+						responseTemplateResult.Status = types.Int64Value(responseTemplateValue.Status)
 
-						responseTemplatesResult[apiV4SpecResponseTemplatesKey] = apiV4SpecResponseTemplatesResult
+						responseTemplatesResult[responseTemplateKey] = responseTemplateResult
 					}
 				}
 
@@ -2815,9 +2815,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			Tags:              tags3,
 		})
 	}
-	responseTemplates := make(map[string]map[string]shared.APIV4SpecResponseTemplates)
+	responseTemplates := make(map[string]map[string]shared.ResponseTemplate)
 	for responseTemplatesKey := range r.ResponseTemplates {
-		responseTemplatesInst := make(map[string]shared.APIV4SpecResponseTemplates)
+		responseTemplatesInst := make(map[string]shared.ResponseTemplate)
 		for key1 := range r.ResponseTemplates[responseTemplatesKey] {
 			var status1 int64
 			status1 = r.ResponseTemplates[responseTemplatesKey][key1].Status.ValueInt64()
@@ -2841,7 +2841,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				propagateErrorKeyToLogs = nil
 			}
-			inst := shared.APIV4SpecResponseTemplates{
+			inst := shared.ResponseTemplate{
 				Status:                  status1,
 				Headers:                 headers1,
 				Body:                    body,

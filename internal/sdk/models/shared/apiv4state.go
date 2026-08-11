@@ -9,60 +9,6 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
-// APIV4StateResponseTemplates - API response template
-type APIV4StateResponseTemplates struct {
-	// HTTP Status to return
-	Status int64 `json:"status"`
-	// Headers to return as key/value pairs
-	Headers map[string]string `json:"headers,omitempty"`
-	// Response body (use `Content-Type` header to specify the content type)
-	Body *string `json:"body,omitempty"`
-	// Log the key associated with this response template
-	PropagateErrorKeyToLogs *bool `default:"false" json:"propagateErrorKeyToLogs"`
-}
-
-func (a APIV4StateResponseTemplates) MarshalJSON() ([]byte, error) {
-	return utils.MarshalJSON(a, "", false)
-}
-
-func (a *APIV4StateResponseTemplates) UnmarshalJSON(data []byte) error {
-	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (a *APIV4StateResponseTemplates) GetStatus() int64 {
-	if a == nil {
-		return 0
-	}
-	return a.Status
-}
-
-func (a *APIV4StateResponseTemplates) GetHeaders() map[string]string {
-	if a == nil {
-		return nil
-	}
-	return a.Headers
-}
-
-func (a *APIV4StateResponseTemplates) GetBody() *string {
-	if a == nil {
-		return nil
-	}
-	return a.Body
-}
-
-func (a *APIV4StateResponseTemplates) GetPropagateErrorKeyToLogs() *bool {
-	if a == nil {
-		return nil
-	}
-	return a.PropagateErrorKeyToLogs
-}
-
-// #region class-body-apiv4stateresponsetemplates
-// #endregion class-body-apiv4stateresponsetemplates
-
 type APIV4StateEvent string
 
 const (
@@ -227,7 +173,7 @@ type APIV4State struct {
 	//
 	// Key of the map is the error code.
 	//
-	ResponseTemplates map[string]map[string]APIV4StateResponseTemplates `json:"responseTemplates,omitempty"`
+	ResponseTemplates map[string]map[string]ResponseTemplate `json:"responseTemplates,omitempty"`
 	// Api services (dynamic properties)
 	Services *APIServices `json:"services,omitempty"`
 	// Name, HRID or UUIDs of existing groups (of users) associated with this API.
@@ -409,7 +355,7 @@ func (a *APIV4State) GetFlows() []FlowV4 {
 	return a.Flows
 }
 
-func (a *APIV4State) GetResponseTemplates() map[string]map[string]APIV4StateResponseTemplates {
+func (a *APIV4State) GetResponseTemplates() map[string]map[string]ResponseTemplate {
 	if a == nil {
 		return nil
 	}
