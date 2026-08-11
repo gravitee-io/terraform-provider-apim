@@ -2994,7 +2994,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).`,
 			},
 			"response_templates": schema.MapAttribute{
-				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.Map{
 					custom_mapplanmodifier.ResponseTemplate(),
