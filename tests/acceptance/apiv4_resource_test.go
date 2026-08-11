@@ -636,6 +636,47 @@ func TestAPIV4Resource_dyn_props(t *testing.T) {
 	})
 }
 
+// Verifies that setting an empty map (`{}`) for
+// `response_templates.<template>.<content-type>.headers` converges (no perpetual plan drift).
+// This is the behavior described in GKO-3100.
+func TestAPIV4Resource_responseTemplates_emptyHeaders_map_idempotency(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Create.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"organization_id": config.StringVariable(organizationId),
+				},
+			},
+			// Re-apply the same config: plan must be empty (idempotency check).
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"organization_id": config.StringVariable(organizationId),
+				},
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+			},
+		},
+	})
+}
+
 // Verifies that a listener path without trailing slash does not cause permanent drift.
 // APIM normalizes paths by adding a trailing slash, and the provider must suppress
 // the resulting diff to maintain idempotency (GKO-2621).
