@@ -108,6 +108,10 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.ApiV4Spec.properties.responseTemplates
+    description: Prevent empty response_templates.headers map from creating plan diff (GKO-3100)
+    update:
+      x-speakeasy-plan-modifiers: ResponseTemplate
   - target: $.components.schemas.Analytics
     description: API return some stuff, need to ignore
     update:
