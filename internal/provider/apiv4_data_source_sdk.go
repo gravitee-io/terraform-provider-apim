@@ -930,24 +930,24 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			r.Resources = append(r.Resources, resources)
 		}
 		if len(resp.ResponseTemplates) > 0 {
-			r.ResponseTemplates = make(map[string]map[string]tfTypes.ResponseTemplate, len(resp.ResponseTemplates))
+			r.ResponseTemplates = make(map[string]map[string]tfTypes.APIV4StateResponseTemplates, len(resp.ResponseTemplates))
 			for responseTemplatesKey, responseTemplatesValue := range resp.ResponseTemplates {
-				var responseTemplatesResult map[string]tfTypes.ResponseTemplate
+				var responseTemplatesResult map[string]tfTypes.APIV4StateResponseTemplates
 				if len(responseTemplatesValue) > 0 {
-					responseTemplatesResult = make(map[string]tfTypes.ResponseTemplate, len(responseTemplatesValue))
-					for responseTemplateKey, responseTemplateValue := range responseTemplatesValue {
-						var responseTemplateResult tfTypes.ResponseTemplate
-						responseTemplateResult.Body = types.StringPointerValue(responseTemplateValue.Body)
-						if len(responseTemplateValue.Headers) > 0 {
-							responseTemplateResult.Headers = make(map[string]types.String, len(responseTemplateValue.Headers))
-							for key1, value1 := range responseTemplateValue.Headers {
-								responseTemplateResult.Headers[key1] = types.StringValue(value1)
+					responseTemplatesResult = make(map[string]tfTypes.APIV4StateResponseTemplates, len(responseTemplatesValue))
+					for apiV4StateResponseTemplatesKey, apiV4StateResponseTemplatesValue := range responseTemplatesValue {
+						var apiV4StateResponseTemplatesResult tfTypes.APIV4StateResponseTemplates
+						apiV4StateResponseTemplatesResult.Body = types.StringPointerValue(apiV4StateResponseTemplatesValue.Body)
+						if len(apiV4StateResponseTemplatesValue.Headers) > 0 {
+							apiV4StateResponseTemplatesResult.Headers = make(map[string]types.String, len(apiV4StateResponseTemplatesValue.Headers))
+							for key1, value1 := range apiV4StateResponseTemplatesValue.Headers {
+								apiV4StateResponseTemplatesResult.Headers[key1] = types.StringValue(value1)
 							}
 						}
-						responseTemplateResult.PropagateErrorKeyToLogs = types.BoolPointerValue(responseTemplateValue.PropagateErrorKeyToLogs)
-						responseTemplateResult.Status = types.Int64Value(responseTemplateValue.Status)
+						apiV4StateResponseTemplatesResult.PropagateErrorKeyToLogs = types.BoolPointerValue(apiV4StateResponseTemplatesValue.PropagateErrorKeyToLogs)
+						apiV4StateResponseTemplatesResult.Status = types.Int64Value(apiV4StateResponseTemplatesValue.Status)
 
-						responseTemplatesResult[responseTemplateKey] = responseTemplateResult
+						responseTemplatesResult[apiV4StateResponseTemplatesKey] = apiV4StateResponseTemplatesResult
 					}
 				}
 
