@@ -1102,6 +1102,7 @@ components:
             additionalProperties:
               $ref: "#/components/schemas/ResponseTemplate"
           x-speakeasy-param-computed: false
+          x-speakeasy-plan-modifiers: ResponseTemplate
         services:
           $ref: "#/components/schemas/ApiServices"
           x-speakeasy-param-computed: true
