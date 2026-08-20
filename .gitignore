@@ -6,6 +6,8 @@
 .DS_Store
 **/.speakeasy/temp/
 **/.speakeasy/logs/
+# Speakeasy CLI unpacked into the workspace by mheap/setup-go-cli in CI
+speakeasy-*-linux/
 .vscode
 .idea/
 terraform-provider-apim
