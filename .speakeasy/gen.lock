@@ -292,7 +292,7 @@ trackedFiles:
     pristine_git_object: 82a8266240c0a51f132fcb29c88ec4679649ad08
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:dd0c04e006646bfbc47d66e190491506713350e3
+    last_write_checksum: sha1:45c95fc474a4b5c710849a16808448d0fc9409aa
     pristine_git_object: c2778feb2568c75764140322353ef7d5dd0506d8
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
