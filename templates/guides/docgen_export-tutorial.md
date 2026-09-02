@@ -55,10 +55,13 @@ It is assumed that APIM URL and credentials are already configured as environmen
 
 Terraform plan will do a READ operation to fulfill instruction in the import file that will eventually be written to a file.
 
+`provider = apim` is required from Terraform 1.16. Without it, `plan -generate-config-out` uses implied `hashicorp/apim` and skips this module's provider block (`http_headers` / `X-Gravitee-Set-Hrid`).
+
 ```terraform
 import {
-  to = apim_apiv4.export
-  id = <<-EOT
+  provider = apim
+  to       = apim_apiv4.export
+  id       = <<-EOT
 	    {
 	      "organization_id": "DEFAULT",
 	      "environment_id": "DEFAULT",
