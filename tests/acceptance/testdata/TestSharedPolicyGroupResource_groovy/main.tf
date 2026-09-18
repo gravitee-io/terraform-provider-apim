@@ -24,11 +24,12 @@ resource "apim_shared_policy_group" "test" {
       name        = "Simple Groovy script"
       policy      = "groovy"
       configuration = jsonencode({
-        script          = <<-EOT
+        strictExecutionTimeout = false
+        script                 = <<-EOT
           return 'test'"
         EOT
-        readContent     = true
-        overrideContent = false
+        readContent            = true
+        overrideContent        = false
       }),
     },
   ]
