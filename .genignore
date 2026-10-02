@@ -28,4 +28,10 @@ examples/resources/apim_portal/import.sh
 examples/resources/apim_portal_listing/resource.tf
 examples/resources/apim_portal_listing/import-by-string-id.tf
 examples/resources/apim_portal_listing/import.sh
+examples/resources/apim_catalog_mcp_server/resource.tf
+examples/resources/apim_catalog_mcp_server/import-by-string-id.tf
+examples/resources/apim_catalog_mcp_server/import.sh
+examples/resources/apim_mcp_proxy/resource.tf
+examples/resources/apim_mcp_proxy/import-by-string-id.tf
+examples/resources/apim_mcp_proxy/import.sh
 CONTRIBUTING.md

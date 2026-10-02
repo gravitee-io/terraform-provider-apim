@@ -126,6 +126,14 @@ async function helmInstallAPIM() {
 
 }
 
+async function installMcpServer() {
+    await $`kubectl apply -f ${KIND_CONFIG}/mcp/fastmcp.yaml`;
+}
+
+async function waitForMcpServer() {
+    await $`kubectl wait --for=condition=ready pod -l app=fastmcp --timeout=300s`;
+}
+
 async function waitForApim() {
     await $`kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=apim3 --timeout=360s`;
 }
@@ -200,7 +208,7 @@ async function configureAPIM() {
     }
 }
 
-const steps = 6;
+const steps = 7;
 let step = 1;
 
 LOG.blue(`
@@ -226,6 +234,12 @@ LOG.blue(`
 `);
 
 await time(helmInstallAPIM);
+
+LOG.blue(`
+  ☸ [${step++}/${steps}] Installing the MCP server the catalog tests register
+`);
+
+await time(installMcpServer);
 
 if (APIM_MINIMAL) {
     LOG.magenta(`
@@ -255,6 +269,7 @@ LOG.blue(`
 `);
 
 await time(waitForApim);
+await time(waitForMcpServer);
 
 LOG.blue(`
   ⚙ [${step++}/${steps}] Configuring APIM

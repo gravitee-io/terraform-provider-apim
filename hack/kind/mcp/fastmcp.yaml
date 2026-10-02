@@ -1,0 +1,133 @@
+# Copyright (C) 2015 The Gravitee team (http://gravitee.io)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# The MCP server the catalog acceptance tests register: streamable HTTP on
+# fastmcp.default.svc.cluster.local:8000/mcp, with tools, prompts and resources
+# for the platform to discover. Adapted from the fastmcp/standalone context of
+# gravitee-io-labs/gck. It installs FastMCP at startup, so the node needs egress.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastmcp
+  labels:
+    app: fastmcp
+data:
+  server.py: |
+    from starlette.requests import Request
+    from starlette.responses import JSONResponse
+
+    from fastmcp import FastMCP
+
+    mcp = FastMCP("fastmcp")
+
+
+    # Every tool is deterministic: same input, same output.
+
+    @mcp.tool
+    def echo(message: str) -> str:
+        """Echo the message back unchanged."""
+        return message
+
+
+    @mcp.tool
+    def add(a: float, b: float) -> float:
+        """Add two numbers."""
+        return a + b
+
+
+    @mcp.tool
+    def to_upper(text: str) -> str:
+        """Uppercase the text."""
+        return text.upper()
+
+
+    @mcp.resource("data://config")
+    def config() -> dict:
+        """Static server configuration."""
+        return {"server": "fastmcp"}
+
+
+    @mcp.prompt
+    def summarize(text: str) -> str:
+        """Build a prompt asking for a short summary."""
+        return f"Summarize the following text in one sentence:\n\n{text}"
+
+
+    @mcp.custom_route("/health", methods=["GET"])
+    async def health(request: Request) -> JSONResponse:
+        return JSONResponse({"status": "healthy"})
+
+
+    if __name__ == "__main__":
+        mcp.run(transport="http", host="0.0.0.0", port=8000)
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastmcp
+  labels:
+    app: fastmcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastmcp
+  template:
+    metadata:
+      labels:
+        app: fastmcp
+    spec:
+      # The service is named fastmcp, so service links would inject
+      # FASTMCP_PORT=tcp://... into the pod, which FastMCP's own FASTMCP_-prefixed
+      # settings reader tries to parse as its port and crashes on.
+      enableServiceLinks: false
+      containers:
+        - name: fastmcp
+          image: python:3.14-slim
+          command: ["sh", "-c"]
+          args:
+            - pip install --no-cache-dir --quiet fastmcp==2.14.7 && exec python /app/server.py
+          ports:
+            - containerPort: 8000
+              name: http
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            periodSeconds: 2
+            failureThreshold: 90
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+          volumeMounts:
+            - name: server
+              mountPath: /app
+      volumes:
+        - name: server
+          configMap:
+            name: fastmcp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastmcp
+  labels:
+    app: fastmcp
+spec:
+  ports:
+    - port: 8000
+      targetPort: 8000
+  selector:
+    app: fastmcp

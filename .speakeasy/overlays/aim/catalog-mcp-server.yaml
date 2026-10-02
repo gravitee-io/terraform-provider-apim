@@ -1,0 +1,74 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Catalog MCP server overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.components.schemas.AimCatalogMcpServerSpec
+    update:
+      x-speakeasy-entity:
+        CatalogMcpServer
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers"].put
+    update:
+      x-speakeasy-entity-operation: CatalogMcpServer#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: CatalogMcpServer#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: CatalogMcpServer#delete
+
+  # Immutable
+  - target: $.components.schemas.AimCatalogMcpServerSpec.properties.entityId
+    description: The platform refuses another entityId on a registered server
+    update:
+      x-speakeasy-plan-modifiers: Immutable
+
+  # Computed
+  - target: $.components.schemas.AimCatalogMcpServerConnection
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimCatalogMcpServerAuth
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimCatalogMcpServerHeaderAuth.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimCatalogMcpServerOAuth2Auth.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+
+  # Discovered by the platform. Computed without suppress-computed-diff: these
+  # change when the connection does, and a suppressed diff plans the old value.
+  - target: $.components.schemas.AimCatalogMcpServerInfo.properties.*
+    description: Reported by the platform only
+    update:
+      x-speakeasy-param-computed: true
+  - target: $.components.schemas.AimCatalogMcpToolStatus.properties.*
+    description: Reported by the platform only
+    update:
+      x-speakeasy-param-computed: true
+  - target: $.components.schemas.AimCatalogMcpPromptStatus.properties.*
+    description: Reported by the platform only
+    update:
+      x-speakeasy-param-computed: true
+  - target: $.components.schemas.AimCatalogMcpResourceStatus.properties.*
+    description: Reported by the platform only
+    update:
+      x-speakeasy-param-computed: true
+
+  # Sensitive
+  - target: $.components.schemas.AimCatalogMcpServerHeaderAuth.allOf[?@.properties.value].properties.value
+    description: Never returned by the platform
+    update:
+      x-speakeasy-param-sensitive: true
+  - target: $.components.schemas.AimCatalogMcpServerOAuth2Auth.allOf[?@.properties.clientSecret].properties.clientSecret
+    description: Never returned by the platform
+    update:
+      x-speakeasy-param-sensitive: true

@@ -47,6 +47,8 @@ actions:
         * Portals
         * Portal Listings
         * Documentations
+        * MCP Catalog Servers
+        * MCP Proxies
         
         [Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)
         

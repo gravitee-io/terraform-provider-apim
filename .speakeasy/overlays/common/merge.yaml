@@ -1,0 +1,23 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Multiple inputs overlay
+  version: 0.0.1
+actions:
+
+  # The source has two inputs: the Automation API document and the AI Management
+  # fragment, which declares no security. When inputs differ, the merge may move
+  # the root security onto each operation of the document that carried it and
+  # leave the others without any. Put it back at the root, for every operation.
+  - target: $.paths.*.*.security
+    description: Security is declared once, at the root
+    remove: true
+  - target: $.security
+    description: Rewritten below so the three schemes appear once
+    remove: true
+  - target: $
+    update:
+      security:
+        - BearerAuth: []
+        - BasicAuth: []
+        - CloudAuth: []
