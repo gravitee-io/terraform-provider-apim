@@ -4,6 +4,9 @@ APIM_API1_USERNAME ?= api1
 APIM_API1_PASSWORD ?= api1
 APIM_SERVER_URL ?= http://localhost:30083/automation
 APIM_OAS_BRANCH=master
+# Tag of gravitee-gamma-module-aim the AI Management fragment is taken from. Bumped by hand:
+# APIM master may pin an older aim than the one this provider is generated against.
+AIM_OAS_REF ?= 5.0.0-alpha.39
 
 .PHONY: speakeasy
 speakeasy: ## Run speakeasy generation with curated examples and docs
@@ -20,6 +23,7 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 lint: lint-commits ## Run speakeasy lint accepting no error or warning
 	@echo "Checking OAS"
 	@speakeasy lint openapi --schema automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
+	@speakeasy lint openapi --schema automation-api-aim-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
 	@echo "Checking custom code"
 	@grep "// BEGIN GRAVITEE CLOUD INIT" internal/provider/provider.go > /dev/null || (echo "Cloud initializer code snippet appear to be missing" && exit 1)
 	@echo "Checking Terraform fmt"
@@ -46,6 +50,10 @@ lint-fix: ## Fix issues that can be found
 .PHONY: sync-oas
 sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-management
 	curl -fsSL "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/${APIM_OAS_BRANCH}/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml" -o automation-api-oas.yaml
+
+.PHONY: sync-aim-oas
+sync-aim-oas: ## Copy the AI Management OAS fragment from gravitee-gamma-module-aim (private: needs an authenticated gh)
+	gh api -H "Accept: application/vnd.github.raw" "repos/gravitee-io/gravitee-gamma-module-aim/contents/src/main/resources/openapi/openapi-automation.yaml?ref=${AIM_OAS_REF}" > automation-api-aim-oas.yaml
 
 PRE_TEST_DIR = "$(shell pwd)/examples/use-cases/application-simple"
 

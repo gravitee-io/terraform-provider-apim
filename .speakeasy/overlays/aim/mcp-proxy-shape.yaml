@@ -1,0 +1,288 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: MCP proxy shape overlay
+  version: 0.0.1
+actions:
+
+  # Applied before the common overlays, as aim/catalog-mcp-server-shape.yaml is.
+
+  ## Parameters
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies"].put.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies"].put
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/dryRunQueryParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies/{hrid}"]
+    description: The fragment declares these on each operation only
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies/{hrid}"].get.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies/{hrid}"].get
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies/{hrid}"].delete.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies/{hrid}"].delete
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+
+  ## Refusals
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies"].put.responses["400"]
+    description: Same reason as on the catalog server
+    remove: true
+
+  ## Upstream authentication union
+  - target: $.components.schemas.AimMcpProxyNoUpstreamAuth.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Type of upstream authentication
+          enum:
+            - NONE
+          default: NONE
+      required:
+        - type
+  - target: $.components.schemas.AimMcpProxyNoUpstreamAuth.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyApiKeyUpstreamAuth.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Type of upstream authentication
+          enum:
+            - API_KEY
+          default: API_KEY
+      required:
+        - type
+  - target: $.components.schemas.AimMcpProxyApiKeyUpstreamAuth.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyBearerUpstreamAuth.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Type of upstream authentication
+          enum:
+            - BEARER
+          default: BEARER
+      required:
+        - type
+  - target: $.components.schemas.AimMcpProxyBearerUpstreamAuth.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyBasicUpstreamAuth.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Type of upstream authentication
+          enum:
+            - BASIC
+          default: BASIC
+      required:
+        - type
+  - target: $.components.schemas.AimMcpProxyBasicUpstreamAuth.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Type of upstream authentication
+          enum:
+            - OAUTH2
+          default: OAUTH2
+      required:
+        - type
+  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyUpstreamAuth.properties
+    remove: true
+  - target: $.components.schemas.AimMcpProxyUpstreamAuth.required
+    remove: true
+  - target: $.components.schemas.AimMcpProxyUpstreamAuth.type
+    remove: true
+  - target: $.components.schemas.AimMcpProxyUpstreamAuth.examples
+    description: The example is a bearer, no longer valid against every variant
+    remove: true
+  - target: $.components.schemas.AimMcpProxyUpstreamAuth
+    update:
+      oneOf:
+        - $ref: '#/components/schemas/AimMcpProxyNoUpstreamAuth'
+        - $ref: '#/components/schemas/AimMcpProxyApiKeyUpstreamAuth'
+        - $ref: '#/components/schemas/AimMcpProxyBearerUpstreamAuth'
+        - $ref: '#/components/schemas/AimMcpProxyBasicUpstreamAuth'
+        - $ref: '#/components/schemas/AimMcpProxyOAuth2UpstreamAuth'
+
+  ## Plan security union
+  - target: $.components.schemas.AimMcpProxyKeyLessPlanSecurity.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Type of plan security
+          enum:
+            - KEY_LESS
+          default: KEY_LESS
+      required:
+        - type
+  - target: $.components.schemas.AimMcpProxyKeyLessPlanSecurity.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyApiKeyPlanSecurity.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Type of plan security
+          enum:
+            - API_KEY
+          default: API_KEY
+      required:
+        - type
+  - target: $.components.schemas.AimMcpProxyApiKeyPlanSecurity.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyOAuth2PlanSecurity.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Type of plan security
+          enum:
+            - OAUTH2
+          default: OAUTH2
+      required:
+        - type
+  - target: $.components.schemas.AimMcpProxyOAuth2PlanSecurity.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyPlanSecurity.properties
+    remove: true
+  - target: $.components.schemas.AimMcpProxyPlanSecurity.required
+    remove: true
+  - target: $.components.schemas.AimMcpProxyPlanSecurity.type
+    remove: true
+  - target: $.components.schemas.AimMcpProxyPlanSecurity
+    update:
+      oneOf:
+        - $ref: '#/components/schemas/AimMcpProxyKeyLessPlanSecurity'
+        - $ref: '#/components/schemas/AimMcpProxyApiKeyPlanSecurity'
+        - $ref: '#/components/schemas/AimMcpProxyOAuth2PlanSecurity'
+
+  ## Flow selector union
+  - target: $.components.schemas.AimMcpProxyMcpFlowSelector.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Kind of selector
+          enum:
+            - MCP
+          default: MCP
+      required:
+        - type
+  - target: $.components.schemas.AimMcpProxyMcpFlowSelector.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyConditionFlowSelector.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Kind of selector
+          enum:
+            - CONDITION
+          default: CONDITION
+      required:
+        - type
+  - target: $.components.schemas.AimMcpProxyConditionFlowSelector.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyFlowSelector.properties
+    remove: true
+  - target: $.components.schemas.AimMcpProxyFlowSelector.required
+    remove: true
+  - target: $.components.schemas.AimMcpProxyFlowSelector.type
+    remove: true
+  - target: $.components.schemas.AimMcpProxyFlowSelector
+    update:
+      oneOf:
+        - $ref: '#/components/schemas/AimMcpProxyMcpFlowSelector'
+        - $ref: '#/components/schemas/AimMcpProxyConditionFlowSelector'
+
+  ## Identity provider union
+  ## The base carries name beside type, so each variant declares both.
+  - target: $.components.schemas.AimMcpProxyGraviteeAmIdentityProvider.allOf[1]
+    update:
+      properties:
+        name:
+          type: string
+          description: Name of the provider, the resource name on the proxy and the value plans reference
+        type:
+          type: string
+          description: Kind of authorization server
+          enum:
+            - GRAVITEE_AM
+          default: GRAVITEE_AM
+      required:
+        - name
+        - type
+  - target: $.components.schemas.AimMcpProxyGraviteeAmIdentityProvider.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[1]
+    update:
+      properties:
+        name:
+          type: string
+          description: Name of the provider, the resource name on the proxy and the value plans reference
+        type:
+          type: string
+          description: Kind of authorization server
+          enum:
+            - OAUTH2_GENERIC
+          default: OAUTH2_GENERIC
+      required:
+        - name
+        - type
+  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyAuth0IdentityProvider.allOf[1]
+    update:
+      properties:
+        name:
+          type: string
+          description: Name of the provider, the resource name on the proxy and the value plans reference
+        type:
+          type: string
+          description: Kind of authorization server
+          enum:
+            - OAUTH2_AUTH0
+          default: OAUTH2_AUTH0
+      required:
+        - name
+        - type
+  - target: $.components.schemas.AimMcpProxyAuth0IdentityProvider.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimMcpProxyIdentityProvider.properties
+    remove: true
+  - target: $.components.schemas.AimMcpProxyIdentityProvider.required
+    remove: true
+  - target: $.components.schemas.AimMcpProxyIdentityProvider.type
+    remove: true
+  - target: $.components.schemas.AimMcpProxyIdentityProvider
+    update:
+      oneOf:
+        - $ref: '#/components/schemas/AimMcpProxyGraviteeAmIdentityProvider'
+        - $ref: '#/components/schemas/AimMcpProxyGenericIdentityProvider'
+        - $ref: '#/components/schemas/AimMcpProxyAuth0IdentityProvider'

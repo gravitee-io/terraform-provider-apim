@@ -25,6 +25,10 @@ make lint-fix          # fix Terraform formatting
 # Sync OAS from upstream APIM
 make sync-oas
 
+# Sync the AI Management fragment from gravitee-gamma-module-aim at AIM_OAS_REF
+# (private repository: needs an authenticated gh)
+make sync-aim-oas
+
 # Unit tests (no APIM required)
 make unit-tests
 
@@ -53,7 +57,7 @@ make stop-cluster
 
 | Output | Tool | Source |
 |--------|------|--------|
-| `internal/sdk/`, most of `internal/provider/`, `internal/planmodifiers/`, `internal/validators/`, `main.go` | Speakeasy | `automation-api-oas.yaml` + `.speakeasy/overlays/` |
+| `internal/sdk/`, most of `internal/provider/`, `internal/planmodifiers/`, `internal/validators/`, `main.go` | Speakeasy | `automation-api-oas.yaml` + `automation-api-aim-oas.yaml` + `.speakeasy/overlays/` |
 | `docs/index.md`, `docs/resources/*.md` | tfplugindocs (`go generate` in `main.go`, run as part of `make speakeasy`) | Provider schema + `examples/` + `templates/` |
 | `templates/guides/docgen_*.md` | doc-gen (`make doc-gen`) | `.docgen/config/default.yaml` + `.docgen/config/tmpl/*.md.tmpl` + `examples/use-cases/` chunks |
 
@@ -66,6 +70,7 @@ Files listed in `.genignore` are **not** overwritten by Speakeasy even though si
 | Path | Purpose |
 |------|---------|
 | `automation-api-oas.yaml` | Base OpenAPI spec (synced via `make sync-oas`) |
+| `automation-api-aim-oas.yaml` | AI Management fragment: MCP catalog servers and MCP proxies (synced via `make sync-aim-oas`, tag in `AIM_OAS_REF`) |
 | `.speakeasy/overlays/**`, `.speakeasy/workflow.yaml`, `.speakeasy/speakeasy-modifications-overlay.yaml` | Schema and generation customizations |
 | `.genignore` | Files Speakeasy must preserve |
 | `.docgen/config/default.yaml`, `.docgen/config/tmpl/*.md.tmpl` | Guide prose and chunk wiring |
@@ -74,19 +79,23 @@ Files listed in `.genignore` are **not** overwritten by Speakeasy even though si
 | `tests/**` | **Entirely hand-written** — acceptance tests, example tests, testdata, utilities; nothing here is generated |
 | `internal/provider/gravitee_cloud.go` | Gravitee Cloud auth / server URL resolution |
 | `internal/provider/customtypes/**` | `TrimmedString`, `RFC3339` custom Terraform types (referenced from overlays) |
-| `internal/planmodifiers/stringplanmodifier/immutable.go`, `normalize_path.go` | Custom plan modifiers |
-| `internal/planmodifiers/listplanmodifier/ignore_empty_list.go` | Custom plan modifier |
+| `internal/planmodifiers/stringplanmodifier/immutable.go`, `normalize_path.go`, `trim_trailing_slash.go` | Custom plan modifiers |
+| `internal/planmodifiers/listplanmodifier/ignore_empty_list.go`, `no_removal_by_name.go` | Custom plan modifiers |
+| `internal/planmodifiers/mapplanmodifier/response_template.go` | Custom plan modifier |
+| `internal/validators/listvalidators/sorted_by*.go` | Custom validators: lists the platform reports in its own order |
+| `internal/validators/objectvalidators/proxy_upstream_auth_not_none.go` | Custom validator |
+| `internal/listkeys/` | Reads the identifying attributes of a list's elements, for the validators and modifiers above |
 | `internal/sdk/internal/hooks/registration.go` | Generated once, then free to edit |
 | `hack/`, `Makefile`, CI config | Project infrastructure |
 
-Most files under `internal/planmodifiers/` and `internal/validators/` are Speakeasy-generated scaffolding; only the custom modifiers listed above are hand-maintained.
+Most files under `internal/planmodifiers/` and `internal/validators/` are Speakeasy-generated scaffolding; only the custom modifiers and validators listed above are hand-maintained.
 
 ## Architecture
 
 ### Code generation flow
 
 ```
-automation-api-oas.yaml + .speakeasy/overlays/
+automation-api-oas.yaml + automation-api-aim-oas.yaml + .speakeasy/overlays/
         │
         ├─► Speakeasy ──► internal/sdk/, internal/provider/, main.go
         │                      │
@@ -103,8 +112,8 @@ Config: `.speakeasy/gen.yaml`, `.speakeasy/gen.lock`, `.speakeasy/workflow.yaml`
 
 ### Provider structure (`internal/provider/`)
 
-- **Resources** (10): `apim_apiv4`, `apim_application`, `apim_dictionary`, `apim_documentation_api`, `apim_documentation_portal`, `apim_group`, `apim_portal`, `apim_portal_listing`, `apim_shared_policy_group`, `apim_subscription`
-- **Data sources** (10): mirror the resources above for read-only access
+- **Resources** (12): `apim_apiv4`, `apim_application`, `apim_catalog_mcp_server`, `apim_dictionary`, `apim_documentation_api`, `apim_documentation_portal`, `apim_group`, `apim_mcp_proxy`, `apim_portal`, `apim_portal_listing`, `apim_shared_policy_group`, `apim_subscription`
+- **Data sources** (12): mirror the resources above for read-only access
 - Each resource has `*_resource.go` (CRUD) and `*_resource_sdk.go` (type mapping); data sources follow the same pattern
 - `provider.go` — provider config, auth, schema (generated, with `// BEGIN GRAVITEE CLOUD INIT` hook)
 - `reflect/` and `typeconvert/` — Terraform ↔ SDK type conversion (generated)
@@ -141,11 +150,16 @@ Provider supports three auth methods:
 
 To change schema behavior (plan modifiers, computed fields, validators, defaults, suppress diffs, etc.), update `.speakeasy/overlays/` and regenerate with `make speakeasy`. Never edit generated files directly.
 
+The source has two inputs (`.speakeasy/workflow.yaml`). The AI Management fragment comes from a Gamma module, with its own `Aim*` components and its unions written as a discriminator on a base schema. `.speakeasy/overlays/aim/*-shape.yaml` run before the common overlays and give it the shape of the base document: the shared parameter components, and a `oneOf` per union. `.speakeasy/overlays/aim/<resource>.yaml` then carry the behaviour, as the other resource overlays do.
+
+An overlay action whose target matches nothing is ignored without an error: after a generation, grep `.speakeasy/output/computed.yaml` and the generated resource for each annotation you added.
+
 Key Speakeasy overlay annotations:
 
 - `x-speakeasy-param-computed: true` — mark a field as computed
 - `x-speakeasy-param-suppress-computed-diff: true` — add `SuppressDiff` plan modifier (only works for Unknown plan values)
 - `x-speakeasy-plan-modifiers: MyModifier` — reference a custom plan modifier from `internal/planmodifiers/<type>planmodifier/`
+- `x-speakeasy-plan-validators: MyValidator` — reference a custom validator from `internal/validators/<type>validators/`
 
 Wire custom types from overlays (see `application.yaml` for examples):
 

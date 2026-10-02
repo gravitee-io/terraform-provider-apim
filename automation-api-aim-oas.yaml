@@ -1,0 +1,1425 @@
+openapi: 3.1.0
+info:
+    title: Gravitee.io - Automation API - AI Management
+    description: The AI Management resources of the APIM automation API.
+    contact:
+        name: AI Management team
+        url: https://www.gravitee.io/
+    license:
+        name: Apache 2.0
+        url: https://www.apache.org/licenses/LICENSE-2.0.html
+    version: 1.0.0
+servers:
+    - url: 'https://eu.cloudgate.gravitee.io/apim/automation'
+tags:
+    - name: AI Catalog
+      description: Upstream MCP servers registered in the AI Catalog.
+    - name: MCP Proxies
+      description: MCP proxies exposing an upstream MCP server through the gateway.
+paths:
+    /organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers:
+        put:
+            operationId: createOrUpdateAimCatalogMcpServer
+            tags:
+                - AI Catalog
+            summary: Create or update a Catalog MCP server from its spec
+            description: |
+                Create or update an upstream MCP server registered in the AI Catalog, identified by the `hrid` carried in the
+                body. Re-applying an unchanged spec is a no-op. When the connection is new or changed, or the server was never
+                synced, the platform discovers the server before persisting anything and syncs its tools, prompts and
+                resources; an upstream that cannot be discovered rejects the apply. Findings that prevent the apply — a
+                failed discovery included — are reported in `errors.severe` with a `400`, and nothing is persisted or
+                destroyed. A dry run performs the same checks, discovery included.
+            parameters:
+                - $ref: '#/components/parameters/AimOrgIdParam'
+                - $ref: '#/components/parameters/AimEnvIdParam'
+                - $ref: '#/components/parameters/AimDryRunQueryParam'
+            requestBody:
+                description: Catalog MCP server specification
+                content:
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/AimCatalogMcpServerSpec'
+                required: true
+            responses:
+                '200':
+                    description: State of the created or updated Catalog MCP server, or the dry-run preview
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AimCatalogMcpServerState'
+                '400':
+                    description: |
+                        The spec was rejected: the body is the resource state — the preview of the declaration, credentials
+                        removed — with the findings in `errors.severe`. A request the host rejects before the module sees it,
+                        a missing `hrid` for instance, answers the platform error shape instead.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AimCatalogMcpServerState'
+                '401':
+                    $ref: '#/components/responses/AimUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AimUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AimNotFound'
+                default:
+                    $ref: '#/components/responses/AimError'
+    /organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers/{hrid}:
+        parameters:
+            - $ref: '#/components/parameters/AimOrgIdParam'
+            - $ref: '#/components/parameters/AimEnvIdParam'
+            - $ref: '#/components/parameters/AimHridParam'
+        get:
+            operationId: getAimCatalogMcpServer
+            tags:
+                - AI Catalog
+            summary: Get one Catalog MCP server
+            description: Get a Catalog MCP server using its HRID. Credential values are never returned.
+            parameters:
+                - $ref: '#/components/parameters/AimOrgIdParam'
+                - $ref: '#/components/parameters/AimEnvIdParam'
+                - $ref: '#/components/parameters/AimHridParam'
+            responses:
+                '200':
+                    description: Catalog MCP server successfully retrieved
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AimCatalogMcpServerState'
+                '401':
+                    $ref: '#/components/responses/AimUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AimUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AimNotFound'
+                default:
+                    $ref: '#/components/responses/AimError'
+        delete:
+            operationId: deleteAimCatalogMcpServer
+            tags:
+                - AI Catalog
+            summary: Delete one Catalog MCP server
+            description: Delete a Catalog MCP server, its discovered tools, prompts and resources, and the catalog source it was registered under, using its HRID
+            parameters:
+                - $ref: '#/components/parameters/AimOrgIdParam'
+                - $ref: '#/components/parameters/AimEnvIdParam'
+                - $ref: '#/components/parameters/AimHridParam'
+            responses:
+                '204':
+                    description: Catalog MCP server successfully deleted
+                '401':
+                    $ref: '#/components/responses/AimUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AimUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AimNotFound'
+                default:
+                    $ref: '#/components/responses/AimError'
+    /organizations/{orgId}/environments/{envId}/aim/mcp-proxies:
+        put:
+            operationId: createOrUpdateAimMcpProxy
+            tags:
+                - MCP Proxies
+            summary: Create or update an MCP proxy from its spec
+            description: |
+                Create or update a single-upstream MCP proxy, identified by the `hrid` carried in the body. Re-applying an
+                unchanged spec is a no-op. A first apply creates the proxy and, unless `state` is `STOPPED`, starts it; a
+                later apply converges the mutable parts — `name`, `description`, `proxy`, `contextPath`, the identity
+                providers and the plan set — and, while the proxy runs, redeploys it once. The lifecycle converges too: `STARTED`
+                starts a stopped proxy, `STOPPED` stops a running one and keeps later changes stored until the next
+                `STARTED`. Policy flows are owned by the declaration: the proxy's flows and each declared plan's flows are
+                replaced by the declared ones whenever they differ, and a flow the declaration no longer carries is
+                removed. Identity providers converge by name: a declared provider the proxy does not have is attached
+                as a resource of its API, a declared provider whose configuration differs from the proxy's resource is
+                rejected — except a generic provider's `clientSecret`, which replaces the stored one when it differs and
+                is kept when omitted — and a resource the declaration no longer names is left in place. The `GRAVITEE_AM`
+                provider is provisioned when the proxy is created and cannot be added later. Plans converge by name: a declared plan
+                the proxy does not have is created and published, a plan the proxy holds in staging is published, a plan
+                the declaration no longer carries is closed — closing terminates its subscriptions — and a deprecated plan
+                is rejected, as APIM cannot publish it again. `entityId` is fixed at creation, and a plan cannot be changed
+                in place under the same name: declaring a different value is rejected rather than applied. The upstream
+                server is not contacted — the gateway reaches it at runtime.
+                A `STUDIO` (`mode: STUDIO`) is declared from servers registered under `catalog/mcp-servers`: `studio.tools`
+                names each tool by its server's HRID and runtime name, converges as a set and replaces the studio's tool
+                surface when it changes; `studio.upstreamAuth` converges per server; `studio.enableFGA` inserts or removes
+                the platform's authorization flow. `mode` is fixed at creation.
+                Findings that prevent the apply are reported in `errors.severe` with a `400`, and nothing is persisted or
+                destroyed. A dry run performs the same checks. A start or a deploy the gateway side refuses answers `500`
+                with the technical code `gamma.mcp.lifecycle.failed`: the declaration is stored and the next apply retries,
+                redeploying a running proxy APIM reports out of sync even when nothing changed.
+            parameters:
+                - $ref: '#/components/parameters/AimOrgIdParam'
+                - $ref: '#/components/parameters/AimEnvIdParam'
+                - $ref: '#/components/parameters/AimDryRunQueryParam'
+            requestBody:
+                description: MCP proxy specification
+                content:
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/AimMcpProxySpec'
+                        examples:
+                            proxy:
+                                summary: A GitHub MCP proxy behind an API key plan
+                                value:
+                                    hrid: github-mcp-proxy
+                                    entityId: mcp-proxy.github
+                                    name: GitHub
+                                    contextPath: /mcp/github
+                                    mode: PROXY
+                                    proxy:
+                                        serverUrl: https://api.githubcopilot.com/mcp/
+                                        upstreamAuth:
+                                            type: BEARER
+                                            token: 'secret://kubernetes/github-mcp:token'
+                                    plans:
+                                        - name: gold
+                                          security:
+                                              type: API_KEY
+                                              source: HEADER
+                            proxyBehindKeycloak:
+                                summary: A proxy whose plans authenticate against Keycloak and against Gravitee AM
+                                value:
+                                    hrid: github-mcp-proxy
+                                    entityId: mcp-proxy.github
+                                    name: GitHub
+                                    contextPath: /mcp/github
+                                    mode: PROXY
+                                    proxy:
+                                        serverUrl: https://api.githubcopilot.com/mcp/
+                                    state: STARTED
+                                    identityProviders:
+                                        - name: am
+                                          type: GRAVITEE_AM
+                                        - name: keycloak
+                                          type: OAUTH2_GENERIC
+                                          issuerUrl: https://kc.example.com/realms/acme
+                                          introspectionEndpoint: /protocol/openid-connect/token/introspect
+                                          introspectionEndpointMethod: POST
+                                          clientId: gateway
+                                          clientSecret: 'secret://kubernetes/keycloak-gateway:client-secret'
+                                    flows:
+                                        - name: Tools ACL
+                                          selectors:
+                                              - type: MCP
+                                                methods:
+                                                    - tools/list
+                                                    - tools/call
+                                          request:
+                                              - name: MCP ACL
+                                                policy: mcp-acl
+                                                configuration:
+                                                    authorizations:
+                                                        - authorizedFeatures:
+                                                              - type: TOOLS
+                                                                methods:
+                                                                    - TOOLS_LIST
+                                                                    - TOOLS_CALL
+                                                                patternType: ANY
+                                    plans:
+                                        - name: gold
+                                          security:
+                                              type: OAUTH2
+                                              provider: am
+                                              scopes:
+                                                  - repo:read
+                                          flows:
+                                              - name: Gold rate limit
+                                                selectors:
+                                                    - type: MCP
+                                                      methods:
+                                                          - tools/call
+                                                request:
+                                                    - name: Rate limit
+                                                      policy: rate-limit
+                                                      configuration:
+                                                          rate:
+                                                              limit: 100
+                                                              periodTime: 1
+                                                              periodTimeUnit: MINUTES
+                                        - name: partners
+                                          security:
+                                              type: OAUTH2
+                                              provider: keycloak
+                            studio:
+                                summary: A studio exposing two GitHub tools and one Jira tool, with fine-grained authorization
+                                value:
+                                    hrid: support-studio
+                                    entityId: mcp-proxy.support-studio
+                                    name: Support Studio
+                                    contextPath: /mcp/support
+                                    mode: STUDIO
+                                    studio:
+                                        tools:
+                                            - server: github-mcp
+                                              tool: create_issue
+                                            - server: github-mcp
+                                              tool: search_issues
+                                              alias: gh_search
+                                            - server: jira-mcp
+                                              tool: create_ticket
+                                        upstreamAuth:
+                                            - server: github-mcp
+                                              auth:
+                                                  type: BEARER
+                                                  token: 'secret://kubernetes/github-mcp:token'
+                                            - server: jira-mcp
+                                              auth:
+                                                  type: NONE
+                                        enableFGA: true
+                                    plans:
+                                        - name: gold
+                                          security:
+                                              type: API_KEY
+                                              source: HEADER
+                required: true
+            responses:
+                '200':
+                    description: State of the created or updated MCP proxy, or the dry-run preview
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AimMcpProxyState'
+                            examples:
+                                applied:
+                                    summary: The state answered after the apply, credentials removed
+                                    value:
+                                        hrid: github-mcp-proxy
+                                        entityId: mcp-proxy.github
+                                        name: GitHub
+                                        contextPath: /mcp/github
+                                        mode: PROXY
+                                        proxy:
+                                            serverUrl: https://api.githubcopilot.com/mcp/
+                                            upstreamAuth:
+                                                type: BEARER
+                                        state: STARTED
+                                        plans:
+                                            - name: gold
+                                              security:
+                                                  type: API_KEY
+                                                  source: HEADER
+                                        id: 2a5bce95-bd0c-4bc0-a30d-72e299047a09
+                                        environmentId: DEFAULT
+                                        organizationId: DEFAULT
+                '400':
+                    description: |
+                        The proxy spec was rejected: the body is the resource state — the preview of the declaration with
+                        credentials removed — carrying the findings in `errors.severe`. A request the host rejects before
+                        the module sees it answers the platform error shape instead.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AimMcpProxyState'
+                            examples:
+                                rejected:
+                                    summary: A declaration changing the immutable entityId
+                                    value:
+                                        hrid: github-mcp-proxy
+                                        entityId: mcp-proxy.github-tools
+                                        name: GitHub
+                                        contextPath: /mcp/github
+                                        mode: PROXY
+                                        proxy:
+                                            serverUrl: https://api.githubcopilot.com/mcp/
+                                        plans:
+                                            - name: gold
+                                              security:
+                                                  type: API_KEY
+                                                  source: HEADER
+                                        errors:
+                                            severe:
+                                                - 'entityId [mcp-proxy.github-tools] does not match the stored entityId [mcp-proxy.github]: the entityId is immutable — delete the proxy and declare it again to change it'
+                '401':
+                    $ref: '#/components/responses/AimUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AimUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AimNotFound'
+                default:
+                    $ref: '#/components/responses/AimError'
+    /organizations/{orgId}/environments/{envId}/aim/mcp-proxies/{hrid}:
+        get:
+            operationId: getAimMcpProxy
+            tags:
+                - MCP Proxies
+            summary: Get one MCP proxy
+            description: |
+                Get an MCP proxy using its HRID, in the shape of its spec. Plans are returned sorted by name. Credential
+                values are never returned.
+            parameters:
+                - $ref: '#/components/parameters/AimOrgIdParam'
+                - $ref: '#/components/parameters/AimEnvIdParam'
+                - $ref: '#/components/parameters/AimHridParam'
+            responses:
+                '200':
+                    description: MCP proxy successfully retrieved
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AimMcpProxyState'
+                            examples:
+                                proxy:
+                                    summary: A proxy read back in the shape of its spec
+                                    value:
+                                        hrid: github-mcp-proxy
+                                        entityId: mcp-proxy.github
+                                        name: GitHub
+                                        contextPath: /mcp/github
+                                        mode: PROXY
+                                        proxy:
+                                            serverUrl: https://api.githubcopilot.com/mcp/
+                                            upstreamAuth:
+                                                type: BEARER
+                                        state: STARTED
+                                        plans:
+                                            - name: gold
+                                              security:
+                                                  type: API_KEY
+                                                  source: HEADER
+                                        id: 2a5bce95-bd0c-4bc0-a30d-72e299047a09
+                                        environmentId: DEFAULT
+                                        organizationId: DEFAULT
+                '401':
+                    $ref: '#/components/responses/AimUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AimUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AimNotFound'
+                default:
+                    $ref: '#/components/responses/AimError'
+        delete:
+            operationId: deleteAimMcpProxy
+            tags:
+                - MCP Proxies
+            summary: Delete one MCP proxy
+            description: Delete an MCP proxy and the gateway API serving it, using its HRID. Its plans are closed with it.
+            parameters:
+                - $ref: '#/components/parameters/AimOrgIdParam'
+                - $ref: '#/components/parameters/AimEnvIdParam'
+                - $ref: '#/components/parameters/AimHridParam'
+            responses:
+                '204':
+                    description: MCP proxy successfully deleted
+                '401':
+                    $ref: '#/components/responses/AimUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AimUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AimNotFound'
+                default:
+                    $ref: '#/components/responses/AimError'
+components:
+    schemas:
+        AimHrid:
+            type: string
+            description: A unique human readable id identifying this resource
+            pattern: '^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$'
+            maxLength: 256
+            examples:
+                - github-mcp
+        AimCatalogMcpServerSpec:
+            type: object
+            description: |
+                Specification of an upstream MCP server registered in the AI Catalog. `entityId` is declared by the author and
+                validated against the Gamma entity id grammar — it is never repaired or re-slugged. Tools, prompts and resources
+                are discovered by the platform and reported in the state only.
+            properties:
+                hrid:
+                    $ref: '#/components/schemas/AimHrid'
+                entityId:
+                    type: string
+                    description: |
+                        Stable catalog identity of the server, the name authorization policies reference: lowercase, dot-separated
+                        segments, first segment `mcp-server`. Validated, never repaired: an invalid value, or a value already used by
+                        another server of the environment, is rejected. Immutable once the server exists — declaring a different value
+                        is rejected rather than applied, since nothing re-points the policies naming the old one. Delete the server and
+                        declare it again to give it another identity.
+                    pattern: '^mcp-server\.[a-z0-9_-]+(\.[a-z0-9_-]+)*$'
+                    maxLength: 255
+                    examples:
+                        - mcp-server.github
+                description:
+                    type: string
+                    description: Human description shown in the Catalog
+                    examples:
+                        - GitHub tools for coding agents
+                connection:
+                    $ref: '#/components/schemas/AimCatalogMcpServerConnection'
+            required:
+                - hrid
+                - entityId
+                - connection
+        AimCatalogMcpServerConnection:
+            type: object
+            description: How the platform reaches the upstream MCP server
+            properties:
+                endpoint:
+                    type: string
+                    format: uri
+                    description: URL of the upstream MCP server, http or https
+                    examples:
+                        - https://api.githubcopilot.com/mcp/
+                transport:
+                    $ref: '#/components/schemas/AimCatalogMcpServerTransport'
+                auth:
+                    $ref: '#/components/schemas/AimCatalogMcpServerAuth'
+            required:
+                - endpoint
+                - transport
+        AimCatalogMcpServerTransport:
+            type: string
+            description: MCP transport of the upstream server; `HTTP` is the streamable HTTP transport, the only one discovery supports today.
+            enum:
+                - HTTP
+        AimCatalogMcpServerAuth:
+            type: object
+            description: |
+                Authentication the platform uses against the upstream MCP server, discriminated by `type`. Credential values are
+                stored verbatim: a literal, or a `secret://` URI pointing at a configured secret provider. They are never returned
+                by this API, and a spec that omits a credential clears the stored one.
+            properties:
+                type:
+                    type: string
+                    description: Type of authentication
+                    enum:
+                        - NONE
+                        - HEADER
+                        - OAUTH2
+            required:
+                - type
+            discriminator:
+                propertyName: type
+                mapping:
+                    NONE: '#/components/schemas/AimCatalogMcpServerNoAuth'
+                    HEADER: '#/components/schemas/AimCatalogMcpServerHeaderAuth'
+                    OAUTH2: '#/components/schemas/AimCatalogMcpServerOAuth2Auth'
+        AimCatalogMcpServerNoAuth:
+            description: No authentication
+            allOf:
+                - $ref: '#/components/schemas/AimCatalogMcpServerAuth'
+                - type: object
+        AimCatalogMcpServerHeaderAuth:
+            description: |
+                A static header sent on every request. Write the full header value: `Bearer <token>` for a bearer token,
+                `Basic <base64>` for basic credentials, or the raw key for an API-key header — or point the whole value at a
+                secret with a `secret://` URI.
+            allOf:
+                - $ref: '#/components/schemas/AimCatalogMcpServerAuth'
+                - type: object
+                  properties:
+                      name:
+                          type: string
+                          description: Header name
+                          examples:
+                              - Authorization
+                      value:
+                          type: string
+                          format: password
+                          writeOnly: true
+                          description: Full header value, a literal or a `secret://` URI stored verbatim; never returned
+                  required:
+                      - name
+                      - value
+        AimCatalogMcpServerOAuth2Auth:
+            description: OAuth 2.0 client credentials; the platform fetches a token from `tokenUrl` before reaching the server
+            allOf:
+                - $ref: '#/components/schemas/AimCatalogMcpServerAuth'
+                - type: object
+                  properties:
+                      clientId:
+                          type: string
+                          description: OAuth 2.0 client id
+                      clientSecret:
+                          type: string
+                          format: password
+                          writeOnly: true
+                          description: OAuth 2.0 client secret, a literal or a `secret://` URI stored verbatim; never returned
+                      tokenUrl:
+                          type: string
+                          format: uri
+                          description: Token endpoint of the authorization server
+                      scope:
+                          type: string
+                          description: Space-separated scopes requested with the token
+                  required:
+                      - clientId
+                      - clientSecret
+                      - tokenUrl
+        AimResourceStatus:
+            type: object
+            description: Envelope the Automation API stamps on every state; read-only.
+            properties:
+                id:
+                    type: string
+                    description: Resource UUID
+                    readOnly: true
+                environmentId:
+                    type: string
+                    description: The environment ID
+                    readOnly: true
+                organizationId:
+                    type: string
+                    description: The organization ID
+                    readOnly: true
+                errors:
+                    readOnly: true
+                    $ref: '#/components/schemas/AimErrors'
+        AimErrors:
+            type: object
+            description: Findings about the applied spec
+            properties:
+                severe:
+                    type: array
+                    description: Findings that prevented the apply; nothing was persisted
+                    items:
+                        type: string
+                warning:
+                    type: array
+                    description: Findings that did not prevent the apply
+                    items:
+                        type: string
+        AimCatalogMcpServerStatus:
+            description: Platform-discovered facts about a Catalog MCP server; read-only.
+            allOf:
+                - $ref: '#/components/schemas/AimResourceStatus'
+                - type: object
+                  properties:
+                      lastSyncedAt:
+                          type: string
+                          format: date-time
+                          readOnly: true
+                          description: When the server's tools, prompts and resources were last synced; a registered server has synced at least once
+                      serverInfo:
+                          readOnly: true
+                          $ref: '#/components/schemas/AimCatalogMcpServerInfo'
+                      protocolVersion:
+                          type: string
+                          readOnly: true
+                          description: MCP protocol version negotiated with the server
+                      tools:
+                          type: array
+                          readOnly: true
+                          items:
+                              $ref: '#/components/schemas/AimCatalogMcpToolStatus'
+                      prompts:
+                          type: array
+                          readOnly: true
+                          items:
+                              $ref: '#/components/schemas/AimCatalogMcpPromptStatus'
+                      resources:
+                          type: array
+                          readOnly: true
+                          items:
+                              $ref: '#/components/schemas/AimCatalogMcpResourceStatus'
+        AimCatalogMcpServerInfo:
+            type: object
+            description: What the server said about itself when it was discovered
+            properties:
+                name:
+                    type: string
+                version:
+                    type: string
+        AimCatalogMcpToolStatus:
+            type: object
+            description: A tool the platform discovered on the upstream server; declared by the server, never by the author
+            properties:
+                name:
+                    type: string
+                entityId:
+                    type: string
+                    description: Composed entity id of the tool, the name an authorization policy references, e.g. `mcp-tool.github.create_issue`
+        AimCatalogMcpPromptStatus:
+            type: object
+            description: A prompt the platform discovered on the upstream server; declared by the server, never by the author
+            properties:
+                name:
+                    type: string
+                entityId:
+                    type: string
+                    description: Composed entity id of the prompt, e.g. `mcp-prompt.github.summarize`
+        AimCatalogMcpResourceStatus:
+            type: object
+            description: A resource the platform discovered on the upstream server; declared by the server, never by the author
+            properties:
+                uri:
+                    type: string
+                name:
+                    type: string
+                entityId:
+                    type: string
+                    description: Composed entity id of the resource, e.g. `mcp-resource.github.readme`
+        AimCatalogMcpServerState:
+            description: State of a Catalog MCP server that has been created or updated.
+            allOf:
+                - $ref: '#/components/schemas/AimCatalogMcpServerSpec'
+                - $ref: '#/components/schemas/AimCatalogMcpServerStatus'
+        AimMcpProxySpec:
+            type: object
+            description: |
+                Specification of an MCP proxy. In `PROXY` mode the gateway exposes one upstream MCP server, declared under
+                `proxy`, at `contextPath`; in `STUDIO` mode it exposes a curated set of tools picked from catalog MCP
+                servers, declared under `studio`. Both sit behind the declared plans, which
+                authenticate consumers against the declared identity providers, and run the declared policy flows on the
+                traffic. `mode` and `entityId` are fixed at creation; `name`, `description`, `proxy`,
+                `studio`, `contextPath`, the identity providers, the plan set, the flows and the lifecycle `state` converge
+                on re-apply.
+            properties:
+                hrid:
+                    $ref: '#/components/schemas/AimHrid'
+                entityId:
+                    type: string
+                    description: |
+                        Stable identity of the proxy, the name authorization policies reference: lowercase, dot-separated
+                        segments, first segment `mcp-proxy`. Required. Validated,
+                        never repaired: an invalid value, or a value already used by another MCP proxy of the environment, is
+                        rejected. Immutable once the proxy exists — declaring a different value is rejected rather than
+                        applied. Delete the proxy and declare it again to give it another identity. Uniqueness across the
+                        environment is checked at apply time, not enforced by the store (AIAM-242): two concurrent applies
+                        of the same entityId can both pass.
+                    pattern: '^mcp-proxy\.[a-z0-9_-]+(\.[a-z0-9_-]+)*$'
+                    maxLength: 255
+                    examples:
+                        - mcp-proxy.github
+                name:
+                    type: string
+                    description: Display name of the proxy; converges on re-apply
+                    examples:
+                        - GitHub
+                description:
+                    type: string
+                    description: Human description of the proxy; converges on re-apply
+                    examples:
+                        - GitHub tools proxied through the gateway
+                contextPath:
+                    type: string
+                    description: Context path the gateway serves the proxy on; must be available in the environment
+                    examples:
+                        - /mcp/github
+                mode:
+                    $ref: '#/components/schemas/AimMcpProxyMode'
+                proxy:
+                    $ref: '#/components/schemas/AimMcpProxyProxy'
+                studio:
+                    $ref: '#/components/schemas/AimMcpProxyStudio'
+                state:
+                    $ref: '#/components/schemas/AimMcpProxyLifecycleState'
+                flowExecution:
+                    $ref: '#/components/schemas/AimMcpProxyFlowExecution'
+                flows:
+                    type: array
+                    description: |
+                        Policy flows of the proxy, in execution order, run after the flows of the plan the request matched.
+                        The manifest owns them: on every apply the proxy's flows are replaced by the declared ones, so a
+                        flow authored in the policy studio survives only if the manifest carries it, and omitting `flows`
+                        removes them all. Each step's configuration is validated against its policy's schema, on apply and
+                        on dry run, and reported back as stored.
+                    items:
+                        $ref: '#/components/schemas/AimMcpProxyFlow'
+                    examples:
+                        - - name: Tools ACL
+                            selectors:
+                                - type: MCP
+                                  methods:
+                                      - tools/list
+                                      - tools/call
+                            request:
+                                - name: MCP ACL
+                                  policy: mcp-acl
+                                  configuration:
+                                      authorizations:
+                                          - authorizedFeatures:
+                                                - type: TOOLS
+                                                  methods:
+                                                      - TOOLS_LIST
+                                                      - TOOLS_CALL
+                                                  patternType: ANY
+                identityProviders:
+                    type: array
+                    description: |
+                        Authorization servers declared on the proxy as OAuth2 resources, which OAUTH2 plans reference through
+                        `provider`. Converged by name: a declared provider the proxy lacks is attached; a declared provider
+                        whose configuration differs from the proxy's resource is rejected, except a generic provider's
+                        `clientSecret`, which replaces the stored one when it differs and is kept when omitted; a resource
+                        no longer declared is left in place; a declared provider named like a resource the proxy holds
+                        disabled, or under another type, is rejected. At most one `GRAVITEE_AM` provider, provisioned when
+                        the proxy is created only.
+                    items:
+                        $ref: '#/components/schemas/AimMcpProxyIdentityProvider'
+                    examples:
+                        - - name: am
+                            type: GRAVITEE_AM
+                plans:
+                    type: array
+                    description: |
+                        Plans consumers subscribe to, converged by name: a declared plan the proxy does not have is created
+                        and published, a plan the proxy holds in staging is published, a plan the declaration no longer
+                        carries is closed — closing terminates its subscriptions — and a plan cannot be changed in place
+                        under the same name. At least one plan is required.
+                    minItems: 1
+                    items:
+                        $ref: '#/components/schemas/AimMcpProxyPlan'
+                    examples:
+                        - - name: gold
+                            security:
+                                type: API_KEY
+                                source: HEADER
+            required:
+                - hrid
+                - entityId
+                - name
+                - contextPath
+                - mode
+                - plans
+        AimMcpProxyLifecycleState:
+            type: string
+            description: |
+                Lifecycle of the proxy on the gateway. `STARTED` runs it with the last applied definition and redeploys it
+                after every apply that changes it; `STOPPED` makes the gateway answer 404 and stores changes without
+                deploying them, which the next `STARTED` does. `STARTED` when omitted. Reported back as the lifecycle APIM
+                observes. A start or a deploy the gateway side refuses fails the apply with a `500` carrying the technical
+                code `gamma.mcp.lifecycle.failed` and the operation, the proxy and the cause as parameters; the declaration
+                is stored, and the next apply starts the proxy or redeploys the one APIM reports out of sync.
+            default: STARTED
+            enum:
+                - STARTED
+                - STOPPED
+        AimMcpProxyMode:
+            type: string
+            description: |
+                Shape of the proxy, and the one block it carries: `PROXY` fronts one upstream MCP server, declared under
+                `proxy`; `STUDIO` composes a curated tool surface out of catalog MCP servers, declared under `studio`. The
+                other mode's block is rejected. Required. Fixed at creation: declaring another mode on
+                an existing proxy is rejected, and changing it is a delete and a new declaration.
+            enum:
+                - PROXY
+                - STUDIO
+        AimMcpProxyProxy:
+            type: object
+            description: |
+                What a `PROXY` fronts: one upstream MCP server and the credential the gateway presents to it. Required when
+                `mode` is `PROXY`, rejected otherwise.
+            properties:
+                serverUrl:
+                    type: string
+                    format: uri
+                    description: URL of the upstream MCP server, http or https; the gateway reaches it at runtime
+                    examples:
+                        - https://api.githubcopilot.com/mcp/
+                upstreamAuth:
+                    $ref: '#/components/schemas/AimMcpProxyUpstreamAuth'
+            required:
+                - serverUrl
+        AimMcpProxyStudio:
+            type: object
+            description: |
+                What a `STUDIO` exposes: tools picked from catalog MCP servers of the environment, the credential the
+                gateway presents to each of those servers, and whether the platform's fine-grained authorization runs on
+                tool calls. Tools converge as a set — adding, removing or re-aliasing one replaces the studio's tool
+                surface — and `upstreamAuth` converges per server.
+            properties:
+                tools:
+                    type: array
+                    description: |
+                        The tools the studio exposes, each named by the catalog server it comes from and its runtime name.
+                        Every server named here needs an `upstreamAuth` entry. On a studio created with a `GRAVITEE_AM`
+                        provider, a tool added after creation is served but not registered as a scope on the Access
+                        Management domain; the apply reports it as a warning.
+                    minItems: 1
+                    items:
+                        $ref: '#/components/schemas/AimMcpProxyStudioTool'
+                upstreamAuth:
+                    type: array
+                    description: |
+                        One entry per catalog server a tool comes from: the credential the gateway presents to that server,
+                        stored verbatim and never returned, or `type: NONE` to say the server needs none. Nothing is inferred
+                        from the credential the catalog synced the server with. An entry for a server no tool uses, a server
+                        without an entry, or two entries for one server are rejected.
+                    items:
+                        $ref: '#/components/schemas/AimMcpProxyStudioUpstreamAuth'
+                enableFGA:
+                    type: boolean
+                    description: |
+                        Inserts the platform's fine-grained authorization flow, which runs the `authz-pep` policy on
+                        `tools/call` with the called tool as the resource; `false` removes it. That flow belongs to the
+                        platform: `flows` may not carry an `authz-pep` step themselves, and the state reports the declared
+                        flows without it.
+                    default: false
+            required:
+                - tools
+                - upstreamAuth
+        AimMcpProxyStudioTool:
+            type: object
+            description: A tool the studio exposes, picked from a catalog MCP server
+            properties:
+                server:
+                    type: string
+                    description: HRID of the `catalog/mcp-servers` resource of this environment the tool comes from
+                    examples:
+                        - github-mcp
+                tool:
+                    type: string
+                    description: Runtime name of the tool, as the server's state lists it under `tools`
+                    examples:
+                        - create_issue
+                alias:
+                    type: string
+                    description: |
+                        Name the studio exposes the tool under, when the runtime name collides with another tool's or reads
+                        better renamed; effective names must be unique across the studio
+                    pattern: '^[a-zA-Z0-9_=-]+$'
+                    examples:
+                        - gh_create_issue
+                entityId:
+                    type: string
+                    description: Composed entity id of the tool, the name an authorization policy references, e.g. `mcp-tool.github.create_issue`
+                    readOnly: true
+            required:
+                - server
+                - tool
+        AimMcpProxyStudioUpstreamAuth:
+            type: object
+            description: The credential the gateway presents to one of the studio's catalog servers
+            properties:
+                server:
+                    type: string
+                    description: HRID of the `catalog/mcp-servers` resource the credential is for
+                    examples:
+                        - github-mcp
+                auth:
+                    $ref: '#/components/schemas/AimMcpProxyUpstreamAuth'
+            required:
+                - server
+                - auth
+        AimMcpProxyUpstreamAuth:
+            type: object
+            description: |
+                Authentication the gateway uses against the upstream MCP server, discriminated by `type`. Credential values
+                are stored verbatim: a literal, or a `secret://` URI pointing at a configured secret provider. They are
+                never returned by this API. Omitting `proxy.upstreamAuth`, or declaring `type: NONE`, means the gateway passes
+                the caller's credentials through — and clears any stored upstream authentication.
+            properties:
+                type:
+                    type: string
+                    description: Type of upstream authentication
+                    enum:
+                        - NONE
+                        - API_KEY
+                        - BEARER
+                        - BASIC
+                        - OAUTH2
+            required:
+                - type
+            discriminator:
+                propertyName: type
+                mapping:
+                    NONE: '#/components/schemas/AimMcpProxyNoUpstreamAuth'
+                    API_KEY: '#/components/schemas/AimMcpProxyApiKeyUpstreamAuth'
+                    BEARER: '#/components/schemas/AimMcpProxyBearerUpstreamAuth'
+                    BASIC: '#/components/schemas/AimMcpProxyBasicUpstreamAuth'
+                    OAUTH2: '#/components/schemas/AimMcpProxyOAuth2UpstreamAuth'
+            examples:
+                - type: BEARER
+                  token: 'secret://kubernetes/github-mcp:token'
+        AimMcpProxyNoUpstreamAuth:
+            description: No upstream authentication; the gateway passes the caller's credentials through
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyUpstreamAuth'
+                - type: object
+        AimMcpProxyApiKeyUpstreamAuth:
+            description: A static API key sent to the upstream server in a header
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyUpstreamAuth'
+                - type: object
+                  properties:
+                      apiKeyHeader:
+                          type: string
+                          description: Name of the header carrying the API key
+                          examples:
+                              - X-Api-Key
+                      apiKey:
+                          type: string
+                          format: password
+                          writeOnly: true
+                          description: API key value, a literal or a `secret://` URI stored verbatim; never returned
+                  required:
+                      - apiKeyHeader
+                      - apiKey
+        AimMcpProxyBearerUpstreamAuth:
+            description: A static bearer token sent to the upstream server
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyUpstreamAuth'
+                - type: object
+                  properties:
+                      token:
+                          type: string
+                          format: password
+                          writeOnly: true
+                          description: Bearer token, a literal or a `secret://` URI stored verbatim; never returned
+                  required:
+                      - token
+        AimMcpProxyBasicUpstreamAuth:
+            description: Basic credentials sent to the upstream server
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyUpstreamAuth'
+                - type: object
+                  properties:
+                      username:
+                          type: string
+                          description: Basic authentication user name
+                      password:
+                          type: string
+                          format: password
+                          writeOnly: true
+                          description: Basic authentication password, a literal or a `secret://` URI stored verbatim; never returned
+                  required:
+                      - username
+                      - password
+        AimMcpProxyOAuth2UpstreamAuth:
+            description: OAuth 2.0 authentication negotiated with the upstream server through MCP elicitation
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyUpstreamAuth'
+                - type: object
+                  properties:
+                      authorizeUrl:
+                          type: string
+                          format: uri
+                          description: Authorization endpoint the elicitation flow sends the user to
+                      tokenUrl:
+                          type: string
+                          format: uri
+                          description: Token endpoint the gateway exchanges the authorization code at
+                      clientId:
+                          type: string
+                          description: Client id of the upstream OAuth 2.0 client
+                      clientSecret:
+                          type: string
+                          format: password
+                          writeOnly: true
+                          description: Client secret of the upstream OAuth 2.0 client, a literal or a `secret://` URI stored verbatim; never returned
+                      scopes:
+                          type: array
+                          description: Scopes requested with the token
+                          items:
+                              type: string
+                  required:
+                      - authorizeUrl
+                      - tokenUrl
+                      - clientId
+                      - clientSecret
+        AimMcpProxyPlan:
+            type: object
+            description: A plan consumers subscribe to; identified by its name within the proxy
+            properties:
+                name:
+                    type: string
+                    description: Name of the plan, the key plan convergence matches on
+                    examples:
+                        - gold
+                security:
+                    $ref: '#/components/schemas/AimMcpProxyPlanSecurity'
+                flows:
+                    type: array
+                    description: |
+                        Policy flows of the plan, in execution order, run before the proxy's own on requests the plan
+                        matched. Owned by the manifest like the proxy's flows, and — unlike `security` — free to change in
+                        place under the same plan name.
+                    items:
+                        $ref: '#/components/schemas/AimMcpProxyFlow'
+            required:
+                - name
+                - security
+        AimMcpProxyPlanSecurity:
+            type: object
+            description: How consumers authenticate against the plan, discriminated by `type`
+            properties:
+                type:
+                    type: string
+                    description: Type of plan security
+                    enum:
+                        - KEY_LESS
+                        - API_KEY
+                        - OAUTH2
+            required:
+                - type
+            discriminator:
+                propertyName: type
+                mapping:
+                    KEY_LESS: '#/components/schemas/AimMcpProxyKeyLessPlanSecurity'
+                    API_KEY: '#/components/schemas/AimMcpProxyApiKeyPlanSecurity'
+                    OAUTH2: '#/components/schemas/AimMcpProxyOAuth2PlanSecurity'
+        AimMcpProxyKeyLessPlanSecurity:
+            description: No consumer authentication
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyPlanSecurity'
+                - type: object
+        AimMcpProxyApiKeyPlanSecurity:
+            description: Consumers authenticate with an API key
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyPlanSecurity'
+                - type: object
+                  properties:
+                      source:
+                          type: string
+                          description: Where the gateway reads the API key from
+                          enum:
+                              - HEADER
+                              - BEARER
+                              - QUERY_PARAMETER
+                      apiKeyHeader:
+                          type: string
+                          description: Name of a custom header carrying the API key; naming one switches the gateway to that header
+                          examples:
+                              - X-Gravitee-Api-Key
+                      propagateApiKey:
+                          type: boolean
+                          description: Forward the API key to the upstream server; false when omitted
+                  required:
+                      - source
+        AimMcpProxyOAuth2PlanSecurity:
+            description: |
+                Consumers authenticate with OAuth 2.0 tokens the gateway validates against one of the proxy's identity
+                providers, named by `provider`.
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyPlanSecurity'
+                - type: object
+                  properties:
+                      provider:
+                          type: string
+                          description: The `name` of an `identityProviders` entry of this spec
+                          examples:
+                              - am
+                      scopes:
+                          type: array
+                          description: |
+                              Scopes required on top of the standard MCP scopes; accepted on a `GRAVITEE_AM` provider only, since
+                              the gateway checks them against the Access Management domain. On a plan added after creation the
+                              scopes cannot be registered on the domain and are rejected.
+                          items:
+                              type: string
+                  required:
+                      - provider
+        AimMcpProxyFlowExecution:
+            type: object
+            description: |
+                How the gateway selects among the proxy's flows. `DEFAULT` runs every flow whose selectors match;
+                `BEST_MATCH` runs the one whose selectors match best. Omitted, APIM's defaults apply and the state
+                reports no execution block.
+            properties:
+                mode:
+                    type: string
+                    description: Flow selection mode
+                    default: DEFAULT
+                    enum:
+                        - DEFAULT
+                        - BEST_MATCH
+                matchRequired:
+                    type: boolean
+                    description: Reject a request no flow matches; false when omitted
+                    default: false
+        AimMcpProxyFlow:
+            type: object
+            description: |
+                A policy flow, the same shape APIM's own API resource declares: the requests it selects, and the steps
+                run on the request and on the response. An MCP proxy has no other phase.
+            properties:
+                name:
+                    type: string
+                    description: Name of the flow, shown in the policy studio; flows are compared by content, not by name
+                    examples:
+                        - Tools ACL
+                enabled:
+                    type: boolean
+                    description: Whether the gateway runs the flow; true when omitted
+                    default: true
+                selectors:
+                    type: array
+                    description: What the flow applies to; a flow without selectors applies to every request
+                    items:
+                        $ref: '#/components/schemas/AimMcpProxyFlowSelector'
+                request:
+                    type: array
+                    description: Steps run on the request, in order
+                    items:
+                        $ref: '#/components/schemas/AimMcpProxyFlowStep'
+                response:
+                    type: array
+                    description: Steps run on the response, in order
+                    items:
+                        $ref: '#/components/schemas/AimMcpProxyFlowStep'
+                tags:
+                    type: array
+                    description: Sharding tags of the gateways the flow runs on; all of them when omitted
+                    items:
+                        type: string
+            required:
+                - name
+        AimMcpProxyFlowSelector:
+            type: object
+            description: What a flow applies to, discriminated by `type`; the kinds an MCP proxy accepts
+            properties:
+                type:
+                    type: string
+                    description: Kind of selector
+                    enum:
+                        - MCP
+                        - CONDITION
+            required:
+                - type
+            discriminator:
+                propertyName: type
+                mapping:
+                    MCP: '#/components/schemas/AimMcpProxyMcpFlowSelector'
+                    CONDITION: '#/components/schemas/AimMcpProxyConditionFlowSelector'
+        AimMcpProxyMcpFlowSelector:
+            description: Selects requests by MCP method
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyFlowSelector'
+                - type: object
+                  properties:
+                      methods:
+                          type: array
+                          description: MCP methods the flow applies to, such as `tools/call`; every method when empty
+                          items:
+                              type: string
+                          examples:
+                              - - tools/list
+                                - tools/call
+                  required:
+                      - methods
+        AimMcpProxyConditionFlowSelector:
+            description: Selects requests by an expression-language condition
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyFlowSelector'
+                - type: object
+                  properties:
+                      condition:
+                          type: string
+                          description: Condition the request must satisfy
+                          examples:
+                              - "{#context.attributes['mcp_tool_name'] == 'create_issue'}"
+                  required:
+                      - condition
+        AimMcpProxyFlowStep:
+            type: object
+            description: A policy run at one point of a flow, configured as that policy's schema says
+            properties:
+                name:
+                    type: string
+                    description: Name of the step, shown in the policy studio
+                    examples:
+                        - MCP ACL
+                description:
+                    type: string
+                    description: Human description of the step
+                enabled:
+                    type: boolean
+                    description: Whether the gateway runs the step; true when omitted
+                    default: true
+                policy:
+                    type: string
+                    description: Id of a policy plugin deployed on the platform
+                    examples:
+                        - mcp-acl
+                        - rate-limit
+                condition:
+                    type: string
+                    description: Expression-language condition the step runs under; always when omitted
+                configuration:
+                    type: object
+                    description: Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run
+                    additionalProperties: true
+            required:
+                - name
+                - policy
+        AimMcpProxyIdentityProvider:
+            type: object
+            description: |
+                An authorization server declared on the proxy, discriminated by `type`. Each becomes an OAuth2 resource of
+                the proxy's API, named after `name`, which OAUTH2 plans reference through `provider`.
+            properties:
+                name:
+                    type: string
+                    description: Name of the provider, the resource name on the proxy and the value plans reference
+                    examples:
+                        - keycloak
+                type:
+                    type: string
+                    description: Kind of authorization server
+                    enum:
+                        - GRAVITEE_AM
+                        - OAUTH2_GENERIC
+                        - OAUTH2_AUTH0
+            required:
+                - name
+                - type
+            discriminator:
+                propertyName: type
+                mapping:
+                    GRAVITEE_AM: '#/components/schemas/AimMcpProxyGraviteeAmIdentityProvider'
+                    OAUTH2_GENERIC: '#/components/schemas/AimMcpProxyGenericIdentityProvider'
+                    OAUTH2_AUTH0: '#/components/schemas/AimMcpProxyAuth0IdentityProvider'
+        AimMcpProxyGraviteeAmIdentityProvider:
+            description: |
+                The Gravitee Access Management integration of the organization: the domain, the client and the resource are
+                provisioned when the proxy is created, and the AM connection must exist at that moment. At most one per
+                proxy, and fixed at creation.
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyIdentityProvider'
+                - type: object
+        AimMcpProxyGenericIdentityProvider:
+            description: A third-party authorization server the gateway introspects tokens with
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyIdentityProvider'
+                - type: object
+                  properties:
+                      issuerUrl:
+                          type: string
+                          format: uri
+                          description: Issuer URL of the authorization server, the base the endpoints are resolved against
+                          examples:
+                              - https://kc.example.com/realms/acme
+                      introspectionEndpoint:
+                          type: string
+                          description: |
+                              Token introspection endpoint, as a path relative to `issuerUrl` or as an absolute URL beneath it;
+                              stored and reported as the path
+                          examples:
+                              - /protocol/openid-connect/token/introspect
+                      introspectionEndpointMethod:
+                          type: string
+                          description: HTTP method of the introspection call
+                          enum:
+                              - GET
+                              - POST
+                      clientId:
+                          type: string
+                          description: Client id the gateway introspects tokens with
+                      clientSecret:
+                          type: string
+                          format: password
+                          writeOnly: true
+                          description: |
+                              Client secret the gateway introspects tokens with, a literal or a `secret://` URI stored verbatim and
+                              never returned. Omitted on a later apply, the stored secret is kept; a different value replaces the
+                              proxy's resource in place and redeploys the proxy, which is how a rotated reference reaches the gateway.
+                      userInfoEndpoint:
+                          type: string
+                          description: UserInfo endpoint, same rule as `introspectionEndpoint`
+                  required:
+                      - issuerUrl
+                      - introspectionEndpoint
+                      - introspectionEndpointMethod
+        AimMcpProxyAuth0IdentityProvider:
+            description: An Auth0 tenant the gateway validates tokens against
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxyIdentityProvider'
+                - type: object
+                  properties:
+                      domain:
+                          type: string
+                          description: Auth0 tenant domain
+                          examples:
+                              - my-tenant.eu.auth0.com
+                      audience:
+                          type: string
+                          description: Audience of the tokens the gateway accepts
+                  required:
+                      - domain
+                      - audience
+        AimMcpProxyState:
+            description: |
+                State of an MCP proxy that has been created or updated, in the shape of its spec. Identity providers are
+                read off the resources of its API and plans off APIM, both sorted by name; `state` is the lifecycle APIM
+                observes; `flows` and each plan's `flows` are read off APIM in stored order, step configurations as
+                stored, and are absent when there are none; `flowExecution` is reported when it differs from APIM's
+                defaults. For a `STUDIO`, `studio.tools` is read off the stored specification with each tool's
+                `entityId` and sorted by server then tool, `studio.upstreamAuth` off the stored backends without
+                credentials, and `studio.enableFGA` off the API's flows, which `flows` reports without the platform's
+                authorization flow.
+            allOf:
+                - $ref: '#/components/schemas/AimMcpProxySpec'
+                - $ref: '#/components/schemas/AimResourceStatus'
+        AimHttpError:
+            type: object
+            description: An error returned by the Automation API when a request could not be served.
+            properties:
+                httpStatus:
+                    type: integer
+                    format: int32
+                    description: HTTP status code
+                    examples:
+                        - 400
+                message:
+                    type: string
+                    description: Human readable message
+                    examples:
+                        - entityId [mcp-server.github] is already used by another MCP server
+                technicalCode:
+                    type: string
+                    description: Stable technical code of the error
+                    examples:
+                        - mcp-server.already-exists
+                parameters:
+                    type: object
+                    description: Values interpolated into the message, keyed by placeholder name
+                    additionalProperties:
+                        type: string
+    responses:
+        AimUnauthenticated:
+            description: Authentication is required
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/AimHttpError'
+        AimUnauthorized:
+            description: The caller lacks the permission, or the license does not include AI Management
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/AimHttpError'
+        AimNotFound:
+            description: No resource with this HRID, or AI Management is not available on this installation
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/AimHttpError'
+        AimError:
+            description: Unexpected error
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/AimHttpError'
+    parameters:
+        AimOrgIdParam:
+            name: orgId
+            in: path
+            required: true
+            description: Id of an organization
+            schema:
+                type: string
+                default: DEFAULT
+        AimEnvIdParam:
+            name: envId
+            in: path
+            required: true
+            description: Id of an environment
+            schema:
+                type: string
+                default: DEFAULT
+        AimHridParam:
+            name: hrid
+            in: path
+            required: true
+            description: Human-readable ID of the resource
+            schema:
+                type: string
+        AimDryRunQueryParam:
+            name: dryRun
+            in: query
+            description: |
+                Preview the result of the apply without persisting anything. The same validation runs as for a real apply and
+                the findings are reported in the returned state.
+            schema:
+                type: boolean
+                default: false

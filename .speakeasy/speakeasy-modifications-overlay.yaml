@@ -236,3 +236,33 @@ actions:
       x-speakeasy-name-override: delete
     x-speakeasy-metadata:
       type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers"]["put"]
+    update:
+      x-speakeasy-name-override: createOrUpdate
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers/{hrid}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers/{hrid}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies"]["put"]
+    update:
+      x-speakeasy-name-override: createOrUpdate
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies/{hrid}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies/{hrid}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      type: method-name

@@ -99,6 +99,13 @@ api:
       value: none
     - name: MANAGEMENT_MONGODB_TRANSACTIONAL
       value: "false"
+    # AI Management (MCP catalog servers and proxies) is a Gamma module.
+    - name: gravitee_gamma_enabled
+      value: "true"
+    # Catalog discovery refuses private addresses by default, and the MCP
+    # server the acceptance tests register runs in this cluster (hack/kind/mcp).
+    - name: gravitee_modules_aim_catalog_mcpdiscovery_allowprivateendpoints
+      value: "true"
 
 installation:
   api:

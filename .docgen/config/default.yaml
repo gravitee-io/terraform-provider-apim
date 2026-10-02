@@ -65,6 +65,8 @@ outputs:
    target: templates/guides/docgen_v4api-portal-navigation.md
  - template: {{ .RootDir }}/tmpl/portal-next-gen.md.tmpl
    target: templates/guides/docgen_portal-next-gen.md
+ - template: {{ .RootDir }}/tmpl/mcp-studio.md.tmpl
+   target: templates/guides/docgen_mcp-studio.md
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
     exportedAs: V4ApiSimple
@@ -176,4 +178,13 @@ chunks:
     required: true
   - template: examples/use-cases/portal-next-gen/api.tf
     exportedAs: PortalNextGenAPI
+    required: true
+  - template: examples/use-cases/mcp-studio/catalog-server.tf
+    exportedAs: McpStudioCatalogServer
+    required: true
+  - template: examples/use-cases/mcp-studio/proxy.tf
+    exportedAs: McpStudioProxy
+    required: true
+  - template: examples/use-cases/mcp-studio/studio.tf
+    exportedAs: McpStudioStudio
     required: true

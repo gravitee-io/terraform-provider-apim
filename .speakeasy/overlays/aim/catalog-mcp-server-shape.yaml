@@ -1,0 +1,124 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Catalog MCP server shape overlay
+  version: 0.0.1
+actions:
+
+  # Applied before the common overlays: it gives the AI Management fragment the
+  # shape the rest of the document has, so the common overlays apply to it.
+
+  ## Parameters
+  ## The fragment declares its own Aim*Param components. The shared ones carry the
+  ## provider-level organization and environment, force-new on hrid and the ignored
+  ## dryRun (common/oas.yaml, common/param.yaml). An update appends to a list, so
+  ## each list is removed before it is declared again.
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers"].put.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers"].put
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/dryRunQueryParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers/{hrid}"].parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers/{hrid}"]
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers/{hrid}"].get.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers/{hrid}"].get
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers/{hrid}"].delete.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers/{hrid}"].delete
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+
+  ## Refusals
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers"].put.responses["400"]
+    description: |
+      A refused apply answers the state with its findings. Left to the default
+      response, the body is reported as it is, findings included, whatever the
+      declaration it previews looks like.
+    remove: true
+
+  ## Connection
+  - target: $.components.schemas.AimCatalogMcpServerTransport
+    description: HTTP is the only transport, so it does not have to be written
+    update:
+      default: HTTP
+  - target: $.components.schemas.AimCatalogMcpServerConnection
+    description: |
+      An omitted auth is read back as NONE. Declaring it keeps the plan equal to
+      what the platform reports.
+    update:
+      required:
+        - auth
+
+  ## Authentication union
+  ## The fragment discriminates on a base schema its variants extend. Written as a
+  ## oneOf, as Selector is, it becomes one nested attribute per variant. Each
+  ## variant declares the one type it stands for, so it does not have to be written.
+  - target: $.components.schemas.AimCatalogMcpServerNoAuth.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Type of authentication
+          enum:
+            - NONE
+          default: NONE
+      required:
+        - type
+  - target: $.components.schemas.AimCatalogMcpServerNoAuth.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimCatalogMcpServerHeaderAuth.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Type of authentication
+          enum:
+            - HEADER
+          default: HEADER
+      required:
+        - type
+  - target: $.components.schemas.AimCatalogMcpServerHeaderAuth.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimCatalogMcpServerOAuth2Auth.allOf[1]
+    update:
+      properties:
+        type:
+          type: string
+          description: Type of authentication
+          enum:
+            - OAUTH2
+          default: OAUTH2
+      required:
+        - type
+  - target: $.components.schemas.AimCatalogMcpServerOAuth2Auth.allOf[0]
+    remove: true
+  - target: $.components.schemas.AimCatalogMcpServerAuth.properties
+    remove: true
+  - target: $.components.schemas.AimCatalogMcpServerAuth.required
+    remove: true
+  - target: $.components.schemas.AimCatalogMcpServerAuth.type
+    remove: true
+  - target: $.components.schemas.AimCatalogMcpServerAuth
+    update:
+      oneOf:
+        - $ref: '#/components/schemas/AimCatalogMcpServerNoAuth'
+        - $ref: '#/components/schemas/AimCatalogMcpServerHeaderAuth'
+        - $ref: '#/components/schemas/AimCatalogMcpServerOAuth2Auth'

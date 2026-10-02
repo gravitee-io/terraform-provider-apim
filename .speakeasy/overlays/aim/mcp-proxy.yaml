@@ -1,0 +1,237 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: MCP proxy overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.components.schemas.AimMcpProxySpec
+    update:
+      x-speakeasy-entity:
+        McpProxy
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies"].put
+    update:
+      x-speakeasy-entity-operation: McpProxy#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: McpProxy#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/aim/mcp-proxies/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: McpProxy#delete
+
+  # Immutable
+  - target: $.components.schemas.AimMcpProxySpec.properties.entityId
+    description: The platform refuses another entityId on an existing proxy
+    update:
+      x-speakeasy-plan-modifiers: Immutable
+  - target: $.components.schemas.AimMcpProxyMode
+    description: |
+      The platform refuses another mode on an existing proxy. Set on the component:
+      the property is a $ref, and an extension beside a $ref is ignored.
+    update:
+      x-speakeasy-plan-modifiers: Immutable
+
+  # Mode blocks
+  # Wrap $ref in allOf so Speakeasy can apply conflicts-with on nested objects
+  - target: $.components.schemas.AimMcpProxySpec.properties.proxy['$ref']
+    remove: true
+  - target: $.components.schemas.AimMcpProxySpec.properties.proxy
+    description: proxy and studio are mutually exclusive
+    update:
+      allOf:
+        - $ref: '#/components/schemas/AimMcpProxyProxy'
+      x-speakeasy-conflicts-with:
+        - studio
+  - target: $.components.schemas.AimMcpProxySpec.properties.studio['$ref']
+    remove: true
+  - target: $.components.schemas.AimMcpProxySpec.properties.studio
+    description: studio and proxy are mutually exclusive
+    update:
+      allOf:
+        - $ref: '#/components/schemas/AimMcpProxyStudio'
+      x-speakeasy-conflicts-with:
+        - proxy
+  - target: $.components.schemas.AimMcpProxyProxy
+    description: |
+      A proxy declared with no upstream authentication is read back without the
+      block. Refused at plan time, where leaving the block out says the same.
+    update:
+      x-speakeasy-plan-validators: ProxyUpstreamAuthNotNone
+
+  # Computed
+  - target: $.components.schemas.AimMcpProxyProxy
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyStudio
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyUpstreamAuth
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyPlanSecurity
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyFlowExecution
+    description: |
+      Ignored by speakeasy (because used as $ref) so setting computed false for the
+      component. The platform reports the block only when it differs from its
+      defaults, so it is declared only then.
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyApiKeyUpstreamAuth.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyBearerUpstreamAuth.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyBasicUpstreamAuth.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyApiKeyPlanSecurity.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyOAuth2PlanSecurity.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyMcpFlowSelector.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyConditionFlowSelector.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyGraviteeAmIdentityProvider.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyAuth0IdentityProvider.allOf[*].properties.*
+    description: Used in a allOf so need to apply it explicitly
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AimMcpProxyStudioTool.properties.entityId
+    description: |
+      Composed by the platform. Computed without suppress-computed-diff: tools
+      match the state by position, and a changed list would plan another tool's id.
+    update:
+      x-speakeasy-param-computed: true
+
+  # Lists the platform reports empty, or leaves out, when none is declared
+  - target: $.components.schemas.AimMcpProxySpec.properties.flows
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.AimMcpProxyPlan.properties.flows
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.AimMcpProxyFlow.properties.selectors
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.AimMcpProxyFlow.properties.request
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.AimMcpProxyFlow.properties.response
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.AimMcpProxyFlow.properties.tags
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[?@.properties.scopes].properties.scopes
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.AimMcpProxyOAuth2PlanSecurity.allOf[?@.properties.scopes].properties.scopes
+    description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+
+  # Lists the platform reports in its own order
+  # A list declared in another order is a diff on every plan. The validators
+  # refuse it at plan time and name the order the platform reports.
+  - target: $.components.schemas.AimMcpProxySpec.properties.plans
+    description: Reported sorted by name
+    update:
+      x-speakeasy-plan-validators: SortedByName
+  - target: $.components.schemas.AimMcpProxySpec.properties.identityProviders
+    description: |
+      Reported sorted by name, empty when none is declared, and a provider the
+      declaration no longer names is left in place by the platform.
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-validators: SortedByName
+      x-speakeasy-plan-modifiers:
+        - IgnoreEmptyList
+        - NoRemovalByName
+  - target: $.components.schemas.AimMcpProxyStudio.properties.tools
+    description: Reported sorted by server then tool
+    update:
+      x-speakeasy-plan-validators: SortedByServerAndTool
+  - target: $.components.schemas.AimMcpProxyStudio.properties.upstreamAuth
+    description: Reported sorted by server
+    update:
+      x-speakeasy-plan-validators: SortedByServer
+
+  # Normalized by the platform
+  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[?@.properties.issuerUrl].properties.issuerUrl
+    description: Reported without its trailing slash
+    update:
+      x-speakeasy-plan-modifiers: TrimTrailingSlash
+
+  # Configuration as free-form object
+  - target: $.components.schemas.AimMcpProxyFlowStep.properties.configuration
+    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
+    update:
+      x-speakeasy-type-override: any
+
+  # Sensitive
+  - target: $.components.schemas.AimMcpProxyApiKeyUpstreamAuth.allOf[?@.properties.apiKey].properties.apiKey
+    description: Never returned by the platform
+    update:
+      x-speakeasy-param-sensitive: true
+  - target: $.components.schemas.AimMcpProxyBearerUpstreamAuth.allOf[?@.properties.token].properties.token
+    description: Never returned by the platform
+    update:
+      x-speakeasy-param-sensitive: true
+  - target: $.components.schemas.AimMcpProxyBasicUpstreamAuth.allOf[?@.properties.password].properties.password
+    description: Never returned by the platform
+    update:
+      x-speakeasy-param-sensitive: true
+  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[?@.properties.clientSecret].properties.clientSecret
+    description: Never returned by the platform
+    update:
+      x-speakeasy-param-sensitive: true
+  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[?@.properties.clientSecret].properties.clientSecret
+    description: Never returned by the platform
+    update:
+      x-speakeasy-param-sensitive: true

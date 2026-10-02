@@ -1,0 +1,28 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: AI Management common overlay
+  version: 0.0.1
+actions:
+
+  # AimResourceStatus is to the AI Management resources what BaseStatus is to the
+  # others (common/schema.yaml).
+  - target: $.components.schemas.AimResourceStatus.properties.id
+    description: API-assigned UUID, computed and suppress diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.AimResourceStatus.properties.organizationId
+    description: API-returned org ID, suppress diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.AimResourceStatus.properties.environmentId
+    description: API-returned env ID, suppress diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.AimErrors
+    description: Intentionally ignored for Terraform state
+    update:
+      x-speakeasy-terraform-ignore: true
