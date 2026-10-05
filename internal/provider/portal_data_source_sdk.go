@@ -16,6 +16,7 @@ func (r *PortalDataSourceModel) RefreshFromSharedPortalState(ctx context.Context
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.ActiveThemeHrid = types.StringPointerValue(resp.ActiveThemeHrid)
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
@@ -27,10 +28,35 @@ func (r *PortalDataSourceModel) RefreshFromSharedPortalState(ctx context.Context
 
 			navigation.DisplayName = types.StringPointerValue(navigationItem.DisplayName)
 			navigation.Path = types.StringValue(navigationItem.Path)
+			if navigationItem.Visibility != nil {
+				navigation.Visibility = types.StringValue(string(*navigationItem.Visibility))
+			} else {
+				navigation.Visibility = types.StringNull()
+			}
 
 			r.Navigation = append(r.Navigation, navigation)
 		}
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
+		if resp.Structure == nil {
+			r.Structure = nil
+		} else {
+			r.Structure = &tfTypes.PortalNavigationStructure{}
+			r.Structure.TopNavbar = []tfTypes.PortalNavigationPath{}
+
+			for _, topNavbarItem := range resp.Structure.TopNavbar {
+				var topNavbar tfTypes.PortalNavigationPath
+
+				topNavbar.DisplayName = types.StringPointerValue(topNavbarItem.DisplayName)
+				topNavbar.Path = types.StringValue(topNavbarItem.Path)
+				if topNavbarItem.Visibility != nil {
+					topNavbar.Visibility = types.StringValue(string(*topNavbarItem.Visibility))
+				} else {
+					topNavbar.Visibility = types.StringNull()
+				}
+
+				r.Structure.TopNavbar = append(r.Structure.TopNavbar, topNavbar)
+			}
+		}
 	}
 
 	return diags

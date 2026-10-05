@@ -8,12 +8,13 @@ import (
 )
 
 type Cors struct {
-	AllowCredentials types.Bool     `tfsdk:"allow_credentials"`
-	AllowHeaders     []types.String `tfsdk:"allow_headers"`
-	AllowMethods     []types.String `tfsdk:"allow_methods"`
-	AllowOrigin      []types.String `tfsdk:"allow_origin"`
-	Enabled          types.Bool     `tfsdk:"enabled"`
-	ExposeHeaders    []types.String `tfsdk:"expose_headers"`
-	MaxAge           types.Int32    `tfsdk:"max_age"`
-	RunPolicies      types.Bool     `tfsdk:"run_policies"`
+	AllowCredentials    types.Bool     `tfsdk:"allow_credentials"`
+	AllowHeaders        []types.String `tfsdk:"allow_headers"`
+	AllowMethods        []types.String `tfsdk:"allow_methods"`
+	AllowOrigin         []types.String `tfsdk:"allow_origin"`
+	AllowPrivateNetwork types.Bool     `tfsdk:"allow_private_network"`
+	Enabled             types.Bool     `tfsdk:"enabled"`
+	ExposeHeaders       []types.String `tfsdk:"expose_headers"`
+	MaxAge              types.Int32    `tfsdk:"max_age"`
+	RunPolicies         types.Bool     `tfsdk:"run_policies"`
 }

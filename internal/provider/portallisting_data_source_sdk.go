@@ -24,6 +24,11 @@ func (r *PortalListingDataSourceModel) RefreshFromSharedPortalListingState(ctx c
 			apis.APIHrid = types.StringValue(apisItem.APIHrid)
 			apis.Location = types.StringValue(apisItem.Location)
 			apis.Order = types.Int64PointerValue(apisItem.Order)
+			if apisItem.Visibility != nil {
+				apis.Visibility = types.StringValue(string(*apisItem.Visibility))
+			} else {
+				apis.Visibility = types.StringNull()
+			}
 
 			r.Apis = append(r.Apis, apis)
 		}

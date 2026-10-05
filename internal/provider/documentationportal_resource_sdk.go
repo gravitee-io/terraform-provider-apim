@@ -15,12 +15,22 @@ func (r *DocumentationPortalResourceModel) RefreshFromSharedDocumentationPortalS
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.Area != nil {
+			r.Area = types.StringValue(string(*resp.Area))
+		} else {
+			r.Area = types.StringNull()
+		}
 		r.Content = types.StringValue(resp.Content)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.Location = types.StringPointerValue(resp.Location)
 		r.Name = types.StringValue(resp.Name)
 		r.Order = types.Int64PointerValue(resp.Order)
 		r.Type = types.StringValue(string(resp.Type))
+		if resp.Visibility != nil {
+			r.Visibility = types.StringValue(string(*resp.Visibility))
+		} else {
+			r.Visibility = types.StringNull()
+		}
 	}
 
 	return diags
@@ -148,13 +158,27 @@ func (r *DocumentationPortalResourceModel) ToSharedDocumentationPortalSpec(ctx c
 	} else {
 		order = nil
 	}
+	area := new(shared.DocumentationArea)
+	if !r.Area.IsUnknown() && !r.Area.IsNull() {
+		*area = shared.DocumentationArea(r.Area.ValueString())
+	} else {
+		area = nil
+	}
+	visibility := new(shared.PortalVisibility)
+	if !r.Visibility.IsUnknown() && !r.Visibility.IsNull() {
+		*visibility = shared.PortalVisibility(r.Visibility.ValueString())
+	} else {
+		visibility = nil
+	}
 	out := shared.DocumentationPortalSpec{
-		Hrid:     hrid,
-		Name:     name,
-		Type:     typeVar,
-		Content:  content,
-		Location: location,
-		Order:    order,
+		Hrid:       hrid,
+		Name:       name,
+		Type:       typeVar,
+		Content:    content,
+		Location:   location,
+		Order:      order,
+		Area:       area,
+		Visibility: visibility,
 	}
 
 	return &out, diags

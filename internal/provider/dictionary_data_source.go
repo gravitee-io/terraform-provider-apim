@@ -74,6 +74,16 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 			"dynamic": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
+					"encryption": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"encrypt_on_fetch": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Encrypt every fetched value instead of relying on per-key classification.`,
+							},
+						},
+						Description: `Encryption policy applied to a 'DYNAMIC' dictionary's fetched values.`,
+					},
 					"provider": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
@@ -150,7 +160,7 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 				Description: `A unique human readable id identifying this resource`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{

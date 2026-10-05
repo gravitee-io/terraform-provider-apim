@@ -22,6 +22,12 @@ func (r *DictionaryDataSourceModel) RefreshFromSharedDictionaryState(ctx context
 			r.Dynamic = nil
 		} else {
 			r.Dynamic = &tfTypes.DynamicDictionarySpec{}
+			if resp.Dynamic.Encryption == nil {
+				r.Dynamic.Encryption = nil
+			} else {
+				r.Dynamic.Encryption = &tfTypes.DictionaryEncryptionPolicy{}
+				r.Dynamic.Encryption.EncryptOnFetch = types.BoolPointerValue(resp.Dynamic.Encryption.EncryptOnFetch)
+			}
 			if r.Dynamic.Provider == nil {
 				r.Dynamic.Provider = &tfTypes.DictionaryProvider{}
 			}

@@ -128,6 +128,17 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 				},
 				Attributes: map[string]schema.Attribute{
+					"connection_events": schema.ListAttribute{
+						Optional:    true,
+						ElementType: types.StringType,
+						MarkdownDescription: `Which connection lifecycle events the gateway reports. Only applicable to Native v4 APIs.` + "\n" +
+							`Omitting it clears the selection rather than preserving it: an apply replaces the whole analytics block, so a manifest that does not carry this field returns the API to the unconfigured state. Unconfigured means it keeps reporting ` + "`" + `CONNECTED` + "`" + ` and ` + "`" + `ERROR` + "`" + ` — what every API deployed before this setting existed already does, so an upgrade does not silently start writing ` + "`" + `DISCONNECTED` + "`" + ` documents. A newly created API starts out unconfigured too: ` + "`" + `DISCONNECTED` + "`" + ` is opt-in for every API. TEMPORARY NOTE, to be removed once the gateway support has shipped: no released native Kafka gateway honours this yet. The selection is stored and will apply as written once a gateway built against this definition model is deployed; until then a connection keeps reporting what it reports today.` + "\n" +
+							`An empty array counts as absent, because a request that omits the field is indistinguishable from one sending ` + "`" + `[]` + "`" + `. To report nothing, turn ` + "`" + `reporterMetricsEnabled` + "`" + ` off — that is the master switch.` + "\n" +
+							`` + "`" + `ERROR` + "`" + ` covers every failure status the gateway emits (` + "`" + `CONNECTION_ERROR` + "`" + `, ` + "`" + `SESSION_ERROR` + "`" + `, ` + "`" + `INTERNAL_ERROR` + "`" + `); which one a given failure produces depends on where the gateway caught it.`,
+						Validators: []validator.List{
+							listvalidator.UniqueValues(),
+						},
+					},
 					"enabled": schema.BoolAttribute{
 						Optional:    true,
 						Description: `Whether or not analytics are enabled.`,
@@ -276,6 +287,89 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							"enabled": schema.BoolAttribute{
 								Optional:    true,
 								Description: `Enable OpenTelemetry tracing`,
+							},
+							"redaction": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
+								Attributes: map[string]schema.Attribute{
+									"default_replacement": schema.StringAttribute{
+										Optional:    true,
+										Description: `Fallback replacement text for FULL masking rules with no per-rule replacement. Defaults to [REDACTED].`,
+									},
+									"rules": schema.ListNestedAttribute{
+										Optional: true,
+										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+											},
+											Attributes: map[string]schema.Attribute{
+												"attribute_name_pattern": schema.StringAttribute{
+													Optional: true,
+													MarkdownDescription: `Glob pattern, short name (no dots — matches anywhere in key hierarchy),` + "\n" +
+														`or regex:-prefixed Java regex matching the span attribute key.` + "\n" +
+														`Not Null`,
+													Validators: []validator.String{
+														speakeasy_stringvalidators.NotNull(),
+													},
+												},
+												"masking_strategy": schema.SingleNestedAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.Object{
+														speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+													},
+													Attributes: map[string]schema.Attribute{
+														"prefix_length": schema.Int64Attribute{
+															Computed:    true,
+															Optional:    true,
+															Default:     int64default.StaticInt64(0),
+															Description: `PARTIAL only — number of leading characters to keep visible. Default: 0`,
+															Validators: []validator.Int64{
+																int64validator.AtLeast(0),
+															},
+														},
+														"replacement": schema.StringAttribute{
+															Optional: true,
+															MarkdownDescription: `For FULL: replacement text (default [REDACTED]).` + "\n" +
+																`For PARTIAL: single mask character (default *).`,
+														},
+														"suffix_length": schema.Int64Attribute{
+															Computed:    true,
+															Optional:    true,
+															Default:     int64default.StaticInt64(0),
+															Description: `PARTIAL only — number of trailing characters to keep visible. Default: 0`,
+															Validators: []validator.Int64{
+																int64validator.AtLeast(0),
+															},
+														},
+														"type": schema.StringAttribute{
+															Optional:    true,
+															Description: `FULL replaces the entire value; PARTIAL keeps a visible prefix and/or suffix. Not Null; must be one of ["FULL", "PARTIAL"]`,
+															Validators: []validator.String{
+																speakeasy_stringvalidators.NotNull(),
+																stringvalidator.OneOf(
+																	"FULL",
+																	"PARTIAL",
+																),
+															},
+														},
+													},
+												},
+												"value_pattern": schema.StringAttribute{
+													Optional:    true,
+													Description: `Optional Java regex (partial match). Rule only fires when the attribute value matches.`,
+												},
+											},
+										},
+									},
+								},
+								Description: `Masking rules applied to span attributes before traces are exported.`,
 							},
 							"verbose": schema.BoolAttribute{
 								Optional:    true,
@@ -1330,7 +1424,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Human-readable ID of a spec. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{
@@ -1412,6 +1506,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												listvalidator.UniqueValues(),
 											},
 										},
+										"allow_private_network": schema.BoolAttribute{
+											Computed:    true,
+											Optional:    true,
+											Default:     booldefault.StaticBool(false),
+											Description: `` + "`" + `Access-Control-Allow-Private-Network` + "`" + `: Allow private network access (PNA) requests during CORS preflight. Default: false`,
+										},
 										"enabled": schema.BoolAttribute{
 											Optional:    true,
 											Description: `Enable CORS`,
@@ -1492,6 +1592,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										listvalidator.SizeAtLeast(1),
 									},
 								},
+								"path_mappings": schema.ListAttribute{
+									Computed:    true,
+									Optional:    true,
+									ElementType: types.StringType,
+									Description: `Path patterns used to group analytics by API path (e.g. ` + "`" + `/products/:productId` + "`" + `).`,
+								},
 								"paths": schema.ListNestedAttribute{
 									Computed: true,
 									Optional: true,
@@ -1528,6 +1634,19 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									Validators: []validator.List{
 										listvalidator.SizeAtLeast(1),
 									},
+								},
+								"request_validation": schema.SingleNestedAttribute{
+									Computed: true,
+									Optional: true,
+									Attributes: map[string]schema.Attribute{
+										"reject_null_byte": schema.BoolAttribute{
+											Computed:    true,
+											Optional:    true,
+											Default:     booldefault.StaticBool(false),
+											Description: `Reject requests whose path or query contains a null byte. Default: false`,
+										},
+									},
+									Description: `Validation the Gateway applies to incoming requests before running flows.`,
 								},
 								"servers": schema.ListAttribute{
 									Computed: true,
@@ -2020,7 +2139,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 								stringvalidator.UTF8LengthAtMost(256),
-								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 							},
 						},
 						"name": schema.StringAttribute{
@@ -2800,7 +2919,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 								stringvalidator.UTF8LengthAtMost(256),
-								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 							},
 						},
 						"mode": schema.StringAttribute{
@@ -2938,6 +3057,21 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								`Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
+							},
+						},
+						"visibility": schema.StringAttribute{
+							Computed: true,
+							Optional: true,
+							MarkdownDescription: `Whether the navigation entry is visible to anonymous portal visitors.` + "\n" +
+								`Optional in the Automation API for backward compatibility with clients that predate this field —` + "\n" +
+								`when omitted, the entry inherits from its parent (root entries default to PUBLIC).` + "\n" +
+								`A PUBLIC child under a PRIVATE parent is rejected.` + "\n" +
+								`must be one of ["PUBLIC", "PRIVATE"]`,
+							Validators: []validator.String{
+								stringvalidator.OneOf(
+									"PUBLIC",
+									"PRIVATE",
+								),
 							},
 						},
 					},

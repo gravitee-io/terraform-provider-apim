@@ -15,6 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -44,6 +45,7 @@ type DocumentationPortalResource struct {
 
 // DocumentationPortalResourceModel describes the resource data model.
 type DocumentationPortalResourceModel struct {
+	Area           types.String `tfsdk:"area"`
 	Content        types.String `tfsdk:"content"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	Hrid           types.String `tfsdk:"hrid"`
@@ -53,6 +55,7 @@ type DocumentationPortalResourceModel struct {
 	OrganizationID types.String `tfsdk:"organization_id"`
 	PortalHrid     types.String `tfsdk:"portal_hrid"`
 	Type           types.String `tfsdk:"type"`
+	Visibility     types.String `tfsdk:"visibility"`
 }
 
 func (r *DocumentationPortalResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -63,6 +66,21 @@ func (r *DocumentationPortalResource) Schema(ctx context.Context, req resource.S
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "DocumentationPortal Resource",
 		Attributes: map[string]schema.Attribute{
+			"area": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+				Default:  stringdefault.StaticString(`TOP_NAVBAR`),
+				MarkdownDescription: `Where the documentation page appears in the portal. ` + "`" + `TOP_NAVBAR` + "`" + ` is the default. ` + "`" + `HOMEPAGE` + "`" + `` + "\n" +
+					`marks the page as the portal's homepage — only one homepage may exist per portal, and applying` + "\n" +
+					`a new one replaces any existing homepage for that portal.` + "\n" +
+					`Default: "TOP_NAVBAR"; must be one of ["TOP_NAVBAR", "HOMEPAGE"]`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"TOP_NAVBAR",
+						"HOMEPAGE",
+					),
+				},
+			},
 			"content": schema.StringAttribute{
 				Required:    true,
 				Description: `The content of the documentation page`,
@@ -81,7 +99,7 @@ func (r *DocumentationPortalResource) Schema(ctx context.Context, req resource.S
 				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"location": schema.StringAttribute{
@@ -113,6 +131,21 @@ func (r *DocumentationPortalResource) Schema(ctx context.Context, req resource.S
 						"GRAVITEE_MARKDOWN",
 						"OPENAPI",
 						"ASYNCAPI",
+					),
+				},
+			},
+			"visibility": schema.StringAttribute{
+				Computed: true,
+				Optional: true,
+				MarkdownDescription: `Whether the navigation entry is visible to anonymous portal visitors.` + "\n" +
+					`Optional in the Automation API for backward compatibility with clients that predate this field —` + "\n" +
+					`when omitted, the entry inherits from its parent (root entries default to PUBLIC).` + "\n" +
+					`A PUBLIC child under a PRIVATE parent is rejected.` + "\n" +
+					`must be one of ["PUBLIC", "PRIVATE"]`,
+				Validators: []validator.String{
+					stringvalidator.OneOf(
+						"PUBLIC",
+						"PRIVATE",
 					),
 				},
 			},

@@ -15,12 +15,22 @@ func (r *DocumentationAPIDataSourceModel) RefreshFromSharedDocumentationAPISpec(
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.Area != nil {
+			r.Area = types.StringValue(string(*resp.Area))
+		} else {
+			r.Area = types.StringNull()
+		}
 		r.Content = types.StringValue(resp.Content)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.Location = types.StringPointerValue(resp.Location)
 		r.Name = types.StringValue(resp.Name)
 		r.Order = types.Int64PointerValue(resp.Order)
 		r.Type = types.StringValue(string(resp.Type))
+		if resp.Visibility != nil {
+			r.Visibility = types.StringValue(string(*resp.Visibility))
+		} else {
+			r.Visibility = types.StringNull()
+		}
 	}
 
 	return diags
