@@ -8,8 +8,7 @@ import (
 )
 
 type PortalListingAPIEntry struct {
-	APIHrid    types.String `tfsdk:"api_hrid"`
-	Location   types.String `tfsdk:"location"`
-	Order      types.Int64  `tfsdk:"order"`
-	Visibility types.String `tfsdk:"visibility"`
+	APIHrid  types.String `tfsdk:"api_hrid"`
+	Location types.String `tfsdk:"location"`
+	Order    types.Int64  `tfsdk:"order"`
 }

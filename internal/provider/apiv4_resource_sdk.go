@@ -25,10 +25,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			r.Analytics = nil
 		} else {
 			r.Analytics = &tfTypes.Analytics{}
-			r.Analytics.ConnectionEvents = make([]types.String, 0, len(resp.Analytics.ConnectionEvents))
-			for _, v := range resp.Analytics.ConnectionEvents {
-				r.Analytics.ConnectionEvents = append(r.Analytics.ConnectionEvents, types.StringValue(string(v)))
-			}
 			r.Analytics.Enabled = types.BoolPointerValue(resp.Analytics.Enabled)
 			if resp.Analytics.Logging == nil {
 				r.Analytics.Logging = nil
@@ -80,31 +76,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			} else {
 				r.Analytics.Tracing = &tfTypes.TracingV4{}
 				r.Analytics.Tracing.Enabled = types.BoolPointerValue(resp.Analytics.Tracing.Enabled)
-				if resp.Analytics.Tracing.Redaction == nil {
-					r.Analytics.Tracing.Redaction = nil
-				} else {
-					r.Analytics.Tracing.Redaction = &tfTypes.TracingRedactionConfig{}
-					r.Analytics.Tracing.Redaction.DefaultReplacement = types.StringPointerValue(resp.Analytics.Tracing.Redaction.DefaultReplacement)
-					r.Analytics.Tracing.Redaction.Rules = []tfTypes.TracingRedactionRule{}
-
-					for _, rulesItem := range resp.Analytics.Tracing.Redaction.Rules {
-						var rules tfTypes.TracingRedactionRule
-
-						rules.AttributeNamePattern = types.StringValue(rulesItem.AttributeNamePattern)
-						if rulesItem.MaskingStrategy == nil {
-							rules.MaskingStrategy = nil
-						} else {
-							rules.MaskingStrategy = &tfTypes.TracingMaskingStrategy{}
-							rules.MaskingStrategy.PrefixLength = types.Int64PointerValue(rulesItem.MaskingStrategy.PrefixLength)
-							rules.MaskingStrategy.Replacement = types.StringPointerValue(rulesItem.MaskingStrategy.Replacement)
-							rules.MaskingStrategy.SuffixLength = types.Int64PointerValue(rulesItem.MaskingStrategy.SuffixLength)
-							rules.MaskingStrategy.Type = types.StringValue(string(rulesItem.MaskingStrategy.Type))
-						}
-						rules.ValuePattern = types.StringPointerValue(rulesItem.ValuePattern)
-
-						r.Analytics.Tracing.Redaction.Rules = append(r.Analytics.Tracing.Redaction.Rules, rules)
-					}
-				}
 				r.Analytics.Tracing.Verbose = types.BoolPointerValue(resp.Analytics.Tracing.Verbose)
 			}
 		}
@@ -468,7 +439,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					for _, v := range listenersItem.HTTPListener.Cors.AllowOrigin {
 						listeners.HTTP.Cors.AllowOrigin = append(listeners.HTTP.Cors.AllowOrigin, types.StringValue(v))
 					}
-					listeners.HTTP.Cors.AllowPrivateNetwork = types.BoolPointerValue(listenersItem.HTTPListener.Cors.AllowPrivateNetwork)
 					listeners.HTTP.Cors.Enabled = types.BoolPointerValue(listenersItem.HTTPListener.Cors.Enabled)
 					listeners.HTTP.Cors.ExposeHeaders = make([]types.String, 0, len(listenersItem.HTTPListener.Cors.ExposeHeaders))
 					for _, v := range listenersItem.HTTPListener.Cors.ExposeHeaders {
@@ -503,10 +473,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 					listeners.HTTP.Entrypoints = append(listeners.HTTP.Entrypoints, entrypoints)
 				}
-				listeners.HTTP.PathMappings = make([]types.String, 0, len(listenersItem.HTTPListener.PathMappings))
-				for _, v := range listenersItem.HTTPListener.PathMappings {
-					listeners.HTTP.PathMappings = append(listeners.HTTP.PathMappings, types.StringValue(v))
-				}
 				listeners.HTTP.Paths = []tfTypes.PathV4{}
 
 				for _, pathsItem := range listenersItem.HTTPListener.Paths {
@@ -517,12 +483,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 					paths.Path = types.StringPointerValue(pathsItem.Path)
 
 					listeners.HTTP.Paths = append(listeners.HTTP.Paths, paths)
-				}
-				if listenersItem.HTTPListener.RequestValidation == nil {
-					listeners.HTTP.RequestValidation = nil
-				} else {
-					listeners.HTTP.RequestValidation = &tfTypes.RequestValidation{}
-					listeners.HTTP.RequestValidation.RejectNullByte = types.BoolPointerValue(listenersItem.HTTPListener.RequestValidation.RejectNullByte)
 				}
 				listeners.HTTP.Servers = make([]types.String, 0, len(listenersItem.HTTPListener.Servers))
 				for _, v := range listenersItem.HTTPListener.Servers {
@@ -952,11 +912,6 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 			portalNavigation.DisplayName = types.StringPointerValue(portalNavigationItem.DisplayName)
 			portalNavigation.Order = types.Int64PointerValue(portalNavigationItem.Order)
 			portalNavigation.Path = types.StringValue(portalNavigationItem.Path)
-			if portalNavigationItem.Visibility != nil {
-				portalNavigation.Visibility = types.StringValue(string(*portalNavigationItem.Visibility))
-			} else {
-				portalNavigation.Visibility = types.StringNull()
-			}
 
 			r.PortalNavigation = append(r.PortalNavigation, portalNavigation)
 		}
@@ -1231,10 +1186,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					OverrideAccess: overrideAccess,
 				})
 			}
-			pathMappings := make([]string, 0, len(r.Listeners[listenersItem].HTTP.PathMappings))
-			for pathMappingsIndex := range r.Listeners[listenersItem].HTTP.PathMappings {
-				pathMappings = append(pathMappings, r.Listeners[listenersItem].HTTP.PathMappings[pathMappingsIndex].ValueString())
-			}
 			var cors *shared.Cors
 			if r.Listeners[listenersItem].HTTP.Cors != nil {
 				enabled := new(bool)
@@ -1277,44 +1228,23 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				} else {
 					runPolicies = nil
 				}
-				allowPrivateNetwork := new(bool)
-				if !r.Listeners[listenersItem].HTTP.Cors.AllowPrivateNetwork.IsUnknown() && !r.Listeners[listenersItem].HTTP.Cors.AllowPrivateNetwork.IsNull() {
-					*allowPrivateNetwork = r.Listeners[listenersItem].HTTP.Cors.AllowPrivateNetwork.ValueBool()
-				} else {
-					allowPrivateNetwork = nil
-				}
 				cors = &shared.Cors{
-					Enabled:             enabled,
-					AllowCredentials:    allowCredentials,
-					AllowHeaders:        allowHeaders,
-					AllowMethods:        allowMethods,
-					AllowOrigin:         allowOrigin,
-					ExposeHeaders:       exposeHeaders,
-					MaxAge:              maxAge,
-					RunPolicies:         runPolicies,
-					AllowPrivateNetwork: allowPrivateNetwork,
-				}
-			}
-			var requestValidation *shared.RequestValidation
-			if r.Listeners[listenersItem].HTTP.RequestValidation != nil {
-				rejectNullByte := new(bool)
-				if !r.Listeners[listenersItem].HTTP.RequestValidation.RejectNullByte.IsUnknown() && !r.Listeners[listenersItem].HTTP.RequestValidation.RejectNullByte.IsNull() {
-					*rejectNullByte = r.Listeners[listenersItem].HTTP.RequestValidation.RejectNullByte.ValueBool()
-				} else {
-					rejectNullByte = nil
-				}
-				requestValidation = &shared.RequestValidation{
-					RejectNullByte: rejectNullByte,
+					Enabled:          enabled,
+					AllowCredentials: allowCredentials,
+					AllowHeaders:     allowHeaders,
+					AllowMethods:     allowMethods,
+					AllowOrigin:      allowOrigin,
+					ExposeHeaders:    exposeHeaders,
+					MaxAge:           maxAge,
+					RunPolicies:      runPolicies,
 				}
 			}
 			httpListener := shared.HTTPListener{
-				Type:              typeVar1,
-				Entrypoints:       entrypoints,
-				Servers:           servers,
-				Paths:             paths,
-				PathMappings:      pathMappings,
-				Cors:              cors,
-				RequestValidation: requestValidation,
+				Type:        typeVar1,
+				Entrypoints: entrypoints,
+				Servers:     servers,
+				Paths:       paths,
+				Cors:        cors,
 			}
 			listeners = append(listeners, shared.Listener{
 				HTTPListener: &httpListener,
@@ -1675,10 +1605,6 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			reporterMetricsEnabled = nil
 		}
-		connectionEvents := make([]shared.ConnectionEvent, 0, len(r.Analytics.ConnectionEvents))
-		for _, connectionEventsItem := range r.Analytics.ConnectionEvents {
-			connectionEvents = append(connectionEvents, shared.ConnectionEvent(connectionEventsItem.ValueString()))
-		}
 		var otelLogs *shared.OtelLogsV4
 		if r.Analytics.OtelLogs != nil {
 			enabled5 := new(bool)
@@ -1819,74 +1745,14 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				verbose = nil
 			}
-			var redaction *shared.TracingRedactionConfig
-			if r.Analytics.Tracing.Redaction != nil {
-				defaultReplacement := new(string)
-				if !r.Analytics.Tracing.Redaction.DefaultReplacement.IsUnknown() && !r.Analytics.Tracing.Redaction.DefaultReplacement.IsNull() {
-					*defaultReplacement = r.Analytics.Tracing.Redaction.DefaultReplacement.ValueString()
-				} else {
-					defaultReplacement = nil
-				}
-				rules := make([]shared.TracingRedactionRule, 0, len(r.Analytics.Tracing.Redaction.Rules))
-				for rulesIndex := range r.Analytics.Tracing.Redaction.Rules {
-					var attributeNamePattern string
-					attributeNamePattern = r.Analytics.Tracing.Redaction.Rules[rulesIndex].AttributeNamePattern.ValueString()
-
-					var maskingStrategy *shared.TracingMaskingStrategy
-					if r.Analytics.Tracing.Redaction.Rules[rulesIndex].MaskingStrategy != nil {
-						typeVar10 := shared.TracingMaskingStrategyType(r.Analytics.Tracing.Redaction.Rules[rulesIndex].MaskingStrategy.Type.ValueString())
-						replacement := new(string)
-						if !r.Analytics.Tracing.Redaction.Rules[rulesIndex].MaskingStrategy.Replacement.IsUnknown() && !r.Analytics.Tracing.Redaction.Rules[rulesIndex].MaskingStrategy.Replacement.IsNull() {
-							*replacement = r.Analytics.Tracing.Redaction.Rules[rulesIndex].MaskingStrategy.Replacement.ValueString()
-						} else {
-							replacement = nil
-						}
-						prefixLength := new(int64)
-						if !r.Analytics.Tracing.Redaction.Rules[rulesIndex].MaskingStrategy.PrefixLength.IsUnknown() && !r.Analytics.Tracing.Redaction.Rules[rulesIndex].MaskingStrategy.PrefixLength.IsNull() {
-							*prefixLength = r.Analytics.Tracing.Redaction.Rules[rulesIndex].MaskingStrategy.PrefixLength.ValueInt64()
-						} else {
-							prefixLength = nil
-						}
-						suffixLength := new(int64)
-						if !r.Analytics.Tracing.Redaction.Rules[rulesIndex].MaskingStrategy.SuffixLength.IsUnknown() && !r.Analytics.Tracing.Redaction.Rules[rulesIndex].MaskingStrategy.SuffixLength.IsNull() {
-							*suffixLength = r.Analytics.Tracing.Redaction.Rules[rulesIndex].MaskingStrategy.SuffixLength.ValueInt64()
-						} else {
-							suffixLength = nil
-						}
-						maskingStrategy = &shared.TracingMaskingStrategy{
-							Type:         typeVar10,
-							Replacement:  replacement,
-							PrefixLength: prefixLength,
-							SuffixLength: suffixLength,
-						}
-					}
-					valuePattern := new(string)
-					if !r.Analytics.Tracing.Redaction.Rules[rulesIndex].ValuePattern.IsUnknown() && !r.Analytics.Tracing.Redaction.Rules[rulesIndex].ValuePattern.IsNull() {
-						*valuePattern = r.Analytics.Tracing.Redaction.Rules[rulesIndex].ValuePattern.ValueString()
-					} else {
-						valuePattern = nil
-					}
-					rules = append(rules, shared.TracingRedactionRule{
-						AttributeNamePattern: attributeNamePattern,
-						MaskingStrategy:      maskingStrategy,
-						ValuePattern:         valuePattern,
-					})
-				}
-				redaction = &shared.TracingRedactionConfig{
-					DefaultReplacement: defaultReplacement,
-					Rules:              rules,
-				}
-			}
 			tracing = &shared.TracingV4{
-				Enabled:   enabled6,
-				Verbose:   verbose,
-				Redaction: redaction,
+				Enabled: enabled6,
+				Verbose: verbose,
 			}
 		}
 		analytics = &shared.Analytics{
 			Enabled:                enabled4,
 			ReporterMetricsEnabled: reporterMetricsEnabled,
-			ConnectionEvents:       connectionEvents,
 			OtelLogs:               otelLogs,
 			Sampling:               sampling,
 			Logging:                logging,
@@ -2022,13 +1888,13 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		}
 		var security *shared.PlanSecurity
 		if r.Plans[plansIndex].Security != nil {
-			typeVar11 := shared.PlanSecurityType(r.Plans[plansIndex].Security.Type.ValueString())
+			typeVar10 := shared.PlanSecurityType(r.Plans[plansIndex].Security.Type.ValueString())
 			var configuration9 interface{}
 			if !r.Plans[plansIndex].Security.Configuration.IsUnknown() && !r.Plans[plansIndex].Security.Configuration.IsNull() {
 				_ = json.Unmarshal([]byte(r.Plans[plansIndex].Security.Configuration.ValueString()), &configuration9)
 			}
 			security = &shared.PlanSecurity{
-				Type:          typeVar11,
+				Type:          typeVar10,
 				Configuration: configuration9,
 			}
 		}
@@ -2080,7 +1946,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			selectors := make([]shared.Selector, 0, len(r.Plans[plansIndex].Flows[flowsIndex].Selectors))
 			for selectorsItem := range r.Plans[plansIndex].Flows[flowsIndex].Selectors {
 				if r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].HTTP != nil {
-					typeVar12 := shared.HTTPSelectorType(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].HTTP.Type.ValueString())
+					typeVar11 := shared.HTTPSelectorType(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].HTTP.Type.ValueString())
 					path1 := new(string)
 					if !r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].HTTP.Path.IsUnknown() && !r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].HTTP.Path.IsNull() {
 						*path1 = r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].HTTP.Path.ValueString()
@@ -2098,7 +1964,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 						methods = append(methods, shared.HTTPMethod(methodsItem.ValueString()))
 					}
 					httpSelector := shared.HTTPSelector{
-						Type:         typeVar12,
+						Type:         typeVar11,
 						Path:         path1,
 						PathOperator: pathOperator,
 						Methods:      methods,
@@ -2108,7 +1974,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					})
 				}
 				if r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel != nil {
-					typeVar13 := shared.ChannelSelectorType(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel.Type.ValueString())
+					typeVar12 := shared.ChannelSelectorType(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel.Type.ValueString())
 					operationsVar := make([]shared.Operation, 0, len(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel.Operations))
 					for _, operationsItem := range r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel.Operations {
 						operationsVar = append(operationsVar, shared.Operation(operationsItem.ValueString()))
@@ -2130,7 +1996,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 						entrypoints4 = append(entrypoints4, r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Channel.Entrypoints[entrypointsIndex4].ValueString())
 					}
 					channelSelector := shared.ChannelSelector{
-						Type:            typeVar13,
+						Type:            typeVar12,
 						Operations:      operationsVar,
 						Channel:         channel,
 						ChannelOperator: channelOperator,
@@ -2141,12 +2007,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					})
 				}
 				if r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Condition != nil {
-					typeVar14 := shared.ConditionSelectorType(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Condition.Type.ValueString())
+					typeVar13 := shared.ConditionSelectorType(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Condition.Type.ValueString())
 					var condition1 string
 					condition1 = r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Condition.Condition.ValueString()
 
 					conditionSelector := shared.ConditionSelector{
-						Type:      typeVar14,
+						Type:      typeVar13,
 						Condition: condition1,
 					}
 					selectors = append(selectors, shared.Selector{
@@ -2154,13 +2020,13 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					})
 				}
 				if r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Mcp != nil {
-					typeVar15 := shared.McpSelectorType(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Mcp.Type.ValueString())
+					typeVar14 := shared.McpSelectorType(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Mcp.Type.ValueString())
 					methods1 := make([]string, 0, len(r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Mcp.Methods))
 					for methodsIndex := range r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Mcp.Methods {
 						methods1 = append(methods1, r.Plans[plansIndex].Flows[flowsIndex].Selectors[selectorsItem].Mcp.Methods[methodsIndex].ValueString())
 					}
 					mcpSelector := shared.McpSelector{
-						Type:    typeVar15,
+						Type:    typeVar14,
 						Methods: methods1,
 					}
 					selectors = append(selectors, shared.Selector{
@@ -2561,7 +2427,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		selectors1 := make([]shared.Selector, 0, len(r.Flows[flowsIndex1].Selectors))
 		for selectorsItem1 := range r.Flows[flowsIndex1].Selectors {
 			if r.Flows[flowsIndex1].Selectors[selectorsItem1].HTTP != nil {
-				typeVar16 := shared.HTTPSelectorType(r.Flows[flowsIndex1].Selectors[selectorsItem1].HTTP.Type.ValueString())
+				typeVar15 := shared.HTTPSelectorType(r.Flows[flowsIndex1].Selectors[selectorsItem1].HTTP.Type.ValueString())
 				path2 := new(string)
 				if !r.Flows[flowsIndex1].Selectors[selectorsItem1].HTTP.Path.IsUnknown() && !r.Flows[flowsIndex1].Selectors[selectorsItem1].HTTP.Path.IsNull() {
 					*path2 = r.Flows[flowsIndex1].Selectors[selectorsItem1].HTTP.Path.ValueString()
@@ -2579,7 +2445,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					methods2 = append(methods2, shared.HTTPMethod(methodsItem1.ValueString()))
 				}
 				httpSelector1 := shared.HTTPSelector{
-					Type:         typeVar16,
+					Type:         typeVar15,
 					Path:         path2,
 					PathOperator: pathOperator1,
 					Methods:      methods2,
@@ -2589,7 +2455,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				})
 			}
 			if r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel != nil {
-				typeVar17 := shared.ChannelSelectorType(r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel.Type.ValueString())
+				typeVar16 := shared.ChannelSelectorType(r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel.Type.ValueString())
 				operationsVar1 := make([]shared.Operation, 0, len(r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel.Operations))
 				for _, operationsItem1 := range r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel.Operations {
 					operationsVar1 = append(operationsVar1, shared.Operation(operationsItem1.ValueString()))
@@ -2611,7 +2477,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 					entrypoints5 = append(entrypoints5, r.Flows[flowsIndex1].Selectors[selectorsItem1].Channel.Entrypoints[entrypointsIndex5].ValueString())
 				}
 				channelSelector1 := shared.ChannelSelector{
-					Type:            typeVar17,
+					Type:            typeVar16,
 					Operations:      operationsVar1,
 					Channel:         channel1,
 					ChannelOperator: channelOperator1,
@@ -2622,12 +2488,12 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				})
 			}
 			if r.Flows[flowsIndex1].Selectors[selectorsItem1].Condition != nil {
-				typeVar18 := shared.ConditionSelectorType(r.Flows[flowsIndex1].Selectors[selectorsItem1].Condition.Type.ValueString())
+				typeVar17 := shared.ConditionSelectorType(r.Flows[flowsIndex1].Selectors[selectorsItem1].Condition.Type.ValueString())
 				var condition8 string
 				condition8 = r.Flows[flowsIndex1].Selectors[selectorsItem1].Condition.Condition.ValueString()
 
 				conditionSelector1 := shared.ConditionSelector{
-					Type:      typeVar18,
+					Type:      typeVar17,
 					Condition: condition8,
 				}
 				selectors1 = append(selectors1, shared.Selector{
@@ -2635,13 +2501,13 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 				})
 			}
 			if r.Flows[flowsIndex1].Selectors[selectorsItem1].Mcp != nil {
-				typeVar19 := shared.McpSelectorType(r.Flows[flowsIndex1].Selectors[selectorsItem1].Mcp.Type.ValueString())
+				typeVar18 := shared.McpSelectorType(r.Flows[flowsIndex1].Selectors[selectorsItem1].Mcp.Type.ValueString())
 				methods3 := make([]string, 0, len(r.Flows[flowsIndex1].Selectors[selectorsItem1].Mcp.Methods))
 				for methodsIndex1 := range r.Flows[flowsIndex1].Selectors[selectorsItem1].Mcp.Methods {
 					methods3 = append(methods3, r.Flows[flowsIndex1].Selectors[selectorsItem1].Mcp.Methods[methodsIndex1].ValueString())
 				}
 				mcpSelector1 := shared.McpSelector{
-					Type:    typeVar19,
+					Type:    typeVar18,
 					Methods: methods3,
 				}
 				selectors1 = append(selectors1, shared.Selector{
@@ -3014,14 +2880,14 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 			} else {
 				enabled23 = nil
 			}
-			var typeVar20 string
-			typeVar20 = r.Services.DynamicProperty.Type.ValueString()
+			var typeVar19 string
+			typeVar19 = r.Services.DynamicProperty.Type.ValueString()
 
 			dynamicProperty = &shared.ServiceV4{
 				OverrideConfiguration: overrideConfiguration3,
 				Configuration:         configuration22,
 				Enabled:               enabled23,
-				Type:                  typeVar20,
+				Type:                  typeVar19,
 			}
 		}
 		services2 = &shared.APIServices{
@@ -3139,18 +3005,18 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		}
 		var source1 *shared.PageSource
 		if r.Pages[pagesIndex].Source != nil {
-			typeVar21 := new(string)
+			typeVar20 := new(string)
 			if !r.Pages[pagesIndex].Source.Type.IsUnknown() && !r.Pages[pagesIndex].Source.Type.IsNull() {
-				*typeVar21 = r.Pages[pagesIndex].Source.Type.ValueString()
+				*typeVar20 = r.Pages[pagesIndex].Source.Type.ValueString()
 			} else {
-				typeVar21 = nil
+				typeVar20 = nil
 			}
 			var configuration23 interface{}
 			if !r.Pages[pagesIndex].Source.Configuration.IsUnknown() && !r.Pages[pagesIndex].Source.Configuration.IsNull() {
 				_ = json.Unmarshal([]byte(r.Pages[pagesIndex].Source.Configuration.ValueString()), &configuration23)
 			}
 			source1 = &shared.PageSource{
-				Type:          typeVar21,
+				Type:          typeVar20,
 				Configuration: configuration23,
 			}
 		}
@@ -3216,17 +3082,10 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			order = nil
 		}
-		visibility2 := new(shared.PortalVisibility)
-		if !r.PortalNavigation[portalNavigationIndex].Visibility.IsUnknown() && !r.PortalNavigation[portalNavigationIndex].Visibility.IsNull() {
-			*visibility2 = shared.PortalVisibility(r.PortalNavigation[portalNavigationIndex].Visibility.ValueString())
-		} else {
-			visibility2 = nil
-		}
 		portalNavigation = append(portalNavigation, shared.NavigationPath{
 			Path:        path3,
 			DisplayName: displayName,
 			Order:       order,
-			Visibility:  visibility2,
 		})
 	}
 	var consoleNotification *shared.APIV4SpecConsoleNotification

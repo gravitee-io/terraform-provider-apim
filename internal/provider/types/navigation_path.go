@@ -11,5 +11,4 @@ type NavigationPath struct {
 	DisplayName types.String `tfsdk:"display_name"`
 	Order       types.Int64  `tfsdk:"order"`
 	Path        types.String `tfsdk:"path"`
-	Visibility  types.String `tfsdk:"visibility"`
 }

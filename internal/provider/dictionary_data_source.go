@@ -74,16 +74,6 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 			"dynamic": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"encryption": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"encrypt_on_fetch": schema.BoolAttribute{
-								Computed:    true,
-								Description: `Encrypt every fetched value instead of relying on per-key classification.`,
-							},
-						},
-						Description: `Encryption policy applied to a 'DYNAMIC' dictionary's fetched values.`,
-					},
 					"provider": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{

@@ -39,14 +39,12 @@ type PortalDataSource struct {
 
 // PortalDataSourceModel describes the data model.
 type PortalDataSourceModel struct {
-	ActiveThemeHrid types.String                       `tfsdk:"active_theme_hrid"`
-	EnvironmentID   types.String                       `tfsdk:"environment_id"`
-	Hrid            types.String                       `tfsdk:"hrid"`
-	ID              types.String                       `tfsdk:"id"`
-	Name            types.String                       `tfsdk:"name"`
-	Navigation      []tfTypes.PortalNavigationPath     `tfsdk:"navigation"`
-	OrganizationID  types.String                       `tfsdk:"organization_id"`
-	Structure       *tfTypes.PortalNavigationStructure `tfsdk:"structure"`
+	EnvironmentID  types.String                   `tfsdk:"environment_id"`
+	Hrid           types.String                   `tfsdk:"hrid"`
+	ID             types.String                   `tfsdk:"id"`
+	Name           types.String                   `tfsdk:"name"`
+	Navigation     []tfTypes.PortalNavigationPath `tfsdk:"navigation"`
+	OrganizationID types.String                   `tfsdk:"organization_id"`
 }
 
 // Metadata returns the data source type name.
@@ -60,13 +58,6 @@ func (r *PortalDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 		MarkdownDescription: "Portal DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"active_theme_hrid": schema.StringAttribute{
-				Computed: true,
-				MarkdownDescription: `HRID of the Theme this portal should use as its active theme. When set, applying the portal` + "\n" +
-					`marks the referenced theme as active (enabled) and disables every other PORTAL_NEXT theme` + "\n" +
-					`in the environment. Leaving this field unset clears the reference and disables the` + "\n" +
-					`previously-active theme; the portal-next UI will then lazily fall back to a fresh default theme.`,
-			},
 			"environment_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
@@ -102,55 +93,14 @@ func (r *PortalDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							MarkdownDescription: `A slash-separated path defining the navigation hierarchy.` + "\n" +
 								`Intermediate folders are implicitly created if not listed explicitly.`,
 						},
-						"visibility": schema.StringAttribute{
-							Computed: true,
-							MarkdownDescription: `Whether the navigation entry is visible to anonymous portal visitors.` + "\n" +
-								`Optional in the Automation API for backward compatibility with clients that predate this field —` + "\n" +
-								`when omitted, the entry inherits from its parent (root entries default to PUBLIC).` + "\n" +
-								`A PUBLIC child under a PRIVATE parent is rejected.`,
-						},
 					},
 				},
-				DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-				MarkdownDescription: `Deprecated. Use ` + "`" + `structure.topNavbar` + "`" + ` instead. ` + "`" + `navigation` + "`" + ` and ` + "`" + `structure` + "`" + ` cannot be set at the same time;` + "\n" +
-					`when only ` + "`" + `navigation` + "`" + ` is provided, it is mapped to ` + "`" + `structure.topNavbar` + "`" + ` for backward compatibility.`,
+				Description: `The portal's navigation hierarchy as a flat list of paths.`,
 			},
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
 				Description: `The organization ID.`,
-			},
-			"structure": schema.SingleNestedAttribute{
-				Computed: true,
-				Attributes: map[string]schema.Attribute{
-					"top_navbar": schema.ListNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"display_name": schema.StringAttribute{
-									Computed: true,
-									MarkdownDescription: `Optional human-friendly label for this path node.` + "\n" +
-										`Listing a path explicitly is the only way to attach a displayName.`,
-								},
-								"path": schema.StringAttribute{
-									Computed: true,
-									MarkdownDescription: `A slash-separated path defining the navigation hierarchy.` + "\n" +
-										`Intermediate folders are implicitly created if not listed explicitly.`,
-								},
-								"visibility": schema.StringAttribute{
-									Computed: true,
-									MarkdownDescription: `Whether the navigation entry is visible to anonymous portal visitors.` + "\n" +
-										`Optional in the Automation API for backward compatibility with clients that predate this field —` + "\n" +
-										`when omitted, the entry inherits from its parent (root entries default to PUBLIC).` + "\n" +
-										`A PUBLIC child under a PRIVATE parent is rejected.`,
-								},
-							},
-						},
-						MarkdownDescription: `Top navbar entries as an ordered list of paths.` + "\n" +
-							`Intermediate folders are implicitly created if not listed explicitly.`,
-					},
-				},
-				Description: `Portal navigation grouped by area.`,
 			},
 		},
 	}

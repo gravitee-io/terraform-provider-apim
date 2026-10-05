@@ -39,7 +39,6 @@ type DocumentationAPIDataSource struct {
 // DocumentationAPIDataSourceModel describes the data model.
 type DocumentationAPIDataSourceModel struct {
 	APIHrid        types.String `tfsdk:"api_hrid"`
-	Area           types.String `tfsdk:"area"`
 	Content        types.String `tfsdk:"content"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	Hrid           types.String `tfsdk:"hrid"`
@@ -48,7 +47,6 @@ type DocumentationAPIDataSourceModel struct {
 	Order          types.Int64  `tfsdk:"order"`
 	OrganizationID types.String `tfsdk:"organization_id"`
 	Type           types.String `tfsdk:"type"`
-	Visibility     types.String `tfsdk:"visibility"`
 }
 
 // Metadata returns the data source type name.
@@ -65,12 +63,6 @@ func (r *DocumentationAPIDataSource) Schema(ctx context.Context, req datasource.
 			"api_hrid": schema.StringAttribute{
 				Required:    true,
 				Description: `Human-readable ID of api`,
-			},
-			"area": schema.StringAttribute{
-				Computed: true,
-				MarkdownDescription: `Where the documentation page appears in the portal. ` + "`" + `TOP_NAVBAR` + "`" + ` is the default. ` + "`" + `HOMEPAGE` + "`" + `` + "\n" +
-					`marks the page as the portal's homepage — only one homepage may exist per portal, and applying` + "\n" +
-					`a new one replaces any existing homepage for that portal.`,
 			},
 			"content": schema.StringAttribute{
 				Computed:    true,
@@ -109,13 +101,6 @@ func (r *DocumentationAPIDataSource) Schema(ctx context.Context, req datasource.
 			"type": schema.StringAttribute{
 				Computed:    true,
 				Description: `The type of documentation page`,
-			},
-			"visibility": schema.StringAttribute{
-				Computed: true,
-				MarkdownDescription: `Whether the navigation entry is visible to anonymous portal visitors.` + "\n" +
-					`Optional in the Automation API for backward compatibility with clients that predate this field —` + "\n" +
-					`when omitted, the entry inherits from its parent (root entries default to PUBLIC).` + "\n" +
-					`A PUBLIC child under a PRIVATE parent is rejected.`,
 			},
 		},
 	}

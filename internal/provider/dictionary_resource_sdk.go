@@ -22,12 +22,6 @@ func (r *DictionaryResourceModel) RefreshFromSharedDictionaryState(ctx context.C
 			r.Dynamic = nil
 		} else {
 			r.Dynamic = &tfTypes.DynamicDictionarySpec{}
-			if resp.Dynamic.Encryption == nil {
-				r.Dynamic.Encryption = nil
-			} else {
-				r.Dynamic.Encryption = &tfTypes.DictionaryEncryptionPolicy{}
-				r.Dynamic.Encryption.EncryptOnFetch = types.BoolPointerValue(resp.Dynamic.Encryption.EncryptOnFetch)
-			}
 			if r.Dynamic.Provider == nil {
 				r.Dynamic.Provider = &tfTypes.DictionaryProvider{}
 			}
@@ -254,22 +248,9 @@ func (r *DictionaryResourceModel) ToSharedDictionarySpec(ctx context.Context) (*
 			Rate: rate,
 			Unit: unit,
 		}
-		var encryption *shared.DictionaryEncryptionPolicy
-		if r.Dynamic.Encryption != nil {
-			encryptOnFetch := new(bool)
-			if !r.Dynamic.Encryption.EncryptOnFetch.IsUnknown() && !r.Dynamic.Encryption.EncryptOnFetch.IsNull() {
-				*encryptOnFetch = r.Dynamic.Encryption.EncryptOnFetch.ValueBool()
-			} else {
-				encryptOnFetch = nil
-			}
-			encryption = &shared.DictionaryEncryptionPolicy{
-				EncryptOnFetch: encryptOnFetch,
-			}
-		}
 		dynamic = &shared.DynamicDictionarySpec{
-			Provider:   provider,
-			Trigger:    trigger,
-			Encryption: encryption,
+			Provider: provider,
+			Trigger:  trigger,
 		}
 	}
 	out := shared.DictionarySpec{

@@ -11,11 +11,7 @@ type PortalSpec struct {
 	Name string `json:"name"`
 	// Portal navigation grouped by area.
 	Structure *PortalNavigationStructure `json:"structure,omitempty"`
-	// Deprecated. Use `structure.topNavbar` instead. `navigation` and `structure` cannot be set at the same time;
-	// when only `navigation` is provided, it is mapped to `structure.topNavbar` for backward compatibility.
-	//
-	//
-	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
+	// The portal's navigation hierarchy as a flat list of paths.
 	Navigation []PortalNavigationPath `json:"navigation,omitempty"`
 	// HRID of the Theme this portal should use as its active theme. When set, applying the portal
 	// marks the referenced theme as active (enabled) and disables every other PORTAL_NEXT theme

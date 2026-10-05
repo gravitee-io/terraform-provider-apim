@@ -8,11 +8,10 @@ import (
 )
 
 type Analytics struct {
-	ConnectionEvents       []types.String `tfsdk:"connection_events"`
-	Enabled                types.Bool     `tfsdk:"enabled"`
-	Logging                *LoggingV4     `tfsdk:"logging"`
-	OtelLogs               *OtelLogsV4    `tfsdk:"otel_logs"`
-	ReporterMetricsEnabled types.Bool     `tfsdk:"reporter_metrics_enabled"`
-	Sampling               *Sampling      `tfsdk:"sampling"`
-	Tracing                *TracingV4     `tfsdk:"tracing"`
+	Enabled                types.Bool  `tfsdk:"enabled"`
+	Logging                *LoggingV4  `tfsdk:"logging"`
+	OtelLogs               *OtelLogsV4 `tfsdk:"otel_logs"`
+	ReporterMetricsEnabled types.Bool  `tfsdk:"reporter_metrics_enabled"`
+	Sampling               *Sampling   `tfsdk:"sampling"`
+	Tracing                *TracingV4  `tfsdk:"tracing"`
 }
