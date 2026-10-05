@@ -191,7 +191,6 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	if cloudAuthEnvVar := os.Getenv("APIM_CLOUD_TOKEN"); security.CloudAuth == nil && cloudAuthEnvVar != "" {
 		security.CloudAuth = &cloudAuthEnvVar
 	}
-	registerSensitiveValues(security.BearerAuth, basicAuth.Password, security.CloudAuth)
 
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),

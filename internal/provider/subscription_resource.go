@@ -237,8 +237,6 @@ func (r *SubscriptionResource) Create(ctx context.Context, req resource.CreateRe
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateOrUpdateAPISubscriptionsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -247,7 +245,7 @@ func (r *SubscriptionResource) Create(ctx context.Context, req resource.CreateRe
 	}
 	res, err := r.client.Subscriptions.Update(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -299,8 +297,6 @@ func (r *SubscriptionResource) Read(ctx context.Context, req resource.ReadReques
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetAPISubscriptionRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -309,7 +305,7 @@ func (r *SubscriptionResource) Read(ctx context.Context, req resource.ReadReques
 	}
 	res, err := r.client.Subscriptions.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -363,8 +359,6 @@ func (r *SubscriptionResource) Update(ctx context.Context, req resource.UpdateRe
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
-
 	request, requestDiags := data.ToOperationsCreateOrUpdateAPISubscriptionsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -373,7 +367,7 @@ func (r *SubscriptionResource) Update(ctx context.Context, req resource.UpdateRe
 	}
 	res, err := r.client.Subscriptions.Update(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -433,8 +427,6 @@ func (r *SubscriptionResource) Delete(ctx context.Context, req resource.DeleteRe
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDeleteAPISubscriptionRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -443,7 +435,7 @@ func (r *SubscriptionResource) Delete(ctx context.Context, req resource.DeleteRe
 	}
 	res, err := r.client.Subscriptions.Delete(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -488,8 +480,8 @@ func (r *SubscriptionResource) ImportState(ctx context.Context, req resource.Imp
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			var environmentIDDefault string = `DEFAULT`
-			data.EnvironmentID = &environmentIDDefault
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"'`)
+			return
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -503,8 +495,8 @@ func (r *SubscriptionResource) ImportState(ctx context.Context, req resource.Imp
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			var organizationIDDefault string = `DEFAULT`
-			data.OrganizationID = &organizationIDDefault
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"'`)
+			return
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

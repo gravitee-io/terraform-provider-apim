@@ -169,8 +169,6 @@ func (r *DocumentationPortalDataSource) Read(ctx context.Context, req datasource
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetPortalDocumentationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -179,7 +177,7 @@ func (r *DocumentationPortalDataSource) Read(ctx context.Context, req datasource
 	}
 	res, err := r.client.PortalDocumentations.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

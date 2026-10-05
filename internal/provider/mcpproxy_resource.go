@@ -15,7 +15,6 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	custom_listvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/listvalidators"
 	speakeasy_listvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/listvalidators"
-	custom_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
 	"github.com/hashicorp/terraform-plugin-framework-jsontypes/jsontypes"
@@ -1096,7 +1095,6 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 					objectvalidator.ConflictsWith(path.Expressions{
 						path.MatchRelative().AtParent().AtName("studio"),
 					}...),
-					custom_objectvalidators.ProxyUpstreamAuthNotNone(),
 				},
 			},
 			"state": schema.StringAttribute{
@@ -1177,30 +1175,21 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 					"upstream_auth": schema.ListNestedAttribute{
 						Required: true,
 						NestedObject: schema.NestedAttributeObject{
-							Validators: []validator.Object{
-								speakeasy_objectvalidators.NotNull(),
-							},
 							Attributes: map[string]schema.Attribute{
 								"auth": schema.SingleNestedAttribute{
-									Optional: true,
+									Required: true,
 									Attributes: map[string]schema.Attribute{
 										"api_key": schema.SingleNestedAttribute{
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
 												"api_key": schema.StringAttribute{
-													Optional:    true,
+													Required:    true,
 													Sensitive:   true,
-													Description: `API key value, a literal or a ` + "`" + `secret://` + "`" + ` URI stored verbatim; never returned. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Description: `API key value, a literal or a ` + "`" + `secret://` + "`" + ` URI stored verbatim; never returned`,
 												},
 												"api_key_header": schema.StringAttribute{
-													Optional:    true,
-													Description: `Name of the header carrying the API key. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `Name of the header carrying the API key`,
 												},
 												"type": schema.StringAttribute{
 													Computed:    true,
@@ -1226,12 +1215,9 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
 												"password": schema.StringAttribute{
-													Optional:    true,
+													Required:    true,
 													Sensitive:   true,
-													Description: `Basic authentication password, a literal or a ` + "`" + `secret://` + "`" + ` URI stored verbatim; never returned. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Description: `Basic authentication password, a literal or a ` + "`" + `secret://` + "`" + ` URI stored verbatim; never returned`,
 												},
 												"type": schema.StringAttribute{
 													Computed:    true,
@@ -1243,11 +1229,8 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 													},
 												},
 												"username": schema.StringAttribute{
-													Optional:    true,
-													Description: `Basic authentication user name. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `Basic authentication user name`,
 												},
 											},
 											Description: `Basic credentials sent to the upstream server`,
@@ -1264,12 +1247,9 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
 												"token": schema.StringAttribute{
-													Optional:    true,
+													Required:    true,
 													Sensitive:   true,
-													Description: `Bearer token, a literal or a ` + "`" + `secret://` + "`" + ` URI stored verbatim; never returned. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Description: `Bearer token, a literal or a ` + "`" + `secret://` + "`" + ` URI stored verbatim; never returned`,
 												},
 												"type": schema.StringAttribute{
 													Computed:    true,
@@ -1318,26 +1298,17 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 											Optional: true,
 											Attributes: map[string]schema.Attribute{
 												"authorize_url": schema.StringAttribute{
-													Optional:    true,
-													Description: `Authorization endpoint the elicitation flow sends the user to. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `Authorization endpoint the elicitation flow sends the user to`,
 												},
 												"client_id": schema.StringAttribute{
-													Optional:    true,
-													Description: `Client id of the upstream OAuth 2.0 client. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `Client id of the upstream OAuth 2.0 client`,
 												},
 												"client_secret": schema.StringAttribute{
-													Optional:    true,
+													Required:    true,
 													Sensitive:   true,
-													Description: `Client secret of the upstream OAuth 2.0 client, a literal or a ` + "`" + `secret://` + "`" + ` URI stored verbatim; never returned. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Description: `Client secret of the upstream OAuth 2.0 client, a literal or a ` + "`" + `secret://` + "`" + ` URI stored verbatim; never returned`,
 												},
 												"scopes": schema.ListAttribute{
 													Computed: true,
@@ -1349,11 +1320,8 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 													Description: `Scopes requested with the token`,
 												},
 												"token_url": schema.StringAttribute{
-													Optional:    true,
-													Description: `Token endpoint the gateway exchanges the authorization code at. Not Null`,
-													Validators: []validator.String{
-														speakeasy_stringvalidators.NotNull(),
-													},
+													Required:    true,
+													Description: `Token endpoint the gateway exchanges the authorization code at`,
 												},
 												"type": schema.StringAttribute{
 													Computed:    true,
@@ -1379,18 +1347,11 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 									MarkdownDescription: `Authentication the gateway uses against the upstream MCP server, discriminated by ` + "`" + `type` + "`" + `. Credential values` + "\n" +
 										`are stored verbatim: a literal, or a ` + "`" + `secret://` + "`" + ` URI pointing at a configured secret provider. They are` + "\n" +
 										`never returned by this API. Omitting ` + "`" + `proxy.upstreamAuth` + "`" + `, or declaring ` + "`" + `type: NONE` + "`" + `, means the gateway passes` + "\n" +
-										`the caller's credentials through — and clears any stored upstream authentication.` + "\n" +
-										`Not Null`,
-									Validators: []validator.Object{
-										speakeasy_objectvalidators.NotNull(),
-									},
+										`the caller's credentials through — and clears any stored upstream authentication.`,
 								},
 								"server": schema.StringAttribute{
-									Optional:    true,
-									Description: `HRID of the ` + "`" + `catalog/mcp-servers` + "`" + ` resource the credential is for. Not Null`,
-									Validators: []validator.String{
-										speakeasy_stringvalidators.NotNull(),
-									},
+									Required:    true,
+									Description: `HRID of the ` + "`" + `catalog/mcp-servers` + "`" + ` resource the credential is for`,
 								},
 							},
 						},
@@ -1398,9 +1359,6 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 							`stored verbatim and never returned, or ` + "`" + `type: NONE` + "`" + ` to say the server needs none. Nothing is inferred` + "\n" +
 							`from the credential the catalog synced the server with. An entry for a server no tool uses, a server` + "\n" +
 							`without an entry, or two entries for one server are rejected.`,
-						Validators: []validator.List{
-							custom_listvalidators.SortedByServer(),
-						},
 					},
 				},
 				MarkdownDescription: `What a ` + "`" + `STUDIO` + "`" + ` exposes: tools picked from catalog MCP servers of the environment, the credential the` + "\n" +
@@ -1465,8 +1423,6 @@ func (r *McpProxyResource) Create(ctx context.Context, req resource.CreateReques
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateOrUpdateAimMcpProxyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1475,7 +1431,7 @@ func (r *McpProxyResource) Create(ctx context.Context, req resource.CreateReques
 	}
 	res, err := r.client.MCPProxies.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1527,8 +1483,6 @@ func (r *McpProxyResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetAimMcpProxyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1537,7 +1491,7 @@ func (r *McpProxyResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 	res, err := r.client.MCPProxies.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1591,8 +1545,6 @@ func (r *McpProxyResource) Update(ctx context.Context, req resource.UpdateReques
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
-
 	request, requestDiags := data.ToOperationsCreateOrUpdateAimMcpProxyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1601,7 +1553,7 @@ func (r *McpProxyResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 	res, err := r.client.MCPProxies.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1661,8 +1613,6 @@ func (r *McpProxyResource) Delete(ctx context.Context, req resource.DeleteReques
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDeleteAimMcpProxyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1671,7 +1621,7 @@ func (r *McpProxyResource) Delete(ctx context.Context, req resource.DeleteReques
 	}
 	res, err := r.client.MCPProxies.Delete(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1710,8 +1660,8 @@ func (r *McpProxyResource) ImportState(ctx context.Context, req resource.ImportS
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			var environmentIDDefault string = `DEFAULT`
-			data.EnvironmentID = &environmentIDDefault
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"'`)
+			return
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -1725,8 +1675,8 @@ func (r *McpProxyResource) ImportState(ctx context.Context, req resource.ImportS
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			var organizationIDDefault string = `DEFAULT`
-			data.OrganizationID = &organizationIDDefault
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"'`)
+			return
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

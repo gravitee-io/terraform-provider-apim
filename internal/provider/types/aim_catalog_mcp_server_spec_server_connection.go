@@ -8,7 +8,7 @@ import (
 )
 
 type AimCatalogMcpServerSpecServerConnection struct {
-	Auth      *AimCatalogMcpServerAuth `tfsdk:"auth"`
-	Endpoint  types.String             `tfsdk:"endpoint"`
-	Transport types.String             `tfsdk:"transport"`
+	Auth      *Auth        `tfsdk:"auth"`
+	Endpoint  types.String `tfsdk:"endpoint"`
+	Transport types.String `tfsdk:"transport"`
 }

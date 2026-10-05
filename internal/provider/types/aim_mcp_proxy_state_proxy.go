@@ -8,6 +8,5 @@ import (
 )
 
 type AimMcpProxyStateProxy struct {
-	ServerURL    types.String                   `tfsdk:"server_url"`
-	UpstreamAuth *AimMcpProxyUpstreamAuthOutput `tfsdk:"upstream_auth"`
+	ServerURL types.String `tfsdk:"server_url"`
 }

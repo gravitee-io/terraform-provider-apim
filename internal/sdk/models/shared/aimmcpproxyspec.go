@@ -4,20 +4,521 @@
 package shared
 
 import (
+	"encoding/json"
+	"errors"
+	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
+
+// AimMcpProxySpecTypeOauth2 - Type of upstream authentication
+type AimMcpProxySpecTypeOauth2 string
+
+const (
+	AimMcpProxySpecTypeOauth2Oauth2 AimMcpProxySpecTypeOauth2 = "OAUTH2"
+)
+
+func (e AimMcpProxySpecTypeOauth2) ToPointer() *AimMcpProxySpecTypeOauth2 {
+	return &e
+}
+func (e *AimMcpProxySpecTypeOauth2) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "OAUTH2":
+		*e = AimMcpProxySpecTypeOauth2(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for AimMcpProxySpecTypeOauth2: %v", v)
+	}
+}
+
+// AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth - OAuth 2.0 authentication negotiated with the upstream server through MCP elicitation
+type AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth struct {
+	// Authorization endpoint the elicitation flow sends the user to
+	AuthorizeURL string `json:"authorizeUrl"`
+	// Token endpoint the gateway exchanges the authorization code at
+	TokenURL string `json:"tokenUrl"`
+	// Client id of the upstream OAuth 2.0 client
+	ClientID string `json:"clientId"`
+	// Client secret of the upstream OAuth 2.0 client, a literal or a `secret://` URI stored verbatim; never returned
+	ClientSecret string `json:"clientSecret"`
+	// Scopes requested with the token
+	Scopes []string `json:"scopes,omitempty"`
+	// Type of upstream authentication
+	Type *AimMcpProxySpecTypeOauth2 `default:"OAUTH2" json:"type"`
+}
+
+func (a AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth) GetAuthorizeURL() string {
+	if a == nil {
+		return ""
+	}
+	return a.AuthorizeURL
+}
+
+func (a *AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth) GetTokenURL() string {
+	if a == nil {
+		return ""
+	}
+	return a.TokenURL
+}
+
+func (a *AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth) GetClientID() string {
+	if a == nil {
+		return ""
+	}
+	return a.ClientID
+}
+
+func (a *AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth) GetClientSecret() string {
+	if a == nil {
+		return ""
+	}
+	return a.ClientSecret
+}
+
+func (a *AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth) GetScopes() []string {
+	if a == nil {
+		return nil
+	}
+	return a.Scopes
+}
+
+func (a *AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth) GetType() *AimMcpProxySpecTypeOauth2 {
+	if a == nil {
+		return nil
+	}
+	return a.Type
+}
+
+// #region class-body-aimmcpproxyspecaimmcpproxyoauth2upstreamauth
+// #endregion class-body-aimmcpproxyspecaimmcpproxyoauth2upstreamauth
+
+// AimMcpProxySpecTypeBasic - Type of upstream authentication
+type AimMcpProxySpecTypeBasic string
+
+const (
+	AimMcpProxySpecTypeBasicBasic AimMcpProxySpecTypeBasic = "BASIC"
+)
+
+func (e AimMcpProxySpecTypeBasic) ToPointer() *AimMcpProxySpecTypeBasic {
+	return &e
+}
+func (e *AimMcpProxySpecTypeBasic) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "BASIC":
+		*e = AimMcpProxySpecTypeBasic(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for AimMcpProxySpecTypeBasic: %v", v)
+	}
+}
+
+// AimMcpProxySpecAimMcpProxyBasicUpstreamAuth - Basic credentials sent to the upstream server
+type AimMcpProxySpecAimMcpProxyBasicUpstreamAuth struct {
+	// Basic authentication user name
+	Username string `json:"username"`
+	// Basic authentication password, a literal or a `secret://` URI stored verbatim; never returned
+	Password string `json:"password"`
+	// Type of upstream authentication
+	Type *AimMcpProxySpecTypeBasic `default:"BASIC" json:"type"`
+}
+
+func (a AimMcpProxySpecAimMcpProxyBasicUpstreamAuth) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AimMcpProxySpecAimMcpProxyBasicUpstreamAuth) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *AimMcpProxySpecAimMcpProxyBasicUpstreamAuth) GetUsername() string {
+	if a == nil {
+		return ""
+	}
+	return a.Username
+}
+
+func (a *AimMcpProxySpecAimMcpProxyBasicUpstreamAuth) GetPassword() string {
+	if a == nil {
+		return ""
+	}
+	return a.Password
+}
+
+func (a *AimMcpProxySpecAimMcpProxyBasicUpstreamAuth) GetType() *AimMcpProxySpecTypeBasic {
+	if a == nil {
+		return nil
+	}
+	return a.Type
+}
+
+// AimMcpProxySpecTypeBearer - Type of upstream authentication
+type AimMcpProxySpecTypeBearer string
+
+const (
+	AimMcpProxySpecTypeBearerBearer AimMcpProxySpecTypeBearer = "BEARER"
+)
+
+func (e AimMcpProxySpecTypeBearer) ToPointer() *AimMcpProxySpecTypeBearer {
+	return &e
+}
+func (e *AimMcpProxySpecTypeBearer) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "BEARER":
+		*e = AimMcpProxySpecTypeBearer(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for AimMcpProxySpecTypeBearer: %v", v)
+	}
+}
+
+// AimMcpProxySpecAimMcpProxyBearerUpstreamAuth - A static bearer token sent to the upstream server
+type AimMcpProxySpecAimMcpProxyBearerUpstreamAuth struct {
+	// Bearer token, a literal or a `secret://` URI stored verbatim; never returned
+	Token string `json:"token"`
+	// Type of upstream authentication
+	Type *AimMcpProxySpecTypeBearer `default:"BEARER" json:"type"`
+}
+
+func (a AimMcpProxySpecAimMcpProxyBearerUpstreamAuth) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AimMcpProxySpecAimMcpProxyBearerUpstreamAuth) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *AimMcpProxySpecAimMcpProxyBearerUpstreamAuth) GetToken() string {
+	if a == nil {
+		return ""
+	}
+	return a.Token
+}
+
+func (a *AimMcpProxySpecAimMcpProxyBearerUpstreamAuth) GetType() *AimMcpProxySpecTypeBearer {
+	if a == nil {
+		return nil
+	}
+	return a.Type
+}
+
+// AimMcpProxySpecTypeAPIKey - Type of upstream authentication
+type AimMcpProxySpecTypeAPIKey string
+
+const (
+	AimMcpProxySpecTypeAPIKeyAPIKey AimMcpProxySpecTypeAPIKey = "API_KEY"
+)
+
+func (e AimMcpProxySpecTypeAPIKey) ToPointer() *AimMcpProxySpecTypeAPIKey {
+	return &e
+}
+func (e *AimMcpProxySpecTypeAPIKey) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "API_KEY":
+		*e = AimMcpProxySpecTypeAPIKey(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for AimMcpProxySpecTypeAPIKey: %v", v)
+	}
+}
+
+// AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth - A static API key sent to the upstream server in a header
+type AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth struct {
+	// Name of the header carrying the API key
+	APIKeyHeader string `json:"apiKeyHeader"`
+	// API key value, a literal or a `secret://` URI stored verbatim; never returned
+	APIKey string `json:"apiKey"`
+	// Type of upstream authentication
+	Type *AimMcpProxySpecTypeAPIKey `default:"API_KEY" json:"type"`
+}
+
+func (a AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth) GetAPIKeyHeader() string {
+	if a == nil {
+		return ""
+	}
+	return a.APIKeyHeader
+}
+
+func (a *AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth) GetAPIKey() string {
+	if a == nil {
+		return ""
+	}
+	return a.APIKey
+}
+
+func (a *AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth) GetType() *AimMcpProxySpecTypeAPIKey {
+	if a == nil {
+		return nil
+	}
+	return a.Type
+}
+
+// AimMcpProxySpecTypeNone - Type of upstream authentication
+type AimMcpProxySpecTypeNone string
+
+const (
+	AimMcpProxySpecTypeNoneNone AimMcpProxySpecTypeNone = "NONE"
+)
+
+func (e AimMcpProxySpecTypeNone) ToPointer() *AimMcpProxySpecTypeNone {
+	return &e
+}
+func (e *AimMcpProxySpecTypeNone) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "NONE":
+		*e = AimMcpProxySpecTypeNone(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for AimMcpProxySpecTypeNone: %v", v)
+	}
+}
+
+// AimMcpProxySpecAimMcpProxyNoUpstreamAuth - No upstream authentication; the gateway passes the caller's credentials through
+type AimMcpProxySpecAimMcpProxyNoUpstreamAuth struct {
+	// Type of upstream authentication
+	Type *AimMcpProxySpecTypeNone `default:"NONE" json:"type"`
+}
+
+func (a AimMcpProxySpecAimMcpProxyNoUpstreamAuth) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(a, "", false)
+}
+
+func (a *AimMcpProxySpecAimMcpProxyNoUpstreamAuth) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &a, "", false, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *AimMcpProxySpecAimMcpProxyNoUpstreamAuth) GetType() *AimMcpProxySpecTypeNone {
+	if a == nil {
+		return nil
+	}
+	return a.Type
+}
+
+type UpstreamAuthType string
+
+const (
+	UpstreamAuthTypeNone   UpstreamAuthType = "NONE"
+	UpstreamAuthTypeAPIKey UpstreamAuthType = "API_KEY"
+	UpstreamAuthTypeBearer UpstreamAuthType = "BEARER"
+	UpstreamAuthTypeBasic  UpstreamAuthType = "BASIC"
+	UpstreamAuthTypeOauth2 UpstreamAuthType = "OAUTH2"
+)
+
+// UpstreamAuth - Authentication the gateway uses against the upstream MCP server, discriminated by `type`. Credential values
+// are stored verbatim: a literal, or a `secret://` URI pointing at a configured secret provider. They are
+// never returned by this API. Omitting `proxy.upstreamAuth`, or declaring `type: NONE`, means the gateway passes
+// the caller's credentials through — and clears any stored upstream authentication.
+type UpstreamAuth struct {
+	AimMcpProxySpecAimMcpProxyNoUpstreamAuth     *AimMcpProxySpecAimMcpProxyNoUpstreamAuth     `queryParam:"inline" union:"member"`
+	AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth *AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth `queryParam:"inline" union:"member"`
+	AimMcpProxySpecAimMcpProxyBearerUpstreamAuth *AimMcpProxySpecAimMcpProxyBearerUpstreamAuth `queryParam:"inline" union:"member"`
+	AimMcpProxySpecAimMcpProxyBasicUpstreamAuth  *AimMcpProxySpecAimMcpProxyBasicUpstreamAuth  `queryParam:"inline" union:"member"`
+	AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth *AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth `queryParam:"inline" union:"member"`
+
+	Type UpstreamAuthType
+}
+
+func CreateUpstreamAuthNone(none AimMcpProxySpecAimMcpProxyNoUpstreamAuth) UpstreamAuth {
+	typ := UpstreamAuthTypeNone
+
+	typStr := AimMcpProxySpecTypeNone(typ)
+	none.Type = &typStr
+
+	return UpstreamAuth{
+		AimMcpProxySpecAimMcpProxyNoUpstreamAuth: &none,
+		Type:                                     typ,
+	}
+}
+
+func CreateUpstreamAuthAPIKey(apiKey AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth) UpstreamAuth {
+	typ := UpstreamAuthTypeAPIKey
+
+	typStr := AimMcpProxySpecTypeAPIKey(typ)
+	apiKey.Type = &typStr
+
+	return UpstreamAuth{
+		AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth: &apiKey,
+		Type: typ,
+	}
+}
+
+func CreateUpstreamAuthBearer(bearer AimMcpProxySpecAimMcpProxyBearerUpstreamAuth) UpstreamAuth {
+	typ := UpstreamAuthTypeBearer
+
+	typStr := AimMcpProxySpecTypeBearer(typ)
+	bearer.Type = &typStr
+
+	return UpstreamAuth{
+		AimMcpProxySpecAimMcpProxyBearerUpstreamAuth: &bearer,
+		Type: typ,
+	}
+}
+
+func CreateUpstreamAuthBasic(basic AimMcpProxySpecAimMcpProxyBasicUpstreamAuth) UpstreamAuth {
+	typ := UpstreamAuthTypeBasic
+
+	typStr := AimMcpProxySpecTypeBasic(typ)
+	basic.Type = &typStr
+
+	return UpstreamAuth{
+		AimMcpProxySpecAimMcpProxyBasicUpstreamAuth: &basic,
+		Type: typ,
+	}
+}
+
+func CreateUpstreamAuthOauth2(oauth2 AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth) UpstreamAuth {
+	typ := UpstreamAuthTypeOauth2
+
+	typStr := AimMcpProxySpecTypeOauth2(typ)
+	oauth2.Type = &typStr
+
+	return UpstreamAuth{
+		AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth: &oauth2,
+		Type: typ,
+	}
+}
+
+func (u *UpstreamAuth) UnmarshalJSON(data []byte) error {
+
+	type discriminator struct {
+		Type string `json:"type"`
+	}
+
+	dis := new(discriminator)
+	if err := json.Unmarshal(data, &dis); err != nil {
+		return fmt.Errorf("could not unmarshal discriminator: %w", err)
+	}
+
+	switch dis.Type {
+	case "NONE":
+		aimMcpProxySpecAimMcpProxyNoUpstreamAuth := new(AimMcpProxySpecAimMcpProxyNoUpstreamAuth)
+		if err := utils.UnmarshalJSON(data, &aimMcpProxySpecAimMcpProxyNoUpstreamAuth, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == NONE) type AimMcpProxySpecAimMcpProxyNoUpstreamAuth within UpstreamAuth: %w", string(data), err)
+		}
+
+		u.AimMcpProxySpecAimMcpProxyNoUpstreamAuth = aimMcpProxySpecAimMcpProxyNoUpstreamAuth
+		u.Type = UpstreamAuthTypeNone
+		return nil
+	case "API_KEY":
+		aimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth := new(AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth)
+		if err := utils.UnmarshalJSON(data, &aimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == API_KEY) type AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth within UpstreamAuth: %w", string(data), err)
+		}
+
+		u.AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth = aimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth
+		u.Type = UpstreamAuthTypeAPIKey
+		return nil
+	case "BEARER":
+		aimMcpProxySpecAimMcpProxyBearerUpstreamAuth := new(AimMcpProxySpecAimMcpProxyBearerUpstreamAuth)
+		if err := utils.UnmarshalJSON(data, &aimMcpProxySpecAimMcpProxyBearerUpstreamAuth, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == BEARER) type AimMcpProxySpecAimMcpProxyBearerUpstreamAuth within UpstreamAuth: %w", string(data), err)
+		}
+
+		u.AimMcpProxySpecAimMcpProxyBearerUpstreamAuth = aimMcpProxySpecAimMcpProxyBearerUpstreamAuth
+		u.Type = UpstreamAuthTypeBearer
+		return nil
+	case "BASIC":
+		aimMcpProxySpecAimMcpProxyBasicUpstreamAuth := new(AimMcpProxySpecAimMcpProxyBasicUpstreamAuth)
+		if err := utils.UnmarshalJSON(data, &aimMcpProxySpecAimMcpProxyBasicUpstreamAuth, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == BASIC) type AimMcpProxySpecAimMcpProxyBasicUpstreamAuth within UpstreamAuth: %w", string(data), err)
+		}
+
+		u.AimMcpProxySpecAimMcpProxyBasicUpstreamAuth = aimMcpProxySpecAimMcpProxyBasicUpstreamAuth
+		u.Type = UpstreamAuthTypeBasic
+		return nil
+	case "OAUTH2":
+		aimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth := new(AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth)
+		if err := utils.UnmarshalJSON(data, &aimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth, "", true, nil); err != nil {
+			return fmt.Errorf("could not unmarshal `%s` into expected (Type == OAUTH2) type AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth within UpstreamAuth: %w", string(data), err)
+		}
+
+		u.AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth = aimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth
+		u.Type = UpstreamAuthTypeOauth2
+		return nil
+	}
+
+	return fmt.Errorf("could not unmarshal `%s` into any supported union types for UpstreamAuth", string(data))
+}
+
+func (u UpstreamAuth) MarshalJSON() ([]byte, error) {
+	if u.AimMcpProxySpecAimMcpProxyNoUpstreamAuth != nil {
+		return utils.MarshalJSON(u.AimMcpProxySpecAimMcpProxyNoUpstreamAuth, "", true)
+	}
+
+	if u.AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth != nil {
+		return utils.MarshalJSON(u.AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth, "", true)
+	}
+
+	if u.AimMcpProxySpecAimMcpProxyBearerUpstreamAuth != nil {
+		return utils.MarshalJSON(u.AimMcpProxySpecAimMcpProxyBearerUpstreamAuth, "", true)
+	}
+
+	if u.AimMcpProxySpecAimMcpProxyBasicUpstreamAuth != nil {
+		return utils.MarshalJSON(u.AimMcpProxySpecAimMcpProxyBasicUpstreamAuth, "", true)
+	}
+
+	if u.AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth != nil {
+		return utils.MarshalJSON(u.AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth, "", true)
+	}
+
+	return nil, errors.New("could not marshal union type UpstreamAuth: all fields are null")
+}
 
 // AimMcpProxySpecProxy - What a `PROXY` fronts: one upstream MCP server and the credential the gateway presents to it. Required when
 // `mode` is `PROXY`, rejected otherwise.
 type AimMcpProxySpecProxy struct {
 	// URL of the upstream MCP server, http or https; the gateway reaches it at runtime
-	ServerURL string `json:"serverUrl"`
-	// Authentication the gateway uses against the upstream MCP server, discriminated by `type`. Credential values
-	// are stored verbatim: a literal, or a `secret://` URI pointing at a configured secret provider. They are
-	// never returned by this API. Omitting `proxy.upstreamAuth`, or declaring `type: NONE`, means the gateway passes
-	// the caller's credentials through — and clears any stored upstream authentication.
-	//
-	UpstreamAuth *AimMcpProxyUpstreamAuth `json:"upstreamAuth,omitempty"`
+	ServerURL    string        `json:"serverUrl"`
+	UpstreamAuth *UpstreamAuth `json:"upstreamAuth,omitempty"`
 }
 
 func (a *AimMcpProxySpecProxy) GetServerURL() string {
@@ -27,44 +528,44 @@ func (a *AimMcpProxySpecProxy) GetServerURL() string {
 	return a.ServerURL
 }
 
-func (a *AimMcpProxySpecProxy) GetUpstreamAuth() *AimMcpProxyUpstreamAuth {
+func (a *AimMcpProxySpecProxy) GetUpstreamAuth() *UpstreamAuth {
 	if a == nil {
 		return nil
 	}
 	return a.UpstreamAuth
 }
 
-func (a *AimMcpProxySpecProxy) GetUpstreamAuthNone() *AimMcpProxyNoUpstreamAuth {
+func (a *AimMcpProxySpecProxy) GetUpstreamAuthNone() *AimMcpProxySpecAimMcpProxyNoUpstreamAuth {
 	if v := a.GetUpstreamAuth(); v != nil {
-		return v.AimMcpProxyNoUpstreamAuth
+		return v.AimMcpProxySpecAimMcpProxyNoUpstreamAuth
 	}
 	return nil
 }
 
-func (a *AimMcpProxySpecProxy) GetUpstreamAuthAPIKey() *AimMcpProxyAPIKeyUpstreamAuth {
+func (a *AimMcpProxySpecProxy) GetUpstreamAuthAPIKey() *AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth {
 	if v := a.GetUpstreamAuth(); v != nil {
-		return v.AimMcpProxyAPIKeyUpstreamAuth
+		return v.AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth
 	}
 	return nil
 }
 
-func (a *AimMcpProxySpecProxy) GetUpstreamAuthBearer() *AimMcpProxyBearerUpstreamAuth {
+func (a *AimMcpProxySpecProxy) GetUpstreamAuthBearer() *AimMcpProxySpecAimMcpProxyBearerUpstreamAuth {
 	if v := a.GetUpstreamAuth(); v != nil {
-		return v.AimMcpProxyBearerUpstreamAuth
+		return v.AimMcpProxySpecAimMcpProxyBearerUpstreamAuth
 	}
 	return nil
 }
 
-func (a *AimMcpProxySpecProxy) GetUpstreamAuthBasic() *AimMcpProxyBasicUpstreamAuth {
+func (a *AimMcpProxySpecProxy) GetUpstreamAuthBasic() *AimMcpProxySpecAimMcpProxyBasicUpstreamAuth {
 	if v := a.GetUpstreamAuth(); v != nil {
-		return v.AimMcpProxyBasicUpstreamAuth
+		return v.AimMcpProxySpecAimMcpProxyBasicUpstreamAuth
 	}
 	return nil
 }
 
-func (a *AimMcpProxySpecProxy) GetUpstreamAuthOauth2() *AimMcpProxyOAuth2UpstreamAuth {
+func (a *AimMcpProxySpecProxy) GetUpstreamAuthOauth2() *AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth {
 	if v := a.GetUpstreamAuth(); v != nil {
-		return v.AimMcpProxyOAuth2UpstreamAuth
+		return v.AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth
 	}
 	return nil
 }

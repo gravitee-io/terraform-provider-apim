@@ -141,62 +141,6 @@ func (r *CatalogMcpServerDataSource) Schema(ctx context.Context, req datasource.
 			"server_connection": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
-					"auth": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"header": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"name": schema.StringAttribute{
-										Computed:    true,
-										Description: `Header name`,
-									},
-									"type": schema.StringAttribute{
-										Computed:    true,
-										Description: `Type of authentication`,
-									},
-								},
-								MarkdownDescription: `A static header sent on every request. Write the full header value: ` + "`" + `Bearer <token>` + "`" + ` for a bearer token,` + "\n" +
-									`` + "`" + `Basic <base64>` + "`" + ` for basic credentials, or the raw key for an API-key header — or point the whole value at a` + "\n" +
-									`secret with a ` + "`" + `secret://` + "`" + ` URI.`,
-							},
-							"none": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"type": schema.StringAttribute{
-										Computed:    true,
-										Description: `Type of authentication`,
-									},
-								},
-								Description: `No authentication`,
-							},
-							"oauth2": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"client_id": schema.StringAttribute{
-										Computed:    true,
-										Description: `OAuth 2.0 client id`,
-									},
-									"scope": schema.StringAttribute{
-										Computed:    true,
-										Description: `Space-separated scopes requested with the token`,
-									},
-									"token_url": schema.StringAttribute{
-										Computed:    true,
-										Description: `Token endpoint of the authorization server`,
-									},
-									"type": schema.StringAttribute{
-										Computed:    true,
-										Description: `Type of authentication`,
-									},
-								},
-								Description: `OAuth 2.0 client credentials; the platform fetches a token from ` + "`" + `tokenUrl` + "`" + ` before reaching the server`,
-							},
-						},
-						MarkdownDescription: `Authentication the platform uses against the upstream MCP server, discriminated by ` + "`" + `type` + "`" + `. Credential values are` + "\n" +
-							`stored verbatim: a literal, or a ` + "`" + `secret://` + "`" + ` URI pointing at a configured secret provider. They are never returned` + "\n" +
-							`by this API, and a spec that omits a credential clears the stored one.`,
-					},
 					"endpoint": schema.StringAttribute{
 						Computed:    true,
 						Description: `URL of the upstream MCP server, http or https`,
@@ -286,8 +230,6 @@ func (r *CatalogMcpServerDataSource) Read(ctx context.Context, req datasource.Re
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetAimCatalogMcpServerRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -296,7 +238,7 @@ func (r *CatalogMcpServerDataSource) Read(ctx context.Context, req datasource.Re
 	}
 	res, err := r.client.AICatalog.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

@@ -48,57 +48,14 @@ func (r *CatalogMcpServerResourceModel) RefreshFromSharedAimCatalogMcpServerStat
 		}
 		serverConnectionPriorData := r.ServerConnection
 		r.ServerConnection = &tfTypes.AimCatalogMcpServerSpecServerConnection{}
-		authPriorData := serverConnectionPriorData.Auth
-		if r.ServerConnection.Auth == nil {
-			r.ServerConnection.Auth = &tfTypes.AimCatalogMcpServerAuth{}
-		}
-		if resp.ServerConnection.Auth.AimCatalogMcpServerHeaderAuthOutput != nil {
-			var headerPriorData *tfTypes.AimCatalogMcpServerHeaderAuth
-			if authPriorData != nil {
-				headerPriorData = authPriorData.Header
-			}
-			r.ServerConnection.Auth.Header = &tfTypes.AimCatalogMcpServerHeaderAuth{}
-			r.ServerConnection.Auth.Header.Name = types.StringValue(resp.ServerConnection.Auth.AimCatalogMcpServerHeaderAuthOutput.Name)
-			if resp.ServerConnection.Auth.AimCatalogMcpServerHeaderAuthOutput.Type != nil {
-				r.ServerConnection.Auth.Header.Type = types.StringValue(string(*resp.ServerConnection.Auth.AimCatalogMcpServerHeaderAuthOutput.Type))
-			} else {
-				r.ServerConnection.Auth.Header.Type = types.StringNull()
-			}
-			if headerPriorData != nil {
-				r.ServerConnection.Auth.Header.Value = headerPriorData.Value
-			}
-		}
-		if resp.ServerConnection.Auth.AimCatalogMcpServerNoAuth != nil {
-			r.ServerConnection.Auth.None = &tfTypes.AimCatalogMcpServerNoAuth{}
-			if resp.ServerConnection.Auth.AimCatalogMcpServerNoAuth.Type != nil {
-				r.ServerConnection.Auth.None.Type = types.StringValue(string(*resp.ServerConnection.Auth.AimCatalogMcpServerNoAuth.Type))
-			} else {
-				r.ServerConnection.Auth.None.Type = types.StringNull()
-			}
-		}
-		if resp.ServerConnection.Auth.AimCatalogMcpServerOAuth2AuthOutput != nil {
-			var oauth2PriorData *tfTypes.AimCatalogMcpServerOAuth2Auth
-			if authPriorData != nil {
-				oauth2PriorData = authPriorData.Oauth2
-			}
-			r.ServerConnection.Auth.Oauth2 = &tfTypes.AimCatalogMcpServerOAuth2Auth{}
-			r.ServerConnection.Auth.Oauth2.ClientID = types.StringValue(resp.ServerConnection.Auth.AimCatalogMcpServerOAuth2AuthOutput.ClientID)
-			r.ServerConnection.Auth.Oauth2.Scope = types.StringPointerValue(resp.ServerConnection.Auth.AimCatalogMcpServerOAuth2AuthOutput.Scope)
-			r.ServerConnection.Auth.Oauth2.TokenURL = types.StringValue(resp.ServerConnection.Auth.AimCatalogMcpServerOAuth2AuthOutput.TokenURL)
-			if resp.ServerConnection.Auth.AimCatalogMcpServerOAuth2AuthOutput.Type != nil {
-				r.ServerConnection.Auth.Oauth2.Type = types.StringValue(string(*resp.ServerConnection.Auth.AimCatalogMcpServerOAuth2AuthOutput.Type))
-			} else {
-				r.ServerConnection.Auth.Oauth2.Type = types.StringNull()
-			}
-			if oauth2PriorData != nil {
-				r.ServerConnection.Auth.Oauth2.ClientSecret = oauth2PriorData.ClientSecret
-			}
-		}
 		r.ServerConnection.Endpoint = types.StringValue(resp.ServerConnection.Endpoint)
 		if resp.ServerConnection.Transport != nil {
 			r.ServerConnection.Transport = types.StringValue(string(*resp.ServerConnection.Transport))
 		} else {
 			r.ServerConnection.Transport = types.StringNull()
+		}
+		if serverConnectionPriorData != nil {
+			r.ServerConnection.Auth = serverConnectionPriorData.Auth
 		}
 		if resp.ServerInfo == nil {
 			r.ServerInfo = nil
@@ -231,12 +188,12 @@ func (r *CatalogMcpServerResourceModel) ToSharedAimCatalogMcpServerSpec(ctx cont
 	} else {
 		transport = nil
 	}
-	var auth shared.AimCatalogMcpServerAuth
+	var auth shared.Auth
 	var aimCatalogMcpServerNoAuth *shared.AimCatalogMcpServerNoAuth
 	if r.ServerConnection.Auth.None != nil {
-		typeVar := new(shared.AimCatalogMcpServerAuthTypeNone)
+		typeVar := new(shared.AimCatalogMcpServerSpecTypeNone)
 		if !r.ServerConnection.Auth.None.Type.IsUnknown() && !r.ServerConnection.Auth.None.Type.IsNull() {
-			*typeVar = shared.AimCatalogMcpServerAuthTypeNone(r.ServerConnection.Auth.None.Type.ValueString())
+			*typeVar = shared.AimCatalogMcpServerSpecTypeNone(r.ServerConnection.Auth.None.Type.ValueString())
 		} else {
 			typeVar = nil
 		}
@@ -245,7 +202,7 @@ func (r *CatalogMcpServerResourceModel) ToSharedAimCatalogMcpServerSpec(ctx cont
 		}
 	}
 	if aimCatalogMcpServerNoAuth != nil {
-		auth = shared.AimCatalogMcpServerAuth{
+		auth = shared.Auth{
 			AimCatalogMcpServerNoAuth: aimCatalogMcpServerNoAuth,
 		}
 	}
@@ -270,7 +227,7 @@ func (r *CatalogMcpServerResourceModel) ToSharedAimCatalogMcpServerSpec(ctx cont
 		}
 	}
 	if aimCatalogMcpServerHeaderAuth != nil {
-		auth = shared.AimCatalogMcpServerAuth{
+		auth = shared.Auth{
 			AimCatalogMcpServerHeaderAuth: aimCatalogMcpServerHeaderAuth,
 		}
 	}
@@ -291,9 +248,9 @@ func (r *CatalogMcpServerResourceModel) ToSharedAimCatalogMcpServerSpec(ctx cont
 		} else {
 			scope = nil
 		}
-		typeVar2 := new(shared.AimCatalogMcpServerAuthTypeOauth2)
+		typeVar2 := new(shared.AimCatalogMcpServerSpecTypeOauth2)
 		if !r.ServerConnection.Auth.Oauth2.Type.IsUnknown() && !r.ServerConnection.Auth.Oauth2.Type.IsNull() {
-			*typeVar2 = shared.AimCatalogMcpServerAuthTypeOauth2(r.ServerConnection.Auth.Oauth2.Type.ValueString())
+			*typeVar2 = shared.AimCatalogMcpServerSpecTypeOauth2(r.ServerConnection.Auth.Oauth2.Type.ValueString())
 		} else {
 			typeVar2 = nil
 		}
@@ -306,7 +263,7 @@ func (r *CatalogMcpServerResourceModel) ToSharedAimCatalogMcpServerSpec(ctx cont
 		}
 	}
 	if aimCatalogMcpServerOAuth2Auth != nil {
-		auth = shared.AimCatalogMcpServerAuth{
+		auth = shared.Auth{
 			AimCatalogMcpServerOAuth2Auth: aimCatalogMcpServerOAuth2Auth,
 		}
 	}

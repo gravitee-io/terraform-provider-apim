@@ -12,12 +12,6 @@ import (
 type AimMcpProxyStateProxy struct {
 	// URL of the upstream MCP server, http or https; the gateway reaches it at runtime
 	ServerURL string `json:"serverUrl"`
-	// Authentication the gateway uses against the upstream MCP server, discriminated by `type`. Credential values
-	// are stored verbatim: a literal, or a `secret://` URI pointing at a configured secret provider. They are
-	// never returned by this API. Omitting `proxy.upstreamAuth`, or declaring `type: NONE`, means the gateway passes
-	// the caller's credentials through — and clears any stored upstream authentication.
-	//
-	UpstreamAuth *AimMcpProxyUpstreamAuthOutput `json:"upstreamAuth,omitempty"`
 }
 
 func (a *AimMcpProxyStateProxy) GetServerURL() string {
@@ -25,48 +19,6 @@ func (a *AimMcpProxyStateProxy) GetServerURL() string {
 		return ""
 	}
 	return a.ServerURL
-}
-
-func (a *AimMcpProxyStateProxy) GetUpstreamAuth() *AimMcpProxyUpstreamAuthOutput {
-	if a == nil {
-		return nil
-	}
-	return a.UpstreamAuth
-}
-
-func (a *AimMcpProxyStateProxy) GetUpstreamAuthNone() *AimMcpProxyNoUpstreamAuth {
-	if v := a.GetUpstreamAuth(); v != nil {
-		return v.AimMcpProxyNoUpstreamAuth
-	}
-	return nil
-}
-
-func (a *AimMcpProxyStateProxy) GetUpstreamAuthAPIKey() *AimMcpProxyAPIKeyUpstreamAuthOutput {
-	if v := a.GetUpstreamAuth(); v != nil {
-		return v.AimMcpProxyAPIKeyUpstreamAuthOutput
-	}
-	return nil
-}
-
-func (a *AimMcpProxyStateProxy) GetUpstreamAuthBearer() *AimMcpProxyBearerUpstreamAuthOutput {
-	if v := a.GetUpstreamAuth(); v != nil {
-		return v.AimMcpProxyBearerUpstreamAuthOutput
-	}
-	return nil
-}
-
-func (a *AimMcpProxyStateProxy) GetUpstreamAuthBasic() *AimMcpProxyBasicUpstreamAuthOutput {
-	if v := a.GetUpstreamAuth(); v != nil {
-		return v.AimMcpProxyBasicUpstreamAuthOutput
-	}
-	return nil
-}
-
-func (a *AimMcpProxyStateProxy) GetUpstreamAuthOauth2() *AimMcpProxyOAuth2UpstreamAuthOutput {
-	if v := a.GetUpstreamAuth(); v != nil {
-		return v.AimMcpProxyOAuth2UpstreamAuthOutput
-	}
-	return nil
 }
 
 // AimMcpProxyStateStudio - What a `STUDIO` exposes: tools picked from catalog MCP servers of the environment, the credential the
@@ -80,12 +32,6 @@ type AimMcpProxyStateStudio struct {
 	// Management domain; the apply reports it as a warning.
 	//
 	Tools []AimMcpProxyStudioTool `json:"tools"`
-	// One entry per catalog server a tool comes from: the credential the gateway presents to that server,
-	// stored verbatim and never returned, or `type: NONE` to say the server needs none. Nothing is inferred
-	// from the credential the catalog synced the server with. An entry for a server no tool uses, a server
-	// without an entry, or two entries for one server are rejected.
-	//
-	UpstreamAuth []AimMcpProxyStudioUpstreamAuthOutput `json:"upstreamAuth"`
 	// Inserts the platform's fine-grained authorization flow, which runs the `authz-pep` policy on
 	// `tools/call` with the called tool as the resource; `false` removes it. That flow belongs to the
 	// platform: `flows` may not carry an `authz-pep` step themselves, and the state reports the declared
@@ -110,13 +56,6 @@ func (a *AimMcpProxyStateStudio) GetTools() []AimMcpProxyStudioTool {
 		return []AimMcpProxyStudioTool{}
 	}
 	return a.Tools
-}
-
-func (a *AimMcpProxyStateStudio) GetUpstreamAuth() []AimMcpProxyStudioUpstreamAuthOutput {
-	if a == nil {
-		return []AimMcpProxyStudioUpstreamAuthOutput{}
-	}
-	return a.UpstreamAuth
 }
 
 func (a *AimMcpProxyStateStudio) GetEnableFGA() *bool {

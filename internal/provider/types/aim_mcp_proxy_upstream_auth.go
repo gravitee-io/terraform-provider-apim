@@ -4,9 +4,9 @@
 package types
 
 type AimMcpProxyUpstreamAuth struct {
-	APIKey *AimMcpProxyAPIKeyUpstreamAuth `queryParam:"inline" tfsdk:"api_key"`
-	Basic  *AimMcpProxyBasicUpstreamAuth  `queryParam:"inline" tfsdk:"basic"`
-	Bearer *AimMcpProxyBearerUpstreamAuth `queryParam:"inline" tfsdk:"bearer"`
-	None   *AimMcpProxyNoUpstreamAuth     `queryParam:"inline" tfsdk:"none"`
-	Oauth2 *AimMcpProxyOAuth2UpstreamAuth `queryParam:"inline" tfsdk:"oauth2"`
+	APIKey *AimMcpProxyUpstreamAuthAimMcpProxyAPIKeyUpstreamAuth `queryParam:"inline" tfsdk:"api_key"`
+	Basic  *AimMcpProxyUpstreamAuthAimMcpProxyBasicUpstreamAuth  `queryParam:"inline" tfsdk:"basic"`
+	Bearer *AimMcpProxyUpstreamAuthAimMcpProxyBearerUpstreamAuth `queryParam:"inline" tfsdk:"bearer"`
+	None   *AimMcpProxyUpstreamAuthAimMcpProxyNoUpstreamAuth     `queryParam:"inline" tfsdk:"none"`
+	Oauth2 *AimMcpProxyUpstreamAuthAimMcpProxyOAuth2UpstreamAuth `queryParam:"inline" tfsdk:"oauth2"`
 }

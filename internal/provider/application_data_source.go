@@ -313,8 +313,6 @@ func (r *ApplicationDataSource) Read(ctx context.Context, req datasource.ReadReq
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetApplicationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -323,7 +321,7 @@ func (r *ApplicationDataSource) Read(ctx context.Context, req datasource.ReadReq
 	}
 	res, err := r.client.Applications.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}

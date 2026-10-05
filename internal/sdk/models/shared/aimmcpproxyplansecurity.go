@@ -289,14 +289,7 @@ func CreateAimMcpProxyPlanSecurityOauth2(oauth2 AimMcpProxyOAuth2PlanSecurity) A
 	}
 }
 
-func (u *AimMcpProxyPlanSecurity) UnmarshalJSON(data []byte) (err error) {
-	previous := *u
-	*u = AimMcpProxyPlanSecurity{}
-	defer func() {
-		if err != nil {
-			*u = previous
-		}
-	}()
+func (u *AimMcpProxyPlanSecurity) UnmarshalJSON(data []byte) error {
 
 	type discriminator struct {
 		Type string `json:"type"`

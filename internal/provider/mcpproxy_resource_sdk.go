@@ -305,86 +305,8 @@ func (r *McpProxyResourceModel) RefreshFromSharedAimMcpProxyState(ctx context.Co
 			proxyPriorData := r.Proxy
 			r.Proxy = &tfTypes.AimMcpProxySpecProxy{}
 			r.Proxy.ServerURL = types.StringValue(resp.Proxy.ServerURL)
-			if resp.Proxy.UpstreamAuth != nil {
-				upstreamAuthPriorData := proxyPriorData.UpstreamAuth
-				r.Proxy.UpstreamAuth = &tfTypes.AimMcpProxyUpstreamAuth{}
-				if resp.Proxy.UpstreamAuth.AimMcpProxyAPIKeyUpstreamAuthOutput != nil {
-					var apiKeyPriorData *tfTypes.AimMcpProxyAPIKeyUpstreamAuth
-					if upstreamAuthPriorData != nil {
-						apiKeyPriorData = upstreamAuthPriorData.APIKey
-					}
-					r.Proxy.UpstreamAuth.APIKey = &tfTypes.AimMcpProxyAPIKeyUpstreamAuth{}
-					r.Proxy.UpstreamAuth.APIKey.APIKeyHeader = types.StringValue(resp.Proxy.UpstreamAuth.AimMcpProxyAPIKeyUpstreamAuthOutput.APIKeyHeader)
-					if resp.Proxy.UpstreamAuth.AimMcpProxyAPIKeyUpstreamAuthOutput.Type != nil {
-						r.Proxy.UpstreamAuth.APIKey.Type = types.StringValue(string(*resp.Proxy.UpstreamAuth.AimMcpProxyAPIKeyUpstreamAuthOutput.Type))
-					} else {
-						r.Proxy.UpstreamAuth.APIKey.Type = types.StringNull()
-					}
-					if apiKeyPriorData != nil {
-						r.Proxy.UpstreamAuth.APIKey.APIKey = apiKeyPriorData.APIKey
-					}
-				}
-				if resp.Proxy.UpstreamAuth.AimMcpProxyBasicUpstreamAuthOutput != nil {
-					var basicPriorData *tfTypes.AimMcpProxyBasicUpstreamAuth
-					if upstreamAuthPriorData != nil {
-						basicPriorData = upstreamAuthPriorData.Basic
-					}
-					r.Proxy.UpstreamAuth.Basic = &tfTypes.AimMcpProxyBasicUpstreamAuth{}
-					if resp.Proxy.UpstreamAuth.AimMcpProxyBasicUpstreamAuthOutput.Type != nil {
-						r.Proxy.UpstreamAuth.Basic.Type = types.StringValue(string(*resp.Proxy.UpstreamAuth.AimMcpProxyBasicUpstreamAuthOutput.Type))
-					} else {
-						r.Proxy.UpstreamAuth.Basic.Type = types.StringNull()
-					}
-					r.Proxy.UpstreamAuth.Basic.Username = types.StringValue(resp.Proxy.UpstreamAuth.AimMcpProxyBasicUpstreamAuthOutput.Username)
-					if basicPriorData != nil {
-						r.Proxy.UpstreamAuth.Basic.Password = basicPriorData.Password
-					}
-				}
-				if resp.Proxy.UpstreamAuth.AimMcpProxyBearerUpstreamAuthOutput != nil {
-					var bearerPriorData *tfTypes.AimMcpProxyBearerUpstreamAuth
-					if upstreamAuthPriorData != nil {
-						bearerPriorData = upstreamAuthPriorData.Bearer
-					}
-					r.Proxy.UpstreamAuth.Bearer = &tfTypes.AimMcpProxyBearerUpstreamAuth{}
-					if resp.Proxy.UpstreamAuth.AimMcpProxyBearerUpstreamAuthOutput.Type != nil {
-						r.Proxy.UpstreamAuth.Bearer.Type = types.StringValue(string(*resp.Proxy.UpstreamAuth.AimMcpProxyBearerUpstreamAuthOutput.Type))
-					} else {
-						r.Proxy.UpstreamAuth.Bearer.Type = types.StringNull()
-					}
-					if bearerPriorData != nil {
-						r.Proxy.UpstreamAuth.Bearer.Token = bearerPriorData.Token
-					}
-				}
-				if resp.Proxy.UpstreamAuth.AimMcpProxyNoUpstreamAuth != nil {
-					r.Proxy.UpstreamAuth.None = &tfTypes.AimMcpProxyNoUpstreamAuth{}
-					if resp.Proxy.UpstreamAuth.AimMcpProxyNoUpstreamAuth.Type != nil {
-						r.Proxy.UpstreamAuth.None.Type = types.StringValue(string(*resp.Proxy.UpstreamAuth.AimMcpProxyNoUpstreamAuth.Type))
-					} else {
-						r.Proxy.UpstreamAuth.None.Type = types.StringNull()
-					}
-				}
-				if resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput != nil {
-					var oauth2PriorData *tfTypes.AimMcpProxyOAuth2UpstreamAuth
-					if upstreamAuthPriorData != nil {
-						oauth2PriorData = upstreamAuthPriorData.Oauth2
-					}
-					r.Proxy.UpstreamAuth.Oauth2 = &tfTypes.AimMcpProxyOAuth2UpstreamAuth{}
-					r.Proxy.UpstreamAuth.Oauth2.AuthorizeURL = types.StringValue(resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.AuthorizeURL)
-					r.Proxy.UpstreamAuth.Oauth2.ClientID = types.StringValue(resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.ClientID)
-					r.Proxy.UpstreamAuth.Oauth2.Scopes = make([]types.String, 0, len(resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.Scopes))
-					for _, v := range resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.Scopes {
-						r.Proxy.UpstreamAuth.Oauth2.Scopes = append(r.Proxy.UpstreamAuth.Oauth2.Scopes, types.StringValue(v))
-					}
-					r.Proxy.UpstreamAuth.Oauth2.TokenURL = types.StringValue(resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.TokenURL)
-					if resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.Type != nil {
-						r.Proxy.UpstreamAuth.Oauth2.Type = types.StringValue(string(*resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.Type))
-					} else {
-						r.Proxy.UpstreamAuth.Oauth2.Type = types.StringNull()
-					}
-					if oauth2PriorData != nil {
-						r.Proxy.UpstreamAuth.Oauth2.ClientSecret = oauth2PriorData.ClientSecret
-					}
-				}
+			if proxyPriorData != nil {
+				r.Proxy.UpstreamAuth = proxyPriorData.UpstreamAuth
 			}
 		}
 		if resp.State != nil {
@@ -395,6 +317,7 @@ func (r *McpProxyResourceModel) RefreshFromSharedAimMcpProxyState(ctx context.Co
 		if resp.Studio == nil {
 			r.Studio = nil
 		} else {
+			studioPriorData := r.Studio
 			r.Studio = &tfTypes.AimMcpProxySpecStudio{}
 			r.Studio.EnableFGA = types.BoolPointerValue(resp.Studio.EnableFGA)
 			r.Studio.Tools = []tfTypes.AimMcpProxyStudioTool{}
@@ -409,101 +332,8 @@ func (r *McpProxyResourceModel) RefreshFromSharedAimMcpProxyState(ctx context.Co
 
 				r.Studio.Tools = append(r.Studio.Tools, tools)
 			}
-			upstreamAuthPriorSlice := r.Studio.UpstreamAuth
-			r.Studio.UpstreamAuth = []tfTypes.AimMcpProxyStudioUpstreamAuth{}
-
-			for upstreamAuthIdx, upstreamAuthItem := range resp.Studio.UpstreamAuth {
-				var upstreamAuth tfTypes.AimMcpProxyStudioUpstreamAuth
-
-				var upstreamAuthPriorItem *tfTypes.AimMcpProxyStudioUpstreamAuth
-				if upstreamAuthIdx < len(upstreamAuthPriorSlice) {
-					upstreamAuthPriorItem = &upstreamAuthPriorSlice[upstreamAuthIdx]
-				}
-
-				authPriorData := upstreamAuthPriorItem.Auth
-				if upstreamAuth.Auth == nil {
-					upstreamAuth.Auth = &tfTypes.AimMcpProxyUpstreamAuth{}
-				}
-				if upstreamAuthItem.Auth.AimMcpProxyAPIKeyUpstreamAuthOutput != nil {
-					var apiKeyPriorData1 *tfTypes.AimMcpProxyAPIKeyUpstreamAuth
-					if authPriorData != nil {
-						apiKeyPriorData1 = authPriorData.APIKey
-					}
-					upstreamAuth.Auth.APIKey = &tfTypes.AimMcpProxyAPIKeyUpstreamAuth{}
-					upstreamAuth.Auth.APIKey.APIKeyHeader = types.StringValue(upstreamAuthItem.Auth.AimMcpProxyAPIKeyUpstreamAuthOutput.APIKeyHeader)
-					if upstreamAuthItem.Auth.AimMcpProxyAPIKeyUpstreamAuthOutput.Type != nil {
-						upstreamAuth.Auth.APIKey.Type = types.StringValue(string(*upstreamAuthItem.Auth.AimMcpProxyAPIKeyUpstreamAuthOutput.Type))
-					} else {
-						upstreamAuth.Auth.APIKey.Type = types.StringNull()
-					}
-					if apiKeyPriorData1 != nil {
-						upstreamAuth.Auth.APIKey.APIKey = apiKeyPriorData1.APIKey
-					}
-				}
-				if upstreamAuthItem.Auth.AimMcpProxyBasicUpstreamAuthOutput != nil {
-					var basicPriorData1 *tfTypes.AimMcpProxyBasicUpstreamAuth
-					if authPriorData != nil {
-						basicPriorData1 = authPriorData.Basic
-					}
-					upstreamAuth.Auth.Basic = &tfTypes.AimMcpProxyBasicUpstreamAuth{}
-					if upstreamAuthItem.Auth.AimMcpProxyBasicUpstreamAuthOutput.Type != nil {
-						upstreamAuth.Auth.Basic.Type = types.StringValue(string(*upstreamAuthItem.Auth.AimMcpProxyBasicUpstreamAuthOutput.Type))
-					} else {
-						upstreamAuth.Auth.Basic.Type = types.StringNull()
-					}
-					upstreamAuth.Auth.Basic.Username = types.StringValue(upstreamAuthItem.Auth.AimMcpProxyBasicUpstreamAuthOutput.Username)
-					if basicPriorData1 != nil {
-						upstreamAuth.Auth.Basic.Password = basicPriorData1.Password
-					}
-				}
-				if upstreamAuthItem.Auth.AimMcpProxyBearerUpstreamAuthOutput != nil {
-					var bearerPriorData1 *tfTypes.AimMcpProxyBearerUpstreamAuth
-					if authPriorData != nil {
-						bearerPriorData1 = authPriorData.Bearer
-					}
-					upstreamAuth.Auth.Bearer = &tfTypes.AimMcpProxyBearerUpstreamAuth{}
-					if upstreamAuthItem.Auth.AimMcpProxyBearerUpstreamAuthOutput.Type != nil {
-						upstreamAuth.Auth.Bearer.Type = types.StringValue(string(*upstreamAuthItem.Auth.AimMcpProxyBearerUpstreamAuthOutput.Type))
-					} else {
-						upstreamAuth.Auth.Bearer.Type = types.StringNull()
-					}
-					if bearerPriorData1 != nil {
-						upstreamAuth.Auth.Bearer.Token = bearerPriorData1.Token
-					}
-				}
-				if upstreamAuthItem.Auth.AimMcpProxyNoUpstreamAuth != nil {
-					upstreamAuth.Auth.None = &tfTypes.AimMcpProxyNoUpstreamAuth{}
-					if upstreamAuthItem.Auth.AimMcpProxyNoUpstreamAuth.Type != nil {
-						upstreamAuth.Auth.None.Type = types.StringValue(string(*upstreamAuthItem.Auth.AimMcpProxyNoUpstreamAuth.Type))
-					} else {
-						upstreamAuth.Auth.None.Type = types.StringNull()
-					}
-				}
-				if upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput != nil {
-					var oauth2PriorData1 *tfTypes.AimMcpProxyOAuth2UpstreamAuth
-					if authPriorData != nil {
-						oauth2PriorData1 = authPriorData.Oauth2
-					}
-					upstreamAuth.Auth.Oauth2 = &tfTypes.AimMcpProxyOAuth2UpstreamAuth{}
-					upstreamAuth.Auth.Oauth2.AuthorizeURL = types.StringValue(upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.AuthorizeURL)
-					upstreamAuth.Auth.Oauth2.ClientID = types.StringValue(upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.ClientID)
-					upstreamAuth.Auth.Oauth2.Scopes = make([]types.String, 0, len(upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.Scopes))
-					for _, v := range upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.Scopes {
-						upstreamAuth.Auth.Oauth2.Scopes = append(upstreamAuth.Auth.Oauth2.Scopes, types.StringValue(v))
-					}
-					upstreamAuth.Auth.Oauth2.TokenURL = types.StringValue(upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.TokenURL)
-					if upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.Type != nil {
-						upstreamAuth.Auth.Oauth2.Type = types.StringValue(string(*upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.Type))
-					} else {
-						upstreamAuth.Auth.Oauth2.Type = types.StringNull()
-					}
-					if oauth2PriorData1 != nil {
-						upstreamAuth.Auth.Oauth2.ClientSecret = oauth2PriorData1.ClientSecret
-					}
-				}
-				upstreamAuth.Server = types.StringValue(upstreamAuthItem.Server)
-
-				r.Studio.UpstreamAuth = append(r.Studio.UpstreamAuth, upstreamAuth)
+			if studioPriorData != nil {
+				r.Studio.UpstreamAuth = studioPriorData.UpstreamAuth
 			}
 		}
 	}
@@ -623,26 +453,26 @@ func (r *McpProxyResourceModel) ToSharedAimMcpProxySpec(ctx context.Context) (*s
 		var serverURL string
 		serverURL = r.Proxy.ServerURL.ValueString()
 
-		var upstreamAuth *shared.AimMcpProxyUpstreamAuth
+		var upstreamAuth *shared.UpstreamAuth
 		if r.Proxy.UpstreamAuth != nil {
-			var aimMcpProxyNoUpstreamAuth *shared.AimMcpProxyNoUpstreamAuth
+			var aimMcpProxySpecAimMcpProxyNoUpstreamAuth *shared.AimMcpProxySpecAimMcpProxyNoUpstreamAuth
 			if r.Proxy.UpstreamAuth.None != nil {
-				typeVar := new(shared.AimMcpProxyUpstreamAuthTypeNone)
+				typeVar := new(shared.AimMcpProxySpecTypeNone)
 				if !r.Proxy.UpstreamAuth.None.Type.IsUnknown() && !r.Proxy.UpstreamAuth.None.Type.IsNull() {
-					*typeVar = shared.AimMcpProxyUpstreamAuthTypeNone(r.Proxy.UpstreamAuth.None.Type.ValueString())
+					*typeVar = shared.AimMcpProxySpecTypeNone(r.Proxy.UpstreamAuth.None.Type.ValueString())
 				} else {
 					typeVar = nil
 				}
-				aimMcpProxyNoUpstreamAuth = &shared.AimMcpProxyNoUpstreamAuth{
+				aimMcpProxySpecAimMcpProxyNoUpstreamAuth = &shared.AimMcpProxySpecAimMcpProxyNoUpstreamAuth{
 					Type: typeVar,
 				}
 			}
-			if aimMcpProxyNoUpstreamAuth != nil {
-				upstreamAuth = &shared.AimMcpProxyUpstreamAuth{
-					AimMcpProxyNoUpstreamAuth: aimMcpProxyNoUpstreamAuth,
+			if aimMcpProxySpecAimMcpProxyNoUpstreamAuth != nil {
+				upstreamAuth = &shared.UpstreamAuth{
+					AimMcpProxySpecAimMcpProxyNoUpstreamAuth: aimMcpProxySpecAimMcpProxyNoUpstreamAuth,
 				}
 			}
-			var aimMcpProxyAPIKeyUpstreamAuth *shared.AimMcpProxyAPIKeyUpstreamAuth
+			var aimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth *shared.AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth
 			if r.Proxy.UpstreamAuth.APIKey != nil {
 				var apiKeyHeader string
 				apiKeyHeader = r.Proxy.UpstreamAuth.APIKey.APIKeyHeader.ValueString()
@@ -650,45 +480,45 @@ func (r *McpProxyResourceModel) ToSharedAimMcpProxySpec(ctx context.Context) (*s
 				var apiKey string
 				apiKey = r.Proxy.UpstreamAuth.APIKey.APIKey.ValueString()
 
-				typeVar1 := new(shared.AimMcpProxyUpstreamAuthTypeAPIKey)
+				typeVar1 := new(shared.AimMcpProxySpecTypeAPIKey)
 				if !r.Proxy.UpstreamAuth.APIKey.Type.IsUnknown() && !r.Proxy.UpstreamAuth.APIKey.Type.IsNull() {
-					*typeVar1 = shared.AimMcpProxyUpstreamAuthTypeAPIKey(r.Proxy.UpstreamAuth.APIKey.Type.ValueString())
+					*typeVar1 = shared.AimMcpProxySpecTypeAPIKey(r.Proxy.UpstreamAuth.APIKey.Type.ValueString())
 				} else {
 					typeVar1 = nil
 				}
-				aimMcpProxyAPIKeyUpstreamAuth = &shared.AimMcpProxyAPIKeyUpstreamAuth{
+				aimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth = &shared.AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth{
 					APIKeyHeader: apiKeyHeader,
 					APIKey:       apiKey,
 					Type:         typeVar1,
 				}
 			}
-			if aimMcpProxyAPIKeyUpstreamAuth != nil {
-				upstreamAuth = &shared.AimMcpProxyUpstreamAuth{
-					AimMcpProxyAPIKeyUpstreamAuth: aimMcpProxyAPIKeyUpstreamAuth,
+			if aimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth != nil {
+				upstreamAuth = &shared.UpstreamAuth{
+					AimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth: aimMcpProxySpecAimMcpProxyAPIKeyUpstreamAuth,
 				}
 			}
-			var aimMcpProxyBearerUpstreamAuth *shared.AimMcpProxyBearerUpstreamAuth
+			var aimMcpProxySpecAimMcpProxyBearerUpstreamAuth *shared.AimMcpProxySpecAimMcpProxyBearerUpstreamAuth
 			if r.Proxy.UpstreamAuth.Bearer != nil {
 				var token string
 				token = r.Proxy.UpstreamAuth.Bearer.Token.ValueString()
 
-				typeVar2 := new(shared.TypeBearer)
+				typeVar2 := new(shared.AimMcpProxySpecTypeBearer)
 				if !r.Proxy.UpstreamAuth.Bearer.Type.IsUnknown() && !r.Proxy.UpstreamAuth.Bearer.Type.IsNull() {
-					*typeVar2 = shared.TypeBearer(r.Proxy.UpstreamAuth.Bearer.Type.ValueString())
+					*typeVar2 = shared.AimMcpProxySpecTypeBearer(r.Proxy.UpstreamAuth.Bearer.Type.ValueString())
 				} else {
 					typeVar2 = nil
 				}
-				aimMcpProxyBearerUpstreamAuth = &shared.AimMcpProxyBearerUpstreamAuth{
+				aimMcpProxySpecAimMcpProxyBearerUpstreamAuth = &shared.AimMcpProxySpecAimMcpProxyBearerUpstreamAuth{
 					Token: token,
 					Type:  typeVar2,
 				}
 			}
-			if aimMcpProxyBearerUpstreamAuth != nil {
-				upstreamAuth = &shared.AimMcpProxyUpstreamAuth{
-					AimMcpProxyBearerUpstreamAuth: aimMcpProxyBearerUpstreamAuth,
+			if aimMcpProxySpecAimMcpProxyBearerUpstreamAuth != nil {
+				upstreamAuth = &shared.UpstreamAuth{
+					AimMcpProxySpecAimMcpProxyBearerUpstreamAuth: aimMcpProxySpecAimMcpProxyBearerUpstreamAuth,
 				}
 			}
-			var aimMcpProxyBasicUpstreamAuth *shared.AimMcpProxyBasicUpstreamAuth
+			var aimMcpProxySpecAimMcpProxyBasicUpstreamAuth *shared.AimMcpProxySpecAimMcpProxyBasicUpstreamAuth
 			if r.Proxy.UpstreamAuth.Basic != nil {
 				var username string
 				username = r.Proxy.UpstreamAuth.Basic.Username.ValueString()
@@ -696,24 +526,24 @@ func (r *McpProxyResourceModel) ToSharedAimMcpProxySpec(ctx context.Context) (*s
 				var password string
 				password = r.Proxy.UpstreamAuth.Basic.Password.ValueString()
 
-				typeVar3 := new(shared.TypeBasic)
+				typeVar3 := new(shared.AimMcpProxySpecTypeBasic)
 				if !r.Proxy.UpstreamAuth.Basic.Type.IsUnknown() && !r.Proxy.UpstreamAuth.Basic.Type.IsNull() {
-					*typeVar3 = shared.TypeBasic(r.Proxy.UpstreamAuth.Basic.Type.ValueString())
+					*typeVar3 = shared.AimMcpProxySpecTypeBasic(r.Proxy.UpstreamAuth.Basic.Type.ValueString())
 				} else {
 					typeVar3 = nil
 				}
-				aimMcpProxyBasicUpstreamAuth = &shared.AimMcpProxyBasicUpstreamAuth{
+				aimMcpProxySpecAimMcpProxyBasicUpstreamAuth = &shared.AimMcpProxySpecAimMcpProxyBasicUpstreamAuth{
 					Username: username,
 					Password: password,
 					Type:     typeVar3,
 				}
 			}
-			if aimMcpProxyBasicUpstreamAuth != nil {
-				upstreamAuth = &shared.AimMcpProxyUpstreamAuth{
-					AimMcpProxyBasicUpstreamAuth: aimMcpProxyBasicUpstreamAuth,
+			if aimMcpProxySpecAimMcpProxyBasicUpstreamAuth != nil {
+				upstreamAuth = &shared.UpstreamAuth{
+					AimMcpProxySpecAimMcpProxyBasicUpstreamAuth: aimMcpProxySpecAimMcpProxyBasicUpstreamAuth,
 				}
 			}
-			var aimMcpProxyOAuth2UpstreamAuth *shared.AimMcpProxyOAuth2UpstreamAuth
+			var aimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth *shared.AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth
 			if r.Proxy.UpstreamAuth.Oauth2 != nil {
 				var authorizeURL string
 				authorizeURL = r.Proxy.UpstreamAuth.Oauth2.AuthorizeURL.ValueString()
@@ -731,13 +561,13 @@ func (r *McpProxyResourceModel) ToSharedAimMcpProxySpec(ctx context.Context) (*s
 				for scopesIndex := range r.Proxy.UpstreamAuth.Oauth2.Scopes {
 					scopes = append(scopes, r.Proxy.UpstreamAuth.Oauth2.Scopes[scopesIndex].ValueString())
 				}
-				typeVar4 := new(shared.AimMcpProxyUpstreamAuthTypeOauth2)
+				typeVar4 := new(shared.AimMcpProxySpecTypeOauth2)
 				if !r.Proxy.UpstreamAuth.Oauth2.Type.IsUnknown() && !r.Proxy.UpstreamAuth.Oauth2.Type.IsNull() {
-					*typeVar4 = shared.AimMcpProxyUpstreamAuthTypeOauth2(r.Proxy.UpstreamAuth.Oauth2.Type.ValueString())
+					*typeVar4 = shared.AimMcpProxySpecTypeOauth2(r.Proxy.UpstreamAuth.Oauth2.Type.ValueString())
 				} else {
 					typeVar4 = nil
 				}
-				aimMcpProxyOAuth2UpstreamAuth = &shared.AimMcpProxyOAuth2UpstreamAuth{
+				aimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth = &shared.AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth{
 					AuthorizeURL: authorizeURL,
 					TokenURL:     tokenURL,
 					ClientID:     clientID,
@@ -746,9 +576,9 @@ func (r *McpProxyResourceModel) ToSharedAimMcpProxySpec(ctx context.Context) (*s
 					Type:         typeVar4,
 				}
 			}
-			if aimMcpProxyOAuth2UpstreamAuth != nil {
-				upstreamAuth = &shared.AimMcpProxyUpstreamAuth{
-					AimMcpProxyOAuth2UpstreamAuth: aimMcpProxyOAuth2UpstreamAuth,
+			if aimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth != nil {
+				upstreamAuth = &shared.UpstreamAuth{
+					AimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth: aimMcpProxySpecAimMcpProxyOAuth2UpstreamAuth,
 				}
 			}
 		}
@@ -785,7 +615,7 @@ func (r *McpProxyResourceModel) ToSharedAimMcpProxySpec(ctx context.Context) (*s
 			server1 = r.Studio.UpstreamAuth[upstreamAuthIndex].Server.ValueString()
 
 			var auth shared.AimMcpProxyUpstreamAuth
-			var aimMcpProxyNoUpstreamAuth1 *shared.AimMcpProxyNoUpstreamAuth
+			var aimMcpProxyUpstreamAuthAimMcpProxyNoUpstreamAuth *shared.AimMcpProxyUpstreamAuthAimMcpProxyNoUpstreamAuth
 			if r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.None != nil {
 				typeVar5 := new(shared.AimMcpProxyUpstreamAuthTypeNone)
 				if !r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.None.Type.IsUnknown() && !r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.None.Type.IsNull() {
@@ -793,16 +623,16 @@ func (r *McpProxyResourceModel) ToSharedAimMcpProxySpec(ctx context.Context) (*s
 				} else {
 					typeVar5 = nil
 				}
-				aimMcpProxyNoUpstreamAuth1 = &shared.AimMcpProxyNoUpstreamAuth{
+				aimMcpProxyUpstreamAuthAimMcpProxyNoUpstreamAuth = &shared.AimMcpProxyUpstreamAuthAimMcpProxyNoUpstreamAuth{
 					Type: typeVar5,
 				}
 			}
-			if aimMcpProxyNoUpstreamAuth1 != nil {
+			if aimMcpProxyUpstreamAuthAimMcpProxyNoUpstreamAuth != nil {
 				auth = shared.AimMcpProxyUpstreamAuth{
-					AimMcpProxyNoUpstreamAuth: aimMcpProxyNoUpstreamAuth1,
+					AimMcpProxyUpstreamAuthAimMcpProxyNoUpstreamAuth: aimMcpProxyUpstreamAuthAimMcpProxyNoUpstreamAuth,
 				}
 			}
-			var aimMcpProxyAPIKeyUpstreamAuth1 *shared.AimMcpProxyAPIKeyUpstreamAuth
+			var aimMcpProxyUpstreamAuthAimMcpProxyAPIKeyUpstreamAuth *shared.AimMcpProxyUpstreamAuthAimMcpProxyAPIKeyUpstreamAuth
 			if r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.APIKey != nil {
 				var apiKeyHeader1 string
 				apiKeyHeader1 = r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.APIKey.APIKeyHeader.ValueString()
@@ -816,39 +646,39 @@ func (r *McpProxyResourceModel) ToSharedAimMcpProxySpec(ctx context.Context) (*s
 				} else {
 					typeVar6 = nil
 				}
-				aimMcpProxyAPIKeyUpstreamAuth1 = &shared.AimMcpProxyAPIKeyUpstreamAuth{
+				aimMcpProxyUpstreamAuthAimMcpProxyAPIKeyUpstreamAuth = &shared.AimMcpProxyUpstreamAuthAimMcpProxyAPIKeyUpstreamAuth{
 					APIKeyHeader: apiKeyHeader1,
 					APIKey:       apiKey1,
 					Type:         typeVar6,
 				}
 			}
-			if aimMcpProxyAPIKeyUpstreamAuth1 != nil {
+			if aimMcpProxyUpstreamAuthAimMcpProxyAPIKeyUpstreamAuth != nil {
 				auth = shared.AimMcpProxyUpstreamAuth{
-					AimMcpProxyAPIKeyUpstreamAuth: aimMcpProxyAPIKeyUpstreamAuth1,
+					AimMcpProxyUpstreamAuthAimMcpProxyAPIKeyUpstreamAuth: aimMcpProxyUpstreamAuthAimMcpProxyAPIKeyUpstreamAuth,
 				}
 			}
-			var aimMcpProxyBearerUpstreamAuth1 *shared.AimMcpProxyBearerUpstreamAuth
+			var aimMcpProxyUpstreamAuthAimMcpProxyBearerUpstreamAuth *shared.AimMcpProxyUpstreamAuthAimMcpProxyBearerUpstreamAuth
 			if r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Bearer != nil {
 				var token1 string
 				token1 = r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Bearer.Token.ValueString()
 
-				typeVar7 := new(shared.TypeBearer)
+				typeVar7 := new(shared.AimMcpProxyUpstreamAuthTypeBearer)
 				if !r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Bearer.Type.IsUnknown() && !r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Bearer.Type.IsNull() {
-					*typeVar7 = shared.TypeBearer(r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Bearer.Type.ValueString())
+					*typeVar7 = shared.AimMcpProxyUpstreamAuthTypeBearer(r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Bearer.Type.ValueString())
 				} else {
 					typeVar7 = nil
 				}
-				aimMcpProxyBearerUpstreamAuth1 = &shared.AimMcpProxyBearerUpstreamAuth{
+				aimMcpProxyUpstreamAuthAimMcpProxyBearerUpstreamAuth = &shared.AimMcpProxyUpstreamAuthAimMcpProxyBearerUpstreamAuth{
 					Token: token1,
 					Type:  typeVar7,
 				}
 			}
-			if aimMcpProxyBearerUpstreamAuth1 != nil {
+			if aimMcpProxyUpstreamAuthAimMcpProxyBearerUpstreamAuth != nil {
 				auth = shared.AimMcpProxyUpstreamAuth{
-					AimMcpProxyBearerUpstreamAuth: aimMcpProxyBearerUpstreamAuth1,
+					AimMcpProxyUpstreamAuthAimMcpProxyBearerUpstreamAuth: aimMcpProxyUpstreamAuthAimMcpProxyBearerUpstreamAuth,
 				}
 			}
-			var aimMcpProxyBasicUpstreamAuth1 *shared.AimMcpProxyBasicUpstreamAuth
+			var aimMcpProxyUpstreamAuthAimMcpProxyBasicUpstreamAuth *shared.AimMcpProxyUpstreamAuthAimMcpProxyBasicUpstreamAuth
 			if r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Basic != nil {
 				var username1 string
 				username1 = r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Basic.Username.ValueString()
@@ -856,24 +686,24 @@ func (r *McpProxyResourceModel) ToSharedAimMcpProxySpec(ctx context.Context) (*s
 				var password1 string
 				password1 = r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Basic.Password.ValueString()
 
-				typeVar8 := new(shared.TypeBasic)
+				typeVar8 := new(shared.AimMcpProxyUpstreamAuthTypeBasic)
 				if !r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Basic.Type.IsUnknown() && !r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Basic.Type.IsNull() {
-					*typeVar8 = shared.TypeBasic(r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Basic.Type.ValueString())
+					*typeVar8 = shared.AimMcpProxyUpstreamAuthTypeBasic(r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Basic.Type.ValueString())
 				} else {
 					typeVar8 = nil
 				}
-				aimMcpProxyBasicUpstreamAuth1 = &shared.AimMcpProxyBasicUpstreamAuth{
+				aimMcpProxyUpstreamAuthAimMcpProxyBasicUpstreamAuth = &shared.AimMcpProxyUpstreamAuthAimMcpProxyBasicUpstreamAuth{
 					Username: username1,
 					Password: password1,
 					Type:     typeVar8,
 				}
 			}
-			if aimMcpProxyBasicUpstreamAuth1 != nil {
+			if aimMcpProxyUpstreamAuthAimMcpProxyBasicUpstreamAuth != nil {
 				auth = shared.AimMcpProxyUpstreamAuth{
-					AimMcpProxyBasicUpstreamAuth: aimMcpProxyBasicUpstreamAuth1,
+					AimMcpProxyUpstreamAuthAimMcpProxyBasicUpstreamAuth: aimMcpProxyUpstreamAuthAimMcpProxyBasicUpstreamAuth,
 				}
 			}
-			var aimMcpProxyOAuth2UpstreamAuth1 *shared.AimMcpProxyOAuth2UpstreamAuth
+			var aimMcpProxyUpstreamAuthAimMcpProxyOAuth2UpstreamAuth *shared.AimMcpProxyUpstreamAuthAimMcpProxyOAuth2UpstreamAuth
 			if r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Oauth2 != nil {
 				var authorizeUrl1 string
 				authorizeUrl1 = r.Studio.UpstreamAuth[upstreamAuthIndex].Auth.Oauth2.AuthorizeURL.ValueString()
@@ -897,7 +727,7 @@ func (r *McpProxyResourceModel) ToSharedAimMcpProxySpec(ctx context.Context) (*s
 				} else {
 					typeVar9 = nil
 				}
-				aimMcpProxyOAuth2UpstreamAuth1 = &shared.AimMcpProxyOAuth2UpstreamAuth{
+				aimMcpProxyUpstreamAuthAimMcpProxyOAuth2UpstreamAuth = &shared.AimMcpProxyUpstreamAuthAimMcpProxyOAuth2UpstreamAuth{
 					AuthorizeURL: authorizeUrl1,
 					TokenURL:     tokenUrl1,
 					ClientID:     clientId1,
@@ -906,9 +736,9 @@ func (r *McpProxyResourceModel) ToSharedAimMcpProxySpec(ctx context.Context) (*s
 					Type:         typeVar9,
 				}
 			}
-			if aimMcpProxyOAuth2UpstreamAuth1 != nil {
+			if aimMcpProxyUpstreamAuthAimMcpProxyOAuth2UpstreamAuth != nil {
 				auth = shared.AimMcpProxyUpstreamAuth{
-					AimMcpProxyOAuth2UpstreamAuth: aimMcpProxyOAuth2UpstreamAuth1,
+					AimMcpProxyUpstreamAuthAimMcpProxyOAuth2UpstreamAuth: aimMcpProxyUpstreamAuthAimMcpProxyOAuth2UpstreamAuth,
 				}
 			}
 			upstreamAuth1 = append(upstreamAuth1, shared.AimMcpProxyStudioUpstreamAuth{

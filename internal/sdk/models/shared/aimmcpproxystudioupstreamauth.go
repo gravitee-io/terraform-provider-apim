@@ -29,22 +29,22 @@ func (a *AimMcpProxyStudioUpstreamAuth) GetAuth() AimMcpProxyUpstreamAuth {
 	return a.Auth
 }
 
-func (a *AimMcpProxyStudioUpstreamAuth) GetAuthNone() *AimMcpProxyNoUpstreamAuth {
-	return a.GetAuth().AimMcpProxyNoUpstreamAuth
+func (a *AimMcpProxyStudioUpstreamAuth) GetAuthNone() *AimMcpProxyUpstreamAuthAimMcpProxyNoUpstreamAuth {
+	return a.GetAuth().AimMcpProxyUpstreamAuthAimMcpProxyNoUpstreamAuth
 }
 
-func (a *AimMcpProxyStudioUpstreamAuth) GetAuthAPIKey() *AimMcpProxyAPIKeyUpstreamAuth {
-	return a.GetAuth().AimMcpProxyAPIKeyUpstreamAuth
+func (a *AimMcpProxyStudioUpstreamAuth) GetAuthAPIKey() *AimMcpProxyUpstreamAuthAimMcpProxyAPIKeyUpstreamAuth {
+	return a.GetAuth().AimMcpProxyUpstreamAuthAimMcpProxyAPIKeyUpstreamAuth
 }
 
-func (a *AimMcpProxyStudioUpstreamAuth) GetAuthBearer() *AimMcpProxyBearerUpstreamAuth {
-	return a.GetAuth().AimMcpProxyBearerUpstreamAuth
+func (a *AimMcpProxyStudioUpstreamAuth) GetAuthBearer() *AimMcpProxyUpstreamAuthAimMcpProxyBearerUpstreamAuth {
+	return a.GetAuth().AimMcpProxyUpstreamAuthAimMcpProxyBearerUpstreamAuth
 }
 
-func (a *AimMcpProxyStudioUpstreamAuth) GetAuthBasic() *AimMcpProxyBasicUpstreamAuth {
-	return a.GetAuth().AimMcpProxyBasicUpstreamAuth
+func (a *AimMcpProxyStudioUpstreamAuth) GetAuthBasic() *AimMcpProxyUpstreamAuthAimMcpProxyBasicUpstreamAuth {
+	return a.GetAuth().AimMcpProxyUpstreamAuthAimMcpProxyBasicUpstreamAuth
 }
 
-func (a *AimMcpProxyStudioUpstreamAuth) GetAuthOauth2() *AimMcpProxyOAuth2UpstreamAuth {
-	return a.GetAuth().AimMcpProxyOAuth2UpstreamAuth
+func (a *AimMcpProxyStudioUpstreamAuth) GetAuthOauth2() *AimMcpProxyUpstreamAuthAimMcpProxyOAuth2UpstreamAuth {
+	return a.GetAuth().AimMcpProxyUpstreamAuthAimMcpProxyOAuth2UpstreamAuth
 }

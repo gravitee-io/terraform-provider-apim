@@ -161,14 +161,7 @@ func CreateAimMcpProxyFlowSelectorCondition(condition Mcp) AimMcpProxyFlowSelect
 	}
 }
 
-func (u *AimMcpProxyFlowSelector) UnmarshalJSON(data []byte) (err error) {
-	previous := *u
-	*u = AimMcpProxyFlowSelector{}
-	defer func() {
-		if err != nil {
-			*u = previous
-		}
-	}()
+func (u *AimMcpProxyFlowSelector) UnmarshalJSON(data []byte) error {
 
 	type discriminator struct {
 		Type string `json:"type"`

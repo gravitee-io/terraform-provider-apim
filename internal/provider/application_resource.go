@@ -482,8 +482,6 @@ func (r *ApplicationResource) Create(ctx context.Context, req resource.CreateReq
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateOrUpdateApplicationsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -492,7 +490,7 @@ func (r *ApplicationResource) Create(ctx context.Context, req resource.CreateReq
 	}
 	res, err := r.client.Applications.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -529,7 +527,7 @@ func (r *ApplicationResource) Create(ctx context.Context, req resource.CreateReq
 	}
 	res1, err := r.client.Applications.Get(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -581,8 +579,6 @@ func (r *ApplicationResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetApplicationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -591,7 +587,7 @@ func (r *ApplicationResource) Read(ctx context.Context, req resource.ReadRequest
 	}
 	res, err := r.client.Applications.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -645,8 +641,6 @@ func (r *ApplicationResource) Update(ctx context.Context, req resource.UpdateReq
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
-
 	request, requestDiags := data.ToOperationsCreateOrUpdateApplicationsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -655,7 +649,7 @@ func (r *ApplicationResource) Update(ctx context.Context, req resource.UpdateReq
 	}
 	res, err := r.client.Applications.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -692,7 +686,7 @@ func (r *ApplicationResource) Update(ctx context.Context, req resource.UpdateReq
 	}
 	res1, err := r.client.Applications.Get(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -752,8 +746,6 @@ func (r *ApplicationResource) Delete(ctx context.Context, req resource.DeleteReq
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsDeleteApplicationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -762,7 +754,7 @@ func (r *ApplicationResource) Delete(ctx context.Context, req resource.DeleteReq
 	}
 	res, err := r.client.Applications.Delete(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -801,8 +793,8 @@ func (r *ApplicationResource) ImportState(ctx context.Context, req resource.Impo
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			var environmentIDDefault string = `DEFAULT`
-			data.EnvironmentID = &environmentIDDefault
+			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"'`)
+			return
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -816,8 +808,8 @@ func (r *ApplicationResource) ImportState(ctx context.Context, req resource.Impo
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			var organizationIDDefault string = `DEFAULT`
-			data.OrganizationID = &organizationIDDefault
+			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"'`)
+			return
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

@@ -8,7 +8,6 @@ import (
 )
 
 type AimMcpProxyStateStudio struct {
-	EnableFGA    types.Bool                       `tfsdk:"enable_fga"`
-	Tools        []AimMcpProxyStudioTool          `tfsdk:"tools"`
-	UpstreamAuth []AimMcpProxyStudioUpstreamAuth1 `tfsdk:"upstream_auth"`
+	EnableFGA types.Bool              `tfsdk:"enable_fga"`
+	Tools     []AimMcpProxyStudioTool `tfsdk:"tools"`
 }

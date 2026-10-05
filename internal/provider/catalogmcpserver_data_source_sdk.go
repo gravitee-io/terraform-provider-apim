@@ -47,37 +47,6 @@ func (r *CatalogMcpServerDataSourceModel) RefreshFromSharedAimCatalogMcpServerSt
 			r.Resources = append(r.Resources, resources)
 		}
 		r.ServerConnection = &tfTypes.AimCatalogMcpServerStateServerConnection{}
-		if r.ServerConnection.Auth == nil {
-			r.ServerConnection.Auth = &tfTypes.AimCatalogMcpServerAuthOutput{}
-		}
-		if resp.ServerConnection.Auth.AimCatalogMcpServerHeaderAuthOutput != nil {
-			r.ServerConnection.Auth.Header = &tfTypes.AimCatalogMcpServerHeaderAuth1{}
-			r.ServerConnection.Auth.Header.Name = types.StringValue(resp.ServerConnection.Auth.AimCatalogMcpServerHeaderAuthOutput.Name)
-			if resp.ServerConnection.Auth.AimCatalogMcpServerHeaderAuthOutput.Type != nil {
-				r.ServerConnection.Auth.Header.Type = types.StringValue(string(*resp.ServerConnection.Auth.AimCatalogMcpServerHeaderAuthOutput.Type))
-			} else {
-				r.ServerConnection.Auth.Header.Type = types.StringNull()
-			}
-		}
-		if resp.ServerConnection.Auth.AimCatalogMcpServerNoAuth != nil {
-			r.ServerConnection.Auth.None = &tfTypes.AimCatalogMcpServerNoAuth{}
-			if resp.ServerConnection.Auth.AimCatalogMcpServerNoAuth.Type != nil {
-				r.ServerConnection.Auth.None.Type = types.StringValue(string(*resp.ServerConnection.Auth.AimCatalogMcpServerNoAuth.Type))
-			} else {
-				r.ServerConnection.Auth.None.Type = types.StringNull()
-			}
-		}
-		if resp.ServerConnection.Auth.AimCatalogMcpServerOAuth2AuthOutput != nil {
-			r.ServerConnection.Auth.Oauth2 = &tfTypes.AimCatalogMcpServerOAuth2Auth1{}
-			r.ServerConnection.Auth.Oauth2.ClientID = types.StringValue(resp.ServerConnection.Auth.AimCatalogMcpServerOAuth2AuthOutput.ClientID)
-			r.ServerConnection.Auth.Oauth2.Scope = types.StringPointerValue(resp.ServerConnection.Auth.AimCatalogMcpServerOAuth2AuthOutput.Scope)
-			r.ServerConnection.Auth.Oauth2.TokenURL = types.StringValue(resp.ServerConnection.Auth.AimCatalogMcpServerOAuth2AuthOutput.TokenURL)
-			if resp.ServerConnection.Auth.AimCatalogMcpServerOAuth2AuthOutput.Type != nil {
-				r.ServerConnection.Auth.Oauth2.Type = types.StringValue(string(*resp.ServerConnection.Auth.AimCatalogMcpServerOAuth2AuthOutput.Type))
-			} else {
-				r.ServerConnection.Auth.Oauth2.Type = types.StringNull()
-			}
-		}
 		r.ServerConnection.Endpoint = types.StringValue(resp.ServerConnection.Endpoint)
 		if resp.ServerConnection.Transport != nil {
 			r.ServerConnection.Transport = types.StringValue(string(*resp.ServerConnection.Transport))

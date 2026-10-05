@@ -291,58 +291,6 @@ func (r *McpProxyDataSourceModel) RefreshFromSharedAimMcpProxyState(ctx context.
 		} else {
 			r.Proxy = &tfTypes.AimMcpProxyStateProxy{}
 			r.Proxy.ServerURL = types.StringValue(resp.Proxy.ServerURL)
-			if resp.Proxy.UpstreamAuth != nil {
-				r.Proxy.UpstreamAuth = &tfTypes.AimMcpProxyUpstreamAuthOutput{}
-				if resp.Proxy.UpstreamAuth.AimMcpProxyAPIKeyUpstreamAuthOutput != nil {
-					r.Proxy.UpstreamAuth.APIKey = &tfTypes.AimMcpProxyAPIKeyUpstreamAuth1{}
-					r.Proxy.UpstreamAuth.APIKey.APIKeyHeader = types.StringValue(resp.Proxy.UpstreamAuth.AimMcpProxyAPIKeyUpstreamAuthOutput.APIKeyHeader)
-					if resp.Proxy.UpstreamAuth.AimMcpProxyAPIKeyUpstreamAuthOutput.Type != nil {
-						r.Proxy.UpstreamAuth.APIKey.Type = types.StringValue(string(*resp.Proxy.UpstreamAuth.AimMcpProxyAPIKeyUpstreamAuthOutput.Type))
-					} else {
-						r.Proxy.UpstreamAuth.APIKey.Type = types.StringNull()
-					}
-				}
-				if resp.Proxy.UpstreamAuth.AimMcpProxyBasicUpstreamAuthOutput != nil {
-					r.Proxy.UpstreamAuth.Basic = &tfTypes.AimMcpProxyBasicUpstreamAuth1{}
-					if resp.Proxy.UpstreamAuth.AimMcpProxyBasicUpstreamAuthOutput.Type != nil {
-						r.Proxy.UpstreamAuth.Basic.Type = types.StringValue(string(*resp.Proxy.UpstreamAuth.AimMcpProxyBasicUpstreamAuthOutput.Type))
-					} else {
-						r.Proxy.UpstreamAuth.Basic.Type = types.StringNull()
-					}
-					r.Proxy.UpstreamAuth.Basic.Username = types.StringValue(resp.Proxy.UpstreamAuth.AimMcpProxyBasicUpstreamAuthOutput.Username)
-				}
-				if resp.Proxy.UpstreamAuth.AimMcpProxyBearerUpstreamAuthOutput != nil {
-					r.Proxy.UpstreamAuth.Bearer = &tfTypes.AimMcpProxyBearerUpstreamAuth1{}
-					if resp.Proxy.UpstreamAuth.AimMcpProxyBearerUpstreamAuthOutput.Type != nil {
-						r.Proxy.UpstreamAuth.Bearer.Type = types.StringValue(string(*resp.Proxy.UpstreamAuth.AimMcpProxyBearerUpstreamAuthOutput.Type))
-					} else {
-						r.Proxy.UpstreamAuth.Bearer.Type = types.StringNull()
-					}
-				}
-				if resp.Proxy.UpstreamAuth.AimMcpProxyNoUpstreamAuth != nil {
-					r.Proxy.UpstreamAuth.None = &tfTypes.AimMcpProxyNoUpstreamAuth{}
-					if resp.Proxy.UpstreamAuth.AimMcpProxyNoUpstreamAuth.Type != nil {
-						r.Proxy.UpstreamAuth.None.Type = types.StringValue(string(*resp.Proxy.UpstreamAuth.AimMcpProxyNoUpstreamAuth.Type))
-					} else {
-						r.Proxy.UpstreamAuth.None.Type = types.StringNull()
-					}
-				}
-				if resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput != nil {
-					r.Proxy.UpstreamAuth.Oauth2 = &tfTypes.AimMcpProxyOAuth2UpstreamAuth1{}
-					r.Proxy.UpstreamAuth.Oauth2.AuthorizeURL = types.StringValue(resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.AuthorizeURL)
-					r.Proxy.UpstreamAuth.Oauth2.ClientID = types.StringValue(resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.ClientID)
-					r.Proxy.UpstreamAuth.Oauth2.Scopes = make([]types.String, 0, len(resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.Scopes))
-					for _, v := range resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.Scopes {
-						r.Proxy.UpstreamAuth.Oauth2.Scopes = append(r.Proxy.UpstreamAuth.Oauth2.Scopes, types.StringValue(v))
-					}
-					r.Proxy.UpstreamAuth.Oauth2.TokenURL = types.StringValue(resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.TokenURL)
-					if resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.Type != nil {
-						r.Proxy.UpstreamAuth.Oauth2.Type = types.StringValue(string(*resp.Proxy.UpstreamAuth.AimMcpProxyOAuth2UpstreamAuthOutput.Type))
-					} else {
-						r.Proxy.UpstreamAuth.Oauth2.Type = types.StringNull()
-					}
-				}
-			}
 		}
 		if resp.State != nil {
 			r.State = types.StringValue(string(*resp.State))
@@ -365,67 +313,6 @@ func (r *McpProxyDataSourceModel) RefreshFromSharedAimMcpProxyState(ctx context.
 				tools.Tool = types.StringValue(toolsItem.Tool)
 
 				r.Studio.Tools = append(r.Studio.Tools, tools)
-			}
-			r.Studio.UpstreamAuth = []tfTypes.AimMcpProxyStudioUpstreamAuth1{}
-
-			for _, upstreamAuthItem := range resp.Studio.UpstreamAuth {
-				var upstreamAuth tfTypes.AimMcpProxyStudioUpstreamAuth1
-
-				if upstreamAuth.Auth == nil {
-					upstreamAuth.Auth = &tfTypes.AimMcpProxyUpstreamAuthOutput{}
-				}
-				if upstreamAuthItem.Auth.AimMcpProxyAPIKeyUpstreamAuthOutput != nil {
-					upstreamAuth.Auth.APIKey = &tfTypes.AimMcpProxyAPIKeyUpstreamAuth1{}
-					upstreamAuth.Auth.APIKey.APIKeyHeader = types.StringValue(upstreamAuthItem.Auth.AimMcpProxyAPIKeyUpstreamAuthOutput.APIKeyHeader)
-					if upstreamAuthItem.Auth.AimMcpProxyAPIKeyUpstreamAuthOutput.Type != nil {
-						upstreamAuth.Auth.APIKey.Type = types.StringValue(string(*upstreamAuthItem.Auth.AimMcpProxyAPIKeyUpstreamAuthOutput.Type))
-					} else {
-						upstreamAuth.Auth.APIKey.Type = types.StringNull()
-					}
-				}
-				if upstreamAuthItem.Auth.AimMcpProxyBasicUpstreamAuthOutput != nil {
-					upstreamAuth.Auth.Basic = &tfTypes.AimMcpProxyBasicUpstreamAuth1{}
-					if upstreamAuthItem.Auth.AimMcpProxyBasicUpstreamAuthOutput.Type != nil {
-						upstreamAuth.Auth.Basic.Type = types.StringValue(string(*upstreamAuthItem.Auth.AimMcpProxyBasicUpstreamAuthOutput.Type))
-					} else {
-						upstreamAuth.Auth.Basic.Type = types.StringNull()
-					}
-					upstreamAuth.Auth.Basic.Username = types.StringValue(upstreamAuthItem.Auth.AimMcpProxyBasicUpstreamAuthOutput.Username)
-				}
-				if upstreamAuthItem.Auth.AimMcpProxyBearerUpstreamAuthOutput != nil {
-					upstreamAuth.Auth.Bearer = &tfTypes.AimMcpProxyBearerUpstreamAuth1{}
-					if upstreamAuthItem.Auth.AimMcpProxyBearerUpstreamAuthOutput.Type != nil {
-						upstreamAuth.Auth.Bearer.Type = types.StringValue(string(*upstreamAuthItem.Auth.AimMcpProxyBearerUpstreamAuthOutput.Type))
-					} else {
-						upstreamAuth.Auth.Bearer.Type = types.StringNull()
-					}
-				}
-				if upstreamAuthItem.Auth.AimMcpProxyNoUpstreamAuth != nil {
-					upstreamAuth.Auth.None = &tfTypes.AimMcpProxyNoUpstreamAuth{}
-					if upstreamAuthItem.Auth.AimMcpProxyNoUpstreamAuth.Type != nil {
-						upstreamAuth.Auth.None.Type = types.StringValue(string(*upstreamAuthItem.Auth.AimMcpProxyNoUpstreamAuth.Type))
-					} else {
-						upstreamAuth.Auth.None.Type = types.StringNull()
-					}
-				}
-				if upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput != nil {
-					upstreamAuth.Auth.Oauth2 = &tfTypes.AimMcpProxyOAuth2UpstreamAuth1{}
-					upstreamAuth.Auth.Oauth2.AuthorizeURL = types.StringValue(upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.AuthorizeURL)
-					upstreamAuth.Auth.Oauth2.ClientID = types.StringValue(upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.ClientID)
-					upstreamAuth.Auth.Oauth2.Scopes = make([]types.String, 0, len(upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.Scopes))
-					for _, v := range upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.Scopes {
-						upstreamAuth.Auth.Oauth2.Scopes = append(upstreamAuth.Auth.Oauth2.Scopes, types.StringValue(v))
-					}
-					upstreamAuth.Auth.Oauth2.TokenURL = types.StringValue(upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.TokenURL)
-					if upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.Type != nil {
-						upstreamAuth.Auth.Oauth2.Type = types.StringValue(string(*upstreamAuthItem.Auth.AimMcpProxyOAuth2UpstreamAuthOutput.Type))
-					} else {
-						upstreamAuth.Auth.Oauth2.Type = types.StringNull()
-					}
-				}
-				upstreamAuth.Server = types.StringValue(upstreamAuthItem.Server)
-
-				r.Studio.UpstreamAuth = append(r.Studio.UpstreamAuth, upstreamAuth)
 			}
 		}
 	}

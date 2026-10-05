@@ -14,11 +14,6 @@ type AimCatalogMcpServerStateServerConnection struct {
 	Endpoint string `json:"endpoint"`
 	// MCP transport of the upstream server; `HTTP` is the streamable HTTP transport, the only one discovery supports today.
 	Transport *AimCatalogMcpServerTransport `default:"HTTP" json:"transport"`
-	// Authentication the platform uses against the upstream MCP server, discriminated by `type`. Credential values are
-	// stored verbatim: a literal, or a `secret://` URI pointing at a configured secret provider. They are never returned
-	// by this API, and a spec that omits a credential clears the stored one.
-	//
-	Auth AimCatalogMcpServerAuthOutput `json:"auth"`
 }
 
 func (a AimCatalogMcpServerStateServerConnection) MarshalJSON() ([]byte, error) {
@@ -44,25 +39,6 @@ func (a *AimCatalogMcpServerStateServerConnection) GetTransport() *AimCatalogMcp
 		return nil
 	}
 	return a.Transport
-}
-
-func (a *AimCatalogMcpServerStateServerConnection) GetAuth() AimCatalogMcpServerAuthOutput {
-	if a == nil {
-		return AimCatalogMcpServerAuthOutput{}
-	}
-	return a.Auth
-}
-
-func (a *AimCatalogMcpServerStateServerConnection) GetAuthNone() *AimCatalogMcpServerNoAuth {
-	return a.GetAuth().AimCatalogMcpServerNoAuth
-}
-
-func (a *AimCatalogMcpServerStateServerConnection) GetAuthHeader() *AimCatalogMcpServerHeaderAuthOutput {
-	return a.GetAuth().AimCatalogMcpServerHeaderAuthOutput
-}
-
-func (a *AimCatalogMcpServerStateServerConnection) GetAuthOauth2() *AimCatalogMcpServerOAuth2AuthOutput {
-	return a.GetAuth().AimCatalogMcpServerOAuth2AuthOutput
 }
 
 // AimCatalogMcpServerState - State of a Catalog MCP server that has been created or updated.

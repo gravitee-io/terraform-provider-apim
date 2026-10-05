@@ -550,90 +550,6 @@ func (r *McpProxyDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 						Computed:    true,
 						Description: `URL of the upstream MCP server, http or https; the gateway reaches it at runtime`,
 					},
-					"upstream_auth": schema.SingleNestedAttribute{
-						Computed: true,
-						Attributes: map[string]schema.Attribute{
-							"api_key": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"api_key_header": schema.StringAttribute{
-										Computed:    true,
-										Description: `Name of the header carrying the API key`,
-									},
-									"type": schema.StringAttribute{
-										Computed:    true,
-										Description: `Type of upstream authentication`,
-									},
-								},
-								Description: `A static API key sent to the upstream server in a header`,
-							},
-							"basic": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"type": schema.StringAttribute{
-										Computed:    true,
-										Description: `Type of upstream authentication`,
-									},
-									"username": schema.StringAttribute{
-										Computed:    true,
-										Description: `Basic authentication user name`,
-									},
-								},
-								Description: `Basic credentials sent to the upstream server`,
-							},
-							"bearer": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"type": schema.StringAttribute{
-										Computed:    true,
-										Description: `Type of upstream authentication`,
-									},
-								},
-								Description: `A static bearer token sent to the upstream server`,
-							},
-							"none": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"type": schema.StringAttribute{
-										Computed:    true,
-										Description: `Type of upstream authentication`,
-									},
-								},
-								Description: `No upstream authentication; the gateway passes the caller's credentials through`,
-							},
-							"oauth2": schema.SingleNestedAttribute{
-								Computed: true,
-								Attributes: map[string]schema.Attribute{
-									"authorize_url": schema.StringAttribute{
-										Computed:    true,
-										Description: `Authorization endpoint the elicitation flow sends the user to`,
-									},
-									"client_id": schema.StringAttribute{
-										Computed:    true,
-										Description: `Client id of the upstream OAuth 2.0 client`,
-									},
-									"scopes": schema.ListAttribute{
-										Computed:    true,
-										ElementType: types.StringType,
-										Description: `Scopes requested with the token`,
-									},
-									"token_url": schema.StringAttribute{
-										Computed:    true,
-										Description: `Token endpoint the gateway exchanges the authorization code at`,
-									},
-									"type": schema.StringAttribute{
-										Computed:    true,
-										Description: `Type of upstream authentication`,
-									},
-								},
-								Description: `OAuth 2.0 authentication negotiated with the upstream server through MCP elicitation`,
-							},
-						},
-						MarkdownDescription: `Authentication the gateway uses against the upstream MCP server, discriminated by ` + "`" + `type` + "`" + `. Credential values` + "\n" +
-							`are stored verbatim: a literal, or a ` + "`" + `secret://` + "`" + ` URI pointing at a configured secret provider. They are` + "\n" +
-							`never returned by this API. Omitting ` + "`" + `proxy.upstreamAuth` + "`" + `, or declaring ` + "`" + `type: NONE` + "`" + `, means the gateway passes` + "\n" +
-							`the caller's credentials through — and clears any stored upstream authentication.`,
-					},
 				},
 				MarkdownDescription: `What a ` + "`" + `PROXY` + "`" + ` fronts: one upstream MCP server and the credential the gateway presents to it. Required when` + "\n" +
 					`` + "`" + `mode` + "`" + ` is ` + "`" + `PROXY` + "`" + `, rejected otherwise.`,
@@ -684,105 +600,6 @@ func (r *McpProxyDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 							`Every server named here needs an ` + "`" + `upstreamAuth` + "`" + ` entry. On a studio created with a ` + "`" + `GRAVITEE_AM` + "`" + `` + "\n" +
 							`provider, a tool added after creation is served but not registered as a scope on the Access` + "\n" +
 							`Management domain; the apply reports it as a warning.`,
-					},
-					"upstream_auth": schema.ListNestedAttribute{
-						Computed: true,
-						NestedObject: schema.NestedAttributeObject{
-							Attributes: map[string]schema.Attribute{
-								"auth": schema.SingleNestedAttribute{
-									Computed: true,
-									Attributes: map[string]schema.Attribute{
-										"api_key": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"api_key_header": schema.StringAttribute{
-													Computed:    true,
-													Description: `Name of the header carrying the API key`,
-												},
-												"type": schema.StringAttribute{
-													Computed:    true,
-													Description: `Type of upstream authentication`,
-												},
-											},
-											Description: `A static API key sent to the upstream server in a header`,
-										},
-										"basic": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"type": schema.StringAttribute{
-													Computed:    true,
-													Description: `Type of upstream authentication`,
-												},
-												"username": schema.StringAttribute{
-													Computed:    true,
-													Description: `Basic authentication user name`,
-												},
-											},
-											Description: `Basic credentials sent to the upstream server`,
-										},
-										"bearer": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"type": schema.StringAttribute{
-													Computed:    true,
-													Description: `Type of upstream authentication`,
-												},
-											},
-											Description: `A static bearer token sent to the upstream server`,
-										},
-										"none": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"type": schema.StringAttribute{
-													Computed:    true,
-													Description: `Type of upstream authentication`,
-												},
-											},
-											Description: `No upstream authentication; the gateway passes the caller's credentials through`,
-										},
-										"oauth2": schema.SingleNestedAttribute{
-											Computed: true,
-											Attributes: map[string]schema.Attribute{
-												"authorize_url": schema.StringAttribute{
-													Computed:    true,
-													Description: `Authorization endpoint the elicitation flow sends the user to`,
-												},
-												"client_id": schema.StringAttribute{
-													Computed:    true,
-													Description: `Client id of the upstream OAuth 2.0 client`,
-												},
-												"scopes": schema.ListAttribute{
-													Computed:    true,
-													ElementType: types.StringType,
-													Description: `Scopes requested with the token`,
-												},
-												"token_url": schema.StringAttribute{
-													Computed:    true,
-													Description: `Token endpoint the gateway exchanges the authorization code at`,
-												},
-												"type": schema.StringAttribute{
-													Computed:    true,
-													Description: `Type of upstream authentication`,
-												},
-											},
-											Description: `OAuth 2.0 authentication negotiated with the upstream server through MCP elicitation`,
-										},
-									},
-									MarkdownDescription: `Authentication the gateway uses against the upstream MCP server, discriminated by ` + "`" + `type` + "`" + `. Credential values` + "\n" +
-										`are stored verbatim: a literal, or a ` + "`" + `secret://` + "`" + ` URI pointing at a configured secret provider. They are` + "\n" +
-										`never returned by this API. Omitting ` + "`" + `proxy.upstreamAuth` + "`" + `, or declaring ` + "`" + `type: NONE` + "`" + `, means the gateway passes` + "\n" +
-										`the caller's credentials through — and clears any stored upstream authentication.`,
-								},
-								"server": schema.StringAttribute{
-									Computed:    true,
-									Description: `HRID of the ` + "`" + `catalog/mcp-servers` + "`" + ` resource the credential is for`,
-								},
-							},
-						},
-						MarkdownDescription: `One entry per catalog server a tool comes from: the credential the gateway presents to that server,` + "\n" +
-							`stored verbatim and never returned, or ` + "`" + `type: NONE` + "`" + ` to say the server needs none. Nothing is inferred` + "\n" +
-							`from the credential the catalog synced the server with. An entry for a server no tool uses, a server` + "\n" +
-							`without an entry, or two entries for one server are rejected.`,
 					},
 				},
 				MarkdownDescription: `What a ` + "`" + `STUDIO` + "`" + ` exposes: tools picked from catalog MCP servers of the environment, the credential the` + "\n" +
@@ -842,8 +659,6 @@ func (r *McpProxyDataSource) Read(ctx context.Context, req datasource.ReadReques
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetAimMcpProxyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -852,7 +667,7 @@ func (r *McpProxyDataSource) Read(ctx context.Context, req datasource.ReadReques
 	}
 	res, err := r.client.MCPProxies.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
+		resp.Diagnostics.AddError("failure to invoke API", err.Error())
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
