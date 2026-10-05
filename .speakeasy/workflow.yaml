@@ -22,6 +22,7 @@ sources:
             - location: .speakeasy/overlays/portal-listing.yaml
             - location: .speakeasy/overlays/documentation-portal.yaml
             - location: .speakeasy/overlays/documentation-api.yaml
+            - location: .speakeasy/overlays/common/not-managed.yaml
             - location: .speakeasy/overlays/aim/common.yaml
             - location: .speakeasy/overlays/aim/catalog-mcp-server.yaml
             - location: .speakeasy/overlays/aim/mcp-proxy.yaml
