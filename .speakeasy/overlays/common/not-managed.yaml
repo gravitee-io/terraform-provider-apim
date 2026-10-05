@@ -1,0 +1,66 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Attributes the API has and the provider does not manage yet
+  version: 0.0.1
+actions:
+
+  # The Automation API document is synced as a whole, so it brings attributes
+  # no one has wired into the provider: no overlay, no test, no check against
+  # the older APIM versions the provider supports. Left in, they are generated
+  # as computed and show as a change on every plan. They are held back here until
+  # the work that owns each of them takes its entry out of this file.
+  #
+  # An attribute that is a $ref is ignored on its component: an extension beside
+  # a $ref is not read.
+
+  ## Dictionary encryption (GKO-3070)
+  - target: $.components.schemas.ManualDictionarySpec.properties.encryptedProperties
+    description: |
+      Besides not being managed: the code generated for a map of objects that hold
+      nothing but a write-only value does not compile.
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.DictionaryEncryptionPolicy
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  ## Portal theme, homepage, links and navigation visibility
+  - target: $.components.schemas.PortalSpec.properties.activeThemeHrid
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.PortalNavigationStructure
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.PortalVisibility
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.DocumentationArea
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.PortalSpec.properties.navigation.deprecated
+    description: Its replacement, structure, is held back above
+    remove: true
+  - target: $.components.schemas.PortalSpec.properties.navigation
+    description: The document's wording points at structure
+    update:
+      description: The portal's navigation hierarchy as a flat list of paths.
+
+  ## HTTP listener, CORS and tracing properties
+  - target: $.components.schemas.HttpListener.allOf[*].properties.pathMappings
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.RequestValidation
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.Cors.properties.allowPrivateNetwork
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.schemas.TracingRedactionConfig
+    update:
+      x-speakeasy-terraform-ignore: true
+
+  ## Native connection events
+  - target: $.components.schemas.Analytics.properties.connectionEvents
+    update:
+      x-speakeasy-terraform-ignore: true
