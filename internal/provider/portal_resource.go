@@ -81,7 +81,7 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{
@@ -122,9 +122,7 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 						},
 					},
 				},
-				MarkdownDescription: `The portal's navigation hierarchy as a flat list of paths.` + "\n" +
-					`Paths are ordered — the order in the list is preserved.` + "\n" +
-					`Intermediate folders are implicitly created if not listed explicitly.`,
+				Description: `The portal's navigation hierarchy as a flat list of paths.`,
 			},
 			"organization_id": schema.StringAttribute{
 				Computed: true,
