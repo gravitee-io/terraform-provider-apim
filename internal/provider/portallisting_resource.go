@@ -205,6 +205,8 @@ func (r *PortalListingResource) Create(ctx context.Context, req resource.CreateR
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateOrUpdatePortalListingRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -213,7 +215,7 @@ func (r *PortalListingResource) Create(ctx context.Context, req resource.CreateR
 	}
 	res, err := r.client.PortalListings.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -265,6 +267,8 @@ func (r *PortalListingResource) Read(ctx context.Context, req resource.ReadReque
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetPortalListingRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -273,7 +277,7 @@ func (r *PortalListingResource) Read(ctx context.Context, req resource.ReadReque
 	}
 	res, err := r.client.PortalListings.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -327,6 +331,8 @@ func (r *PortalListingResource) Update(ctx context.Context, req resource.UpdateR
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsCreateOrUpdatePortalListingRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -335,7 +341,7 @@ func (r *PortalListingResource) Update(ctx context.Context, req resource.UpdateR
 	}
 	res, err := r.client.PortalListings.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -395,6 +401,8 @@ func (r *PortalListingResource) Delete(ctx context.Context, req resource.DeleteR
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeletePortalListingRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -403,7 +411,7 @@ func (r *PortalListingResource) Delete(ctx context.Context, req resource.DeleteR
 	}
 	res, err := r.client.PortalListings.Delete(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -443,8 +451,8 @@ func (r *PortalListingResource) ImportState(ctx context.Context, req resource.Im
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"'`)
-			return
+			var environmentIDDefault string = `DEFAULT`
+			data.EnvironmentID = &environmentIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -458,8 +466,8 @@ func (r *PortalListingResource) ImportState(ctx context.Context, req resource.Im
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"'`)
-			return
+			var organizationIDDefault string = `DEFAULT`
+			data.OrganizationID = &organizationIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

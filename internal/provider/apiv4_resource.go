@@ -3342,6 +3342,8 @@ func (r *Apiv4Resource) Create(ctx context.Context, req resource.CreateRequest, 
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateOrUpdateApisRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -3350,7 +3352,7 @@ func (r *Apiv4Resource) Create(ctx context.Context, req resource.CreateRequest, 
 	}
 	res, err := r.client.Apis.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -3387,7 +3389,7 @@ func (r *Apiv4Resource) Create(ctx context.Context, req resource.CreateRequest, 
 	}
 	res1, err := r.client.Apis.Get(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -3439,6 +3441,8 @@ func (r *Apiv4Resource) Read(ctx context.Context, req resource.ReadRequest, resp
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetAPIRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -3447,7 +3451,7 @@ func (r *Apiv4Resource) Read(ctx context.Context, req resource.ReadRequest, resp
 	}
 	res, err := r.client.Apis.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -3501,6 +3505,8 @@ func (r *Apiv4Resource) Update(ctx context.Context, req resource.UpdateRequest, 
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsCreateOrUpdateApisRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -3509,7 +3515,7 @@ func (r *Apiv4Resource) Update(ctx context.Context, req resource.UpdateRequest, 
 	}
 	res, err := r.client.Apis.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -3546,7 +3552,7 @@ func (r *Apiv4Resource) Update(ctx context.Context, req resource.UpdateRequest, 
 	}
 	res1, err := r.client.Apis.Get(ctx, *request1)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res1 != nil && res1.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res1.RawResponse))
 		}
@@ -3606,6 +3612,8 @@ func (r *Apiv4Resource) Delete(ctx context.Context, req resource.DeleteRequest, 
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteAPIRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -3614,7 +3622,7 @@ func (r *Apiv4Resource) Delete(ctx context.Context, req resource.DeleteRequest, 
 	}
 	res, err := r.client.Apis.Delete(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -3653,8 +3661,8 @@ func (r *Apiv4Resource) ImportState(ctx context.Context, req resource.ImportStat
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"'`)
-			return
+			var environmentIDDefault string = `DEFAULT`
+			data.EnvironmentID = &environmentIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -3668,8 +3676,8 @@ func (r *Apiv4Resource) ImportState(ctx context.Context, req resource.ImportStat
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"'`)
-			return
+			var organizationIDDefault string = `DEFAULT`
+			data.OrganizationID = &organizationIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

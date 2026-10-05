@@ -250,7 +250,14 @@ func CreateAimCatalogMcpServerAuthOutputOauth2(oauth2 AimCatalogMcpServerOAuth2A
 	}
 }
 
-func (u *AimCatalogMcpServerAuthOutput) UnmarshalJSON(data []byte) error {
+func (u *AimCatalogMcpServerAuthOutput) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = AimCatalogMcpServerAuthOutput{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Type string `json:"type"`
@@ -472,7 +479,14 @@ func CreateAimCatalogMcpServerAuthOauth2(oauth2 AimCatalogMcpServerOAuth2Auth) A
 	}
 }
 
-func (u *AimCatalogMcpServerAuth) UnmarshalJSON(data []byte) error {
+func (u *AimCatalogMcpServerAuth) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = AimCatalogMcpServerAuth{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Type string `json:"type"`

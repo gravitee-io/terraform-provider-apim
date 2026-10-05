@@ -391,7 +391,14 @@ func CreateAimMcpProxyUpstreamAuthOutputOauth2(oauth2 AimMcpProxyOAuth2UpstreamA
 	}
 }
 
-func (u *AimMcpProxyUpstreamAuthOutput) UnmarshalJSON(data []byte) error {
+func (u *AimMcpProxyUpstreamAuthOutput) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = AimMcpProxyUpstreamAuthOutput{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Type string `json:"type"`
@@ -750,7 +757,14 @@ func CreateAimMcpProxyUpstreamAuthOauth2(oauth2 AimMcpProxyOAuth2UpstreamAuth) A
 	}
 }
 
-func (u *AimMcpProxyUpstreamAuth) UnmarshalJSON(data []byte) error {
+func (u *AimMcpProxyUpstreamAuth) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = AimMcpProxyUpstreamAuth{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Type string `json:"type"`

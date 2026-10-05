@@ -35,7 +35,14 @@ func CreateDictionaryProviderHTTP(http HTTPDictionaryProvider) DictionaryProvide
 	}
 }
 
-func (u *DictionaryProvider) UnmarshalJSON(data []byte) error {
+func (u *DictionaryProvider) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = DictionaryProvider{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Type string `json:"type"`
