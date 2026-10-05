@@ -61,8 +61,17 @@ resource "apim_mcp_proxy" "github" {
 }
 
 resource "apim_catalog_mcp_server" "github" {
-  # properties omitted for simplicity
-  hrid = "github"
+  hrid      = "github"
+  entity_id = "mcp-server.github"
+  server_connection = {
+    endpoint = "https://api.githubcopilot.com/mcp/"
+    auth = {
+      header = {
+        name  = "Authorization"
+        value = "Bearer ${var.github_mcp_token}"
+      }
+    }
+  }
 }
 
 # STUDIO mode: tools picked from catalog MCP servers.

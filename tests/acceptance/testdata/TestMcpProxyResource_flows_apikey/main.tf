@@ -69,7 +69,7 @@ resource "apim_mcp_proxy" "test" {
                 rate = {
                   limit          = var.limit * 10
                   periodTime     = 1
-                  periodTimeUnit = "HOURS"
+                  periodTimeUnit = "SECONDS"
                   key            = ""
                   useKeyOnly     = false
                 }

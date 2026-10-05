@@ -17,7 +17,7 @@ resource "apim_catalog_mcp_server" "test" {
 
   hrid      = var.hrid
   entity_id = "mcp-server.${var.hrid}"
-  connection = {
+  server_connection = {
     endpoint = "http://unreachable.invalid/mcp"
     auth = {
       none = {}

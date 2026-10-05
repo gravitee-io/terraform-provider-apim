@@ -52,13 +52,6 @@ actions:
         - $ref: '#/components/schemas/AimMcpProxyStudio'
       x-speakeasy-conflicts-with:
         - proxy
-  - target: $.components.schemas.AimMcpProxyProxy
-    description: |
-      A proxy declared with no upstream authentication is read back without the
-      block. Refused at plan time, where leaving the block out says the same.
-    update:
-      x-speakeasy-plan-validators: ProxyUpstreamAuthNotNone
-
   # Computed
   - target: $.components.schemas.AimMcpProxyProxy
     description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
@@ -165,12 +158,12 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-plan-modifiers: IgnoreEmptyList
-  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[?@.properties.scopes].properties.scopes
+  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[*].properties.scopes
     description: Prevent empty array to create plan diff
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-plan-modifiers: IgnoreEmptyList
-  - target: $.components.schemas.AimMcpProxyOAuth2PlanSecurity.allOf[?@.properties.scopes].properties.scopes
+  - target: $.components.schemas.AimMcpProxyOAuth2PlanSecurity.allOf[*].properties.scopes
     description: Prevent empty array to create plan diff
     update:
       x-speakeasy-param-computed: true
@@ -197,13 +190,9 @@ actions:
     description: Reported sorted by server then tool
     update:
       x-speakeasy-plan-validators: SortedByServerAndTool
-  - target: $.components.schemas.AimMcpProxyStudio.properties.upstreamAuth
-    description: Reported sorted by server
-    update:
-      x-speakeasy-plan-validators: SortedByServer
 
   # Normalized by the platform
-  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[?@.properties.issuerUrl].properties.issuerUrl
+  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[*].properties.issuerUrl
     description: Reported without its trailing slash
     update:
       x-speakeasy-plan-modifiers: TrimTrailingSlash
@@ -214,24 +203,40 @@ actions:
     update:
       x-speakeasy-type-override: any
 
+  # Credentials
+  # Write-only as a whole, for the reason given on the catalog server
+  # (aim/catalog-mcp-server.yaml): Terraform sends the declared upstream
+  # authentication and does not read it back.
+  # Wrap $ref in allOf so Speakeasy can apply writeOnly on the property
+  - target: $.components.schemas.AimMcpProxyProxy.properties.upstreamAuth['$ref']
+    remove: true
+  - target: $.components.schemas.AimMcpProxyProxy.properties.upstreamAuth
+    update:
+      allOf:
+        - $ref: '#/components/schemas/AimMcpProxyUpstreamAuth'
+      writeOnly: true
+  - target: $.components.schemas.AimMcpProxyStudio.properties.upstreamAuth
+    update:
+      writeOnly: true
+
   # Sensitive
-  - target: $.components.schemas.AimMcpProxyApiKeyUpstreamAuth.allOf[?@.properties.apiKey].properties.apiKey
+  - target: $.components.schemas.AimMcpProxyApiKeyUpstreamAuth.allOf[*].properties.apiKey
     description: Never returned by the platform
     update:
       x-speakeasy-param-sensitive: true
-  - target: $.components.schemas.AimMcpProxyBearerUpstreamAuth.allOf[?@.properties.token].properties.token
+  - target: $.components.schemas.AimMcpProxyBearerUpstreamAuth.allOf[*].properties.token
     description: Never returned by the platform
     update:
       x-speakeasy-param-sensitive: true
-  - target: $.components.schemas.AimMcpProxyBasicUpstreamAuth.allOf[?@.properties.password].properties.password
+  - target: $.components.schemas.AimMcpProxyBasicUpstreamAuth.allOf[*].properties.password
     description: Never returned by the platform
     update:
       x-speakeasy-param-sensitive: true
-  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[?@.properties.clientSecret].properties.clientSecret
+  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[*].properties.clientSecret
     description: Never returned by the platform
     update:
       x-speakeasy-param-sensitive: true
-  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[?@.properties.clientSecret].properties.clientSecret
+  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[*].properties.clientSecret
     description: Never returned by the platform
     update:
       x-speakeasy-param-sensitive: true

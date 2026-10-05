@@ -47,8 +47,11 @@ resource "apim_mcp_proxy" "test" {
   plans = [
     for plan in var.plans : {
       name = plan
+      # An API takes one keyless plan at most.
       security = {
-        key_less = {}
+        api_key = {
+          source = "HEADER"
+        }
       }
     }
   ]

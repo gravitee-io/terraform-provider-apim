@@ -83,7 +83,6 @@ Files listed in `.genignore` are **not** overwritten by Speakeasy even though si
 | `internal/planmodifiers/listplanmodifier/ignore_empty_list.go`, `no_removal_by_name.go` | Custom plan modifiers |
 | `internal/planmodifiers/mapplanmodifier/response_template.go` | Custom plan modifier |
 | `internal/validators/listvalidators/sorted_by*.go` | Custom validators: lists the platform reports in its own order |
-| `internal/validators/objectvalidators/proxy_upstream_auth_not_none.go` | Custom validator |
 | `internal/listkeys/` | Reads the identifying attributes of a list's elements, for the validators and modifiers above |
 | `internal/sdk/internal/hooks/registration.go` | Generated once, then free to edit |
 | `hack/`, `Makefile`, CI config | Project infrastructure |
@@ -121,7 +120,7 @@ Config: `.speakeasy/gen.yaml`, `.speakeasy/gen.lock`, `.speakeasy/workflow.yaml`
 
 ### SDK (`internal/sdk/`)
 
-Generated Go HTTP client. Entry point: `graviteeapim.go`. API groups: `apis.go`, `applications.go`, `dictionaries.go`, `groups.go`, `sharedpolicygroups.go`, `subscriptions.go`, `portals.go`, `portallistings.go`, `apidocumentations.go`, `portaldocumentations.go`. Models in `models/operations/` and `models/shared/`.
+Generated Go HTTP client. Entry point: `graviteeapim.go`. API groups: `apis.go`, `applications.go`, `dictionaries.go`, `groups.go`, `sharedpolicygroups.go`, `subscriptions.go`, `portals.go`, `portallistings.go`, `apidocumentations.go`, `portaldocumentations.go`, `aicatalog.go`, `mcpproxies.go`. `themes.go`, `portallinks.go` and `apilinks.go` are in the SDK only: the provider has no resource for them yet. Models in `models/operations/` and `models/shared/`.
 
 ### Tests (`tests/`)
 
@@ -151,6 +150,13 @@ Provider supports three auth methods:
 To change schema behavior (plan modifiers, computed fields, validators, defaults, suppress diffs, etc.), update `.speakeasy/overlays/` and regenerate with `make speakeasy`. Never edit generated files directly.
 
 The source has two inputs (`.speakeasy/workflow.yaml`). The AI Management fragment comes from a Gamma module, with its own `Aim*` components and its unions written as a discriminator on a base schema. `.speakeasy/overlays/aim/*-shape.yaml` run before the common overlays and give it the shape of the base document: the shared parameter components, and a `oneOf` per union. `.speakeasy/overlays/aim/<resource>.yaml` then carry the behaviour, as the other resource overlays do.
+
+Two things in the AI Management overlays are there because of the generator, and are explained where they are declared:
+
+- `server_connection` on `apim_catalog_mcp_server`: the API's `connection` is a reserved root attribute name in Terraform.
+- The authentication blocks (`server_connection.auth`, `proxy.upstream_auth`, `studio.upstream_auth`) are write-only as a whole. The code Speakeasy generates to keep a write-only attribute nested deeper than that dereferences a nil prior state, on import and on every read of a studio.
+
+An overlay target cannot use `value`, `count`, `length`, `match` or `search` as a name inside a filter (`[?@.properties.value]`): they are JSONPath function names and the overlay fails to parse.
 
 An overlay action whose target matches nothing is ignored without an error: after a generation, grep `.speakeasy/output/computed.yaml` and the generated resource for each annotation you added.
 

@@ -199,7 +199,8 @@ func TestMcpProxyResource_upstream_auth(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
-			// 1: a bearer token. The platform never returns it.
+			// 1: a bearer token. The platform never returns it, and the provider does not read
+			// the upstream authentication back: the state holds what was declared.
 			{
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestStepDirectory(),
@@ -237,13 +238,6 @@ func TestMcpProxyResource_upstream_auth(t *testing.T) {
 				ConfigDirectory:          config.TestStepDirectory(),
 				ConfigVariables:          variables,
 				ConfigPlanChecks:         emptyPlan,
-			},
-			// 6: the none variant reads back without the block, so it is refused when planning.
-			{
-				ProtoV6ProviderFactories: testProviders(),
-				ConfigDirectory:          config.TestStepDirectory(),
-				ConfigVariables:          variables,
-				ExpectError:              regexp.MustCompile(`No upstream authentication is declared by leaving upstream_auth out`),
 			},
 		},
 	})

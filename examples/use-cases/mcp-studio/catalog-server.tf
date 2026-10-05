@@ -5,7 +5,7 @@ resource "apim_catalog_mcp_server" "deepwiki" {
   hrid        = "example-deepwiki"
   entity_id   = "mcp-server.example-deepwiki"
   description = "DeepWiki documentation tools for coding agents"
-  connection = {
+  server_connection = {
     endpoint = "https://mcp.deepwiki.com/mcp"
     # DeepWiki is public. A server that needs a credential declares
     # header = { name, value } or oauth2 = { client_id, client_secret, token_url }.

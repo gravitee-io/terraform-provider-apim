@@ -18,7 +18,7 @@ variable "entity_id" {
 resource "apim_catalog_mcp_server" "test" {
   hrid      = var.hrid
   entity_id = var.entity_id
-  connection = {
+  server_connection = {
     endpoint = var.endpoint
     auth = {
       none = {}

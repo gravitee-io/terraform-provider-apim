@@ -8,7 +8,7 @@ resource "apim_catalog_mcp_server" "github" {
   hrid        = "github"
   entity_id   = "mcp-server.github"
   description = "GitHub tools for coding agents"
-  connection = {
+  server_connection = {
     endpoint = "https://api.githubcopilot.com/mcp/"
     auth = {
       header = {
