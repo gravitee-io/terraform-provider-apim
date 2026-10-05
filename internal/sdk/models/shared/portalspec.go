@@ -9,11 +9,16 @@ type PortalSpec struct {
 	Hrid string `json:"hrid"`
 	// Display name of the portal
 	Name string `json:"name"`
+	// Portal navigation grouped by area.
+	Structure *PortalNavigationStructure `json:"structure,omitempty"`
 	// The portal's navigation hierarchy as a flat list of paths.
-	// Paths are ordered — the order in the list is preserved.
-	// Intermediate folders are implicitly created if not listed explicitly.
-	//
 	Navigation []PortalNavigationPath `json:"navigation,omitempty"`
+	// HRID of the Theme this portal should use as its active theme. When set, applying the portal
+	// marks the referenced theme as active (enabled) and disables every other PORTAL_NEXT theme
+	// in the environment. Leaving this field unset clears the reference and disables the
+	// previously-active theme; the portal-next UI will then lazily fall back to a fresh default theme.
+	//
+	ActiveThemeHrid *string `json:"activeThemeHrid,omitempty"`
 }
 
 func (p *PortalSpec) GetHrid() string {
@@ -30,9 +35,23 @@ func (p *PortalSpec) GetName() string {
 	return p.Name
 }
 
+func (p *PortalSpec) GetStructure() *PortalNavigationStructure {
+	if p == nil {
+		return nil
+	}
+	return p.Structure
+}
+
 func (p *PortalSpec) GetNavigation() []PortalNavigationPath {
 	if p == nil {
 		return nil
 	}
 	return p.Navigation
+}
+
+func (p *PortalSpec) GetActiveThemeHrid() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ActiveThemeHrid
 }

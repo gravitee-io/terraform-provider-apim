@@ -61,6 +61,8 @@ func Pointer[T any](v T) *T { return &v }
 // * Portals
 // * Portal Listings
 // * Documentations
+// * MCP Catalog Servers
+// * MCP Proxies
 //
 // [Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)
 //
@@ -83,8 +85,16 @@ type GraviteeApim struct {
 	PortalListings *PortalListings
 	// Everything about Portal Documentations
 	PortalDocumentations *PortalDocumentations
+	// Everything about Portal Links (external navigation entries in a portal's navigation)
+	PortalLinks *PortalLinks
+	Themes      *Themes
 	// Everything about API Documentations (next-gen portal)
 	APIDocumentations *APIDocumentations
+	APILinks          *APILinks
+	// Upstream MCP servers registered in the AI Catalog.
+	AICatalog *AICatalog
+	// MCP proxies exposing an upstream MCP server through the gateway.
+	MCPProxies *MCPProxies
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -207,7 +217,12 @@ func New(opts ...SDKOption) *GraviteeApim {
 	sdk.Portals = newPortals(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.PortalListings = newPortalListings(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.PortalDocumentations = newPortalDocumentations(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.PortalLinks = newPortalLinks(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Themes = newThemes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APIDocumentations = newAPIDocumentations(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APILinks = newAPILinks(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.AICatalog = newAICatalog(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.MCPProxies = newMCPProxies(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }

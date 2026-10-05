@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 2d436461a43a93eec2b65f0eaf85040a
+  docChecksum: 872d7232aebe11091c5df7825e31c607
   docVersion: 1.0.0
   speakeasyVersion: 1.793.1
   generationVersion: 2.928.0
   releaseVersion: 1.0.0
   configChecksum: e4e0dd4531b872006ef64c6bc4d96ead
 persistentEdits:
-  generation_id: 714a7c58-647d-402b-8a68-4480d9911dce
-  pristine_commit_hash: e80b75c6b4e011b9ba8e0b111142f45d79e370a1
-  pristine_tree_hash: c82f031eda436a953a065ca869b7e0b09108cb35
+  generation_id: a5361fd0-b038-4010-bb33-62fd3b9c7f7c
+  pristine_commit_hash: 408cc2fb6e6b45dd5722baed468035a0f52a81be
+  pristine_tree_hash: 6acbc644b51625372768196dd8e4837f86c2466e
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -46,6 +46,11 @@ trackedFiles:
     last_write_checksum: sha1:f3b11d3ade11050fefff8d6699c54a42983bafcc
     pristine_git_object: d2ea716c15de1fac55acce7b93ea58ad29be1568
     deleted: true
+  examples/data-sources/apim_catalog_mcp_server/data-source.tf:
+    id: 53a31f294f50
+    last_write_checksum: sha1:f5ceb26e235ed8b2307dd69aab46795e6913ae06
+    pristine_git_object: e158e6b5f66a965c3cd5e4e79302d02f633e661e
+    deleted: true
   examples/data-sources/apim_dictionary/data-source.tf:
     id: 6c7733ed26d6
     last_write_checksum: sha1:701c3445663ec80c9140e153fa2280fd80aadae1
@@ -70,6 +75,11 @@ trackedFiles:
     id: 98b93d66233a
     last_write_checksum: sha1:89a08eb7ad4ea01cb4c4b494a44a674f8eae13c2
     pristine_git_object: be23cd970d1399aea1c9b10af16ec0331e2f6b19
+    deleted: true
+  examples/data-sources/apim_mcp_proxy/data-source.tf:
+    id: 0302d1ad14d0
+    last_write_checksum: sha1:67c3eefa24b7e528442bc74c5d696fb9314a153f
+    pristine_git_object: 1cfe65b0a7762cffc42fd49445c9f526b0d9c9ff
     deleted: true
   examples/data-sources/apim_portal/data-source.tf:
     id: c9a23644cbb2
@@ -241,136 +251,168 @@ trackedFiles:
     pristine_git_object: cd0dbf813362d30f2c7b2f489f99a65ea2d528e0
   internal/provider/apiv4_data_source.go:
     id: 1b5cb67c37e9
-    last_write_checksum: sha1:57f8530a334de60dd3f48abb1d0a163e0f743658
-    pristine_git_object: cf8298c428fa14ad94b8ec9915624d5abd770b22
+    last_write_checksum: sha1:e573f790a0b8b4a358b9f9955d81a0418901a526
+    pristine_git_object: 1350d9170484cf19646ac830f82697d6da863fea
   internal/provider/apiv4_data_source_sdk.go:
     id: 0f327fef7ee2
     last_write_checksum: sha1:4c935e1d9e39fb8b54992121ee7b1117cd99a4fc
     pristine_git_object: b7b1c23c4efe76203282dcb710960adadf617f59
   internal/provider/apiv4_resource.go:
     id: 333e3a57e1ff
-    last_write_checksum: sha1:a85ca9cca2b2367ad71dd6744a11235988becee1
-    pristine_git_object: 38d3573fc80eee3dfb8a4e8cd3b7fbbfcd021a5f
+    last_write_checksum: sha1:249f34b63b2aad581f2b68f2526d9d4f5cc5dad5
+    pristine_git_object: 46c6c2cf3f6eca21f4ba0b79ac776d45f1710d12
   internal/provider/apiv4_resource_sdk.go:
     id: ba8026d69f87
     last_write_checksum: sha1:fb30ff3080efd6db6c2e8c197a0f8884a2244cd0
     pristine_git_object: 1ab2ca62ea3aacc3a13ceed2e9d19f3f2eef76e1
   internal/provider/application_data_source.go:
     id: bc1a3e0c6e41
-    last_write_checksum: sha1:d08e7014ca8911498df76774aa0815414f708777
-    pristine_git_object: e5f24c0c7076273e22c86b35b36af4d8a90a3d87
+    last_write_checksum: sha1:92274519381d828dcba033997e84219c5de8b5c4
+    pristine_git_object: cfd2440469cae0aa8d2263c8b549605814c1b437
   internal/provider/application_data_source_sdk.go:
     id: c8d852b89fb1
     last_write_checksum: sha1:0060cebce5467ad6176001c7692141506b435992
     pristine_git_object: 1d3a0057cd11804fd40569c7651a97086cc8859c
   internal/provider/application_resource.go:
     id: 7f6eb7925aae
-    last_write_checksum: sha1:ff193048a00f2e8c495d6c39feaacc3fa65dac49
-    pristine_git_object: 23ffaa103753e4c13a1a713713d3c7cf2bea5323
+    last_write_checksum: sha1:05581d107df0b6bb2d2cba2df21371e5d9cf287a
+    pristine_git_object: 9ee161025fa98bc400d0f1ab7b7d2bbb5d1bb6fd
   internal/provider/application_resource_sdk.go:
     id: e222f1f0cfa7
     last_write_checksum: sha1:8dc7cdae0fd416f110c161dab24512143f347698
     pristine_git_object: cb10c715d6d0333ca4a33e2231c7278b43dc523f
+  internal/provider/catalogmcpserver_data_source.go:
+    id: 7efb451356df
+    last_write_checksum: sha1:fa5a94566e39cc890ef28c45a5b0e3c05211b830
+    pristine_git_object: 88a3b5ffb358fa6fbe46f158b299c0a444c4713e
+  internal/provider/catalogmcpserver_data_source_sdk.go:
+    id: d6d0a5e051aa
+    last_write_checksum: sha1:aefd8238ab32549b818e9fa431f5b5e6938f011b
+    pristine_git_object: 9e905d7583441ea7f50aebbfc70ba8a79bedb347
+  internal/provider/catalogmcpserver_resource.go:
+    id: 111ad69d7619
+    last_write_checksum: sha1:6bba811df31118f1f85f2f18caecac53dfea3af6
+    pristine_git_object: ba42481db4e9201fae8ea5767e840357e2ae5ea7
+  internal/provider/catalogmcpserver_resource_sdk.go:
+    id: c91ee7948113
+    last_write_checksum: sha1:2602f4cddb7fecedcbd5234fb4a52bc0cbc67db1
+    pristine_git_object: 8c9ddb44cb69aea9d0190b8a3044a4248e3f8726
   internal/provider/dictionary_data_source.go:
     id: 4903f0ba16b5
-    last_write_checksum: sha1:23f6d7bf8e9305da0a369dbd5635072ba55a7430
-    pristine_git_object: 489bd53a213005b24b60a2e00ef391ee6ba30e06
+    last_write_checksum: sha1:41b7b6c2de2c55d6535257a2dcf3b21146d2d711
+    pristine_git_object: 7193ce03844354e8b45cbf61539210cd644fb85d
   internal/provider/dictionary_data_source_sdk.go:
     id: 2b0e2626c673
     last_write_checksum: sha1:5ca992d4d136d07ee21b934eebb23e805c548cce
     pristine_git_object: 7c4d4aa706a876f35f1db1bc88930ab4af73f254
   internal/provider/dictionary_resource.go:
     id: 4e5315a19546
-    last_write_checksum: sha1:6f205c8e6a421c1eafc7211ade71e2eeadac07ce
-    pristine_git_object: b3ff87230fcd813a22916e8dee0ca7be023da501
+    last_write_checksum: sha1:e87c791fcbeb31b4b9253d3b9667832761042cdc
+    pristine_git_object: 3df83cb259b14228cfb97f79a27c1e7bab738fd5
   internal/provider/dictionary_resource_sdk.go:
     id: 1dc3aa1cf6a1
     last_write_checksum: sha1:f5f9e120557a1ecf6051b3b5654d906b9a74ef6f
     pristine_git_object: ac65bd11d6d5a393277968965abff182ab1f9090
   internal/provider/documentationapi_data_source.go:
     id: 381459a5a301
-    last_write_checksum: sha1:217e7d546457d806c770613f9926cd316a9ed07e
-    pristine_git_object: d21cc54c9683f3437ee6434af17d593b265e7977
+    last_write_checksum: sha1:8b3323bc1da0084c1fa6d052c890d50db295ae3e
+    pristine_git_object: bd358d59eab5f3d1dd1b25ed7d4bd19649cd0eb4
   internal/provider/documentationapi_data_source_sdk.go:
     id: b2fe28dd17ef
     last_write_checksum: sha1:1dc70409b94291a390943db05838100446d837d4
     pristine_git_object: 4020ddc0179df652ab6a68d352abf904a819550e
   internal/provider/documentationapi_resource.go:
     id: e0aeb0644e7f
-    last_write_checksum: sha1:8de757721c8c587544f07ad4c820a973099a4abc
-    pristine_git_object: 86fb33a27f3ac91598337ebf804f53e656dc1976
+    last_write_checksum: sha1:a18792b2fbf509f8025fcc25a488b44d6f53b1a2
+    pristine_git_object: 38d61ceee3255a373e242efabc8265b4e1102fab
   internal/provider/documentationapi_resource_sdk.go:
     id: 2d0673ec07dc
     last_write_checksum: sha1:19df5820f788f791ae2f14af2ab968f025e1954b
     pristine_git_object: e408be61de97632285fb21b6020e0625e4489065
   internal/provider/documentationportal_data_source.go:
     id: d899bfa756c0
-    last_write_checksum: sha1:d8bd93b6634d1f78d7b8f8c4582efc8bbdb21d5f
-    pristine_git_object: aeebb882637c41d3f272150840a8a6f75a0e2fc7
+    last_write_checksum: sha1:4c7a2bac18b2773bb5be88dd0ff07f7c6981703b
+    pristine_git_object: 8d9755bd806a6de7ab299fd664cf4ada4acd515d
   internal/provider/documentationportal_data_source_sdk.go:
     id: 505af87b9ad3
     last_write_checksum: sha1:fe7f7e1f0341281b2aa199fa80da95274f70eba3
     pristine_git_object: aece01d0487a9d5b4629c246b4fcc04736bd38b5
   internal/provider/documentationportal_resource.go:
     id: d9cf7504aa9a
-    last_write_checksum: sha1:8b70024f3c574741efbab6ff28504423cd886f08
-    pristine_git_object: 68075803405591db8b0fcf7009f331a45b7f3983
+    last_write_checksum: sha1:5dec9c83eb9555d6d33472dec78b8ca5fa142fed
+    pristine_git_object: a238965916d30d2dbc6d69e8f3e923893be78d21
   internal/provider/documentationportal_resource_sdk.go:
     id: b9dc2ecf5542
     last_write_checksum: sha1:337ad5be12ca6798a7806ec3cd5efda11e588bb4
     pristine_git_object: b7664369455bf5131d7f9960b15a8c25d97eb069
   internal/provider/group_data_source.go:
     id: 42985a05e298
-    last_write_checksum: sha1:969ef1cf2ec6e98af23eb512a86bda7c782af317
-    pristine_git_object: eb568866ff1ad316136228b30d61306f130fe3d0
+    last_write_checksum: sha1:7c160d1122c04617fb1f70d0caf8e245621476fd
+    pristine_git_object: c45920ec1e166e85c5660eeeffb655009d843fbd
   internal/provider/group_data_source_sdk.go:
     id: 987dcf32f584
     last_write_checksum: sha1:6d50111468ef003185434c10393f93e30fb77bbf
     pristine_git_object: 89bd39a64bdbd4bf2a31606ee11e9c139e863a84
   internal/provider/group_resource.go:
     id: 77b83309e259
-    last_write_checksum: sha1:34156a51ea184a34478cf8a7b48aea70fde26740
-    pristine_git_object: db1c2454555a898d67d7044f7c56d345ad0f82bb
+    last_write_checksum: sha1:e19d87128ed0e4c389083f824a8c09654be1ff23
+    pristine_git_object: eb0b39d1b31ea9cff110e1ddf56cbb1fddbfb272
   internal/provider/group_resource_sdk.go:
     id: 318ed979ef04
     last_write_checksum: sha1:72813a05d5343414f3832adcda2db3a810938153
     pristine_git_object: 82a8266240c0a51f132fcb29c88ec4679649ad08
+  internal/provider/mcpproxy_data_source.go:
+    id: 843bedf73467
+    last_write_checksum: sha1:3efdc517fb04773713e97467298a87c722cd3db0
+    pristine_git_object: de6c7080a6cb9c3fcfbf1cc810d8301d413fabf7
+  internal/provider/mcpproxy_data_source_sdk.go:
+    id: 2958c39fc585
+    last_write_checksum: sha1:5ea9b04fe0a5cc8be3a68a9a3a239b1f143f41a8
+    pristine_git_object: 32927ba5e28aa9b70afb5e1b3ad2dae077e1a807
+  internal/provider/mcpproxy_resource.go:
+    id: 1fbc95b04bd5
+    last_write_checksum: sha1:25f33627a7357501b7a2bf7be5978db47d05fe6b
+    pristine_git_object: b4776beb66bc1bdcab34c69311ee15d90abc900e
+  internal/provider/mcpproxy_resource_sdk.go:
+    id: 381350ac9576
+    last_write_checksum: sha1:5efe89414492b72cf0eea9ac94125be8b5f579cf
+    pristine_git_object: 1fa8f3e283b79a7eec508b0fd88f242db603b299
   internal/provider/portal_data_source.go:
     id: f657a6b78738
-    last_write_checksum: sha1:13dee0b3af25b778a26deec24519c0802c4acf73
-    pristine_git_object: 6df315fefd04287255e5ffb0e0231cf6932122b8
+    last_write_checksum: sha1:44ee481f91a4da111f00a84ab2c3ba21a073de8c
+    pristine_git_object: 5c1ca4819dd534121d0f02c89c58b5d5d143bfd6
   internal/provider/portal_data_source_sdk.go:
     id: f58c406cdd45
     last_write_checksum: sha1:bf1107e597981646f5ff3bd9e41c7cf5f4cfa620
     pristine_git_object: 915369664198e2b27a5c858cacb93936e9db31ce
   internal/provider/portal_resource.go:
     id: a15e85b54f08
-    last_write_checksum: sha1:85f0735fa7a88f8e14fd3d31583bebf296f0ba92
-    pristine_git_object: 22c98145cdbe90322eec1680b0b2eac17db958ad
+    last_write_checksum: sha1:389c8d82d389750dadc3f6bcd187074deddd9446
+    pristine_git_object: 8d6c1bc0e713141e4e3bba660e96e1c4f68a2c92
   internal/provider/portal_resource_sdk.go:
     id: 6dd876308f89
     last_write_checksum: sha1:9a11d6ca2000edb97935e59c3fd296a1d7fe32ec
     pristine_git_object: c2433b330d21b2a87d7348321177454320822c36
   internal/provider/portallisting_data_source.go:
     id: 41a349e01d19
-    last_write_checksum: sha1:3e3b81c88179a5b64dee58c2e8434c793fec6e29
-    pristine_git_object: 33c0cac3614a6e33cb35df88ebaa7cea1e0092be
+    last_write_checksum: sha1:df96340465c6deaab4ee6ab90367a6cf1bb8ce92
+    pristine_git_object: 460068e45b0991b4b0779603a9df393972e20179
   internal/provider/portallisting_data_source_sdk.go:
     id: 5c9c8c55e09b
     last_write_checksum: sha1:97b693661f6defeac8e767e844d10c2ddb93aeca
     pristine_git_object: 3982861280b8524843ebcaab92a0141f9c6ce024
   internal/provider/portallisting_resource.go:
     id: f8bacb81f57a
-    last_write_checksum: sha1:a7fbc8e028a2d9ea525707bd730bbc9566361f01
-    pristine_git_object: cddfbc629817e4c44612874e960cdc29263dbd26
+    last_write_checksum: sha1:b607672e6cd247e9929c44055cd1d136dbcb9954
+    pristine_git_object: 2fad7aaab6c3652cddb9e60404420275cdcab772
   internal/provider/portallisting_resource_sdk.go:
     id: 6f2b128fad5f
     last_write_checksum: sha1:71b35ddf11d654f4aa58cf34fd14dc9852279ad2
     pristine_git_object: 48d66a9518f6d3176c2f944178a31131f594a765
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:f48c7af345e3bf94a5db225423bee6ee94749bde
-    pristine_git_object: 90bb3f5791bd226ee5070115820c7eaaeffccf6a
+    last_write_checksum: sha1:4ec8796a2bc35fe8b2a949793b83ebc519c0d7b3
+    pristine_git_object: 8d0046ef14e16f0743b17b99fceaa373c752ddea
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
     last_write_checksum: sha1:42e02d5e7e31b0a5d4e14deb739cf5020c79f2e0
@@ -429,32 +471,32 @@ trackedFiles:
     pristine_git_object: 2e7d63a4864472f1837e48f18da0524ea87f3c3b
   internal/provider/sharedpolicygroup_data_source.go:
     id: 46320b35e95c
-    last_write_checksum: sha1:fc607be78c22b5d7a3d55b679923288f74b9e8c9
-    pristine_git_object: 1932bf518ebecd935fe36bfb8ce267e4d0cdc85f
+    last_write_checksum: sha1:de5b8ed05512907b869809c3465bdfa5dc7f79bb
+    pristine_git_object: ada9ee89e428cf7537ab535172d9789ddfe1d30b
   internal/provider/sharedpolicygroup_data_source_sdk.go:
     id: 7431f78d34d8
     last_write_checksum: sha1:dc94897c4ae5509d3c01fad0a413f7c041fb9095
     pristine_git_object: bac7bf763b4395f5e0a689fc2390ce72a8940a98
   internal/provider/sharedpolicygroup_resource.go:
     id: b8d307a6ab72
-    last_write_checksum: sha1:95536aba578c4f02cc91e48f6d9ece2c6c58f654
-    pristine_git_object: dd7539798e207310dd016904a4492a53bae699b2
+    last_write_checksum: sha1:92db3228cf6110daaaf412958b2baa55e572112b
+    pristine_git_object: c5906ba81e9b1cce0b2c0cf82eb30aa5e96026fa
   internal/provider/sharedpolicygroup_resource_sdk.go:
     id: d0406f2ae70c
     last_write_checksum: sha1:b82d6fa67258f3176e7a5dcafabe93084f3d239e
     pristine_git_object: 03b6a225fe3875902bb1eb4dbd04ce8b58d851ca
   internal/provider/subscription_data_source.go:
     id: 228db6b8d459
-    last_write_checksum: sha1:58570a68302084e91e928159885afc3846ed88f6
-    pristine_git_object: 2ab1a7acefe239b1f1c2a31bbcab35bae3afd376
+    last_write_checksum: sha1:28395e6bf830f9fd4faa39e0bd8dc1588f4a3df3
+    pristine_git_object: e8c20a4a9e214cdc13fdc4686958df09894be2aa
   internal/provider/subscription_data_source_sdk.go:
     id: 7861a4c1da39
     last_write_checksum: sha1:ef0dcc7f60e1315fbb70cebbe72d7bdd42d5d5f4
     pristine_git_object: b8e49e0ec32e45f0a5bd4f85569dfa799c1eaf3c
   internal/provider/subscription_resource.go:
     id: 466e40c89aec
-    last_write_checksum: sha1:6b3ee05051d64da6456f733648bfd3f3f17b5a4f
-    pristine_git_object: 5e40e27e2279b83130fce3ab92c835e28633115f
+    last_write_checksum: sha1:1628907086558907fd20a624baa0faf906ff2861
+    pristine_git_object: 9d74c7c7f515898b0bf892556cfdffb8ac073e69
   internal/provider/subscription_resource_sdk.go:
     id: 9ba4a8b00592
     last_write_checksum: sha1:4fd3fe99379aced058625abe50e23c5cfdc4558c
@@ -471,6 +513,162 @@ trackedFiles:
     id: c44fcd78fccc
     last_write_checksum: sha1:24698cc95c172a2525d1002d44d99cd9c6e0a17d
     pristine_git_object: 85e79406782c5e6fb67d15b25784be652dc08478
+  internal/provider/types/aim_catalog_mcp_prompt_status.go:
+    id: 5250e4806abd
+    last_write_checksum: sha1:aaa8d8211985fc6d2a5f6da7fe6c76b237140f4c
+    pristine_git_object: 84379829bf3116662b3a65ce7fb06940b67e8c8a
+  internal/provider/types/aim_catalog_mcp_resource_status.go:
+    id: 64f7468a9497
+    last_write_checksum: sha1:b2e5f600c896b1bae0feb5fd59250f99000e3ba4
+    pristine_git_object: 911ffabacc52e3f5a1c83b219564562e1b4b57b4
+  internal/provider/types/aim_catalog_mcp_server_header_auth.go:
+    id: 4cdac6e427b2
+    last_write_checksum: sha1:db9e96269864bfd479de37f33933f23dec93bc4f
+    pristine_git_object: aed0838a588805823e79a3a6558ffce477cf9492
+  internal/provider/types/aim_catalog_mcp_server_info.go:
+    id: c81482a939b5
+    last_write_checksum: sha1:4bd357f93d3db6f2c4c6e47c35d4ef2c32a17830
+    pristine_git_object: bb9bef68e26338f2bc8b5f676050baa8987c7154
+  internal/provider/types/aim_catalog_mcp_server_no_auth.go:
+    id: e00df5e79f96
+    last_write_checksum: sha1:49398f69ac916b6296c16e91d5d94b636f2c3f9e
+    pristine_git_object: 660c26fad182b6c300a6180930758074fd183053
+  internal/provider/types/aim_catalog_mcp_server_o_auth2_auth.go:
+    id: cadf8b7010c9
+    last_write_checksum: sha1:ef2930e741741082891bfbc56a65cb7a5971d7d7
+    pristine_git_object: 5dd3a17516fcc40f16a5b865b0fa0bfaa0fbfa6c
+  internal/provider/types/aim_catalog_mcp_server_spec_server_connection.go:
+    id: 0167ac201c5e
+    last_write_checksum: sha1:c9b18c0b4c9292c3866b337c8b7855f9a6cc170f
+    pristine_git_object: da7fc55177069c2bbc76b3ac10e9d964537248bb
+  internal/provider/types/aim_catalog_mcp_server_state_server_connection.go:
+    id: cbca6712ad0c
+    last_write_checksum: sha1:0fd814c8377293b7358fb0cb54cb7280a2642afa
+    pristine_git_object: 597e8c128e63e0f31c7036074628c33357b5741f
+  internal/provider/types/aim_catalog_mcp_tool_status.go:
+    id: 0c8fad2b224b
+    last_write_checksum: sha1:df4b87855b41d2e38e4ef9ad6bca01838c5d0f61
+    pristine_git_object: fb5d2f19f4ecfee357ed67a8eae208d60e42057e
+  internal/provider/types/aim_mcp_proxy_api_key_plan_security.go:
+    id: 3b0ea341f74a
+    last_write_checksum: sha1:39d559e36dd6586e1e8980693e2c659286c2c79a
+    pristine_git_object: fb92c564a84063a067da42767cf553464033ca77
+  internal/provider/types/aim_mcp_proxy_flow.go:
+    id: f5e472040172
+    last_write_checksum: sha1:1288876e412d640197f5782419edfefda9d8e39f
+    pristine_git_object: e462147108856fd85b590c24669afbd9c44d0db3
+  internal/provider/types/aim_mcp_proxy_flow_execution.go:
+    id: 3b96426e387f
+    last_write_checksum: sha1:130e6ab4925408e11fd1788ab7bfb8b8225f6646
+    pristine_git_object: d321eebab7753f2038f6d9bf4397d75fe70be892
+  internal/provider/types/aim_mcp_proxy_flow_selector.go:
+    id: f8d3b9f3e343
+    last_write_checksum: sha1:f924b7a89825f755f7ddc101bcc25e08584294d4
+    pristine_git_object: 8ef26284acfc39cc8f9459db9861198520c2c2dc
+  internal/provider/types/aim_mcp_proxy_flow_selector_true.go:
+    id: 6c284d841c22
+    last_write_checksum: sha1:477edabf79336a4ed6910dcbc3c73d2405e63a79
+    pristine_git_object: 80c0bd02c710223926ddb6682928d6bd224305de
+  internal/provider/types/aim_mcp_proxy_flow_step.go:
+    id: 2f3cb66562b5
+    last_write_checksum: sha1:17c01a2d625ede577a03b3924de66f825c191b24
+    pristine_git_object: a0f8975c81fd91db9d6624e2c8c18276bd454c72
+  internal/provider/types/aim_mcp_proxy_identity_provider.go:
+    id: bceafbfc623f
+    last_write_checksum: sha1:03cf7513ed8c4483c04671d9f5af3c3b1ad95676
+    pristine_git_object: 4910a35cb5b2e10f6b7972f7cea5871c681d67a4
+  internal/provider/types/aim_mcp_proxy_identity_provider_output.go:
+    id: 07b56922b329
+    last_write_checksum: sha1:dd9eb95257b13bd4e8f99cc29f9bfcb2cae59522
+    pristine_git_object: 1ce35dec916059a9039722b7261b43cfb38653b1
+  internal/provider/types/aim_mcp_proxy_identity_provider_true.go:
+    id: 3374083f1c95
+    last_write_checksum: sha1:e5fc8fede2e860ff065267d12671a2dd667944ee
+    pristine_git_object: 7c5c8775884e5549f6d096fe092228c41f4a592c
+  internal/provider/types/aim_mcp_proxy_key_less_plan_security.go:
+    id: aebdab31f7fe
+    last_write_checksum: sha1:a589bc8caa725e8f73667013d5b2d77efc497b98
+    pristine_git_object: 81217e5009060e2fe80c351e9e6648c91306db9b
+  internal/provider/types/aim_mcp_proxy_o_auth2_plan_security.go:
+    id: 89ae0aa05c2a
+    last_write_checksum: sha1:6d3a3d2acd38bf54c5ed15d88743aed88350897e
+    pristine_git_object: 942122742d3ef6feb19447b507b002e39e83588f
+  internal/provider/types/aim_mcp_proxy_plan.go:
+    id: a97573608923
+    last_write_checksum: sha1:f45ab8d6b6454c85910fb6493e32a29a2c89e40c
+    pristine_git_object: ebe09e0f86cd958ecc524e8052e47e1b01e80779
+  internal/provider/types/aim_mcp_proxy_plan_security.go:
+    id: 4e67f70e3c59
+    last_write_checksum: sha1:cd80c807cdb74b0b93b761b4e864990385ef0b53
+    pristine_git_object: 056448266e5846c1116046b70683c0dc23afacc8
+  internal/provider/types/aim_mcp_proxy_spec_aim_mcp_proxy_api_key_upstream_auth.go:
+    id: e20eb17daa3e
+    last_write_checksum: sha1:e86a4577fc9319de50d1f8b299204857a77aa9a3
+    pristine_git_object: b838c1432fe1a29fa5b7cbffca7b707cc02440c6
+  internal/provider/types/aim_mcp_proxy_spec_aim_mcp_proxy_basic_upstream_auth.go:
+    id: 0639d3963dbf
+    last_write_checksum: sha1:23f468e09bffb3a618947464075db13abd24ff85
+    pristine_git_object: 11dcfc93c6fc7459a5ef7b0ac6b3be17d34ec5fb
+  internal/provider/types/aim_mcp_proxy_spec_aim_mcp_proxy_bearer_upstream_auth.go:
+    id: aecafca9ede8
+    last_write_checksum: sha1:c68923f50f95e9da07a00908046d1daab48017e8
+    pristine_git_object: 9e71cf5d68bca6e3c42cfdb6e40325ad910ad91c
+  internal/provider/types/aim_mcp_proxy_spec_aim_mcp_proxy_no_upstream_auth.go:
+    id: 2e770c347b55
+    last_write_checksum: sha1:52b6950f93baff7601a2f71009992e8e66405a83
+    pristine_git_object: 3264818550dbdc2e296d70627c95fa5a21ca9c3b
+  internal/provider/types/aim_mcp_proxy_spec_aim_mcp_proxy_o_auth2_upstream_auth.go:
+    id: 5895ffdd551b
+    last_write_checksum: sha1:a3ad1efbe687874b4c87cbcb92d319ba6f4cce9d
+    pristine_git_object: a39eafd867fe36c6c1baa04a41d37f9f4bb405d5
+  internal/provider/types/aim_mcp_proxy_spec_proxy.go:
+    id: 6ee650e49dde
+    last_write_checksum: sha1:2c30a2c9ff5574cd35b82c4df3c6f3301d721f47
+    pristine_git_object: e4949d01b110085e42a6e8cb4472849982554ff9
+  internal/provider/types/aim_mcp_proxy_spec_studio.go:
+    id: b6874d09371c
+    last_write_checksum: sha1:b1b44e2355d58825996eba31038be4c5483e65dd
+    pristine_git_object: 41ecabf5ebbe6a49cb4cdc15bfa7cb5102b20fb5
+  internal/provider/types/aim_mcp_proxy_state_proxy.go:
+    id: 1ac280ae3ce5
+    last_write_checksum: sha1:da575a500dc2b9487dc42138454bdcbd8de1c502
+    pristine_git_object: 63803e294a19291b36561789d77ee7e2fe837027
+  internal/provider/types/aim_mcp_proxy_state_studio.go:
+    id: efe2e950533b
+    last_write_checksum: sha1:0f578e6fa3117cb83f9a649440ae9661877e8d30
+    pristine_git_object: dd61e3ae2187ed0392d29810f46eee810a34ddcf
+  internal/provider/types/aim_mcp_proxy_studio_tool.go:
+    id: "967630106363"
+    last_write_checksum: sha1:a9c76564f873f21e91aceb4b2eb658f776ccfb16
+    pristine_git_object: c2efbd8e9d1a1786216f1aec645557484ad34f59
+  internal/provider/types/aim_mcp_proxy_studio_upstream_auth.go:
+    id: 4b68641c912a
+    last_write_checksum: sha1:dfefa30aa7f010d6cf8c95a70086b3dfee70fef2
+    pristine_git_object: 2585bddbe8cd8b6d3f4a57a13e6d6d69b6ec71c3
+  internal/provider/types/aim_mcp_proxy_upstream_auth.go:
+    id: f6f83d7d0e0e
+    last_write_checksum: sha1:ed09ba2ea461181eb14e7a9ee0de4c7aa6b1d7c4
+    pristine_git_object: 935330511784fbaf71eadfc3bf6835127f855f61
+  internal/provider/types/aim_mcp_proxy_upstream_auth_aim_mcp_proxy_api_key_upstream_auth.go:
+    id: d4e3af4f67c7
+    last_write_checksum: sha1:0f9357400d4ffb51b79ded707ab8a3dfe0855dc4
+    pristine_git_object: 409c8d1df086f2c66d08100416d166e8cfb75a3d
+  internal/provider/types/aim_mcp_proxy_upstream_auth_aim_mcp_proxy_basic_upstream_auth.go:
+    id: 0247938f93f4
+    last_write_checksum: sha1:d6401edf87503e9eebcefe3e1bf005b9db1c1257
+    pristine_git_object: 93a76f2ac52798fefc34031aef898962825573eb
+  internal/provider/types/aim_mcp_proxy_upstream_auth_aim_mcp_proxy_bearer_upstream_auth.go:
+    id: 3a5fa812a7d1
+    last_write_checksum: sha1:d06c630937d9c92dff4605ff6f67485fc5bcd182
+    pristine_git_object: a6e2351c5fe1ac814fb213a21bc52d4c3c8661cb
+  internal/provider/types/aim_mcp_proxy_upstream_auth_aim_mcp_proxy_no_upstream_auth.go:
+    id: 097a732e0452
+    last_write_checksum: sha1:319f4c16e5aabeca40c0aeda0fc038683d3805a8
+    pristine_git_object: baac4cef7011be495e6469f70423ec19780e9f98
+  internal/provider/types/aim_mcp_proxy_upstream_auth_aim_mcp_proxy_o_auth2_upstream_auth.go:
+    id: 8f961666063f
+    last_write_checksum: sha1:048106c6173b704a30c50d1afdd156b28f32f47a
+    pristine_git_object: b5aa8225a11e1da290ad104f07094021c0f30056
   internal/provider/types/analytics.go:
     id: 17f4183ad9ff
     last_write_checksum: sha1:caedf67bcecf46bd407793d0f839b0c62c18440e
@@ -512,6 +710,10 @@ trackedFiles:
     id: 5f3d0aac9070
     last_write_checksum: sha1:d66003cb9279194cb670622dc86f35bab0bbb5a9
     pristine_git_object: 53f50be9bd7def5e1907b7b45385dc4fae913502
+  internal/provider/types/auth.go:
+    id: 6c9303cd900a
+    last_write_checksum: sha1:0c7bcc0117dc8918b09673e5b28da3e7d000ec50
+    pristine_git_object: 96893d5fbb0bc08aa9af51c7a5834fca5db9ea3f
   internal/provider/types/channel_selector.go:
     id: ffed5b933a69
     last_write_checksum: sha1:e97b9eb715061eedc3267ea5a0159d1ed194597c
@@ -576,6 +778,14 @@ trackedFiles:
     id: 991e2f3efe04
     last_write_checksum: sha1:62f05f79a64d30f50d2df4090d85657384e22170
     pristine_git_object: 1b9204dfeaa2a3c69d01b77d9bff0ced434ec1dc
+  internal/provider/types/gravitee_am.go:
+    id: 72b702706f6d
+    last_write_checksum: sha1:a738a69727db0335930ece32e3a4bd244d6a113a
+    pristine_git_object: cb9a2069b820834bbe73da8ea5880effb48f0289
+  internal/provider/types/gravitee_am1.go:
+    id: fecec7f5f874
+    last_write_checksum: sha1:9c577ff5913bd7640da2bf194bcca026622badb3
+    pristine_git_object: 41d3f16268670f75b2914d9a515a88a0f628c667
   internal/provider/types/group_member.go:
     id: 7797a4bd793f
     last_write_checksum: sha1:21b9a579fb52e30a0fd4e0ec38fd05e6ed64ba8b
@@ -628,6 +838,10 @@ trackedFiles:
     id: b0338d3c8341
     last_write_checksum: sha1:9e141f7b6ff355af183496ce876a97d7221d3fa0
     pristine_git_object: 14d9dc614c8ad05ed8dcbe47d8930db2b3820c61
+  internal/provider/types/mcp.go:
+    id: a090d9e14451
+    last_write_checksum: sha1:f063fb1b13aabf0c93cc94960169e96ef1fc87ec
+    pristine_git_object: 5acaf199c500382268409d3a4418c40acc517df3
   internal/provider/types/mcp_selector.go:
     id: 2f2fa22ec55a
     last_write_checksum: sha1:1bfaf9f64f66e8f44cad5f8f62bd6876ae30f7fc
@@ -648,6 +862,10 @@ trackedFiles:
     id: 82880b8d3a41
     last_write_checksum: sha1:61acc465fd666154e5dc5f84f44dc14b280ae76b
     pristine_git_object: e38d615bdb8c07fd52ca18cae70333a75975e5d4
+  internal/provider/types/oauth2_generic.go:
+    id: 851cd48fb2b5
+    last_write_checksum: sha1:b1529d0015e9845659eaf499e572ccd40de3feca
+    pristine_git_object: a3a3888c4ac14743befc526c93193c0e8669c1eb
   internal/provider/types/otel_logs_v4.go:
     id: 3c5f12ab2e9e
     last_write_checksum: sha1:4d57a46c0f35208fb50da82ffab54554f2e985b8
@@ -729,6 +947,10 @@ trackedFiles:
     id: 473435d8fab8
     last_write_checksum: sha1:5765eb9dcc434cd4200bc3230fdedc48197d5588
     pristine_git_object: 48b6a72efa5041edd636a48050afa0fd558f6424
+  internal/provider/types/upstream_auth.go:
+    id: "971940808866"
+    last_write_checksum: sha1:d4620dca8e343ac04d45acb0e2565f368ca51b4d
+    pristine_git_object: 2bc152be0ce1587f4972211a8d0b9e1d68e05431
   internal/provider/utils.go:
     id: 312d50f148af
     last_write_checksum: sha1:044ab01666f50ea8d7d953442811969cad09a9bf
@@ -737,10 +959,18 @@ trackedFiles:
     id: 1ea4c4e0a39d
     last_write_checksum: sha1:84b0115789fc3ea52e31df701d8a27f76077e29f
     pristine_git_object: e6a994416d0f527912d2d272e2583458f4fc9bcb
+  internal/sdk/aicatalog.go:
+    id: acd7519636d1
+    last_write_checksum: sha1:14f969a03c5001a8a74aeb5e27670273837aae2e
+    pristine_git_object: 1797480e9a22c1eece0bd824c23db5e98076698d
   internal/sdk/apidocumentations.go:
     id: 86e2f935a768
     last_write_checksum: sha1:baabbaf7cff6e6c2d5ec9066037aa9f0ccabde25
     pristine_git_object: f74d2d2b52ff38b69303ea4848e46b1337a982e0
+  internal/sdk/apilinks.go:
+    id: 6710256c5198
+    last_write_checksum: sha1:7cd50028ad69c813d36cb1c9009d09a35bf1fbdf
+    pristine_git_object: d28fa4d3f0b7432da581c5da331e589c44c3855c
   internal/sdk/apis.go:
     id: a39b4e1e4851
     last_write_checksum: sha1:89afcc4243d932e5bc4d848537ae22487d1e2785
@@ -759,8 +989,8 @@ trackedFiles:
     pristine_git_object: 748c4bab704e399fd73706ce2a0478fc4a298117
   internal/sdk/graviteeapim.go:
     id: 1f2cf575c2fd
-    last_write_checksum: sha1:82b3632876b43d99b4c722f7b3b901a5e531f41c
-    pristine_git_object: 0099ba603f5aac34402075f38099dbea0bc70dcd
+    last_write_checksum: sha1:cb7acc535ed9442c48c3984e1a9f11e037035e7d
+    pristine_git_object: 0ffcdaa274332f66b25de9db0e021ca0cff8f02d
   internal/sdk/groups.go:
     id: 2bfe17bcb000
     last_write_checksum: sha1:709108650e6e2f0612bad64fe38a49f88aefd495
@@ -829,14 +1059,30 @@ trackedFiles:
     id: feefcdf75dbd
     last_write_checksum: sha1:2fe9f3d0d42c8f3df89a8b57bd5d76e087099bdf
     pristine_git_object: 19a84be9ece852a3fbc754939a2959c1dc59ce90
+  internal/sdk/mcpproxies.go:
+    id: 8974ffbbdc27
+    last_write_checksum: sha1:d965827548fabcb2a7765eef4be2b8e3406cce13
+    pristine_git_object: eb3090bc0995d539573ccae575036651afa711a7
   internal/sdk/models/errors/apierror.go:
     id: bf281d768352
     last_write_checksum: sha1:48baa200e233c2bfe77fb5b39ab9bbd257e9c36d
     pristine_git_object: aac3bd31bc35ca9cfa535f71be8a234594bd6762
+  internal/sdk/models/operations/createorupdateaimcatalogmcpserver.go:
+    id: 43579ce88186
+    last_write_checksum: sha1:2e0b06a75970859ca3b42886cd38885b8820c2ff
+    pristine_git_object: 1c34c68b02e1fff8b399b7672f5ae642cd6c2d61
+  internal/sdk/models/operations/createorupdateaimmcpproxy.go:
+    id: 751263513c8e
+    last_write_checksum: sha1:b72af221147f115ac3353da2f6dab7ea6d048732
+    pristine_git_object: 22f1beb5f692a9302b66185e1e83efadc1180c44
   internal/sdk/models/operations/createorupdateapidocumentation.go:
     id: 5e7cc3ac92f4
     last_write_checksum: sha1:fbaa61bf390e128d44228b86c9a1c6661e4032ad
     pristine_git_object: 01967892a5451d1fa86fbd01570b902108245699
+  internal/sdk/models/operations/createorupdateapilink.go:
+    id: 77ddf656afdc
+    last_write_checksum: sha1:c994467baf9774852a72102f846909fb15363fd0
+    pristine_git_object: 871bf3abac2e605b8020fbe71781e63ada98b5df
   internal/sdk/models/operations/createorupdateapis.go:
     id: 5d2f4552edfd
     last_write_checksum: sha1:cb004468c3bbe665fba3f02bfb428531a4343dec
@@ -869,10 +1115,26 @@ trackedFiles:
     id: d2c70f4eca7b
     last_write_checksum: sha1:8e915de29e6a6d683aba2ddaee062812c616763a
     pristine_git_object: dcba9cba7f9a55c9d3bb9bd277a0854e0a937a70
+  internal/sdk/models/operations/createorupdateportallink.go:
+    id: 416346173f9d
+    last_write_checksum: sha1:76e3749de4d9dfc5bd3d1973a3be6d2b1934b0b3
+    pristine_git_object: f78415122e7e719fad422f0cf4f2a15e42e5a5ed
   internal/sdk/models/operations/createorupdateportallisting.go:
     id: 054464a598c1
     last_write_checksum: sha1:c33055178375d2d565834fcc27bfe492e232909c
     pristine_git_object: fd878154fd52805c5372702e6f273a7b10dcd0c8
+  internal/sdk/models/operations/createorupdateportaltheme.go:
+    id: 7965fbfab437
+    last_write_checksum: sha1:a164ff149e3e9aa9fc624add2b8c2d652ef7db8f
+    pristine_git_object: ccc9982a48d536d949f905c88fa63dc0a4a46209
+  internal/sdk/models/operations/deleteaimcatalogmcpserver.go:
+    id: fcb609e55995
+    last_write_checksum: sha1:5c4f77540c24bd05341e8c86a8f21e26da0be402
+    pristine_git_object: b6aee10733a5d65aae5c624e659a0e60686314b5
+  internal/sdk/models/operations/deleteaimmcpproxy.go:
+    id: 23431766c275
+    last_write_checksum: sha1:3a2881a5e9d6459a4955d69ddd8b3e695c4b141a
+    pristine_git_object: cfae60fc554e30fd1841ecf3f040a5fadedd0dc6
   internal/sdk/models/operations/deleteapi.go:
     id: 452cbeb96903
     last_write_checksum: sha1:a57932627943b24d800810a177eaccfd2b0eb9fc
@@ -881,6 +1143,10 @@ trackedFiles:
     id: 6a2d522580d4
     last_write_checksum: sha1:c2cf2fe0a584f999e57ec05d282bff92ab83fee7
     pristine_git_object: 189e3a4bdec7ad934bf6a4bb94539b14edb3f61a
+  internal/sdk/models/operations/deleteapilink.go:
+    id: 0e071e119d89
+    last_write_checksum: sha1:1e357880cd67b029eb7bd6914ffcef08ec507e60
+    pristine_git_object: 436d2f9d242a9b4a89635c14f429889e1a735521
   internal/sdk/models/operations/deleteapisubscription.go:
     id: 97bf06ebebf1
     last_write_checksum: sha1:383e218c620f6d0cada2da80cfa0d13c0eeec621
@@ -909,10 +1175,26 @@ trackedFiles:
     id: d89637317c14
     last_write_checksum: sha1:612a08367748bfbeee014f42ca90812e87a7c359
     pristine_git_object: 5fd60cf49b9f2857c21ea31830d170d22df7dbbd
+  internal/sdk/models/operations/deleteportallink.go:
+    id: 24975309e09e
+    last_write_checksum: sha1:5eb68e609f5dabe3bd41135d8c71e2e4f024c5d0
+    pristine_git_object: 2564faddb4a32d47d8a0a35980cd3bf9bc09c023
   internal/sdk/models/operations/deleteportallisting.go:
     id: c414421aa7f4
     last_write_checksum: sha1:f8462b499faed0a00020f22429eda8c8d9e80967
     pristine_git_object: 1f1cd47dbaff66fe60408703f81a180e93ed7f76
+  internal/sdk/models/operations/deleteportaltheme.go:
+    id: 58a3b18fead5
+    last_write_checksum: sha1:57cb7dd2d4f815988c1b18c1a0047902732272f5
+    pristine_git_object: 31f2b1d71d416a049c29789fb5cdf52f09297328
+  internal/sdk/models/operations/getaimcatalogmcpserver.go:
+    id: 0a8f196bc49e
+    last_write_checksum: sha1:72a1912eccb5158d19bbe0eea641dc9f5b1086a8
+    pristine_git_object: bc6b7cfc22cd6e99fd86b07f95323ddaca1764b1
+  internal/sdk/models/operations/getaimmcpproxy.go:
+    id: 9a2d57e3fcd6
+    last_write_checksum: sha1:1616a615a46147d4253efd33f1e2304ad57deed1
+    pristine_git_object: ed68b97ff00cc1f62d7f385cf05172496367ccff
   internal/sdk/models/operations/getapi.go:
     id: 802d9b66b302
     last_write_checksum: sha1:e12bfd3e480c8172415c6e69a3e96b27eb5abe1b
@@ -921,6 +1203,10 @@ trackedFiles:
     id: cfe36a58ece6
     last_write_checksum: sha1:ae24e7da0978873ccd213f61160f97c7b81b3388
     pristine_git_object: aef795cd96fd0b04f69e37e66d06f762076578f2
+  internal/sdk/models/operations/getapilink.go:
+    id: ffc7b70060ef
+    last_write_checksum: sha1:2bee285f35aa724ba25a34ba31f312b1b8b669dd
+    pristine_git_object: d9edd924baa8e928ecb7a730261e3ff35a5b11aa
   internal/sdk/models/operations/getapisubscription.go:
     id: 1397776d0e22
     last_write_checksum: sha1:e43bcf217f7002b54e47d5e51fa3cf4b186064e6
@@ -949,18 +1235,122 @@ trackedFiles:
     id: d811dbb7c6e1
     last_write_checksum: sha1:67094d9b40ad422543c48db9fc3c1a045559900e
     pristine_git_object: 1b0641f1ed4c77ab2a660be9483051489c8a4220
+  internal/sdk/models/operations/getportallink.go:
+    id: d3d47c28f16e
+    last_write_checksum: sha1:d1317d2428c7d71dcbd442574e39f3870a84a88f
+    pristine_git_object: 9801372c4f82f1a414cddd2dc4138a2c98cd6a02
   internal/sdk/models/operations/getportallisting.go:
     id: f78ad26bdde5
     last_write_checksum: sha1:e772f3051a1ad8981ed6277fd348088f8442dfeb
     pristine_git_object: bdb5acf5744d8d078d6476dc442062d9f5ccbce6
+  internal/sdk/models/operations/getportaltheme.go:
+    id: 54279695b0ac
+    last_write_checksum: sha1:9bed9f3f13b22a0f39482c19a083abb7893d6cb5
+    pristine_git_object: 7d74f3561f2c3ff088135109309bece7b870fedc
   internal/sdk/models/operations/options.go:
     id: 6d0d29414e00
     last_write_checksum: sha1:4552e74aaa7f47f7704e547d8904d9fe1e9440a6
     pristine_git_object: 1dc1770c202e9520f1e5a25242bf165ce9e6ca5b
+  internal/sdk/models/shared/aimcatalogmcppromptstatus.go:
+    id: 56b45c94ee02
+    last_write_checksum: sha1:78b50e792cacf5c9259a8980773a46369aa69450
+    pristine_git_object: 0251e52b34eebc26b074b2c1ac02b04f2dd2c452
+  internal/sdk/models/shared/aimcatalogmcpresourcestatus.go:
+    id: aea1040fbd32
+    last_write_checksum: sha1:64496520168cdcbd79faf6014eaf9711f2df3adb
+    pristine_git_object: 9d6e4d52acda86e6a0b7eb720271f890f63d187c
+  internal/sdk/models/shared/aimcatalogmcpserverinfo.go:
+    id: 1261723b6cda
+    last_write_checksum: sha1:94f114b38a6fbdb6c98e5a11a4a1d7ef754b8ff4
+    pristine_git_object: a1c742bfc88d6e13309c54514f60a2e180c78e4a
+  internal/sdk/models/shared/aimcatalogmcpserverspec.go:
+    id: de77f7c28a23
+    last_write_checksum: sha1:20a0b372e952a698463f03b0a42849dbce9f64ed
+    pristine_git_object: c61b9dcb9c208f60684dc9696f468ea45e9847db
+  internal/sdk/models/shared/aimcatalogmcpserverstate.go:
+    id: 33a48cbbbeb3
+    last_write_checksum: sha1:d4b97be2b18cd012bb29c32d6aaab7ee70b4e436
+    pristine_git_object: 80095156a92ae70c4ea961fc43a273496da2808a
+  internal/sdk/models/shared/aimcatalogmcpservertransport.go:
+    id: e5713cab694a
+    last_write_checksum: sha1:fd5ac85dcd66d5202c9e81016e25ac8ec1a77078
+    pristine_git_object: 4860876550307a3687aed2d7eb8aa9856911e322
+  internal/sdk/models/shared/aimcatalogmcptoolstatus.go:
+    id: 82b6b84c08c5
+    last_write_checksum: sha1:cd335b2650a19c3b34c24aff488a46443bc34332
+    pristine_git_object: 227d34686b73dddaf4a3950711af37650c1fa2fb
+  internal/sdk/models/shared/aimerrors.go:
+    id: 8c6cc559588b
+    last_write_checksum: sha1:7616026f3ac507899e552b8e95d5eadf5feb154a
+    pristine_git_object: 684bea58e2cf83b9f768d86819f48ae27b0cf4e5
+  internal/sdk/models/shared/aimhttperror.go:
+    id: 0f748eabea87
+    last_write_checksum: sha1:d1f98e2a3caa757175f2c2b9fe12a97ad67b4493
+    pristine_git_object: 8b6409359ce0335ecfd71bded8651da07dd0c817
+  internal/sdk/models/shared/aimmcpproxyflow.go:
+    id: c891e1016d5c
+    last_write_checksum: sha1:96e6da49227e2adc182a84f2f0311d732e51b742
+    pristine_git_object: 07367fb0908f72355b48cced1edf33aeb1ae0bbd
+  internal/sdk/models/shared/aimmcpproxyflowexecution.go:
+    id: 693fd75e3e96
+    last_write_checksum: sha1:5cbe9c26aeb40d2cda26dbec6ee92a02e27f7ff8
+    pristine_git_object: 922ad011762c1cb8347a45de788bf2d0395d08d2
+  internal/sdk/models/shared/aimmcpproxyflowselector.go:
+    id: 76c5c1f308d9
+    last_write_checksum: sha1:7f8709be100f6b2b892e778cabe8b2bc638370ed
+    pristine_git_object: fcbed2542609bbb5c58a06e056a7b95f41f91331
+  internal/sdk/models/shared/aimmcpproxyflowstep.go:
+    id: 785ee705096f
+    last_write_checksum: sha1:1779605d299ca638357cd4a4a4580f012df37baf
+    pristine_git_object: 02b4f754ed0865565ea294c63ced0ef04569c1dc
+  internal/sdk/models/shared/aimmcpproxyidentityprovideroutput.go:
+    id: 82ce441e1ce5
+    last_write_checksum: sha1:98b8928af43d77112608cb339048188ed563e68d
+    pristine_git_object: aff6e4182c022a6dd1f5e3f25bb0f68bdf6a12f3
+  internal/sdk/models/shared/aimmcpproxylifecyclestate.go:
+    id: 58401f65299e
+    last_write_checksum: sha1:3db7fca2cf137beb61f1f066605025d250e6d740
+    pristine_git_object: a4a5d66acfaaf20e8f73eb12301cad03dbaf09b6
+  internal/sdk/models/shared/aimmcpproxymode.go:
+    id: bc13c86326be
+    last_write_checksum: sha1:c361d89ff6c82445cc0c564a070ccba448bd41f1
+    pristine_git_object: 5f26825887c745bb67d4429d19ca65383b24db5b
+  internal/sdk/models/shared/aimmcpproxyplan.go:
+    id: 15012fed9173
+    last_write_checksum: sha1:f86eaab8ace529476013d0675af7da981c60e8b9
+    pristine_git_object: fab21ec1ffeea8256794fe3982218b88302b5fb2
+  internal/sdk/models/shared/aimmcpproxyplansecurity.go:
+    id: 1d70d56180eb
+    last_write_checksum: sha1:63a8c6a0a82d84ae8afe3ccea8d8a36d5fe8cc30
+    pristine_git_object: 2745cbe32b4618887bb6da755aa99651eea04ccf
+  internal/sdk/models/shared/aimmcpproxyspec.go:
+    id: 0871dda72466
+    last_write_checksum: sha1:c73885a7c168d057882665665ec0ce5fb2ac37bd
+    pristine_git_object: 0f1d9f0fe11f9ac3e986b955bea31be8831a7a6f
+  internal/sdk/models/shared/aimmcpproxystate.go:
+    id: d5ed73b5cc2c
+    last_write_checksum: sha1:542f24ce5e2a4cbd45715c684e44e1145c7ecd0d
+    pristine_git_object: 0d1bb77561119f2f765baed435e764bf3fd9c615
+  internal/sdk/models/shared/aimmcpproxystudiotool.go:
+    id: 0e946641e1f1
+    last_write_checksum: sha1:03f0e3af16f69f26b6b5148cc5d04a0463187021
+    pristine_git_object: faa493aac52d05e73d5ad297e0ac3e8ff9e3e87d
+  internal/sdk/models/shared/aimmcpproxystudiotoolinput.go:
+    id: 60dd3ecc22cb
+    last_write_checksum: sha1:95b5f2ba317a6c8c33df687c86e79b29dee63fb7
+    pristine_git_object: 162e5ee424ffe559c780a6de881b07dee4ae04a4
+  internal/sdk/models/shared/aimmcpproxystudioupstreamauth.go:
+    id: 1faa86090981
+    last_write_checksum: sha1:b2ad32bf098cc16d9b5e84b08dd20bc1d77a2a7e
+    pristine_git_object: e2b47331c32c8012cbc07b250177e7b1324f4b3f
+  internal/sdk/models/shared/aimmcpproxyupstreamauth.go:
+    id: 65f885f61c08
+    last_write_checksum: sha1:dc2f2e9a893b1b0778f0676fe6d07fb9bfb8ba13
+    pristine_git_object: 38662c7a2d4ee5ec62abdff6a6e737152847a511
   internal/sdk/models/shared/analytics.go:
     id: 7126032f3891
-    last_write_checksum: sha1:f15873e522c2338d9afc700b8da4873496efabb5
-    pristine_git_object: 6c3a416ca2c7e3a425ce8293847fe8a57963a8b1
+    last_write_checksum: sha1:c9105551d6aa0897f4cf05703f40693d355a0ef3
+    pristine_git_object: 4f8c62cfd3d5f3f72d403d596232dc01ae27fe2b
   internal/sdk/models/shared/apikeyspec.go:
     id: 05af8b419800
     last_write_checksum: sha1:11ce0dc2d7e1e071ce7609cf7271585829c9b6d1
@@ -996,8 +1386,8 @@ trackedFiles:
     deleted: true
   internal/sdk/models/shared/applicationsettings.go:
     id: 23b3970475e7
-    last_write_checksum: sha1:ed996bd54d69a630601be6233df9299abedddf22
-    pristine_git_object: 30bba42034e095c1cecb048d7f6b90e076862da1
+    last_write_checksum: sha1:1cd4b21eacd64687fbfbcb82a372df34fa1f0244
+    pristine_git_object: d12ed3fc50d01ed865a435e9bf9e24a20e5ef5a5
   internal/sdk/models/shared/applicationspec.go:
     id: 9b88f9f8e528
     last_write_checksum: sha1:d0a5a73afcfbffc851122a09e47c709ec7c6b5c8
@@ -1024,8 +1414,12 @@ trackedFiles:
     pristine_git_object: deef295bafefe0287ff5c282eb0d2c90fc4bfe26
   internal/sdk/models/shared/cors.go:
     id: c5431c36f440
-    last_write_checksum: sha1:abdfc018ed7e17b03badb9d86d82a694f9498e27
-    pristine_git_object: 79442ddb9a8cf5fdb0bcd00d3ae2607ea846d8f3
+    last_write_checksum: sha1:8814f1edcd35e02bafdad4a1cfe02f5ad541e3c9
+    pristine_git_object: 07d6605e74ac8c0cedbf526aab9e222a19852baf
+  internal/sdk/models/shared/dictionaryencryptionpolicy.go:
+    id: d08f8d356b18
+    last_write_checksum: sha1:b350e6f1cd9aa242db32152a51450aa522ea8920
+    pristine_git_object: 308a0d973d02e2efc061d35af2a247bda8fe9f06
   internal/sdk/models/shared/dictionaryprovider.go:
     id: 5e6f38a0f60b
     last_write_checksum: sha1:250f7bfa21218919f54c01a0e387b86ffb65bbcb
@@ -1036,8 +1430,8 @@ trackedFiles:
     pristine_git_object: 177ed3903a7a7e9e211e33a010809ef5dd5a40b4
   internal/sdk/models/shared/dictionarystate.go:
     id: 6deb03255492
-    last_write_checksum: sha1:50dc67cbb4136d27fb548f3a59150c1f61a4cc3e
-    pristine_git_object: 2da2fdbb566cfa9b1db3fc7395d0fd4cfb229a18
+    last_write_checksum: sha1:2511abcdae13b306bc277085ee9b251f1edb9d6b
+    pristine_git_object: 8fe5311330e76fe02548c1bdf5b022db6f20c3a3
   internal/sdk/models/shared/dictionarytrigger.go:
     id: ca606c085f07
     last_write_checksum: sha1:4eca4e70de12d58999635f9f2a8cfdcec41aae85
@@ -1052,20 +1446,32 @@ trackedFiles:
     pristine_git_object: 6f97e426a59d8354f94b841e40d27fca77628233
   internal/sdk/models/shared/documentationapispec.go:
     id: e3ecbbce66ec
-    last_write_checksum: sha1:19515e591beacfe43a37970c4381575d68b301a9
-    pristine_git_object: 40f3228703a892eb845e3e67e99a3158a22d3a9d
+    last_write_checksum: sha1:40a0f2dd2d30f84c1336d10d00b60fc8e2829e41
+    pristine_git_object: 010ddf6eeadf6ad8a4b2c0a387ddbf006e083405
+  internal/sdk/models/shared/documentationarea.go:
+    id: 22b9899ca9c9
+    last_write_checksum: sha1:ef853cb8228865acd668cde425f032e0f53d4be0
+    pristine_git_object: fb87320fb2c60e6ccfb104baeff9d58aafb5234e
   internal/sdk/models/shared/documentationportalspec.go:
     id: 90f74526be68
-    last_write_checksum: sha1:e67b2d916d0e4ab05b713327ead20a429b15f7ec
-    pristine_git_object: ef4ba88e26b3e4fd9365ecfa2c77c5a280015786
+    last_write_checksum: sha1:dfc53a83be266247decd3c1c874bebc4e7f9e375
+    pristine_git_object: e198d89960b9f10dd9f23d39be8287ddeefb135b
   internal/sdk/models/shared/documentationtype.go:
     id: 77143a3f46f1
     last_write_checksum: sha1:3504ef98c5d5742023454d316c85ee0dbc8e0737
     pristine_git_object: ba6cf62d17ccfcd8489eba539f9fc2d299dd8b6f
   internal/sdk/models/shared/dynamicdictionaryspec.go:
     id: d7c948965a7a
-    last_write_checksum: sha1:aa22359c6654e548ea749af9a231c279d2a27169
-    pristine_git_object: f784ea7d5804c8fb27767c45c5d2e6f37b684b4e
+    last_write_checksum: sha1:3f126005a2a643f2383f0eeb1fa4567065f7ad3b
+    pristine_git_object: debeaaf5c625fa342e52e9fc632f6548163ecd37
+  internal/sdk/models/shared/encryptablevalue.go:
+    id: dafe50bf34db
+    last_write_checksum: sha1:5faaebf0da354659a0d4d2d5ba96368ba32340f7
+    pristine_git_object: ce6a2134d7558bf3e1c342aa5cb4fb2fb026ea40
+  internal/sdk/models/shared/encryptablevalueoutput.go:
+    id: 038303e37eb5
+    last_write_checksum: sha1:3a43dbf9638b07b8480b3c31cdd1ce579f31db46
+    pristine_git_object: d7ff21db5477e00fbc3866a82b164ef6145740a2
   internal/sdk/models/shared/endpointgroupservices.go:
     id: 4f09e3f5a8bb
     last_write_checksum: sha1:fb892334f483f0b3a1e712c9aee9b1842404555b
@@ -1136,8 +1542,8 @@ trackedFiles:
     pristine_git_object: 86395ce829485ab7883cf5281c3ae95f94acbbeb
   internal/sdk/models/shared/httplistener.go:
     id: 1ed1ea7d46a3
-    last_write_checksum: sha1:47470dfaa4bcb994f882829c371d06754df64ca7
-    pristine_git_object: bcf902c967113c2cf9ddd0148b2be579380f11a3
+    last_write_checksum: sha1:62b12632cd548314b0619e79b317b31fefc96757
+    pristine_git_object: 1bf71c6c63d22957fe679191b17a4233f7ddb7e0
   internal/sdk/models/shared/httpmethod.go:
     id: 30f139dd0ff9
     last_write_checksum: sha1:3a13d70675a9e9cbf57bb3b9a52c03f7b50c56c4
@@ -1184,8 +1590,12 @@ trackedFiles:
     pristine_git_object: c83de76e21ef8434e7b531ee03dec9a49de5ca3a
   internal/sdk/models/shared/manualdictionaryspec.go:
     id: 527ae8490113
-    last_write_checksum: sha1:99985f6dc7942f46dd31621f9370a88523846038
-    pristine_git_object: f7bd88e7786a344ef1444cd8d2fac5d64f410dcf
+    last_write_checksum: sha1:d7dad9515b325812d5dfced57e2334b29dcb4eef
+    pristine_git_object: f58fd753f590d15c527839d398a6424a238dcc98
+  internal/sdk/models/shared/manualdictionaryspecoutput.go:
+    id: abc8526174a0
+    last_write_checksum: sha1:90afdfef410536a0ad352739762b8cdc52b9f76d
+    pristine_git_object: f7ed81c6330ed2f0c8f784ee8fd10fd242d87caf
   internal/sdk/models/shared/mcpselector.go:
     id: 8ccd9a2c4a58
     last_write_checksum: sha1:1da6e3375c30dc75bad0290720df0852db565440
@@ -1208,8 +1618,8 @@ trackedFiles:
     pristine_git_object: 793eaf471272e454da9ec56afab96c6a8e1c4238
   internal/sdk/models/shared/navigationpath.go:
     id: 6660ba7539f0
-    last_write_checksum: sha1:fd72d2486ad0dc36517a201210b60a911f958fb1
-    pristine_git_object: 075edfbbc2b3cddd91a081c9e86ff7289478ad50
+    last_write_checksum: sha1:2b5d26040c722c047de12edf62b16eb1d83f1370
+    pristine_git_object: 2c415e46868ea352856c4ad36b4751cf8ca8b3a9
   internal/sdk/models/shared/operator.go:
     id: c74369d99c89
     last_write_checksum: sha1:86f5644171cd2634e214e4446235669c428763b6
@@ -1266,10 +1676,14 @@ trackedFiles:
     id: 919c96524714
     last_write_checksum: sha1:65bc9b3f8cdacb474bf16dfd956851e8210b9c65
     pristine_git_object: e801902f5375cd11cd150515ad3de9b12feb1c35
+  internal/sdk/models/shared/portallinkspec.go:
+    id: fa10e7aa477f
+    last_write_checksum: sha1:5644c94ab63b46198545bed3aae5c9e9a787f1a3
+    pristine_git_object: dacf0b9b4bc093b44e216ca5860dd2e7292f8180
   internal/sdk/models/shared/portallistingapientry.go:
     id: dc2a826815ed
-    last_write_checksum: sha1:a837513676ce68d1888728b8cd8a8c11856dc9fc
-    pristine_git_object: b88c2b43d7be292b8dcfec16131dec96aba1ae02
+    last_write_checksum: sha1:5f9b9a5d53c76c165a25e5b7471033a71a1ab08e
+    pristine_git_object: 7c7a00b5f5310faccb5fe1c44ddebe926f483212
   internal/sdk/models/shared/portallistingspec.go:
     id: d23486dfea24
     last_write_checksum: sha1:d6e3a5a449181028e1e2af456c3d954ecf1aa4c6
@@ -1280,16 +1694,48 @@ trackedFiles:
     pristine_git_object: 95d866b67208df428e7c514c491684498d05c877
   internal/sdk/models/shared/portalnavigationpath.go:
     id: ca6ba68bb0d6
-    last_write_checksum: sha1:1be3057cec02f0f09688b673c79eacf1ebb43203
-    pristine_git_object: 768b07d215a8bc2b2a50472995f179895d137c04
+    last_write_checksum: sha1:44c89a5b7509e901fd92747b26da9fe584dd46fe
+    pristine_git_object: 42c20b011aeea75d6b600c031e825569aae30af4
+  internal/sdk/models/shared/portalnavigationstructure.go:
+    id: 43b8bc38017a
+    last_write_checksum: sha1:a4b9ee89b4e9bcfdfc4986b3cb5af53ed1594112
+    pristine_git_object: 373f203753f8e441eb5509701cd4ef34348593a3
+  internal/sdk/models/shared/portalnextthemebackground.go:
+    id: cf83edee5824
+    last_write_checksum: sha1:74ca15359b4985e0421e78d227c1b4d8789d24ab
+    pristine_git_object: 7959e72d2c636e9adb3e31f1a93a8b4b8575b3ea
+  internal/sdk/models/shared/portalnextthemecolor.go:
+    id: 0164ab834c7c
+    last_write_checksum: sha1:55872fec62b1b6662333dcd9273c8ec2a0128812
+    pristine_git_object: 9cdbc2b6afae6697283d257b13235bdca1e29729
+  internal/sdk/models/shared/portalnextthemedefinition.go:
+    id: c00c92878c4b
+    last_write_checksum: sha1:0436e71186a915e4204e0cb86ac6b5bc3f458cf1
+    pristine_git_object: 48923db03f2a5ca58126a06e2d831edc709999b2
+  internal/sdk/models/shared/portalnextthemefont.go:
+    id: 2c8bbea958e4
+    last_write_checksum: sha1:4f88f22797384eb4ef906e797d73f6022a58893c
+    pristine_git_object: a875a972374688be6d9e6feff4219ed3d651abcb
   internal/sdk/models/shared/portalspec.go:
     id: cfc64dd1e285
-    last_write_checksum: sha1:e3e7188659641d07ebe9cb48daf301550c0a8526
-    pristine_git_object: 2cb86f7f4109eb658a404c57751cd1815e306942
+    last_write_checksum: sha1:a9ab83e4cf4fca04dddf68cca1341c8a05d160ee
+    pristine_git_object: 135a764215ca1e6bfbf6edd806a93dac71d1c00b
   internal/sdk/models/shared/portalstate.go:
     id: c6755d79c636
-    last_write_checksum: sha1:7e9cd6fbda12834e5afdd15130c943a709b96645
-    pristine_git_object: c978fbc9c1debe04a4be83d723b79eb46a275691
+    last_write_checksum: sha1:95a50c0bf39d2f78b2eefc4b293d769752f0c613
+    pristine_git_object: f415a3370f0cfbdb80e05905ea31899eca5e2a2a
+  internal/sdk/models/shared/portalthemespec.go:
+    id: 3936be29e409
+    last_write_checksum: sha1:df8401c4e15af28d31387041012a103615660bd4
+    pristine_git_object: ab310f8b22c1b389cf66e2595cc28b61710c3727
+  internal/sdk/models/shared/portalthemestate.go:
+    id: 2ef284023dba
+    last_write_checksum: sha1:fd196b668f158f1e54eff687cef6f3ce2992e68a
+    pristine_git_object: e50759d7bf10508cb69c6539582c4a0cde665566
+  internal/sdk/models/shared/portalvisibility.go:
+    id: b41300bb0e89
+    last_write_checksum: sha1:9cb7e175b43e1a9db69d53df09bcdfb790d02585
+    pristine_git_object: 7918334d79d5793171d7ecdec66e3f12b5faa736
   internal/sdk/models/shared/primaryowner.go:
     id: 9a36ee7815cb
     last_write_checksum: sha1:00fdf8a31b608ad3b32e6f1baa6dbe21bbe3861b
@@ -1306,6 +1752,10 @@ trackedFiles:
     id: 588c8db56663
     last_write_checksum: sha1:62c34ee2c7f49f4d5f3e275f56f5cf11d0e785ae
     pristine_git_object: 6524ab468991b0bff75bd5d5c2eda51f4bd67fbd
+  internal/sdk/models/shared/requestvalidation.go:
+    id: 506767e74f26
+    last_write_checksum: sha1:5adccf20f5f60cac23956ffa35a9c90cc98472a2
+    pristine_git_object: 59cb5d29f2d89b8d34d2d8dc4c9ade4742ebcd96
   internal/sdk/models/shared/responsetemplate.go:
     id: e4a7af46b81c
     last_write_checksum: sha1:8182d3bc346901e694a64f6f4975d81546274753
@@ -1371,10 +1821,22 @@ trackedFiles:
     id: 3a59ed94fc76
     last_write_checksum: sha1:5b4246b380fa7d68036f66e4ca0a176e7ec02117
     pristine_git_object: 7fff951c137c2ba0259554427d35562b36159026
+  internal/sdk/models/shared/tracingmaskingstrategy.go:
+    id: c5041465dd96
+    last_write_checksum: sha1:b5ba0e84a5472c85b9216b0cefabf84d9c9557d0
+    pristine_git_object: eff29121f1f4bbc7bd29e746fdf109427085074e
+  internal/sdk/models/shared/tracingredactionconfig.go:
+    id: 7c4c7e630b89
+    last_write_checksum: sha1:5c523bcc8427fcbcbe74dc3e90bdb2d3cb6fb124
+    pristine_git_object: 73bc4ed441b7af427ccf34ff514c90a5f2715883
+  internal/sdk/models/shared/tracingredactionrule.go:
+    id: d50d0aae3389
+    last_write_checksum: sha1:953802fecb8b827716cfdba01b192774c150de8c
+    pristine_git_object: 1a0abdd143674652836e42a3fc4d13cebe55f756
   internal/sdk/models/shared/tracingv4.go:
     id: e1d61eaeb1c3
-    last_write_checksum: sha1:8657fe4558a4f7e3f947b7675ca58ca01e3dfdc9
-    pristine_git_object: 87f61f9d06bec2bc340ce66806433b40a9926a8f
+    last_write_checksum: sha1:3a1b3dfbf3dbf33037ebac85466d3b08a926acc7
+    pristine_git_object: 46d88272f45297605bf184c8cde9f8c397b0b16b
   internal/sdk/models/shared/visibility.go:
     id: 67300ab25b55
     last_write_checksum: sha1:4ccdb555259d1093c9e86d8e50ea3436509af1ca
@@ -1391,6 +1853,10 @@ trackedFiles:
     id: 31434336774d
     last_write_checksum: sha1:f4db71823bf91d6c628a85196c3bfd64f0ed6da0
     pristine_git_object: 1793dee7676a3675cefde49dcbfe960959909af7
+  internal/sdk/portallinks.go:
+    id: 6b6b34565753
+    last_write_checksum: sha1:b46169a17f964b302e11c738866925310eca98e4
+    pristine_git_object: ec63c79740d4895a3633807666116abd06af16cf
   internal/sdk/portallistings.go:
     id: fac5cc1fc18b
     last_write_checksum: sha1:66e1c1c04578f0f194af05ca43e8b4b5b4cd70bb
@@ -1411,6 +1877,10 @@ trackedFiles:
     id: 6c0fb6924ba6
     last_write_checksum: sha1:a1ea703f8861588c9cb96b1d8b7b0d26fb7c0622
     pristine_git_object: f0706cc8476e9b02ef9e8013404ece0901168c66
+  internal/sdk/themes.go:
+    id: 8cd310725873
+    last_write_checksum: sha1:41082fb6b02ca347bed53a3b809174e44bbaa142
+    pristine_git_object: 352f3e912efeb529ab466affd1f022a39c47685e
   internal/sdk/types/bigint.go:
     id: fc530b70337e
     last_write_checksum: sha1:c1ec8524ee4ed730b8514bb36c6abbb3c063d787
@@ -1509,10 +1979,10 @@ examples:
         query:
           dryRun: true
       requestBody:
-        application/json: {"hrid": "my_demo_api", "name": "My Api", "version": "1.0.0", "type": "MESSAGE", "description": "I can use many characters to describe this API.", "tags": ["europe"], "listeners": [], "endpointGroups": [{"name": "default-endpoint-group", "type": "default", "loadBalancer": {"type": "ROUND_ROBIN"}, "endpoints": [{"name": "default-endpoint", "type": "mock", "weight": 1, "inheritConfiguration": false, "services": {}, "secondary": false, "tenants": []}]}], "analytics": {"reporterMetricsEnabled": true, "logging": {"condition": "{#request.headers['Content-Type'][0] == 'application/json'}", "messageCondition": "{ #message.headers['Content-Type'][0] == 'application/json'}"}}, "properties": [], "resources": [], "plans": [], "flowExecution": {"mode": "BEST_MATCH", "matchRequired": false}, "flows": [], "groups": ["developers"], "visibility": "PUBLIC", "state": "STARTED", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "labels": ["example"], "metadata": [], "lifecycleState": "CREATED", "categories": ["Example APIs"], "members": [], "notifyMembers": true, "pages": [], "allowedInApiProducts": false, "allowMultiJwtOauth2Subscriptions": false, "portalNavigation": []}
+        application/json: {"hrid": "my_demo_api", "name": "My Api", "version": "1.0.0", "type": "MESSAGE", "description": "I can use many characters to describe this API.", "tags": ["europe"], "listeners": [], "endpointGroups": [{"name": "default-endpoint-group", "type": "default", "loadBalancer": {"type": "ROUND_ROBIN"}, "endpoints": [{"name": "default-endpoint", "type": "mock", "weight": 1, "inheritConfiguration": false, "services": {}, "secondary": false, "tenants": []}]}], "analytics": {"reporterMetricsEnabled": true, "connectionEvents": ["CONNECTED", "DISCONNECTED", "ERROR"], "logging": {"condition": "{#request.headers['Content-Type'][0] == 'application/json'}", "messageCondition": "{ #message.headers['Content-Type'][0] == 'application/json'}"}, "tracing": {"redaction": {"defaultReplacement": "[REDACTED]", "rules": [{"attributeNamePattern": "http.request.header.authorization", "maskingStrategy": {"type": "FULL", "replacement": "[REDACTED]", "prefixLength": 0, "suffixLength": 0}, "valuePattern": "^Bearer "}]}}}, "properties": [], "resources": [], "plans": [], "flowExecution": {"mode": "BEST_MATCH", "matchRequired": false}, "flows": [], "groups": ["developers"], "visibility": "PUBLIC", "state": "STARTED", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "labels": ["example"], "metadata": [], "lifecycleState": "CREATED", "categories": ["Example APIs"], "members": [], "notifyMembers": true, "pages": [], "allowedInApiProducts": false, "allowMultiJwtOauth2Subscriptions": false, "portalNavigation": []}
       responses:
         "200":
-          application/json: {"hrid": "my_demo_api", "name": "My Api", "version": "1.0.0", "type": "MESSAGE", "description": "I can use many characters to describe this API.", "tags": ["europe"], "listeners": [], "endpointGroups": [{"name": "default-endpoint-group", "type": "default", "loadBalancer": {"type": "ROUND_ROBIN"}, "endpoints": [{"name": "default-endpoint", "type": "mock", "weight": 1, "inheritConfiguration": false, "services": {}, "secondary": false, "tenants": []}]}], "analytics": {"reporterMetricsEnabled": true, "logging": {"condition": "{#request.headers['Content-Type'][0] == 'application/json'}", "messageCondition": "{ #message.headers['Content-Type'][0] == 'application/json'}"}}, "properties": [], "resources": [], "plans": [], "flowExecution": {"mode": "BEST_MATCH", "matchRequired": false}, "flows": [], "groups": ["developers"], "visibility": "PUBLIC", "state": "STARTED", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "labels": ["example"], "metadata": [], "lifecycleState": "CREATED", "categories": ["Example APIs"], "members": [], "pages": [], "allowedInApiProducts": false, "allowMultiJwtOauth2Subscriptions": false, "portalNavigation": []}
+          application/json: {"hrid": "my_demo_api", "name": "My Api", "version": "1.0.0", "type": "MESSAGE", "description": "I can use many characters to describe this API.", "tags": ["europe"], "listeners": [], "endpointGroups": [{"name": "default-endpoint-group", "type": "default", "loadBalancer": {"type": "ROUND_ROBIN"}, "endpoints": [{"name": "default-endpoint", "type": "mock", "weight": 1, "inheritConfiguration": false, "services": {}, "secondary": false, "tenants": []}]}], "analytics": {"reporterMetricsEnabled": true, "connectionEvents": ["CONNECTED", "DISCONNECTED", "ERROR"], "logging": {"condition": "{#request.headers['Content-Type'][0] == 'application/json'}", "messageCondition": "{ #message.headers['Content-Type'][0] == 'application/json'}"}, "tracing": {"redaction": {"defaultReplacement": "[REDACTED]", "rules": [{"attributeNamePattern": "http.request.header.authorization", "maskingStrategy": {"type": "FULL", "replacement": "[REDACTED]", "prefixLength": 0, "suffixLength": 0}, "valuePattern": "^Bearer "}]}}}, "properties": [], "resources": [], "plans": [], "flowExecution": {"mode": "BEST_MATCH", "matchRequired": false}, "flows": [], "groups": ["developers"], "visibility": "PUBLIC", "state": "STARTED", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "labels": ["example"], "metadata": [], "lifecycleState": "CREATED", "categories": ["Example APIs"], "members": [], "pages": [], "allowedInApiProducts": false, "allowMultiJwtOauth2Subscriptions": false, "portalNavigation": []}
         "400":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:
@@ -1526,7 +1996,7 @@ examples:
           hrid: "my_demo_api"
       responses:
         "200":
-          application/json: {"hrid": "my_demo_api", "name": "My Api", "version": "1.0.0", "type": "MESSAGE", "description": "I can use many characters to describe this API.", "tags": ["europe"], "listeners": [{"type": "KAFKA", "servers": [], "host": "unique-king.org", "port": 609571}], "endpointGroups": [{"name": "default-endpoint-group", "type": "default", "loadBalancer": {"type": "ROUND_ROBIN"}, "endpoints": [{"name": "default-endpoint", "type": "mock", "weight": 1, "inheritConfiguration": false, "services": {}, "secondary": false, "tenants": []}]}], "analytics": {"reporterMetricsEnabled": true, "logging": {"condition": "{#request.headers['Content-Type'][0] == 'application/json'}", "messageCondition": "{ #message.headers['Content-Type'][0] == 'application/json'}"}}, "properties": [], "resources": [], "plans": [], "flowExecution": {"mode": "BEST_MATCH", "matchRequired": false}, "flows": [], "groups": ["developers"], "visibility": "PUBLIC", "state": "STARTED", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "labels": ["example"], "metadata": [], "lifecycleState": "CREATED", "categories": ["Example APIs"], "members": [], "pages": [], "allowedInApiProducts": false, "allowMultiJwtOauth2Subscriptions": false, "portalNavigation": []}
+          application/json: {"hrid": "my_demo_api", "name": "My Api", "version": "1.0.0", "type": "MESSAGE", "description": "I can use many characters to describe this API.", "tags": ["europe"], "listeners": [{"type": "KAFKA", "servers": [], "host": "unique-king.org", "port": 609571}], "endpointGroups": [{"name": "default-endpoint-group", "type": "default", "loadBalancer": {"type": "ROUND_ROBIN"}, "endpoints": [{"name": "default-endpoint", "type": "mock", "weight": 1, "inheritConfiguration": false, "services": {}, "secondary": false, "tenants": []}]}], "analytics": {"reporterMetricsEnabled": true, "connectionEvents": ["CONNECTED", "DISCONNECTED", "ERROR"], "logging": {"condition": "{#request.headers['Content-Type'][0] == 'application/json'}", "messageCondition": "{ #message.headers['Content-Type'][0] == 'application/json'}"}, "tracing": {"redaction": {"defaultReplacement": "[REDACTED]", "rules": [{"attributeNamePattern": "http.request.header.authorization", "maskingStrategy": {"type": "FULL", "replacement": "[REDACTED]", "prefixLength": 0, "suffixLength": 0}, "valuePattern": "^Bearer "}]}}}, "properties": [], "resources": [], "plans": [], "flowExecution": {"mode": "BEST_MATCH", "matchRequired": false}, "flows": [], "groups": ["developers"], "visibility": "PUBLIC", "state": "STARTED", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "labels": ["example"], "metadata": [], "lifecycleState": "CREATED", "categories": ["Example APIs"], "members": [], "pages": [], "allowedInApiProducts": false, "allowMultiJwtOauth2Subscriptions": false, "portalNavigation": []}
         "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:
@@ -1552,14 +2022,14 @@ examples:
         query:
           dryRun: true
       requestBody:
-        application/json: {"hrid": "my_demo_api", "name": "Example Application", "description": "This is the documentation explaining purpose of this Application.", "domain": "examples.com", "groups": ["developers"], "pictureUrl": "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png", "notifyMembers": false, "background": "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "settings": {"app": {"type": "web", "clientId": "example-client-id"}, "oauth": {"applicationType": "browser", "grantTypes": ["authorization_code"], "redirectUris": ["https://myapp.example.com/oauth/callback"]}, "tls": {}}, "metadata": [], "members": [], "status": "ACTIVE"}
+        application/json: {"hrid": "my_demo_api", "name": "Example Application", "description": "This is the documentation explaining purpose of this Application.", "domain": "examples.com", "groups": ["developers"], "pictureUrl": "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png", "notifyMembers": false, "background": "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "settings": {"app": {"type": "web", "clientId": "example-client-id"}, "oauth": {"applicationType": "browser", "grantTypes": ["authorization_code"], "redirectUris": ["https://myapp.example.com/oauth/callback"], "additionalClientMetadata": {"software_id": "3d5a2f0e-1c4b-4c8a-9f7e-2b6d8e0a1c34"}}, "tls": {}}, "metadata": [], "members": [], "status": "ACTIVE"}
       responses:
         "400":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         "200":
-          application/json: {"hrid": "my_demo_api", "name": "Example Application", "description": "This is the documentation explaining purpose of this Application.", "domain": "examples.com", "groups": ["developers"], "pictureUrl": "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png", "notifyMembers": false, "background": "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "settings": {"app": {"type": "web", "clientId": "example-client-id"}, "oauth": {"applicationType": "browser", "grantTypes": ["authorization_code"], "redirectUris": ["https://myapp.example.com/oauth/callback"]}, "tls": {}}, "metadata": [], "members": [], "status": "ACTIVE"}
+          application/json: {"hrid": "my_demo_api", "name": "Example Application", "description": "This is the documentation explaining purpose of this Application.", "domain": "examples.com", "groups": ["developers"], "pictureUrl": "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png", "notifyMembers": false, "background": "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "settings": {"app": {"type": "web", "clientId": "example-client-id"}, "oauth": {"applicationType": "browser", "grantTypes": ["authorization_code"], "redirectUris": ["https://myapp.example.com/oauth/callback"], "additionalClientMetadata": {"software_id": "3d5a2f0e-1c4b-4c8a-9f7e-2b6d8e0a1c34"}}, "tls": {}}, "metadata": [], "members": [], "status": "ACTIVE"}
   getApplication:
     speakeasy-default-get-application:
       parameters:
@@ -1569,7 +2039,7 @@ examples:
           hrid: "my_demo_api"
       responses:
         "200":
-          application/json: {"hrid": "my_demo_api", "name": "Example Application", "description": "This is the documentation explaining purpose of this Application.", "domain": "examples.com", "groups": ["developers"], "pictureUrl": "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png", "notifyMembers": false, "background": "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "settings": {"app": {"type": "web", "clientId": "example-client-id"}, "oauth": {"applicationType": "browser", "grantTypes": ["authorization_code"], "redirectUris": ["https://myapp.example.com/oauth/callback"]}, "tls": {}}, "metadata": [], "members": [], "status": "ACTIVE"}
+          application/json: {"hrid": "my_demo_api", "name": "Example Application", "description": "This is the documentation explaining purpose of this Application.", "domain": "examples.com", "groups": ["developers"], "pictureUrl": "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png", "notifyMembers": false, "background": "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "settings": {"app": {"type": "web", "clientId": "example-client-id"}, "oauth": {"applicationType": "browser", "grantTypes": ["authorization_code"], "redirectUris": ["https://myapp.example.com/oauth/callback"], "additionalClientMetadata": {"software_id": "3d5a2f0e-1c4b-4c8a-9f7e-2b6d8e0a1c34"}}, "tls": {}}, "metadata": [], "members": [], "status": "ACTIVE"}
         "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:
@@ -1819,10 +2289,10 @@ examples:
         query:
           dryRun: true
       requestBody:
-        application/json: {"hrid": "demo_api", "name": "Default Portal", "navigation": [{"path": "/projects/alpha", "displayName": "Alpha"}]}
+        application/json: {"hrid": "demo_api", "name": "Default Portal", "structure": {"topNavbar": [{"path": "/projects/alpha", "displayName": "Alpha"}]}, "navigation": [{"path": "/projects/alpha", "displayName": "Alpha"}], "activeThemeHrid": "brand-theme"}
       responses:
         "200":
-          application/json: {"hrid": "demo_api", "name": "Default Portal", "navigation": [{"path": "/projects/alpha", "displayName": "Alpha"}]}
+          application/json: {"hrid": "demo_api", "name": "Default Portal", "structure": {"topNavbar": [{"path": "/projects/alpha", "displayName": "Alpha"}]}, "navigation": [{"path": "/projects/alpha", "displayName": "Alpha"}], "activeThemeHrid": "brand-theme"}
         "400":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
         default:
@@ -1836,7 +2306,7 @@ examples:
           hrid: "my_demo_api"
       responses:
         "200":
-          application/json: {"hrid": "demo_api", "name": "Default Portal", "navigation": [{"path": "/projects/alpha", "displayName": "Alpha"}]}
+          application/json: {"hrid": "demo_api", "name": "Default Portal", "structure": {"topNavbar": [{"path": "/projects/alpha", "displayName": "Alpha"}]}, "navigation": [{"path": "/projects/alpha", "displayName": "Alpha"}], "activeThemeHrid": "brand-theme"}
         "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
         default:
@@ -1909,10 +2379,10 @@ examples:
         query:
           dryRun: true
       requestBody:
-        application/json: {"hrid": "demo_api", "name": "Getting Started", "type": "OPENAPI", "content": "<value>", "location": "/projects/alpha/docs"}
+        application/json: {"hrid": "demo_api", "name": "Getting Started", "type": "OPENAPI", "content": "<value>", "location": "/projects/alpha/docs", "area": "TOP_NAVBAR"}
       responses:
         "200":
-          application/json: {"hrid": "demo_api", "name": "Getting Started", "type": "OPENAPI", "content": "<value>", "location": "/projects/alpha/docs"}
+          application/json: {"hrid": "demo_api", "name": "Getting Started", "type": "OPENAPI", "content": "<value>", "location": "/projects/alpha/docs", "area": "TOP_NAVBAR"}
         "400":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
         default:
@@ -1927,7 +2397,7 @@ examples:
           hrid: "my_demo_api"
       responses:
         "200":
-          application/json: {"hrid": "demo_api", "name": "Getting Started", "type": "ASYNCAPI", "content": "<value>", "location": "/projects/alpha/docs"}
+          application/json: {"hrid": "demo_api", "name": "Getting Started", "type": "ASYNCAPI", "content": "<value>", "location": "/projects/alpha/docs", "area": "TOP_NAVBAR"}
         "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
         default:
@@ -1955,10 +2425,10 @@ examples:
         query:
           dryRun: true
       requestBody:
-        application/json: {"hrid": "demo_api", "name": "Getting Started", "type": "GRAVITEE_MARKDOWN", "content": "<value>", "location": "/projects/alpha/docs"}
+        application/json: {"hrid": "demo_api", "name": "Getting Started", "type": "GRAVITEE_MARKDOWN", "content": "<value>", "location": "/projects/alpha/docs", "area": "TOP_NAVBAR"}
       responses:
         "200":
-          application/json: {"hrid": "demo_api", "name": "Getting Started", "type": "GRAVITEE_MARKDOWN", "content": "<value>", "location": "/projects/alpha/docs"}
+          application/json: {"hrid": "demo_api", "name": "Getting Started", "type": "GRAVITEE_MARKDOWN", "content": "<value>", "location": "/projects/alpha/docs", "area": "TOP_NAVBAR"}
         "400":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
         default:
@@ -1973,7 +2443,7 @@ examples:
           hrid: "my_demo_api"
       responses:
         "200":
-          application/json: {"hrid": "demo_api", "name": "Getting Started", "type": "GRAVITEE_MARKDOWN", "content": "<value>", "location": "/projects/alpha/docs"}
+          application/json: {"hrid": "demo_api", "name": "Getting Started", "type": "GRAVITEE_MARKDOWN", "content": "<value>", "location": "/projects/alpha/docs", "area": "TOP_NAVBAR"}
         "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
         default:
@@ -1991,6 +2461,267 @@ examples:
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
         default:
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  createOrUpdatePortalLink:
+    speakeasy-default-create-or-update-portal-link:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          portalHrid: "default-portal"
+        query:
+          dryRun: true
+      requestBody:
+        application/json: {"hrid": "demo_api", "name": "External Docs", "href": "https://docs.example.com", "location": "/projects/alpha"}
+      responses:
+        "200":
+          application/json: {"hrid": "demo_api", "name": "External Docs", "href": "https://docs.example.com", "location": "/projects/alpha"}
+        "400":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  getPortalLink:
+    speakeasy-default-get-portal-link:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          portalHrid: "default-portal"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "demo_api", "name": "External Docs", "href": "https://docs.example.com", "location": "/projects/alpha"}
+        "401":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  deletePortalLink:
+    speakeasy-default-delete-portal-link:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          portalHrid: "default-portal"
+          hrid: "my_demo_api"
+      responses:
+        "401":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  createOrUpdatePortalTheme:
+    speakeasy-default-create-or-update-portal-theme:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+        query:
+          dryRun: true
+      requestBody:
+        application/json: {"hrid": "demo_api", "name": "Default Theme", "definition": {}}
+      responses:
+        "200":
+          application/json: {"hrid": "demo_api", "name": "Default Theme", "definition": {}}
+        "400":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  getPortalTheme:
+    speakeasy-default-get-portal-theme:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "demo_api", "name": "Default Theme", "definition": {}}
+        "401":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  deletePortalTheme:
+    speakeasy-default-delete-portal-theme:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "400":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  createOrUpdateApiLink:
+    speakeasy-default-create-or-update-api-link:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          apiHrid: "my_demo_api"
+        query:
+          dryRun: true
+      requestBody:
+        application/json: {"hrid": "demo_api", "name": "External Docs", "href": "https://docs.example.com", "location": "/projects/alpha"}
+      responses:
+        "200":
+          application/json: {"hrid": "demo_api", "name": "External Docs", "href": "https://docs.example.com", "location": "/projects/alpha"}
+        "400":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  getApiLink:
+    speakeasy-default-get-api-link:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          apiHrid: "my_demo_api"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "demo_api", "name": "External Docs", "href": "https://docs.example.com", "location": "/projects/alpha"}
+        "401":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  deleteApiLink:
+    speakeasy-default-delete-api-link:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          apiHrid: "my_demo_api"
+          hrid: "my_demo_api"
+      responses:
+        "401":
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+        default:
+          application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
+  createOrUpdateAimCatalogMcpServer:
+    speakeasy-default-create-or-update-aim-catalog-mcp-server:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+        query:
+          dryRun: true
+      requestBody:
+        application/json: {"hrid": "github-mcp", "entityId": "mcp-server.github", "description": "GitHub tools for coding agents", "connection": {"endpoint": "https://api.githubcopilot.com/mcp/", "transport": "HTTP", "auth": {"clientId": "<id>", "clientSecret": "bc7kLWfe6CdW02Z", "tokenUrl": "https://bruised-analogy.org/", "type": "OAUTH2"}}}
+      responses:
+        "200":
+          application/json: {"hrid": "github-mcp", "entityId": "mcp-server.github", "description": "GitHub tools for coding agents", "connection": {"endpoint": "https://api.githubcopilot.com/mcp/", "transport": "HTTP"}}
+        "401":
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+        default:
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+  getAimCatalogMcpServer:
+    speakeasy-default-get-aim-catalog-mcp-server:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "github-mcp", "entityId": "mcp-server.github", "description": "GitHub tools for coding agents", "connection": {"endpoint": "https://api.githubcopilot.com/mcp/", "transport": "HTTP"}}
+        "401":
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+        default:
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+  deleteAimCatalogMcpServer:
+    speakeasy-default-delete-aim-catalog-mcp-server:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "401":
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+        default:
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+  createOrUpdateAimMcpProxy:
+    proxy:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+        query:
+          dryRun: true
+      requestBody:
+        application/json: {"hrid": "github-mcp-proxy", "entityId": "mcp-proxy.github", "name": "GitHub", "contextPath": "/mcp/github", "mode": "PROXY", "proxy": {"serverUrl": "https://api.githubcopilot.com/mcp/", "upstreamAuth": {"token": "secret://kubernetes/github-mcp:token", "type": "BEARER"}}, "state": "STARTED", "plans": [{"name": "gold", "security": {"source": "HEADER", "type": "API_KEY"}}]}
+      responses:
+        "200":
+          application/json: {"hrid": "github-mcp", "entityId": "mcp-proxy.github", "name": "GitHub", "description": "GitHub tools proxied through the gateway", "contextPath": "/mcp/github", "mode": "PROXY", "proxy": {"serverUrl": "https://api.githubcopilot.com/mcp/"}, "studio": {"tools": [{"server": "github-mcp", "tool": "create_issue", "alias": "gh_create_issue"}], "enableFGA": false}, "state": "STARTED", "flows": [{"name": "Tools ACL", "enabled": true, "selectors": [{"methods": ["tools/list", "tools/call"], "type": "MCP"}], "request": [{"name": "MCP ACL", "enabled": true, "policy": "mcp-acl", "configuration": {"authorizations": [{"authorizedFeatures": [{"type": "TOOLS", "methods": ["TOOLS_LIST", "TOOLS_CALL"], "patternType": "ANY"}]}]}}]}], "identityProviders": [{"name": "am", "type": "GRAVITEE_AM"}], "plans": [{"name": "gold", "security": {"source": "HEADER", "type": "API_KEY"}}]}
+        "401":
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+        default:
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+    proxyBehindKeycloak:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+        query:
+          dryRun: true
+      requestBody:
+        application/json: {"hrid": "github-mcp-proxy", "entityId": "mcp-proxy.github", "name": "GitHub", "contextPath": "/mcp/github", "mode": "PROXY", "proxy": {"serverUrl": "https://api.githubcopilot.com/mcp/"}, "state": "STARTED", "flows": [{"name": "Tools ACL", "enabled": true, "selectors": [{"methods": ["tools/list", "tools/call"], "type": "MCP"}], "request": [{"name": "MCP ACL", "enabled": true, "policy": "mcp-acl", "configuration": {"authorizations": [{"authorizedFeatures": [{"type": "TOOLS", "methods": ["TOOLS_LIST", "TOOLS_CALL"], "patternType": "ANY"}]}]}}]}], "identityProviders": [{"name": "am", "type": "GRAVITEE_AM"}, {"issuerUrl": "https://kc.example.com/realms/acme", "introspectionEndpoint": "/protocol/openid-connect/token/introspect", "introspectionEndpointMethod": "POST", "clientId": "gateway", "clientSecret": "secret://kubernetes/keycloak-gateway:client-secret", "name": "keycloak", "type": "OAUTH2_GENERIC"}], "plans": [{"name": "gold", "security": {"provider": "am", "scopes": ["repo:read"], "type": "OAUTH2"}, "flows": [{"name": "Gold rate limit", "enabled": true, "selectors": [{"methods": ["tools/call"], "type": "MCP"}], "request": [{"name": "Rate limit", "enabled": true, "policy": "rate-limit", "configuration": {"rate": {"limit": 100, "periodTime": 1, "periodTimeUnit": "MINUTES"}}}]}]}, {"name": "partners", "security": {"provider": "keycloak", "type": "OAUTH2"}}]}
+      responses:
+        "200":
+          application/json: {"hrid": "github-mcp", "entityId": "mcp-proxy.github", "name": "GitHub", "description": "GitHub tools proxied through the gateway", "contextPath": "/mcp/github", "mode": "PROXY", "proxy": {"serverUrl": "https://api.githubcopilot.com/mcp/"}, "studio": {"tools": [{"server": "github-mcp", "tool": "create_issue", "alias": "gh_create_issue"}], "enableFGA": false}, "state": "STARTED", "flows": [{"name": "Tools ACL", "enabled": true, "selectors": [{"methods": ["tools/list", "tools/call"], "type": "MCP"}], "request": [{"name": "MCP ACL", "enabled": true, "policy": "mcp-acl", "configuration": {"authorizations": [{"authorizedFeatures": [{"type": "TOOLS", "methods": ["TOOLS_LIST", "TOOLS_CALL"], "patternType": "ANY"}]}]}}]}], "identityProviders": [{"name": "am", "type": "GRAVITEE_AM"}], "plans": [{"name": "gold", "security": {"source": "HEADER", "type": "API_KEY"}}]}
+        "401":
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+        default:
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+    studio:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+        query:
+          dryRun: true
+      requestBody:
+        application/json: {"hrid": "support-studio", "entityId": "mcp-proxy.support-studio", "name": "Support Studio", "contextPath": "/mcp/support", "mode": "STUDIO", "studio": {"tools": [{"server": "github-mcp", "tool": "create_issue"}, {"server": "github-mcp", "tool": "search_issues", "alias": "gh_search"}, {"server": "jira-mcp", "tool": "create_ticket"}], "upstreamAuth": [{"server": "github-mcp", "auth": {"token": "secret://kubernetes/github-mcp:token", "type": "BEARER"}}, {"server": "jira-mcp", "auth": {"type": "NONE"}}], "enableFGA": true}, "state": "STARTED", "plans": [{"name": "gold", "security": {"source": "HEADER", "type": "API_KEY"}}]}
+      responses:
+        "200":
+          application/json: {"hrid": "github-mcp", "entityId": "mcp-proxy.github", "name": "GitHub", "description": "GitHub tools proxied through the gateway", "contextPath": "/mcp/github", "mode": "PROXY", "proxy": {"serverUrl": "https://api.githubcopilot.com/mcp/"}, "studio": {"tools": [{"server": "github-mcp", "tool": "create_issue", "alias": "gh_create_issue"}], "enableFGA": false}, "state": "STARTED", "flows": [{"name": "Tools ACL", "enabled": true, "selectors": [{"methods": ["tools/list", "tools/call"], "type": "MCP"}], "request": [{"name": "MCP ACL", "enabled": true, "policy": "mcp-acl", "configuration": {"authorizations": [{"authorizedFeatures": [{"type": "TOOLS", "methods": ["TOOLS_LIST", "TOOLS_CALL"], "patternType": "ANY"}]}]}}]}], "identityProviders": [{"name": "am", "type": "GRAVITEE_AM"}], "plans": [{"name": "gold", "security": {"source": "HEADER", "type": "API_KEY"}}]}
+        "401":
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+        default:
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+    applied:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+        query:
+          dryRun: true
+      requestBody:
+        application/json: {"hrid": "github-mcp", "entityId": "mcp-proxy.github", "name": "GitHub", "description": "GitHub tools proxied through the gateway", "contextPath": "/mcp/github", "mode": "STUDIO", "proxy": {"serverUrl": "https://api.githubcopilot.com/mcp/", "upstreamAuth": {"apiKeyHeader": "X-Api-Key", "apiKey": "_mOgWfkSlk57ZEA", "type": "API_KEY"}}, "studio": {"tools": [], "upstreamAuth": [{"server": "github-mcp", "auth": {"token": "jqpoZ1ARk0Uqxk1", "type": "BEARER"}}], "enableFGA": false}, "state": "STARTED", "flows": [{"name": "Tools ACL", "enabled": true, "selectors": [{"methods": ["tools/list", "tools/call"], "type": "MCP"}], "request": [{"name": "MCP ACL", "enabled": true, "policy": "mcp-acl", "configuration": {"authorizations": [{"authorizedFeatures": [{"type": "TOOLS", "methods": ["TOOLS_LIST", "TOOLS_CALL"], "patternType": "ANY"}]}]}}]}], "identityProviders": [{"name": "am", "type": "GRAVITEE_AM"}], "plans": [{"name": "gold", "security": {"source": "HEADER", "type": "API_KEY"}}]}
+      responses:
+        "200":
+          application/json: {"hrid": "github-mcp-proxy", "entityId": "mcp-proxy.github", "name": "GitHub", "contextPath": "/mcp/github", "mode": "PROXY", "proxy": {"serverUrl": "https://api.githubcopilot.com/mcp/"}, "state": "STARTED", "plans": [{"name": "gold", "security": {"source": "HEADER", "type": "API_KEY"}}], "id": "2a5bce95-bd0c-4bc0-a30d-72e299047a09", "environmentId": "DEFAULT", "organizationId": "DEFAULT"}
+  getAimMcpProxy:
+    proxy:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "github-mcp-proxy", "entityId": "mcp-proxy.github", "name": "GitHub", "contextPath": "/mcp/github", "mode": "PROXY", "proxy": {"serverUrl": "https://api.githubcopilot.com/mcp/"}, "state": "STARTED", "plans": [{"name": "gold", "security": {"source": "HEADER", "type": "API_KEY"}}], "id": "2a5bce95-bd0c-4bc0-a30d-72e299047a09", "environmentId": "DEFAULT", "organizationId": "DEFAULT"}
+  deleteAimMcpProxy:
+    speakeasy-default-delete-aim-mcp-proxy:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "401":
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+        default:
+          application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes

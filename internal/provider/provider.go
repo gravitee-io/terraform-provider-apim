@@ -109,6 +109,8 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			`* Portals` + "\n" +
 			`* Portal Listings` + "\n" +
 			`* Documentations` + "\n" +
+			`* MCP Catalog Servers` + "\n" +
+			`* MCP Proxies` + "\n" +
 			`` + "\n" +
 			`[Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)` + "\n" +
 			`` + "\n" +
@@ -250,10 +252,12 @@ func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource
 	return []func() resource.Resource{
 		NewApiv4Resource,
 		NewApplicationResource,
+		NewCatalogMcpServerResource,
 		NewDictionaryResource,
 		NewDocumentationAPIResource,
 		NewDocumentationPortalResource,
 		NewGroupResource,
+		NewMcpProxyResource,
 		NewPortalResource,
 		NewPortalListingResource,
 		NewSharedPolicyGroupResource,
@@ -265,10 +269,12 @@ func (p *ApimProvider) DataSources(ctx context.Context) []func() datasource.Data
 	return []func() datasource.DataSource{
 		NewApiv4DataSource,
 		NewApplicationDataSource,
+		NewCatalogMcpServerDataSource,
 		NewDictionaryDataSource,
 		NewDocumentationAPIDataSource,
 		NewDocumentationPortalDataSource,
 		NewGroupDataSource,
+		NewMcpProxyDataSource,
 		NewPortalDataSource,
 		NewPortalListingDataSource,
 		NewSharedPolicyGroupDataSource,

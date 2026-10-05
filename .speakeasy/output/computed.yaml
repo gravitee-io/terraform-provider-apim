@@ -27,24 +27,21 @@ info:
     * Portals
     * Portal Listings
     * Documentations
+    * MCP Catalog Servers
+    * MCP Proxies
 
     [Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)
 
     Checkout other sections to configure, authenticate and start working with Gravitee resources
   contact:
-    name: DevX team
-    email: team-gko@graviteesource.com
+    name: AI Management team
     url: https://www.gravitee.io/
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
-security:
-  - BearerAuth: []
-  - BasicAuth: []
-  - CloudAuth: []
 servers:
-  - url: "https://eu.cloudgate.gravitee.io/apim/automation"
+  - url: https://eu.cloudgate.gravitee.io/apim/automation
 tags:
   - name: APIs
     description: Everything about APIs
@@ -64,8 +61,14 @@ tags:
     description: Everything about Portal Listings (publishing APIs to a portal)
   - name: Portal Documentations
     description: Everything about Portal Documentations
+  - name: Portal Links
+    description: Everything about Portal Links (external navigation entries in a portal's navigation)
   - name: API Documentations
     description: Everything about API Documentations (next-gen portal)
+  - name: AI Catalog
+    description: Upstream MCP servers registered in the AI Catalog.
+  - name: MCP Proxies
+    description: MCP proxies exposing an upstream MCP server through the gateway.
 paths:
   # APIs
   /organizations/{orgId}/environments/{envId}/apis:
@@ -885,6 +888,164 @@ paths:
           $ref: "#/components/responses/Error"
       x-speakeasy-entity-operation: DocumentationPortal#delete
       x-speakeasy-name-override: delete
+  # Portal Links
+  /organizations/{orgId}/environments/{envId}/portals/{portalHrid}/links:
+    put:
+      operationId: createOrUpdatePortalLink
+      tags:
+        - Portal Links
+      summary: Create or update a Portal Link
+      description: Create or update a Portal Link attached to a Portal
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/portalHridParam"
+        - $ref: "#/components/parameters/dryRunQueryParam"
+      requestBody:
+        description: Portal Link specification
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/PortalLinkSpec"
+        required: true
+      responses:
+        "200":
+          description: State of the successfully created/updated Portal Link
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortalLinkState"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        default:
+          $ref: "#/components/responses/Error"
+  /organizations/{orgId}/environments/{envId}/portals/{portalHrid}/links/{hrid}:
+    parameters:
+      - $ref: "#/components/parameters/orgIdParam"
+      - $ref: "#/components/parameters/envIdParam"
+      - $ref: "#/components/parameters/portalHridParam"
+      - $ref: "#/components/parameters/hridParam"
+    get:
+      operationId: getPortalLink
+      tags:
+        - Portal Links
+      summary: Get one Portal Link
+      description: Get a Portal Link using HRID
+      responses:
+        "200":
+          description: Portal Link successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortalLinkState"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+    delete:
+      operationId: deletePortalLink
+      tags:
+        - Portal Links
+      summary: Delete one Portal Link
+      description: Delete a Portal Link using HRID
+      responses:
+        "204":
+          description: Portal Link successfully deleted
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+  # Themes
+  /organizations/{orgId}/environments/{envId}/portal-themes:
+    put:
+      operationId: createOrUpdatePortalTheme
+      tags:
+        - Themes
+      summary: Create or update a Theme
+      description: Create or update a next-gen portal Theme from PortalThemeSpec
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/dryRunQueryParam"
+      requestBody:
+        description: Theme specification
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/PortalThemeSpec"
+        required: true
+      responses:
+        "200":
+          description: State of the successfully created/updated Theme
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortalThemeState"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        default:
+          $ref: "#/components/responses/Error"
+  /organizations/{orgId}/environments/{envId}/portal-themes/{hrid}:
+    parameters:
+      - $ref: "#/components/parameters/orgIdParam"
+      - $ref: "#/components/parameters/envIdParam"
+      - $ref: "#/components/parameters/hridParam"
+    get:
+      operationId: getPortalTheme
+      tags:
+        - Themes
+      summary: Get one Theme
+      description: Get a Theme using HRID
+      responses:
+        "200":
+          description: Theme successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortalThemeState"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+    delete:
+      operationId: deletePortalTheme
+      tags:
+        - Themes
+      summary: Delete one Theme
+      description: Delete a Theme using HRID
+      responses:
+        "204":
+          description: Theme successfully deleted
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
   # API Documentations
   /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/documentations:
     put:
@@ -970,11 +1131,461 @@ paths:
           $ref: "#/components/responses/Error"
       x-speakeasy-entity-operation: DocumentationApi#delete
       x-speakeasy-name-override: delete
+  # API Links
+  /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/links:
+    put:
+      operationId: createOrUpdateApiLink
+      tags:
+        - API Links
+      summary: Create or update an API Link
+      description: Create or update a Link attached to an API
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/apiHridParam"
+        - $ref: "#/components/parameters/dryRunQueryParam"
+      requestBody:
+        description: Portal Link specification
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/PortalLinkSpec"
+        required: true
+      responses:
+        "200":
+          description: State of the successfully created/updated Link
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortalLinkState"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        default:
+          $ref: "#/components/responses/Error"
+  /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/links/{hrid}:
+    parameters:
+      - $ref: "#/components/parameters/orgIdParam"
+      - $ref: "#/components/parameters/envIdParam"
+      - $ref: "#/components/parameters/apiHridParam"
+      - $ref: "#/components/parameters/hridParam"
+    get:
+      operationId: getApiLink
+      tags:
+        - API Links
+      summary: Get one API Link
+      description: Get an API Link using HRID
+      responses:
+        "200":
+          description: Link successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortalLinkState"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+    delete:
+      operationId: deleteApiLink
+      tags:
+        - API Links
+      summary: Delete one API Link
+      description: Delete an API Link using HRID
+      responses:
+        "204":
+          description: Link successfully deleted
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+  /organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers:
+    put:
+      operationId: createOrUpdateAimCatalogMcpServer
+      summary: Create or update a Catalog MCP server from its spec
+      description: |
+        Create or update an upstream MCP server registered in the AI Catalog, identified by the `hrid` carried in the
+        body. Re-applying an unchanged spec is a no-op. When the connection is new or changed, or the server was never
+        synced, the platform discovers the server before persisting anything and syncs its tools, prompts and
+        resources; an upstream that cannot be discovered rejects the apply. Findings that prevent the apply — a
+        failed discovery included — are reported in `errors.severe` with a `400`, and nothing is persisted or
+        destroyed. A dry run performs the same checks, discovery included.
+      tags:
+        - AI Catalog
+      requestBody:
+        description: Catalog MCP server specification
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AimCatalogMcpServerSpec'
+        required: true
+      responses:
+        "200":
+          description: State of the created or updated Catalog MCP server, or the dry-run preview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AimCatalogMcpServerState'
+        "401":
+          $ref: '#/components/responses/AimUnauthenticated'
+        "403":
+          $ref: '#/components/responses/AimUnauthorized'
+        "404":
+          $ref: '#/components/responses/AimNotFound'
+        default:
+          $ref: '#/components/responses/AimError'
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/dryRunQueryParam'
+      x-speakeasy-entity-operation: CatalogMcpServer#create,update
+      x-speakeasy-name-override: createOrUpdate
+  /organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers/{hrid}:
+    get:
+      operationId: getAimCatalogMcpServer
+      summary: Get one Catalog MCP server
+      description: Get a Catalog MCP server using its HRID. Credential values are never returned.
+      tags:
+        - AI Catalog
+      responses:
+        "200":
+          description: Catalog MCP server successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AimCatalogMcpServerState'
+        "401":
+          $ref: '#/components/responses/AimUnauthenticated'
+        "403":
+          $ref: '#/components/responses/AimUnauthorized'
+        "404":
+          $ref: '#/components/responses/AimNotFound'
+        default:
+          $ref: '#/components/responses/AimError'
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+      x-speakeasy-entity-operation: CatalogMcpServer#read
+      x-speakeasy-name-override: get
+    delete:
+      operationId: deleteAimCatalogMcpServer
+      summary: Delete one Catalog MCP server
+      description: Delete a Catalog MCP server, its discovered tools, prompts and resources, and the catalog source it was registered under, using its HRID
+      tags:
+        - AI Catalog
+      responses:
+        "204":
+          description: Catalog MCP server successfully deleted
+        "401":
+          $ref: '#/components/responses/AimUnauthenticated'
+        "403":
+          $ref: '#/components/responses/AimUnauthorized'
+        "404":
+          $ref: '#/components/responses/AimNotFound'
+        default:
+          $ref: '#/components/responses/AimError'
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+      x-speakeasy-entity-operation: CatalogMcpServer#delete
+      x-speakeasy-name-override: delete
+    parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/envIdParam'
+      - $ref: '#/components/parameters/hridParam'
+  /organizations/{orgId}/environments/{envId}/aim/mcp-proxies:
+    put:
+      operationId: createOrUpdateAimMcpProxy
+      summary: Create or update an MCP proxy from its spec
+      description: |
+        Create or update a single-upstream MCP proxy, identified by the `hrid` carried in the body. Re-applying an
+        unchanged spec is a no-op. A first apply creates the proxy and, unless `state` is `STOPPED`, starts it; a
+        later apply converges the mutable parts — `name`, `description`, `proxy`, `contextPath`, the identity
+        providers and the plan set — and, while the proxy runs, redeploys it once. The lifecycle converges too: `STARTED`
+        starts a stopped proxy, `STOPPED` stops a running one and keeps later changes stored until the next
+        `STARTED`. Policy flows are owned by the declaration: the proxy's flows and each declared plan's flows are
+        replaced by the declared ones whenever they differ, and a flow the declaration no longer carries is
+        removed. Identity providers converge by name: a declared provider the proxy does not have is attached
+        as a resource of its API, a declared provider whose configuration differs from the proxy's resource is
+        rejected — except a generic provider's `clientSecret`, which replaces the stored one when it differs and
+        is kept when omitted — and a resource the declaration no longer names is left in place. The `GRAVITEE_AM`
+        provider is provisioned when the proxy is created and cannot be added later. Plans converge by name: a declared plan
+        the proxy does not have is created and published, a plan the proxy holds in staging is published, a plan
+        the declaration no longer carries is closed — closing terminates its subscriptions — and a deprecated plan
+        is rejected, as APIM cannot publish it again. `entityId` is fixed at creation, and a plan cannot be changed
+        in place under the same name: declaring a different value is rejected rather than applied. The upstream
+        server is not contacted — the gateway reaches it at runtime.
+        A `STUDIO` (`mode: STUDIO`) is declared from servers registered under `catalog/mcp-servers`: `studio.tools`
+        names each tool by its server's HRID and runtime name, converges as a set and replaces the studio's tool
+        surface when it changes; `studio.upstreamAuth` converges per server; `studio.enableFGA` inserts or removes
+        the platform's authorization flow. `mode` is fixed at creation.
+        Findings that prevent the apply are reported in `errors.severe` with a `400`, and nothing is persisted or
+        destroyed. A dry run performs the same checks. A start or a deploy the gateway side refuses answers `500`
+        with the technical code `gamma.mcp.lifecycle.failed`: the declaration is stored and the next apply retries,
+        redeploying a running proxy APIM reports out of sync even when nothing changed.
+      tags:
+        - MCP Proxies
+      requestBody:
+        description: MCP proxy specification
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AimMcpProxySpec'
+            examples:
+              proxy:
+                summary: A GitHub MCP proxy behind an API key plan
+                value:
+                  hrid: github-mcp-proxy
+                  entityId: mcp-proxy.github
+                  name: GitHub
+                  contextPath: /mcp/github
+                  mode: PROXY
+                  proxy:
+                    serverUrl: https://api.githubcopilot.com/mcp/
+                    upstreamAuth:
+                      type: BEARER
+                      token: 'secret://kubernetes/github-mcp:token'
+                  plans:
+                    - name: gold
+                      security:
+                        type: API_KEY
+                        source: HEADER
+              proxyBehindKeycloak:
+                summary: A proxy whose plans authenticate against Keycloak and against Gravitee AM
+                value:
+                  hrid: github-mcp-proxy
+                  entityId: mcp-proxy.github
+                  name: GitHub
+                  contextPath: /mcp/github
+                  mode: PROXY
+                  proxy:
+                    serverUrl: https://api.githubcopilot.com/mcp/
+                  state: STARTED
+                  identityProviders:
+                    - name: am
+                      type: GRAVITEE_AM
+                    - name: keycloak
+                      type: OAUTH2_GENERIC
+                      issuerUrl: https://kc.example.com/realms/acme
+                      introspectionEndpoint: /protocol/openid-connect/token/introspect
+                      introspectionEndpointMethod: POST
+                      clientId: gateway
+                      clientSecret: 'secret://kubernetes/keycloak-gateway:client-secret'
+                  flows:
+                    - name: Tools ACL
+                      selectors:
+                        - type: MCP
+                          methods:
+                            - tools/list
+                            - tools/call
+                      request:
+                        - name: MCP ACL
+                          policy: mcp-acl
+                          configuration:
+                            authorizations:
+                              - authorizedFeatures:
+                                  - type: TOOLS
+                                    methods:
+                                      - TOOLS_LIST
+                                      - TOOLS_CALL
+                                    patternType: ANY
+                  plans:
+                    - name: gold
+                      security:
+                        type: OAUTH2
+                        provider: am
+                        scopes:
+                          - repo:read
+                      flows:
+                        - name: Gold rate limit
+                          selectors:
+                            - type: MCP
+                              methods:
+                                - tools/call
+                          request:
+                            - name: Rate limit
+                              policy: rate-limit
+                              configuration:
+                                rate:
+                                  limit: 100
+                                  periodTime: 1
+                                  periodTimeUnit: MINUTES
+                    - name: partners
+                      security:
+                        type: OAUTH2
+                        provider: keycloak
+              studio:
+                summary: A studio exposing two GitHub tools and one Jira tool, with fine-grained authorization
+                value:
+                  hrid: support-studio
+                  entityId: mcp-proxy.support-studio
+                  name: Support Studio
+                  contextPath: /mcp/support
+                  mode: STUDIO
+                  studio:
+                    tools:
+                      - server: github-mcp
+                        tool: create_issue
+                      - server: github-mcp
+                        tool: search_issues
+                        alias: gh_search
+                      - server: jira-mcp
+                        tool: create_ticket
+                    upstreamAuth:
+                      - server: github-mcp
+                        auth:
+                          type: BEARER
+                          token: 'secret://kubernetes/github-mcp:token'
+                      - server: jira-mcp
+                        auth:
+                          type: NONE
+                    enableFGA: true
+                  plans:
+                    - name: gold
+                      security:
+                        type: API_KEY
+                        source: HEADER
+        required: true
+      responses:
+        "200":
+          description: State of the created or updated MCP proxy, or the dry-run preview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AimMcpProxyState'
+              examples:
+                applied:
+                  summary: The state answered after the apply, credentials removed
+                  value:
+                    hrid: github-mcp-proxy
+                    entityId: mcp-proxy.github
+                    name: GitHub
+                    contextPath: /mcp/github
+                    mode: PROXY
+                    proxy:
+                      serverUrl: https://api.githubcopilot.com/mcp/
+                      upstreamAuth:
+                        type: BEARER
+                    state: STARTED
+                    plans:
+                      - name: gold
+                        security:
+                          type: API_KEY
+                          source: HEADER
+                    id: 2a5bce95-bd0c-4bc0-a30d-72e299047a09
+                    environmentId: DEFAULT
+                    organizationId: DEFAULT
+        "401":
+          $ref: '#/components/responses/AimUnauthenticated'
+        "403":
+          $ref: '#/components/responses/AimUnauthorized'
+        "404":
+          $ref: '#/components/responses/AimNotFound'
+        default:
+          $ref: '#/components/responses/AimError'
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/dryRunQueryParam'
+      x-speakeasy-entity-operation: McpProxy#create,update
+      x-speakeasy-name-override: createOrUpdate
+  /organizations/{orgId}/environments/{envId}/aim/mcp-proxies/{hrid}:
+    get:
+      operationId: getAimMcpProxy
+      summary: Get one MCP proxy
+      description: |
+        Get an MCP proxy using its HRID, in the shape of its spec. Plans are returned sorted by name. Credential
+        values are never returned.
+      tags:
+        - MCP Proxies
+      responses:
+        "200":
+          description: MCP proxy successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AimMcpProxyState'
+              examples:
+                proxy:
+                  summary: A proxy read back in the shape of its spec
+                  value:
+                    hrid: github-mcp-proxy
+                    entityId: mcp-proxy.github
+                    name: GitHub
+                    contextPath: /mcp/github
+                    mode: PROXY
+                    proxy:
+                      serverUrl: https://api.githubcopilot.com/mcp/
+                      upstreamAuth:
+                        type: BEARER
+                    state: STARTED
+                    plans:
+                      - name: gold
+                        security:
+                          type: API_KEY
+                          source: HEADER
+                    id: 2a5bce95-bd0c-4bc0-a30d-72e299047a09
+                    environmentId: DEFAULT
+                    organizationId: DEFAULT
+        "401":
+          $ref: '#/components/responses/AimUnauthenticated'
+        "403":
+          $ref: '#/components/responses/AimUnauthorized'
+        "404":
+          $ref: '#/components/responses/AimNotFound'
+        default:
+          $ref: '#/components/responses/AimError'
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+      x-speakeasy-entity-operation: McpProxy#read
+      x-speakeasy-name-override: get
+    delete:
+      operationId: deleteAimMcpProxy
+      summary: Delete one MCP proxy
+      description: Delete an MCP proxy and the gateway API serving it, using its HRID. Its plans are closed with it.
+      tags:
+        - MCP Proxies
+      responses:
+        "204":
+          description: MCP proxy successfully deleted
+        "401":
+          $ref: '#/components/responses/AimUnauthenticated'
+        "403":
+          $ref: '#/components/responses/AimUnauthorized'
+        "404":
+          $ref: '#/components/responses/AimNotFound'
+        default:
+          $ref: '#/components/responses/AimError'
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+      x-speakeasy-entity-operation: McpProxy#delete
+      x-speakeasy-name-override: delete
+    parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/envIdParam'
+      - $ref: '#/components/parameters/hridParam'
 components:
   schemas:
     Hrid:
       type: string
-      pattern: '^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$'
+      pattern: '^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$'
       description: A unique human readable id identifying this resource
       examples:
         - demo_api
@@ -1445,8 +2056,15 @@ components:
           x-speakeasy-param-computed: false
         additionalClientMetadata:
           type: object
+          description: |
+            Additional Dynamic Client Registration metadata sent to the client registration provider,
+            as a flat map of DCR field name to value. Only fields defined by the registration request
+            are forwarded, the others are ignored. Use `software_id` to select a client template on
+            the provider; a value set here takes precedence over the provider-wide one.
           additionalProperties:
             type: string
+          examples:
+            - {"software_id": "3d5a2f0e-1c4b-4c8a-9f7e-2b6d8e0a1c34"}
           x-speakeasy-param-computed: false
       required:
         - applicationType
@@ -1678,6 +2296,7 @@ components:
       x-speakeasy-entity: Dictionary
     ManualDictionarySpec:
       description: A manual dictionary with static key/value properties.
+      type: object
       properties:
         properties:
           type: object
@@ -1685,9 +2304,26 @@ components:
           additionalProperties:
             type: string
           x-speakeasy-param-computed: false
-      required:
-        - properties
+        encryptedProperties:
+          type: object
+          description: >-
+            Secret properties, keyed by the property key. Their values are write-only: they are never returned, so a client can compare a `GET` against its manifest without seeing a difference on a value it cannot read back. A key must not appear in both `properties` and `encryptedProperties`.
+          additionalProperties:
+            $ref: "#/components/schemas/EncryptableValue"
+          x-speakeasy-param-computed: false
+          x-speakeasy-terraform-ignore: true
       x-speakeasy-param-computed: false
+    EncryptableValue:
+      description: A secret property value.
+      type: object
+      properties:
+        value:
+          description: The plaintext value to encrypt on save.
+          type: string
+          writeOnly: true
+          x-speakeasy-param-computed: false
+      required:
+        - value
     DynamicDictionarySpec:
       description: A dynamic dictionary populated from an external provider on a schedule.
       type: object
@@ -1697,6 +2333,9 @@ components:
           x-speakeasy-param-computed: false
         trigger:
           $ref: "#/components/schemas/DictionaryTrigger"
+          x-speakeasy-param-computed: false
+        encryption:
+          $ref: "#/components/schemas/DictionaryEncryptionPolicy"
           x-speakeasy-param-computed: false
       required:
         - provider
@@ -1797,6 +2436,16 @@ components:
       required:
         - rate
         - unit
+    DictionaryEncryptionPolicy:
+      type: object
+      description: Encryption policy applied to a 'DYNAMIC' dictionary's fetched values.
+      properties:
+        encryptOnFetch:
+          type: boolean
+          default: false
+          description: Encrypt every fetched value instead of relying on per-key classification.
+          x-speakeasy-param-computed: false
+      x-speakeasy-terraform-ignore: true
     DictionaryType:
       type: string
       description: Type of dictionary. MANUAL is to be updated manually, DYNAMIC is updated and deployed automatically.
@@ -2145,6 +2794,23 @@ components:
             Independent of the parent `enabled` flag: event-metrics reporting and the connection-metrics reporter are gated separately.
           x-speakeasy-param-computed: false
           default: true
+        connectionEvents:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum: [CONNECTED, DISCONNECTED, ERROR]
+          description: |-
+            Which connection lifecycle events the gateway reports. Only applicable to Native v4 APIs.
+            Omitting it clears the selection rather than preserving it: an apply replaces the whole analytics block, so a manifest that does not carry this field returns the API to the unconfigured state. Unconfigured means it keeps reporting `CONNECTED` and `ERROR` — what every API deployed before this setting existed already does, so an upgrade does not silently start writing `DISCONNECTED` documents. A newly created API starts out unconfigured too: `DISCONNECTED` is opt-in for every API. TEMPORARY NOTE, to be removed once the gateway support has shipped: no released native Kafka gateway honours this yet. The selection is stored and will apply as written once a gateway built against this definition model is deployed; until then a connection keeps reporting what it reports today.
+            An empty array counts as absent, because a request that omits the field is indistinguishable from one sending `[]`. To report nothing, turn `reporterMetricsEnabled` off — that is the master switch.
+            `ERROR` covers every failure status the gateway emits (`CONNECTION_ERROR`, `SESSION_ERROR`, `INTERNAL_ERROR`); which one a given failure produces depends on where the gateway caught it.
+          example:
+            - CONNECTED
+            - DISCONNECTED
+            - ERROR
+          x-speakeasy-param-computed: false
+          x-speakeasy-terraform-ignore: true
         otelLogs:
           $ref: "#/components/schemas/OtelLogsV4"
           x-speakeasy-param-computed: false
@@ -2336,6 +3002,13 @@ components:
           description: Allow the Gateway to run policies during in pre-flight request
           type: boolean
           x-speakeasy-param-computed: false
+        allowPrivateNetwork:
+          description: |
+            `Access-Control-Allow-Private-Network`: Allow private network access (PNA) requests during CORS preflight.
+          type: boolean
+          default: false
+          x-speakeasy-param-computed: false
+          x-speakeasy-terraform-ignore: true
       x-speakeasy-param-computed: false
     Dlq:
       description: Dead Letter Queue to process undelivered messages.
@@ -2596,9 +3269,29 @@ components:
               minItems: 1
               items:
                 $ref: "#/components/schemas/PathV4"
+            pathMappings:
+              description: Path patterns used to group analytics by API path (e.g. `/products/:productId`).
+              type: array
+              items:
+                type: string
+              examples:
+                - ["/products/:productId"]
+              x-speakeasy-terraform-ignore: true
             cors:
               $ref: "#/components/schemas/Cors"
               x-speakeasy-param-computed: false
+            requestValidation:
+              $ref: "#/components/schemas/RequestValidation"
+    RequestValidation:
+      description: Validation the Gateway applies to incoming requests before running flows.
+      type: object
+      properties:
+        rejectNullByte:
+          description: Reject requests whose path or query contains a null byte.
+          type: boolean
+          default: false
+          x-speakeasy-param-computed: false
+      x-speakeasy-terraform-ignore: true
     HttpMethod:
       type: string
       description: The method of the selector
@@ -2815,7 +3508,80 @@ components:
           type: boolean
           description: Enable technical tracing to get more details on request execution. Be careful this settings can generate more noise and can impact performance.
           x-speakeasy-param-computed: false
+        redaction:
+          $ref: "#/components/schemas/TracingRedactionConfig"
+          x-speakeasy-param-computed: false
       x-speakeasy-param-computed: false
+    TracingRedactionConfig:
+      description: Masking rules applied to span attributes before traces are exported.
+      type: object
+      properties:
+        defaultReplacement:
+          type: string
+          description: Fallback replacement text for FULL masking rules with no per-rule replacement. Defaults to [REDACTED].
+          examples:
+            - "[REDACTED]"
+          x-speakeasy-param-computed: false
+        rules:
+          type: array
+          items:
+            $ref: "#/components/schemas/TracingRedactionRule"
+          x-speakeasy-param-computed: false
+      x-speakeasy-terraform-ignore: true
+    TracingRedactionRule:
+      type: object
+      required:
+        - attributeNamePattern
+      properties:
+        attributeNamePattern:
+          type: string
+          description: |
+            Glob pattern, short name (no dots — matches anywhere in key hierarchy),
+            or regex:-prefixed Java regex matching the span attribute key.
+          examples:
+            - http.request.header.authorization
+          x-speakeasy-param-computed: false
+        maskingStrategy:
+          $ref: "#/components/schemas/TracingMaskingStrategy"
+          x-speakeasy-param-computed: false
+        valuePattern:
+          type: string
+          description: Optional Java regex (partial match). Rule only fires when the attribute value matches.
+          examples:
+            - "^Bearer "
+          x-speakeasy-param-computed: false
+    TracingMaskingStrategy:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum: [FULL, PARTIAL]
+          description: FULL replaces the entire value; PARTIAL keeps a visible prefix and/or suffix.
+          examples:
+            - FULL
+          x-speakeasy-param-computed: false
+        replacement:
+          type: string
+          description: |
+            For FULL: replacement text (default [REDACTED]).
+            For PARTIAL: single mask character (default *).
+          examples:
+            - "[REDACTED]"
+          x-speakeasy-param-computed: false
+        prefixLength:
+          type: integer
+          description: PARTIAL only — number of leading characters to keep visible.
+          default: 0
+          minimum: 0
+          x-speakeasy-param-computed: false
+        suffixLength:
+          type: integer
+          description: PARTIAL only — number of trailing characters to keep visible.
+          default: 0
+          minimum: 0
+          x-speakeasy-param-computed: false
     Operator:
       type: string
       description: Operator function to match a URI path
@@ -3627,6 +4393,9 @@ components:
           examples:
             - 1
           x-speakeasy-param-computed: false
+        visibility:
+          $ref: "#/components/schemas/PortalVisibility"
+          x-speakeasy-param-computed: false
       required:
         - path
     PortalNavigationPath:
@@ -3650,8 +4419,35 @@ components:
           examples:
             - Alpha
           x-speakeasy-param-computed: false
+        visibility:
+          $ref: "#/components/schemas/PortalVisibility"
+          x-speakeasy-param-computed: false
       required:
         - path
+    PortalVisibility:
+      type: string
+      description: |
+        Whether the navigation entry is visible to anonymous portal visitors.
+        Optional in the Automation API for backward compatibility with clients that predate this field —
+        when omitted, the entry inherits from its parent (root entries default to PUBLIC).
+        A PUBLIC child under a PRIVATE parent is rejected.
+      enum:
+        - PUBLIC
+        - PRIVATE
+      x-speakeasy-terraform-ignore: true
+    PortalNavigationStructure:
+      description: Portal navigation grouped by area.
+      type: object
+      properties:
+        topNavbar:
+          type: array
+          description: |
+            Top navbar entries as an ordered list of paths.
+            Intermediate folders are implicitly created if not listed explicitly.
+          items:
+            $ref: "#/components/schemas/PortalNavigationPath"
+          x-speakeasy-param-computed: false
+      x-speakeasy-terraform-ignore: true
     PortalSpec:
       description: Specification of a Portal resource. Represents a next-gen developer portal instance.
       type: object
@@ -3665,16 +4461,28 @@ components:
           examples:
             - Default Portal
           x-speakeasy-param-computed: false
+        structure:
+          $ref: "#/components/schemas/PortalNavigationStructure"
+          x-speakeasy-param-computed: false
         navigation:
           type: array
-          description: |
+          description: |-
             The portal's navigation hierarchy as a flat list of paths.
-            Paths are ordered — the order in the list is preserved.
-            Intermediate folders are implicitly created if not listed explicitly.
           items:
             $ref: "#/components/schemas/PortalNavigationPath"
           x-speakeasy-param-computed: true
           x-speakeasy-plan-modifiers: IgnoreEmptyList
+        activeThemeHrid:
+          type: string
+          description: |
+            HRID of the Theme this portal should use as its active theme. When set, applying the portal
+            marks the referenced theme as active (enabled) and disables every other PORTAL_NEXT theme
+            in the environment. Leaving this field unset clears the reference and disables the
+            previously-active theme; the portal-next UI will then lazily fall back to a fresh default theme.
+          examples:
+            - brand-theme
+          x-speakeasy-param-computed: false
+          x-speakeasy-terraform-ignore: true
       required:
         - hrid
         - name
@@ -3710,6 +4518,9 @@ components:
             Disambiguates ordering when APIs from multiple listings share a location.
           examples:
             - 1
+          x-speakeasy-param-computed: false
+        visibility:
+          $ref: "#/components/schemas/PortalVisibility"
           x-speakeasy-param-computed: false
       required:
         - apiHrid
@@ -3757,6 +4568,17 @@ components:
         - GRAVITEE_MARKDOWN
         - OPENAPI
         - ASYNCAPI
+    DocumentationArea:
+      type: string
+      description: |
+        Where the documentation page appears in the portal. `TOP_NAVBAR` is the default. `HOMEPAGE`
+        marks the page as the portal's homepage — only one homepage may exist per portal, and applying
+        a new one replaces any existing homepage for that portal.
+      default: TOP_NAVBAR
+      enum:
+        - TOP_NAVBAR
+        - HOMEPAGE
+      x-speakeasy-terraform-ignore: true
     DocumentationSpec:
       description: |
         Specification of a Documentation page.
@@ -3790,6 +4612,12 @@ components:
           type: integer
           description: Display order relative to siblings at the same location
           x-speakeasy-param-computed: false
+        area:
+          $ref: "#/components/schemas/DocumentationArea"
+          x-speakeasy-param-computed: false
+        visibility:
+          $ref: "#/components/schemas/PortalVisibility"
+          x-speakeasy-param-computed: false
       required:
         - hrid
         - name
@@ -3816,6 +4644,1369 @@ components:
       allOf:
         - $ref: "#/components/schemas/DocumentationSpec"
         - $ref: "#/components/schemas/DocumentationStatus"
+    # Portal Link schemas
+    PortalLinkSpec:
+      description: |
+        Specification of a Portal Link.
+        An external navigation entry placed in a portal's navigation — a thin wrapper around a URL, with no separate content of its own.
+        A link is attached to either a portal or an API, determined by the endpoint used.
+      type: object
+      properties:
+        hrid:
+          $ref: "#/components/schemas/Hrid"
+          x-speakeasy-param-computed: false
+        name:
+          type: string
+          description: Display name of the link
+          examples:
+            - External Docs
+          x-speakeasy-param-computed: false
+        href:
+          type: string
+          description: The URL this link points to
+          examples:
+            - https://docs.example.com
+          x-speakeasy-param-computed: false
+        location:
+          type: string
+          description: |
+            The path in the navigation hierarchy where this link should appear.
+            Resolved against the portal's navigation for a portal-attached link, and against the API's own
+            navigation for an API-attached link — the same path string therefore denotes a different tree
+            depending on which endpoint was used.
+          examples:
+            - /projects/alpha
+          x-speakeasy-param-computed: false
+        order:
+          type: integer
+          description: Display order relative to siblings at the same location
+          x-speakeasy-param-computed: false
+        visibility:
+          $ref: "#/components/schemas/PortalVisibility"
+          x-speakeasy-param-computed: false
+      required:
+        - hrid
+        - name
+        - href
+    PortalLinkStatus:
+      description: |
+        Status information for a Portal Link after import.
+        Exactly one of `portalHrid` / `apiHrid` is populated depending on the parent endpoint used.
+      allOf:
+        - $ref: "#/components/schemas/BaseStatus"
+        - type: object
+          properties:
+            portalHrid:
+              type: string
+              description: The HRID of the portal this link belongs to (when attached to a portal).
+              readOnly: true
+            apiHrid:
+              type: string
+              description: The HRID of the API this link belongs to (when attached to an API).
+              readOnly: true
+    PortalLinkState:
+      description: State of a Portal Link that has been created/updated.
+      allOf:
+        - $ref: "#/components/schemas/PortalLinkSpec"
+        - $ref: "#/components/schemas/PortalLinkStatus"
+    # Theme schemas
+    PortalThemeSpec:
+      description: |
+        Specification of a next-gen portal Theme. Applying a Theme through the Automation API
+        makes it the active Theme for the environment; every other Theme in the same environment
+        is disabled.
+      type: object
+      properties:
+        hrid:
+          $ref: "#/components/schemas/Hrid"
+          x-speakeasy-param-computed: false
+        name:
+          type: string
+          description: Display name of the theme
+          examples:
+            - Default Theme
+          x-speakeasy-param-computed: false
+        definition:
+          $ref: "#/components/schemas/PortalNextThemeDefinition"
+          x-speakeasy-param-computed: false
+        logo:
+          type: string
+          description: |
+            Primary logo. Inline data URI (for example `data:image/png;base64,...`), the same shape the
+            console produces on upload.
+          x-speakeasy-param-computed: false
+        optionalLogo:
+          type: string
+          description: Alternate logo for contexts where the primary one does not render well (dark background, small badge, etc.).
+          x-speakeasy-param-computed: false
+        favicon:
+          type: string
+          description: Browser tab icon. Same inline data URI convention as `logo`.
+          x-speakeasy-param-computed: false
+        backgroundImage:
+          type: string
+          description: Hero / landing page background image. Same inline data URI convention as `logo`.
+          x-speakeasy-param-computed: false
+      required:
+        - hrid
+        - name
+        - definition
+    PortalThemeState:
+      description: State of a Theme that has been created/updated.
+      allOf:
+        - $ref: "#/components/schemas/PortalThemeSpec"
+        - $ref: "#/components/schemas/BaseStatus"
+    PortalNextThemeDefinition:
+      description: Visual definition of a next-gen portal Theme.
+      type: object
+      properties:
+        customCss:
+          type: string
+          description: Custom CSS applied on top of the palette.
+          x-speakeasy-param-computed: false
+        font:
+          $ref: "#/components/schemas/PortalNextThemeFont"
+          x-speakeasy-param-computed: false
+        color:
+          $ref: "#/components/schemas/PortalNextThemeColor"
+          x-speakeasy-param-computed: false
+    PortalNextThemeFont:
+      description: Typography settings for a next-gen portal Theme.
+      type: object
+      properties:
+        fontFamily:
+          type: string
+          description: CSS `font-family` value.
+          x-speakeasy-param-computed: false
+    PortalNextThemeColor:
+      description: Palette for a next-gen portal Theme.
+      type: object
+      properties:
+        primary:
+          type: string
+          description: Primary color (CSS color value).
+          x-speakeasy-param-computed: false
+        secondary:
+          type: string
+          description: Secondary color (CSS color value).
+          x-speakeasy-param-computed: false
+        tertiary:
+          type: string
+          description: Tertiary color (CSS color value).
+          x-speakeasy-param-computed: false
+        error:
+          type: string
+          description: Error color (CSS color value).
+          x-speakeasy-param-computed: false
+        background:
+          $ref: "#/components/schemas/PortalNextThemeBackground"
+          x-speakeasy-param-computed: false
+    PortalNextThemeBackground:
+      description: Background palette for a next-gen portal Theme.
+      type: object
+      properties:
+        page:
+          type: string
+          description: Page background color (CSS color value).
+          x-speakeasy-param-computed: false
+        card:
+          type: string
+          description: Card background color (CSS color value).
+          x-speakeasy-param-computed: false
+    AimHrid:
+      type: string
+      examples:
+        - github-mcp
+      maxLength: 256
+      pattern: ^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$
+      description: A unique human readable id identifying this resource
+    AimCatalogMcpServerSpec:
+      type: object
+      properties:
+        hrid:
+          $ref: '#/components/schemas/AimHrid'
+          x-speakeasy-param-computed: false
+        entityId:
+          type: string
+          examples:
+            - mcp-server.github
+          maxLength: 255
+          pattern: ^mcp-server\.[a-z0-9_-]+(\.[a-z0-9_-]+)*$
+          description: |
+            Stable catalog identity of the server, the name authorization policies reference: lowercase, dot-separated
+            segments, first segment `mcp-server`. Validated, never repaired: an invalid value, or a value already used by
+            another server of the environment, is rejected. Immutable once the server exists — declaring a different value
+            is rejected rather than applied, since nothing re-points the policies naming the old one. Delete the server and
+            declare it again to give it another identity.
+          x-speakeasy-param-computed: false
+          x-speakeasy-plan-modifiers: Immutable
+        description:
+          type: string
+          examples:
+            - GitHub tools for coding agents
+          description: Human description shown in the Catalog
+          x-speakeasy-param-computed: false
+        connection:
+          x-speakeasy-param-computed: false
+          allOf:
+            - $ref: '#/components/schemas/AimCatalogMcpServerConnection'
+          x-speakeasy-name-override: serverConnection
+      required:
+        - hrid
+        - entityId
+        - connection
+      description: |
+        Specification of an upstream MCP server registered in the AI Catalog. `entityId` is declared by the author and
+        validated against the Gamma entity id grammar — it is never repaired or re-slugged. Tools, prompts and resources
+        are discovered by the platform and reported in the state only.
+      x-speakeasy-entity: CatalogMcpServer
+    AimCatalogMcpServerConnection:
+      type: object
+      properties:
+        endpoint:
+          type: string
+          examples:
+            - https://api.githubcopilot.com/mcp/
+          format: uri
+          description: URL of the upstream MCP server, http or https
+          x-speakeasy-param-computed: false
+        transport:
+          $ref: '#/components/schemas/AimCatalogMcpServerTransport'
+          x-speakeasy-param-computed: false
+        auth:
+          x-speakeasy-param-computed: false
+          allOf:
+            - $ref: '#/components/schemas/AimCatalogMcpServerAuth'
+          writeOnly: true
+      required:
+        - endpoint
+        - transport
+        - auth
+      description: How the platform reaches the upstream MCP server
+      x-speakeasy-param-computed: false
+    AimCatalogMcpServerTransport:
+      type: string
+      enum:
+        - HTTP
+      description: MCP transport of the upstream server; `HTTP` is the streamable HTTP transport, the only one discovery supports today.
+      default: HTTP
+    AimCatalogMcpServerAuth:
+      discriminator:
+        propertyName: type
+        mapping:
+          NONE: '#/components/schemas/AimCatalogMcpServerNoAuth'
+          HEADER: '#/components/schemas/AimCatalogMcpServerHeaderAuth'
+          OAUTH2: '#/components/schemas/AimCatalogMcpServerOAuth2Auth'
+      description: |
+        Authentication the platform uses against the upstream MCP server, discriminated by `type`. Credential values are
+        stored verbatim: a literal, or a `secret://` URI pointing at a configured secret provider. They are never returned
+        by this API, and a spec that omits a credential clears the stored one.
+      oneOf:
+        - $ref: '#/components/schemas/AimCatalogMcpServerNoAuth'
+        - $ref: '#/components/schemas/AimCatalogMcpServerHeaderAuth'
+        - $ref: '#/components/schemas/AimCatalogMcpServerOAuth2Auth'
+      x-speakeasy-param-computed: false
+    AimCatalogMcpServerNoAuth:
+      allOf:
+        - type: object
+          properties:
+            type:
+              type: string
+              description: Type of authentication
+              enum:
+                - NONE
+              default: NONE
+          required:
+            - type
+      description: No authentication
+    AimCatalogMcpServerHeaderAuth:
+      allOf:
+        - type: object
+          properties:
+            name:
+              type: string
+              examples:
+                - Authorization
+              description: Header name
+              x-speakeasy-param-computed: false
+            value:
+              type: string
+              format: password
+              description: Full header value, a literal or a `secret://` URI stored verbatim; never returned
+              writeOnly: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-param-sensitive: true
+            type:
+              type: string
+              description: Type of authentication
+              enum:
+                - HEADER
+              default: HEADER
+              x-speakeasy-param-computed: false
+          required:
+            - name
+            - value
+            - type
+      description: |
+        A static header sent on every request. Write the full header value: `Bearer <token>` for a bearer token,
+        `Basic <base64>` for basic credentials, or the raw key for an API-key header — or point the whole value at a
+        secret with a `secret://` URI.
+    AimCatalogMcpServerOAuth2Auth:
+      allOf:
+        - type: object
+          properties:
+            clientId:
+              type: string
+              description: OAuth 2.0 client id
+              x-speakeasy-param-computed: false
+            clientSecret:
+              type: string
+              format: password
+              description: OAuth 2.0 client secret, a literal or a `secret://` URI stored verbatim; never returned
+              writeOnly: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-param-sensitive: true
+            tokenUrl:
+              type: string
+              format: uri
+              description: Token endpoint of the authorization server
+              x-speakeasy-param-computed: false
+            scope:
+              type: string
+              description: Space-separated scopes requested with the token
+              x-speakeasy-param-computed: false
+            type:
+              type: string
+              description: Type of authentication
+              enum:
+                - OAUTH2
+              default: OAUTH2
+              x-speakeasy-param-computed: false
+          required:
+            - clientId
+            - clientSecret
+            - tokenUrl
+            - type
+      description: OAuth 2.0 client credentials; the platform fetches a token from `tokenUrl` before reaching the server
+    AimResourceStatus:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource UUID
+          readOnly: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
+        environmentId:
+          type: string
+          description: The environment ID
+          readOnly: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
+        organizationId:
+          type: string
+          description: The organization ID
+          readOnly: true
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
+        errors:
+          $ref: '#/components/schemas/AimErrors'
+          readOnly: true
+          x-speakeasy-param-computed: false
+      description: Envelope the Automation API stamps on every state; read-only.
+    AimErrors:
+      type: object
+      properties:
+        severe:
+          type: array
+          items:
+            type: string
+          description: Findings that prevented the apply; nothing was persisted
+          x-speakeasy-param-computed: false
+        warning:
+          type: array
+          items:
+            type: string
+          description: Findings that did not prevent the apply
+          x-speakeasy-param-computed: false
+      description: Findings about the applied spec
+      x-speakeasy-terraform-ignore: true
+    AimCatalogMcpServerStatus:
+      allOf:
+        - $ref: '#/components/schemas/AimResourceStatus'
+        - type: object
+          properties:
+            lastSyncedAt:
+              type: string
+              format: date-time
+              description: When the server's tools, prompts and resources were last synced; a registered server has synced at least once
+              readOnly: true
+            serverInfo:
+              $ref: '#/components/schemas/AimCatalogMcpServerInfo'
+              readOnly: true
+            protocolVersion:
+              type: string
+              description: MCP protocol version negotiated with the server
+              readOnly: true
+            tools:
+              type: array
+              items:
+                $ref: '#/components/schemas/AimCatalogMcpToolStatus'
+              readOnly: true
+            prompts:
+              type: array
+              items:
+                $ref: '#/components/schemas/AimCatalogMcpPromptStatus'
+              readOnly: true
+            resources:
+              type: array
+              items:
+                $ref: '#/components/schemas/AimCatalogMcpResourceStatus'
+              readOnly: true
+      description: Platform-discovered facts about a Catalog MCP server; read-only.
+    AimCatalogMcpServerInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          x-speakeasy-param-computed: true
+        version:
+          type: string
+          x-speakeasy-param-computed: true
+      description: What the server said about itself when it was discovered
+    AimCatalogMcpToolStatus:
+      type: object
+      properties:
+        name:
+          type: string
+          x-speakeasy-param-computed: true
+        entityId:
+          type: string
+          description: Composed entity id of the tool, the name an authorization policy references, e.g. `mcp-tool.github.create_issue`
+          x-speakeasy-param-computed: true
+      description: A tool the platform discovered on the upstream server; declared by the server, never by the author
+    AimCatalogMcpPromptStatus:
+      type: object
+      properties:
+        name:
+          type: string
+          x-speakeasy-param-computed: true
+        entityId:
+          type: string
+          description: Composed entity id of the prompt, e.g. `mcp-prompt.github.summarize`
+          x-speakeasy-param-computed: true
+      description: A prompt the platform discovered on the upstream server; declared by the server, never by the author
+    AimCatalogMcpResourceStatus:
+      type: object
+      properties:
+        uri:
+          type: string
+          x-speakeasy-param-computed: true
+        name:
+          type: string
+          x-speakeasy-param-computed: true
+        entityId:
+          type: string
+          description: Composed entity id of the resource, e.g. `mcp-resource.github.readme`
+          x-speakeasy-param-computed: true
+      description: A resource the platform discovered on the upstream server; declared by the server, never by the author
+    AimCatalogMcpServerState:
+      allOf:
+        - $ref: '#/components/schemas/AimCatalogMcpServerSpec'
+        - $ref: '#/components/schemas/AimCatalogMcpServerStatus'
+      description: State of a Catalog MCP server that has been created or updated.
+    AimMcpProxySpec:
+      type: object
+      properties:
+        hrid:
+          $ref: '#/components/schemas/AimHrid'
+          x-speakeasy-param-computed: false
+        entityId:
+          type: string
+          examples:
+            - mcp-proxy.github
+          maxLength: 255
+          pattern: ^mcp-proxy\.[a-z0-9_-]+(\.[a-z0-9_-]+)*$
+          description: |
+            Stable identity of the proxy, the name authorization policies reference: lowercase, dot-separated
+            segments, first segment `mcp-proxy`. Required. Validated,
+            never repaired: an invalid value, or a value already used by another MCP proxy of the environment, is
+            rejected. Immutable once the proxy exists — declaring a different value is rejected rather than
+            applied. Delete the proxy and declare it again to give it another identity. Uniqueness across the
+            environment is checked at apply time, not enforced by the store (AIAM-242): two concurrent applies
+            of the same entityId can both pass.
+          x-speakeasy-param-computed: false
+          x-speakeasy-plan-modifiers: Immutable
+        name:
+          type: string
+          examples:
+            - GitHub
+          description: Display name of the proxy; converges on re-apply
+          x-speakeasy-param-computed: false
+        description:
+          type: string
+          examples:
+            - GitHub tools proxied through the gateway
+          description: Human description of the proxy; converges on re-apply
+          x-speakeasy-param-computed: false
+        contextPath:
+          type: string
+          examples:
+            - /mcp/github
+          description: Context path the gateway serves the proxy on; must be available in the environment
+          x-speakeasy-param-computed: false
+        mode:
+          $ref: '#/components/schemas/AimMcpProxyMode'
+          x-speakeasy-param-computed: false
+        proxy:
+          x-speakeasy-param-computed: false
+          allOf:
+            - $ref: '#/components/schemas/AimMcpProxyProxy'
+          x-speakeasy-conflicts-with:
+            - studio
+        studio:
+          x-speakeasy-param-computed: false
+          allOf:
+            - $ref: '#/components/schemas/AimMcpProxyStudio'
+          x-speakeasy-conflicts-with:
+            - proxy
+        state:
+          $ref: '#/components/schemas/AimMcpProxyLifecycleState'
+          x-speakeasy-param-computed: false
+        flowExecution:
+          $ref: '#/components/schemas/AimMcpProxyFlowExecution'
+          x-speakeasy-param-computed: false
+        flows:
+          type: array
+          examples:
+            - - name: Tools ACL
+                selectors:
+                  - type: MCP
+                    methods:
+                      - tools/list
+                      - tools/call
+                request:
+                  - name: MCP ACL
+                    policy: mcp-acl
+                    configuration:
+                      authorizations:
+                        - authorizedFeatures:
+                            - type: TOOLS
+                              methods:
+                                - TOOLS_LIST
+                                - TOOLS_CALL
+                              patternType: ANY
+          items:
+            $ref: '#/components/schemas/AimMcpProxyFlow'
+          description: |
+            Policy flows of the proxy, in execution order, run after the flows of the plan the request matched.
+            The manifest owns them: on every apply the proxy's flows are replaced by the declared ones, so a
+            flow authored in the policy studio survives only if the manifest carries it, and omitting `flows`
+            removes them all. Each step's configuration is validated against its policy's schema, on apply and
+            on dry run, and reported back as stored.
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
+        identityProviders:
+          type: array
+          examples:
+            - - name: am
+                type: GRAVITEE_AM
+          items:
+            $ref: '#/components/schemas/AimMcpProxyIdentityProvider'
+          description: |
+            Authorization servers declared on the proxy as OAuth2 resources, which OAUTH2 plans reference through
+            `provider`. Converged by name: a declared provider the proxy lacks is attached; a declared provider
+            whose configuration differs from the proxy's resource is rejected, except a generic provider's
+            `clientSecret`, which replaces the stored one when it differs and is kept when omitted; a resource
+            no longer declared is left in place; a declared provider named like a resource the proxy holds
+            disabled, or under another type, is rejected. At most one `GRAVITEE_AM` provider, provisioned when
+            the proxy is created only.
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-validators: SortedByName
+          x-speakeasy-plan-modifiers:
+            - IgnoreEmptyList
+            - NoRemovalByName
+        plans:
+          type: array
+          examples:
+            - - name: gold
+                security:
+                  type: API_KEY
+                  source: HEADER
+          items:
+            $ref: '#/components/schemas/AimMcpProxyPlan'
+          minItems: 1
+          description: |
+            Plans consumers subscribe to, converged by name: a declared plan the proxy does not have is created
+            and published, a plan the proxy holds in staging is published, a plan the declaration no longer
+            carries is closed — closing terminates its subscriptions — and a plan cannot be changed in place
+            under the same name. At least one plan is required.
+          x-speakeasy-param-computed: false
+          x-speakeasy-plan-validators: SortedByName
+      required:
+        - hrid
+        - entityId
+        - name
+        - contextPath
+        - mode
+        - plans
+      description: |
+        Specification of an MCP proxy. In `PROXY` mode the gateway exposes one upstream MCP server, declared under
+        `proxy`, at `contextPath`; in `STUDIO` mode it exposes a curated set of tools picked from catalog MCP
+        servers, declared under `studio`. Both sit behind the declared plans, which
+        authenticate consumers against the declared identity providers, and run the declared policy flows on the
+        traffic. `mode` and `entityId` are fixed at creation; `name`, `description`, `proxy`,
+        `studio`, `contextPath`, the identity providers, the plan set, the flows and the lifecycle `state` converge
+        on re-apply.
+      x-speakeasy-entity: McpProxy
+    AimMcpProxyLifecycleState:
+      type: string
+      enum:
+        - STARTED
+        - STOPPED
+      description: |
+        Lifecycle of the proxy on the gateway. `STARTED` runs it with the last applied definition and redeploys it
+        after every apply that changes it; `STOPPED` makes the gateway answer 404 and stores changes without
+        deploying them, which the next `STARTED` does. `STARTED` when omitted. Reported back as the lifecycle APIM
+        observes. A start or a deploy the gateway side refuses fails the apply with a `500` carrying the technical
+        code `gamma.mcp.lifecycle.failed` and the operation, the proxy and the cause as parameters; the declaration
+        is stored, and the next apply starts the proxy or redeploys the one APIM reports out of sync.
+      default: STARTED
+    AimMcpProxyMode:
+      type: string
+      enum:
+        - PROXY
+        - STUDIO
+      description: |
+        Shape of the proxy, and the one block it carries: `PROXY` fronts one upstream MCP server, declared under
+        `proxy`; `STUDIO` composes a curated tool surface out of catalog MCP servers, declared under `studio`. The
+        other mode's block is rejected. Required. Fixed at creation: declaring another mode on
+        an existing proxy is rejected, and changing it is a delete and a new declaration.
+      x-speakeasy-plan-modifiers: Immutable
+    AimMcpProxyProxy:
+      type: object
+      properties:
+        serverUrl:
+          type: string
+          examples:
+            - https://api.githubcopilot.com/mcp/
+          format: uri
+          description: URL of the upstream MCP server, http or https; the gateway reaches it at runtime
+          x-speakeasy-param-computed: false
+        upstreamAuth:
+          x-speakeasy-param-computed: false
+          allOf:
+            - $ref: '#/components/schemas/AimMcpProxyUpstreamAuth'
+          writeOnly: true
+      required:
+        - serverUrl
+      description: |
+        What a `PROXY` fronts: one upstream MCP server and the credential the gateway presents to it. Required when
+        `mode` is `PROXY`, rejected otherwise.
+      x-speakeasy-param-computed: false
+    AimMcpProxyStudio:
+      type: object
+      properties:
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/AimMcpProxyStudioTool'
+          minItems: 1
+          description: |
+            The tools the studio exposes, each named by the catalog server it comes from and its runtime name.
+            Every server named here needs an `upstreamAuth` entry. On a studio created with a `GRAVITEE_AM`
+            provider, a tool added after creation is served but not registered as a scope on the Access
+            Management domain; the apply reports it as a warning.
+          x-speakeasy-param-computed: false
+          x-speakeasy-plan-validators: SortedByServerAndTool
+        upstreamAuth:
+          type: array
+          items:
+            $ref: '#/components/schemas/AimMcpProxyStudioUpstreamAuth'
+          description: |
+            One entry per catalog server a tool comes from: the credential the gateway presents to that server,
+            stored verbatim and never returned, or `type: NONE` to say the server needs none. Nothing is inferred
+            from the credential the catalog synced the server with. An entry for a server no tool uses, a server
+            without an entry, or two entries for one server are rejected.
+          x-speakeasy-param-computed: false
+          writeOnly: true
+        enableFGA:
+          type: boolean
+          description: |
+            Inserts the platform's fine-grained authorization flow, which runs the `authz-pep` policy on
+            `tools/call` with the called tool as the resource; `false` removes it. That flow belongs to the
+            platform: `flows` may not carry an `authz-pep` step themselves, and the state reports the declared
+            flows without it.
+          default: false
+          x-speakeasy-param-computed: false
+      required:
+        - tools
+        - upstreamAuth
+      description: |
+        What a `STUDIO` exposes: tools picked from catalog MCP servers of the environment, the credential the
+        gateway presents to each of those servers, and whether the platform's fine-grained authorization runs on
+        tool calls. Tools converge as a set — adding, removing or re-aliasing one replaces the studio's tool
+        surface — and `upstreamAuth` converges per server.
+      x-speakeasy-param-computed: false
+    AimMcpProxyStudioTool:
+      type: object
+      properties:
+        server:
+          type: string
+          examples:
+            - github-mcp
+          description: HRID of the `catalog/mcp-servers` resource of this environment the tool comes from
+          x-speakeasy-param-computed: false
+        tool:
+          type: string
+          examples:
+            - create_issue
+          description: Runtime name of the tool, as the server's state lists it under `tools`
+          x-speakeasy-param-computed: false
+        alias:
+          type: string
+          examples:
+            - gh_create_issue
+          pattern: ^[a-zA-Z0-9_=-]+$
+          description: |
+            Name the studio exposes the tool under, when the runtime name collides with another tool's or reads
+            better renamed; effective names must be unique across the studio
+          x-speakeasy-param-computed: false
+        entityId:
+          type: string
+          description: Composed entity id of the tool, the name an authorization policy references, e.g. `mcp-tool.github.create_issue`
+          readOnly: true
+          x-speakeasy-param-computed: true
+      required:
+        - server
+        - tool
+      description: A tool the studio exposes, picked from a catalog MCP server
+    AimMcpProxyStudioUpstreamAuth:
+      type: object
+      properties:
+        server:
+          type: string
+          examples:
+            - github-mcp
+          description: HRID of the `catalog/mcp-servers` resource the credential is for
+          x-speakeasy-param-computed: false
+        auth:
+          $ref: '#/components/schemas/AimMcpProxyUpstreamAuth'
+          x-speakeasy-param-computed: false
+      required:
+        - server
+        - auth
+      description: The credential the gateway presents to one of the studio's catalog servers
+    AimMcpProxyUpstreamAuth:
+      discriminator:
+        propertyName: type
+        mapping:
+          NONE: '#/components/schemas/AimMcpProxyNoUpstreamAuth'
+          API_KEY: '#/components/schemas/AimMcpProxyApiKeyUpstreamAuth'
+          BEARER: '#/components/schemas/AimMcpProxyBearerUpstreamAuth'
+          BASIC: '#/components/schemas/AimMcpProxyBasicUpstreamAuth'
+          OAUTH2: '#/components/schemas/AimMcpProxyOAuth2UpstreamAuth'
+      description: |
+        Authentication the gateway uses against the upstream MCP server, discriminated by `type`. Credential values
+        are stored verbatim: a literal, or a `secret://` URI pointing at a configured secret provider. They are
+        never returned by this API. Omitting `proxy.upstreamAuth`, or declaring `type: NONE`, means the gateway passes
+        the caller's credentials through — and clears any stored upstream authentication.
+      oneOf:
+        - $ref: '#/components/schemas/AimMcpProxyNoUpstreamAuth'
+        - $ref: '#/components/schemas/AimMcpProxyApiKeyUpstreamAuth'
+        - $ref: '#/components/schemas/AimMcpProxyBearerUpstreamAuth'
+        - $ref: '#/components/schemas/AimMcpProxyBasicUpstreamAuth'
+        - $ref: '#/components/schemas/AimMcpProxyOAuth2UpstreamAuth'
+      x-speakeasy-param-computed: false
+    AimMcpProxyNoUpstreamAuth:
+      allOf:
+        - type: object
+          properties:
+            type:
+              type: string
+              description: Type of upstream authentication
+              enum:
+                - NONE
+              default: NONE
+          required:
+            - type
+      description: No upstream authentication; the gateway passes the caller's credentials through
+    AimMcpProxyApiKeyUpstreamAuth:
+      allOf:
+        - type: object
+          properties:
+            apiKeyHeader:
+              type: string
+              examples:
+                - X-Api-Key
+              description: Name of the header carrying the API key
+              x-speakeasy-param-computed: false
+            apiKey:
+              type: string
+              format: password
+              description: API key value, a literal or a `secret://` URI stored verbatim; never returned
+              writeOnly: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-param-sensitive: true
+            type:
+              type: string
+              description: Type of upstream authentication
+              enum:
+                - API_KEY
+              default: API_KEY
+              x-speakeasy-param-computed: false
+          required:
+            - apiKeyHeader
+            - apiKey
+            - type
+      description: A static API key sent to the upstream server in a header
+    AimMcpProxyBearerUpstreamAuth:
+      allOf:
+        - type: object
+          properties:
+            token:
+              type: string
+              format: password
+              description: Bearer token, a literal or a `secret://` URI stored verbatim; never returned
+              writeOnly: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-param-sensitive: true
+            type:
+              type: string
+              description: Type of upstream authentication
+              enum:
+                - BEARER
+              default: BEARER
+              x-speakeasy-param-computed: false
+          required:
+            - token
+            - type
+      description: A static bearer token sent to the upstream server
+    AimMcpProxyBasicUpstreamAuth:
+      allOf:
+        - type: object
+          properties:
+            username:
+              type: string
+              description: Basic authentication user name
+              x-speakeasy-param-computed: false
+            password:
+              type: string
+              format: password
+              description: Basic authentication password, a literal or a `secret://` URI stored verbatim; never returned
+              writeOnly: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-param-sensitive: true
+            type:
+              type: string
+              description: Type of upstream authentication
+              enum:
+                - BASIC
+              default: BASIC
+              x-speakeasy-param-computed: false
+          required:
+            - username
+            - password
+            - type
+      description: Basic credentials sent to the upstream server
+    AimMcpProxyOAuth2UpstreamAuth:
+      allOf:
+        - type: object
+          properties:
+            authorizeUrl:
+              type: string
+              format: uri
+              description: Authorization endpoint the elicitation flow sends the user to
+              x-speakeasy-param-computed: false
+            tokenUrl:
+              type: string
+              format: uri
+              description: Token endpoint the gateway exchanges the authorization code at
+              x-speakeasy-param-computed: false
+            clientId:
+              type: string
+              description: Client id of the upstream OAuth 2.0 client
+              x-speakeasy-param-computed: false
+            clientSecret:
+              type: string
+              format: password
+              description: Client secret of the upstream OAuth 2.0 client, a literal or a `secret://` URI stored verbatim; never returned
+              writeOnly: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-param-sensitive: true
+            scopes:
+              type: array
+              items:
+                type: string
+              description: Scopes requested with the token
+              x-speakeasy-param-computed: true
+              x-speakeasy-plan-modifiers: IgnoreEmptyList
+            type:
+              type: string
+              description: Type of upstream authentication
+              enum:
+                - OAUTH2
+              default: OAUTH2
+              x-speakeasy-param-computed: false
+          required:
+            - authorizeUrl
+            - tokenUrl
+            - clientId
+            - clientSecret
+            - type
+      description: OAuth 2.0 authentication negotiated with the upstream server through MCP elicitation
+    AimMcpProxyPlan:
+      type: object
+      properties:
+        name:
+          type: string
+          examples:
+            - gold
+          description: Name of the plan, the key plan convergence matches on
+          x-speakeasy-param-computed: false
+        security:
+          $ref: '#/components/schemas/AimMcpProxyPlanSecurity'
+          x-speakeasy-param-computed: false
+        flows:
+          type: array
+          items:
+            $ref: '#/components/schemas/AimMcpProxyFlow'
+          description: |
+            Policy flows of the plan, in execution order, run before the proxy's own on requests the plan
+            matched. Owned by the manifest like the proxy's flows, and — unlike `security` — free to change in
+            place under the same plan name.
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
+      required:
+        - name
+        - security
+      description: A plan consumers subscribe to; identified by its name within the proxy
+    AimMcpProxyPlanSecurity:
+      discriminator:
+        propertyName: type
+        mapping:
+          KEY_LESS: '#/components/schemas/AimMcpProxyKeyLessPlanSecurity'
+          API_KEY: '#/components/schemas/AimMcpProxyApiKeyPlanSecurity'
+          OAUTH2: '#/components/schemas/AimMcpProxyOAuth2PlanSecurity'
+      description: How consumers authenticate against the plan, discriminated by `type`
+      oneOf:
+        - $ref: '#/components/schemas/AimMcpProxyKeyLessPlanSecurity'
+        - $ref: '#/components/schemas/AimMcpProxyApiKeyPlanSecurity'
+        - $ref: '#/components/schemas/AimMcpProxyOAuth2PlanSecurity'
+      x-speakeasy-param-computed: false
+    AimMcpProxyKeyLessPlanSecurity:
+      allOf:
+        - type: object
+          properties:
+            type:
+              type: string
+              description: Type of plan security
+              enum:
+                - KEY_LESS
+              default: KEY_LESS
+          required:
+            - type
+      description: No consumer authentication
+    AimMcpProxyApiKeyPlanSecurity:
+      allOf:
+        - type: object
+          properties:
+            source:
+              type: string
+              enum:
+                - HEADER
+                - BEARER
+                - QUERY_PARAMETER
+              description: Where the gateway reads the API key from
+              x-speakeasy-param-computed: false
+            apiKeyHeader:
+              type: string
+              examples:
+                - X-Gravitee-Api-Key
+              description: Name of a custom header carrying the API key; naming one switches the gateway to that header
+              x-speakeasy-param-computed: false
+            propagateApiKey:
+              type: boolean
+              description: Forward the API key to the upstream server; false when omitted
+              x-speakeasy-param-computed: false
+            type:
+              type: string
+              description: Type of plan security
+              enum:
+                - API_KEY
+              default: API_KEY
+              x-speakeasy-param-computed: false
+          required:
+            - source
+            - type
+      description: Consumers authenticate with an API key
+    AimMcpProxyOAuth2PlanSecurity:
+      allOf:
+        - type: object
+          properties:
+            provider:
+              type: string
+              examples:
+                - am
+              description: The `name` of an `identityProviders` entry of this spec
+              x-speakeasy-param-computed: false
+            scopes:
+              type: array
+              items:
+                type: string
+              description: |
+                Scopes required on top of the standard MCP scopes; accepted on a `GRAVITEE_AM` provider only, since
+                the gateway checks them against the Access Management domain. On a plan added after creation the
+                scopes cannot be registered on the domain and are rejected.
+              x-speakeasy-param-computed: true
+              x-speakeasy-plan-modifiers: IgnoreEmptyList
+            type:
+              type: string
+              description: Type of plan security
+              enum:
+                - OAUTH2
+              default: OAUTH2
+              x-speakeasy-param-computed: false
+          required:
+            - provider
+            - type
+      description: |
+        Consumers authenticate with OAuth 2.0 tokens the gateway validates against one of the proxy's identity
+        providers, named by `provider`.
+    AimMcpProxyFlowExecution:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum:
+            - DEFAULT
+            - BEST_MATCH
+          description: Flow selection mode
+          default: DEFAULT
+          x-speakeasy-param-computed: false
+        matchRequired:
+          type: boolean
+          description: Reject a request no flow matches; false when omitted
+          default: false
+          x-speakeasy-param-computed: false
+      description: |
+        How the gateway selects among the proxy's flows. `DEFAULT` runs every flow whose selectors match;
+        `BEST_MATCH` runs the one whose selectors match best. Omitted, APIM's defaults apply and the state
+        reports no execution block.
+      x-speakeasy-param-computed: false
+    AimMcpProxyFlow:
+      type: object
+      properties:
+        name:
+          type: string
+          examples:
+            - Tools ACL
+          description: Name of the flow, shown in the policy studio; flows are compared by content, not by name
+          x-speakeasy-param-computed: false
+        enabled:
+          type: boolean
+          description: Whether the gateway runs the flow; true when omitted
+          default: true
+          x-speakeasy-param-computed: false
+        selectors:
+          type: array
+          items:
+            $ref: '#/components/schemas/AimMcpProxyFlowSelector'
+          description: What the flow applies to; a flow without selectors applies to every request
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
+        request:
+          type: array
+          items:
+            $ref: '#/components/schemas/AimMcpProxyFlowStep'
+          description: Steps run on the request, in order
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
+        response:
+          type: array
+          items:
+            $ref: '#/components/schemas/AimMcpProxyFlowStep'
+          description: Steps run on the response, in order
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
+        tags:
+          type: array
+          items:
+            type: string
+          description: Sharding tags of the gateways the flow runs on; all of them when omitted
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
+      required:
+        - name
+      description: |
+        A policy flow, the same shape APIM's own API resource declares: the requests it selects, and the steps
+        run on the request and on the response. An MCP proxy has no other phase.
+    AimMcpProxyFlowSelector:
+      discriminator:
+        propertyName: type
+        mapping:
+          MCP: '#/components/schemas/AimMcpProxyMcpFlowSelector'
+          CONDITION: '#/components/schemas/AimMcpProxyConditionFlowSelector'
+      description: What a flow applies to, discriminated by `type`; the kinds an MCP proxy accepts
+      oneOf:
+        - $ref: '#/components/schemas/AimMcpProxyMcpFlowSelector'
+        - $ref: '#/components/schemas/AimMcpProxyConditionFlowSelector'
+    AimMcpProxyMcpFlowSelector:
+      allOf:
+        - type: object
+          properties:
+            methods:
+              type: array
+              examples:
+                - - tools/list
+                  - tools/call
+              items:
+                type: string
+              description: MCP methods the flow applies to, such as `tools/call`; every method when empty
+              x-speakeasy-param-computed: false
+            type:
+              type: string
+              description: Kind of selector
+              enum:
+                - MCP
+              default: MCP
+              x-speakeasy-param-computed: false
+          required:
+            - methods
+            - type
+      description: Selects requests by MCP method
+    AimMcpProxyConditionFlowSelector:
+      allOf:
+        - type: object
+          properties:
+            condition:
+              type: string
+              examples:
+                - "{#context.attributes['mcp_tool_name'] == 'create_issue'}"
+              description: Condition the request must satisfy
+              x-speakeasy-param-computed: false
+            type:
+              type: string
+              description: Kind of selector
+              enum:
+                - CONDITION
+              default: CONDITION
+              x-speakeasy-param-computed: false
+          required:
+            - condition
+            - type
+      description: Selects requests by an expression-language condition
+    AimMcpProxyFlowStep:
+      type: object
+      properties:
+        name:
+          type: string
+          examples:
+            - MCP ACL
+          description: Name of the step, shown in the policy studio
+          x-speakeasy-param-computed: false
+        description:
+          type: string
+          description: Human description of the step
+          x-speakeasy-param-computed: false
+        enabled:
+          type: boolean
+          description: Whether the gateway runs the step; true when omitted
+          default: true
+          x-speakeasy-param-computed: false
+        policy:
+          type: string
+          examples:
+            - mcp-acl
+            - rate-limit
+          description: Id of a policy plugin deployed on the platform
+          x-speakeasy-param-computed: false
+        condition:
+          type: string
+          description: Expression-language condition the step runs under; always when omitted
+          x-speakeasy-param-computed: false
+        configuration:
+          type: object
+          additionalProperties: true
+          description: Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run
+          x-speakeasy-param-computed: false
+          x-speakeasy-type-override: any
+      required:
+        - name
+        - policy
+      description: A policy run at one point of a flow, configured as that policy's schema says
+    AimMcpProxyIdentityProvider:
+      discriminator:
+        propertyName: type
+        mapping:
+          GRAVITEE_AM: '#/components/schemas/AimMcpProxyGraviteeAmIdentityProvider'
+          OAUTH2_GENERIC: '#/components/schemas/AimMcpProxyGenericIdentityProvider'
+          OAUTH2_AUTH0: '#/components/schemas/AimMcpProxyAuth0IdentityProvider'
+      description: |
+        An authorization server declared on the proxy, discriminated by `type`. Each becomes an OAuth2 resource of
+        the proxy's API, named after `name`, which OAUTH2 plans reference through `provider`.
+      oneOf:
+        - $ref: '#/components/schemas/AimMcpProxyGraviteeAmIdentityProvider'
+        - $ref: '#/components/schemas/AimMcpProxyGenericIdentityProvider'
+        - $ref: '#/components/schemas/AimMcpProxyAuth0IdentityProvider'
+    AimMcpProxyGraviteeAmIdentityProvider:
+      allOf:
+        - type: object
+          properties:
+            name:
+              type: string
+              description: Name of the provider, the resource name on the proxy and the value plans reference
+              x-speakeasy-param-computed: false
+            type:
+              type: string
+              description: Kind of authorization server
+              enum:
+                - GRAVITEE_AM
+              default: GRAVITEE_AM
+              x-speakeasy-param-computed: false
+          required:
+            - name
+            - type
+      description: |
+        The Gravitee Access Management integration of the organization: the domain, the client and the resource are
+        provisioned when the proxy is created, and the AM connection must exist at that moment. At most one per
+        proxy, and fixed at creation.
+    AimMcpProxyGenericIdentityProvider:
+      allOf:
+        - type: object
+          properties:
+            issuerUrl:
+              type: string
+              examples:
+                - https://kc.example.com/realms/acme
+              format: uri
+              description: Issuer URL of the authorization server, the base the endpoints are resolved against
+              x-speakeasy-param-computed: false
+              x-speakeasy-plan-modifiers: TrimTrailingSlash
+            introspectionEndpoint:
+              type: string
+              examples:
+                - /protocol/openid-connect/token/introspect
+              description: |
+                Token introspection endpoint, as a path relative to `issuerUrl` or as an absolute URL beneath it;
+                stored and reported as the path
+              x-speakeasy-param-computed: false
+            introspectionEndpointMethod:
+              type: string
+              enum:
+                - GET
+                - POST
+              description: HTTP method of the introspection call
+              x-speakeasy-param-computed: false
+            clientId:
+              type: string
+              description: Client id the gateway introspects tokens with
+              x-speakeasy-param-computed: false
+            clientSecret:
+              type: string
+              format: password
+              description: |
+                Client secret the gateway introspects tokens with, a literal or a `secret://` URI stored verbatim and
+                never returned. Omitted on a later apply, the stored secret is kept; a different value replaces the
+                proxy's resource in place and redeploys the proxy, which is how a rotated reference reaches the gateway.
+              writeOnly: true
+              x-speakeasy-param-computed: false
+              x-speakeasy-param-sensitive: true
+            userInfoEndpoint:
+              type: string
+              description: UserInfo endpoint, same rule as `introspectionEndpoint`
+              x-speakeasy-param-computed: false
+            name:
+              type: string
+              description: Name of the provider, the resource name on the proxy and the value plans reference
+              x-speakeasy-param-computed: false
+            type:
+              type: string
+              description: Kind of authorization server
+              enum:
+                - OAUTH2_GENERIC
+              default: OAUTH2_GENERIC
+              x-speakeasy-param-computed: false
+          required:
+            - issuerUrl
+            - introspectionEndpoint
+            - introspectionEndpointMethod
+            - name
+            - type
+      description: A third-party authorization server the gateway introspects tokens with
+    AimMcpProxyAuth0IdentityProvider:
+      allOf:
+        - type: object
+          properties:
+            domain:
+              type: string
+              examples:
+                - my-tenant.eu.auth0.com
+              description: Auth0 tenant domain
+              x-speakeasy-param-computed: false
+            audience:
+              type: string
+              description: Audience of the tokens the gateway accepts
+              x-speakeasy-param-computed: false
+            name:
+              type: string
+              description: Name of the provider, the resource name on the proxy and the value plans reference
+              x-speakeasy-param-computed: false
+            type:
+              type: string
+              description: Kind of authorization server
+              enum:
+                - OAUTH2_AUTH0
+              default: OAUTH2_AUTH0
+              x-speakeasy-param-computed: false
+          required:
+            - domain
+            - audience
+            - name
+            - type
+      description: An Auth0 tenant the gateway validates tokens against
+    AimMcpProxyState:
+      allOf:
+        - $ref: '#/components/schemas/AimMcpProxySpec'
+        - $ref: '#/components/schemas/AimResourceStatus'
+      description: |
+        State of an MCP proxy that has been created or updated, in the shape of its spec. Identity providers are
+        read off the resources of its API and plans off APIM, both sorted by name; `state` is the lifecycle APIM
+        observes; `flows` and each plan's `flows` are read off APIM in stored order, step configurations as
+        stored, and are absent when there are none; `flowExecution` is reported when it differs from APIM's
+        defaults. For a `STUDIO`, `studio.tools` is read off the stored specification with each tool's
+        `entityId` and sorted by server then tool, `studio.upstreamAuth` off the stored backends without
+        credentials, and `studio.enableFGA` off the API's flows, which `flows` reports without the platform's
+        authorization flow.
+    AimHttpError:
+      type: object
+      properties:
+        httpStatus:
+          type: integer
+          examples:
+            - 400
+          format: int32
+          description: HTTP status code
+          x-speakeasy-param-computed: false
+        message:
+          type: string
+          examples:
+            - entityId [mcp-server.github] is already used by another MCP server
+          description: Human readable message
+          x-speakeasy-param-computed: false
+        technicalCode:
+          type: string
+          examples:
+            - mcp-server.already-exists
+          description: Stable technical code of the error
+          x-speakeasy-param-computed: false
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Values interpolated into the message, keyed by placeholder name
+          x-speakeasy-param-computed: false
+      description: An error returned by the Automation API when a request could not be served.
     DocumentationPortalSpec:
       $ref: "#/components/schemas/DocumentationSpec"
       description: Specification for a Portal Documentation page.
@@ -3889,6 +6080,30 @@ components:
             type: object
             allOf:
               - $ref: "#/components/schemas/HttpError"
+    AimUnauthenticated:
+      description: Authentication is required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AimHttpError'
+    AimUnauthorized:
+      description: The caller lacks the permission, or the license does not include AI Management
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AimHttpError'
+    AimNotFound:
+      description: No resource with this HRID, or AI Management is not available on this installation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AimHttpError'
+    AimError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AimHttpError'
   parameters:
     envIdParam:
       name: envId
@@ -3965,6 +6180,38 @@ components:
         type: string
         examples:
           - default-portal
+    AimOrgIdParam:
+      name: orgId
+      in: path
+      description: Id of an organization
+      required: true
+      schema:
+        type: string
+        default: DEFAULT
+    AimEnvIdParam:
+      name: envId
+      in: path
+      description: Id of an environment
+      required: true
+      schema:
+        type: string
+        default: DEFAULT
+    AimHridParam:
+      name: hrid
+      in: path
+      description: Human-readable ID of the resource
+      required: true
+      schema:
+        type: string
+    AimDryRunQueryParam:
+      name: dryRun
+      in: query
+      description: |
+        Preview the result of the apply without persisting anything. The same validation runs as for a real apply and
+        the findings are reported in the returned state.
+      schema:
+        type: boolean
+        default: false
   securitySchemes:
     BasicAuth:
       description: Basic authentication
@@ -3980,6 +6227,10 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+security:
+  - BearerAuth: []
+  - BasicAuth: []
+  - CloudAuth: []
 x-speakeasy-retries:
   strategy: backoff
   backoff:

@@ -9,6 +9,8 @@ type DynamicDictionarySpec struct {
 	Provider DictionaryProvider `json:"provider"`
 	// Renewal configuration for a 'DYNAMIC' dictionary
 	Trigger DictionaryTrigger `json:"trigger"`
+	// Encryption policy applied to a 'DYNAMIC' dictionary's fetched values.
+	Encryption *DictionaryEncryptionPolicy `json:"encryption,omitempty"`
 }
 
 func (d *DynamicDictionarySpec) GetProvider() DictionaryProvider {
@@ -27,4 +29,11 @@ func (d *DynamicDictionarySpec) GetTrigger() DictionaryTrigger {
 		return DictionaryTrigger{}
 	}
 	return d.Trigger
+}
+
+func (d *DynamicDictionarySpec) GetEncryption() *DictionaryEncryptionPolicy {
+	if d == nil {
+		return nil
+	}
+	return d.Encryption
 }

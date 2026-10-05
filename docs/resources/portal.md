@@ -45,9 +45,7 @@ resource "apim_portal" "developer-portal" {
 ### Optional
 
 - `environment_id` (String) environment ID
-- `navigation` (Attributes List) The portal's navigation hierarchy as a flat list of paths.
-Paths are ordered — the order in the list is preserved.
-Intermediate folders are implicitly created if not listed explicitly. (see [below for nested schema](#nestedatt--navigation))
+- `navigation` (Attributes List) The portal's navigation hierarchy as a flat list of paths. (see [below for nested schema](#nestedatt--navigation))
 - `organization_id` (String) organization ID
 
 ### Read-Only
