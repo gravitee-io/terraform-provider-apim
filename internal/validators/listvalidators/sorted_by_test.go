@@ -102,15 +102,6 @@ func TestSortedBy(t *testing.T) {
 			config:    providers([2]string{"auth0", "tenant"}, [2]string{"gravitee_am", "am"}),
 			expected:  "Declare it in this order: am, tenant.",
 		},
-		"sorted by server": {
-			validator: listvalidators.SortedByServer(),
-			config:    tools([2]string{"deepwiki", "b"}, [2]string{"github", "a"}),
-		},
-		"not sorted by server": {
-			validator: listvalidators.SortedByServer(),
-			config:    tools([2]string{"github", "a"}, [2]string{"deepwiki", "b"}),
-			expected:  "must be sorted by server. Declare it in this order: deepwiki, github.",
-		},
 		"sorted by server then tool": {
 			validator: listvalidators.SortedByServerAndTool(),
 			config:    tools([2]string{"deepwiki", "ask"}, [2]string{"deepwiki", "read"}, [2]string{"github", "ask"}),

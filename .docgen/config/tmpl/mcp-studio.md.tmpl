@@ -27,7 +27,7 @@ an authorization policy names, such as `mcp-tool.example-deepwiki.ask_wiki_quest
 {{ .McpStudioCatalogServer.Content }}
 ```
 
-~> The platform discovers a server again only when its `connection` changes. A tool added upstream afterwards does not
+~> The platform discovers a server again only when its `server_connection` changes. A tool added upstream afterwards does not
 reach the state on a refresh.
 
 ## Proxy
@@ -49,13 +49,16 @@ ends its subscriptions, and the `security` of an existing plan cannot be changed
 
 ## Order of the lists
 
-The platform reports `plans` and `identity_providers` sorted by name, `studio.tools` sorted by server then tool, and
-`studio.upstream_auth` sorted by server. Declare them in that order: another order is refused when planning, with the
-expected order in the message.
+The platform reports `plans` and `identity_providers` sorted by name, and `studio.tools` sorted by server then tool.
+Declare them in that order: another order is refused when planning, with the expected order in the message.
 
 ## Credentials
 
-The platform stores a credential as written and never returns it, so an imported resource needs its credentials declared
-before the next apply. On a proxy or a studio, `upstream_auth` also takes a `secret://` URI pointing at a secret provider
-configured on the platform: the gateway resolves it at runtime. The credential of a catalog server is the one the
-platform itself presents to discover the server.
+The platform stores a credential as written and never returns it. The provider sends the authentication declared in
+`server_connection.auth`, `proxy.upstream_auth` and `studio.upstream_auth` and does not read it back: the state holds
+what the configuration declares, a change made to it in the Console does not show in a plan, and an imported resource
+has none until the next apply.
+
+On a proxy or a studio, a credential may be a `secret://` URI pointing at a secret provider configured on the platform:
+the gateway resolves it at runtime. The credential of a catalog server is the one the platform itself presents to
+discover the server.

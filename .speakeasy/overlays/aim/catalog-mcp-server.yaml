@@ -20,6 +20,19 @@ actions:
     update:
       x-speakeasy-entity-operation: CatalogMcpServer#delete
 
+  # Naming
+  # Wrap $ref in allOf so Speakeasy can apply the name override on the property
+  - target: $.components.schemas.AimCatalogMcpServerSpec.properties.connection['$ref']
+    remove: true
+  - target: $.components.schemas.AimCatalogMcpServerSpec.properties.connection
+    description: |
+      connection is a reserved root attribute name in Terraform, as count or
+      lifecycle are. The attribute is server_connection; the API still reads connection.
+    update:
+      allOf:
+        - $ref: '#/components/schemas/AimCatalogMcpServerConnection'
+      x-speakeasy-name-override: serverConnection
+
   # Immutable
   - target: $.components.schemas.AimCatalogMcpServerSpec.properties.entityId
     description: The platform refuses another entityId on a registered server
@@ -63,12 +76,28 @@ actions:
     update:
       x-speakeasy-param-computed: true
 
+  # Credentials
+  # The platform returns the authentication without its secret. The generator
+  # carries a write-only attribute over from the prior state, but the code it
+  # writes for one nested two objects down dereferences a prior state that is
+  # nil on import. Declared write-only as a whole, the block is copied from the
+  # prior state in one guarded step: Terraform sends what is declared and does
+  # not read it back.
+  # Wrap $ref in allOf so Speakeasy can apply writeOnly on the property
+  - target: $.components.schemas.AimCatalogMcpServerConnection.properties.auth['$ref']
+    remove: true
+  - target: $.components.schemas.AimCatalogMcpServerConnection.properties.auth
+    update:
+      allOf:
+        - $ref: '#/components/schemas/AimCatalogMcpServerAuth'
+      writeOnly: true
+
   # Sensitive
-  - target: $.components.schemas.AimCatalogMcpServerHeaderAuth.allOf[?@.properties.value].properties.value
+  - target: $.components.schemas.AimCatalogMcpServerHeaderAuth.allOf[*].properties.value
     description: Never returned by the platform
     update:
       x-speakeasy-param-sensitive: true
-  - target: $.components.schemas.AimCatalogMcpServerOAuth2Auth.allOf[?@.properties.clientSecret].properties.clientSecret
+  - target: $.components.schemas.AimCatalogMcpServerOAuth2Auth.allOf[*].properties.clientSecret
     description: Never returned by the platform
     update:
       x-speakeasy-param-sensitive: true

@@ -11,9 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 )
 
-// The platform reports discovered tools, prompts and resources in no stable
-// order, so two reads of one server are not compared on them.
-var catalogMcpServerDiscovered = []string{"tools", "prompts", "resources"}
+// What an import cannot be compared on: the platform reports discovered tools,
+// prompts and resources in no stable order, and the provider does not read the
+// authentication back, so an imported server has none until it is applied.
+var catalogMcpServerNotImported = []string{"tools", "prompts", "resources", "server_connection.auth"}
 
 func TestCatalogMcpServerResource_minimal(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
@@ -37,7 +38,7 @@ func TestCatalogMcpServerResource_minimal(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttrSet(resourceAddress, "id"),
 					resource.TestCheckResourceAttr(resourceAddress, "entity_id", "mcp-server."+randomId),
-					resource.TestCheckResourceAttr(resourceAddress, "connection.transport", "HTTP"),
+					resource.TestCheckResourceAttr(resourceAddress, "server_connection.transport", "HTTP"),
 					resource.TestCheckResourceAttrSet(resourceAddress, "last_synced_at"),
 					resource.TestCheckResourceAttrSet(resourceAddress, "tools.0.name"),
 					resource.TestCheckResourceAttrSet(resourceAddress, "tools.0.entity_id"),
@@ -51,7 +52,7 @@ func TestCatalogMcpServerResource_minimal(t *testing.T) {
 				ImportState:              true,
 				ImportStateIdFunc:        importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
 				ImportStateVerify:        true,
-				ImportStateVerifyIgnore:  catalogMcpServerDiscovered,
+				ImportStateVerifyIgnore:  catalogMcpServerNotImported,
 			},
 			// Testing framework implicitly verifies resource delete.
 		},
@@ -123,8 +124,8 @@ func TestCatalogMcpServerResource_header_auth(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables:          variables,
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceAddress, "connection.auth.header.name", "Authorization"),
-					resource.TestCheckResourceAttr(resourceAddress, "connection.auth.header.value", "Bearer acceptance-test"),
+					resource.TestCheckResourceAttr(resourceAddress, "server_connection.auth.header.name", "Authorization"),
+					resource.TestCheckResourceAttr(resourceAddress, "server_connection.auth.header.value", "Bearer acceptance-test"),
 				),
 			},
 			// The platform never returns the header value. The state keeps the
@@ -136,7 +137,7 @@ func TestCatalogMcpServerResource_header_auth(t *testing.T) {
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
 				},
-				Check: resource.TestCheckResourceAttr(resourceAddress, "connection.auth.header.value", "Bearer acceptance-test"),
+				Check: resource.TestCheckResourceAttr(resourceAddress, "server_connection.auth.header.value", "Bearer acceptance-test"),
 			},
 		},
 	})
