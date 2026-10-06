@@ -46,7 +46,7 @@ actions:
     remove: true
 
   ## Upstream authentication union
-  - target: $.components.schemas.AimMcpProxyNoUpstreamAuth.allOf[1]
+  - target: $.components.schemas.AimMcpProxyNoUpstreamAuth.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -55,11 +55,10 @@ actions:
           enum:
             - NONE
           default: NONE
-      required:
-        - type
-  - target: $.components.schemas.AimMcpProxyNoUpstreamAuth.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimMcpProxyNoUpstreamAuth.allOf[?@['$ref']]
     remove: true
-  - target: $.components.schemas.AimMcpProxyApiKeyUpstreamAuth.allOf[1]
+  - target: $.components.schemas.AimMcpProxyApiKeyUpstreamAuth.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -68,11 +67,10 @@ actions:
           enum:
             - API_KEY
           default: API_KEY
-      required:
-        - type
-  - target: $.components.schemas.AimMcpProxyApiKeyUpstreamAuth.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimMcpProxyApiKeyUpstreamAuth.allOf[?@['$ref']]
     remove: true
-  - target: $.components.schemas.AimMcpProxyBearerUpstreamAuth.allOf[1]
+  - target: $.components.schemas.AimMcpProxyBearerUpstreamAuth.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -81,11 +79,10 @@ actions:
           enum:
             - BEARER
           default: BEARER
-      required:
-        - type
-  - target: $.components.schemas.AimMcpProxyBearerUpstreamAuth.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimMcpProxyBearerUpstreamAuth.allOf[?@['$ref']]
     remove: true
-  - target: $.components.schemas.AimMcpProxyBasicUpstreamAuth.allOf[1]
+  - target: $.components.schemas.AimMcpProxyBasicUpstreamAuth.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -94,11 +91,10 @@ actions:
           enum:
             - BASIC
           default: BASIC
-      required:
-        - type
-  - target: $.components.schemas.AimMcpProxyBasicUpstreamAuth.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimMcpProxyBasicUpstreamAuth.allOf[?@['$ref']]
     remove: true
-  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[1]
+  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -107,9 +103,8 @@ actions:
           enum:
             - OAUTH2
           default: OAUTH2
-      required:
-        - type
-  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[?@['$ref']]
     remove: true
   - target: $.components.schemas.AimMcpProxyUpstreamAuth.properties
     remove: true
@@ -130,7 +125,7 @@ actions:
         - $ref: '#/components/schemas/AimMcpProxyOAuth2UpstreamAuth'
 
   ## Plan security union
-  - target: $.components.schemas.AimMcpProxyKeyLessPlanSecurity.allOf[1]
+  - target: $.components.schemas.AimMcpProxyKeyLessPlanSecurity.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -139,11 +134,10 @@ actions:
           enum:
             - KEY_LESS
           default: KEY_LESS
-      required:
-        - type
-  - target: $.components.schemas.AimMcpProxyKeyLessPlanSecurity.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimMcpProxyKeyLessPlanSecurity.allOf[?@['$ref']]
     remove: true
-  - target: $.components.schemas.AimMcpProxyApiKeyPlanSecurity.allOf[1]
+  - target: $.components.schemas.AimMcpProxyApiKeyPlanSecurity.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -152,11 +146,10 @@ actions:
           enum:
             - API_KEY
           default: API_KEY
-      required:
-        - type
-  - target: $.components.schemas.AimMcpProxyApiKeyPlanSecurity.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimMcpProxyApiKeyPlanSecurity.allOf[?@['$ref']]
     remove: true
-  - target: $.components.schemas.AimMcpProxyOAuth2PlanSecurity.allOf[1]
+  - target: $.components.schemas.AimMcpProxyOAuth2PlanSecurity.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -165,9 +158,8 @@ actions:
           enum:
             - OAUTH2
           default: OAUTH2
-      required:
-        - type
-  - target: $.components.schemas.AimMcpProxyOAuth2PlanSecurity.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimMcpProxyOAuth2PlanSecurity.allOf[?@['$ref']]
     remove: true
   - target: $.components.schemas.AimMcpProxyPlanSecurity.properties
     remove: true
@@ -183,7 +175,7 @@ actions:
         - $ref: '#/components/schemas/AimMcpProxyOAuth2PlanSecurity'
 
   ## Flow selector union
-  - target: $.components.schemas.AimMcpProxyMcpFlowSelector.allOf[1]
+  - target: $.components.schemas.AimMcpProxyMcpFlowSelector.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -192,11 +184,10 @@ actions:
           enum:
             - MCP
           default: MCP
-      required:
-        - type
-  - target: $.components.schemas.AimMcpProxyMcpFlowSelector.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimMcpProxyMcpFlowSelector.allOf[?@['$ref']]
     remove: true
-  - target: $.components.schemas.AimMcpProxyConditionFlowSelector.allOf[1]
+  - target: $.components.schemas.AimMcpProxyConditionFlowSelector.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -205,9 +196,8 @@ actions:
           enum:
             - CONDITION
           default: CONDITION
-      required:
-        - type
-  - target: $.components.schemas.AimMcpProxyConditionFlowSelector.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimMcpProxyConditionFlowSelector.allOf[?@['$ref']]
     remove: true
   - target: $.components.schemas.AimMcpProxyFlowSelector.properties
     remove: true
@@ -223,7 +213,7 @@ actions:
 
   ## Identity provider union
   ## The base carries name beside type, so each variant declares both.
-  - target: $.components.schemas.AimMcpProxyGraviteeAmIdentityProvider.allOf[1]
+  - target: $.components.schemas.AimMcpProxyGraviteeAmIdentityProvider.allOf[?@.type == 'object']
     update:
       properties:
         name:
@@ -235,12 +225,10 @@ actions:
           enum:
             - GRAVITEE_AM
           default: GRAVITEE_AM
-      required:
-        - name
-        - type
-  - target: $.components.schemas.AimMcpProxyGraviteeAmIdentityProvider.allOf[0]
+      required: ["name", "type"]
+  - target: $.components.schemas.AimMcpProxyGraviteeAmIdentityProvider.allOf[?@['$ref']]
     remove: true
-  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[1]
+  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[?@.type == 'object']
     update:
       properties:
         name:
@@ -252,12 +240,10 @@ actions:
           enum:
             - OAUTH2_GENERIC
           default: OAUTH2_GENERIC
-      required:
-        - name
-        - type
-  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[0]
+      required: ["name", "type"]
+  - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[?@['$ref']]
     remove: true
-  - target: $.components.schemas.AimMcpProxyAuth0IdentityProvider.allOf[1]
+  - target: $.components.schemas.AimMcpProxyAuth0IdentityProvider.allOf[?@.type == 'object']
     update:
       properties:
         name:
@@ -269,10 +255,8 @@ actions:
           enum:
             - OAUTH2_AUTH0
           default: OAUTH2_AUTH0
-      required:
-        - name
-        - type
-  - target: $.components.schemas.AimMcpProxyAuth0IdentityProvider.allOf[0]
+      required: ["name", "type"]
+  - target: $.components.schemas.AimMcpProxyAuth0IdentityProvider.allOf[?@['$ref']]
     remove: true
   - target: $.components.schemas.AimMcpProxyIdentityProvider.properties
     remove: true

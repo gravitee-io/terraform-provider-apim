@@ -64,14 +64,13 @@ actions:
       An omitted auth is read back as NONE. Declaring it keeps the plan equal to
       what the platform reports.
     update:
-      required:
-        - auth
+      required: ["auth"]
 
   ## Authentication union
   ## The fragment discriminates on a base schema its variants extend. Written as a
   ## oneOf, as Selector is, it becomes one nested attribute per variant. Each
   ## variant declares the one type it stands for, so it does not have to be written.
-  - target: $.components.schemas.AimCatalogMcpServerNoAuth.allOf[1]
+  - target: $.components.schemas.AimCatalogMcpServerNoAuth.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -80,11 +79,10 @@ actions:
           enum:
             - NONE
           default: NONE
-      required:
-        - type
-  - target: $.components.schemas.AimCatalogMcpServerNoAuth.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimCatalogMcpServerNoAuth.allOf[?@['$ref']]
     remove: true
-  - target: $.components.schemas.AimCatalogMcpServerHeaderAuth.allOf[1]
+  - target: $.components.schemas.AimCatalogMcpServerHeaderAuth.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -93,11 +91,10 @@ actions:
           enum:
             - HEADER
           default: HEADER
-      required:
-        - type
-  - target: $.components.schemas.AimCatalogMcpServerHeaderAuth.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimCatalogMcpServerHeaderAuth.allOf[?@['$ref']]
     remove: true
-  - target: $.components.schemas.AimCatalogMcpServerOAuth2Auth.allOf[1]
+  - target: $.components.schemas.AimCatalogMcpServerOAuth2Auth.allOf[?@.type == 'object']
     update:
       properties:
         type:
@@ -106,9 +103,8 @@ actions:
           enum:
             - OAUTH2
           default: OAUTH2
-      required:
-        - type
-  - target: $.components.schemas.AimCatalogMcpServerOAuth2Auth.allOf[0]
+      required: ["type"]
+  - target: $.components.schemas.AimCatalogMcpServerOAuth2Auth.allOf[?@['$ref']]
     remove: true
   - target: $.components.schemas.AimCatalogMcpServerAuth.properties
     remove: true

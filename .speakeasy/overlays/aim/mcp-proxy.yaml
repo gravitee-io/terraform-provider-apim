@@ -221,22 +221,22 @@ actions:
 
   # Sensitive
   - target: $.components.schemas.AimMcpProxyApiKeyUpstreamAuth.allOf[*].properties.apiKey
-    description: Never returned by the platform
+    description: Hidden from plan and apply output
     update:
       x-speakeasy-param-sensitive: true
   - target: $.components.schemas.AimMcpProxyBearerUpstreamAuth.allOf[*].properties.token
-    description: Never returned by the platform
+    description: Hidden from plan and apply output
     update:
       x-speakeasy-param-sensitive: true
   - target: $.components.schemas.AimMcpProxyBasicUpstreamAuth.allOf[*].properties.password
-    description: Never returned by the platform
+    description: Hidden from plan and apply output
     update:
       x-speakeasy-param-sensitive: true
   - target: $.components.schemas.AimMcpProxyOAuth2UpstreamAuth.allOf[*].properties.clientSecret
-    description: Never returned by the platform
+    description: Hidden from plan and apply output
     update:
       x-speakeasy-param-sensitive: true
   - target: $.components.schemas.AimMcpProxyGenericIdentityProvider.allOf[*].properties.clientSecret
-    description: Never returned by the platform
+    description: Hidden from plan and apply output
     update:
       x-speakeasy-param-sensitive: true
