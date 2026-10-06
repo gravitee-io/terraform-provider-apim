@@ -118,12 +118,7 @@ type Oauth struct {
 	//
 	GrantTypes []GrantType `json:"grantTypes"`
 	// OAuth client redirect Uris
-	RedirectUris []string `json:"redirectUris,omitempty"`
-	// Additional Dynamic Client Registration metadata sent to the client registration provider,
-	// as a flat map of DCR field name to value. Only fields defined by the registration request
-	// are forwarded, the others are ignored. Use `software_id` to select a client template on
-	// the provider; a value set here takes precedence over the provider-wide one.
-	//
+	RedirectUris             []string          `json:"redirectUris,omitempty"`
 	AdditionalClientMetadata map[string]string `json:"additionalClientMetadata,omitempty"`
 }
 

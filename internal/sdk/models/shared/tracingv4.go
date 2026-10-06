@@ -9,8 +9,6 @@ type TracingV4 struct {
 	Enabled *bool `json:"enabled,omitempty"`
 	// Enable technical tracing to get more details on request execution. Be careful this settings can generate more noise and can impact performance.
 	Verbose *bool `json:"verbose,omitempty"`
-	// Masking rules applied to span attributes before traces are exported.
-	Redaction *TracingRedactionConfig `json:"redaction,omitempty"`
 }
 
 func (t *TracingV4) GetEnabled() *bool {
@@ -25,13 +23,6 @@ func (t *TracingV4) GetVerbose() *bool {
 		return nil
 	}
 	return t.Verbose
-}
-
-func (t *TracingV4) GetRedaction() *TracingRedactionConfig {
-	if t == nil {
-		return nil
-	}
-	return t.Redaction
 }
 
 // #region class-body-tracingv4

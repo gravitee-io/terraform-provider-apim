@@ -13,12 +13,6 @@ type PortalNavigationPath struct {
 	// Listing a path explicitly is the only way to attach a displayName.
 	//
 	DisplayName *string `json:"displayName,omitempty"`
-	// Whether the navigation entry is visible to anonymous portal visitors.
-	// Optional in the Automation API for backward compatibility with clients that predate this field —
-	// when omitted, the entry inherits from its parent (root entries default to PUBLIC).
-	// A PUBLIC child under a PRIVATE parent is rejected.
-	//
-	Visibility *PortalVisibility `json:"visibility,omitempty"`
 }
 
 func (p *PortalNavigationPath) GetPath() string {
@@ -33,11 +27,4 @@ func (p *PortalNavigationPath) GetDisplayName() *string {
 		return nil
 	}
 	return p.DisplayName
-}
-
-func (p *PortalNavigationPath) GetVisibility() *PortalVisibility {
-	if p == nil {
-		return nil
-	}
-	return p.Visibility
 }

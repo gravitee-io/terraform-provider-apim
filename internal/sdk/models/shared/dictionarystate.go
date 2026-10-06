@@ -18,7 +18,7 @@ type DictionaryState struct {
 	// Type of dictionary. MANUAL is to be updated manually, DYNAMIC is updated and deployed automatically.
 	Type DictionaryType `json:"type"`
 	// A manual dictionary with static key/value properties.
-	Manual *ManualDictionarySpecOutput `json:"manual,omitempty"`
+	Manual *ManualDictionarySpec `json:"manual,omitempty"`
 	// A dynamic dictionary populated from an external provider on a schedule.
 	Dynamic *DynamicDictionarySpec `json:"dynamic,omitempty"`
 	// Resource UUID.
@@ -66,7 +66,7 @@ func (d *DictionaryState) GetType() DictionaryType {
 	return d.Type
 }
 
-func (d *DictionaryState) GetManual() *ManualDictionarySpecOutput {
+func (d *DictionaryState) GetManual() *ManualDictionarySpec {
 	if d == nil {
 		return nil
 	}
