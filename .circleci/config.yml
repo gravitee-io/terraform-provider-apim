@@ -13,6 +13,7 @@ parameters:
       - test_results_notification
       - release_notification
       - publish_changelog
+      - verify_aim_oas
       - none
   changelog_path:
     type: string
@@ -284,6 +285,20 @@ jobs:
               "text": ":terraform: Terraform provider changelog publish *failed* for version << pipeline.parameters.release_version >>"
             }
 
+  verify-aim-oas:
+    docker:
+      - image: cimg/base:stable
+    resource_class: small
+    steps:
+      - checkout
+      - keeper/env-export:
+          secret-url: keeper://TIlcGPFq4rN5GvgnZb9hng/field/password
+          var-name: GITHUB_TOKEN
+      - gh/setup
+      - run:
+          name: Verify the AI Management OAS fragment matches its tag
+          command: make verify-aim-oas
+
 workflows:
   send-notification:
     when:
@@ -313,4 +328,14 @@ workflows:
     jobs:
       - publish-changelog-to-docs:
           name: Publish changelog to docs
+          context: cicd-orchestrator
+
+  verify-aim-oas:
+    when:
+      equal:
+        - << pipeline.parameters.trigger >>
+        - verify_aim_oas
+    jobs:
+      - verify-aim-oas:
+          name: Verify AI Management OAS matches upstream
           context: cicd-orchestrator
