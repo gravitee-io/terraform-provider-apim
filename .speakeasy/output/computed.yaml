@@ -888,164 +888,6 @@ paths:
           $ref: "#/components/responses/Error"
       x-speakeasy-entity-operation: DocumentationPortal#delete
       x-speakeasy-name-override: delete
-  # Portal Links
-  /organizations/{orgId}/environments/{envId}/portals/{portalHrid}/links:
-    put:
-      operationId: createOrUpdatePortalLink
-      tags:
-        - Portal Links
-      summary: Create or update a Portal Link
-      description: Create or update a Portal Link attached to a Portal
-      parameters:
-        - $ref: "#/components/parameters/orgIdParam"
-        - $ref: "#/components/parameters/envIdParam"
-        - $ref: "#/components/parameters/portalHridParam"
-        - $ref: "#/components/parameters/dryRunQueryParam"
-      requestBody:
-        description: Portal Link specification
-        content:
-          "application/json":
-            schema:
-              $ref: "#/components/schemas/PortalLinkSpec"
-        required: true
-      responses:
-        "200":
-          description: State of the successfully created/updated Portal Link
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PortalLinkState"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        default:
-          $ref: "#/components/responses/Error"
-  /organizations/{orgId}/environments/{envId}/portals/{portalHrid}/links/{hrid}:
-    parameters:
-      - $ref: "#/components/parameters/orgIdParam"
-      - $ref: "#/components/parameters/envIdParam"
-      - $ref: "#/components/parameters/portalHridParam"
-      - $ref: "#/components/parameters/hridParam"
-    get:
-      operationId: getPortalLink
-      tags:
-        - Portal Links
-      summary: Get one Portal Link
-      description: Get a Portal Link using HRID
-      responses:
-        "200":
-          description: Portal Link successfully retrieved
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PortalLinkState"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        default:
-          $ref: "#/components/responses/Error"
-    delete:
-      operationId: deletePortalLink
-      tags:
-        - Portal Links
-      summary: Delete one Portal Link
-      description: Delete a Portal Link using HRID
-      responses:
-        "204":
-          description: Portal Link successfully deleted
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        default:
-          $ref: "#/components/responses/Error"
-  # Themes
-  /organizations/{orgId}/environments/{envId}/portal-themes:
-    put:
-      operationId: createOrUpdatePortalTheme
-      tags:
-        - Themes
-      summary: Create or update a Theme
-      description: Create or update a next-gen portal Theme from PortalThemeSpec
-      parameters:
-        - $ref: "#/components/parameters/orgIdParam"
-        - $ref: "#/components/parameters/envIdParam"
-        - $ref: "#/components/parameters/dryRunQueryParam"
-      requestBody:
-        description: Theme specification
-        content:
-          "application/json":
-            schema:
-              $ref: "#/components/schemas/PortalThemeSpec"
-        required: true
-      responses:
-        "200":
-          description: State of the successfully created/updated Theme
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PortalThemeState"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        default:
-          $ref: "#/components/responses/Error"
-  /organizations/{orgId}/environments/{envId}/portal-themes/{hrid}:
-    parameters:
-      - $ref: "#/components/parameters/orgIdParam"
-      - $ref: "#/components/parameters/envIdParam"
-      - $ref: "#/components/parameters/hridParam"
-    get:
-      operationId: getPortalTheme
-      tags:
-        - Themes
-      summary: Get one Theme
-      description: Get a Theme using HRID
-      responses:
-        "200":
-          description: Theme successfully retrieved
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PortalThemeState"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        default:
-          $ref: "#/components/responses/Error"
-    delete:
-      operationId: deletePortalTheme
-      tags:
-        - Themes
-      summary: Delete one Theme
-      description: Delete a Theme using HRID
-      responses:
-        "204":
-          description: Theme successfully deleted
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        default:
-          $ref: "#/components/responses/Error"
   # API Documentations
   /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/documentations:
     put:
@@ -1131,85 +973,6 @@ paths:
           $ref: "#/components/responses/Error"
       x-speakeasy-entity-operation: DocumentationApi#delete
       x-speakeasy-name-override: delete
-  # API Links
-  /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/links:
-    put:
-      operationId: createOrUpdateApiLink
-      tags:
-        - API Links
-      summary: Create or update an API Link
-      description: Create or update a Link attached to an API
-      parameters:
-        - $ref: "#/components/parameters/orgIdParam"
-        - $ref: "#/components/parameters/envIdParam"
-        - $ref: "#/components/parameters/apiHridParam"
-        - $ref: "#/components/parameters/dryRunQueryParam"
-      requestBody:
-        description: Portal Link specification
-        content:
-          "application/json":
-            schema:
-              $ref: "#/components/schemas/PortalLinkSpec"
-        required: true
-      responses:
-        "200":
-          description: State of the successfully created/updated Link
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PortalLinkState"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        default:
-          $ref: "#/components/responses/Error"
-  /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/links/{hrid}:
-    parameters:
-      - $ref: "#/components/parameters/orgIdParam"
-      - $ref: "#/components/parameters/envIdParam"
-      - $ref: "#/components/parameters/apiHridParam"
-      - $ref: "#/components/parameters/hridParam"
-    get:
-      operationId: getApiLink
-      tags:
-        - API Links
-      summary: Get one API Link
-      description: Get an API Link using HRID
-      responses:
-        "200":
-          description: Link successfully retrieved
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PortalLinkState"
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        default:
-          $ref: "#/components/responses/Error"
-    delete:
-      operationId: deleteApiLink
-      tags:
-        - API Links
-      summary: Delete one API Link
-      description: Delete an API Link using HRID
-      responses:
-        "204":
-          description: Link successfully deleted
-        "401":
-          $ref: "#/components/responses/Unauthenticated"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        default:
-          $ref: "#/components/responses/Error"
   /organizations/{orgId}/environments/{envId}/aim/catalog/mcp-servers:
     put:
       operationId: createOrUpdateAimCatalogMcpServer
@@ -1585,7 +1348,7 @@ components:
   schemas:
     Hrid:
       type: string
-      pattern: '^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$'
+      pattern: '^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$'
       description: A unique human readable id identifying this resource
       examples:
         - demo_api
@@ -2056,11 +1819,6 @@ components:
           x-speakeasy-param-computed: false
         additionalClientMetadata:
           type: object
-          description: |
-            Additional Dynamic Client Registration metadata sent to the client registration provider,
-            as a flat map of DCR field name to value. Only fields defined by the registration request
-            are forwarded, the others are ignored. Use `software_id` to select a client template on
-            the provider; a value set here takes precedence over the provider-wide one.
           additionalProperties:
             type: string
           examples:
@@ -2304,26 +2062,9 @@ components:
           additionalProperties:
             type: string
           x-speakeasy-param-computed: false
-        encryptedProperties:
-          type: object
-          description: >-
-            Secret properties, keyed by the property key. Their values are write-only: they are never returned, so a client can compare a `GET` against its manifest without seeing a difference on a value it cannot read back. A key must not appear in both `properties` and `encryptedProperties`.
-          additionalProperties:
-            $ref: "#/components/schemas/EncryptableValue"
-          x-speakeasy-param-computed: false
-          x-speakeasy-terraform-ignore: true
       x-speakeasy-param-computed: false
-    EncryptableValue:
-      description: A secret property value.
-      type: object
-      properties:
-        value:
-          description: The plaintext value to encrypt on save.
-          type: string
-          writeOnly: true
-          x-speakeasy-param-computed: false
       required:
-        - value
+        - properties
     DynamicDictionarySpec:
       description: A dynamic dictionary populated from an external provider on a schedule.
       type: object
@@ -2333,9 +2074,6 @@ components:
           x-speakeasy-param-computed: false
         trigger:
           $ref: "#/components/schemas/DictionaryTrigger"
-          x-speakeasy-param-computed: false
-        encryption:
-          $ref: "#/components/schemas/DictionaryEncryptionPolicy"
           x-speakeasy-param-computed: false
       required:
         - provider
@@ -2436,16 +2174,6 @@ components:
       required:
         - rate
         - unit
-    DictionaryEncryptionPolicy:
-      type: object
-      description: Encryption policy applied to a 'DYNAMIC' dictionary's fetched values.
-      properties:
-        encryptOnFetch:
-          type: boolean
-          default: false
-          description: Encrypt every fetched value instead of relying on per-key classification.
-          x-speakeasy-param-computed: false
-      x-speakeasy-terraform-ignore: true
     DictionaryType:
       type: string
       description: Type of dictionary. MANUAL is to be updated manually, DYNAMIC is updated and deployed automatically.
@@ -2794,23 +2522,6 @@ components:
             Independent of the parent `enabled` flag: event-metrics reporting and the connection-metrics reporter are gated separately.
           x-speakeasy-param-computed: false
           default: true
-        connectionEvents:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            enum: [CONNECTED, DISCONNECTED, ERROR]
-          description: |-
-            Which connection lifecycle events the gateway reports. Only applicable to Native v4 APIs.
-            Omitting it clears the selection rather than preserving it: an apply replaces the whole analytics block, so a manifest that does not carry this field returns the API to the unconfigured state. Unconfigured means it keeps reporting `CONNECTED` and `ERROR` — what every API deployed before this setting existed already does, so an upgrade does not silently start writing `DISCONNECTED` documents. A newly created API starts out unconfigured too: `DISCONNECTED` is opt-in for every API. TEMPORARY NOTE, to be removed once the gateway support has shipped: no released native Kafka gateway honours this yet. The selection is stored and will apply as written once a gateway built against this definition model is deployed; until then a connection keeps reporting what it reports today.
-            An empty array counts as absent, because a request that omits the field is indistinguishable from one sending `[]`. To report nothing, turn `reporterMetricsEnabled` off — that is the master switch.
-            `ERROR` covers every failure status the gateway emits (`CONNECTION_ERROR`, `SESSION_ERROR`, `INTERNAL_ERROR`); which one a given failure produces depends on where the gateway caught it.
-          example:
-            - CONNECTED
-            - DISCONNECTED
-            - ERROR
-          x-speakeasy-param-computed: false
-          x-speakeasy-terraform-ignore: true
         otelLogs:
           $ref: "#/components/schemas/OtelLogsV4"
           x-speakeasy-param-computed: false
@@ -3002,13 +2713,6 @@ components:
           description: Allow the Gateway to run policies during in pre-flight request
           type: boolean
           x-speakeasy-param-computed: false
-        allowPrivateNetwork:
-          description: |
-            `Access-Control-Allow-Private-Network`: Allow private network access (PNA) requests during CORS preflight.
-          type: boolean
-          default: false
-          x-speakeasy-param-computed: false
-          x-speakeasy-terraform-ignore: true
       x-speakeasy-param-computed: false
     Dlq:
       description: Dead Letter Queue to process undelivered messages.
@@ -3269,29 +2973,9 @@ components:
               minItems: 1
               items:
                 $ref: "#/components/schemas/PathV4"
-            pathMappings:
-              description: Path patterns used to group analytics by API path (e.g. `/products/:productId`).
-              type: array
-              items:
-                type: string
-              examples:
-                - ["/products/:productId"]
-              x-speakeasy-terraform-ignore: true
             cors:
               $ref: "#/components/schemas/Cors"
               x-speakeasy-param-computed: false
-            requestValidation:
-              $ref: "#/components/schemas/RequestValidation"
-    RequestValidation:
-      description: Validation the Gateway applies to incoming requests before running flows.
-      type: object
-      properties:
-        rejectNullByte:
-          description: Reject requests whose path or query contains a null byte.
-          type: boolean
-          default: false
-          x-speakeasy-param-computed: false
-      x-speakeasy-terraform-ignore: true
     HttpMethod:
       type: string
       description: The method of the selector
@@ -3508,80 +3192,7 @@ components:
           type: boolean
           description: Enable technical tracing to get more details on request execution. Be careful this settings can generate more noise and can impact performance.
           x-speakeasy-param-computed: false
-        redaction:
-          $ref: "#/components/schemas/TracingRedactionConfig"
-          x-speakeasy-param-computed: false
       x-speakeasy-param-computed: false
-    TracingRedactionConfig:
-      description: Masking rules applied to span attributes before traces are exported.
-      type: object
-      properties:
-        defaultReplacement:
-          type: string
-          description: Fallback replacement text for FULL masking rules with no per-rule replacement. Defaults to [REDACTED].
-          examples:
-            - "[REDACTED]"
-          x-speakeasy-param-computed: false
-        rules:
-          type: array
-          items:
-            $ref: "#/components/schemas/TracingRedactionRule"
-          x-speakeasy-param-computed: false
-      x-speakeasy-terraform-ignore: true
-    TracingRedactionRule:
-      type: object
-      required:
-        - attributeNamePattern
-      properties:
-        attributeNamePattern:
-          type: string
-          description: |
-            Glob pattern, short name (no dots — matches anywhere in key hierarchy),
-            or regex:-prefixed Java regex matching the span attribute key.
-          examples:
-            - http.request.header.authorization
-          x-speakeasy-param-computed: false
-        maskingStrategy:
-          $ref: "#/components/schemas/TracingMaskingStrategy"
-          x-speakeasy-param-computed: false
-        valuePattern:
-          type: string
-          description: Optional Java regex (partial match). Rule only fires when the attribute value matches.
-          examples:
-            - "^Bearer "
-          x-speakeasy-param-computed: false
-    TracingMaskingStrategy:
-      type: object
-      required:
-        - type
-      properties:
-        type:
-          type: string
-          enum: [FULL, PARTIAL]
-          description: FULL replaces the entire value; PARTIAL keeps a visible prefix and/or suffix.
-          examples:
-            - FULL
-          x-speakeasy-param-computed: false
-        replacement:
-          type: string
-          description: |
-            For FULL: replacement text (default [REDACTED]).
-            For PARTIAL: single mask character (default *).
-          examples:
-            - "[REDACTED]"
-          x-speakeasy-param-computed: false
-        prefixLength:
-          type: integer
-          description: PARTIAL only — number of leading characters to keep visible.
-          default: 0
-          minimum: 0
-          x-speakeasy-param-computed: false
-        suffixLength:
-          type: integer
-          description: PARTIAL only — number of trailing characters to keep visible.
-          default: 0
-          minimum: 0
-          x-speakeasy-param-computed: false
     Operator:
       type: string
       description: Operator function to match a URI path
@@ -4393,9 +4004,6 @@ components:
           examples:
             - 1
           x-speakeasy-param-computed: false
-        visibility:
-          $ref: "#/components/schemas/PortalVisibility"
-          x-speakeasy-param-computed: false
       required:
         - path
     PortalNavigationPath:
@@ -4419,35 +4027,8 @@ components:
           examples:
             - Alpha
           x-speakeasy-param-computed: false
-        visibility:
-          $ref: "#/components/schemas/PortalVisibility"
-          x-speakeasy-param-computed: false
       required:
         - path
-    PortalVisibility:
-      type: string
-      description: |
-        Whether the navigation entry is visible to anonymous portal visitors.
-        Optional in the Automation API for backward compatibility with clients that predate this field —
-        when omitted, the entry inherits from its parent (root entries default to PUBLIC).
-        A PUBLIC child under a PRIVATE parent is rejected.
-      enum:
-        - PUBLIC
-        - PRIVATE
-      x-speakeasy-terraform-ignore: true
-    PortalNavigationStructure:
-      description: Portal navigation grouped by area.
-      type: object
-      properties:
-        topNavbar:
-          type: array
-          description: |
-            Top navbar entries as an ordered list of paths.
-            Intermediate folders are implicitly created if not listed explicitly.
-          items:
-            $ref: "#/components/schemas/PortalNavigationPath"
-          x-speakeasy-param-computed: false
-      x-speakeasy-terraform-ignore: true
     PortalSpec:
       description: Specification of a Portal resource. Represents a next-gen developer portal instance.
       type: object
@@ -4461,28 +4042,16 @@ components:
           examples:
             - Default Portal
           x-speakeasy-param-computed: false
-        structure:
-          $ref: "#/components/schemas/PortalNavigationStructure"
-          x-speakeasy-param-computed: false
         navigation:
           type: array
-          description: |-
+          description: |
             The portal's navigation hierarchy as a flat list of paths.
+            Paths are ordered — the order in the list is preserved.
+            Intermediate folders are implicitly created if not listed explicitly.
           items:
             $ref: "#/components/schemas/PortalNavigationPath"
           x-speakeasy-param-computed: true
           x-speakeasy-plan-modifiers: IgnoreEmptyList
-        activeThemeHrid:
-          type: string
-          description: |
-            HRID of the Theme this portal should use as its active theme. When set, applying the portal
-            marks the referenced theme as active (enabled) and disables every other PORTAL_NEXT theme
-            in the environment. Leaving this field unset clears the reference and disables the
-            previously-active theme; the portal-next UI will then lazily fall back to a fresh default theme.
-          examples:
-            - brand-theme
-          x-speakeasy-param-computed: false
-          x-speakeasy-terraform-ignore: true
       required:
         - hrid
         - name
@@ -4518,9 +4087,6 @@ components:
             Disambiguates ordering when APIs from multiple listings share a location.
           examples:
             - 1
-          x-speakeasy-param-computed: false
-        visibility:
-          $ref: "#/components/schemas/PortalVisibility"
           x-speakeasy-param-computed: false
       required:
         - apiHrid
@@ -4568,17 +4134,6 @@ components:
         - GRAVITEE_MARKDOWN
         - OPENAPI
         - ASYNCAPI
-    DocumentationArea:
-      type: string
-      description: |
-        Where the documentation page appears in the portal. `TOP_NAVBAR` is the default. `HOMEPAGE`
-        marks the page as the portal's homepage — only one homepage may exist per portal, and applying
-        a new one replaces any existing homepage for that portal.
-      default: TOP_NAVBAR
-      enum:
-        - TOP_NAVBAR
-        - HOMEPAGE
-      x-speakeasy-terraform-ignore: true
     DocumentationSpec:
       description: |
         Specification of a Documentation page.
@@ -4612,12 +4167,6 @@ components:
           type: integer
           description: Display order relative to siblings at the same location
           x-speakeasy-param-computed: false
-        area:
-          $ref: "#/components/schemas/DocumentationArea"
-          x-speakeasy-param-computed: false
-        visibility:
-          $ref: "#/components/schemas/PortalVisibility"
-          x-speakeasy-param-computed: false
       required:
         - hrid
         - name
@@ -4644,175 +4193,6 @@ components:
       allOf:
         - $ref: "#/components/schemas/DocumentationSpec"
         - $ref: "#/components/schemas/DocumentationStatus"
-    # Portal Link schemas
-    PortalLinkSpec:
-      description: |
-        Specification of a Portal Link.
-        An external navigation entry placed in a portal's navigation — a thin wrapper around a URL, with no separate content of its own.
-        A link is attached to either a portal or an API, determined by the endpoint used.
-      type: object
-      properties:
-        hrid:
-          $ref: "#/components/schemas/Hrid"
-          x-speakeasy-param-computed: false
-        name:
-          type: string
-          description: Display name of the link
-          examples:
-            - External Docs
-          x-speakeasy-param-computed: false
-        href:
-          type: string
-          description: The URL this link points to
-          examples:
-            - https://docs.example.com
-          x-speakeasy-param-computed: false
-        location:
-          type: string
-          description: |
-            The path in the navigation hierarchy where this link should appear.
-            Resolved against the portal's navigation for a portal-attached link, and against the API's own
-            navigation for an API-attached link — the same path string therefore denotes a different tree
-            depending on which endpoint was used.
-          examples:
-            - /projects/alpha
-          x-speakeasy-param-computed: false
-        order:
-          type: integer
-          description: Display order relative to siblings at the same location
-          x-speakeasy-param-computed: false
-        visibility:
-          $ref: "#/components/schemas/PortalVisibility"
-          x-speakeasy-param-computed: false
-      required:
-        - hrid
-        - name
-        - href
-    PortalLinkStatus:
-      description: |
-        Status information for a Portal Link after import.
-        Exactly one of `portalHrid` / `apiHrid` is populated depending on the parent endpoint used.
-      allOf:
-        - $ref: "#/components/schemas/BaseStatus"
-        - type: object
-          properties:
-            portalHrid:
-              type: string
-              description: The HRID of the portal this link belongs to (when attached to a portal).
-              readOnly: true
-            apiHrid:
-              type: string
-              description: The HRID of the API this link belongs to (when attached to an API).
-              readOnly: true
-    PortalLinkState:
-      description: State of a Portal Link that has been created/updated.
-      allOf:
-        - $ref: "#/components/schemas/PortalLinkSpec"
-        - $ref: "#/components/schemas/PortalLinkStatus"
-    # Theme schemas
-    PortalThemeSpec:
-      description: |
-        Specification of a next-gen portal Theme. Applying a Theme through the Automation API
-        makes it the active Theme for the environment; every other Theme in the same environment
-        is disabled.
-      type: object
-      properties:
-        hrid:
-          $ref: "#/components/schemas/Hrid"
-          x-speakeasy-param-computed: false
-        name:
-          type: string
-          description: Display name of the theme
-          examples:
-            - Default Theme
-          x-speakeasy-param-computed: false
-        definition:
-          $ref: "#/components/schemas/PortalNextThemeDefinition"
-          x-speakeasy-param-computed: false
-        logo:
-          type: string
-          description: |
-            Primary logo. Inline data URI (for example `data:image/png;base64,...`), the same shape the
-            console produces on upload.
-          x-speakeasy-param-computed: false
-        optionalLogo:
-          type: string
-          description: Alternate logo for contexts where the primary one does not render well (dark background, small badge, etc.).
-          x-speakeasy-param-computed: false
-        favicon:
-          type: string
-          description: Browser tab icon. Same inline data URI convention as `logo`.
-          x-speakeasy-param-computed: false
-        backgroundImage:
-          type: string
-          description: Hero / landing page background image. Same inline data URI convention as `logo`.
-          x-speakeasy-param-computed: false
-      required:
-        - hrid
-        - name
-        - definition
-    PortalThemeState:
-      description: State of a Theme that has been created/updated.
-      allOf:
-        - $ref: "#/components/schemas/PortalThemeSpec"
-        - $ref: "#/components/schemas/BaseStatus"
-    PortalNextThemeDefinition:
-      description: Visual definition of a next-gen portal Theme.
-      type: object
-      properties:
-        customCss:
-          type: string
-          description: Custom CSS applied on top of the palette.
-          x-speakeasy-param-computed: false
-        font:
-          $ref: "#/components/schemas/PortalNextThemeFont"
-          x-speakeasy-param-computed: false
-        color:
-          $ref: "#/components/schemas/PortalNextThemeColor"
-          x-speakeasy-param-computed: false
-    PortalNextThemeFont:
-      description: Typography settings for a next-gen portal Theme.
-      type: object
-      properties:
-        fontFamily:
-          type: string
-          description: CSS `font-family` value.
-          x-speakeasy-param-computed: false
-    PortalNextThemeColor:
-      description: Palette for a next-gen portal Theme.
-      type: object
-      properties:
-        primary:
-          type: string
-          description: Primary color (CSS color value).
-          x-speakeasy-param-computed: false
-        secondary:
-          type: string
-          description: Secondary color (CSS color value).
-          x-speakeasy-param-computed: false
-        tertiary:
-          type: string
-          description: Tertiary color (CSS color value).
-          x-speakeasy-param-computed: false
-        error:
-          type: string
-          description: Error color (CSS color value).
-          x-speakeasy-param-computed: false
-        background:
-          $ref: "#/components/schemas/PortalNextThemeBackground"
-          x-speakeasy-param-computed: false
-    PortalNextThemeBackground:
-      description: Background palette for a next-gen portal Theme.
-      type: object
-      properties:
-        page:
-          type: string
-          description: Page background color (CSS color value).
-          x-speakeasy-param-computed: false
-        card:
-          type: string
-          description: Card background color (CSS color value).
-          x-speakeasy-param-computed: false
     AimHrid:
       type: string
       examples:

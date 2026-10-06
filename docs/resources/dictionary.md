@@ -133,7 +133,7 @@ Required:
 <a id="nestedatt--manual"></a>
 ### Nested Schema for `manual`
 
-Optional:
+Required:
 
 - `properties` (Map of String) Dictionary data are key/value pairs for `MANUAL` properties
 

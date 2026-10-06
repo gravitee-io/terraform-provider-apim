@@ -94,7 +94,7 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 				Description: `A unique human readable id identifying this resource`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{
@@ -190,10 +190,6 @@ func (r *ApplicationDataSource) Schema(ctx context.Context, req datasource.Schem
 							"additional_client_metadata": schema.MapAttribute{
 								Computed:    true,
 								ElementType: types.StringType,
-								MarkdownDescription: `Additional Dynamic Client Registration metadata sent to the client registration provider,` + "\n" +
-									`as a flat map of DCR field name to value. Only fields defined by the registration request` + "\n" +
-									`are forwarded, the others are ignored. Use ` + "`" + `software_id` + "`" + ` to select a client template on` + "\n" +
-									`the provider; a value set here takes precedence over the provider-wide one.`,
 							},
 							"application_type": schema.StringAttribute{
 								Computed: true,

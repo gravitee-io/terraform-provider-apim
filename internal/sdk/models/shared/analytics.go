@@ -4,39 +4,8 @@
 package shared
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
-
-type ConnectionEvent string
-
-const (
-	ConnectionEventConnected    ConnectionEvent = "CONNECTED"
-	ConnectionEventDisconnected ConnectionEvent = "DISCONNECTED"
-	ConnectionEventError        ConnectionEvent = "ERROR"
-)
-
-func (e ConnectionEvent) ToPointer() *ConnectionEvent {
-	return &e
-}
-func (e *ConnectionEvent) UnmarshalJSON(data []byte) error {
-	var v string
-	if err := json.Unmarshal(data, &v); err != nil {
-		return err
-	}
-	switch v {
-	case "CONNECTED":
-		fallthrough
-	case "DISCONNECTED":
-		fallthrough
-	case "ERROR":
-		*e = ConnectionEvent(v)
-		return nil
-	default:
-		return fmt.Errorf("invalid value for ConnectionEvent: %v", v)
-	}
-}
 
 // Analytics - API analytics configuration to enable/disable what can be observed.
 type Analytics struct {
@@ -45,13 +14,8 @@ type Analytics struct {
 	// Enable the connection-metrics reporter on the gateway. Only applicable to Native v4 APIs; ignored on HTTP v4 requests and omitted from HTTP v4 responses.
 	// Server-side default for Native v4 on create is `true`.
 	// Independent of the parent `enabled` flag: event-metrics reporting and the connection-metrics reporter are gated separately.
-	ReporterMetricsEnabled *bool `default:"true" json:"reporterMetricsEnabled"`
-	// Which connection lifecycle events the gateway reports. Only applicable to Native v4 APIs.
-	// Omitting it clears the selection rather than preserving it: an apply replaces the whole analytics block, so a manifest that does not carry this field returns the API to the unconfigured state. Unconfigured means it keeps reporting `CONNECTED` and `ERROR` — what every API deployed before this setting existed already does, so an upgrade does not silently start writing `DISCONNECTED` documents. A newly created API starts out unconfigured too: `DISCONNECTED` is opt-in for every API. TEMPORARY NOTE, to be removed once the gateway support has shipped: no released native Kafka gateway honours this yet. The selection is stored and will apply as written once a gateway built against this definition model is deployed; until then a connection keeps reporting what it reports today.
-	// An empty array counts as absent, because a request that omits the field is indistinguishable from one sending `[]`. To report nothing, turn `reporterMetricsEnabled` off — that is the master switch.
-	// `ERROR` covers every failure status the gateway emits (`CONNECTION_ERROR`, `SESSION_ERROR`, `INTERNAL_ERROR`); which one a given failure produces depends on where the gateway caught it.
-	ConnectionEvents []ConnectionEvent `json:"connectionEvents,omitempty"`
-	OtelLogs         *OtelLogsV4       `json:"otelLogs,omitempty"`
+	ReporterMetricsEnabled *bool       `default:"true" json:"reporterMetricsEnabled"`
+	OtelLogs               *OtelLogsV4 `json:"otelLogs,omitempty"`
 	// API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.
 	Sampling *Sampling `json:"sampling,omitempty"`
 	// API logging configuration (Not for native APIs)
@@ -83,13 +47,6 @@ func (a *Analytics) GetReporterMetricsEnabled() *bool {
 		return nil
 	}
 	return a.ReporterMetricsEnabled
-}
-
-func (a *Analytics) GetConnectionEvents() []ConnectionEvent {
-	if a == nil {
-		return nil
-	}
-	return a.ConnectionEvents
 }
 
 func (a *Analytics) GetOtelLogs() *OtelLogsV4 {
