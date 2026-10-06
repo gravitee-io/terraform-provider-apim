@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: ac38c2479c91a1ea99c76ff9a73e9ffb
+  docChecksum: 8d893c446283bc95e55ed02fc9c7fcc0
   docVersion: 1.0.0
   speakeasyVersion: 1.793.2
   generationVersion: 2.928.0
@@ -1902,14 +1902,14 @@ examples:
         query:
           dryRun: true
       requestBody:
-        application/json: {"hrid": "my_demo_api", "name": "Example Application", "description": "This is the documentation explaining purpose of this Application.", "domain": "examples.com", "groups": ["developers"], "pictureUrl": "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png", "notifyMembers": false, "background": "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "settings": {"app": {"type": "web", "clientId": "example-client-id"}, "oauth": {"applicationType": "browser", "grantTypes": ["authorization_code"], "redirectUris": ["https://myapp.example.com/oauth/callback"], "additionalClientMetadata": {"software_id": "3d5a2f0e-1c4b-4c8a-9f7e-2b6d8e0a1c34"}}, "tls": {}}, "metadata": [], "members": [], "status": "ACTIVE"}
+        application/json: {"hrid": "my_demo_api", "name": "Example Application", "description": "This is the documentation explaining purpose of this Application.", "domain": "examples.com", "groups": ["developers"], "pictureUrl": "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png", "notifyMembers": false, "background": "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "settings": {"app": {"type": "web", "clientId": "example-client-id"}, "oauth": {"applicationType": "browser", "grantTypes": ["authorization_code"], "redirectUris": ["https://myapp.example.com/oauth/callback"]}, "tls": {}}, "metadata": [], "members": [], "status": "ACTIVE"}
       responses:
         "400":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         "200":
-          application/json: {"hrid": "my_demo_api", "name": "Example Application", "description": "This is the documentation explaining purpose of this Application.", "domain": "examples.com", "groups": ["developers"], "pictureUrl": "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png", "notifyMembers": false, "background": "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "settings": {"app": {"type": "web", "clientId": "example-client-id"}, "oauth": {"applicationType": "browser", "grantTypes": ["authorization_code"], "redirectUris": ["https://myapp.example.com/oauth/callback"], "additionalClientMetadata": {"software_id": "3d5a2f0e-1c4b-4c8a-9f7e-2b6d8e0a1c34"}}, "tls": {}}, "metadata": [], "members": [], "status": "ACTIVE"}
+          application/json: {"hrid": "my_demo_api", "name": "Example Application", "description": "This is the documentation explaining purpose of this Application.", "domain": "examples.com", "groups": ["developers"], "pictureUrl": "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png", "notifyMembers": false, "background": "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "settings": {"app": {"type": "web", "clientId": "example-client-id"}, "oauth": {"applicationType": "browser", "grantTypes": ["authorization_code"], "redirectUris": ["https://myapp.example.com/oauth/callback"]}, "tls": {}}, "metadata": [], "members": [], "status": "ACTIVE"}
   getApplication:
     speakeasy-default-get-application:
       parameters:
@@ -1919,7 +1919,7 @@ examples:
           hrid: "my_demo_api"
       responses:
         "200":
-          application/json: {"hrid": "my_demo_api", "name": "Example Application", "description": "This is the documentation explaining purpose of this Application.", "domain": "examples.com", "groups": ["developers"], "pictureUrl": "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png", "notifyMembers": false, "background": "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "settings": {"app": {"type": "web", "clientId": "example-client-id"}, "oauth": {"applicationType": "browser", "grantTypes": ["authorization_code"], "redirectUris": ["https://myapp.example.com/oauth/callback"], "additionalClientMetadata": {"software_id": "3d5a2f0e-1c4b-4c8a-9f7e-2b6d8e0a1c34"}}, "tls": {}}, "metadata": [], "members": [], "status": "ACTIVE"}
+          application/json: {"hrid": "my_demo_api", "name": "Example Application", "description": "This is the documentation explaining purpose of this Application.", "domain": "examples.com", "groups": ["developers"], "pictureUrl": "https://upload.wikimedia.org/wikipedia/fr/0/09/Logo_App_Store_d%27Apple.png", "notifyMembers": false, "background": "https://upload.wikimedia.org/wikipedia/commons/d/df/Green_Red_Gradient_Background.png", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "settings": {"app": {"type": "web", "clientId": "example-client-id"}, "oauth": {"applicationType": "browser", "grantTypes": ["authorization_code"], "redirectUris": ["https://myapp.example.com/oauth/callback"]}, "tls": {}}, "metadata": [], "members": [], "status": "ACTIVE"}
         "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
         default:

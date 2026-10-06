@@ -61,8 +61,6 @@ tags:
     description: Everything about Portal Listings (publishing APIs to a portal)
   - name: Portal Documentations
     description: Everything about Portal Documentations
-  - name: Portal Links
-    description: Everything about Portal Links (external navigation entries in a portal's navigation)
   - name: API Documentations
     description: Everything about API Documentations (next-gen portal)
   - name: AI Catalog
@@ -1821,8 +1819,6 @@ components:
           type: object
           additionalProperties:
             type: string
-          examples:
-            - {"software_id": "3d5a2f0e-1c4b-4c8a-9f7e-2b6d8e0a1c34"}
           x-speakeasy-param-computed: false
       required:
         - applicationType
@@ -2054,7 +2050,6 @@ components:
       x-speakeasy-entity: Dictionary
     ManualDictionarySpec:
       description: A manual dictionary with static key/value properties.
-      type: object
       properties:
         properties:
           type: object
@@ -2062,9 +2057,9 @@ components:
           additionalProperties:
             type: string
           x-speakeasy-param-computed: false
-      x-speakeasy-param-computed: false
       required:
         - properties
+      x-speakeasy-param-computed: false
     DynamicDictionarySpec:
       description: A dynamic dictionary populated from an external provider on a schedule.
       type: object
@@ -4261,7 +4256,7 @@ components:
       required:
         - endpoint
         - transport
-        - auth
+        - "auth"
       description: How the platform reaches the upstream MCP server
       x-speakeasy-param-computed: false
     AimCatalogMcpServerTransport:
@@ -4296,8 +4291,7 @@ components:
               enum:
                 - NONE
               default: NONE
-          required:
-            - type
+          required: ["type"]
       description: No authentication
     AimCatalogMcpServerHeaderAuth:
       allOf:
@@ -4326,7 +4320,7 @@ components:
           required:
             - name
             - value
-            - type
+            - "type"
       description: |
         A static header sent on every request. Write the full header value: `Bearer <token>` for a bearer token,
         `Basic <base64>` for basic credentials, or the raw key for an API-key header — or point the whole value at a
@@ -4366,7 +4360,7 @@ components:
             - clientId
             - clientSecret
             - tokenUrl
-            - type
+            - "type"
       description: OAuth 2.0 client credentials; the platform fetches a token from `tokenUrl` before reaching the server
     AimResourceStatus:
       type: object
@@ -4808,8 +4802,7 @@ components:
               enum:
                 - NONE
               default: NONE
-          required:
-            - type
+          required: ["type"]
       description: No upstream authentication; the gateway passes the caller's credentials through
     AimMcpProxyApiKeyUpstreamAuth:
       allOf:
@@ -4838,7 +4831,7 @@ components:
           required:
             - apiKeyHeader
             - apiKey
-            - type
+            - "type"
       description: A static API key sent to the upstream server in a header
     AimMcpProxyBearerUpstreamAuth:
       allOf:
@@ -4860,7 +4853,7 @@ components:
               x-speakeasy-param-computed: false
           required:
             - token
-            - type
+            - "type"
       description: A static bearer token sent to the upstream server
     AimMcpProxyBasicUpstreamAuth:
       allOf:
@@ -4887,7 +4880,7 @@ components:
           required:
             - username
             - password
-            - type
+            - "type"
       description: Basic credentials sent to the upstream server
     AimMcpProxyOAuth2UpstreamAuth:
       allOf:
@@ -4933,7 +4926,7 @@ components:
             - tokenUrl
             - clientId
             - clientSecret
-            - type
+            - "type"
       description: OAuth 2.0 authentication negotiated with the upstream server through MCP elicitation
     AimMcpProxyPlan:
       type: object
@@ -4984,8 +4977,7 @@ components:
               enum:
                 - KEY_LESS
               default: KEY_LESS
-          required:
-            - type
+          required: ["type"]
       description: No consumer authentication
     AimMcpProxyApiKeyPlanSecurity:
       allOf:
@@ -5018,7 +5010,7 @@ components:
               x-speakeasy-param-computed: false
           required:
             - source
-            - type
+            - "type"
       description: Consumers authenticate with an API key
     AimMcpProxyOAuth2PlanSecurity:
       allOf:
@@ -5049,7 +5041,7 @@ components:
               x-speakeasy-param-computed: false
           required:
             - provider
-            - type
+            - "type"
       description: |
         Consumers authenticate with OAuth 2.0 tokens the gateway validates against one of the proxy's identity
         providers, named by `provider`.
@@ -5153,7 +5145,7 @@ components:
               x-speakeasy-param-computed: false
           required:
             - methods
-            - type
+            - "type"
       description: Selects requests by MCP method
     AimMcpProxyConditionFlowSelector:
       allOf:
@@ -5174,7 +5166,7 @@ components:
               x-speakeasy-param-computed: false
           required:
             - condition
-            - type
+            - "type"
       description: Selects requests by an expression-language condition
     AimMcpProxyFlowStep:
       type: object
@@ -5244,9 +5236,7 @@ components:
                 - GRAVITEE_AM
               default: GRAVITEE_AM
               x-speakeasy-param-computed: false
-          required:
-            - name
-            - type
+          required: ["name", "type"]
       description: |
         The Gravitee Access Management integration of the organization: the domain, the client and the resource are
         provisioned when the proxy is created, and the AM connection must exist at that moment. At most one per
@@ -5311,8 +5301,8 @@ components:
             - issuerUrl
             - introspectionEndpoint
             - introspectionEndpointMethod
-            - name
-            - type
+            - "name"
+            - "type"
       description: A third-party authorization server the gateway introspects tokens with
     AimMcpProxyAuth0IdentityProvider:
       allOf:
@@ -5342,8 +5332,8 @@ components:
           required:
             - domain
             - audience
-            - name
-            - type
+            - "name"
+            - "type"
       description: An Auth0 tenant the gateway validates tokens against
     AimMcpProxyState:
       allOf:
