@@ -55,6 +55,10 @@ sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-mana
 sync-aim-oas: ## Copy the AI Management OAS fragment from gravitee-gamma-module-aim (private: needs an authenticated gh)
 	gh api -H "Accept: application/vnd.github.raw" "repos/gravitee-io/gravitee-gamma-module-aim/contents/src/main/resources/openapi/openapi-automation.yaml?ref=${AIM_OAS_REF}" > automation-api-aim-oas.yaml
 
+.PHONY: verify-aim-oas
+verify-aim-oas: sync-aim-oas ## Fail when the AI Management OAS fragment differs from gravitee-gamma-module-aim at AIM_OAS_REF (runs in CircleCI)
+	@git diff --exit-code -- automation-api-aim-oas.yaml || (echo "automation-api-aim-oas.yaml differs from gravitee-gamma-module-aim at ${AIM_OAS_REF}" && exit 1)
+
 PRE_TEST_DIR = "$(shell pwd)/examples/use-cases/application-simple"
 
 .PHONY: local-test-setup

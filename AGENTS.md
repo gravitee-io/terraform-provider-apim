@@ -190,6 +190,6 @@ Do not hand-edit `templates/guides/docgen_*.md` or `docs/` — they are generate
 - Import IDs are JSON-encoded composite keys (see acceptance test files for format)
 - APIM compatibility: 4.9+
 - CI runs acceptance tests across a matrix of Terraform versions (1.9.x, latest) × APIM versions (4.9.x, 4.10.x, 4.11.x, master-latest/4.12.x)
-- CI re-fetches both OpenAPI inputs and fails on a diff: the base document against APIM `master`, the AI Management fragment against the tag in `AIM_OAS_REF` (private repository, read with the `AIM_OAS_TOKEN` secret). Neither file is edited by hand; a PR does not sync the base document unless it implements what the sync brings
+- CI re-fetches both OpenAPI inputs and fails on a diff: the base document against APIM `master`, the AI Management fragment against the tag in `AIM_OAS_REF` (`make verify-aim-oas`, run in CircleCI by `hack/scripts/verify-aim-oas.mjs`: the repository is private and CircleCI holds the GitHub token, in Keeper). Neither file is edited by hand; a PR does not sync the base document unless it implements what the sync brings
 - Issues tracked at github.com/gravitee-io/issues with tag `project: GKO`
 - `make lint` verifies the `// BEGIN GRAVITEE CLOUD INIT` marker is present in `provider.go`

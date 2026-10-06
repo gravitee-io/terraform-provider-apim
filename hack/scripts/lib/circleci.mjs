@@ -29,6 +29,11 @@ if (isEmptyString(CIRCLECI_TOKEN)) {
 }
 
 export async function triggerPipeline(parameters, branch = "master") {
+  const { url } = await runPipeline(parameters, branch);
+  return url;
+}
+
+export async function runPipeline(parameters, branch = "master") {
   const response = await fetch(
     `${API_BASE}/project/${SCM}/${ORG}/${PROJECT}/pipeline`,
     {
@@ -44,8 +49,45 @@ export async function triggerPipeline(parameters, branch = "master") {
 
   if (response.status === 201) {
     const json = await response.json();
-    return `${APP_BASE}/pipelines/${SCM}/${ORG}/${PROJECT}/${json.number}`;
+    return {
+      id: json.id,
+      number: json.number,
+      url: `${APP_BASE}/pipelines/${SCM}/${ORG}/${PROJECT}/${json.number}`,
+    };
   }
 
   throw new Error(`Unable to run pipeline (HTTP status ${response.status})`);
+}
+
+const PENDING_WORKFLOW_STATUSES = ["running", "failing", "on_hold"];
+
+// Resolves with the pipeline's workflows once none is pending. Rejects when the
+// pipeline's config fails to compile or the timeout elapses.
+export async function waitForPipeline(id, { timeout = 15 * 60_000, interval = 10_000 } = {}) {
+  const deadline = Date.now() + timeout;
+  while (Date.now() < deadline) {
+    const pipeline = await get(`${API_BASE}/pipeline/${id}`);
+    if (pipeline.state === "errored") {
+      throw new Error(`Pipeline errored: ${JSON.stringify(pipeline.errors)}`);
+    }
+    const { items: workflows } = await get(`${API_BASE}/pipeline/${id}/workflow`);
+    const settled =
+      workflows.length > 0 &&
+      workflows.every((w) => !PENDING_WORKFLOW_STATUSES.includes(w.status));
+    if (settled) {
+      return workflows;
+    }
+    await new Promise((resolve) => setTimeout(resolve, interval));
+  }
+  throw new Error(`Pipeline ${id} still running after ${timeout / 1000}s`);
+}
+
+async function get(url) {
+  const response = await fetch(url, {
+    headers: { "Circle-Token": CIRCLECI_TOKEN, Accept: "application/json" },
+  });
+  if (!response.ok) {
+    throw new Error(`GET ${url} answered HTTP ${response.status}`);
+  }
+  return response.json();
 }

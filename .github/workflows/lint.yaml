@@ -12,10 +12,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Verify AI Management OAS matches upstream
-        uses: ./.github/actions/verify-aim-oas-upstream
+      - name: Run the check in CircleCI, where the token that reads the aim repository lives
+        working-directory: hack/scripts
         env:
-          GH_TOKEN: ${{ secrets.AIM_OAS_TOKEN }}
+          CIRCLECI_TOKEN: ${{ secrets.CIRCLECI_TOKEN }}
+        run: |
+          npm ci
+          npx zx verify-aim-oas.mjs --branch "${{ github.head_ref }}"
   lint:
     permissions:
       contents: read
