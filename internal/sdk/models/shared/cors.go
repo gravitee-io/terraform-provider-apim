@@ -80,9 +80,6 @@ type Cors struct {
 	MaxAge *int `default:"-1" json:"maxAge"`
 	// Allow the Gateway to run policies during in pre-flight request
 	RunPolicies *bool `json:"runPolicies,omitempty"`
-	// `Access-Control-Allow-Private-Network`: Allow private network access (PNA) requests during CORS preflight.
-	//
-	AllowPrivateNetwork *bool `default:"false" json:"allowPrivateNetwork"`
 }
 
 func (c Cors) MarshalJSON() ([]byte, error) {
@@ -150,11 +147,4 @@ func (c *Cors) GetRunPolicies() *bool {
 		return nil
 	}
 	return c.RunPolicies
-}
-
-func (c *Cors) GetAllowPrivateNetwork() *bool {
-	if c == nil {
-		return nil
-	}
-	return c.AllowPrivateNetwork
 }

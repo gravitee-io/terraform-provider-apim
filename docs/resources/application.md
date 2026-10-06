@@ -107,10 +107,7 @@ Optional:
 
 Optional:
 
-- `additional_client_metadata` (Map of String) Additional Dynamic Client Registration metadata sent to the client registration provider,
-as a flat map of DCR field name to value. Only fields defined by the registration request
-are forwarded, the others are ignored. Use `software_id` to select a client template on
-the provider; a value set here takes precedence over the provider-wide one.
+- `additional_client_metadata` (Map of String)
 - `application_type` (String) OAuth client application type: 
 `browser` for single page apps (SPA),
 `web` for regular web apps,

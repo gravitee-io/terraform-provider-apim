@@ -6,21 +6,12 @@ package shared
 // ManualDictionarySpec - A manual dictionary with static key/value properties.
 type ManualDictionarySpec struct {
 	// Dictionary data are key/value pairs for `MANUAL` properties
-	Properties map[string]string `json:"properties,omitempty"`
-	// Secret properties, keyed by the property key. Their values are write-only: they are never returned, so a client can compare a `GET` against its manifest without seeing a difference on a value it cannot read back. A key must not appear in both `properties` and `encryptedProperties`.
-	EncryptedProperties map[string]EncryptableValue `json:"encryptedProperties,omitempty"`
+	Properties map[string]string `json:"properties"`
 }
 
 func (m *ManualDictionarySpec) GetProperties() map[string]string {
 	if m == nil {
-		return nil
+		return map[string]string{}
 	}
 	return m.Properties
-}
-
-func (m *ManualDictionarySpec) GetEncryptedProperties() map[string]EncryptableValue {
-	if m == nil {
-		return nil
-	}
-	return m.EncryptedProperties
 }
