@@ -4,6 +4,18 @@ on:
 #    paths:
 #      - "schemas/automation-api-oas.yaml"
 jobs:
+  verify-aim-oas:
+    name: Verify AI Management OAS matches upstream
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Verify AI Management OAS matches upstream
+        uses: ./.github/actions/verify-aim-oas-upstream
+        env:
+          GH_TOKEN: ${{ secrets.AIM_OAS_TOKEN }}
   lint:
     permissions:
       contents: read
