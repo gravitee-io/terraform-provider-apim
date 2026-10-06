@@ -59,6 +59,6 @@ The platform stores a credential as written and never returns it. The provider s
 what the configuration declares, a change made to it in the Console does not show in a plan, and an imported resource
 has none until the next apply.
 
-On a proxy or a studio, a credential may be a `secret://` URI pointing at a secret provider configured on the platform:
-the gateway resolves it at runtime. The credential of a catalog server is the one the platform itself presents to
-discover the server.
+A credential is a string: the header `value`, `token`, `api_key`, `password` or `client_secret`. It is stored as
+written, a literal or a `secret://` URI that a secret provider configured on the platform resolves. The gateway presents
+a proxy's credentials to the upstream server; the platform presents a catalog server's when it discovers the server.
