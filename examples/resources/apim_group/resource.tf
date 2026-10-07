@@ -1,6 +1,11 @@
 resource "apim_group" "example" {
   hrid = "example"
   name = "Example"
+  default_member_roles = {
+    API         = "USER"
+    APPLICATION = "USER"
+    API_PRODUCT = "USER"
+  }
   members = [
     {
       roles = {

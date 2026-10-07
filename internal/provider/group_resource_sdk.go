@@ -16,6 +16,12 @@ func (r *GroupResourceModel) RefreshFromSharedGroupState(ctx context.Context, re
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if len(resp.DefaultMemberRoles) > 0 {
+			r.DefaultMemberRoles = make(map[string]types.String, len(resp.DefaultMemberRoles))
+			for key, value := range resp.DefaultMemberRoles {
+				r.DefaultMemberRoles[key] = types.StringValue(value)
+			}
+		}
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
@@ -26,8 +32,8 @@ func (r *GroupResourceModel) RefreshFromSharedGroupState(ctx context.Context, re
 
 			if len(membersItem.Roles) > 0 {
 				members.Roles = make(map[string]types.String, len(membersItem.Roles))
-				for key, value := range membersItem.Roles {
-					members.Roles[key] = types.StringValue(value)
+				for key1, value1 := range membersItem.Roles {
+					members.Roles[key1] = types.StringValue(value1)
 				}
 			}
 			members.Source = types.StringValue(membersItem.Source)
@@ -58,6 +64,12 @@ func (r *GroupResourceModel) ToOperationsCreateOrUpdateGroupRequest(ctx context.
 	} else {
 		environmentID = nil
 	}
+	ignoreMembers := new(bool)
+	if !r.IgnoreMembers.IsUnknown() && !r.IgnoreMembers.IsNull() {
+		*ignoreMembers = r.IgnoreMembers.ValueBool()
+	} else {
+		ignoreMembers = nil
+	}
 	groupSpec, groupSpecDiags := r.ToSharedGroupSpec(ctx)
 	diags.Append(groupSpecDiags...)
 
@@ -68,6 +80,7 @@ func (r *GroupResourceModel) ToOperationsCreateOrUpdateGroupRequest(ctx context.
 	out := operations.CreateOrUpdateGroupRequest{
 		OrganizationID: organizationID,
 		EnvironmentID:  environmentID,
+		IgnoreMembers:  ignoreMembers,
 		GroupSpec:      *groupSpec,
 	}
 
@@ -158,6 +171,13 @@ func (r *GroupResourceModel) ToSharedGroupSpec(ctx context.Context) (*shared.Gro
 			Roles:    roles,
 		})
 	}
+	defaultMemberRoles := make(map[string]string)
+	for defaultMemberRolesKey := range r.DefaultMemberRoles {
+		var defaultMemberRolesInst string
+		defaultMemberRolesInst = r.DefaultMemberRoles[defaultMemberRolesKey].ValueString()
+
+		defaultMemberRoles[defaultMemberRolesKey] = defaultMemberRolesInst
+	}
 	notifyMembers := new(bool)
 	if !r.NotifyMembers.IsUnknown() && !r.NotifyMembers.IsNull() {
 		*notifyMembers = r.NotifyMembers.ValueBool()
@@ -165,10 +185,11 @@ func (r *GroupResourceModel) ToSharedGroupSpec(ctx context.Context) (*shared.Gro
 		notifyMembers = nil
 	}
 	out := shared.GroupSpec{
-		Hrid:          hrid,
-		Name:          name,
-		Members:       members,
-		NotifyMembers: notifyMembers,
+		Hrid:               hrid,
+		Name:               name,
+		Members:            members,
+		DefaultMemberRoles: defaultMemberRoles,
+		NotifyMembers:      notifyMembers,
 	}
 
 	return &out, diags

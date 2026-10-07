@@ -18,6 +18,16 @@ type GroupSpec struct {
 	// Members that do not already exist in the IDP will be ignored.
 	//
 	Members []GroupMember `json:"members,omitempty"`
+	// Default role, per scope, given to a member who joins the group, including members
+	// mapped from an identity provider.
+	// Keys are `API`, `APPLICATION` and `API_PRODUCT`; any other key is refused with a 400.
+	// When omitted or empty, the group's default roles on the platform are left untouched.
+	// When it declares at least one scope, the map is the whole set: a scope absent from it
+	// loses its default role.
+	// `PRIMARY_OWNER` is refused; an unknown role name is reported as a warning and that scope
+	// is left without a default role.
+	//
+	DefaultMemberRoles map[string]string `json:"defaultMemberRoles,omitempty"`
 	// If true, members will be notified when the group is synced with APIM.
 	NotifyMembers *bool `default:"true" json:"notifyMembers"`
 }
@@ -52,6 +62,13 @@ func (g *GroupSpec) GetMembers() []GroupMember {
 		return nil
 	}
 	return g.Members
+}
+
+func (g *GroupSpec) GetDefaultMemberRoles() map[string]string {
+	if g == nil {
+		return nil
+	}
+	return g.DefaultMemberRoles
 }
 
 func (g *GroupSpec) GetNotifyMembers() *bool {
