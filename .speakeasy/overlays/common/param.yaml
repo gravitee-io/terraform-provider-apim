@@ -12,6 +12,14 @@ actions:
     description: Not necessary in Terraform context
     update:
       x-speakeasy-terraform-ignore: true
+  - target: $.components.parameters.ignoreGroupsQueryParam.schema.default
+    description: >-
+      Request-only flag APIM never returns: with a default of false, a created resource stores false while an
+      imported one stores nothing, and import verification fails. Unset means false on the wire anyway.
+    remove: true
+  - target: $.components.parameters.ignoreMembersQueryParam.schema.default
+    description: Same as ignoreGroups
+    remove: true
   - target: $.components.parameters.envIdParam
     description: Align parameter naming with property naming so envId is not a separate attribute
     update:

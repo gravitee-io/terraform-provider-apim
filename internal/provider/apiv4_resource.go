@@ -1320,6 +1320,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				PlanModifiers: []planmodifier.List{
 					custom_listplanmodifier.IgnoreEmptyList(),
+					custom_listplanmodifier.KeepWhenGroupsIgnored(),
 				},
 				ElementType: types.StringType,
 				Description: `Name, HRID or UUIDs of existing groups (of users) associated with this API. Default: []`,
@@ -1344,15 +1345,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Resource UUID.`,
 			},
 			"ignore_groups": schema.BoolAttribute{
-				Computed: true,
 				Optional: true,
-				Default:  booldefault.StaticBool(false),
 				MarkdownDescription: `When true, ` + "`" + `groups` + "`" + ` in the spec is not applied and the platform keeps ownership of the` + "\n" +
 					`resource's group assignment, for instance groups managed from the Console.` + "\n" +
 					`On update, the resource keeps the groups it has on the platform. On create, it receives` + "\n" +
 					`the environment's default groups, as a Console create does.` + "\n" +
-					`The answer echoes the request; read the group assignment back with GET.` + "\n" +
-					`Default: false`,
+					`The answer echoes the request; read the group assignment back with GET.`,
 			},
 			"labels": schema.ListAttribute{
 				Computed:    true,

@@ -59,7 +59,7 @@ type CreateOrUpdateGroupRequest struct {
 	// Name, `notifyMembers` and `defaultMemberRoles` still converge.
 	// Use it for groups whose members an identity provider manages through group mapping.
 	//
-	IgnoreMembers *bool `default:"false" queryParam:"style=form,explode=true,name=ignoreMembers"`
+	IgnoreMembers *bool `queryParam:"style=form,explode=true,name=ignoreMembers"`
 	// Group specification
 	GroupSpec shared.GroupSpec `request:"mediaType=application/json"`
 }

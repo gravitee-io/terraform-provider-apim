@@ -56,7 +56,7 @@ type CreateOrUpdateApplicationsRequest struct {
 	// the environment's default groups, as a Console create does.
 	// The answer echoes the request; read the group assignment back with GET.
 	//
-	IgnoreGroups *bool `default:"false" queryParam:"style=form,explode=true,name=ignoreGroups"`
+	IgnoreGroups *bool `queryParam:"style=form,explode=true,name=ignoreGroups"`
 	// Application specification
 	ApplicationSpec shared.ApplicationSpec `request:"mediaType=application/json"`
 }
