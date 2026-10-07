@@ -385,3 +385,8 @@ actions:
   - target: $.components.schemas.LoggingPhase.properties.*
     update:
       default: false
+  - target: $.components.schemas.ApiV4Spec.properties.groups
+    description: With ignore_groups the platform owns the groups; an unset list must not fight the refreshed state
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList

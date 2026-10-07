@@ -50,6 +50,13 @@ type CreateOrUpdateApisRequest struct {
 	// the state of the underlying spec.
 	//
 	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
+	// When true, `groups` in the spec is not applied and the platform keeps ownership of the
+	// resource's group assignment, for instance groups managed from the Console.
+	// On update, the resource keeps the groups it has on the platform. On create, it receives
+	// the environment's default groups, as a Console create does.
+	// The answer echoes the request; read the group assignment back with GET.
+	//
+	IgnoreGroups *bool `default:"false" queryParam:"style=form,explode=true,name=ignoreGroups"`
 	// API Specification
 	APIV4Spec shared.APIV4Spec `request:"mediaType=application/json"`
 }
@@ -84,6 +91,13 @@ func (c *CreateOrUpdateApisRequest) GetDryRun() *bool {
 		return nil
 	}
 	return c.DryRun
+}
+
+func (c *CreateOrUpdateApisRequest) GetIgnoreGroups() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.IgnoreGroups
 }
 
 func (c *CreateOrUpdateApisRequest) GetAPIV4Spec() shared.APIV4Spec {

@@ -79,6 +79,7 @@ type Apiv4ResourceModel struct {
 	Groups                           []types.String                                 `tfsdk:"groups"`
 	Hrid                             types.String                                   `tfsdk:"hrid"`
 	ID                               types.String                                   `tfsdk:"id"`
+	IgnoreGroups                     types.Bool                                     `queryParam:"style=form,explode=true,name=ignoreGroups" tfsdk:"ignore_groups"`
 	Labels                           []types.String                                 `tfsdk:"labels"`
 	LifecycleState                   types.String                                   `tfsdk:"lifecycle_state"`
 	Listeners                        []tfTypes.Listener                             `tfsdk:"listeners"`
@@ -1314,9 +1315,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Common flows for the API where traffic policies are configured.`,
 			},
 			"groups": schema.ListAttribute{
-				Computed:    true,
-				Optional:    true,
-				Default:     listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+				Computed: true,
+				Optional: true,
+				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
+				},
 				ElementType: types.StringType,
 				Description: `Name, HRID or UUIDs of existing groups (of users) associated with this API. Default: []`,
 			},
@@ -1338,6 +1342,17 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Resource UUID.`,
+			},
+			"ignore_groups": schema.BoolAttribute{
+				Computed: true,
+				Optional: true,
+				Default:  booldefault.StaticBool(false),
+				MarkdownDescription: `When true, ` + "`" + `groups` + "`" + ` in the spec is not applied and the platform keeps ownership of the` + "\n" +
+					`resource's group assignment, for instance groups managed from the Console.` + "\n" +
+					`On update, the resource keeps the groups it has on the platform. On create, it receives` + "\n" +
+					`the environment's default groups, as a Console create does.` + "\n" +
+					`The answer echoes the request; read the group assignment back with GET.` + "\n" +
+					`Default: false`,
 			},
 			"labels": schema.ListAttribute{
 				Computed:    true,

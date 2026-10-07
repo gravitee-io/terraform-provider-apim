@@ -240,6 +240,12 @@ resource "apim_apiv4" "example" {
 - `flow_execution` (Attributes) Flow execution enablement (Not applicable for Native API) (see [below for nested schema](#nestedatt--flow_execution))
 - `flows` (Attributes List) Common flows for the API where traffic policies are configured. (see [below for nested schema](#nestedatt--flows))
 - `groups` (List of String) Name, HRID or UUIDs of existing groups (of users) associated with this API. Default: []
+- `ignore_groups` (Boolean) When true, `groups` in the spec is not applied and the platform keeps ownership of the
+resource's group assignment, for instance groups managed from the Console.
+On update, the resource keeps the groups it has on the platform. On create, it receives
+the environment's default groups, as a Console create does.
+The answer echoes the request; read the group assignment back with GET.
+Default: false
 - `labels` (List of String) Informative labels for this API. Default: []
 - `members` (Attributes List) Users that can access or manage the API (depending on their roles). (see [below for nested schema](#nestedatt--members))
 - `metadata` (Attributes List) The list of API's metadata. (see [below for nested schema](#nestedatt--metadata))
