@@ -34,7 +34,9 @@ actions:
     description: Prevent unknown values if unconfigured
     update:
       x-speakeasy-param-computed: true
-      x-speakeasy-plan-modifiers: IgnoreEmptyList
+      x-speakeasy-plan-modifiers:
+        - IgnoreEmptyList
+        - KeepWhenGroupsIgnored   # with ignore_groups, APIM owns the groups: no diff for them
 
   - target: $.components.schemas.ApplicationSpec.properties.members
     description: Prevent unknown values if unconfigured
@@ -52,6 +54,13 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-plan-modifiers: IgnoreEmptyList
+
+  - target: $.components.schemas.ApplicationSettings
+    description: >-
+      settings is computed; when another attribute plans a change (groups with ignore_groups, for instance),
+      Terraform marks its unset parts "known after apply" and shows a diff on every plan. Keep the state's value.
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
 
   - target: $.components.schemas.ApplicationTLSSettings.properties.clientCertificate
     description: Using TrimmedString to make sure certs are semantically equal regardless of trailing/leading spaces

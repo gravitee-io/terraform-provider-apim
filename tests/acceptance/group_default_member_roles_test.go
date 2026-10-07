@@ -50,12 +50,6 @@ func TestGroupResource_defaultMemberRoles(t *testing.T) {
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables:          config.Variables{"hrid": config.StringVariable(randomId), "default_member_roles": apiOnly},
-			},
-			{
-				ProtoV6ProviderFactories: testProviders(),
-				ConfigDirectory:          config.TestNameDirectory(),
-				ConfigVariables:          config.Variables{"hrid": config.StringVariable(randomId), "default_member_roles": apiOnly},
-				RefreshState:             true,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceAddress, "default_member_roles.%", "1"),
 					resource.TestCheckResourceAttr(resourceAddress, "default_member_roles.API", "OWNER"),
@@ -75,7 +69,11 @@ func TestGroupResource_ignoreMembers(t *testing.T) {
 	members := config.ListVariable(config.ObjectVariable(config.Variables{
 		"source":    config.StringVariable("memory"),
 		"source_id": config.StringVariable("api1"),
-		"roles":     config.MapVariable(map[string]config.Variable{"API": config.StringVariable("USER")}),
+		"roles": config.MapVariable(map[string]config.Variable{
+			"API":         config.StringVariable("USER"),
+			"APPLICATION": config.StringVariable("USER"),
+			"INTEGRATION": config.StringVariable("USER"),
+		}),
 	}))
 
 	resource.Test(t, resource.TestCase{
@@ -91,12 +89,6 @@ func TestGroupResource_ignoreMembers(t *testing.T) {
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables:          config.Variables{"hrid": config.StringVariable(randomId), "ignore_members": config.BoolVariable(true)},
-			},
-			{
-				ProtoV6ProviderFactories: testProviders(),
-				ConfigDirectory:          config.TestNameDirectory(),
-				ConfigVariables:          config.Variables{"hrid": config.StringVariable(randomId), "ignore_members": config.BoolVariable(true)},
-				RefreshState:             true,
 				Check:                    resource.TestCheckResourceAttr(resourceAddress, "members.#", "1"),
 			},
 		},

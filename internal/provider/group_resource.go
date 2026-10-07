@@ -8,6 +8,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
+	speakeasy_mapplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/mapplanmodifier"
+	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
@@ -68,8 +71,11 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 		MarkdownDescription: "Group Resource",
 		Attributes: map[string]schema.Attribute{
 			"default_member_roles": schema.MapAttribute{
-				Computed:    true,
-				Optional:    true,
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Map{
+					speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+				},
 				ElementType: types.StringType,
 				MarkdownDescription: `Default role, per scope, given to a member who joins the group, including members` + "\n" +
 					`mapped from an identity provider.` + "\n" +
@@ -108,20 +114,23 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Resource UUID.`,
 			},
 			"ignore_members": schema.BoolAttribute{
-				Computed: true,
 				Optional: true,
-				Default:  booldefault.StaticBool(false),
 				MarkdownDescription: `When true, ` + "`" + `members` + "`" + ` in the group spec is not applied: no member is added and none is removed.` + "\n" +
 					`Name, ` + "`" + `notifyMembers` + "`" + ` and ` + "`" + `defaultMemberRoles` + "`" + ` still converge.` + "\n" +
-					`Use it for groups whose members an identity provider manages through group mapping.` + "\n" +
-					`Default: false`,
+					`Use it for groups whose members an identity provider manages through group mapping.`,
 			},
 			"members": schema.ListNestedAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
+					},
+					PlanModifiers: []planmodifier.Object{
+						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 					},
 					Attributes: map[string]schema.Attribute{
 						"roles": schema.MapAttribute{

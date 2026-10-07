@@ -389,4 +389,6 @@ actions:
     description: With ignore_groups the platform owns the groups; an unset list must not fight the refreshed state
     update:
       x-speakeasy-param-computed: true
-      x-speakeasy-plan-modifiers: IgnoreEmptyList
+      x-speakeasy-plan-modifiers:
+        - IgnoreEmptyList
+        - KeepWhenGroupsIgnored   # with ignore_groups, APIM owns the groups: no diff for them

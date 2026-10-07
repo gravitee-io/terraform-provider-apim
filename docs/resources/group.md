@@ -57,7 +57,6 @@ is left without a default role.
 - `ignore_members` (Boolean) When true, `members` in the group spec is not applied: no member is added and none is removed.
 Name, `notifyMembers` and `defaultMemberRoles` still converge.
 Use it for groups whose members an identity provider manages through group mapping.
-Default: false
 - `members` (Attributes List) Members of this group with their IDP source and role assignments.
 Members that do not already exist in the IDP will be ignored. (see [below for nested schema](#nestedatt--members))
 - `notify_members` (Boolean) If true, members will be notified when the group is synced with APIM. Default: true

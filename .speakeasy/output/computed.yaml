@@ -1141,7 +1141,9 @@ components:
           examples:
             - ["developers"]
           x-speakeasy-param-computed: true
-          x-speakeasy-plan-modifiers: IgnoreEmptyList
+          x-speakeasy-plan-modifiers:
+            - IgnoreEmptyList
+            - KeepWhenGroupsIgnored # with ignore_groups, APIM owns the groups: no diff for them
         visibility:
           $ref: "#/components/schemas/Visibility"
           x-speakeasy-param-computed: false
@@ -1315,7 +1317,9 @@ components:
           default: []
           example: ["developers"]
           x-speakeasy-param-computed: true
-          x-speakeasy-plan-modifiers: IgnoreEmptyList
+          x-speakeasy-plan-modifiers:
+            - IgnoreEmptyList
+            - KeepWhenGroupsIgnored # with ignore_groups, APIM owns the groups: no diff for them
         pictureUrl:
           type: string
           description: Application's picture Url.
@@ -1397,6 +1401,7 @@ components:
         tls:
           $ref: '#/components/schemas/ApplicationTLSSettings'
           x-speakeasy-param-computed: false
+      x-speakeasy-param-suppress-computed-diff: true
     SimpleApplicationSettings:
       type: object
       description: Simple application settings
@@ -1587,6 +1592,8 @@ components:
             $ref: "#/components/schemas/GroupMember"
           x-speakeasy-param-computed: true
           x-speakeasy-param-plan-modifiers: IgnoreEmptyList
+          # members joined outside Terraform (IdP group mapping, with ignore_members) must not show as "known after apply"
+          x-speakeasy-param-suppress-computed-diff: true
         defaultMemberRoles:
           type: object
           description: |
@@ -1605,6 +1612,7 @@ components:
               APPLICATION: USER
               API_PRODUCT: USER
           x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         notifyMembers:
           type: boolean
           description: If true, members will be notified when the group is synced with APIM.
@@ -4920,7 +4928,6 @@ components:
         The answer echoes the request; read the group assignment back with GET.
       schema:
         type: boolean
-        default: false
     ignoreMembersQueryParam:
       name: ignoreMembers
       in: query
@@ -4930,7 +4937,6 @@ components:
         Use it for groups whose members an identity provider manages through group mapping.
       schema:
         type: boolean
-        default: false
     hridParam:
       name: hrid
       in: path

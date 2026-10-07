@@ -26,11 +26,14 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-plan-modifiers: IgnoreEmptyList
+      # members joined outside Terraform (IdP group mapping, with ignore_members) must not show as "known after apply"
+      x-speakeasy-param-suppress-computed-diff: true
 
   - target: $.components.schemas.GroupSpec.properties.defaultMemberRoles
     description: The group may hold default roles the configuration does not declare
     update:
       x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
 
   # Status management
   - target: $.components.schemas.GroupStatus.allOf[?@.properties.memberCount].properties.memberCount
