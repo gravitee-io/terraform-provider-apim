@@ -50,3 +50,8 @@ resource "apim_group" "developers" {
 }
 
 ```
+
+## Leaving the groups to the Console
+
+Set `ignore_groups = true` when the application's groups are managed in the Console or by a script.
+Terraform then does not apply `groups`: on update the application keeps the groups it has, and on create it receives the environment's default groups.

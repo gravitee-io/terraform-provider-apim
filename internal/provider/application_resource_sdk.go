@@ -135,6 +135,12 @@ func (r *ApplicationResourceModel) ToOperationsCreateOrUpdateApplicationsRequest
 	} else {
 		environmentID = nil
 	}
+	ignoreGroups := new(bool)
+	if !r.IgnoreGroups.IsUnknown() && !r.IgnoreGroups.IsNull() {
+		*ignoreGroups = r.IgnoreGroups.ValueBool()
+	} else {
+		ignoreGroups = nil
+	}
 	applicationSpec, applicationSpecDiags := r.ToSharedApplicationSpec(ctx)
 	diags.Append(applicationSpecDiags...)
 
@@ -145,6 +151,7 @@ func (r *ApplicationResourceModel) ToOperationsCreateOrUpdateApplicationsRequest
 	out := operations.CreateOrUpdateApplicationsRequest{
 		OrganizationID:  organizationID,
 		EnvironmentID:   environmentID,
+		IgnoreGroups:    ignoreGroups,
 		ApplicationSpec: *applicationSpec,
 	}
 
