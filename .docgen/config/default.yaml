@@ -53,6 +53,8 @@ outputs:
    target: templates/guides/docgen_dictionary-manual.md
  - template: {{ .RootDir }}/tmpl/group.md.tmpl
    target: templates/guides/docgen_group.md
+ - template: {{ .RootDir }}/tmpl/group-default-roles.md.tmpl
+   target: templates/guides/docgen_group-default-roles.md
  - template: {{ .RootDir }}/tmpl/v4api-webhook.md.tmpl
    target: templates/guides/docgen_v4api-webhook.md
  - template: {{ .RootDir }}/tmpl/application-with-group.md.tmpl
@@ -153,6 +155,9 @@ chunks:
     required: true
   - template: examples/use-cases/group-developers/group.tf
     exportedAs: Group
+    required: true
+  - template: examples/use-cases/group-default-roles/group.tf
+    exportedAs: GroupDefaultRoles
     required: true
   - template: examples/use-cases/application-with_group/app-with-group.tf
     exportedAs: ApplicationWithGroup

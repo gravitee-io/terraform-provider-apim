@@ -16,6 +16,11 @@ Group Resource
 resource "apim_group" "example" {
   hrid = "example"
   name = "Example"
+  default_member_roles = {
+    API         = "USER"
+    APPLICATION = "USER"
+    API_PRODUCT = "USER"
+  }
   members = [
     {
       roles = {
@@ -40,7 +45,19 @@ resource "apim_group" "example" {
 
 ### Optional
 
+- `default_member_roles` (Map of String) Default role, per scope, given to a member who joins the group, including members
+mapped from an identity provider.
+Keys are `API`, `APPLICATION` and `API_PRODUCT`; any other key is refused with a 400.
+When omitted or empty, the group's default roles on the platform are left untouched.
+When it declares at least one scope, the map is the whole set: a scope absent from it
+loses its default role.
+`PRIMARY_OWNER` is refused; an unknown role name is reported as a warning and that scope
+is left without a default role.
 - `environment_id` (String) environment ID
+- `ignore_members` (Boolean) When true, `members` in the group spec is not applied: no member is added and none is removed.
+Name, `notifyMembers` and `defaultMemberRoles` still converge.
+Use it for groups whose members an identity provider manages through group mapping.
+Default: false
 - `members` (Attributes List) Members of this group with their IDP source and role assignments.
 Members that do not already exist in the IDP will be ignored. (see [below for nested schema](#nestedatt--members))
 - `notify_members` (Boolean) If true, members will be notified when the group is synced with APIM. Default: true

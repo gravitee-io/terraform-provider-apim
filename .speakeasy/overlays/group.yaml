@@ -27,6 +27,11 @@ actions:
       x-speakeasy-param-computed: true
       x-speakeasy-param-plan-modifiers: IgnoreEmptyList
 
+  - target: $.components.schemas.GroupSpec.properties.defaultMemberRoles
+    description: The group may hold default roles the configuration does not declare
+    update:
+      x-speakeasy-param-computed: true
+
   # Status management
   - target: $.components.schemas.GroupStatus.allOf[?@.properties.memberCount].properties.memberCount
     description: Not required by the provider
