@@ -1,0 +1,38 @@
+---
+page_title: "Next-gen Portal"
+subcategory: "Portal"
+---
+
+# End-to-end Next-gen Portal
+
+This example ties together the next-gen portal resources:
+
+1. A portal with navigation paths (`apim_portal`) and a listing that publishes APIs (`apim_portal_listing`)
+2. Portal and API documentation pages (`apim_documentation_portal`, `apim_documentation_api`)
+3. A V4 API with its own internal portal navigation tree (`apim_apiv4`)
+
+~> **WARNING:** Multiple portals are not supported make sure you create one portal per environment.
+
+## Portal and listing
+
+The portal defines the top-level navigation tree for the developer portal. The listing publishes APIs into that tree at a chosen location.
+
+```terraform
+{{ .PortalNextGenPortal.Content }}
+```
+
+## Documentations
+
+Portal documentation pages are bound to the portal and appear under portal navigation paths. API documentation pages are bound to an API and appear under that API's internal `portal_navigation` tree.
+
+```terraform
+{{ .PortalNextGenDocumentations.Content }}
+```
+
+## API
+
+The V4 API declares its own internal documentation navigation with `portal_navigation`. API documentation pages (see above) are placed under those paths.
+
+```terraform
+{{ .PortalNextGenAPI.Content }}
+```

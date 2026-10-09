@@ -1,0 +1,28 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Portal overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.components.schemas.PortalSpec
+    update:
+      x-speakeasy-entity:
+        Portal
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals"].put
+    update:
+      x-speakeasy-entity-operation: Portal#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: Portal#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: Portal#delete
+
+  # Ignore diff when API returns empty navigation
+  - target: $.components.schemas.PortalSpec.properties.navigation
+    description: Ignore diff when API returns empty list
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList

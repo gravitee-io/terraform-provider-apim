@@ -7,7 +7,6 @@ sources:
             - location: automation-api-aim-oas.yaml
         overlays:
             - location: .speakeasy/overlays/common/merge.yaml
-            - location: .speakeasy/overlays/common/held-back.yaml
             - location: .speakeasy/overlays/aim/catalog-mcp-server-shape.yaml
             - location: .speakeasy/overlays/aim/mcp-proxy-shape.yaml
             - location: .speakeasy/overlays/common/oas.yaml
@@ -19,6 +18,10 @@ sources:
             - location: .speakeasy/overlays/subscription.yaml
             - location: .speakeasy/overlays/dictionary.yaml
             - location: .speakeasy/overlays/group.yaml
+            - location: .speakeasy/overlays/portal.yaml
+            - location: .speakeasy/overlays/portal-listing.yaml
+            - location: .speakeasy/overlays/documentation-portal.yaml
+            - location: .speakeasy/overlays/documentation-api.yaml
             - location: .speakeasy/overlays/aim/common.yaml
             - location: .speakeasy/overlays/aim/catalog-mcp-server.yaml
             - location: .speakeasy/overlays/aim/mcp-proxy.yaml
