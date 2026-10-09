@@ -111,8 +111,8 @@ Config: `.speakeasy/gen.yaml`, `.speakeasy/gen.lock`, `.speakeasy/workflow.yaml`
 
 ### Provider structure (`internal/provider/`)
 
-- **Resources** (12): `apim_apiv4`, `apim_application`, `apim_catalog_mcp_server`, `apim_dictionary`, `apim_documentation_api`, `apim_documentation_portal`, `apim_group`, `apim_mcp_proxy`, `apim_portal`, `apim_portal_listing`, `apim_shared_policy_group`, `apim_subscription`
-- **Data sources** (12): mirror the resources above for read-only access
+- **Resources** (8): `apim_apiv4`, `apim_application`, `apim_catalog_mcp_server`, `apim_dictionary`, `apim_group`, `apim_mcp_proxy`, `apim_shared_policy_group`, `apim_subscription`
+- **Data sources** (8): mirror the resources above for read-only access
 - Each resource has `*_resource.go` (CRUD) and `*_resource_sdk.go` (type mapping); data sources follow the same pattern
 - `provider.go` — provider config, auth, schema (generated, with `// BEGIN GRAVITEE CLOUD INIT` hook)
 - `reflect/` and `typeconvert/` — Terraform ↔ SDK type conversion (generated)
@@ -120,7 +120,7 @@ Config: `.speakeasy/gen.yaml`, `.speakeasy/gen.lock`, `.speakeasy/workflow.yaml`
 
 ### SDK (`internal/sdk/`)
 
-Generated Go HTTP client. Entry point: `graviteeapim.go`. API groups: `apis.go`, `applications.go`, `dictionaries.go`, `groups.go`, `sharedpolicygroups.go`, `subscriptions.go`, `portals.go`, `portallistings.go`, `apidocumentations.go`, `portaldocumentations.go`, `aicatalog.go`, `mcpproxies.go`. `themes.go`, `portallinks.go` and `apilinks.go` are in the SDK only: the provider has no resource for them yet. Models in `models/operations/` and `models/shared/`.
+Generated Go HTTP client. Entry point: `graviteeapim.go`. API groups: `apis.go`, `applications.go`, `dictionaries.go`, `groups.go`, `sharedpolicygroups.go`, `subscriptions.go`, `aicatalog.go`, `mcpproxies.go`. Models in `models/operations/` and `models/shared/`.
 
 ### Tests (`tests/`)
 
