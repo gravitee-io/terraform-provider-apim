@@ -200,11 +200,6 @@ type APIV4State struct {
 	AllowedInAPIProducts *bool `default:"false" json:"allowedInApiProducts"`
 	// Allow an application to subscribe to more than one JWT/OAuth2 plan (V4 only).
 	AllowMultiJwtOauth2Subscriptions *bool `default:"false" json:"allowMultiJwtOauth2Subscriptions"`
-	// The API's internal documentation navigation tree for the next-gen portal.
-	// Paths are ordered — the order in the list is preserved.
-	// Intermediate folders are implicitly created if not listed explicitly.
-	//
-	PortalNavigation []NavigationPath `json:"portalNavigation,omitempty"`
 	// Console notification configuration.
 	ConsoleNotification *APIV4StateConsoleNotification `json:"consoleNotification,omitempty"`
 }
@@ -456,13 +451,6 @@ func (a *APIV4State) GetAllowMultiJwtOauth2Subscriptions() *bool {
 		return nil
 	}
 	return a.AllowMultiJwtOauth2Subscriptions
-}
-
-func (a *APIV4State) GetPortalNavigation() []NavigationPath {
-	if a == nil {
-		return nil
-	}
-	return a.PortalNavigation
 }
 
 func (a *APIV4State) GetConsoleNotification() *APIV4StateConsoleNotification {
