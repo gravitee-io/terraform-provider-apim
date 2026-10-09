@@ -904,6 +904,17 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 
 			r.Plans = append(r.Plans, plans)
 		}
+		r.PortalNavigation = []tfTypes.NavigationPath{}
+
+		for _, portalNavigationItem := range resp.PortalNavigation {
+			var portalNavigation tfTypes.NavigationPath
+
+			portalNavigation.DisplayName = types.StringPointerValue(portalNavigationItem.DisplayName)
+			portalNavigation.Order = types.Int64PointerValue(portalNavigationItem.Order)
+			portalNavigation.Path = types.StringValue(portalNavigationItem.Path)
+
+			r.PortalNavigation = append(r.PortalNavigation, portalNavigation)
+		}
 		r.Properties = []tfTypes.Property1{}
 
 		for _, propertiesItem := range resp.Properties {

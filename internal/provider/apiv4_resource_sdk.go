@@ -904,6 +904,17 @@ func (r *Apiv4ResourceModel) RefreshFromSharedApiv4State(ctx context.Context, re
 
 			r.Plans = append(r.Plans, plans)
 		}
+		r.PortalNavigation = []tfTypes.NavigationPath{}
+
+		for _, portalNavigationItem := range resp.PortalNavigation {
+			var portalNavigation tfTypes.NavigationPath
+
+			portalNavigation.DisplayName = types.StringPointerValue(portalNavigationItem.DisplayName)
+			portalNavigation.Order = types.Int64PointerValue(portalNavigationItem.Order)
+			portalNavigation.Path = types.StringValue(portalNavigationItem.Path)
+
+			r.PortalNavigation = append(r.PortalNavigation, portalNavigation)
+		}
 		propertiesPriorSlice := r.Properties
 		r.Properties = []tfTypes.Property{}
 
@@ -3054,6 +3065,29 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 	} else {
 		allowMultiJwtOauth2Subscriptions = nil
 	}
+	portalNavigation := make([]shared.NavigationPath, 0, len(r.PortalNavigation))
+	for portalNavigationIndex := range r.PortalNavigation {
+		var path3 string
+		path3 = r.PortalNavigation[portalNavigationIndex].Path.ValueString()
+
+		displayName := new(string)
+		if !r.PortalNavigation[portalNavigationIndex].DisplayName.IsUnknown() && !r.PortalNavigation[portalNavigationIndex].DisplayName.IsNull() {
+			*displayName = r.PortalNavigation[portalNavigationIndex].DisplayName.ValueString()
+		} else {
+			displayName = nil
+		}
+		order := new(int64)
+		if !r.PortalNavigation[portalNavigationIndex].Order.IsUnknown() && !r.PortalNavigation[portalNavigationIndex].Order.IsNull() {
+			*order = r.PortalNavigation[portalNavigationIndex].Order.ValueInt64()
+		} else {
+			order = nil
+		}
+		portalNavigation = append(portalNavigation, shared.NavigationPath{
+			Path:        path3,
+			DisplayName: displayName,
+			Order:       order,
+		})
+	}
 	var consoleNotification *shared.APIV4SpecConsoleNotification
 	if r.ConsoleNotification != nil {
 		groups1 := make([]string, 0, len(r.ConsoleNotification.Groups))
@@ -3099,6 +3133,7 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		Pages:                            pages,
 		AllowedInAPIProducts:             allowedInAPIProducts,
 		AllowMultiJwtOauth2Subscriptions: allowMultiJwtOauth2Subscriptions,
+		PortalNavigation:                 portalNavigation,
 		ConsoleNotification:              consoleNotification,
 	}
 

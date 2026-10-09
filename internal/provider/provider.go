@@ -106,6 +106,9 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			`* Subscriptions` + "\n" +
 			`* Group` + "\n" +
 			`* Dictionaries` + "\n" +
+			`* Portals` + "\n" +
+			`* Portal Listings` + "\n" +
+			`* Documentations` + "\n" +
 			`* MCP Catalog Servers` + "\n" +
 			`* MCP Proxies` + "\n" +
 			`` + "\n" +
@@ -251,8 +254,12 @@ func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewApplicationResource,
 		NewCatalogMcpServerResource,
 		NewDictionaryResource,
+		NewDocumentationAPIResource,
+		NewDocumentationPortalResource,
 		NewGroupResource,
 		NewMcpProxyResource,
+		NewPortalResource,
+		NewPortalListingResource,
 		NewSharedPolicyGroupResource,
 		NewSubscriptionResource,
 	}
@@ -264,8 +271,12 @@ func (p *ApimProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewApplicationDataSource,
 		NewCatalogMcpServerDataSource,
 		NewDictionaryDataSource,
+		NewDocumentationAPIDataSource,
+		NewDocumentationPortalDataSource,
 		NewGroupDataSource,
 		NewMcpProxyDataSource,
+		NewPortalDataSource,
+		NewPortalListingDataSource,
 		NewSharedPolicyGroupDataSource,
 		NewSubscriptionDataSource,
 	}
