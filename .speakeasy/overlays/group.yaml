@@ -25,7 +25,7 @@ actions:
     description: Ignore diff when API returns empty list
     update:
       x-speakeasy-param-computed: true
-      x-speakeasy-param-plan-modifiers: IgnoreEmptyList
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
 
   # Status management
   - target: $.components.schemas.GroupStatus.allOf[?@.properties.memberCount].properties.memberCount

@@ -20,7 +20,7 @@ speakeasy: ## Run speakeasy generation with curated examples and docs
 	@go build
 
 .PHONY: lint
-lint: lint-commits ## Run speakeasy lint accepting no error or warning
+lint: lint-commits lint-overlays ## Run speakeasy lint accepting no error or warning
 	@echo "Checking OAS"
 	@speakeasy lint openapi --schema automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
 	@speakeasy lint openapi --schema automation-api-aim-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
@@ -28,6 +28,11 @@ lint: lint-commits ## Run speakeasy lint accepting no error or warning
 	@grep "// BEGIN GRAVITEE CLOUD INIT" internal/provider/provider.go > /dev/null || (echo "Cloud initializer code snippet appear to be missing" && exit 1)
 	@echo "Checking Terraform fmt"
 	@terraform fmt -recursive -check || (echo "Error: Above terraform files are not properly formatted. Please run 'terraform fmt -recursive' to fix formatting issues" && exit 1)
+
+.PHONY: lint-overlays
+lint-overlays: ## Fail when an overlay action targets nothing
+	@echo "Checking overlay targets"
+	@hack/scripts/check-overlay-targets.sh
 
 .PHONY: lint-commits
 lint-commits: node_modules ## Validate commit messages on the current branch (same range as CI)

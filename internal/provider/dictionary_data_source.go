@@ -94,6 +94,7 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 												},
 												"value": schema.StringAttribute{
 													Computed:    true,
+													Sensitive:   true,
 													Description: `Header value`,
 												},
 											},

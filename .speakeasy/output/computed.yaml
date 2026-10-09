@@ -1582,7 +1582,7 @@ components:
           items:
             $ref: "#/components/schemas/GroupMember"
           x-speakeasy-param-computed: true
-          x-speakeasy-param-plan-modifiers: IgnoreEmptyList
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
         notifyMembers:
           type: boolean
           description: If true, members will be notified when the group is synced with APIM.
@@ -1753,6 +1753,7 @@ components:
               value:
                 type: string
                 description: Header value
+                x-speakeasy-param-sensitive: true
             required:
               - name
               - value
