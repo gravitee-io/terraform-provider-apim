@@ -1,0 +1,69 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Next-gen portal held back from 1.1
+  version: 0.0.1
+actions:
+
+  # The Automation API document is synced as a whole, so it carries the
+  # next-gen portal: portals, portal listings, portal and API documentations,
+  # and the API's portal navigation. They ship after 1.1, on
+  # feat/portal-next-gen, and are removed from the document until then.
+
+  ## Paths
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals"]
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{hrid}"]
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{portalHrid}/listings"]
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{portalHrid}/listings/{hrid}"]
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{portalHrid}/documentations"]
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{portalHrid}/documentations/{hrid}"]
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/documentations"]
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/apis/{apiHrid}/documentations/{hrid}"]
+    remove: true
+
+  ## API property
+  - target: $.components.schemas.ApiV4Spec.properties.portalNavigation
+    remove: true
+
+  ## Schemas only the paths and the property above reference
+  - target: $.components.schemas.NavigationPath
+    remove: true
+  - target: $.components.schemas.PortalNavigationPath
+    remove: true
+  - target: $.components.schemas.PortalSpec
+    remove: true
+  - target: $.components.schemas.PortalState
+    remove: true
+  - target: $.components.schemas.PortalListingApiEntry
+    remove: true
+  - target: $.components.schemas.PortalListingSpec
+    remove: true
+  - target: $.components.schemas.PortalListingStatus
+    remove: true
+  - target: $.components.schemas.PortalListingState
+    remove: true
+  - target: $.components.schemas.DocumentationType
+    remove: true
+  - target: $.components.schemas.DocumentationSpec
+    remove: true
+  - target: $.components.schemas.DocumentationStatus
+    remove: true
+  - target: $.components.schemas.DocumentationState
+    remove: true
+
+  ## Tags
+  - target: $.tags[?@.name == 'Portals']
+    remove: true
+  - target: $.tags[?@.name == 'Portal Listings']
+    remove: true
+  - target: $.tags[?@.name == 'Portal Documentations']
+    remove: true
+  - target: $.tags[?@.name == 'API Documentations']
+    remove: true
