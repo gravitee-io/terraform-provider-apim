@@ -39,14 +39,14 @@ type GroupDataSource struct {
 
 // GroupDataSourceModel describes the data model.
 type GroupDataSourceModel struct {
-	DefaultMemberRoles map[string]types.String `tfsdk:"default_member_roles"`
-	EnvironmentID      types.String            `tfsdk:"environment_id"`
-	Hrid               types.String            `tfsdk:"hrid"`
-	ID                 types.String            `tfsdk:"id"`
-	Members            []tfTypes.GroupMember   `tfsdk:"members"`
-	Name               types.String            `tfsdk:"name"`
-	NotifyMembers      types.Bool              `tfsdk:"notify_members"`
-	OrganizationID     types.String            `tfsdk:"organization_id"`
+	DefaultMemberRoles *tfTypes.GroupDefaultMemberRoles `tfsdk:"default_member_roles"`
+	EnvironmentID      types.String                     `tfsdk:"environment_id"`
+	Hrid               types.String                     `tfsdk:"hrid"`
+	ID                 types.String                     `tfsdk:"id"`
+	Members            []tfTypes.GroupMember            `tfsdk:"members"`
+	Name               types.String                     `tfsdk:"name"`
+	NotifyMembers      types.Bool                       `tfsdk:"notify_members"`
+	OrganizationID     types.String                     `tfsdk:"organization_id"`
 }
 
 // Metadata returns the data source type name.
@@ -60,15 +60,28 @@ func (r *GroupDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 		MarkdownDescription: "Group DataSource",
 
 		Attributes: map[string]schema.Attribute{
-			"default_member_roles": schema.MapAttribute{
-				Computed:    true,
-				ElementType: types.StringType,
+			"default_member_roles": schema.SingleNestedAttribute{
+				Computed: true,
+				Attributes: map[string]schema.Attribute{
+					"api": schema.StringAttribute{
+						Computed:    true,
+						Description: `Default role on APIs.`,
+					},
+					"api_product": schema.StringAttribute{
+						Computed:    true,
+						Description: `Default role on API products.`,
+					},
+					"application": schema.StringAttribute{
+						Computed:    true,
+						Description: `Default role on applications.`,
+					},
+				},
 				MarkdownDescription: `Default role, per scope, given to a member who joins the group, including members` + "\n" +
 					`mapped from an identity provider.` + "\n" +
-					`Keys are ` + "`" + `API` + "`" + `, ` + "`" + `APPLICATION` + "`" + ` and ` + "`" + `API_PRODUCT` + "`" + `; any other key is refused with a 400.` + "\n" +
-					`When omitted or empty, the group's default roles on the platform are left untouched.` + "\n" +
-					`When it declares at least one scope, the map is the whole set: a scope absent from it` + "\n" +
-					`loses its default role.` + "\n" +
+					`When omitted, the group's default roles on the platform are left untouched.` + "\n" +
+					`When declared, it is the whole set: a scope left out loses its default role, and ` + "`" + `{}` + "`" + `` + "\n" +
+					`clears all three.` + "\n" +
+					`Responses carry the group's stored default roles, ` + "`" + `{}` + "`" + ` when it has none.` + "\n" +
 					`` + "`" + `PRIMARY_OWNER` + "`" + ` is refused; an unknown role name is reported as a warning and that scope` + "\n" +
 					`is left without a default role.`,
 			},

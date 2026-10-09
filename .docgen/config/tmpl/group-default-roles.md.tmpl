@@ -12,8 +12,8 @@ When an OIDC or SAML login maps a user into the group, the user receives the rol
 `ignore_members = true` stops Terraform from removing those mapped members at each apply.
 Without it, an apply that declares no `members` removes every member of the group.
 
-`default_member_roles` accepts the `API`, `APPLICATION` and `API_PRODUCT` scopes; any other scope is refused.
-A scope removed from the map loses its default role. When the attribute is not set, the group keeps the default roles set in the Console.
+`default_member_roles` sets `api`, `application` and `api_product`. Declared, it is the whole set: a scope left out loses its default role.
+When the attribute is not set, the group keeps the default roles set in the Console.
 
 ```terraform
 {{ .GroupDefaultRoles.Content }}

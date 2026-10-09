@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: e27593e4afe3dbd947c614a198e565a3
+  docChecksum: 581dbde4500a88ca73fbd6215915c766
   docVersion: 1.0.0
   speakeasyVersion: 1.793.2
   generationVersion: 2.928.0
   releaseVersion: 1.0.0
   configChecksum: e4e0dd4531b872006ef64c6bc4d96ead
 persistentEdits:
-  generation_id: d4748cf2-35f1-4b1e-a47a-e678cfe0b629
-  pristine_commit_hash: ea2fa56bc64c6500bd5e5b5aa20276e574531ea6
-  pristine_tree_hash: 0c8927147203c53bafdaab7ce62c807451c78b8f
+  generation_id: 53bc6e3f-c725-4516-b632-4cc6aec33bba
+  pristine_commit_hash: 99d683c454831f969f09ab6e81059341ee400d8c
+  pristine_tree_hash: fc1f98a649b0e2025b9a56fa9210d2f41b8fabc0
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -315,20 +315,20 @@ trackedFiles:
     pristine_git_object: ac65bd11d6d5a393277968965abff182ab1f9090
   internal/provider/group_data_source.go:
     id: 42985a05e298
-    last_write_checksum: sha1:7bbdcb25c51c5deed94692b87776e8d7c6311a55
-    pristine_git_object: a9c8df6c262151c0fd5603cb038474760f589583
+    last_write_checksum: sha1:eb690fa00621f0aba3e451fe6e784bcbab4e6c9b
+    pristine_git_object: df9ccca7aadea7ecb493b6a1bc13f55aed83cd1c
   internal/provider/group_data_source_sdk.go:
     id: 987dcf32f584
-    last_write_checksum: sha1:ee949361a4aad0a6b4ee3ac3d8a1ce18930fdbb8
-    pristine_git_object: 4d191b6599755db11d702841ad648a65b9397d44
+    last_write_checksum: sha1:15d782991ec15d6935fa9f877f71872269ac7c99
+    pristine_git_object: a85775be96864c758447664f09a815da2ac415d2
   internal/provider/group_resource.go:
     id: 77b83309e259
-    last_write_checksum: sha1:55f4afc57dc2a45591b46774435fcbb64571d7c4
-    pristine_git_object: 0f753a5dbe3b2609e4775d847faf0cbfce6f7a34
+    last_write_checksum: sha1:7dc65419d4b7de112e42fee663b0b8df8df6ae2c
+    pristine_git_object: 2bcefadafb8c26079b286d6c0662be51e2023f71
   internal/provider/group_resource_sdk.go:
     id: 318ed979ef04
-    last_write_checksum: sha1:190fe1cd6e7907a04f732f994caab0c24844fd7e
-    pristine_git_object: 15259c97b7c1bc4a463a4255152444f91c67c9f8
+    last_write_checksum: sha1:a337ecd2b83207cb3567071e7f2ef618ca5596f4
+    pristine_git_object: d3b45ed816f4cc67957b83bbb5772f26dae81ae7
   internal/provider/mcpproxy_data_source.go:
     id: 843bedf73467
     last_write_checksum: sha1:3efdc517fb04773713e97467298a87c722cd3db0
@@ -722,6 +722,10 @@ trackedFiles:
     id: fecec7f5f874
     last_write_checksum: sha1:9c577ff5913bd7640da2bf194bcca026622badb3
     pristine_git_object: 41d3f16268670f75b2914d9a515a88a0f628c667
+  internal/provider/types/group_default_member_roles.go:
+    id: 6abd4e35af86
+    last_write_checksum: sha1:2621a047effc58ebea58f29a2c43777455061430
+    pristine_git_object: d2aac9e1327e48fcfc1467a8cf222e2868c437ae
   internal/provider/types/group_member.go:
     id: 7797a4bd793f
     last_write_checksum: sha1:21b9a579fb52e30a0fd4e0ec38fd05e6ed64ba8b
@@ -1324,18 +1328,22 @@ trackedFiles:
     id: 622c6a05d318
     last_write_checksum: sha1:5053ddbf1660e2b4d56cdcb09fb4fea118f8cd64
     pristine_git_object: 83225b2c2cbcac809e1f85508944a46f54744fe6
+  internal/sdk/models/shared/groupdefaultmemberroles.go:
+    id: 0aba83a70b47
+    last_write_checksum: sha1:66ead94e164c090102b33dac917dc20a7fe9fc56
+    pristine_git_object: 39d44a4ef4d8d9d2a879bfbcff986f5acc20e285
   internal/sdk/models/shared/groupmember.go:
     id: aa82d01b7af2
     last_write_checksum: sha1:5b295c2c37e53755bdbd4f3a412c10cb09cc92a1
     pristine_git_object: af4fa8823816708609aff06bde6a0dccc733cba2
   internal/sdk/models/shared/groupspec.go:
     id: 8969fc719324
-    last_write_checksum: sha1:ca3328f8a884070eda6917641f6d7527575f621d
-    pristine_git_object: 97d22cda1fd6ae1805890bb52c1eeaa5dbab1f08
+    last_write_checksum: sha1:28ccf9145389dfe34a69d547fac8993c51e3985e
+    pristine_git_object: 59256c900c603042009c8a6c5e8c2affb0942f36
   internal/sdk/models/shared/groupstate.go:
     id: c9928c613d32
-    last_write_checksum: sha1:a986365796b9aaf5d9152d661da1153ec4aacb6a
-    pristine_git_object: 9787356c30752f4c92f4a3be4e55284558f73d07
+    last_write_checksum: sha1:36f827952dd58c9a37c1e980a9c57ee95e2bbc17
+    pristine_git_object: 36fb279fceea08aa2a7101c2cddb2d25b8f3bf50
   internal/sdk/models/shared/httpdictionaryprovider.go:
     id: 274c3d53bf70
     last_write_checksum: sha1:66ab6df95df04cb49225e0c03ff57d7b25f26df0
@@ -1902,10 +1910,10 @@ examples:
           hridContainsUUID: false
           ignoreMembers: false
       requestBody:
-        application/json: {"hrid": "my_demo_api", "name": "developers", "members": [], "defaultMemberRoles": {"API": "USER", "APPLICATION": "USER", "API_PRODUCT": "USER"}, "notifyMembers": true}
+        application/json: {"hrid": "my_demo_api", "name": "developers", "members": [], "defaultMemberRoles": {"api": "USER", "application": "USER", "apiProduct": "USER"}, "notifyMembers": true}
       responses:
         "200":
-          application/json: {"memberCount": 5, "hrid": "demo_api", "name": "developers", "members": [], "defaultMemberRoles": {"API": "USER", "APPLICATION": "USER", "API_PRODUCT": "USER"}, "notifyMembers": true}
+          application/json: {"memberCount": 5, "hrid": "demo_api", "name": "developers", "members": [], "defaultMemberRoles": {"api": "USER", "application": "USER", "apiProduct": "USER"}, "notifyMembers": true}
         "400":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
         default:
@@ -1921,7 +1929,7 @@ examples:
           hridContainsUUID: false
       responses:
         "200":
-          application/json: {"memberCount": 5, "hrid": "demo_api", "name": "developers", "members": [], "defaultMemberRoles": {"API": "USER", "APPLICATION": "USER", "API_PRODUCT": "USER"}, "notifyMembers": true}
+          application/json: {"memberCount": 5, "hrid": "demo_api", "name": "developers", "members": [], "defaultMemberRoles": {"api": "USER", "application": "USER", "apiProduct": "USER"}, "notifyMembers": true}
         "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key", "invalidValue": {}}]}
         default:

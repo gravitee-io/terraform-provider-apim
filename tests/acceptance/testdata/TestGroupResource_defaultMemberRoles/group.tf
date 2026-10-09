@@ -8,7 +8,11 @@ variable "hrid" {
 }
 
 variable "default_member_roles" {
-  type = map(string)
+  type = object({
+    api         = optional(string)
+    application = optional(string)
+    api_product = optional(string)
+  })
 }
 
 resource "apim_group" "test" {

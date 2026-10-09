@@ -5,8 +5,8 @@ resource "apim_group" "developers" {
   # Members come from the identity provider's group mapping, not from Terraform.
   ignore_members = true
   default_member_roles = {
-    API         = "USER"
-    APPLICATION = "USER"
-    API_PRODUCT = "USER"
+    api         = "USER"
+    application = "USER"
+    api_product = "USER"
   }
 }

@@ -12,19 +12,20 @@ import (
 // Releases whose Automation API has no defaultMemberRoles, ignoreMembers or ignoreGroups.
 var withoutGroupAutomationM2 = []utils.ApimVersion{utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12}
 
-// Verifies that default member roles are created, read back, imported and converge when a scope is removed.
+// Verifies that default member roles are created, read back, imported, and converge when a scope is removed or all are cleared.
 func TestGroupResource_defaultMemberRoles(t *testing.T) {
 	utils.SkipFor(t, withoutGroupAutomationM2...)
 	t.Parallel()
 
 	randomId := "test-" + acctest.RandString(10)
 	resourceAddress := "apim_group.test"
-	allScopes := config.MapVariable(map[string]config.Variable{
-		"API":         config.StringVariable("USER"),
-		"APPLICATION": config.StringVariable("USER"),
-		"API_PRODUCT": config.StringVariable("USER"),
+	allScopes := config.ObjectVariable(map[string]config.Variable{
+		"api":         config.StringVariable("USER"),
+		"application": config.StringVariable("USER"),
+		"api_product": config.StringVariable("USER"),
 	})
-	apiOnly := config.MapVariable(map[string]config.Variable{"API": config.StringVariable("OWNER")})
+	apiOnly := config.ObjectVariable(map[string]config.Variable{"api": config.StringVariable("OWNER")})
+	none := config.ObjectVariable(map[string]config.Variable{})
 
 	resource.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -33,8 +34,8 @@ func TestGroupResource_defaultMemberRoles(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables:          config.Variables{"hrid": config.StringVariable(randomId), "default_member_roles": allScopes},
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceAddress, "default_member_roles.%", "3"),
-					resource.TestCheckResourceAttr(resourceAddress, "default_member_roles.API_PRODUCT", "USER"),
+					resource.TestCheckResourceAttr(resourceAddress, "default_member_roles.application", "USER"),
+					resource.TestCheckResourceAttr(resourceAddress, "default_member_roles.api_product", "USER"),
 				),
 			},
 			{
@@ -51,9 +52,26 @@ func TestGroupResource_defaultMemberRoles(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables:          config.Variables{"hrid": config.StringVariable(randomId), "default_member_roles": apiOnly},
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr(resourceAddress, "default_member_roles.%", "1"),
-					resource.TestCheckResourceAttr(resourceAddress, "default_member_roles.API", "OWNER"),
+					resource.TestCheckResourceAttr(resourceAddress, "default_member_roles.api", "OWNER"),
+					resource.TestCheckNoResourceAttr(resourceAddress, "default_member_roles.application"),
+					resource.TestCheckNoResourceAttr(resourceAddress, "default_member_roles.api_product"),
 				),
+			},
+			{
+				// {} clears all three; APIM answers {} back, so the follow-up plan is empty
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          config.Variables{"hrid": config.StringVariable(randomId), "default_member_roles": none},
+				Check:                    resource.TestCheckNoResourceAttr(resourceAddress, "default_member_roles.api"),
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          config.Variables{"hrid": config.StringVariable(randomId), "default_member_roles": none},
+				ResourceName:             resourceAddress,
+				ImportState:              true,
+				ImportStateIdFunc:        importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
+				ImportStateVerify:        true,
 			},
 		},
 	})

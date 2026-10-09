@@ -16,11 +16,13 @@ func (r *GroupResourceModel) RefreshFromSharedGroupState(ctx context.Context, re
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if len(resp.DefaultMemberRoles) > 0 {
-			r.DefaultMemberRoles = make(map[string]types.String, len(resp.DefaultMemberRoles))
-			for key, value := range resp.DefaultMemberRoles {
-				r.DefaultMemberRoles[key] = types.StringValue(value)
-			}
+		if resp.DefaultMemberRoles == nil {
+			r.DefaultMemberRoles = nil
+		} else {
+			r.DefaultMemberRoles = &tfTypes.GroupDefaultMemberRoles{}
+			r.DefaultMemberRoles.API = types.StringPointerValue(resp.DefaultMemberRoles.API)
+			r.DefaultMemberRoles.APIProduct = types.StringPointerValue(resp.DefaultMemberRoles.APIProduct)
+			r.DefaultMemberRoles.Application = types.StringPointerValue(resp.DefaultMemberRoles.Application)
 		}
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
@@ -32,8 +34,8 @@ func (r *GroupResourceModel) RefreshFromSharedGroupState(ctx context.Context, re
 
 			if len(membersItem.Roles) > 0 {
 				members.Roles = make(map[string]types.String, len(membersItem.Roles))
-				for key1, value1 := range membersItem.Roles {
-					members.Roles[key1] = types.StringValue(value1)
+				for key, value := range membersItem.Roles {
+					members.Roles[key] = types.StringValue(value)
 				}
 			}
 			members.Source = types.StringValue(membersItem.Source)
@@ -171,12 +173,31 @@ func (r *GroupResourceModel) ToSharedGroupSpec(ctx context.Context) (*shared.Gro
 			Roles:    roles,
 		})
 	}
-	defaultMemberRoles := make(map[string]string)
-	for defaultMemberRolesKey := range r.DefaultMemberRoles {
-		var defaultMemberRolesInst string
-		defaultMemberRolesInst = r.DefaultMemberRoles[defaultMemberRolesKey].ValueString()
-
-		defaultMemberRoles[defaultMemberRolesKey] = defaultMemberRolesInst
+	var defaultMemberRoles *shared.GroupDefaultMemberRoles
+	if r.DefaultMemberRoles != nil {
+		api := new(string)
+		if !r.DefaultMemberRoles.API.IsUnknown() && !r.DefaultMemberRoles.API.IsNull() {
+			*api = r.DefaultMemberRoles.API.ValueString()
+		} else {
+			api = nil
+		}
+		application := new(string)
+		if !r.DefaultMemberRoles.Application.IsUnknown() && !r.DefaultMemberRoles.Application.IsNull() {
+			*application = r.DefaultMemberRoles.Application.ValueString()
+		} else {
+			application = nil
+		}
+		apiProduct := new(string)
+		if !r.DefaultMemberRoles.APIProduct.IsUnknown() && !r.DefaultMemberRoles.APIProduct.IsNull() {
+			*apiProduct = r.DefaultMemberRoles.APIProduct.ValueString()
+		} else {
+			apiProduct = nil
+		}
+		defaultMemberRoles = &shared.GroupDefaultMemberRoles{
+			API:         api,
+			Application: application,
+			APIProduct:  apiProduct,
+		}
 	}
 	notifyMembers := new(bool)
 	if !r.NotifyMembers.IsUnknown() && !r.NotifyMembers.IsNull() {
