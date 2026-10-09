@@ -24,7 +24,7 @@ actions:
   - target: $.components.schemas.HttpDictionaryProvider.properties.url
     update:
       x-speakeasy-param-sensitive: true
-  - target: $.components.schemas.HttpDictionaryProvider.properties.headers.properties.value
+  - target: $.components.schemas.HttpDictionaryProvider.properties.headers.items.properties.value
     update:
       x-speakeasy-param-sensitive: true
 
