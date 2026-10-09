@@ -133,11 +133,6 @@ actions:
       x-speakeasy-param-computed: false
   ## Api return empty lists of objects that should be ignored if config value is null
   ### Flow
-  - target: $.components.schemas.FlowV4.properties.connect
-    description: Prevent empty array to create plan diff
-    update:
-      x-speakeasy-param-computed: true
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.FlowV4.properties.entrypointConnect
     description: Prevent empty array to create plan diff
     update:
@@ -351,20 +346,10 @@ actions:
     description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
     update:
       x-speakeasy-type-override: any
-  - target: $.components.schemas.Rule.properties.configuration
-    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
-    update:
-      x-speakeasy-type-override: any
   - target: $.components.schemas.ServiceV4.properties.configuration
     description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
     update:
       x-speakeasy-type-override: any
-
-  ## Type change
-  - target: $.components.schemas.FlowStep.properties.configuration
-    description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
-    update:
-      type: string
 
   ## Defaults
   - target: $.components.schemas.Analytics.properties.enabled.default
