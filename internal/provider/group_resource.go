@@ -9,7 +9,6 @@ import (
 	"encoding/json"
 	"fmt"
 	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
-	speakeasy_mapplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/mapplanmodifier"
 	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
@@ -51,15 +50,15 @@ type GroupResource struct {
 
 // GroupResourceModel describes the resource data model.
 type GroupResourceModel struct {
-	DefaultMemberRoles map[string]types.String `tfsdk:"default_member_roles"`
-	EnvironmentID      types.String            `tfsdk:"environment_id"`
-	Hrid               types.String            `tfsdk:"hrid"`
-	ID                 types.String            `tfsdk:"id"`
-	IgnoreMembers      types.Bool              `queryParam:"style=form,explode=true,name=ignoreMembers" tfsdk:"ignore_members"`
-	Members            []tfTypes.GroupMember   `tfsdk:"members"`
-	Name               types.String            `tfsdk:"name"`
-	NotifyMembers      types.Bool              `tfsdk:"notify_members"`
-	OrganizationID     types.String            `tfsdk:"organization_id"`
+	DefaultMemberRoles *tfTypes.GroupDefaultMemberRoles `tfsdk:"default_member_roles"`
+	EnvironmentID      types.String                     `tfsdk:"environment_id"`
+	Hrid               types.String                     `tfsdk:"hrid"`
+	ID                 types.String                     `tfsdk:"id"`
+	IgnoreMembers      types.Bool                       `queryParam:"style=form,explode=true,name=ignoreMembers" tfsdk:"ignore_members"`
+	Members            []tfTypes.GroupMember            `tfsdk:"members"`
+	Name               types.String                     `tfsdk:"name"`
+	NotifyMembers      types.Bool                       `tfsdk:"notify_members"`
+	OrganizationID     types.String                     `tfsdk:"organization_id"`
 }
 
 func (r *GroupResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,19 +69,32 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Group Resource",
 		Attributes: map[string]schema.Attribute{
-			"default_member_roles": schema.MapAttribute{
+			"default_member_roles": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
-				PlanModifiers: []planmodifier.Map{
-					speakeasy_mapplanmodifier.SuppressDiff(speakeasy_mapplanmodifier.ExplicitSuppress),
+				PlanModifiers: []planmodifier.Object{
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 				},
-				ElementType: types.StringType,
+				Attributes: map[string]schema.Attribute{
+					"api": schema.StringAttribute{
+						Optional:    true,
+						Description: `Default role on APIs.`,
+					},
+					"api_product": schema.StringAttribute{
+						Optional:    true,
+						Description: `Default role on API products.`,
+					},
+					"application": schema.StringAttribute{
+						Optional:    true,
+						Description: `Default role on applications.`,
+					},
+				},
 				MarkdownDescription: `Default role, per scope, given to a member who joins the group, including members` + "\n" +
 					`mapped from an identity provider.` + "\n" +
-					`Keys are ` + "`" + `API` + "`" + `, ` + "`" + `APPLICATION` + "`" + ` and ` + "`" + `API_PRODUCT` + "`" + `; any other key is refused with a 400.` + "\n" +
-					`When omitted or empty, the group's default roles on the platform are left untouched.` + "\n" +
-					`When it declares at least one scope, the map is the whole set: a scope absent from it` + "\n" +
-					`loses its default role.` + "\n" +
+					`When omitted, the group's default roles on the platform are left untouched.` + "\n" +
+					`When declared, it is the whole set: a scope left out loses its default role, and ` + "`" + `{}` + "`" + `` + "\n" +
+					`clears all three.` + "\n" +
+					`Responses carry the group's stored default roles, ` + "`" + `{}` + "`" + ` when it has none.` + "\n" +
 					`` + "`" + `PRIMARY_OWNER` + "`" + ` is refused; an unknown role name is reported as a warning and that scope` + "\n" +
 					`is left without a default role.`,
 			},

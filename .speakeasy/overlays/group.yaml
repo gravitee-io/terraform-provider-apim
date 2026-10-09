@@ -34,6 +34,12 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.GroupDefaultMemberRoles
+    description: >-
+      defaultMemberRoles is a $ref, so the suppression above does not reach the generated attribute;
+      set it on the referenced object too, as for ApplicationSettings.
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
 
   # Status management
   - target: $.components.schemas.GroupStatus.allOf[?@.properties.memberCount].properties.memberCount

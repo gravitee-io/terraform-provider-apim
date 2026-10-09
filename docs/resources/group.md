@@ -17,9 +17,9 @@ resource "apim_group" "example" {
   hrid = "example"
   name = "Example"
   default_member_roles = {
-    API         = "USER"
-    APPLICATION = "USER"
-    API_PRODUCT = "USER"
+    api         = "USER"
+    application = "USER"
+    api_product = "USER"
   }
   members = [
     {
@@ -45,14 +45,14 @@ resource "apim_group" "example" {
 
 ### Optional
 
-- `default_member_roles` (Map of String) Default role, per scope, given to a member who joins the group, including members
+- `default_member_roles` (Attributes) Default role, per scope, given to a member who joins the group, including members
 mapped from an identity provider.
-Keys are `API`, `APPLICATION` and `API_PRODUCT`; any other key is refused with a 400.
-When omitted or empty, the group's default roles on the platform are left untouched.
-When it declares at least one scope, the map is the whole set: a scope absent from it
-loses its default role.
+When omitted, the group's default roles on the platform are left untouched.
+When declared, it is the whole set: a scope left out loses its default role, and `{}`
+clears all three.
+Responses carry the group's stored default roles, `{}` when it has none.
 `PRIMARY_OWNER` is refused; an unknown role name is reported as a warning and that scope
-is left without a default role.
+is left without a default role. (see [below for nested schema](#nestedatt--default_member_roles))
 - `environment_id` (String) environment ID
 - `ignore_members` (Boolean) When true, `members` in the group spec is not applied: no member is added and none is removed.
 Name, `notifyMembers` and `defaultMemberRoles` still converge.
@@ -65,6 +65,16 @@ Members that do not already exist in the IDP will be ignored. (see [below for ne
 ### Read-Only
 
 - `id` (String) Resource UUID.
+
+<a id="nestedatt--default_member_roles"></a>
+### Nested Schema for `default_member_roles`
+
+Optional:
+
+- `api` (String) Default role on APIs.
+- `api_product` (String) Default role on API products.
+- `application` (String) Default role on applications.
+
 
 <a id="nestedatt--members"></a>
 ### Nested Schema for `members`

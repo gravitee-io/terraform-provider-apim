@@ -16,11 +16,13 @@ func (r *GroupDataSourceModel) RefreshFromSharedGroupState(ctx context.Context, 
 	var diags diag.Diagnostics
 
 	if resp != nil {
-		if len(resp.DefaultMemberRoles) > 0 {
-			r.DefaultMemberRoles = make(map[string]types.String, len(resp.DefaultMemberRoles))
-			for key, value := range resp.DefaultMemberRoles {
-				r.DefaultMemberRoles[key] = types.StringValue(value)
-			}
+		if resp.DefaultMemberRoles == nil {
+			r.DefaultMemberRoles = nil
+		} else {
+			r.DefaultMemberRoles = &tfTypes.GroupDefaultMemberRoles{}
+			r.DefaultMemberRoles.API = types.StringPointerValue(resp.DefaultMemberRoles.API)
+			r.DefaultMemberRoles.APIProduct = types.StringPointerValue(resp.DefaultMemberRoles.APIProduct)
+			r.DefaultMemberRoles.Application = types.StringPointerValue(resp.DefaultMemberRoles.Application)
 		}
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
@@ -32,8 +34,8 @@ func (r *GroupDataSourceModel) RefreshFromSharedGroupState(ctx context.Context, 
 
 			if len(membersItem.Roles) > 0 {
 				members.Roles = make(map[string]types.String, len(membersItem.Roles))
-				for key1, value1 := range membersItem.Roles {
-					members.Roles[key1] = types.StringValue(value1)
+				for key, value := range membersItem.Roles {
+					members.Roles[key] = types.StringValue(value)
 				}
 			}
 			members.Source = types.StringValue(membersItem.Source)
