@@ -35,6 +35,7 @@ workflow:
                 - location: automation-api-aim-oas.yaml
             overlays:
                 - location: .speakeasy/overlays/common/merge.yaml
+                - location: .speakeasy/overlays/common/held-back.yaml
                 - location: .speakeasy/overlays/aim/catalog-mcp-server-shape.yaml
                 - location: .speakeasy/overlays/aim/mcp-proxy-shape.yaml
                 - location: .speakeasy/overlays/common/oas.yaml
@@ -50,7 +51,6 @@ workflow:
                 - location: .speakeasy/overlays/aim/catalog-mcp-server.yaml
                 - location: .speakeasy/overlays/aim/mcp-proxy.yaml
                 - location: .speakeasy/speakeasy-modifications-overlay.yaml
-                - location: .speakeasy/overlays/common/held-back.yaml
             output: .speakeasy/output/computed.yaml
             registry:
                 location: registry.speakeasyapi.dev/gravitee/gravitee/gravitee-io-gko---automation-api

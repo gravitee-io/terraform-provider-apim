@@ -18,8 +18,9 @@ make speakeasy
 # Generate guide markdown only (graviteeio/doc-gen Docker image)
 make doc-gen
 
-# Lint (OAS + Terraform fmt + commitlint + cloud-init marker check)
+# Lint (OAS + overlay targets + Terraform fmt + commitlint + cloud-init marker check)
 make lint
+make lint-overlays     # fail on an overlay action whose target matches nothing (speakeasy + yq)
 make lint-fix          # fix Terraform formatting
 
 # Sync OAS from upstream APIM
