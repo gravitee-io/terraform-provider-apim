@@ -115,7 +115,7 @@ Optional:
 Optional:
 
 - `name` (String) Header name. Not Null
-- `value` (String) Header value. Not Null
+- `value` (String, Sensitive) Header value. Not Null
 
 
 
