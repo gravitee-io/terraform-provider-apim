@@ -55,6 +55,11 @@ type CreateOrUpdateGroupRequest struct {
 	// created before migration to the automation API and should not be used for new resources.
 	//
 	HridContainsUUID *bool `default:"false" queryParam:"style=form,explode=true,name=hridContainsUUID"`
+	// When true, `members` in the group spec is not applied: no member is added and none is removed.
+	// Name, `notifyMembers` and `defaultMemberRoles` still converge.
+	// Use it for groups whose members an identity provider manages through group mapping.
+	//
+	IgnoreMembers *bool `queryParam:"style=form,explode=true,name=ignoreMembers"`
 	// Group specification
 	GroupSpec shared.GroupSpec `request:"mediaType=application/json"`
 }
@@ -96,6 +101,13 @@ func (c *CreateOrUpdateGroupRequest) GetHridContainsUUID() *bool {
 		return nil
 	}
 	return c.HridContainsUUID
+}
+
+func (c *CreateOrUpdateGroupRequest) GetIgnoreMembers() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.IgnoreMembers
 }
 
 func (c *CreateOrUpdateGroupRequest) GetGroupSpec() shared.GroupSpec {

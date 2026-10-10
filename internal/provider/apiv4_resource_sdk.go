@@ -1014,6 +1014,12 @@ func (r *Apiv4ResourceModel) ToOperationsCreateOrUpdateApisRequest(ctx context.C
 	} else {
 		environmentID = nil
 	}
+	ignoreGroups := new(bool)
+	if !r.IgnoreGroups.IsUnknown() && !r.IgnoreGroups.IsNull() {
+		*ignoreGroups = r.IgnoreGroups.ValueBool()
+	} else {
+		ignoreGroups = nil
+	}
 	apiV4Spec, apiV4SpecDiags := r.ToSharedApiv4Spec(ctx)
 	diags.Append(apiV4SpecDiags...)
 
@@ -1024,6 +1030,7 @@ func (r *Apiv4ResourceModel) ToOperationsCreateOrUpdateApisRequest(ctx context.C
 	out := operations.CreateOrUpdateApisRequest{
 		OrganizationID: organizationID,
 		EnvironmentID:  environmentID,
+		IgnoreGroups:   ignoreGroups,
 		APIV4Spec:      *apiV4Spec,
 	}
 

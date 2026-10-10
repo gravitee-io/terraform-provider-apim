@@ -8,6 +8,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	speakeasy_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
+	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
@@ -48,13 +50,15 @@ type GroupResource struct {
 
 // GroupResourceModel describes the resource data model.
 type GroupResourceModel struct {
-	EnvironmentID  types.String          `tfsdk:"environment_id"`
-	Hrid           types.String          `tfsdk:"hrid"`
-	ID             types.String          `tfsdk:"id"`
-	Members        []tfTypes.GroupMember `tfsdk:"members"`
-	Name           types.String          `tfsdk:"name"`
-	NotifyMembers  types.Bool            `tfsdk:"notify_members"`
-	OrganizationID types.String          `tfsdk:"organization_id"`
+	DefaultMemberRoles *tfTypes.GroupDefaultMemberRoles `tfsdk:"default_member_roles"`
+	EnvironmentID      types.String                     `tfsdk:"environment_id"`
+	Hrid               types.String                     `tfsdk:"hrid"`
+	ID                 types.String                     `tfsdk:"id"`
+	IgnoreMembers      types.Bool                       `queryParam:"style=form,explode=true,name=ignoreMembers" tfsdk:"ignore_members"`
+	Members            []tfTypes.GroupMember            `tfsdk:"members"`
+	Name               types.String                     `tfsdk:"name"`
+	NotifyMembers      types.Bool                       `tfsdk:"notify_members"`
+	OrganizationID     types.String                     `tfsdk:"organization_id"`
 }
 
 func (r *GroupResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -65,6 +69,35 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Group Resource",
 		Attributes: map[string]schema.Attribute{
+			"default_member_roles": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
+				Attributes: map[string]schema.Attribute{
+					"api": schema.StringAttribute{
+						Optional:    true,
+						Description: `Default role on APIs.`,
+					},
+					"api_product": schema.StringAttribute{
+						Optional:    true,
+						Description: `Default role on API products.`,
+					},
+					"application": schema.StringAttribute{
+						Optional:    true,
+						Description: `Default role on applications.`,
+					},
+				},
+				MarkdownDescription: `Default role, per scope, given to a member who joins the group, including members` + "\n" +
+					`mapped from an identity provider.` + "\n" +
+					`When omitted, the group's default roles on the platform are left untouched.` + "\n" +
+					`When declared, it is the whole set: a scope left out loses its default role, and ` + "`" + `{}` + "`" + `` + "\n" +
+					`clears all three.` + "\n" +
+					`Responses carry the group's stored default roles, ` + "`" + `{}` + "`" + ` when it has none.` + "\n" +
+					`` + "`" + `PRIMARY_OWNER` + "`" + ` is refused; an unknown role name is reported as a warning and that scope` + "\n" +
+					`is left without a default role.`,
+			},
 			"environment_id": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
@@ -92,12 +125,24 @@ func (r *GroupResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 				Description: `Resource UUID.`,
 			},
+			"ignore_members": schema.BoolAttribute{
+				Optional: true,
+				MarkdownDescription: `When true, ` + "`" + `members` + "`" + ` in the group spec is not applied: no member is added and none is removed.` + "\n" +
+					`Name, ` + "`" + `notifyMembers` + "`" + ` and ` + "`" + `defaultMemberRoles` + "`" + ` still converge.` + "\n" +
+					`Use it for groups whose members an identity provider manages through group mapping.`,
+			},
 			"members": schema.ListNestedAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
 						speakeasy_objectvalidators.NotNull(),
+					},
+					PlanModifiers: []planmodifier.Object{
+						speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 					},
 					Attributes: map[string]schema.Attribute{
 						"roles": schema.MapAttribute{

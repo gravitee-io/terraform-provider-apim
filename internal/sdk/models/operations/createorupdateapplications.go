@@ -50,6 +50,13 @@ type CreateOrUpdateApplicationsRequest struct {
 	// the state of the underlying spec.
 	//
 	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
+	// When true, `groups` in the spec is not applied and the platform keeps ownership of the
+	// resource's group assignment, for instance groups managed from the Console.
+	// On update, the resource keeps the groups it has on the platform. On create, it receives
+	// the environment's default groups, as a Console create does.
+	// The answer echoes the request; read the group assignment back with GET.
+	//
+	IgnoreGroups *bool `queryParam:"style=form,explode=true,name=ignoreGroups"`
 	// Application specification
 	ApplicationSpec shared.ApplicationSpec `request:"mediaType=application/json"`
 }
@@ -84,6 +91,13 @@ func (c *CreateOrUpdateApplicationsRequest) GetDryRun() *bool {
 		return nil
 	}
 	return c.DryRun
+}
+
+func (c *CreateOrUpdateApplicationsRequest) GetIgnoreGroups() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.IgnoreGroups
 }
 
 func (c *CreateOrUpdateApplicationsRequest) GetApplicationSpec() shared.ApplicationSpec {

@@ -69,6 +69,7 @@ paths:
         - $ref: "#/components/parameters/orgIdParam"
         - $ref: "#/components/parameters/envIdParam"
         - $ref: "#/components/parameters/dryRunQueryParam"
+        - $ref: "#/components/parameters/ignoreGroupsQueryParam"
       requestBody:
         description: API Specification
         content:
@@ -166,6 +167,7 @@ paths:
         - $ref: "#/components/parameters/orgIdParam"
         - $ref: "#/components/parameters/envIdParam"
         - $ref: "#/components/parameters/dryRunQueryParam"
+        - $ref: "#/components/parameters/ignoreGroupsQueryParam"
       requestBody:
         description: Application specification
         content:
@@ -263,6 +265,7 @@ paths:
         - $ref: "#/components/parameters/envIdParam"
         - $ref: "#/components/parameters/dryRunQueryParam"
         - $ref: "#/components/parameters/hridContainsUUIDQueryParam"
+        - $ref: "#/components/parameters/ignoreMembersQueryParam"
       requestBody:
         description: Group specification
         content:
@@ -1137,7 +1140,10 @@ components:
           default: []
           examples:
             - ["developers"]
-          x-speakeasy-param-computed: false
+          x-speakeasy-param-computed: true
+          x-speakeasy-plan-modifiers:
+            - IgnoreEmptyList
+            - KeepWhenGroupsIgnored # with ignore_groups, APIM owns the groups: no diff for them
         visibility:
           $ref: "#/components/schemas/Visibility"
           x-speakeasy-param-computed: false
@@ -1311,7 +1317,9 @@ components:
           default: []
           example: ["developers"]
           x-speakeasy-param-computed: true
-          x-speakeasy-plan-modifiers: IgnoreEmptyList
+          x-speakeasy-plan-modifiers:
+            - IgnoreEmptyList
+            - KeepWhenGroupsIgnored # with ignore_groups, APIM owns the groups: no diff for them
         pictureUrl:
           type: string
           description: Application's picture Url.
@@ -1393,6 +1401,7 @@ components:
         tls:
           $ref: '#/components/schemas/ApplicationTLSSettings'
           x-speakeasy-param-computed: false
+      x-speakeasy-param-suppress-computed-diff: true
     SimpleApplicationSettings:
       type: object
       description: Simple application settings
@@ -1583,6 +1592,12 @@ components:
             $ref: "#/components/schemas/GroupMember"
           x-speakeasy-param-computed: true
           x-speakeasy-param-plan-modifiers: IgnoreEmptyList
+          # members joined outside Terraform (IdP group mapping, with ignore_members) must not show as "known after apply"
+          x-speakeasy-param-suppress-computed-diff: true
+        defaultMemberRoles:
+          $ref: "#/components/schemas/GroupDefaultMemberRoles"
+          x-speakeasy-param-computed: true
+          x-speakeasy-param-suppress-computed-diff: true
         notifyMembers:
           type: boolean
           description: If true, members will be notified when the group is synced with APIM.
@@ -1592,6 +1607,38 @@ components:
         - hrid
         - name
       x-speakeasy-entity: Group
+    GroupDefaultMemberRoles:
+      description: |
+        Default role, per scope, given to a member who joins the group, including members
+        mapped from an identity provider.
+        When omitted, the group's default roles on the platform are left untouched.
+        When declared, it is the whole set: a scope left out loses its default role, and `{}`
+        clears all three.
+        Responses carry the group's stored default roles, `{}` when it has none.
+        `PRIMARY_OWNER` is refused; an unknown role name is reported as a warning and that scope
+        is left without a default role.
+      type: object
+      additionalProperties: false
+      properties:
+        api:
+          type: string
+          description: Default role on APIs.
+          examples:
+            - USER
+          x-speakeasy-param-computed: false
+        application:
+          type: string
+          description: Default role on applications.
+          examples:
+            - USER
+          x-speakeasy-param-computed: false
+        apiProduct:
+          type: string
+          description: Default role on API products.
+          examples:
+            - USER
+          x-speakeasy-param-computed: false
+      x-speakeasy-param-suppress-computed-diff: true
     GroupMember:
       description: A member of a group, possibly identified by an external IDP source.
       type: object
@@ -4887,6 +4934,26 @@ components:
         examples:
           - true
       x-speakeasy-terraform-ignore: true
+    ignoreGroupsQueryParam:
+      name: ignoreGroups
+      in: query
+      description: |
+        When true, `groups` in the spec is not applied and the platform keeps ownership of the
+        resource's group assignment, for instance groups managed from the Console.
+        On update, the resource keeps the groups it has on the platform. On create, it receives
+        the environment's default groups, as a Console create does.
+        The answer echoes the request; read the group assignment back with GET.
+      schema:
+        type: boolean
+    ignoreMembersQueryParam:
+      name: ignoreMembers
+      in: query
+      description: |
+        When true, `members` in the group spec is not applied: no member is added and none is removed.
+        Name, `notifyMembers` and `defaultMemberRoles` still converge.
+        Use it for groups whose members an identity provider manages through group mapping.
+      schema:
+        type: boolean
     hridParam:
       name: hrid
       in: path

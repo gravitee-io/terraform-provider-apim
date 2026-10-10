@@ -49,6 +49,11 @@ resource "apim_application" "example" {
 - `domain` (String) Application's domain.
 - `environment_id` (String) environment ID
 - `groups` (List of String) List of groups associated with the Application. This groups are names, HRIDs or UUIDs of existing groups in APIM. Default: []
+- `ignore_groups` (Boolean) When true, `groups` in the spec is not applied and the platform keeps ownership of the
+resource's group assignment, for instance groups managed from the Console.
+On update, the resource keeps the groups it has on the platform. On create, it receives
+the environment's default groups, as a Console create does.
+The answer echoes the request; read the group assignment back with GET.
 - `members` (Attributes List) Users that can access or manage this application (depending on their roles). (see [below for nested schema](#nestedatt--members))
 - `metadata` (Attributes List) The list of Application's metadata. (see [below for nested schema](#nestedatt--metadata))
 - `notify_members` (Boolean) If true, new members added to the Application spec will

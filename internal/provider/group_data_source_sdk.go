@@ -16,6 +16,14 @@ func (r *GroupDataSourceModel) RefreshFromSharedGroupState(ctx context.Context, 
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.DefaultMemberRoles == nil {
+			r.DefaultMemberRoles = nil
+		} else {
+			r.DefaultMemberRoles = &tfTypes.GroupDefaultMemberRoles{}
+			r.DefaultMemberRoles.API = types.StringPointerValue(resp.DefaultMemberRoles.API)
+			r.DefaultMemberRoles.APIProduct = types.StringPointerValue(resp.DefaultMemberRoles.APIProduct)
+			r.DefaultMemberRoles.Application = types.StringPointerValue(resp.DefaultMemberRoles.Application)
+		}
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)

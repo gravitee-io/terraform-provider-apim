@@ -65,6 +65,7 @@ type ApplicationResourceModel struct {
 	Groups         []types.String               `tfsdk:"groups"`
 	Hrid           types.String                 `tfsdk:"hrid"`
 	ID             types.String                 `tfsdk:"id"`
+	IgnoreGroups   types.Bool                   `queryParam:"style=form,explode=true,name=ignoreGroups" tfsdk:"ignore_groups"`
 	Members        []tfTypes.Member             `tfsdk:"members"`
 	Metadata       []tfTypes.Metadata           `tfsdk:"metadata"`
 	Name           types.String                 `tfsdk:"name"`
@@ -114,6 +115,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Default:  listdefault.StaticValue(types.ListValueMust(types.StringType, []attr.Value{})),
 				PlanModifiers: []planmodifier.List{
 					custom_listplanmodifier.IgnoreEmptyList(),
+					custom_listplanmodifier.KeepWhenGroupsIgnored(),
 				},
 				ElementType: types.StringType,
 				Description: `List of groups associated with the Application. This groups are names, HRIDs or UUIDs of existing groups in APIM. Default: []`,
@@ -136,6 +138,14 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Resource UUID.`,
+			},
+			"ignore_groups": schema.BoolAttribute{
+				Optional: true,
+				MarkdownDescription: `When true, ` + "`" + `groups` + "`" + ` in the spec is not applied and the platform keeps ownership of the` + "\n" +
+					`resource's group assignment, for instance groups managed from the Console.` + "\n" +
+					`On update, the resource keeps the groups it has on the platform. On create, it receives` + "\n" +
+					`the environment's default groups, as a Console create does.` + "\n" +
+					`The answer echoes the request; read the group assignment back with GET.`,
 			},
 			"members": schema.ListNestedAttribute{
 				Computed: true,
@@ -268,6 +278,9 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 			"settings": schema.SingleNestedAttribute{
 				Computed: true,
 				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+				},
 				Attributes: map[string]schema.Attribute{
 					"app": schema.SingleNestedAttribute{
 						Computed: true,
@@ -356,6 +369,9 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					"tls": schema.SingleNestedAttribute{
 						Computed: true,
 						Optional: true,
+						PlanModifiers: []planmodifier.Object{
+							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+						},
 						Attributes: map[string]schema.Attribute{
 							"client_certificate": schema.StringAttribute{
 								CustomType:         customtypes.TrimmedStringType{},
@@ -373,10 +389,14 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 								Optional: true,
 								PlanModifiers: []planmodifier.List{
 									custom_listplanmodifier.IgnoreEmptyList(),
+									speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
 								},
 								NestedObject: schema.NestedAttributeObject{
 									Validators: []validator.Object{
 										speakeasy_objectvalidators.NotNull(),
+									},
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 									},
 									Attributes: map[string]schema.Attribute{
 										"content": schema.StringAttribute{
