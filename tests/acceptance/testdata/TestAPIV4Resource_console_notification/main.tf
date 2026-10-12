@@ -10,6 +10,11 @@ variable "notification_groups" {
   type = list(string)
 }
 
+variable "notification_enabled" {
+  type    = bool
+  default = true
+}
+
 provider "apim" {
   organization_id = "DEFAULT"
   environment_id  = "DEFAULT"
@@ -34,10 +39,10 @@ resource "apim_apiv4" "test" {
     apim_group.notif.hrid
   ]
 
-  console_notification = {
+  console_notification = var.notification_enabled ? {
     groups = var.notification_groups
     events = var.events
-  }
+  } : null
 
   listeners = [
     {
