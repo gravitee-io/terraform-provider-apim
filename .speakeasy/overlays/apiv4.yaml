@@ -194,6 +194,15 @@ actions:
     description: Prevent empty array to create plan diff
     update:
       x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.ApiV4Spec.properties.consoleNotification
+    description: A console notification without events is cleared by APIM; use console_notification = null instead
+    update:
+      required: [events]
+  - target: $.components.schemas.ApiV4Spec.properties.consoleNotification.properties.events
+    description: An empty list would be cleared by APIM and never converge
+    update:
+      minItems: 1
+      description: Events on which a notification is created. To turn console notifications off, set console_notification = null.
   - target: $.components.schemas.ApiV4Spec.properties.resources
     description: Prevent empty array to create plan diff
     update:
