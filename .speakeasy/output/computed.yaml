@@ -3017,7 +3017,6 @@ components:
         overrideAccess:
           type: boolean
           description: Override default organization entrypoint with `host`
-          default: false
           x-speakeasy-param-computed: true
           x-speakeasy-param-suppress-computed-diff: true
       required:

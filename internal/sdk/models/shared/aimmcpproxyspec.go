@@ -427,7 +427,14 @@ func CreateUpstreamAuthOauth2(oauth2 AimMcpProxySpecAimMcpProxyOAuth2UpstreamAut
 	}
 }
 
-func (u *UpstreamAuth) UnmarshalJSON(data []byte) error {
+func (u *UpstreamAuth) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = UpstreamAuth{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Type string `json:"type"`

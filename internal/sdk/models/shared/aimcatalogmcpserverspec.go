@@ -268,7 +268,14 @@ func CreateAuthOauth2(oauth2 AimCatalogMcpServerOAuth2Auth) Auth {
 	}
 }
 
-func (u *Auth) UnmarshalJSON(data []byte) error {
+func (u *Auth) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = Auth{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Type string `json:"type"`

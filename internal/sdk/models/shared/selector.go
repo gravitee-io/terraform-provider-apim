@@ -77,7 +77,14 @@ func CreateSelectorMcp(mcp McpSelector) Selector {
 	}
 }
 
-func (u *Selector) UnmarshalJSON(data []byte) error {
+func (u *Selector) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = Selector{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Type string `json:"type"`

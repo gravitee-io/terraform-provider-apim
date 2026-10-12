@@ -308,6 +308,8 @@ func (r *DictionaryResource) Create(ctx context.Context, req resource.CreateRequ
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateOrUpdateDictionariesRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -316,7 +318,7 @@ func (r *DictionaryResource) Create(ctx context.Context, req resource.CreateRequ
 	}
 	res, err := r.client.Dictionaries.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -368,6 +370,8 @@ func (r *DictionaryResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetDictionaryRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -376,7 +380,7 @@ func (r *DictionaryResource) Read(ctx context.Context, req resource.ReadRequest,
 	}
 	res, err := r.client.Dictionaries.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -430,6 +434,8 @@ func (r *DictionaryResource) Update(ctx context.Context, req resource.UpdateRequ
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsCreateOrUpdateDictionariesRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -438,7 +444,7 @@ func (r *DictionaryResource) Update(ctx context.Context, req resource.UpdateRequ
 	}
 	res, err := r.client.Dictionaries.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -498,6 +504,8 @@ func (r *DictionaryResource) Delete(ctx context.Context, req resource.DeleteRequ
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteDictionaryRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -506,7 +514,7 @@ func (r *DictionaryResource) Delete(ctx context.Context, req resource.DeleteRequ
 	}
 	res, err := r.client.Dictionaries.Delete(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -545,8 +553,8 @@ func (r *DictionaryResource) ImportState(ctx context.Context, req resource.Impor
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"'`)
-			return
+			var environmentIDDefault string = `DEFAULT`
+			data.EnvironmentID = &environmentIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -560,8 +568,8 @@ func (r *DictionaryResource) ImportState(ctx context.Context, req resource.Impor
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"'`)
-			return
+			var organizationIDDefault string = `DEFAULT`
+			data.OrganizationID = &organizationIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)
