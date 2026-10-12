@@ -299,6 +299,9 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.PathV4.properties.overrideAccess.default
+    description: APIM forces true on the first path of multi-tenant installations (GKO-3243); keep the server value when unconfigured
+    remove: true
 
   ## Removal
   - target: $.components.schemas.ApiV4Spec.properties.primaryOwner
