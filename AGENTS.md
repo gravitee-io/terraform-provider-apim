@@ -18,8 +18,9 @@ make speakeasy
 # Generate guide markdown only (graviteeio/doc-gen Docker image)
 make doc-gen
 
-# Lint (OAS + Terraform fmt + commitlint + cloud-init marker check)
+# Lint (OAS + overlay targets + Terraform fmt + commitlint + cloud-init marker check)
 make lint
+make lint-overlays     # fail on an overlay action whose target matches nothing (speakeasy + yq)
 make lint-fix          # fix Terraform formatting
 
 # Sync OAS from upstream APIM
@@ -158,7 +159,7 @@ Two things in the AI Management overlays are there because of the generator, and
 
 An overlay target cannot use `value`, `count`, `length`, `match` or `search` as a name inside a filter (`[?@.properties.value]`): they are JSONPath function names and the overlay fails to parse.
 
-An overlay action whose target matches nothing is ignored without an error: after a generation, grep `.speakeasy/output/computed.yaml` and the generated resource for each annotation you added.
+An overlay action whose target matches nothing is ignored without an error: `make lint-overlays` fails on it. It cannot catch a misspelled extension name: after a generation, grep `.speakeasy/output/computed.yaml` and the generated resource for each annotation you added.
 
 Key Speakeasy overlay annotations:
 
