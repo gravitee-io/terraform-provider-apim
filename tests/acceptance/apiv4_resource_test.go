@@ -8,7 +8,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/knownvalue"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
+	"github.com/hashicorp/terraform-plugin-testing/statecheck"
+	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 )
 
 // Verifies the create, read, import, and delete lifecycle of a minimal
@@ -775,6 +778,44 @@ func TestAPIV4Resource_console_notification(t *testing.T) {
 						plancheck.ExpectNonEmptyPlan(),
 					},
 				},
+			},
+			// Update: turn console notifications off.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid":                 config.StringVariable(randomId),
+					"notification_groups":  config.ListVariable(),
+					"notification_enabled": config.BoolVariable(false),
+					"events": config.ListVariable(
+						config.StringVariable("API_DEPLOYED"),
+						config.StringVariable("API_STARTED"),
+					),
+				},
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectNonEmptyPlan(),
+					},
+				},
+				ConfigStateChecks: []statecheck.StateCheck{
+					statecheck.ExpectKnownValue(
+						"apim_apiv4.test",
+						tfjsonpath.New("console_notification"),
+						knownvalue.Null(),
+					),
+				},
+			},
+			// An empty events list is rejected at plan time.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid":                config.StringVariable(randomId),
+					"notification_groups": config.ListVariable(),
+					// ListVariable() without arguments renders null, not [].
+					"events": config.ListVariable([]config.Variable{}...),
+				},
+				ExpectError: regexp.MustCompile("at least 1"),
 			},
 			// Testing framework implicitly verifies resource delete.
 		},

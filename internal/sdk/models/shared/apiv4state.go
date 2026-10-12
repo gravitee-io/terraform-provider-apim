@@ -105,8 +105,8 @@ func (e *APIV4StateEvent) UnmarshalJSON(data []byte) error {
 type APIV4StateConsoleNotification struct {
 	// Name, HRID or UUIDs of existing groups (of users) targeted by notifications.
 	Groups []string `json:"groups,omitempty"`
-	// Events on which a notification is created
-	Events []APIV4StateEvent `json:"events,omitempty"`
+	// Events on which a notification is created. To turn console notifications off, set console_notification = null.
+	Events []APIV4StateEvent `json:"events"`
 }
 
 func (a *APIV4StateConsoleNotification) GetGroups() []string {
@@ -118,7 +118,7 @@ func (a *APIV4StateConsoleNotification) GetGroups() []string {
 
 func (a *APIV4StateConsoleNotification) GetEvents() []APIV4StateEvent {
 	if a == nil {
-		return nil
+		return []APIV4StateEvent{}
 	}
 	return a.Events
 }
