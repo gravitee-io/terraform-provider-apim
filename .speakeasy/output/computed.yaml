@@ -1233,7 +1233,7 @@ components:
               x-speakeasy-param-computed: false
               x-speakeasy-plan-modifiers: IgnoreEmptyList
             events:
-              description: Events on which a notification is created
+              description: Events on which a notification is created. To turn console notifications off, set console_notification = null.
               type: array
               items:
                 type: string
@@ -1263,7 +1263,9 @@ components:
                   - API_DEPRECATED
                   - NEW_SPEC_GENERATED
               x-speakeasy-param-computed: false
+              minItems: 1
           x-speakeasy-param-computed: false
+          required: [events]
       required:
         - hrid
         - name

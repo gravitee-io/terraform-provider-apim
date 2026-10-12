@@ -613,9 +613,12 @@ Optional:
 <a id="nestedatt--console_notification"></a>
 ### Nested Schema for `console_notification`
 
+Required:
+
+- `events` (List of String) Events on which a notification is created. To turn console notifications off, set console_notification = null.
+
 Optional:
 
-- `events` (List of String) Events on which a notification is created
 - `groups` (List of String) Name, HRID or UUIDs of existing groups (of users) targeted by notifications.
 
 
