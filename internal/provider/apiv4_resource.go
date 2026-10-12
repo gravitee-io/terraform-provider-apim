@@ -297,9 +297,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
 					"events": schema.ListAttribute{
-						Optional:    true,
+						Required:    true,
 						ElementType: types.StringType,
-						Description: `Events on which a notification is created`,
+						Description: `Events on which a notification is created. To turn console notifications off, set console_notification = null.`,
+						Validators: []validator.List{
+							listvalidator.SizeAtLeast(1),
+						},
 					},
 					"groups": schema.ListAttribute{
 						Optional: true,
