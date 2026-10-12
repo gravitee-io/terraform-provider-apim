@@ -111,6 +111,7 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 												"value": schema.StringAttribute{
 													Computed:    true,
 													Optional:    true,
+													Sensitive:   true,
 													Description: `Header value. Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
