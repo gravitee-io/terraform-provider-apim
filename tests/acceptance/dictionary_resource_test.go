@@ -7,6 +7,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/plancheck"
+	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 )
 
 // Verifies the create, read, import, and delete lifecycle of the
@@ -157,6 +159,15 @@ func TestDictionaryResource_dynamic_update(t *testing.T) {
 						"name":  config.StringVariable("X-Test"),
 						"value": config.StringVariable("OK"),
 					})),
+				},
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectSensitiveValue("apim_dictionary.test",
+							tfjsonpath.New("dynamic").AtMapKey("provider").AtMapKey("http").AtMapKey("url")),
+						plancheck.ExpectSensitiveValue("apim_dictionary.test",
+							tfjsonpath.New("dynamic").AtMapKey("provider").AtMapKey("http").
+								AtMapKey("headers").AtSliceIndex(0).AtMapKey("value")),
+					},
 				},
 			},
 			// Verifies resource create and read.
