@@ -262,6 +262,8 @@ func (r *SharedPolicyGroupResource) Create(ctx context.Context, req resource.Cre
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateOrUpdatePolicyGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -270,7 +272,7 @@ func (r *SharedPolicyGroupResource) Create(ctx context.Context, req resource.Cre
 	}
 	res, err := r.client.SharedPolicyGroups.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -322,6 +324,8 @@ func (r *SharedPolicyGroupResource) Read(ctx context.Context, req resource.ReadR
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetPolicyGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -330,7 +334,7 @@ func (r *SharedPolicyGroupResource) Read(ctx context.Context, req resource.ReadR
 	}
 	res, err := r.client.SharedPolicyGroups.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -384,6 +388,8 @@ func (r *SharedPolicyGroupResource) Update(ctx context.Context, req resource.Upd
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsCreateOrUpdatePolicyGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -392,7 +398,7 @@ func (r *SharedPolicyGroupResource) Update(ctx context.Context, req resource.Upd
 	}
 	res, err := r.client.SharedPolicyGroups.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -452,6 +458,8 @@ func (r *SharedPolicyGroupResource) Delete(ctx context.Context, req resource.Del
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeletePolicyGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -460,7 +468,7 @@ func (r *SharedPolicyGroupResource) Delete(ctx context.Context, req resource.Del
 	}
 	res, err := r.client.SharedPolicyGroups.Delete(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -499,8 +507,8 @@ func (r *SharedPolicyGroupResource) ImportState(ctx context.Context, req resourc
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"'`)
-			return
+			var environmentIDDefault string = `DEFAULT`
+			data.EnvironmentID = &environmentIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -514,8 +522,8 @@ func (r *SharedPolicyGroupResource) ImportState(ctx context.Context, req resourc
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"'`)
-			return
+			var organizationIDDefault string = `DEFAULT`
+			data.OrganizationID = &organizationIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

@@ -1423,6 +1423,8 @@ func (r *McpProxyResource) Create(ctx context.Context, req resource.CreateReques
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
+
 	request, requestDiags := data.ToOperationsCreateOrUpdateAimMcpProxyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1431,7 +1433,7 @@ func (r *McpProxyResource) Create(ctx context.Context, req resource.CreateReques
 	}
 	res, err := r.client.MCPProxies.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1483,6 +1485,8 @@ func (r *McpProxyResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsGetAimMcpProxyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1491,7 +1495,7 @@ func (r *McpProxyResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 	res, err := r.client.MCPProxies.Get(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1545,6 +1549,8 @@ func (r *McpProxyResource) Update(ctx context.Context, req resource.UpdateReques
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
+
 	request, requestDiags := data.ToOperationsCreateOrUpdateAimMcpProxyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1553,7 +1559,7 @@ func (r *McpProxyResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 	res, err := r.client.MCPProxies.CreateOrUpdate(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1613,6 +1619,8 @@ func (r *McpProxyResource) Delete(ctx context.Context, req resource.DeleteReques
 		data.OrganizationID = r.OrganizationID
 	}
 
+	ctx = withSensitiveValues(ctx, req.State)
+
 	request, requestDiags := data.ToOperationsDeleteAimMcpProxyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -1621,7 +1629,7 @@ func (r *McpProxyResource) Delete(ctx context.Context, req resource.DeleteReques
 	}
 	res, err := r.client.MCPProxies.Delete(ctx, *request)
 	if err != nil {
-		resp.Diagnostics.AddError("failure to invoke API", err.Error())
+		resp.Diagnostics.AddError("failure to invoke API", redactSensitiveValues(ctx, err.Error()))
 		if res != nil && res.RawResponse != nil {
 			resp.Diagnostics.AddError("unexpected http request/response", debugResponse(res.RawResponse))
 		}
@@ -1660,8 +1668,8 @@ func (r *McpProxyResource) ImportState(ctx context.Context, req resource.ImportS
 			data.EnvironmentID = r.EnvironmentID.ValueStringPointer()
 		}
 		if data.EnvironmentID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field environment_id is required but was not found in the json encoded ID. It's expected to be a value alike '"a44e0d1b-9fa9-4d64-8b76-3634623a2e27"'`)
-			return
+			var environmentIDDefault string = `DEFAULT`
+			data.EnvironmentID = &environmentIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("environment_id"), data.EnvironmentID)...)
@@ -1675,8 +1683,8 @@ func (r *McpProxyResource) ImportState(ctx context.Context, req resource.ImportS
 			data.OrganizationID = r.OrganizationID.ValueStringPointer()
 		}
 		if data.OrganizationID == nil {
-			resp.Diagnostics.AddError("Missing required field", `The field organization_id is required but was not found in the json encoded ID. It's expected to be a value alike '"dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"'`)
-			return
+			var organizationIDDefault string = `DEFAULT`
+			data.OrganizationID = &organizationIDDefault
 		}
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_id"), data.OrganizationID)...)

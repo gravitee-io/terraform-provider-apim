@@ -71,6 +71,8 @@ terraform:
     - env: APIM_ENV_ID
       providerAttribute: environment_id
   excludeEmptyObjectSchemas: false
+  fixFlags:
+    encodePathParams: false
   forwardCompatibleEnumsByDefault: false
   includeEmptyObjects: false
   inferUnionDiscriminators: false
@@ -79,4 +81,5 @@ terraform:
   providerTypeNameOverride: ""
   respectRequiredFields: false
   respectTitlesForPrimitiveUnionMembers: false
+  serverVariableProviderAttributes: {}
   unionStrategy: populated-fields

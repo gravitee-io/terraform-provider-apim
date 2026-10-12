@@ -419,7 +419,7 @@ Optional:
 Optional:
 
 - `host` (String) Virtual host required to access this API. (`Host` or `:Authority` headers, remote address for websockets)
-- `override_access` (Boolean) Override default organization entrypoint with `host`. Default: false
+- `override_access` (Boolean) Override default organization entrypoint with `host`
 - `path` (String) Default: "/"
 
 

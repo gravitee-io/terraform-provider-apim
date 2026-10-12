@@ -77,7 +77,14 @@ func CreateListenerKafka(kafka KafkaListener) Listener {
 	}
 }
 
-func (u *Listener) UnmarshalJSON(data []byte) error {
+func (u *Listener) UnmarshalJSON(data []byte) (err error) {
+	previous := *u
+	*u = Listener{}
+	defer func() {
+		if err != nil {
+			*u = previous
+		}
+	}()
 
 	type discriminator struct {
 		Type string `json:"type"`

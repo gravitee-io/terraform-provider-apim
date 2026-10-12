@@ -7,6 +7,7 @@ import (
 	"context"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/models/shared"
+	"github.com/hashicorp/go-cleanhttp"
 	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
@@ -188,6 +189,7 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	if cloudAuthEnvVar := os.Getenv("APIM_CLOUD_TOKEN"); security.CloudAuth == nil && cloudAuthEnvVar != "" {
 		security.CloudAuth = &cloudAuthEnvVar
 	}
+	registerSensitiveValues(security.BearerAuth, basicAuth.Password, security.CloudAuth)
 
 	// BEGIN GRAVITEE CLOUD INIT
 	cloudInit := CloudInitializer(ctx, security, serverUrl, &data, resp)
@@ -195,7 +197,7 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 	// END GRAVITEE CLOUD INIT
 	providerHTTPTransportOpts := ProviderHTTPTransportOpts{
 		SetHeaders: make(map[string]string),
-		Transport:  http.DefaultTransport,
+		Transport:  cleanhttp.DefaultPooledTransport(),
 	}
 
 	resp.Diagnostics.Append(data.HTTPHeaders.ElementsAs(ctx, &providerHTTPTransportOpts.SetHeaders, false)...)
@@ -203,11 +205,10 @@ func (p *ApimProvider) Configure(ctx context.Context, req provider.ConfigureRequ
 		return
 	}
 
-	httpClient := http.DefaultClient
-	httpClient.Transport = NewCloudScopeTransport(
+	httpClient := &http.Client{Transport: NewCloudScopeTransport(
 		NewProviderHTTPTransport(providerHTTPTransportOpts),
 		cloudInit.Claims,
-	)
+	)}
 
 	opts := []sdk.SDKOption{
 		sdk.WithServerURL(serverUrl),
