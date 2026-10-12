@@ -49,6 +49,7 @@ func TestAPIV4Resource_minimal(t *testing.T) {
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
 					"version",
+					"listeners.0.http.paths.0.override_access",
 				},
 			},
 			// Testing framework implicitly verifies resource delete.
@@ -94,6 +95,7 @@ func TestAPIV4Resource_all(t *testing.T) {
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
 					"version",
+					"listeners.0.http.paths.0.override_access",
 					"pages.1.homepage",
 					"pages.2.homepage",
 					"pages.3.homepage",
@@ -197,6 +199,7 @@ func TestAPIV4Resource_plans(t *testing.T) {
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
 					"version",
+					"listeners.0.http.paths.0.override_access",
 				},
 			},
 			// Verifies resource update.
@@ -323,6 +326,7 @@ func TestAPIV4Resource_pages(t *testing.T) {
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
 					"version",
+					"listeners.0.http.paths.0.override_access",
 				},
 			},
 			// Verifies resource update.
@@ -488,6 +492,7 @@ func TestAPIV4Resource_cors(t *testing.T) {
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
 					"version",
+					"listeners.0.http.paths.0.override_access",
 				},
 			},
 			// Update `allow_headers`.
