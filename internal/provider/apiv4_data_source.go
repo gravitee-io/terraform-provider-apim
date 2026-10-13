@@ -236,7 +236,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 					"events": schema.ListAttribute{
 						Computed:    true,
 						ElementType: types.StringType,
-						Description: `Events on which a notification is created`,
+						Description: `Events on which a notification is created. To turn console notifications off, set console_notification = null.`,
 					},
 					"groups": schema.ListAttribute{
 						Computed:    true,
