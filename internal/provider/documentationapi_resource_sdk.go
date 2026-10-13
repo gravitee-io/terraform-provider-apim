@@ -15,6 +15,11 @@ func (r *DocumentationAPIResourceModel) RefreshFromSharedDocumentationAPISpec(ct
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.Area != nil {
+			r.Area = types.StringValue(string(*resp.Area))
+		} else {
+			r.Area = types.StringNull()
+		}
 		r.Content = types.StringValue(resp.Content)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.Location = types.StringPointerValue(resp.Location)
@@ -148,6 +153,12 @@ func (r *DocumentationAPIResourceModel) ToSharedDocumentationPortalSpec(ctx cont
 	} else {
 		order = nil
 	}
+	area := new(shared.DocumentationArea)
+	if !r.Area.IsUnknown() && !r.Area.IsNull() {
+		*area = shared.DocumentationArea(r.Area.ValueString())
+	} else {
+		area = nil
+	}
 	out := shared.DocumentationPortalSpec{
 		Hrid:     hrid,
 		Name:     name,
@@ -155,6 +166,7 @@ func (r *DocumentationAPIResourceModel) ToSharedDocumentationPortalSpec(ctx cont
 		Content:  content,
 		Location: location,
 		Order:    order,
+		Area:     area,
 	}
 
 	return &out, diags

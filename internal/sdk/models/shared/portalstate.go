@@ -9,11 +9,18 @@ type PortalState struct {
 	Hrid string `json:"hrid"`
 	// Display name of the portal
 	Name string `json:"name"`
-	// The portal's navigation hierarchy as a flat list of paths.
-	// Paths are ordered — the order in the list is preserved.
-	// Intermediate folders are implicitly created if not listed explicitly.
+	// Portal navigation grouped by area. Omitting both `structure` and `navigation`, or setting both to `null`, preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, `top_navbar` must be an explicit list: use `structure = { top_navbar = [] }` to clear navigation. `structure = {}` and `structure = { top_navbar = null }` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit `top_navbar` within a configured structure.
+	Structure *PortalNavigationStructure `json:"structure,omitempty"`
+	// Deprecated. Use `structure.top_navbar` instead. Configure only one of `navigation` or `structure`; APIM returns both aliases in state.
 	//
+	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	Navigation []PortalNavigationPath `json:"navigation,omitempty"`
+	// HRID of the Theme this portal should use as its active theme. When set, applying the portal
+	// marks the referenced theme as active (enabled) and disables every other PORTAL_NEXT theme
+	// in the environment. Leaving this field unset clears the reference and disables the
+	// previously-active theme; the portal-next UI will then lazily fall back to a fresh default theme.
+	//
+	ActiveThemeHrid *string `json:"activeThemeHrid,omitempty"`
 	// Resource UUID.
 	ID *string `json:"id,omitempty"`
 	// The environment ID.
@@ -38,11 +45,25 @@ func (p *PortalState) GetName() string {
 	return p.Name
 }
 
+func (p *PortalState) GetStructure() *PortalNavigationStructure {
+	if p == nil {
+		return nil
+	}
+	return p.Structure
+}
+
 func (p *PortalState) GetNavigation() []PortalNavigationPath {
 	if p == nil {
 		return nil
 	}
 	return p.Navigation
+}
+
+func (p *PortalState) GetActiveThemeHrid() *string {
+	if p == nil {
+		return nil
+	}
+	return p.ActiveThemeHrid
 }
 
 func (p *PortalState) GetID() *string {

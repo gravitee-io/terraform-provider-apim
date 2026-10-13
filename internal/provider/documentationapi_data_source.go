@@ -39,6 +39,7 @@ type DocumentationAPIDataSource struct {
 // DocumentationAPIDataSourceModel describes the data model.
 type DocumentationAPIDataSourceModel struct {
 	APIHrid        types.String `tfsdk:"api_hrid"`
+	Area           types.String `tfsdk:"area"`
 	Content        types.String `tfsdk:"content"`
 	EnvironmentID  types.String `tfsdk:"environment_id"`
 	Hrid           types.String `tfsdk:"hrid"`
@@ -64,6 +65,12 @@ func (r *DocumentationAPIDataSource) Schema(ctx context.Context, req datasource.
 				Required:    true,
 				Description: `Human-readable ID of api`,
 			},
+			"area": schema.StringAttribute{
+				Computed: true,
+				MarkdownDescription: `Where the documentation page appears in the portal. ` + "`" + `TOP_NAVBAR` + "`" + ` is the default. ` + "`" + `HOMEPAGE` + "`" + `` + "\n" +
+					`marks the page as the portal's homepage — only one homepage may exist per portal, and applying` + "\n" +
+					`a new one replaces any existing homepage for that portal.`,
+			},
 			"content": schema.StringAttribute{
 				Computed:    true,
 				Description: `The content of the documentation page`,
@@ -78,7 +85,7 @@ func (r *DocumentationAPIDataSource) Schema(ctx context.Context, req datasource.
 				Description: `A unique human readable id identifying this resource`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"location": schema.StringAttribute{

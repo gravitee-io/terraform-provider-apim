@@ -81,7 +81,7 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 				Description: `A unique human readable id identifying this resource`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{
