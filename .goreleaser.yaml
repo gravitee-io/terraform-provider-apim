@@ -63,18 +63,16 @@ release:
   # draft: true
 changelog:
   sort: asc
+  format: "{{ .Message }}"
   groups:
     - title: "Features"
-      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      regexp: '^feat(\(.+\))?!?:.+$'
       order: 0
     - title: "Bug Fixes"
-      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      regexp: '^fix(\(.+\))?!?:.+$'
       order: 1
     - title: "Other"
       order: 999
   filters:
     include:
-      - "^fix:"
-      - "^feat:"
-      - "^test:"
-      - "^docs:"
+      - '^(feat|fix|test|docs)(\(.+\))?!?:'
