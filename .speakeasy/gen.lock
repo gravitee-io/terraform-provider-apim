@@ -5,12 +5,12 @@ management:
   docVersion: 1.0.0
   speakeasyVersion: 1.786.1
   generationVersion: 2.913.3
-  releaseVersion: 1.0.2
-  configChecksum: 9d3968bd363172d2ae75f0ec217f5d0a
+  releaseVersion: 1.0.3
+  configChecksum: 4b3a6353e2e3b27cab7772909bcdbab1
 persistentEdits:
-  generation_id: d5038d6e-ba9f-4505-8fd4-4078160dac2b
-  pristine_commit_hash: c7457e92e4fe8390c1bd1ea0e75071550b21219c
-  pristine_tree_hash: bbc0b2641596356f2d1d7a1d95290fe1d155b695
+  generation_id: 6ffc3353-b4fa-4cc9-9903-ed5b2492399d
+  pristine_commit_hash: fe03088f47e345d62e6922835aef19accaf4f497
+  pristine_tree_hash: a92eb4116080e9946863e0a29638c5cb4c13cbbd
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -68,8 +68,8 @@ trackedFiles:
     deleted: true
   examples/provider/provider.tf:
     id: 954e955c0240
-    last_write_checksum: sha1:4a671621deffea1c6f88217669f0346100dd414e
-    pristine_git_object: b2852fc31ec1baee7a397a0855442674cbdcd7d4
+    last_write_checksum: sha1:9884609b8dbc1c3c41733b5090d272790a32f381
+    pristine_git_object: 484fef83b70457ea4cc0f0694d81d7220e833666
   examples/resources/apim_dictionary/import-by-string-id.tf:
     id: fca6a77866a2
     last_write_checksum: sha1:89ad645d4877d71e58e412972d25d4369d478906
@@ -666,8 +666,8 @@ trackedFiles:
     pristine_git_object: 748c4bab704e399fd73706ce2a0478fc4a298117
   internal/sdk/graviteeapim.go:
     id: 1f2cf575c2fd
-    last_write_checksum: sha1:6c88fa0b42bf016f1032ca8311d303cc6be9dafb
-    pristine_git_object: 6f36e5b323e62116b874a57d9f6c3bba2a514725
+    last_write_checksum: sha1:a1abe4d43a7282943299b9a4430b66913c63bf74
+    pristine_git_object: 7a024909a912520b3e1d2f84140953a422013de7
   internal/sdk/groups.go:
     id: 2bfe17bcb000
     last_write_checksum: sha1:709108650e6e2f0612bad64fe38a49f88aefd495
