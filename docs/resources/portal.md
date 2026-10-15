@@ -51,25 +51,12 @@ marks the referenced theme as active (enabled) and disables every other PORTAL_N
 in the environment. Leaving this field unset clears the reference and disables the
 previously-active theme; the portal-next UI will then lazily fall back to a fresh default theme.
 - `environment_id` (String) environment ID
-- `navigation` (Attributes List, Deprecated) Deprecated. Use `structure.top_navbar` instead. Configure only one of `navigation` or `structure`; APIM returns both aliases in state. (see [below for nested schema](#nestedatt--navigation))
 - `organization_id` (String) organization ID
-- `structure` (Attributes) Portal navigation grouped by area. Omitting both `structure` and `navigation`, or setting both to `null`, preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, `top_navbar` must be an explicit list: use `structure = { top_navbar = [] }` to clear navigation. `structure = {}` and `structure = { top_navbar = null }` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit `top_navbar` within a configured structure. (see [below for nested schema](#nestedatt--structure))
+- `structure` (Attributes) Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, `top_navbar` must be an explicit list: use `structure = { top_navbar = [] }` to clear navigation. `structure = {}` and `structure = { top_navbar = null }` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit `top_navbar` within a configured structure. (see [below for nested schema](#nestedatt--structure))
 
 ### Read-Only
 
 - `id` (String) Resource UUID.
-
-<a id="nestedatt--navigation"></a>
-### Nested Schema for `navigation`
-
-Optional:
-
-- `display_name` (String) Optional human-friendly label for this path node.
-Listing a path explicitly is the only way to attach a displayName.
-- `path` (String) A slash-separated path defining the navigation hierarchy.
-Intermediate folders are implicitly created if not listed explicitly.
-Not Null
-
 
 <a id="nestedatt--structure"></a>
 ### Nested Schema for `structure`

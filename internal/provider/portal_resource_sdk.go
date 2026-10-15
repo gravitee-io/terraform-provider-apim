@@ -21,16 +21,6 @@ func (r *PortalResourceModel) RefreshFromSharedPortalState(ctx context.Context, 
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
-		r.Navigation = []tfTypes.PortalNavigationPath{}
-
-		for _, navigationItem := range resp.Navigation {
-			var navigation tfTypes.PortalNavigationPath
-
-			navigation.DisplayName = types.StringPointerValue(navigationItem.DisplayName)
-			navigation.Path = types.StringValue(navigationItem.Path)
-
-			r.Navigation = append(r.Navigation, navigation)
-		}
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
 		if resp.Structure == nil {
 			r.Structure = nil
@@ -168,22 +158,6 @@ func (r *PortalResourceModel) ToSharedPortalSpec(ctx context.Context) (*shared.P
 			TopNavbar: topNavbar,
 		}
 	}
-	navigation := make([]shared.PortalNavigationPath, 0, len(r.Navigation))
-	for navigationIndex := range r.Navigation {
-		var path1 string
-		path1 = r.Navigation[navigationIndex].Path.ValueString()
-
-		displayName1 := new(string)
-		if !r.Navigation[navigationIndex].DisplayName.IsUnknown() && !r.Navigation[navigationIndex].DisplayName.IsNull() {
-			*displayName1 = r.Navigation[navigationIndex].DisplayName.ValueString()
-		} else {
-			displayName1 = nil
-		}
-		navigation = append(navigation, shared.PortalNavigationPath{
-			Path:        path1,
-			DisplayName: displayName1,
-		})
-	}
 	activeThemeHrid := new(string)
 	if !r.ActiveThemeHrid.IsUnknown() && !r.ActiveThemeHrid.IsNull() {
 		*activeThemeHrid = r.ActiveThemeHrid.ValueString()
@@ -194,7 +168,6 @@ func (r *PortalResourceModel) ToSharedPortalSpec(ctx context.Context) (*shared.P
 		Hrid:            hrid,
 		Name:            name,
 		Structure:       structure,
-		Navigation:      navigation,
 		ActiveThemeHrid: activeThemeHrid,
 	}
 

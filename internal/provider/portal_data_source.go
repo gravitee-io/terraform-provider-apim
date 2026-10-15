@@ -44,7 +44,6 @@ type PortalDataSourceModel struct {
 	Hrid            types.String                       `tfsdk:"hrid"`
 	ID              types.String                       `tfsdk:"id"`
 	Name            types.String                       `tfsdk:"name"`
-	Navigation      []tfTypes.PortalNavigationPath     `tfsdk:"navigation"`
 	OrganizationID  types.String                       `tfsdk:"organization_id"`
 	Structure       *tfTypes.PortalNavigationStructure `tfsdk:"structure"`
 }
@@ -88,25 +87,6 @@ func (r *PortalDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				Computed:    true,
 				Description: `Display name of the portal`,
 			},
-			"navigation": schema.ListNestedAttribute{
-				Computed: true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"display_name": schema.StringAttribute{
-							Computed: true,
-							MarkdownDescription: `Optional human-friendly label for this path node.` + "\n" +
-								`Listing a path explicitly is the only way to attach a displayName.`,
-						},
-						"path": schema.StringAttribute{
-							Computed: true,
-							MarkdownDescription: `A slash-separated path defining the navigation hierarchy.` + "\n" +
-								`Intermediate folders are implicitly created if not listed explicitly.`,
-						},
-					},
-				},
-				DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-				Description:        `Deprecated. Use ` + "`" + `structure.top_navbar` + "`" + ` instead. Configure only one of ` + "`" + `navigation` + "`" + ` or ` + "`" + `structure` + "`" + `; APIM returns both aliases in state.`,
-			},
 			"organization_id": schema.StringAttribute{
 				Computed:    true,
 				Optional:    true,
@@ -135,7 +115,7 @@ func (r *PortalDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							`Intermediate folders are implicitly created if not listed explicitly.`,
 					},
 				},
-				Description: `Portal navigation grouped by area. Omitting both ` + "`" + `structure` + "`" + ` and ` + "`" + `navigation` + "`" + `, or setting both to ` + "`" + `null` + "`" + `, preserves existing navigation, including after import and during unrelated updates. When ` + "`" + `structure` + "`" + ` is configured, ` + "`" + `top_navbar` + "`" + ` must be an explicit list: use ` + "`" + `structure = { top_navbar = [] }` + "`" + ` to clear navigation. ` + "`" + `structure = {}` + "`" + ` and ` + "`" + `structure = { top_navbar = null }` + "`" + ` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit ` + "`" + `top_navbar` + "`" + ` within a configured structure.`,
+				Description: `Portal navigation grouped by area. Omitting ` + "`" + `structure` + "`" + ` preserves existing navigation, including after import and during unrelated updates. When ` + "`" + `structure` + "`" + ` is configured, ` + "`" + `top_navbar` + "`" + ` must be an explicit list: use ` + "`" + `structure = { top_navbar = [] }` + "`" + ` to clear navigation. ` + "`" + `structure = {}` + "`" + ` and ` + "`" + `structure = { top_navbar = null }` + "`" + ` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit ` + "`" + `top_navbar` + "`" + ` within a configured structure.`,
 			},
 		},
 	}

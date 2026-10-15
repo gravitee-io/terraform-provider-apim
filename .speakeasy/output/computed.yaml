@@ -4185,7 +4185,7 @@ components:
       required:
         - path
     PortalNavigationStructure:
-      description: 'Portal navigation grouped by area. Omitting both `structure` and `navigation`, or setting both to `null`, preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, `top_navbar` must be an explicit list: use `structure = { top_navbar = [] }` to clear navigation. `structure = {}` and `structure = { top_navbar = null }` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit `top_navbar` within a configured structure.'
+      description: 'Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, `top_navbar` must be an explicit list: use `structure = { top_navbar = [] }` to clear navigation. `structure = {}` and `structure = { top_navbar = null }` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit `top_navbar` within a configured structure.'
       type: object
       properties:
         topNavbar:
@@ -4218,12 +4218,13 @@ components:
         navigation:
           type: array
           deprecated: true
-          description: |-
-            Deprecated. Use `structure.top_navbar` instead. Configure only one of `navigation` or `structure`; APIM returns both aliases in state.
+          description: |
+            Deprecated. Use `structure.topNavbar` instead. `navigation` and `structure` cannot be set at the same time;
+            when only `navigation` is provided, it is mapped to `structure.topNavbar` for backward compatibility.
           items:
             $ref: "#/components/schemas/PortalNavigationPath"
-          x-speakeasy-param-computed: true
-          x-speakeasy-plan-modifiers: PortalNavigation
+          x-speakeasy-param-computed: false
+          x-speakeasy-terraform-ignore: true
         activeThemeHrid:
           type: string
           description: |

@@ -3,7 +3,7 @@
 
 package shared
 
-// PortalNavigationStructure - Portal navigation grouped by area. Omitting both `structure` and `navigation`, or setting both to `null`, preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, `top_navbar` must be an explicit list: use `structure = { top_navbar = [] }` to clear navigation. `structure = {}` and `structure = { top_navbar = null }` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit `top_navbar` within a configured structure.
+// PortalNavigationStructure - Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, `top_navbar` must be an explicit list: use `structure = { top_navbar = [] }` to clear navigation. `structure = {}` and `structure = { top_navbar = null }` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit `top_navbar` within a configured structure.
 type PortalNavigationStructure struct {
 	// Top navbar entries as an ordered list of paths.
 	// Intermediate folders are implicitly created if not listed explicitly.

@@ -20,15 +20,10 @@ actions:
     update:
       x-speakeasy-entity-operation: Portal#delete
 
-  # APIM returns both navigation aliases; only explicitly configured values are inputs.
+  # Terraform users configure the next-gen portal structure only.
   - target: $.components.schemas.PortalSpec.properties.navigation
-    description: Preserve computed navigation unless configured structure changes
     update:
-      x-speakeasy-param-computed: true
-      x-speakeasy-plan-modifiers: PortalNavigation
-      description: >-
-        Deprecated. Use `structure.top_navbar` instead. Configure only one of
-        `navigation` or `structure`; APIM returns both aliases in state.
+      x-speakeasy-terraform-ignore: true
 
   - target: $.components.schemas.PortalSpec.properties.structure
     description: Preserve APIM-managed navigation when structure is omitted
@@ -42,10 +37,9 @@ actions:
       x-speakeasy-param-computed: true
       x-speakeasy-plan-modifiers: PortalStructure
       description: >-
-        Portal navigation grouped by area. Omitting both `structure` and
-        `navigation`, or setting both to `null`, preserves existing navigation,
-        including after import and during unrelated updates. When `structure`
-        is configured, `top_navbar` must be an explicit list: use
+        Portal navigation grouped by area. Omitting `structure` preserves
+        existing navigation, including after import and during unrelated
+        updates. When `structure` is configured, `top_navbar` must be an explicit list: use
         `structure = { top_navbar = [] }` to clear navigation. `structure = {}`
         and `structure = { top_navbar = null }` are rejected rather than clearing
         entries implicitly. TBD (to be discussed): requiring an explicit

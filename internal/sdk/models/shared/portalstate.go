@@ -9,9 +9,11 @@ type PortalState struct {
 	Hrid string `json:"hrid"`
 	// Display name of the portal
 	Name string `json:"name"`
-	// Portal navigation grouped by area. Omitting both `structure` and `navigation`, or setting both to `null`, preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, `top_navbar` must be an explicit list: use `structure = { top_navbar = [] }` to clear navigation. `structure = {}` and `structure = { top_navbar = null }` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit `top_navbar` within a configured structure.
+	// Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, `top_navbar` must be an explicit list: use `structure = { top_navbar = [] }` to clear navigation. `structure = {}` and `structure = { top_navbar = null }` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit `top_navbar` within a configured structure.
 	Structure *PortalNavigationStructure `json:"structure,omitempty"`
-	// Deprecated. Use `structure.top_navbar` instead. Configure only one of `navigation` or `structure`; APIM returns both aliases in state.
+	// Deprecated. Use `structure.topNavbar` instead. `navigation` and `structure` cannot be set at the same time;
+	// when only `navigation` is provided, it is mapped to `structure.topNavbar` for backward compatibility.
+	//
 	//
 	// Deprecated: This will be removed in a future release, please migrate away from it as soon as possible.
 	Navigation []PortalNavigationPath `json:"navigation,omitempty"`

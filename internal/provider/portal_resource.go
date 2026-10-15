@@ -8,7 +8,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
 	custom_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
@@ -54,7 +53,6 @@ type PortalResourceModel struct {
 	Hrid            types.String                       `tfsdk:"hrid"`
 	ID              types.String                       `tfsdk:"id"`
 	Name            types.String                       `tfsdk:"name"`
-	Navigation      []tfTypes.PortalNavigationPath     `tfsdk:"navigation"`
 	OrganizationID  types.String                       `tfsdk:"organization_id"`
 	Structure       *tfTypes.PortalNavigationStructure `tfsdk:"structure"`
 }
@@ -105,36 +103,6 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Required:    true,
 				Description: `Display name of the portal`,
 			},
-			"navigation": schema.ListNestedAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					custom_listplanmodifier.PortalNavigation(),
-				},
-				NestedObject: schema.NestedAttributeObject{
-					Validators: []validator.Object{
-						speakeasy_objectvalidators.NotNull(),
-					},
-					Attributes: map[string]schema.Attribute{
-						"display_name": schema.StringAttribute{
-							Optional: true,
-							MarkdownDescription: `Optional human-friendly label for this path node.` + "\n" +
-								`Listing a path explicitly is the only way to attach a displayName.`,
-						},
-						"path": schema.StringAttribute{
-							Optional: true,
-							MarkdownDescription: `A slash-separated path defining the navigation hierarchy.` + "\n" +
-								`Intermediate folders are implicitly created if not listed explicitly.` + "\n" +
-								`Not Null`,
-							Validators: []validator.String{
-								speakeasy_stringvalidators.NotNull(),
-							},
-						},
-					},
-				},
-				DeprecationMessage: `This will be removed in a future release, please migrate away from it as soon as possible`,
-				Description:        `Deprecated. Use ` + "`" + `structure.top_navbar` + "`" + ` instead. Configure only one of ` + "`" + `navigation` + "`" + ` or ` + "`" + `structure` + "`" + `; APIM returns both aliases in state.`,
-			},
 			"organization_id": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
@@ -177,7 +145,7 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							`Intermediate folders are implicitly created if not listed explicitly.`,
 					},
 				},
-				Description: `Portal navigation grouped by area. Omitting both ` + "`" + `structure` + "`" + ` and ` + "`" + `navigation` + "`" + `, or setting both to ` + "`" + `null` + "`" + `, preserves existing navigation, including after import and during unrelated updates. When ` + "`" + `structure` + "`" + ` is configured, ` + "`" + `top_navbar` + "`" + ` must be an explicit list: use ` + "`" + `structure = { top_navbar = [] }` + "`" + ` to clear navigation. ` + "`" + `structure = {}` + "`" + ` and ` + "`" + `structure = { top_navbar = null }` + "`" + ` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit ` + "`" + `top_navbar` + "`" + ` within a configured structure.`,
+				Description: `Portal navigation grouped by area. Omitting ` + "`" + `structure` + "`" + ` preserves existing navigation, including after import and during unrelated updates. When ` + "`" + `structure` + "`" + ` is configured, ` + "`" + `top_navbar` + "`" + ` must be an explicit list: use ` + "`" + `structure = { top_navbar = [] }` + "`" + ` to clear navigation. ` + "`" + `structure = {}` + "`" + ` and ` + "`" + `structure = { top_navbar = null }` + "`" + ` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit ` + "`" + `top_navbar` + "`" + ` within a configured structure.`,
 			},
 		},
 	}
