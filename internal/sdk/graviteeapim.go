@@ -85,6 +85,9 @@ type GraviteeApim struct {
 	PortalListings *PortalListings
 	// Everything about Portal Documentations
 	PortalDocumentations *PortalDocumentations
+	// Everything about Portal Links (external navigation entries in a portal's navigation)
+	PortalLinks *PortalLinks
+	Themes      *Themes
 	// Everything about API Documentations (next-gen portal)
 	APIDocumentations *APIDocumentations
 	// Upstream MCP servers registered in the AI Catalog.
@@ -213,6 +216,8 @@ func New(opts ...SDKOption) *GraviteeApim {
 	sdk.Portals = newPortals(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.PortalListings = newPortalListings(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.PortalDocumentations = newPortalDocumentations(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.PortalLinks = newPortalLinks(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Themes = newThemes(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.APIDocumentations = newAPIDocumentations(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.AICatalog = newAICatalog(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.MCPProxies = newMCPProxies(sdk, sdk.sdkConfiguration, sdk.hooks)

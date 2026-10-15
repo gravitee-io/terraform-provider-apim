@@ -54,6 +54,10 @@ resource "apim_documentation_portal" "getting-started" {
 
 ### Optional
 
+- `area` (String) Where the documentation page appears in the portal. `TOP_NAVBAR` is the default. `HOMEPAGE`
+marks the page as the portal's homepage — only one homepage may exist per portal, and applying
+a new one replaces any existing homepage for that portal.
+Default: "TOP_NAVBAR"; must be one of ["TOP_NAVBAR", "HOMEPAGE"]
 - `environment_id` (String) environment ID
 - `location` (String) The path in the navigation hierarchy where this page should appear.
 - `order` (Number) Display order relative to siblings at the same location

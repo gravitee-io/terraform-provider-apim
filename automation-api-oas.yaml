@@ -48,6 +48,8 @@ tags:
     description: Everything about Portal Listings (publishing APIs to a portal)
   - name: Portal Documentations
     description: Everything about Portal Documentations
+  - name: Portal Links
+    description: Everything about Portal Links (external navigation entries in a portal's navigation)
   - name: API Documentations
     description: Everything about API Documentations (next-gen portal)
 paths:
@@ -812,6 +814,166 @@ paths:
         default:
           $ref: "#/components/responses/Error"
 
+  # Portal Links
+  /organizations/{orgId}/environments/{envId}/portals/{portalHrid}/links:
+    put:
+      operationId: createOrUpdatePortalLink
+      tags:
+        - Portal Links
+      summary: Create or update a Portal Link
+      description: Create or update a Portal Link attached to a Portal
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/portalHridParam"
+        - $ref: "#/components/parameters/dryRunQueryParam"
+      requestBody:
+        description: Portal Link specification
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/PortalLinkSpec"
+        required: true
+      responses:
+        "200":
+          description: State of the successfully created/updated Portal Link
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortalLinkState"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        default:
+          $ref: "#/components/responses/Error"
+  /organizations/{orgId}/environments/{envId}/portals/{portalHrid}/links/{hrid}:
+    parameters:
+      - $ref: "#/components/parameters/orgIdParam"
+      - $ref: "#/components/parameters/envIdParam"
+      - $ref: "#/components/parameters/portalHridParam"
+      - $ref: "#/components/parameters/hridParam"
+    get:
+      operationId: getPortalLink
+      tags:
+        - Portal Links
+      summary: Get one Portal Link
+      description: Get a Portal Link using HRID
+      responses:
+        "200":
+          description: Portal Link successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortalLinkState"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+    delete:
+      operationId: deletePortalLink
+      tags:
+        - Portal Links
+      summary: Delete one Portal Link
+      description: Delete a Portal Link using HRID
+      responses:
+        "204":
+          description: Portal Link successfully deleted
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+
+  # Themes
+  /organizations/{orgId}/environments/{envId}/portal-themes:
+    put:
+      operationId: createOrUpdatePortalTheme
+      tags:
+        - Themes
+      summary: Create or update a Theme
+      description: Create or update a next-gen portal Theme from PortalThemeSpec
+      parameters:
+        - $ref: "#/components/parameters/orgIdParam"
+        - $ref: "#/components/parameters/envIdParam"
+        - $ref: "#/components/parameters/dryRunQueryParam"
+      requestBody:
+        description: Theme specification
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/PortalThemeSpec"
+        required: true
+      responses:
+        "200":
+          description: State of the successfully created/updated Theme
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortalThemeState"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        default:
+          $ref: "#/components/responses/Error"
+  /organizations/{orgId}/environments/{envId}/portal-themes/{hrid}:
+    parameters:
+      - $ref: "#/components/parameters/orgIdParam"
+      - $ref: "#/components/parameters/envIdParam"
+      - $ref: "#/components/parameters/hridParam"
+    get:
+      operationId: getPortalTheme
+      tags:
+        - Themes
+      summary: Get one Theme
+      description: Get a Theme using HRID
+      responses:
+        "200":
+          description: Theme successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PortalThemeState"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+    delete:
+      operationId: deletePortalTheme
+      tags:
+        - Themes
+      summary: Delete one Theme
+      description: Delete a Theme using HRID
+      responses:
+        "204":
+          description: Theme successfully deleted
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        default:
+          $ref: "#/components/responses/Error"
+
   # API Documentations
   /organizations/{orgId}/environments/{envId}/apis/{apiHrid}/documentations:
     put:
@@ -896,7 +1058,7 @@ components:
   schemas:
     Hrid:
       type: string
-      pattern: '^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$'
+      pattern: '^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$'
       description: A unique human readable id identifying this resource
       examples:
         - demo_api
@@ -3192,6 +3354,17 @@ components:
             - Alpha
       required:
         - path
+    PortalNavigationStructure:
+      description: Portal navigation grouped by area.
+      type: object
+      properties:
+        topNavbar:
+          type: array
+          description: |
+            Top navbar entries as an ordered list of paths.
+            Intermediate folders are implicitly created if not listed explicitly.
+          items:
+            $ref: "#/components/schemas/PortalNavigationPath"
     PortalSpec:
       description: Specification of a Portal resource. Represents a next-gen developer portal instance.
       type: object
@@ -3203,14 +3376,25 @@ components:
           description: Display name of the portal
           examples:
             - Default Portal
+        structure:
+          $ref: "#/components/schemas/PortalNavigationStructure"
         navigation:
           type: array
+          deprecated: true
           description: |
-            The portal's navigation hierarchy as a flat list of paths.
-            Paths are ordered — the order in the list is preserved.
-            Intermediate folders are implicitly created if not listed explicitly.
+            Deprecated. Use `structure.topNavbar` instead. `navigation` and `structure` cannot be set at the same time;
+            when only `navigation` is provided, it is mapped to `structure.topNavbar` for backward compatibility.
           items:
             $ref: "#/components/schemas/PortalNavigationPath"
+        activeThemeHrid:
+          type: string
+          description: |
+            HRID of the Theme this portal should use as its active theme. When set, applying the portal
+            marks the referenced theme as active (enabled) and disables every other PORTAL_NEXT theme
+            in the environment. Leaving this field unset clears the reference and disables the
+            previously-active theme; the portal-next UI will then lazily fall back to a fresh default theme.
+          examples:
+            - brand-theme
       required:
         - hrid
         - name
@@ -3287,6 +3471,16 @@ components:
         - GRAVITEE_MARKDOWN
         - OPENAPI
         - ASYNCAPI
+    DocumentationArea:
+      type: string
+      description: |
+        Where the documentation page appears in the portal. `TOP_NAVBAR` is the default. `HOMEPAGE`
+        marks the page as the portal's homepage — only one homepage may exist per portal, and applying
+        a new one replaces any existing homepage for that portal.
+      default: TOP_NAVBAR
+      enum:
+        - TOP_NAVBAR
+        - HOMEPAGE
     DocumentationSpec:
       description: |
         Specification of a Documentation page.
@@ -3314,6 +3508,8 @@ components:
         order:
           type: integer
           description: Display order relative to siblings at the same location
+        area:
+          $ref: "#/components/schemas/DocumentationArea"
       required:
         - hrid
         - name
@@ -3340,6 +3536,141 @@ components:
       allOf:
         - $ref: "#/components/schemas/DocumentationSpec"
         - $ref: "#/components/schemas/DocumentationStatus"
+
+    # Portal Link schemas
+    PortalLinkSpec:
+      description: |
+        Specification of a Portal Link.
+        An external navigation entry placed in a portal's navigation — a thin wrapper around a URL, with no separate content of its own.
+      type: object
+      properties:
+        hrid:
+          $ref: "#/components/schemas/Hrid"
+        name:
+          type: string
+          description: Display name of the link
+          examples:
+            - External Docs
+        href:
+          type: string
+          description: The URL this link points to
+          examples:
+            - https://docs.example.com
+        location:
+          type: string
+          description: |
+            The path in the navigation hierarchy where this link should appear.
+          examples:
+            - /projects/alpha
+        order:
+          type: integer
+          description: Display order relative to siblings at the same location
+      required:
+        - hrid
+        - name
+        - href
+    PortalLinkStatus:
+      description: Status information for a Portal Link after import.
+      allOf:
+        - $ref: "#/components/schemas/BaseStatus"
+        - type: object
+          properties:
+            portalHrid:
+              type: string
+              description: The HRID of the portal this link belongs to.
+              readOnly: true
+    PortalLinkState:
+      description: State of a Portal Link that has been created/updated.
+      allOf:
+        - $ref: "#/components/schemas/PortalLinkSpec"
+        - $ref: "#/components/schemas/PortalLinkStatus"
+
+    # Theme schemas
+    PortalThemeSpec:
+      description: |
+        Specification of a next-gen portal Theme. Applying a Theme through the Automation API
+        makes it the active Theme for the environment; every other Theme in the same environment
+        is disabled.
+      type: object
+      properties:
+        hrid:
+          $ref: "#/components/schemas/Hrid"
+        name:
+          type: string
+          description: Display name of the theme
+          examples:
+            - Default Theme
+        definition:
+          $ref: "#/components/schemas/PortalNextThemeDefinition"
+        logo:
+          type: string
+          description: |
+            Primary logo. Inline data URI (for example `data:image/png;base64,...`), the same shape the
+            console produces on upload.
+        optionalLogo:
+          type: string
+          description: Alternate logo for contexts where the primary one does not render well (dark background, small badge, etc.).
+        favicon:
+          type: string
+          description: Browser tab icon. Same inline data URI convention as `logo`.
+        backgroundImage:
+          type: string
+          description: Hero / landing page background image. Same inline data URI convention as `logo`.
+      required:
+        - hrid
+        - name
+        - definition
+    PortalThemeState:
+      description: State of a Theme that has been created/updated.
+      allOf:
+        - $ref: "#/components/schemas/PortalThemeSpec"
+        - $ref: "#/components/schemas/BaseStatus"
+    PortalNextThemeDefinition:
+      description: Visual definition of a next-gen portal Theme.
+      type: object
+      properties:
+        customCss:
+          type: string
+          description: Custom CSS applied on top of the palette.
+        font:
+          $ref: "#/components/schemas/PortalNextThemeFont"
+        color:
+          $ref: "#/components/schemas/PortalNextThemeColor"
+    PortalNextThemeFont:
+      description: Typography settings for a next-gen portal Theme.
+      type: object
+      properties:
+        fontFamily:
+          type: string
+          description: CSS `font-family` value.
+    PortalNextThemeColor:
+      description: Palette for a next-gen portal Theme.
+      type: object
+      properties:
+        primary:
+          type: string
+          description: Primary color (CSS color value).
+        secondary:
+          type: string
+          description: Secondary color (CSS color value).
+        tertiary:
+          type: string
+          description: Tertiary color (CSS color value).
+        error:
+          type: string
+          description: Error color (CSS color value).
+        background:
+          $ref: "#/components/schemas/PortalNextThemeBackground"
+    PortalNextThemeBackground:
+      description: Background palette for a next-gen portal Theme.
+      type: object
+      properties:
+        page:
+          type: string
+          description: Page background color (CSS color value).
+        card:
+          type: string
+          description: Card background color (CSS color value).
 
   responses:
     NotFound:

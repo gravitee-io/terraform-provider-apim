@@ -78,9 +78,11 @@ Files listed in `.genignore` are **not** overwritten by Speakeasy even though si
 | `examples/resources/**` | Minimal per-resource examples for registry docs (curated, in `.genignore`) |
 | `tests/**` | **Entirely hand-written** — acceptance tests, example tests, testdata, utilities; nothing here is generated |
 | `internal/provider/gravitee_cloud.go` | Gravitee Cloud auth / server URL resolution |
+| `internal/provider/portal_navigation.go` | Config-aware structure-only portal request selection; called from marked regions in `portal_resource.go` |
 | `internal/provider/customtypes/**` | `TrimmedString`, `RFC3339` custom Terraform types (referenced from overlays) |
 | `internal/planmodifiers/stringplanmodifier/immutable.go`, `normalize_path.go`, `trim_trailing_slash.go` | Custom plan modifiers |
 | `internal/planmodifiers/listplanmodifier/ignore_empty_list.go`, `no_removal_by_name.go` | Custom plan modifiers |
+| `internal/planmodifiers/objectplanmodifier/portal_structure.go` | Validates configured top-navbar structure and preserves computed structure when omitted |
 | `internal/planmodifiers/mapplanmodifier/response_template.go` | Custom plan modifier |
 | `internal/validators/listvalidators/sorted_by*.go` | Custom validators: lists the platform reports in its own order |
 | `internal/listkeys/` | Reads the identifying attributes of a list's elements, for the validators and modifiers above |
@@ -159,6 +161,8 @@ Two things in the AI Management overlays are there because of the generator, and
 An overlay target cannot use `value`, `count`, `length`, `match` or `search` as a name inside a filter (`[?@.properties.value]`): they are JSONPath function names and the overlay fails to parse.
 
 An overlay action whose target matches nothing is ignored without an error: after a generation, grep `.speakeasy/output/computed.yaml` and the generated resource for each annotation you added.
+
+Portal navigation is configured through `structure.top_navbar` only. An omitted/null `structure` preserves existing entries, while `structure = { top_navbar = [] }` clears them. The existing `PortalStructure` modifier rejects a configured structure without a non-null `top_navbar`; the request builder checks resolved apply values too. This conditional requirement is marked TBD in the overlay and generated resource documentation. Do not add an implicit empty-list default: it could clear imported or otherwise unmanaged navigation.
 
 Key Speakeasy overlay annotations:
 

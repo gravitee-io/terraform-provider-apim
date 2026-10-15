@@ -16,21 +16,27 @@ func (r *PortalResourceModel) RefreshFromSharedPortalState(ctx context.Context, 
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		r.ActiveThemeHrid = types.StringPointerValue(resp.ActiveThemeHrid)
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
-		r.Navigation = []tfTypes.PortalNavigationPath{}
-
-		for _, navigationItem := range resp.Navigation {
-			var navigation tfTypes.PortalNavigationPath
-
-			navigation.DisplayName = types.StringPointerValue(navigationItem.DisplayName)
-			navigation.Path = types.StringValue(navigationItem.Path)
-
-			r.Navigation = append(r.Navigation, navigation)
-		}
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
+		if resp.Structure == nil {
+			r.Structure = nil
+		} else {
+			r.Structure = &tfTypes.PortalNavigationStructure{}
+			r.Structure.TopNavbar = []tfTypes.PortalNavigationPath{}
+
+			for _, topNavbarItem := range resp.Structure.TopNavbar {
+				var topNavbar tfTypes.PortalNavigationPath
+
+				topNavbar.DisplayName = types.StringPointerValue(topNavbarItem.DisplayName)
+				topNavbar.Path = types.StringValue(topNavbarItem.Path)
+
+				r.Structure.TopNavbar = append(r.Structure.TopNavbar, topNavbar)
+			}
+		}
 	}
 
 	return diags
@@ -130,26 +136,39 @@ func (r *PortalResourceModel) ToSharedPortalSpec(ctx context.Context) (*shared.P
 	var name string
 	name = r.Name.ValueString()
 
-	navigation := make([]shared.PortalNavigationPath, 0, len(r.Navigation))
-	for navigationIndex := range r.Navigation {
-		var path string
-		path = r.Navigation[navigationIndex].Path.ValueString()
+	var structure *shared.PortalNavigationStructure
+	if r.Structure != nil {
+		topNavbar := make([]shared.PortalNavigationPath, 0, len(r.Structure.TopNavbar))
+		for topNavbarIndex := range r.Structure.TopNavbar {
+			var path string
+			path = r.Structure.TopNavbar[topNavbarIndex].Path.ValueString()
 
-		displayName := new(string)
-		if !r.Navigation[navigationIndex].DisplayName.IsUnknown() && !r.Navigation[navigationIndex].DisplayName.IsNull() {
-			*displayName = r.Navigation[navigationIndex].DisplayName.ValueString()
-		} else {
-			displayName = nil
+			displayName := new(string)
+			if !r.Structure.TopNavbar[topNavbarIndex].DisplayName.IsUnknown() && !r.Structure.TopNavbar[topNavbarIndex].DisplayName.IsNull() {
+				*displayName = r.Structure.TopNavbar[topNavbarIndex].DisplayName.ValueString()
+			} else {
+				displayName = nil
+			}
+			topNavbar = append(topNavbar, shared.PortalNavigationPath{
+				Path:        path,
+				DisplayName: displayName,
+			})
 		}
-		navigation = append(navigation, shared.PortalNavigationPath{
-			Path:        path,
-			DisplayName: displayName,
-		})
+		structure = &shared.PortalNavigationStructure{
+			TopNavbar: topNavbar,
+		}
+	}
+	activeThemeHrid := new(string)
+	if !r.ActiveThemeHrid.IsUnknown() && !r.ActiveThemeHrid.IsNull() {
+		*activeThemeHrid = r.ActiveThemeHrid.ValueString()
+	} else {
+		activeThemeHrid = nil
 	}
 	out := shared.PortalSpec{
-		Hrid:       hrid,
-		Name:       name,
-		Navigation: navigation,
+		Hrid:            hrid,
+		Name:            name,
+		Structure:       structure,
+		ActiveThemeHrid: activeThemeHrid,
 	}
 
 	return &out, diags

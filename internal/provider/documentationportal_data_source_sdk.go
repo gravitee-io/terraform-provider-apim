@@ -15,6 +15,11 @@ func (r *DocumentationPortalDataSourceModel) RefreshFromSharedDocumentationPorta
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.Area != nil {
+			r.Area = types.StringValue(string(*resp.Area))
+		} else {
+			r.Area = types.StringNull()
+		}
 		r.Content = types.StringValue(resp.Content)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.Location = types.StringPointerValue(resp.Location)
