@@ -11,15 +11,17 @@ variable "name" {
   type = string
 }
 
-variable "navigation" {
-  type = list(object({
-    path         = string
-    display_name = string
-  }))
+variable "structure" {
+  type = object({
+    top_navbar = list(object({
+      path         = string
+      display_name = string
+    }))
+  })
 }
 
 resource "apim_portal" "test" {
-  hrid       = var.hrid
-  name       = var.name
-  navigation = var.navigation
+  hrid      = var.hrid
+  name      = var.name
+  structure = var.structure
 }
