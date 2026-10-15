@@ -1,6 +1,8 @@
 package acceptance_test
 
 import (
+	"fmt"
+	"strconv"
 	"testing"
 
 	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
@@ -54,41 +56,72 @@ func TestPortalListingResource_update(t *testing.T) {
 	organizationId := "DEFAULT"
 	randomId := "test-" + acctest.RandString(10)
 	portalHrid := "portal-" + randomId
-
-	apisLocation := "/apis-" + portalHrid
-	apisFeaturedLocation := apisLocation + "/featured-" + portalHrid
+	resourceAddress := "apim_portal_listing.test"
+	rootLocation := "/apis-" + portalHrid
+	featuredLocation := rootLocation + "/featured-" + portalHrid
 
 	apisInitial := config.ListVariable(
 		config.ObjectVariable(config.Variables{
 			"api":      config.StringVariable("first"),
-			"location": config.StringVariable(apisLocation),
+			"location": config.StringVariable("apis"),
 			"order":    config.IntegerVariable(1),
 		}),
 		config.ObjectVariable(config.Variables{
 			"api":      config.StringVariable("second"),
-			"location": config.StringVariable(apisLocation),
+			"location": config.StringVariable("apis"),
 			"order":    config.IntegerVariable(2),
 		}),
 	)
 	apisUpdated := config.ListVariable(
 		config.ObjectVariable(config.Variables{
 			"api":      config.StringVariable("second"),
-			"location": config.StringVariable(apisLocation),
+			"location": config.StringVariable("apis"),
 			"order":    config.IntegerVariable(1),
 		}),
 		config.ObjectVariable(config.Variables{
 			"api":      config.StringVariable("first"),
-			"location": config.StringVariable(apisFeaturedLocation),
+			"location": config.StringVariable("featured"),
 			"order":    config.IntegerVariable(2),
 		}),
 	)
 	apisReduced := config.ListVariable(
 		config.ObjectVariable(config.Variables{
 			"api":      config.StringVariable("first"),
-			"location": config.StringVariable(apisFeaturedLocation),
+			"location": config.StringVariable("featured"),
 			"order":    config.IntegerVariable(1),
 		}),
 	)
+
+	type expectedEntry struct {
+		apiHrid  string
+		location string
+		order    int
+	}
+	checkEntries := func(entries ...expectedEntry) resource.TestCheckFunc {
+		checks := []resource.TestCheckFunc{
+			resource.TestCheckResourceAttr(resourceAddress, "apis.#", strconv.Itoa(len(entries))),
+			resource.TestCheckResourceAttr("apim_portal.primary", "structure.top_navbar.0.path", rootLocation),
+			resource.TestCheckResourceAttr("apim_portal.primary", "structure.top_navbar.1.path", featuredLocation),
+		}
+		for i, entry := range entries {
+			prefix := fmt.Sprintf("apis.%d.", i)
+			checks = append(checks,
+				resource.TestCheckResourceAttr(resourceAddress, prefix+"api_hrid", entry.apiHrid),
+				resource.TestCheckResourceAttr(resourceAddress, prefix+"location", entry.location),
+				resource.TestCheckResourceAttr(resourceAddress, prefix+"order", strconv.Itoa(entry.order)),
+			)
+		}
+		return resource.ComposeTestCheckFunc(checks...)
+	}
+	initialCheck := checkEntries(
+		expectedEntry{"api-a-" + randomId, rootLocation, 1},
+		expectedEntry{"api-b-" + randomId, rootLocation, 2},
+	)
+	updatedCheck := checkEntries(
+		expectedEntry{"api-b-" + randomId, rootLocation, 1},
+		expectedEntry{"api-a-" + randomId, featuredLocation, 2},
+	)
+	reducedCheck := checkEntries(expectedEntry{"api-a-" + randomId, featuredLocation, 1})
 
 	resource.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
@@ -102,6 +135,7 @@ func TestPortalListingResource_update(t *testing.T) {
 					"portal_hrid":     config.StringVariable(portalHrid),
 					"apis":            apisInitial,
 				},
+				Check: initialCheck,
 			},
 			{
 				ProtoV6ProviderFactories: testProviders(),
@@ -113,6 +147,7 @@ func TestPortalListingResource_update(t *testing.T) {
 					"portal_hrid":     config.StringVariable(portalHrid),
 					"apis":            apisUpdated,
 				},
+				Check: updatedCheck,
 			},
 			{
 				ProtoV6ProviderFactories: testProviders(),
@@ -124,6 +159,7 @@ func TestPortalListingResource_update(t *testing.T) {
 					"portal_hrid":     config.StringVariable(portalHrid),
 					"apis":            apisReduced,
 				},
+				Check: reducedCheck,
 			},
 			{
 				ProtoV6ProviderFactories: testProviders(),
@@ -135,6 +171,34 @@ func TestPortalListingResource_update(t *testing.T) {
 					"portal_hrid":     config.StringVariable(portalHrid),
 					"apis":            apisUpdated,
 				},
+				Check: updatedCheck,
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"organization_id": config.StringVariable(organizationId),
+					"portal_hrid":     config.StringVariable(portalHrid),
+					"apis":            apisUpdated,
+				},
+				PlanOnly: true,
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"organization_id": config.StringVariable(organizationId),
+					"portal_hrid":     config.StringVariable(portalHrid),
+					"apis":            apisUpdated,
+				},
+				ResourceName:      resourceAddress,
+				ImportState:       true,
+				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id", "portal_hrid"}, nil),
+				ImportStateVerify: true,
 			},
 		},
 	})
