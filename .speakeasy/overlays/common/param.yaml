@@ -16,6 +16,14 @@ actions:
     description: Not necessary in Terraform context
     update:
       x-speakeasy-terraform-ignore: true
+  - target: $.components.parameters.hridContainsApiUUIDQueryParam
+    description: Not necessary in Terraform context
+    update:
+      x-speakeasy-terraform-ignore: true
+  - target: $.components.parameters.hridContainsAppUUIDQueryParam
+    description: Not necessary in Terraform context
+    update:
+      x-speakeasy-terraform-ignore: true
   - target: $.components.parameters.ignoreGroupsQueryParam.schema.default
     description: >-
       Request-only flag APIM never returns: with a default of false, a created resource stores false while an

@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 2a3944135c050298d680f5ce850f9a67
+  docChecksum: 0165dec7fbe9b5f0f24ce643ae45a31c
   docVersion: 1.0.0
   speakeasyVersion: 1.801.0
   generationVersion: 2.946.0
   releaseVersion: 1.0.0
   configChecksum: dafa9022af3424087ece549f51242510
 persistentEdits:
-  generation_id: 157f7bfd-2015-46bd-a91a-f71c2f6908b5
-  pristine_commit_hash: 30903cf652911e511e7c8d7423c027b54291e303
-  pristine_tree_hash: 87d4c6b2b74e695f8e8a2da66dcbc9818e9170ce
+  generation_id: 382b6790-4f72-40d9-853b-863ae2de7373
+  pristine_commit_hash: 52d43ef633f9ef035aca265172ac02bbd5aabc01
+  pristine_tree_hash: 0b2a48cd7d1ad2aa0fa08abd58a1a102b83f5ef0
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -40,22 +40,18 @@ trackedFiles:
     id: ebd7d6a2592b
     last_write_checksum: sha1:eabfeec280eb508836119ce625dd98628f384cea
     pristine_git_object: 14b02ca74ffdf5035f36eb69b1aaac159d892164
-    deleted: true
   examples/data-sources/apim_application/data-source.tf:
     id: 65546ae3c074
     last_write_checksum: sha1:f3b11d3ade11050fefff8d6699c54a42983bafcc
     pristine_git_object: d2ea716c15de1fac55acce7b93ea58ad29be1568
-    deleted: true
   examples/data-sources/apim_catalog_mcp_server/data-source.tf:
     id: 53a31f294f50
     last_write_checksum: sha1:f5ceb26e235ed8b2307dd69aab46795e6913ae06
     pristine_git_object: e158e6b5f66a965c3cd5e4e79302d02f633e661e
-    deleted: true
   examples/data-sources/apim_dictionary/data-source.tf:
     id: 6c7733ed26d6
     last_write_checksum: sha1:701c3445663ec80c9140e153fa2280fd80aadae1
     pristine_git_object: 57bd460758ad87bb4d314eca7398971e25f4b7c9
-    deleted: true
   examples/data-sources/apim_documentation/data-source.tf:
     id: b696fe692ba9
     last_write_checksum: sha1:f9ed9398a1d6a4de9e17d2c19932f5ef3869edf9
@@ -75,12 +71,10 @@ trackedFiles:
     id: 98b93d66233a
     last_write_checksum: sha1:89a08eb7ad4ea01cb4c4b494a44a674f8eae13c2
     pristine_git_object: be23cd970d1399aea1c9b10af16ec0331e2f6b19
-    deleted: true
   examples/data-sources/apim_mcp_proxy/data-source.tf:
     id: 0302d1ad14d0
     last_write_checksum: sha1:67c3eefa24b7e528442bc74c5d696fb9314a153f
     pristine_git_object: 1cfe65b0a7762cffc42fd49445c9f526b0d9c9ff
-    deleted: true
   examples/data-sources/apim_portal/data-source.tf:
     id: c9a23644cbb2
     last_write_checksum: sha1:830bdef7d13ea5913c12b349bca45941e1bd1762
@@ -95,12 +89,10 @@ trackedFiles:
     id: 8014342c8075
     last_write_checksum: sha1:ab550120d7500431354a81905a426b1d5399ac24
     pristine_git_object: ba16f5e0f384411778387b6bdc25a05494a83b68
-    deleted: true
   examples/data-sources/apim_subscription/data-source.tf:
     id: 7d222c50b5e5
     last_write_checksum: sha1:99fa082e08e2447307208b6a47349b92294eadee
     pristine_git_object: 7b6d309036caadf342e220760efa8897491c94cd
-    deleted: true
   examples/provider/provider.tf:
     id: 954e955c0240
     last_write_checksum: sha1:39d294c9b291aab7a0f02f6af5671425d3093733
@@ -1009,8 +1001,8 @@ trackedFiles:
     pristine_git_object: e8dfde46125723cee74b61776fa74055821d5946
   internal/sdk/models/operations/createorupdateapisubscriptions.go:
     id: 92e4a5c690b3
-    last_write_checksum: sha1:26b7b26978cf96ac19048895be794b11da0254cf
-    pristine_git_object: 24ec74f9848350fb6296493855f8cdfb986d3d05
+    last_write_checksum: sha1:1e79d92bc5864613755672604b8e24b0762e583d
+    pristine_git_object: 15b979bdf3f49d59fa9ba0dfd900f6ed7e5e4ed0
   internal/sdk/models/operations/createorupdateapplications.go:
     id: abfc8c92b8d2
     last_write_checksum: sha1:53bfe1d153f1faa9ceb6fb9c792a7d64fa57b93d
@@ -1041,8 +1033,8 @@ trackedFiles:
     pristine_git_object: 93236d46766f49c0f8d13ceb0733831620e6e88f
   internal/sdk/models/operations/deleteapisubscription.go:
     id: 97bf06ebebf1
-    last_write_checksum: sha1:383e218c620f6d0cada2da80cfa0d13c0eeec621
-    pristine_git_object: 00412260321053a0408bb3e80ce3b2520dab9f37
+    last_write_checksum: sha1:8134cb39143f6307fa2d18bf142cfe96f4796987
+    pristine_git_object: 6dd2d0b8a294bc1a1b4fd4950b49dc1e7d285e44
   internal/sdk/models/operations/deleteapplication.go:
     id: 2a25b08fb4aa
     last_write_checksum: sha1:6c7b6836f47e5d87b1cf339dd155aa5a3221c424
@@ -1073,8 +1065,8 @@ trackedFiles:
     pristine_git_object: 319f4d0bc7f8cd12ac2cdda0a8d0277434c95f31
   internal/sdk/models/operations/getapisubscription.go:
     id: 1397776d0e22
-    last_write_checksum: sha1:e43bcf217f7002b54e47d5e51fa3cf4b186064e6
-    pristine_git_object: 98948882ae40ccbbaa8451b9dad67856cb6fb374
+    last_write_checksum: sha1:ca01d0d2900254390179c16e0fbfe6768b9907f3
+    pristine_git_object: 9316e8faac41e830c10983faeae493918674461d
   internal/sdk/models/operations/getapplication.go:
     id: 42beb30dc36f
     last_write_checksum: sha1:f2935b21b0f7ad3d3c82021dd0c635ccf76a74a9
@@ -1595,8 +1587,8 @@ trackedFiles:
     pristine_git_object: 0c2471e69dc200715d31fbc3bb5dfb5e239f849a
   internal/sdk/subscriptions.go:
     id: 6c0fb6924ba6
-    last_write_checksum: sha1:a1ea703f8861588c9cb96b1d8b7b0d26fb7c0622
-    pristine_git_object: f0706cc8476e9b02ef9e8013404ece0901168c66
+    last_write_checksum: sha1:bf373728f2c6e9313219e791c3a58a59c2fef534
+    pristine_git_object: e6480c7720affaedc6947a17d3512848d733a1b3
   internal/sdk/types/bigint.go:
     id: fc530b70337e
     last_write_checksum: sha1:c1ec8524ee4ed730b8514bb36c6abbb3c063d787
@@ -1876,6 +1868,10 @@ examples:
           orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
           envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
           apiHrid: "my_demo_api"
+        query:
+          hridContainsUUID: false
+          hridContainsApiUUID: false
+          hridContainsAppUUID: false
       requestBody:
         application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "metadata": {"key1": "value1", "key2": "value2"}, "apiKeys": [{"key": "my-custom-api-key", "expireAt": "2040-12-25T09:12:28Z"}], "consumerConfiguration": {"entrypointId": "webhook", "channel": "/channel1"}}
       responses:
@@ -1893,6 +1889,9 @@ examples:
           envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
           apiHrid: "my_demo_api"
           hrid: "my_demo_api"
+        query:
+          hridContainsUUID: false
+          hridContainsApiUUID: false
       responses:
         "200":
           application/json: {"apiHrid": "demo-api", "startingAt": "2040-12-25T09:12:28+01:00", "hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "metadata": {"key1": "value1", "key2": "value2"}, "consumerConfiguration": {"entrypointId": "webhook", "channel": "/channel1"}}
@@ -1908,6 +1907,9 @@ examples:
           envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
           apiHrid: "my_demo_api"
           hrid: "my_demo_api"
+        query:
+          hridContainsUUID: false
+          hridContainsApiUUID: false
       responses:
         "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
