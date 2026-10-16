@@ -48,6 +48,15 @@ type GetAPIRequest struct {
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Human-readable ID of a spec
 	Hrid string `pathParam:"style=simple,explode=false,name=hrid"`
+	// When true, the HRID path or spec value is treated as an existing UUID rather than
+	// a human-readable identifier. This is to support backward compatibility for resources
+	// created before migration to the automation API and should not be used for new resources.
+	//
+	HridContainsUUID *bool `default:"false" queryParam:"style=form,explode=true,name=hridContainsUUID"`
+	// When true, the HRID path value is treated as an existing UUID (like hridContainsUUID), and the returned
+	// HRIDs are generated from names: the API's when missing or a UUID, its pages' and plans' always.
+	//
+	XGraviteeSetHrid *bool `default:"false" header:"style=simple,explode=false,name=X-Gravitee-Set-Hrid"`
 }
 
 func (g GetAPIRequest) MarshalJSON() ([]byte, error) {
@@ -80,6 +89,20 @@ func (g *GetAPIRequest) GetHrid() string {
 		return ""
 	}
 	return g.Hrid
+}
+
+func (g *GetAPIRequest) GetHridContainsUUID() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.HridContainsUUID
+}
+
+func (g *GetAPIRequest) GetXGraviteeSetHrid() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.XGraviteeSetHrid
 }
 
 type GetAPIResponse struct {
