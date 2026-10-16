@@ -50,6 +50,16 @@ type GetAPISubscriptionRequest struct {
 	APIHrid string `pathParam:"style=simple,explode=false,name=apiHrid"`
 	// Human-readable ID of a spec
 	Hrid string `pathParam:"style=simple,explode=false,name=hrid"`
+	// When true, the HRID path or spec value is treated as an existing UUID rather than
+	// a human-readable identifier. This is to support backward compatibility for resources
+	// created before migration to the automation API and should not be used for new resources.
+	//
+	HridContainsUUID *bool `default:"false" queryParam:"style=form,explode=true,name=hridContainsUUID"`
+	// When true, the apiHrid path value (and, on create or update, the spec's planHrid) is treated as an
+	// existing UUID rather than a human-readable identifier. This is to support backward compatibility for
+	// resources created before migration to the automation API and should not be used for new resources.
+	//
+	HridContainsAPIUUID *bool `default:"false" queryParam:"style=form,explode=true,name=hridContainsApiUUID"`
 }
 
 func (g GetAPISubscriptionRequest) MarshalJSON() ([]byte, error) {
@@ -89,6 +99,20 @@ func (g *GetAPISubscriptionRequest) GetHrid() string {
 		return ""
 	}
 	return g.Hrid
+}
+
+func (g *GetAPISubscriptionRequest) GetHridContainsUUID() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.HridContainsUUID
+}
+
+func (g *GetAPISubscriptionRequest) GetHridContainsAPIUUID() *bool {
+	if g == nil {
+		return nil
+	}
+	return g.HridContainsAPIUUID
 }
 
 type GetAPISubscriptionResponse struct {

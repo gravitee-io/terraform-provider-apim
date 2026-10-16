@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 6e6493aaea639285a707afd5e4a58794
+  docChecksum: 0165dec7fbe9b5f0f24ce643ae45a31c
   docVersion: 1.0.0
   speakeasyVersion: 1.801.0
   generationVersion: 2.946.0
   releaseVersion: 1.1.0
   configChecksum: 211d8d0c93e48e2ecfe6e2ea207335af
 persistentEdits:
-  generation_id: 4e6c60cd-0b0a-47c8-93ca-ef7f4ff3dba9
-  pristine_commit_hash: aefde901e655a9d77c49e586742a5619fb7a8e15
-  pristine_tree_hash: c2964923432ac7bd86ad3a87901079a159d7161e
+  generation_id: 083ac54b-2882-435d-a454-398b71ac3ff7
+  pristine_commit_hash: 6c8f5b59e4450b27879f674970aa2ded0b4a169d
+  pristine_tree_hash: 63c2920b000d16b22c76399a7415051389de0403
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -897,8 +897,8 @@ trackedFiles:
     pristine_git_object: 1797480e9a22c1eece0bd824c23db5e98076698d
   internal/sdk/apis.go:
     id: a39b4e1e4851
-    last_write_checksum: sha1:89afcc4243d932e5bc4d848537ae22487d1e2785
-    pristine_git_object: 300f06aa2ba6994a0b64e64eb0064c487bee6996
+    last_write_checksum: sha1:e491a3cd260a373a5db5aefe5cc9853625982d47
+    pristine_git_object: ccb7bec69568437dc24c77b7c981add0d52dd63f
   internal/sdk/applications.go:
     id: 5006ded62046
     last_write_checksum: sha1:8a4edd2becae887555eed346b8651b42a807b21a
@@ -1009,8 +1009,8 @@ trackedFiles:
     pristine_git_object: e8dfde46125723cee74b61776fa74055821d5946
   internal/sdk/models/operations/createorupdateapisubscriptions.go:
     id: 92e4a5c690b3
-    last_write_checksum: sha1:26b7b26978cf96ac19048895be794b11da0254cf
-    pristine_git_object: 24ec74f9848350fb6296493855f8cdfb986d3d05
+    last_write_checksum: sha1:1e79d92bc5864613755672604b8e24b0762e583d
+    pristine_git_object: 15b979bdf3f49d59fa9ba0dfd900f6ed7e5e4ed0
   internal/sdk/models/operations/createorupdateapplications.go:
     id: abfc8c92b8d2
     last_write_checksum: sha1:53bfe1d153f1faa9ceb6fb9c792a7d64fa57b93d
@@ -1037,12 +1037,12 @@ trackedFiles:
     pristine_git_object: cfae60fc554e30fd1841ecf3f040a5fadedd0dc6
   internal/sdk/models/operations/deleteapi.go:
     id: 452cbeb96903
-    last_write_checksum: sha1:a57932627943b24d800810a177eaccfd2b0eb9fc
-    pristine_git_object: e957bb59d08083954a309ce2fcf8b16c1ec7c1fd
+    last_write_checksum: sha1:b4f91d129651669d93f93184205ae3869b701d7f
+    pristine_git_object: 93236d46766f49c0f8d13ceb0733831620e6e88f
   internal/sdk/models/operations/deleteapisubscription.go:
     id: 97bf06ebebf1
-    last_write_checksum: sha1:383e218c620f6d0cada2da80cfa0d13c0eeec621
-    pristine_git_object: 00412260321053a0408bb3e80ce3b2520dab9f37
+    last_write_checksum: sha1:8134cb39143f6307fa2d18bf142cfe96f4796987
+    pristine_git_object: 6dd2d0b8a294bc1a1b4fd4950b49dc1e7d285e44
   internal/sdk/models/operations/deleteapplication.go:
     id: 2a25b08fb4aa
     last_write_checksum: sha1:6c7b6836f47e5d87b1cf339dd155aa5a3221c424
@@ -1069,12 +1069,12 @@ trackedFiles:
     pristine_git_object: ed68b97ff00cc1f62d7f385cf05172496367ccff
   internal/sdk/models/operations/getapi.go:
     id: 802d9b66b302
-    last_write_checksum: sha1:e12bfd3e480c8172415c6e69a3e96b27eb5abe1b
-    pristine_git_object: 404778622ca6f35c5ef0aab74b50082e34297928
+    last_write_checksum: sha1:00a054c0cd523050d2b0ef533a7e07a8d517eb44
+    pristine_git_object: 319f4d0bc7f8cd12ac2cdda0a8d0277434c95f31
   internal/sdk/models/operations/getapisubscription.go:
     id: 1397776d0e22
-    last_write_checksum: sha1:e43bcf217f7002b54e47d5e51fa3cf4b186064e6
-    pristine_git_object: 98948882ae40ccbbaa8451b9dad67856cb6fb374
+    last_write_checksum: sha1:ca01d0d2900254390179c16e0fbfe6768b9907f3
+    pristine_git_object: 9316e8faac41e830c10983faeae493918674461d
   internal/sdk/models/operations/getapplication.go:
     id: 42beb30dc36f
     last_write_checksum: sha1:f2935b21b0f7ad3d3c82021dd0c635ccf76a74a9
@@ -1595,8 +1595,8 @@ trackedFiles:
     pristine_git_object: 0c2471e69dc200715d31fbc3bb5dfb5e239f849a
   internal/sdk/subscriptions.go:
     id: 6c0fb6924ba6
-    last_write_checksum: sha1:a1ea703f8861588c9cb96b1d8b7b0d26fb7c0622
-    pristine_git_object: f0706cc8476e9b02ef9e8013404ece0901168c66
+    last_write_checksum: sha1:bf373728f2c6e9313219e791c3a58a59c2fef534
+    pristine_git_object: e6480c7720affaedc6947a17d3512848d733a1b3
   internal/sdk/types/bigint.go:
     id: fc530b70337e
     last_write_checksum: sha1:c1ec8524ee4ed730b8514bb36c6abbb3c063d787
@@ -1711,6 +1711,10 @@ examples:
           orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
           envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
           hrid: "my_demo_api"
+        query:
+          hridContainsUUID: false
+        header:
+          X-Gravitee-Set-Hrid: false
       responses:
         "200":
           application/json: {"hrid": "my_demo_api", "name": "My Api", "version": "1.0.0", "type": "MESSAGE", "description": "I can use many characters to describe this API.", "tags": ["europe"], "listeners": [{"type": "KAFKA", "servers": [], "host": "unique-king.org", "port": 609571}], "endpointGroups": [{"name": "default-endpoint-group", "type": "default", "loadBalancer": {"type": "ROUND_ROBIN"}, "endpoints": [{"name": "default-endpoint", "type": "mock", "weight": 1, "inheritConfiguration": false, "services": {}, "secondary": false, "tenants": []}]}], "analytics": {"reporterMetricsEnabled": true, "logging": {"condition": "{#request.headers['Content-Type'][0] == 'application/json'}", "messageCondition": "{ #message.headers['Content-Type'][0] == 'application/json'}"}}, "properties": [], "resources": [], "plans": [], "flowExecution": {"mode": "BEST_MATCH", "matchRequired": false}, "flows": [], "groups": ["developers"], "visibility": "PUBLIC", "state": "STARTED", "primaryOwner": {"id": "00f8c9e7-78fc-4907-b8c9-e778fc790750", "email": "john.doe@example.com", "displayName": "John Doe", "type": "USER"}, "labels": ["example"], "metadata": [], "lifecycleState": "CREATED", "categories": ["Example APIs"], "members": [], "pages": [], "allowedInApiProducts": false, "allowMultiJwtOauth2Subscriptions": false}
@@ -1725,6 +1729,8 @@ examples:
           orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
           envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
           hrid: "my_demo_api"
+        query:
+          hridContainsUUID: false
       responses:
         "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
@@ -1870,6 +1876,10 @@ examples:
           orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
           envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
           apiHrid: "my_demo_api"
+        query:
+          hridContainsUUID: false
+          hridContainsApiUUID: false
+          hridContainsAppUUID: false
       requestBody:
         application/json: {"hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "metadata": {"key1": "value1", "key2": "value2"}, "apiKeys": [{"key": "my-custom-api-key", "expireAt": "2040-12-25T09:12:28Z"}], "consumerConfiguration": {"entrypointId": "webhook", "channel": "/channel1"}}
       responses:
@@ -1887,6 +1897,9 @@ examples:
           envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
           apiHrid: "my_demo_api"
           hrid: "my_demo_api"
+        query:
+          hridContainsUUID: false
+          hridContainsApiUUID: false
       responses:
         "200":
           application/json: {"apiHrid": "demo-api", "startingAt": "2040-12-25T09:12:28+01:00", "hrid": "my_demo_api", "applicationHrid": "demo-app", "planHrid": "demo-plan", "endingAt": "2040-12-25T09:12:28Z", "metadata": {"key1": "value1", "key2": "value2"}, "consumerConfiguration": {"entrypointId": "webhook", "channel": "/channel1"}}
@@ -1902,6 +1915,9 @@ examples:
           envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
           apiHrid: "my_demo_api"
           hrid: "my_demo_api"
+        query:
+          hridContainsUUID: false
+          hridContainsApiUUID: false
       responses:
         "401":
           application/json: {"httpStatus": 400, "message": "Bad request", "technicalCode": "invalid.import.definition", "details": [{"message": "Bad request", "location": "updateApi.properties[0].key"}]}
