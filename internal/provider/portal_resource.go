@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
+	custom_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
@@ -48,12 +48,13 @@ type PortalResource struct {
 
 // PortalResourceModel describes the resource data model.
 type PortalResourceModel struct {
-	EnvironmentID  types.String                   `tfsdk:"environment_id"`
-	Hrid           types.String                   `tfsdk:"hrid"`
-	ID             types.String                   `tfsdk:"id"`
-	Name           types.String                   `tfsdk:"name"`
-	Navigation     []tfTypes.PortalNavigationPath `tfsdk:"navigation"`
-	OrganizationID types.String                   `tfsdk:"organization_id"`
+	ActiveThemeHrid types.String                       `tfsdk:"active_theme_hrid"`
+	EnvironmentID   types.String                       `tfsdk:"environment_id"`
+	Hrid            types.String                       `tfsdk:"hrid"`
+	ID              types.String                       `tfsdk:"id"`
+	Name            types.String                       `tfsdk:"name"`
+	OrganizationID  types.String                       `tfsdk:"organization_id"`
+	Structure       *tfTypes.PortalNavigationStructure `tfsdk:"structure"`
 }
 
 func (r *PortalResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -64,6 +65,13 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 	resp.Schema = schema.Schema{
 		MarkdownDescription: "Portal Resource",
 		Attributes: map[string]schema.Attribute{
+			"active_theme_hrid": schema.StringAttribute{
+				Optional: true,
+				MarkdownDescription: `HRID of the Theme this portal should use as its active theme. When set, applying the portal` + "\n" +
+					`marks the referenced theme as active (enabled) and disables every other PORTAL_NEXT theme` + "\n" +
+					`in the environment. Leaving this field unset clears the reference and disables the` + "\n" +
+					`previously-active theme; the portal-next UI will then lazily fall back to a fresh default theme.`,
+			},
 			"environment_id": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
@@ -81,7 +89,7 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `A unique human readable id identifying this resource. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{
@@ -95,37 +103,6 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Required:    true,
 				Description: `Display name of the portal`,
 			},
-			"navigation": schema.ListNestedAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.List{
-					custom_listplanmodifier.IgnoreEmptyList(),
-				},
-				NestedObject: schema.NestedAttributeObject{
-					Validators: []validator.Object{
-						speakeasy_objectvalidators.NotNull(),
-					},
-					Attributes: map[string]schema.Attribute{
-						"display_name": schema.StringAttribute{
-							Optional: true,
-							MarkdownDescription: `Optional human-friendly label for this path node.` + "\n" +
-								`Listing a path explicitly is the only way to attach a displayName.`,
-						},
-						"path": schema.StringAttribute{
-							Optional: true,
-							MarkdownDescription: `A slash-separated path defining the navigation hierarchy.` + "\n" +
-								`Intermediate folders are implicitly created if not listed explicitly.` + "\n" +
-								`Not Null`,
-							Validators: []validator.String{
-								speakeasy_stringvalidators.NotNull(),
-							},
-						},
-					},
-				},
-				MarkdownDescription: `The portal's navigation hierarchy as a flat list of paths.` + "\n" +
-					`Paths are ordered — the order in the list is preserved.` + "\n" +
-					`Intermediate folders are implicitly created if not listed explicitly.`,
-			},
 			"organization_id": schema.StringAttribute{
 				Computed: true,
 				Optional: true,
@@ -133,6 +110,57 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `organization ID`,
+			},
+			"structure": schema.SingleNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.Object{
+					custom_objectplanmodifier.PortalStructure(),
+				},
+				Attributes: map[string]schema.Attribute{
+					"top_navbar": schema.ListNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
+							},
+							Attributes: map[string]schema.Attribute{
+								"display_name": schema.StringAttribute{
+									Optional: true,
+									MarkdownDescription: `Optional human-friendly label for this path node.` + "\n" +
+										`Listing a path explicitly is the only way to attach a displayName.`,
+								},
+								"path": schema.StringAttribute{
+									Optional: true,
+									MarkdownDescription: `A slash-separated path defining the navigation hierarchy.` + "\n" +
+										`Intermediate folders are implicitly created if not listed explicitly.` + "\n" +
+										`Not Null`,
+									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
+									},
+								},
+								"visibility": schema.StringAttribute{
+									Computed: true,
+									Optional: true,
+									MarkdownDescription: `Whether the navigation entry is visible to anonymous portal visitors.` + "\n" +
+										`Optional in the Automation API for backward compatibility with clients that predate this field —` + "\n" +
+										`when omitted, the entry inherits from its parent (root entries default to PUBLIC).` + "\n" +
+										`A PUBLIC child under a PRIVATE parent is rejected.` + "\n" +
+										`must be one of ["PUBLIC", "PRIVATE"]`,
+									Validators: []validator.String{
+										stringvalidator.OneOf(
+											"PUBLIC",
+											"PRIVATE",
+										),
+									},
+								},
+							},
+						},
+						MarkdownDescription: `Top navbar entries as an ordered list of paths.` + "\n" +
+							`Intermediate folders are implicitly created if not listed explicitly.`,
+					},
+				},
+				Description: `Portal navigation grouped by area. Omitting ` + "`" + `structure` + "`" + ` preserves existing navigation, including after import and during unrelated updates. When ` + "`" + `structure` + "`" + ` is configured, ` + "`" + `top_navbar` + "`" + ` must be an explicit list: use ` + "`" + `structure = { top_navbar = [] }` + "`" + ` to clear navigation. ` + "`" + `structure = {}` + "`" + ` and ` + "`" + `structure = { top_navbar = null }` + "`" + ` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit ` + "`" + `top_navbar` + "`" + ` within a configured structure.`,
 			},
 		},
 	}

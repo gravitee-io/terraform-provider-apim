@@ -17,6 +17,12 @@ type NavigationPath struct {
 	// Listing a path explicitly is the only way to attach an order.
 	//
 	Order *int64 `json:"order,omitempty"`
+	// Whether the navigation entry is visible to anonymous portal visitors.
+	// Optional in the Automation API for backward compatibility with clients that predate this field —
+	// when omitted, the entry inherits from its parent (root entries default to PUBLIC).
+	// A PUBLIC child under a PRIVATE parent is rejected.
+	//
+	Visibility *PortalVisibility `json:"visibility,omitempty"`
 }
 
 func (n *NavigationPath) GetPath() string {
@@ -38,4 +44,11 @@ func (n *NavigationPath) GetOrder() *int64 {
 		return nil
 	}
 	return n.Order
+}
+
+func (n *NavigationPath) GetVisibility() *PortalVisibility {
+	if n == nil {
+		return nil
+	}
+	return n.Visibility
 }

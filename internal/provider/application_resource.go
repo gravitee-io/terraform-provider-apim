@@ -65,6 +65,7 @@ type ApplicationResourceModel struct {
 	Groups         []types.String               `tfsdk:"groups"`
 	Hrid           types.String                 `tfsdk:"hrid"`
 	ID             types.String                 `tfsdk:"id"`
+	IgnoreGroups   types.Bool                   `queryParam:"style=form,explode=true,name=ignoreGroups" tfsdk:"ignore_groups"`
 	Members        []tfTypes.Member             `tfsdk:"members"`
 	Metadata       []tfTypes.Metadata           `tfsdk:"metadata"`
 	Name           types.String                 `tfsdk:"name"`
@@ -127,7 +128,7 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 				Description: `Human-readable ID of a spec. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{
@@ -136,6 +137,17 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 					speakeasy_stringplanmodifier.SuppressDiff(speakeasy_stringplanmodifier.ExplicitSuppress),
 				},
 				Description: `Resource UUID.`,
+			},
+			"ignore_groups": schema.BoolAttribute{
+				Computed: true,
+				Optional: true,
+				Default:  booldefault.StaticBool(false),
+				MarkdownDescription: `When true, ` + "`" + `groups` + "`" + ` in the spec is not applied and the platform keeps ownership of the` + "\n" +
+					`resource's group assignment, for instance groups managed from the Console.` + "\n" +
+					`On update, the resource keeps the groups it has on the platform. On create, it receives` + "\n" +
+					`the environment's default groups, as a Console create does.` + "\n" +
+					`The answer echoes the request; read the group assignment back with GET.` + "\n" +
+					`Default: false`,
 			},
 			"members": schema.ListNestedAttribute{
 				Computed: true,
@@ -305,6 +317,10 @@ func (r *ApplicationResource) Schema(ctx context.Context, req resource.SchemaReq
 							"additional_client_metadata": schema.MapAttribute{
 								Optional:    true,
 								ElementType: types.StringType,
+								MarkdownDescription: `Additional Dynamic Client Registration metadata sent to the client registration provider,` + "\n" +
+									`as a flat map of DCR field name to value. Only fields defined by the registration request` + "\n" +
+									`are forwarded, the others are ignored. Use ` + "`" + `software_id` + "`" + ` to select a client template on` + "\n" +
+									`the provider; a value set here takes precedence over the provider-wide one.`,
 							},
 							"application_type": schema.StringAttribute{
 								Optional: true,

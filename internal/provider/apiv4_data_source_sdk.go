@@ -25,6 +25,10 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			r.Analytics = nil
 		} else {
 			r.Analytics = &tfTypes.Analytics{}
+			r.Analytics.ConnectionEvents = make([]types.String, 0, len(resp.Analytics.ConnectionEvents))
+			for _, v := range resp.Analytics.ConnectionEvents {
+				r.Analytics.ConnectionEvents = append(r.Analytics.ConnectionEvents, types.StringValue(string(v)))
+			}
 			r.Analytics.Enabled = types.BoolPointerValue(resp.Analytics.Enabled)
 			if resp.Analytics.Logging == nil {
 				r.Analytics.Logging = nil
@@ -76,6 +80,31 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			} else {
 				r.Analytics.Tracing = &tfTypes.TracingV4{}
 				r.Analytics.Tracing.Enabled = types.BoolPointerValue(resp.Analytics.Tracing.Enabled)
+				if resp.Analytics.Tracing.Redaction == nil {
+					r.Analytics.Tracing.Redaction = nil
+				} else {
+					r.Analytics.Tracing.Redaction = &tfTypes.TracingRedactionConfig{}
+					r.Analytics.Tracing.Redaction.DefaultReplacement = types.StringPointerValue(resp.Analytics.Tracing.Redaction.DefaultReplacement)
+					r.Analytics.Tracing.Redaction.Rules = []tfTypes.TracingRedactionRule{}
+
+					for _, rulesItem := range resp.Analytics.Tracing.Redaction.Rules {
+						var rules tfTypes.TracingRedactionRule
+
+						rules.AttributeNamePattern = types.StringValue(rulesItem.AttributeNamePattern)
+						if rulesItem.MaskingStrategy == nil {
+							rules.MaskingStrategy = nil
+						} else {
+							rules.MaskingStrategy = &tfTypes.TracingMaskingStrategy{}
+							rules.MaskingStrategy.PrefixLength = types.Int64PointerValue(rulesItem.MaskingStrategy.PrefixLength)
+							rules.MaskingStrategy.Replacement = types.StringPointerValue(rulesItem.MaskingStrategy.Replacement)
+							rules.MaskingStrategy.SuffixLength = types.Int64PointerValue(rulesItem.MaskingStrategy.SuffixLength)
+							rules.MaskingStrategy.Type = types.StringValue(string(rulesItem.MaskingStrategy.Type))
+						}
+						rules.ValuePattern = types.StringPointerValue(rulesItem.ValuePattern)
+
+						r.Analytics.Tracing.Redaction.Rules = append(r.Analytics.Tracing.Redaction.Rules, rules)
+					}
+				}
 				r.Analytics.Tracing.Verbose = types.BoolPointerValue(resp.Analytics.Tracing.Verbose)
 			}
 		}
@@ -439,6 +468,7 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					for _, v := range listenersItem.HTTPListener.Cors.AllowOrigin {
 						listeners.HTTP.Cors.AllowOrigin = append(listeners.HTTP.Cors.AllowOrigin, types.StringValue(v))
 					}
+					listeners.HTTP.Cors.AllowPrivateNetwork = types.BoolPointerValue(listenersItem.HTTPListener.Cors.AllowPrivateNetwork)
 					listeners.HTTP.Cors.Enabled = types.BoolPointerValue(listenersItem.HTTPListener.Cors.Enabled)
 					listeners.HTTP.Cors.ExposeHeaders = make([]types.String, 0, len(listenersItem.HTTPListener.Cors.ExposeHeaders))
 					for _, v := range listenersItem.HTTPListener.Cors.ExposeHeaders {
@@ -473,6 +503,10 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 
 					listeners.HTTP.Entrypoints = append(listeners.HTTP.Entrypoints, entrypoints)
 				}
+				listeners.HTTP.PathMappings = make([]types.String, 0, len(listenersItem.HTTPListener.PathMappings))
+				for _, v := range listenersItem.HTTPListener.PathMappings {
+					listeners.HTTP.PathMappings = append(listeners.HTTP.PathMappings, types.StringValue(v))
+				}
 				listeners.HTTP.Paths = []tfTypes.PathV4{}
 
 				for _, pathsItem := range listenersItem.HTTPListener.Paths {
@@ -483,6 +517,12 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 					paths.Path = types.StringPointerValue(pathsItem.Path)
 
 					listeners.HTTP.Paths = append(listeners.HTTP.Paths, paths)
+				}
+				if listenersItem.HTTPListener.RequestValidation == nil {
+					listeners.HTTP.RequestValidation = nil
+				} else {
+					listeners.HTTP.RequestValidation = &tfTypes.RequestValidation{}
+					listeners.HTTP.RequestValidation.RejectNullByte = types.BoolPointerValue(listenersItem.HTTPListener.RequestValidation.RejectNullByte)
 				}
 				listeners.HTTP.Servers = make([]types.String, 0, len(listenersItem.HTTPListener.Servers))
 				for _, v := range listenersItem.HTTPListener.Servers {
@@ -912,6 +952,11 @@ func (r *Apiv4DataSourceModel) RefreshFromSharedApiv4State(ctx context.Context, 
 			portalNavigation.DisplayName = types.StringPointerValue(portalNavigationItem.DisplayName)
 			portalNavigation.Order = types.Int64PointerValue(portalNavigationItem.Order)
 			portalNavigation.Path = types.StringValue(portalNavigationItem.Path)
+			if portalNavigationItem.Visibility != nil {
+				portalNavigation.Visibility = types.StringValue(string(*portalNavigationItem.Visibility))
+			} else {
+				portalNavigation.Visibility = types.StringNull()
+			}
 
 			r.PortalNavigation = append(r.PortalNavigation, portalNavigation)
 		}

@@ -24,6 +24,11 @@ func (r *PortalListingResourceModel) RefreshFromSharedPortalListingState(ctx con
 			apis.APIHrid = types.StringValue(apisItem.APIHrid)
 			apis.Location = types.StringValue(apisItem.Location)
 			apis.Order = types.Int64PointerValue(apisItem.Order)
+			if apisItem.Visibility != nil {
+				apis.Visibility = types.StringValue(string(*apisItem.Visibility))
+			} else {
+				apis.Visibility = types.StringNull()
+			}
 
 			r.Apis = append(r.Apis, apis)
 		}
@@ -154,10 +159,17 @@ func (r *PortalListingResourceModel) ToSharedPortalListingSpec(ctx context.Conte
 		} else {
 			order = nil
 		}
+		visibility := new(shared.PortalVisibility)
+		if !r.Apis[apisIndex].Visibility.IsUnknown() && !r.Apis[apisIndex].Visibility.IsNull() {
+			*visibility = shared.PortalVisibility(r.Apis[apisIndex].Visibility.ValueString())
+		} else {
+			visibility = nil
+		}
 		apis = append(apis, shared.PortalListingAPIEntry{
-			APIHrid:  apiHrid,
-			Location: location,
-			Order:    order,
+			APIHrid:    apiHrid,
+			Location:   location,
+			Order:      order,
+			Visibility: visibility,
 		})
 	}
 	out := shared.PortalListingSpec{

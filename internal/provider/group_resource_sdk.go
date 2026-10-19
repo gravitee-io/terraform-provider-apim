@@ -16,6 +16,14 @@ func (r *GroupResourceModel) RefreshFromSharedGroupState(ctx context.Context, re
 	var diags diag.Diagnostics
 
 	if resp != nil {
+		if resp.DefaultMemberRoles == nil {
+			r.DefaultMemberRoles = nil
+		} else {
+			r.DefaultMemberRoles = &tfTypes.GroupDefaultMemberRoles{}
+			r.DefaultMemberRoles.API = types.StringPointerValue(resp.DefaultMemberRoles.API)
+			r.DefaultMemberRoles.APIProduct = types.StringPointerValue(resp.DefaultMemberRoles.APIProduct)
+			r.DefaultMemberRoles.Application = types.StringPointerValue(resp.DefaultMemberRoles.Application)
+		}
 		r.EnvironmentID = types.StringPointerValue(resp.EnvironmentID)
 		r.Hrid = types.StringValue(resp.Hrid)
 		r.ID = types.StringPointerValue(resp.ID)
@@ -58,6 +66,12 @@ func (r *GroupResourceModel) ToOperationsCreateOrUpdateGroupRequest(ctx context.
 	} else {
 		environmentID = nil
 	}
+	ignoreMembers := new(bool)
+	if !r.IgnoreMembers.IsUnknown() && !r.IgnoreMembers.IsNull() {
+		*ignoreMembers = r.IgnoreMembers.ValueBool()
+	} else {
+		ignoreMembers = nil
+	}
 	groupSpec, groupSpecDiags := r.ToSharedGroupSpec(ctx)
 	diags.Append(groupSpecDiags...)
 
@@ -68,6 +82,7 @@ func (r *GroupResourceModel) ToOperationsCreateOrUpdateGroupRequest(ctx context.
 	out := operations.CreateOrUpdateGroupRequest{
 		OrganizationID: organizationID,
 		EnvironmentID:  environmentID,
+		IgnoreMembers:  ignoreMembers,
 		GroupSpec:      *groupSpec,
 	}
 
@@ -158,6 +173,32 @@ func (r *GroupResourceModel) ToSharedGroupSpec(ctx context.Context) (*shared.Gro
 			Roles:    roles,
 		})
 	}
+	var defaultMemberRoles *shared.GroupDefaultMemberRoles
+	if r.DefaultMemberRoles != nil {
+		api := new(string)
+		if !r.DefaultMemberRoles.API.IsUnknown() && !r.DefaultMemberRoles.API.IsNull() {
+			*api = r.DefaultMemberRoles.API.ValueString()
+		} else {
+			api = nil
+		}
+		application := new(string)
+		if !r.DefaultMemberRoles.Application.IsUnknown() && !r.DefaultMemberRoles.Application.IsNull() {
+			*application = r.DefaultMemberRoles.Application.ValueString()
+		} else {
+			application = nil
+		}
+		apiProduct := new(string)
+		if !r.DefaultMemberRoles.APIProduct.IsUnknown() && !r.DefaultMemberRoles.APIProduct.IsNull() {
+			*apiProduct = r.DefaultMemberRoles.APIProduct.ValueString()
+		} else {
+			apiProduct = nil
+		}
+		defaultMemberRoles = &shared.GroupDefaultMemberRoles{
+			API:         api,
+			Application: application,
+			APIProduct:  apiProduct,
+		}
+	}
 	notifyMembers := new(bool)
 	if !r.NotifyMembers.IsUnknown() && !r.NotifyMembers.IsNull() {
 		*notifyMembers = r.NotifyMembers.ValueBool()
@@ -165,10 +206,11 @@ func (r *GroupResourceModel) ToSharedGroupSpec(ctx context.Context) (*shared.Gro
 		notifyMembers = nil
 	}
 	out := shared.GroupSpec{
-		Hrid:          hrid,
-		Name:          name,
-		Members:       members,
-		NotifyMembers: notifyMembers,
+		Hrid:               hrid,
+		Name:               name,
+		Members:            members,
+		DefaultMemberRoles: defaultMemberRoles,
+		NotifyMembers:      notifyMembers,
 	}
 
 	return &out, diags

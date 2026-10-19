@@ -10,4 +10,5 @@ import (
 type PortalNavigationPath struct {
 	DisplayName types.String `tfsdk:"display_name"`
 	Path        types.String `tfsdk:"path"`
+	Visibility  types.String `tfsdk:"visibility"`
 }

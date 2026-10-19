@@ -3,6 +3,10 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // DocumentationAPISpec - Status information for an API Documentation page after import.
 type DocumentationAPISpec struct {
 	// A unique human readable id identifying this resource
@@ -18,6 +22,28 @@ type DocumentationAPISpec struct {
 	Location *string `json:"location,omitempty"`
 	// Display order relative to siblings at the same location
 	Order *int64 `json:"order,omitempty"`
+	// Where the documentation page appears in the portal. `TOP_NAVBAR` is the default. `HOMEPAGE`
+	// marks the page as the portal's homepage — only one homepage may exist per portal, and applying
+	// a new one replaces any existing homepage for that portal.
+	//
+	Area *DocumentationArea `default:"TOP_NAVBAR" json:"area"`
+	// Whether the navigation entry is visible to anonymous portal visitors.
+	// Optional in the Automation API for backward compatibility with clients that predate this field —
+	// when omitted, the entry inherits from its parent (root entries default to PUBLIC).
+	// A PUBLIC child under a PRIVATE parent is rejected.
+	//
+	Visibility *PortalVisibility `json:"visibility,omitempty"`
+}
+
+func (d DocumentationAPISpec) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(d, "", false)
+}
+
+func (d *DocumentationAPISpec) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &d, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (d *DocumentationAPISpec) GetHrid() string {
@@ -60,4 +86,18 @@ func (d *DocumentationAPISpec) GetOrder() *int64 {
 		return nil
 	}
 	return d.Order
+}
+
+func (d *DocumentationAPISpec) GetArea() *DocumentationArea {
+	if d == nil {
+		return nil
+	}
+	return d.Area
+}
+
+func (d *DocumentationAPISpec) GetVisibility() *PortalVisibility {
+	if d == nil {
+		return nil
+	}
+	return d.Visibility
 }

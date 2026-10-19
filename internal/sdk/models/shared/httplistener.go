@@ -17,8 +17,12 @@ type HTTPListener struct {
 	Servers []string `json:"servers,omitempty"`
 	// One of the possible context paths of this API
 	Paths []PathV4 `json:"paths,omitempty"`
+	// Path patterns used to group analytics by API path (e.g. `/products/:productId`).
+	PathMappings []string `json:"pathMappings,omitempty"`
 	// Http listener Cross-Origin Resource Sharing
 	Cors *Cors `json:"cors,omitempty"`
+	// Validation the Gateway applies to incoming requests before running flows.
+	RequestValidation *RequestValidation `json:"requestValidation,omitempty"`
 }
 
 func (h HTTPListener) MarshalJSON() ([]byte, error) {
@@ -60,9 +64,23 @@ func (h *HTTPListener) GetPaths() []PathV4 {
 	return h.Paths
 }
 
+func (h *HTTPListener) GetPathMappings() []string {
+	if h == nil {
+		return nil
+	}
+	return h.PathMappings
+}
+
 func (h *HTTPListener) GetCors() *Cors {
 	if h == nil {
 		return nil
 	}
 	return h.Cors
+}
+
+func (h *HTTPListener) GetRequestValidation() *RequestValidation {
+	if h == nil {
+		return nil
+	}
+	return h.RequestValidation
 }
