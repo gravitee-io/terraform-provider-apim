@@ -77,6 +77,13 @@ jobs:
         with:
           daemon-config: |
             { "features": { "containerd-snapshotter": false } }
+      # The APIM images and the apim3 chart come from graviteeio.azurecr.io, which requires a login.
+      - name: Log in to graviteeio.azurecr.io
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: graviteeio.azurecr.io
+          username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
       - name: Create test cluster
         env:
           APIM_GRAVITEE_LICENSE: ${{ secrets.GRAVITEE_LICENSE }}
