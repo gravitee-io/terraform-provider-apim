@@ -1581,8 +1581,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"path_mappings": schema.ListAttribute{
-									Computed:    true,
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									ElementType: types.StringType,
 									Description: `Path patterns used to group analytics by API path (e.g. ` + "`" + `/products/:productId` + "`" + `).`,
 								},
@@ -1626,6 +1629,9 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								"request_validation": schema.SingleNestedAttribute{
 									Computed: true,
 									Optional: true,
+									PlanModifiers: []planmodifier.Object{
+										speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+									},
 									Attributes: map[string]schema.Attribute{
 										"reject_null_byte": schema.BoolAttribute{
 											Computed:    true,
