@@ -3223,9 +3223,9 @@ func (r *Apiv4ResourceModel) ToSharedApiv4Spec(ctx context.Context) (*shared.API
 		} else {
 			order = nil
 		}
-		visibility2 := new(shared.PortalVisibility)
+		visibility2 := new(shared.DeclaredPortalVisibility)
 		if !r.PortalNavigation[portalNavigationIndex].Visibility.IsUnknown() && !r.PortalNavigation[portalNavigationIndex].Visibility.IsNull() {
-			*visibility2 = shared.PortalVisibility(r.PortalNavigation[portalNavigationIndex].Visibility.ValueString())
+			*visibility2 = shared.DeclaredPortalVisibility(r.PortalNavigation[portalNavigationIndex].Visibility.ValueString())
 		} else {
 			visibility2 = nil
 		}

@@ -155,9 +155,9 @@ func (r *PortalLinkResourceModel) ToSharedPortalAttachedLinkSpec(ctx context.Con
 	} else {
 		order = nil
 	}
-	visibility := new(shared.PortalVisibility)
+	visibility := new(shared.DeclaredPortalVisibility)
 	if !r.Visibility.IsUnknown() && !r.Visibility.IsNull() {
-		*visibility = shared.PortalVisibility(r.Visibility.ValueString())
+		*visibility = shared.DeclaredPortalVisibility(r.Visibility.ValueString())
 	} else {
 		visibility = nil
 	}

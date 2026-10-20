@@ -154,9 +154,9 @@ func (r *PortalResourceModel) ToSharedPortalSpec(ctx context.Context) (*shared.P
 			} else {
 				displayName = nil
 			}
-			visibility := new(shared.PortalVisibility)
+			visibility := new(shared.DeclaredPortalVisibility)
 			if !r.Structure.TopNavbar[topNavbarIndex].Visibility.IsUnknown() && !r.Structure.TopNavbar[topNavbarIndex].Visibility.IsNull() {
-				*visibility = shared.PortalVisibility(r.Structure.TopNavbar[topNavbarIndex].Visibility.ValueString())
+				*visibility = shared.DeclaredPortalVisibility(r.Structure.TopNavbar[topNavbarIndex].Visibility.ValueString())
 			} else {
 				visibility = nil
 			}

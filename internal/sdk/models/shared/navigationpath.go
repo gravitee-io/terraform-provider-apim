@@ -22,7 +22,7 @@ type NavigationPath struct {
 	// when omitted, the entry inherits from its parent (root entries default to PUBLIC).
 	// A PUBLIC child under a PRIVATE parent is rejected.
 	//
-	Visibility *PortalVisibility `json:"visibility,omitempty"`
+	Visibility *DeclaredPortalVisibility `json:"visibility,omitempty"`
 }
 
 func (n *NavigationPath) GetPath() string {
@@ -46,7 +46,7 @@ func (n *NavigationPath) GetOrder() *int64 {
 	return n.Order
 }
 
-func (n *NavigationPath) GetVisibility() *PortalVisibility {
+func (n *NavigationPath) GetVisibility() *DeclaredPortalVisibility {
 	if n == nil {
 		return nil
 	}

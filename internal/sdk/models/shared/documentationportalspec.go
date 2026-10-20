@@ -33,7 +33,7 @@ type DocumentationPortalSpec struct {
 	// when omitted, the entry inherits from its parent (root entries default to PUBLIC).
 	// A PUBLIC child under a PRIVATE parent is rejected.
 	//
-	Visibility *PortalVisibility `json:"visibility,omitempty"`
+	Visibility *DeclaredPortalVisibility `json:"visibility,omitempty"`
 }
 
 func (d DocumentationPortalSpec) MarshalJSON() ([]byte, error) {
@@ -96,7 +96,7 @@ func (d *DocumentationPortalSpec) GetArea() *DocumentationArea {
 	return d.Area
 }
 
-func (d *DocumentationPortalSpec) GetVisibility() *PortalVisibility {
+func (d *DocumentationPortalSpec) GetVisibility() *DeclaredPortalVisibility {
 	if d == nil {
 		return nil
 	}

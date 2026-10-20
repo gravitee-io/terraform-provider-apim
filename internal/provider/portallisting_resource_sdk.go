@@ -159,9 +159,9 @@ func (r *PortalListingResourceModel) ToSharedPortalListingSpec(ctx context.Conte
 		} else {
 			order = nil
 		}
-		visibility := new(shared.PortalVisibility)
+		visibility := new(shared.DeclaredPortalVisibility)
 		if !r.Apis[apisIndex].Visibility.IsUnknown() && !r.Apis[apisIndex].Visibility.IsNull() {
-			*visibility = shared.PortalVisibility(r.Apis[apisIndex].Visibility.ValueString())
+			*visibility = shared.DeclaredPortalVisibility(r.Apis[apisIndex].Visibility.ValueString())
 		} else {
 			visibility = nil
 		}

@@ -20,7 +20,7 @@ type PortalListingAPIEntry struct {
 	// when omitted, the entry inherits from its parent (root entries default to PUBLIC).
 	// A PUBLIC child under a PRIVATE parent is rejected.
 	//
-	Visibility *PortalVisibility `json:"visibility,omitempty"`
+	Visibility *DeclaredPortalVisibility `json:"visibility,omitempty"`
 }
 
 func (p *PortalListingAPIEntry) GetAPIHrid() string {
@@ -44,7 +44,7 @@ func (p *PortalListingAPIEntry) GetOrder() *int64 {
 	return p.Order
 }
 
-func (p *PortalListingAPIEntry) GetVisibility() *PortalVisibility {
+func (p *PortalListingAPIEntry) GetVisibility() *DeclaredPortalVisibility {
 	if p == nil {
 		return nil
 	}
