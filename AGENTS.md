@@ -88,7 +88,7 @@ APIM_USERNAME=admin APIM_PASSWORD=admin APIM_SERVER_URL=http://localhost:30083/a
 # Run a single unit test
 go test -count=1 -v -run TestSomething ./internal/...
 
-# Local Kind cluster for APIM
+# Local Kind cluster for APIM (pulls from graviteeio.azurecr.io, which needs a `docker login` first)
 make start-cluster                          # full mode
 APIM_MINIMAL=true make start-cluster        # minimal (faster, management API only)
 make stop-cluster
@@ -145,6 +145,6 @@ Custom plan modifiers, validators, and types in `internal/planmodifiers/`, `inte
 - Generated code is the majority of the codebase — custom changes go in marked regions or non-generated files
 - Import IDs are JSON-encoded composite keys (see test files for format)
 - APIM compatibility: 4.9+
-- CI runs acceptance tests across a matrix of Terraform versions (1.9.x, latest) × APIM versions (4.9.x, 4.10.x, 4.11.x, master-latest/4.12.x)
+- CircleCI runs the acceptance and example tests on every push, across a matrix of Terraform versions (1.9.x, latest) × APIM versions (4.9.x, 4.10.x, 4.11.x, 4.12.x). They need Docker, and the ACR credentials and APIM license come from Keeper. Unit tests and the base OAS check stay on GitHub Actions
 - Issues tracked at github.com/gravitee-io/issues with tag `project: GKO`
 - Commit messages must pass commitlint (see **Commit messages** above)
