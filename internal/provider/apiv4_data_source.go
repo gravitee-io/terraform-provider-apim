@@ -64,6 +64,7 @@ type Apiv4DataSourceModel struct {
 	OrganizationID                   types.String                                   `tfsdk:"organization_id"`
 	Pages                            []tfTypes.PageV4                               `tfsdk:"pages"`
 	Plans                            []tfTypes.PlanV4                               `tfsdk:"plans"`
+	PortalNavigation                 []tfTypes.NavigationPath                       `tfsdk:"portal_navigation"`
 	Properties                       []tfTypes.Property1                            `tfsdk:"properties"`
 	Resources                        []tfTypes.APIResource                          `tfsdk:"resources"`
 	ResponseTemplates                map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
@@ -97,6 +98,14 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"analytics": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
+					"connection_events": schema.ListAttribute{
+						Computed:    true,
+						ElementType: types.StringType,
+						MarkdownDescription: `Which connection lifecycle events the gateway reports. Only applicable to Native v4 APIs.` + "\n" +
+							`Omitting it clears the selection rather than preserving it: an apply replaces the whole analytics block, so a manifest that does not carry this field returns the API to the unconfigured state. Unconfigured means it keeps reporting ` + "`" + `CONNECTED` + "`" + ` and ` + "`" + `ERROR` + "`" + ` — what every API deployed before this setting existed already does, so an upgrade does not silently start writing ` + "`" + `DISCONNECTED` + "`" + ` documents. A newly created API starts out unconfigured too: ` + "`" + `DISCONNECTED` + "`" + ` is opt-in for every API. TEMPORARY NOTE, to be removed once the gateway support has shipped: no released native Kafka gateway honours this yet. The selection is stored and will apply as written once a gateway built against this definition model is deployed; until then a connection keeps reporting what it reports today.` + "\n" +
+							`An empty array counts as absent, because a request that omits the field is indistinguishable from one sending ` + "`" + `[]` + "`" + `. To report nothing, turn ` + "`" + `reporterMetricsEnabled` + "`" + ` off — that is the master switch.` + "\n" +
+							`` + "`" + `ERROR` + "`" + ` covers every failure status the gateway emits (` + "`" + `CONNECTION_ERROR` + "`" + `, ` + "`" + `SESSION_ERROR` + "`" + `, ` + "`" + `INTERNAL_ERROR` + "`" + `); which one a given failure produces depends on where the gateway caught it.`,
+					},
 					"enabled": schema.BoolAttribute{
 						Computed:    true,
 						Description: `Whether or not analytics are enabled.`,
@@ -214,6 +223,54 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 							"enabled": schema.BoolAttribute{
 								Computed:    true,
 								Description: `Enable OpenTelemetry tracing`,
+							},
+							"redaction": schema.SingleNestedAttribute{
+								Computed: true,
+								Attributes: map[string]schema.Attribute{
+									"default_replacement": schema.StringAttribute{
+										Computed:    true,
+										Description: `Fallback replacement text for FULL masking rules with no per-rule replacement. Defaults to [REDACTED].`,
+									},
+									"rules": schema.ListNestedAttribute{
+										Computed: true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"attribute_name_pattern": schema.StringAttribute{
+													Computed: true,
+													MarkdownDescription: `Glob pattern, short name (no dots — matches anywhere in key hierarchy),` + "\n" +
+														`or regex:-prefixed Java regex matching the span attribute key.`,
+												},
+												"masking_strategy": schema.SingleNestedAttribute{
+													Computed: true,
+													Attributes: map[string]schema.Attribute{
+														"prefix_length": schema.Int64Attribute{
+															Computed:    true,
+															Description: `PARTIAL only — number of leading characters to keep visible.`,
+														},
+														"replacement": schema.StringAttribute{
+															Computed: true,
+															MarkdownDescription: `For FULL: replacement text (default [REDACTED]).` + "\n" +
+																`For PARTIAL: single mask character (default *).`,
+														},
+														"suffix_length": schema.Int64Attribute{
+															Computed:    true,
+															Description: `PARTIAL only — number of trailing characters to keep visible.`,
+														},
+														"type": schema.StringAttribute{
+															Computed:    true,
+															Description: `FULL replaces the entire value; PARTIAL keeps a visible prefix and/or suffix.`,
+														},
+													},
+												},
+												"value_pattern": schema.StringAttribute{
+													Computed:    true,
+													Description: `Optional Java regex (partial match). Rule only fires when the attribute value matches.`,
+												},
+											},
+										},
+									},
+								},
+								Description: `Masking rules applied to span attributes before traces are exported.`,
 							},
 							"verbose": schema.BoolAttribute{
 								Computed:    true,
@@ -802,7 +859,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Description: `A unique human readable id identifying this resource`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{
@@ -847,6 +904,10 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 											ElementType: types.StringType,
 											MarkdownDescription: `` + "`" + `Access-Control-Allow-Origin` + "`" + `: The origin parameter specifies a URI that may access the resource. Scheme, domain and port are part of the same-origin definition.` + "\n" +
 												`If you choose to enable '*' it means that is allows all requests, regardless of origin. URIs RegExp patterns that may access the resource`,
+										},
+										"allow_private_network": schema.BoolAttribute{
+											Computed:    true,
+											Description: `` + "`" + `Access-Control-Allow-Private-Network` + "`" + `: Allow private network access (PNA) requests during CORS preflight.`,
 										},
 										"enabled": schema.BoolAttribute{
 											Computed:    true,
@@ -899,6 +960,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									},
 									Description: `A list of possible entrypoint of the same type.`,
 								},
+								"path_mappings": schema.ListAttribute{
+									Computed:    true,
+									ElementType: types.StringType,
+									Description: `Path patterns used to group analytics by API path (e.g. ` + "`" + `/products/:productId` + "`" + `).`,
+								},
 								"paths": schema.ListNestedAttribute{
 									Computed: true,
 									NestedObject: schema.NestedAttributeObject{
@@ -917,6 +983,16 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 										},
 									},
 									Description: `One of the possible context paths of this API`,
+								},
+								"request_validation": schema.SingleNestedAttribute{
+									Computed: true,
+									Attributes: map[string]schema.Attribute{
+										"reject_null_byte": schema.BoolAttribute{
+											Computed:    true,
+											Description: `Reject requests whose path or query contains a null byte.`,
+										},
+									},
+									Description: `Validation the Gateway applies to incoming requests before running flows.`,
 								},
 								"servers": schema.ListAttribute{
 									Computed:    true,
@@ -1623,6 +1699,35 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 					},
 				},
 				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `. Plans are prioritized by their position in the list, with earlier entries having higher priority.`,
+			},
+			"portal_navigation": schema.ListNestedAttribute{
+				Computed: true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"display_name": schema.StringAttribute{
+							Computed: true,
+							MarkdownDescription: `Optional human-friendly label for this path node.` + "\n" +
+								`Listing a path explicitly is the only way to attach a displayName.`,
+						},
+						"order": schema.Int64Attribute{
+							Computed: true,
+							MarkdownDescription: `Optional display order of this node relative to its siblings at the same level.` + "\n" +
+								`Listing a path explicitly is the only way to attach an order.`,
+						},
+						"path": schema.StringAttribute{
+							Computed: true,
+							MarkdownDescription: `A slash-separated path defining the navigation hierarchy.` + "\n" +
+								`Intermediate folders are implicitly created if not listed explicitly.`,
+						},
+						"visibility": schema.StringAttribute{
+							Computed:    true,
+							Description: `Declared visibility; omitted values inherit from the parent navigation item.`,
+						},
+					},
+				},
+				MarkdownDescription: `The API's internal documentation navigation tree for the next-gen portal.` + "\n" +
+					`Paths are ordered — the order in the list is preserved.` + "\n" +
+					`Intermediate folders are implicitly created if not listed explicitly.`,
 			},
 			"properties": schema.ListNestedAttribute{
 				Computed: true,
