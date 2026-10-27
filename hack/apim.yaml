@@ -16,9 +16,9 @@
 apim:
   image:
     registry: graviteeio.azurecr.io
-    version: master-latest
+    version: 4.13.x-latest
   chart:
     registry: oci://graviteeio.azurecr.io/helm/apim3
     version: 4.13.*
   doc:
-    changelog: docs/apim/4.12/terraform/changelog.md
+    changelog: docs/apim/4.13/terraform/changelog.md
