@@ -28,6 +28,9 @@ examples/resources/apim_portal_link/import.sh
 examples/resources/apim_api_link/resource.tf
 examples/resources/apim_api_link/import-by-string-id.tf
 examples/resources/apim_api_link/import.sh
+examples/resources/apim_portal_theme/resource.tf
+examples/resources/apim_portal_theme/import-by-string-id.tf
+examples/resources/apim_portal_theme/import.sh
 examples/resources/apim_documentation_portal/resource.tf
 examples/resources/apim_documentation_portal/import-by-string-id.tf
 examples/resources/apim_documentation_portal/import.sh

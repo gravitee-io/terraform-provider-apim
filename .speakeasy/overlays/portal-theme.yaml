@@ -1,0 +1,36 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: Portal Theme overlay
+  version: 0.0.1
+actions:
+  - target: $.components.schemas.PortalThemeSpec
+    update:
+      x-speakeasy-entity: PortalTheme
+      description: >-
+        A next-gen portal theme. Applying a theme activates it for the environment
+        and disables the other next-gen themes. Reference this resource's hrid
+        from a portal's active_theme_hrid to establish the dependency: APIM
+        rejects deleting a theme that a portal still uses.
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portal-themes"].put
+    update:
+      x-speakeasy-entity-operation: PortalTheme#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portal-themes/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: PortalTheme#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/portal-themes/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: PortalTheme#delete
+
+  - target: $.components.schemas.PortalThemeSpec.properties["logo", "optionalLogo", "favicon", "backgroundImage"]
+    description: Retain image defaults returned by APIM when not configured
+    update:
+      x-speakeasy-param-computed: true
+  - target: $.components.schemas["PortalNextThemeDefinition", "PortalNextThemeColor", "PortalNextThemeFont", "PortalNextThemeBackground"].properties.*
+    description: Retain typography and palette values if returned; an empty definition has no palette defaults
+    update:
+      x-speakeasy-param-computed: true
+  - target: $.components.schemas["PortalNextThemeColor", "PortalNextThemeFont", "PortalNextThemeBackground"]
+    description: Referenced optional theme objects also inherit server defaults
+    update:
+      x-speakeasy-param-computed: true
