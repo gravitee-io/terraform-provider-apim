@@ -726,6 +726,124 @@ func TestAPIV4Resource_path_idempotency(t *testing.T) {
 	})
 }
 
+func TestAPIV4Resource_portal_navigation(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId := "test-" + acctest.RandString(10)
+	resourceAddress := "apim_apiv4.test"
+
+	navigationInitial := config.ListVariable(
+		config.ObjectVariable(config.Variables{
+			"path":         config.StringVariable("/guides" + randomId),
+			"display_name": config.StringVariable("Guides"),
+			"order":        config.IntegerVariable(1),
+			"visibility":   config.StringVariable("PRIVATE"),
+		}),
+		config.ObjectVariable(config.Variables{
+			"path":         config.StringVariable("/guides" + randomId + "/getting-started"),
+			"display_name": config.StringVariable("Getting Started"),
+			"order":        config.IntegerVariable(1),
+		}),
+	)
+	navigationUpdated := config.ListVariable(
+		config.ObjectVariable(config.Variables{
+			"path":         config.StringVariable("/reference" + randomId),
+			"display_name": config.StringVariable("Reference"),
+			"order":        config.IntegerVariable(1),
+			"visibility":   config.StringVariable("PUBLIC"),
+		}),
+		config.ObjectVariable(config.Variables{
+			"path":         config.StringVariable("/guides" + randomId),
+			"display_name": config.StringVariable("Guides"),
+			"order":        config.IntegerVariable(3),
+			"visibility":   config.StringVariable("PRIVATE"),
+		}),
+	)
+	navigationReduced := config.ListVariable(
+		config.ObjectVariable(config.Variables{
+			"path":         config.StringVariable("/guides" + randomId),
+			"display_name": config.StringVariable("Guides"),
+			"order":        config.IntegerVariable(1),
+			"visibility":   config.StringVariable("PUBLIC"),
+		}),
+	)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":    config.StringVariable(environmentId),
+					"hrid":              config.StringVariable(randomId),
+					"organization_id":   config.StringVariable(organizationId),
+					"portal_navigation": navigationInitial,
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceAddress, "portal_navigation.#", "2"),
+					resource.TestCheckResourceAttr(resourceAddress, "portal_navigation.0.visibility", "PRIVATE"),
+					resource.TestCheckNoResourceAttr(resourceAddress, "portal_navigation.1.visibility"),
+					checkNavigationVisibility(resourceAddress, true, "Getting Started", "PRIVATE"),
+					resource.TestCheckResourceAttr(resourceAddress, "portal_navigation.1.path", "/guides"+randomId+"/getting-started"),
+				),
+			},
+			{
+
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":    config.StringVariable(environmentId),
+					"hrid":              config.StringVariable(randomId),
+					"organization_id":   config.StringVariable(organizationId),
+					"portal_navigation": navigationInitial,
+				},
+				ResourceName:      resourceAddress,
+				ImportState:       true,
+				ImportStateIdFunc: importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
+				ImportStateVerify: true,
+				ImportStateVerifyIgnore: []string{
+					"notify_members",
+				},
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":    config.StringVariable(environmentId),
+					"hrid":              config.StringVariable(randomId),
+					"organization_id":   config.StringVariable(organizationId),
+					"portal_navigation": navigationUpdated,
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceAddress, "portal_navigation.#", "2"),
+					resource.TestCheckResourceAttr(resourceAddress, "portal_navigation.0.path", "/reference"+randomId),
+					resource.TestCheckResourceAttr(resourceAddress, "portal_navigation.0.order", "1"),
+					resource.TestCheckResourceAttr(resourceAddress, "portal_navigation.0.visibility", "PUBLIC"),
+					resource.TestCheckResourceAttr(resourceAddress, "portal_navigation.1.order", "3"),
+					resource.TestCheckResourceAttr(resourceAddress, "portal_navigation.1.visibility", "PRIVATE"),
+				),
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":    config.StringVariable(environmentId),
+					"hrid":              config.StringVariable(randomId),
+					"organization_id":   config.StringVariable(organizationId),
+					"portal_navigation": navigationReduced,
+				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceAddress, "portal_navigation.#", "1"),
+					resource.TestCheckResourceAttr(resourceAddress, "portal_navigation.0.visibility", "PUBLIC"),
+				),
+			},
+		},
+	})
+}
+
 func TestAPIV4Resource_console_notification(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
 	t.Parallel()

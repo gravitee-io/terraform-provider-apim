@@ -4,6 +4,27 @@ info:
   title: V4API Terraform overlay
   version: 0.0.1
 actions:
+  - target: $.components.schemas.NavigationPath.properties.visibility
+    description: Keep the declared visibility; inheritance is resolved in the navigation tree
+    update:
+      $ref: "#/components/schemas/DeclaredPortalVisibility"
+      x-speakeasy-param-computed: false
+
+  - target: $.components.schemas.HttpListener.allOf[*].properties.pathMappings
+    description: Preserve omitted listener path mappings without perpetual unknown plans
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.HttpListener.allOf[*].properties.requestValidation
+    description: Preserve omitted listener validation without perpetual unknown plans
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.RequestValidation
+    description: Referenced listener validation also needs stable computed planning
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
 
 
   # Entity management
@@ -117,6 +138,12 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.Analytics.properties.connectionEvents
+    description: Treat an omitted event selection and an empty response as equivalent
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: false
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
   - target: $.components.schemas.Operator
     update:
       x-speakeasy-param-computed: true
@@ -210,6 +237,11 @@ actions:
       x-speakeasy-plan-modifiers: IgnoreEmptyList
   - target: $.components.schemas.ApiV4Spec.properties.pages
     description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.ApiV4Spec.properties.portalNavigation
+    description: Next-gen portal navigation is API-computed and should not create plan diffs
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-plan-modifiers: IgnoreEmptyList
