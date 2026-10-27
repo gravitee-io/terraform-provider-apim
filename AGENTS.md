@@ -190,7 +190,7 @@ Do not hand-edit `templates/guides/docgen_*.md` or `docs/` — they are generate
 - Generated code is the majority of the codebase — extend via overlays, hand-maintained files, or marked regions
 - Import IDs are JSON-encoded composite keys (see acceptance test files for format)
 - APIM compatibility: 4.9+
-- CircleCI runs the acceptance and example tests on every push, across a matrix of Terraform versions (1.9.x, latest) × APIM versions (4.9.x, 4.10.x, 4.11.x, 4.12.x, master-latest). They need Docker, and the ACR credentials and APIM license come from Keeper. A CircleCI scheduled trigger on `main` (`trigger=acceptance`, `notify=true`) runs them nightly and posts to Slack. Unit tests and the base OAS check stay on GitHub Actions
+- CircleCI runs the acceptance and example tests on every push, across a matrix of Terraform versions (1.9.x, latest) × APIM versions (4.9.x, 4.10.x, 4.11.x, 4.12.x, 4.13.x). They need Docker, and the ACR credentials and APIM license come from Keeper. A CircleCI scheduled trigger on `main` (`trigger=acceptance`, `notify=true`) runs them nightly and posts to Slack. Unit tests and the base OAS check stay on GitHub Actions
 - CI re-fetches both OpenAPI inputs and fails on a diff: the base document against APIM `master`, the AI Management fragment against the tag in `AIM_OAS_REF` (`make verify-aim-oas`, run in CircleCI by `hack/scripts/verify-aim-oas.mjs`: the repository is private and CircleCI holds the GitHub token, in Keeper). Neither file is edited by hand; a PR does not sync the base document unless it implements what the sync brings
 - Issues tracked at github.com/gravitee-io/issues with tag `project: GKO`
 - `make lint` verifies the `// BEGIN GRAVITEE CLOUD INIT` marker is present in `provider.go`

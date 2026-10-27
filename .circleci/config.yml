@@ -492,9 +492,9 @@ workflows:
         - equal: [ none, << pipeline.parameters.trigger >> ]
     jobs:
       - acceptance:
-          name: Tests - APIM master-latest - Terraform << matrix.terraform-version >>
+          name: Tests - APIM 4.13.x-latest - Terraform << matrix.terraform-version >>
           context: cicd-orchestrator
-          apim-image-tag: master-latest
+          apim-image-tag: 4.13.x-latest
           apim-chart-version: "4.13.*"
           matrix:
             parameters:
