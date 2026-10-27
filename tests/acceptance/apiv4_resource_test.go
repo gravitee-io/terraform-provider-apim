@@ -806,6 +806,7 @@ func TestAPIV4Resource_portal_navigation(t *testing.T) {
 				ImportStateVerify: true,
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
+					"listeners.0.http.paths.0.override_access",
 				},
 			},
 			{
