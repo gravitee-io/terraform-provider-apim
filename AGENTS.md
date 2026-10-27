@@ -46,7 +46,7 @@ APIM_USERNAME=admin APIM_PASSWORD=admin APIM_SERVER_URL=http://localhost:30083/a
 # Run a single unit test
 go test -count=1 -v -run TestSomething ./internal/...
 
-# Local Kind cluster for APIM
+# Local Kind cluster for APIM (pulls from graviteeio.azurecr.io, which needs a `docker login` first)
 make start-cluster                          # full mode
 APIM_MINIMAL=true make start-cluster        # minimal (faster, management API only)
 make stop-cluster
@@ -190,7 +190,7 @@ Do not hand-edit `templates/guides/docgen_*.md` or `docs/` — they are generate
 - Generated code is the majority of the codebase — extend via overlays, hand-maintained files, or marked regions
 - Import IDs are JSON-encoded composite keys (see acceptance test files for format)
 - APIM compatibility: 4.9+
-- CI runs acceptance tests across a matrix of Terraform versions (1.9.x, latest) × APIM versions (4.9.x, 4.10.x, 4.11.x, master-latest/4.12.x)
+- CircleCI runs the acceptance and example tests on every push, across a matrix of Terraform versions (1.9.x, latest) × APIM versions (4.9.x, 4.10.x, 4.11.x, 4.12.x, master-latest). They need Docker, and the ACR credentials and APIM license come from Keeper. A CircleCI scheduled trigger on `main` (`trigger=acceptance`, `notify=true`) runs them nightly and posts to Slack. Unit tests and the base OAS check stay on GitHub Actions
 - CI re-fetches both OpenAPI inputs and fails on a diff: the base document against APIM `master`, the AI Management fragment against the tag in `AIM_OAS_REF` (`make verify-aim-oas`, run in CircleCI by `hack/scripts/verify-aim-oas.mjs`: the repository is private and CircleCI holds the GitHub token, in Keeper). Neither file is edited by hand; a PR does not sync the base document unless it implements what the sync brings
 - Issues tracked at github.com/gravitee-io/issues with tag `project: GKO`
 - `make lint` verifies the `// BEGIN GRAVITEE CLOUD INIT` marker is present in `provider.go`
