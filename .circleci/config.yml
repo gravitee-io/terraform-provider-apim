@@ -523,11 +523,3 @@ workflows:
           matrix:
             parameters:
               terraform-version: [ "1.9.8", latest ]
-      - acceptance:
-          name: Tests - APIM 4.9.x-latest - Terraform << matrix.terraform-version >>
-          context: cicd-orchestrator
-          apim-image-tag: 4.9.x-latest
-          apim-chart-version: "4.9.*"
-          matrix:
-            parameters:
-              terraform-version: [ "1.9.8", latest ]
