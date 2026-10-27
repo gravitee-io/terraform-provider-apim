@@ -1,7 +1,10 @@
 version: 2.1
 
 orbs:
-  keeper: gravitee-io/keeper@0.7.0
+  gravitee: gravitee-io/gravitee@4.22.0
+  keeper: gravitee-io/keeper@0.7.1
+  kubernetes: circleci/kubernetes@2.0.2
+  helm: circleci/helm@3.2.0
   slack: circleci/slack@6.1.1
   gh: circleci/github-cli@2.7.2
 
@@ -14,6 +17,7 @@ parameters:
       - release_notification
       - publish_changelog
       - verify_aim_oas
+      - acceptance
       - none
   changelog_path:
     type: string
@@ -299,6 +303,81 @@ jobs:
           name: Verify the AI Management OAS fragment matches its tag
           command: make verify-aim-oas
 
+  acceptance:
+    parameters:
+      apim-image-tag:
+        type: string
+      apim-chart-version:
+        type: string
+      terraform-version:
+        type: string
+    machine:
+      image: ubuntu-2204:2024.01.2
+    resource_class: medium
+    environment:
+      APIM_SERVER_URL: http://localhost:30083/automation
+      APIM_USERNAME: admin
+      APIM_PASSWORD: admin
+      APIM_IMAGE_TAG: << parameters.apim-image-tag >>
+    steps:
+      - checkout
+      - run:
+          name: Install Go from go.mod
+          command: |
+            GO_VERSION=$(awk '/^go /{print $2}' go.mod)
+            sudo rm -rf /usr/local/go
+            curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" | sudo tar -C /usr/local -xz
+            echo 'export PATH="/usr/local/go/bin:$HOME/go/bin:$PATH"' >> "$BASH_ENV"
+      - kubernetes/install_kubectl
+      - helm/install_helm_client:
+          version: v3.19.4
+      - run:
+          name: Install kind
+          command: |
+            curl -Lo /tmp/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.29.0/kind-linux-amd64
+            chmod +x /tmp/kind
+            sudo mv /tmp/kind /usr/local/bin/
+      - keeper/env-export:
+          secret-url: keeper://YeSlq7aKxJaAFSQupb-rkA/custom_field/base64
+          var-name: APIM_GRAVITEE_LICENSE
+      # graviteeio.azurecr.io refuses anonymous pulls, for images and the APIM chart alike
+      - gravitee/docker-login:
+          registry: graviteeio.azurecr.io
+          username: keeper://Q721P2LSOPJ9qiXLuf5AHQ/field/login
+          password: keeper://Q721P2LSOPJ9qiXLuf5AHQ/field/password
+      - run:
+          name: Create test cluster
+          no_output_timeout: 30m
+          environment:
+            APIM_MINIMAL: "true"
+            APIM_CHART_VERSION: << parameters.apim-chart-version >>
+          command: make start-cluster
+      - run:
+          name: Install Terraform << parameters.terraform-version >>
+          command: hack/scripts/install-terraform.sh << parameters.terraform-version >>
+      - run:
+          name: Run acceptance tests
+          no_output_timeout: 30m
+          environment:
+            APIM_MCP_STUB_URL: http://fastmcp.default.svc.cluster.local:8000/mcp
+          command: make acceptance-tests
+      - when:
+          condition:
+            equal: [ latest, << parameters.terraform-version >> ]
+          steps:
+            - run:
+                name: Install OpenTofu
+                command: |
+                  curl -fsSL https://get.opentofu.org/install-opentofu.sh -o /tmp/install-opentofu.sh
+                  sh /tmp/install-opentofu.sh --install-method standalone
+            - run:
+                name: Build provider
+                command: go build
+            - run:
+                name: Run example tests
+                no_output_timeout: 30m
+                command: make examples-tests
+
 workflows:
   send-notification:
     when:
@@ -339,3 +418,50 @@ workflows:
       - verify-aim-oas:
           name: Verify AI Management OAS matches upstream
           context: cicd-orchestrator
+
+  acceptance:
+    when:
+      equal:
+        - << pipeline.parameters.trigger >>
+        - acceptance
+    jobs:
+      - acceptance:
+          name: Tests - APIM master-latest - Terraform << matrix.terraform-version >>
+          context: cicd-orchestrator
+          apim-image-tag: master-latest
+          apim-chart-version: "4.13.*"
+          matrix:
+            parameters:
+              terraform-version: [ "1.9.8", latest ]
+      - acceptance:
+          name: Tests - APIM 4.12.x-latest - Terraform << matrix.terraform-version >>
+          context: cicd-orchestrator
+          apim-image-tag: 4.12.x-latest
+          apim-chart-version: "4.12.*"
+          matrix:
+            parameters:
+              terraform-version: [ "1.9.8", latest ]
+      - acceptance:
+          name: Tests - APIM 4.11.x-latest - Terraform << matrix.terraform-version >>
+          context: cicd-orchestrator
+          apim-image-tag: 4.11.x-latest
+          apim-chart-version: "4.11.*"
+          matrix:
+            parameters:
+              terraform-version: [ "1.9.8", latest ]
+      - acceptance:
+          name: Tests - APIM 4.10.x-latest - Terraform << matrix.terraform-version >>
+          context: cicd-orchestrator
+          apim-image-tag: 4.10.x-latest
+          apim-chart-version: "4.10.*"
+          matrix:
+            parameters:
+              terraform-version: [ "1.9.8", latest ]
+      - acceptance:
+          name: Tests - APIM 4.9.x-latest - Terraform << matrix.terraform-version >>
+          context: cicd-orchestrator
+          apim-image-tag: 4.9.x-latest
+          apim-chart-version: "4.9.*"
+          matrix:
+            parameters:
+              terraform-version: [ "1.9.8", latest ]
