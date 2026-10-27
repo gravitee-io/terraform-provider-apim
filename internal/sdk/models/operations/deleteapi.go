@@ -48,6 +48,11 @@ type DeleteAPIRequest struct {
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Human-readable ID of a spec
 	Hrid string `pathParam:"style=simple,explode=false,name=hrid"`
+	// When true, the HRID path or spec value is treated as an existing UUID rather than
+	// a human-readable identifier. This is to support backward compatibility for resources
+	// created before migration to the automation API and should not be used for new resources.
+	//
+	HridContainsUUID *bool `default:"false" queryParam:"style=form,explode=true,name=hridContainsUUID"`
 }
 
 func (d DeleteAPIRequest) MarshalJSON() ([]byte, error) {
@@ -80,6 +85,13 @@ func (d *DeleteAPIRequest) GetHrid() string {
 		return ""
 	}
 	return d.Hrid
+}
+
+func (d *DeleteAPIRequest) GetHridContainsUUID() *bool {
+	if d == nil {
+		return nil
+	}
+	return d.HridContainsUUID
 }
 
 type DeleteAPIResponse struct {
