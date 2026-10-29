@@ -14,6 +14,7 @@ import (
 func TestPortalResource_minimal(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
+	lockPortalAcceptanceTest(t)
 
 	randomId := "test-" + acctest.RandString(10)
 	resourceAddress := "apim_portal.test"
@@ -59,6 +60,7 @@ resource "apim_portal" "test" {
 func TestPortalResource_structureLifecycle(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
+	lockPortalAcceptanceTest(t)
 	hrid := "test-" + acctest.RandString(10)
 	address := "apim_portal.test"
 	newPaths := fmt.Sprintf(`[{ path = %q, display_name = "Guides" }]`, "/guides-"+hrid)
@@ -139,6 +141,7 @@ removed {
 func TestPortalResource_emptyStructure(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
+	lockPortalAcceptanceTest(t)
 	hrid := "test-" + acctest.RandString(10)
 	path := "/guides-" + hrid
 	validConfig := portalStructureConfig(hrid, "Configured navigation", fmt.Sprintf(`structure = { top_navbar = [{ path = %q }] }`, path))
@@ -157,6 +160,7 @@ func TestPortalResource_emptyStructure(t *testing.T) {
 func TestPortalResource_visibility(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
+	lockPortalAcceptanceTest(t)
 	hrid := "test-" + acctest.RandString(10)
 	parent := "/visibility-" + hrid
 	step := func(parentVisibility, childVisibility, expected string) resource.TestStep {
@@ -188,6 +192,7 @@ func TestPortalResource_visibility(t *testing.T) {
 func TestPortalResource_update(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
+	lockPortalAcceptanceTest(t)
 
 	randomId := "test-" + acctest.RandString(10)
 	guidesPath := "/guides-" + randomId

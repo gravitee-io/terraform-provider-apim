@@ -37,6 +37,7 @@ resource "apim_portal_link" "test" {
 func TestPortalLinkResource_minimal(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
+	lockPortalAcceptanceTest(t)
 	hrid := "test-" + acctest.RandString(10)
 	address := "apim_portal_link.test"
 	configuration := portalLinkConfig(hrid, "External docs", "https://example.com/docs", "")
@@ -64,6 +65,7 @@ func TestPortalLinkResource_minimal(t *testing.T) {
 func TestPortalLinkResource_allProps(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
+	lockPortalAcceptanceTest(t)
 	hrid := "test-" + acctest.RandString(10)
 	address := "apim_portal_link.test"
 	initial := portalLinkConfig(hrid, "Private docs", "https://example.com/private", fmt.Sprintf("location = %q\norder = 1", "/private-"+hrid))
