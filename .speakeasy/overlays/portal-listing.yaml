@@ -16,6 +16,10 @@ actions:
     update:
       x-speakeasy-entity:
         PortalListing
+  - target: $.components.schemas.PortalListingSpec.properties.apis
+    description: At least one API must be included in a portal listing
+    update:
+      minItems: 1
   - target: $.paths["/organizations/{orgId}/environments/{envId}/portals/{portalHrid}/listings"].put
     update:
       x-speakeasy-entity-operation: PortalListing#create,update
