@@ -534,10 +534,9 @@ Optional:
 
 Optional:
 
-- `connection_events` (List of String) Which connection lifecycle events the gateway reports. Only applicable to Native v4 APIs.
-Omitting it clears the selection rather than preserving it: an apply replaces the whole analytics block, so a manifest that does not carry this field returns the API to the unconfigured state. Unconfigured means it keeps reporting `CONNECTED` and `ERROR` — what every API deployed before this setting existed already does, so an upgrade does not silently start writing `DISCONNECTED` documents. A newly created API starts out unconfigured too: `DISCONNECTED` is opt-in for every API. TEMPORARY NOTE, to be removed once the gateway support has shipped: no released native Kafka gateway honours this yet. The selection is stored and will apply as written once a gateway built against this definition model is deployed; until then a connection keeps reporting what it reports today.
-An empty array counts as absent, because a request that omits the field is indistinguishable from one sending `[]`. To report nothing, turn `reporterMetricsEnabled` off — that is the master switch.
-`ERROR` covers every failure status the gateway emits (`CONNECTION_ERROR`, `SESSION_ERROR`, `INTERNAL_ERROR`); which one a given failure produces depends on where the gateway caught it.
+- `connection_events` (List of String) Which connection lifecycle events the gateway reports, among `CONNECTED`, `DISCONNECTED`, and `ERROR`. Only applicable to Native v4 APIs.
+When absent or empty, the gateway reports `CONNECTED` and `ERROR`: `DISCONNECTED` is opt-in. To report nothing, set `reporter_metrics_enabled` to false.
+`ERROR` covers every failure status the gateway emits (`CONNECTION_ERROR`, `SESSION_ERROR`, `INTERNAL_ERROR`).
 - `enabled` (Boolean) Whether or not analytics are enabled.
 - `logging` (Attributes) API logging configuration (Not for native APIs) (see [below for nested schema](#nestedatt--analytics--logging))
 - `otel_logs` (Attributes) (see [below for nested schema](#nestedatt--analytics--otel_logs))

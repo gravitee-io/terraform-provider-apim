@@ -60,7 +60,9 @@ func Pointer[T any](v T) *T { return &v }
 // * Dictionaries
 // * Portals
 // * Portal Listings
-// * Documentations
+// * Portal and API Documentation
+// * Portal and API Links
+// * Portal Themes
 // * MCP Catalog Servers
 // * MCP Proxies
 //

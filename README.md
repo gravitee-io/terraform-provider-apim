@@ -20,7 +20,9 @@ You can manage with Terraform the following:
 * Dictionaries
 * Portals
 * Portal Listings
-* Documentations
+* Portal and API Documentation
+* Portal and API Links
+* Portal Themes
 * MCP Catalog Servers
 * MCP Proxies
 

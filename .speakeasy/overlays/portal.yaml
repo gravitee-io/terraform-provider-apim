@@ -38,6 +38,16 @@ actions:
     update:
       x-speakeasy-terraform-ignore: true
 
+  - target: $.components.schemas.PortalSpec.properties.activeThemeHrid
+    description: Describe the theme APIM re-enables when the active theme is cleared
+    update:
+      description: >-
+        HRID of the theme the portal uses. Applying the portal with it enables that theme and
+        disables the other next-gen portal themes of the environment. Leaving it unset disables the
+        theme the portal used and re-enables another theme of the environment, preferring one that
+        the Automation API doesn't manage, then the most recently updated. The portal shows the
+        default theme when the environment has no other theme.
+
   - target: $.components.schemas.PortalNavigationPath.properties.visibility
     description: Keep the declared visibility; inheritance is resolved in the navigation tree
     update:

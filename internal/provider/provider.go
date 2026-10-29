@@ -109,7 +109,9 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			`* Dictionaries` + "\n" +
 			`* Portals` + "\n" +
 			`* Portal Listings` + "\n" +
-			`* Documentations` + "\n" +
+			`* Portal and API Documentation` + "\n" +
+			`* Portal and API Links` + "\n" +
+			`* Portal Themes` + "\n" +
 			`* MCP Catalog Servers` + "\n" +
 			`* MCP Proxies` + "\n" +
 			`` + "\n" +

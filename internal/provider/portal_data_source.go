@@ -60,11 +60,8 @@ func (r *PortalDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 
 		Attributes: map[string]schema.Attribute{
 			"active_theme_hrid": schema.StringAttribute{
-				Computed: true,
-				MarkdownDescription: `HRID of the Theme this portal should use as its active theme. When set, applying the portal` + "\n" +
-					`marks the referenced theme as active (enabled) and disables every other PORTAL_NEXT theme` + "\n" +
-					`in the environment. Leaving this field unset clears the reference and disables the` + "\n" +
-					`previously-active theme; the portal-next UI will then lazily fall back to a fresh default theme.`,
+				Computed:    true,
+				Description: `HRID of the theme the portal uses. Applying the portal with it enables that theme and disables the other next-gen portal themes of the environment. Leaving it unset disables the theme the portal used and re-enables another theme of the environment, preferring one that the Automation API doesn't manage, then the most recently updated. The portal shows the default theme when the environment has no other theme.`,
 			},
 			"environment_id": schema.StringAttribute{
 				Computed:    true,

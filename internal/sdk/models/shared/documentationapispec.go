@@ -22,10 +22,7 @@ type DocumentationAPISpec struct {
 	Location *string `json:"location,omitempty"`
 	// Display order relative to siblings at the same location
 	Order *int64 `json:"order,omitempty"`
-	// Where the documentation page appears in the portal. `TOP_NAVBAR` is the default. `HOMEPAGE`
-	// marks the page as the portal's homepage — only one homepage may exist per portal, and applying
-	// a new one replaces any existing homepage for that portal.
-	//
+	// Where the documentation page appears. `TOP_NAVBAR` (default) places the page in the navigation. `HOMEPAGE` makes a portal page the portal's homepage: APIM rejects it on API documentation. A portal has one homepage. Applying it replaces a homepage created in the Console, and a second homepage managed by the Automation API with a different HRID fails with 409.
 	Area *DocumentationArea `default:"TOP_NAVBAR" json:"area"`
 	// Whether the navigation entry is visible to anonymous portal visitors.
 	// Optional in the Automation API for backward compatibility with clients that predate this field —

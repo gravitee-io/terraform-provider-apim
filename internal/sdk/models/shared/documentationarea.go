@@ -8,9 +8,7 @@ import (
 	"fmt"
 )
 
-// DocumentationArea - Where the documentation page appears in the portal. `TOP_NAVBAR` is the default. `HOMEPAGE`
-// marks the page as the portal's homepage — only one homepage may exist per portal, and applying
-// a new one replaces any existing homepage for that portal.
+// DocumentationArea - Where the documentation page appears. `TOP_NAVBAR` (default) places the page in the navigation. `HOMEPAGE` makes a portal page the portal's homepage: APIM rejects it on API documentation. A portal has one homepage. Applying it replaces a homepage created in the Console, and a second homepage managed by the Automation API with a different HRID fails with 409.
 type DocumentationArea string
 
 const (

@@ -63,10 +63,8 @@ func (r *DocumentationPortalDataSource) Schema(ctx context.Context, req datasour
 
 		Attributes: map[string]schema.Attribute{
 			"area": schema.StringAttribute{
-				Computed: true,
-				MarkdownDescription: `Where the documentation page appears in the portal. ` + "`" + `TOP_NAVBAR` + "`" + ` is the default. ` + "`" + `HOMEPAGE` + "`" + `` + "\n" +
-					`marks the page as the portal's homepage — only one homepage may exist per portal, and applying` + "\n" +
-					`a new one replaces any existing homepage for that portal.`,
+				Computed:    true,
+				Description: `Where the documentation page appears. ` + "`" + `TOP_NAVBAR` + "`" + ` (default) places the page in the navigation. ` + "`" + `HOMEPAGE` + "`" + ` makes a portal page the portal's homepage: APIM rejects it on API documentation. A portal has one homepage. Applying it replaces a homepage created in the Console, and a second homepage managed by the Automation API with a different HRID fails with 409.`,
 			},
 			"content": schema.StringAttribute{
 				Computed:    true,

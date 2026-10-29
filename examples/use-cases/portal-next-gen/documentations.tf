@@ -1,3 +1,17 @@
+resource "apim_documentation_portal" "homepage" {
+  portal_hrid = apim_portal.developer-portal.hrid
+  hrid        = "homepage"
+  name        = "Home"
+  type        = "GRAVITEE_MARKDOWN"
+  # Replaces the Console or seeded homepage. A homepage has no location.
+  area    = "HOMEPAGE"
+  content = <<-EOT
+  # Welcome
+
+  Homepage of the developer portal, managed with `apim_documentation_portal`.
+  EOT
+}
+
 resource "apim_documentation_portal" "getting-started-docs" {
   portal_hrid = apim_portal.developer-portal.hrid
   hrid        = "getting-started-docs"

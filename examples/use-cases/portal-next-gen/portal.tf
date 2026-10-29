@@ -1,6 +1,8 @@
 resource "apim_portal" "developer-portal" {
   hrid = "developer-portal"
   name = "[Terraform] Next-gen Developer Portal"
+  # Enables this theme and disables the other themes of the environment
+  active_theme_hrid = apim_portal_theme.brand.hrid
   structure = { top_navbar = [
     {
       path         = "/examples/docs"

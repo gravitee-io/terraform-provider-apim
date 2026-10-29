@@ -46,10 +46,7 @@ resource "apim_portal" "developer-portal" {
 
 ### Optional
 
-- `active_theme_hrid` (String) HRID of the Theme this portal should use as its active theme. When set, applying the portal
-marks the referenced theme as active (enabled) and disables every other PORTAL_NEXT theme
-in the environment. Leaving this field unset clears the reference and disables the
-previously-active theme; the portal-next UI will then lazily fall back to a fresh default theme.
+- `active_theme_hrid` (String) HRID of the theme the portal uses. Applying the portal with it enables that theme and disables the other next-gen portal themes of the environment. Leaving it unset disables the theme the portal used and re-enables another theme of the environment, preferring one that the Automation API doesn't manage, then the most recently updated. The portal shows the default theme when the environment has no other theme.
 - `environment_id` (String) environment ID
 - `organization_id` (String) organization ID
 - `structure` (Attributes) Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, omitted areas preserve their existing values. Set `top_navbar = []` to clear the navigation area. (see [below for nested schema](#nestedatt--structure))
