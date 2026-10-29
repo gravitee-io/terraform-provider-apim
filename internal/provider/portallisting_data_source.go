@@ -77,11 +77,8 @@ func (r *PortalListingDataSource) Schema(ctx context.Context, req datasource.Sch
 								`Disambiguates ordering when APIs from multiple listings share a location.`,
 						},
 						"visibility": schema.StringAttribute{
-							Computed: true,
-							MarkdownDescription: `Whether the navigation entry is visible to anonymous portal visitors.` + "\n" +
-								`Optional in the Automation API for backward compatibility with clients that predate this field —` + "\n" +
-								`when omitted, the entry inherits from its parent (root entries default to PUBLIC).` + "\n" +
-								`A PUBLIC child under a PRIVATE parent is rejected.`,
+							Computed:    true,
+							Description: `Declared visibility; omitted values inherit from the parent navigation item.`,
 						},
 					},
 				},

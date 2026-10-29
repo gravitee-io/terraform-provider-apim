@@ -8,7 +8,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	custom_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
@@ -112,14 +111,10 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `organization ID`,
 			},
 			"structure": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					custom_objectplanmodifier.PortalStructure(),
-				},
+				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"top_navbar": schema.ListNestedAttribute{
-						Optional: true,
+						Required: true,
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
 								speakeasy_objectvalidators.NotNull(),
@@ -140,13 +135,9 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 									},
 								},
 								"visibility": schema.StringAttribute{
-									Computed: true,
-									Optional: true,
-									MarkdownDescription: `Whether the navigation entry is visible to anonymous portal visitors.` + "\n" +
-										`Optional in the Automation API for backward compatibility with clients that predate this field —` + "\n" +
-										`when omitted, the entry inherits from its parent (root entries default to PUBLIC).` + "\n" +
-										`A PUBLIC child under a PRIVATE parent is rejected.` + "\n" +
-										`must be one of ["PUBLIC", "PRIVATE"]`,
+									Computed:    true,
+									Optional:    true,
+									Description: `Declared visibility; omitted values inherit from the parent navigation item. must be one of ["PUBLIC", "PRIVATE"]`,
 									Validators: []validator.String{
 										stringvalidator.OneOf(
 											"PUBLIC",
@@ -160,7 +151,7 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							`Intermediate folders are implicitly created if not listed explicitly.`,
 					},
 				},
-				Description: `Portal navigation grouped by area. Omitting ` + "`" + `structure` + "`" + ` preserves existing navigation, including after import and during unrelated updates. When ` + "`" + `structure` + "`" + ` is configured, ` + "`" + `top_navbar` + "`" + ` must be an explicit list: use ` + "`" + `structure = { top_navbar = [] }` + "`" + ` to clear navigation. ` + "`" + `structure = {}` + "`" + ` and ` + "`" + `structure = { top_navbar = null }` + "`" + ` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit ` + "`" + `top_navbar` + "`" + ` within a configured structure.`,
+				Description: `Portal navigation grouped by area. Configure the complete top navbar on every apply. Set ` + "`" + `top_navbar = []` + "`" + ` to clear all navigation entries.`,
 			},
 		},
 	}

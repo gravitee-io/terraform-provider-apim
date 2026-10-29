@@ -1064,10 +1064,17 @@ func (r *Apiv4DataSourceModel) ToOperationsGetAPIRequest(ctx context.Context) (*
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
+	xGraviteeSetHrid := new(bool)
+	if !r.XGraviteeSetHrid.IsUnknown() && !r.XGraviteeSetHrid.IsNull() {
+		*xGraviteeSetHrid = r.XGraviteeSetHrid.ValueBool()
+	} else {
+		xGraviteeSetHrid = nil
+	}
 	out := operations.GetAPIRequest{
-		OrganizationID: organizationID,
-		EnvironmentID:  environmentID,
-		Hrid:           hrid,
+		OrganizationID:   organizationID,
+		EnvironmentID:    environmentID,
+		Hrid:             hrid,
+		XGraviteeSetHrid: xGraviteeSetHrid,
 	}
 
 	return &out, diags

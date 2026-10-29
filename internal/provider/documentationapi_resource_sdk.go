@@ -164,9 +164,9 @@ func (r *DocumentationAPIResourceModel) ToSharedDocumentationPortalSpec(ctx cont
 	} else {
 		area = nil
 	}
-	visibility := new(shared.DeclaredPortalVisibility)
+	visibility := new(shared.PortalVisibility)
 	if !r.Visibility.IsUnknown() && !r.Visibility.IsNull() {
-		*visibility = shared.DeclaredPortalVisibility(r.Visibility.ValueString())
+		*visibility = shared.PortalVisibility(r.Visibility.ValueString())
 	} else {
 		visibility = nil
 	}

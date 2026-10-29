@@ -48,6 +48,21 @@ type CreateOrUpdateAPISubscriptionsRequest struct {
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
 	// Human-readable ID of api
 	APIHrid string `pathParam:"style=simple,explode=false,name=apiHrid"`
+	// When true, the HRID path or spec value is treated as an existing UUID rather than
+	// a human-readable identifier. This is to support backward compatibility for resources
+	// created before migration to the automation API and should not be used for new resources.
+	//
+	HridContainsUUID *bool `default:"false" queryParam:"style=form,explode=true,name=hridContainsUUID"`
+	// When true, the apiHrid path value (and, on create or update, the spec's planHrid) is treated as an
+	// existing UUID rather than a human-readable identifier. This is to support backward compatibility for
+	// resources created before migration to the automation API and should not be used for new resources.
+	//
+	HridContainsAPIUUID *bool `default:"false" queryParam:"style=form,explode=true,name=hridContainsApiUUID"`
+	// When true, the spec's applicationHrid is treated as an existing UUID rather than a human-readable
+	// identifier. This is to support backward compatibility for resources created before migration to the
+	// automation API and should not be used for new resources.
+	//
+	HridContainsAppUUID *bool `default:"false" queryParam:"style=form,explode=true,name=hridContainsAppUUID"`
 	// Subscription specification
 	SubscriptionSpec shared.SubscriptionSpec `request:"mediaType=application/json"`
 }
@@ -82,6 +97,27 @@ func (c *CreateOrUpdateAPISubscriptionsRequest) GetAPIHrid() string {
 		return ""
 	}
 	return c.APIHrid
+}
+
+func (c *CreateOrUpdateAPISubscriptionsRequest) GetHridContainsUUID() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.HridContainsUUID
+}
+
+func (c *CreateOrUpdateAPISubscriptionsRequest) GetHridContainsAPIUUID() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.HridContainsAPIUUID
+}
+
+func (c *CreateOrUpdateAPISubscriptionsRequest) GetHridContainsAppUUID() *bool {
+	if c == nil {
+		return nil
+	}
+	return c.HridContainsAppUUID
 }
 
 func (c *CreateOrUpdateAPISubscriptionsRequest) GetSubscriptionSpec() shared.SubscriptionSpec {

@@ -47,6 +47,7 @@ type SubscriptionDataSourceModel struct {
 	EndingAt              customtypes.RFC3339                        `tfsdk:"ending_at"`
 	EnvironmentID         types.String                               `tfsdk:"environment_id"`
 	Hrid                  types.String                               `tfsdk:"hrid"`
+	HridContainsAPIUUID   types.Bool                                 `queryParam:"style=form,explode=true,name=hridContainsApiUUID" tfsdk:"hrid_contains_api_uuid"`
 	ID                    types.String                               `tfsdk:"id"`
 	Metadata              map[string]types.String                    `tfsdk:"metadata"`
 	OrganizationID        types.String                               `tfsdk:"organization_id"`
@@ -108,6 +109,12 @@ func (r *SubscriptionDataSource) Schema(ctx context.Context, req datasource.Sche
 					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
+			},
+			"hrid_contains_api_uuid": schema.BoolAttribute{
+				Optional: true,
+				MarkdownDescription: `When true, the apiHrid path value (and, on create or update, the spec's planHrid) is treated as an` + "\n" +
+					`existing UUID rather than a human-readable identifier. This is to support backward compatibility for` + "\n" +
+					`resources created before migration to the automation API and should not be used for new resources.`,
 			},
 			"id": schema.StringAttribute{
 				Computed:    true,

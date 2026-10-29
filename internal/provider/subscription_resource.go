@@ -19,6 +19,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -56,6 +57,8 @@ type SubscriptionResourceModel struct {
 	EndingAt              customtypes.RFC3339                        `tfsdk:"ending_at"`
 	EnvironmentID         types.String                               `tfsdk:"environment_id"`
 	Hrid                  types.String                               `tfsdk:"hrid"`
+	HridContainsAPIUUID   types.Bool                                 `queryParam:"style=form,explode=true,name=hridContainsApiUUID" tfsdk:"hrid_contains_api_uuid"`
+	HridContainsAppUUID   types.Bool                                 `queryParam:"style=form,explode=true,name=hridContainsAppUUID" tfsdk:"hrid_contains_app_uuid"`
 	ID                    types.String                               `tfsdk:"id"`
 	Metadata              map[string]types.String                    `tfsdk:"metadata"`
 	OrganizationID        types.String                               `tfsdk:"organization_id"`
@@ -150,6 +153,24 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringvalidator.UTF8LengthAtMost(256),
 					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
+			},
+			"hrid_contains_api_uuid": schema.BoolAttribute{
+				Computed: true,
+				Optional: true,
+				Default:  booldefault.StaticBool(false),
+				MarkdownDescription: `When true, the apiHrid path value (and, on create or update, the spec's planHrid) is treated as an` + "\n" +
+					`existing UUID rather than a human-readable identifier. This is to support backward compatibility for` + "\n" +
+					`resources created before migration to the automation API and should not be used for new resources.` + "\n" +
+					`Default: false`,
+			},
+			"hrid_contains_app_uuid": schema.BoolAttribute{
+				Computed: true,
+				Optional: true,
+				Default:  booldefault.StaticBool(false),
+				MarkdownDescription: `When true, the spec's applicationHrid is treated as an existing UUID rather than a human-readable` + "\n" +
+					`identifier. This is to support backward compatibility for resources created before migration to the` + "\n" +
+					`automation API and should not be used for new resources.` + "\n" +
+					`Default: false`,
 			},
 			"id": schema.StringAttribute{
 				Computed: true,

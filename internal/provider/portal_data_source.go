@@ -110,11 +110,8 @@ func (r *PortalDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 										`Intermediate folders are implicitly created if not listed explicitly.`,
 								},
 								"visibility": schema.StringAttribute{
-									Computed: true,
-									MarkdownDescription: `Whether the navigation entry is visible to anonymous portal visitors.` + "\n" +
-										`Optional in the Automation API for backward compatibility with clients that predate this field —` + "\n" +
-										`when omitted, the entry inherits from its parent (root entries default to PUBLIC).` + "\n" +
-										`A PUBLIC child under a PRIVATE parent is rejected.`,
+									Computed:    true,
+									Description: `Declared visibility; omitted values inherit from the parent navigation item.`,
 								},
 							},
 						},
@@ -122,7 +119,7 @@ func (r *PortalDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							`Intermediate folders are implicitly created if not listed explicitly.`,
 					},
 				},
-				Description: `Portal navigation grouped by area. Omitting ` + "`" + `structure` + "`" + ` preserves existing navigation, including after import and during unrelated updates. When ` + "`" + `structure` + "`" + ` is configured, ` + "`" + `top_navbar` + "`" + ` must be an explicit list: use ` + "`" + `structure = { top_navbar = [] }` + "`" + ` to clear navigation. ` + "`" + `structure = {}` + "`" + ` and ` + "`" + `structure = { top_navbar = null }` + "`" + ` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit ` + "`" + `top_navbar` + "`" + ` within a configured structure.`,
+				Description: `Portal navigation grouped by area. Configure the complete top navbar on every apply. Set ` + "`" + `top_navbar = []` + "`" + ` to clear all navigation entries.`,
 			},
 		},
 	}

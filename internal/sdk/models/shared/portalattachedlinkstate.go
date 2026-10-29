@@ -36,7 +36,7 @@ type PortalAttachedLinkState struct {
 	// when omitted, the entry inherits from its parent (root entries default to PUBLIC).
 	// A PUBLIC child under a PRIVATE parent is rejected.
 	//
-	Visibility *DeclaredPortalVisibility `json:"visibility,omitempty"`
+	Visibility *PortalVisibility `json:"visibility,omitempty"`
 }
 
 func (p *PortalAttachedLinkState) GetID() *string {
@@ -109,7 +109,7 @@ func (p *PortalAttachedLinkState) GetOrder() *int64 {
 	return p.Order
 }
 
-func (p *PortalAttachedLinkState) GetVisibility() *DeclaredPortalVisibility {
+func (p *PortalAttachedLinkState) GetVisibility() *PortalVisibility {
 	if p == nil {
 		return nil
 	}

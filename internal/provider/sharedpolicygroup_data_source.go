@@ -140,7 +140,8 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 						},
 					},
 				},
-				Description: `SharedPolicyGroup Steps`,
+				MarkdownDescription: `SharedPolicyGroup Steps.` + "\n" +
+					`A GET returns them only to a caller with the ` + "`" + `SHARED_POLICY_GROUP` + "`" + ` ` + "`" + `UPDATE` + "`" + ` permission on the environment.`,
 			},
 		},
 	}

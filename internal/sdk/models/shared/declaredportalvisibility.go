@@ -8,10 +8,7 @@ import (
 	"fmt"
 )
 
-// DeclaredPortalVisibility - Whether the navigation entry is visible to anonymous portal visitors.
-// Optional in the Automation API for backward compatibility with clients that predate this field —
-// when omitted, the entry inherits from its parent (root entries default to PUBLIC).
-// A PUBLIC child under a PRIVATE parent is rejected.
+// DeclaredPortalVisibility - Declared visibility; omitted values inherit from the parent navigation item.
 type DeclaredPortalVisibility string
 
 const (

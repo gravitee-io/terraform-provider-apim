@@ -36,7 +36,7 @@ type APILinkState struct {
 	// when omitted, the entry inherits from its parent (root entries default to PUBLIC).
 	// A PUBLIC child under a PRIVATE parent is rejected.
 	//
-	Visibility *DeclaredPortalVisibility `json:"visibility,omitempty"`
+	Visibility *PortalVisibility `json:"visibility,omitempty"`
 }
 
 func (a *APILinkState) GetID() *string {
@@ -109,7 +109,7 @@ func (a *APILinkState) GetOrder() *int64 {
 	return a.Order
 }
 
-func (a *APILinkState) GetVisibility() *DeclaredPortalVisibility {
+func (a *APILinkState) GetVisibility() *PortalVisibility {
 	if a == nil {
 		return nil
 	}

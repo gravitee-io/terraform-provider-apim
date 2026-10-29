@@ -155,9 +155,9 @@ func (r *APILinkResourceModel) ToSharedPortalAttachedLinkSpec(ctx context.Contex
 	} else {
 		order = nil
 	}
-	visibility := new(shared.DeclaredPortalVisibility)
+	visibility := new(shared.PortalVisibility)
 	if !r.Visibility.IsUnknown() && !r.Visibility.IsNull() {
-		*visibility = shared.DeclaredPortalVisibility(r.Visibility.ValueString())
+		*visibility = shared.PortalVisibility(r.Visibility.ValueString())
 	} else {
 		visibility = nil
 	}

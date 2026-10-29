@@ -74,6 +74,7 @@ type Apiv4DataSourceModel struct {
 	Type                             types.String                                   `tfsdk:"type"`
 	Version                          types.String                                   `tfsdk:"version"`
 	Visibility                       types.String                                   `tfsdk:"visibility"`
+	XGraviteeSetHrid                 types.Bool                                     `tfsdk:"x_gravitee_set_hrid"`
 }
 
 // Metadata returns the data source type name.
@@ -1720,11 +1721,8 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								`Intermediate folders are implicitly created if not listed explicitly.`,
 						},
 						"visibility": schema.StringAttribute{
-							Computed: true,
-							MarkdownDescription: `Whether the navigation entry is visible to anonymous portal visitors.` + "\n" +
-								`Optional in the Automation API for backward compatibility with clients that predate this field —` + "\n" +
-								`when omitted, the entry inherits from its parent (root entries default to PUBLIC).` + "\n" +
-								`A PUBLIC child under a PRIVATE parent is rejected.`,
+							Computed:    true,
+							Description: `Declared visibility; omitted values inherit from the parent navigation item.`,
 						},
 					},
 				},
@@ -1849,6 +1847,11 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 			"visibility": schema.StringAttribute{
 				Computed:    true,
 				Description: `The visibility of the entity regarding the portal.`,
+			},
+			"x_gravitee_set_hrid": schema.BoolAttribute{
+				Optional: true,
+				MarkdownDescription: `When true, the HRID path value is treated as an existing UUID (like hridContainsUUID), and the returned` + "\n" +
+					`HRIDs are generated from names: the API's when missing or a UUID, its pages' and plans' always.`,
 			},
 		},
 	}

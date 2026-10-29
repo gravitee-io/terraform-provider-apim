@@ -74,6 +74,18 @@ func (r *SubscriptionResourceModel) ToOperationsCreateOrUpdateAPISubscriptionsRe
 	var apiHrid string
 	apiHrid = r.APIHrid.ValueString()
 
+	hridContainsAPIUUID := new(bool)
+	if !r.HridContainsAPIUUID.IsUnknown() && !r.HridContainsAPIUUID.IsNull() {
+		*hridContainsAPIUUID = r.HridContainsAPIUUID.ValueBool()
+	} else {
+		hridContainsAPIUUID = nil
+	}
+	hridContainsAppUUID := new(bool)
+	if !r.HridContainsAppUUID.IsUnknown() && !r.HridContainsAppUUID.IsNull() {
+		*hridContainsAppUUID = r.HridContainsAppUUID.ValueBool()
+	} else {
+		hridContainsAppUUID = nil
+	}
 	subscriptionSpec, subscriptionSpecDiags := r.ToSharedSubscriptionSpec(ctx)
 	diags.Append(subscriptionSpecDiags...)
 
@@ -82,10 +94,12 @@ func (r *SubscriptionResourceModel) ToOperationsCreateOrUpdateAPISubscriptionsRe
 	}
 
 	out := operations.CreateOrUpdateAPISubscriptionsRequest{
-		OrganizationID:   organizationID,
-		EnvironmentID:    environmentID,
-		APIHrid:          apiHrid,
-		SubscriptionSpec: *subscriptionSpec,
+		OrganizationID:      organizationID,
+		EnvironmentID:       environmentID,
+		APIHrid:             apiHrid,
+		HridContainsAPIUUID: hridContainsAPIUUID,
+		HridContainsAppUUID: hridContainsAppUUID,
+		SubscriptionSpec:    *subscriptionSpec,
 	}
 
 	return &out, diags
@@ -112,11 +126,18 @@ func (r *SubscriptionResourceModel) ToOperationsDeleteAPISubscriptionRequest(ctx
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
+	hridContainsAPIUUID := new(bool)
+	if !r.HridContainsAPIUUID.IsUnknown() && !r.HridContainsAPIUUID.IsNull() {
+		*hridContainsAPIUUID = r.HridContainsAPIUUID.ValueBool()
+	} else {
+		hridContainsAPIUUID = nil
+	}
 	out := operations.DeleteAPISubscriptionRequest{
-		OrganizationID: organizationID,
-		EnvironmentID:  environmentID,
-		APIHrid:        apiHrid,
-		Hrid:           hrid,
+		OrganizationID:      organizationID,
+		EnvironmentID:       environmentID,
+		APIHrid:             apiHrid,
+		Hrid:                hrid,
+		HridContainsAPIUUID: hridContainsAPIUUID,
 	}
 
 	return &out, diags
@@ -143,11 +164,18 @@ func (r *SubscriptionResourceModel) ToOperationsGetAPISubscriptionRequest(ctx co
 	var hrid string
 	hrid = r.Hrid.ValueString()
 
+	hridContainsAPIUUID := new(bool)
+	if !r.HridContainsAPIUUID.IsUnknown() && !r.HridContainsAPIUUID.IsNull() {
+		*hridContainsAPIUUID = r.HridContainsAPIUUID.ValueBool()
+	} else {
+		hridContainsAPIUUID = nil
+	}
 	out := operations.GetAPISubscriptionRequest{
-		OrganizationID: organizationID,
-		EnvironmentID:  environmentID,
-		APIHrid:        apiHrid,
-		Hrid:           hrid,
+		OrganizationID:      organizationID,
+		EnvironmentID:       environmentID,
+		APIHrid:             apiHrid,
+		Hrid:                hrid,
+		HridContainsAPIUUID: hridContainsAPIUUID,
 	}
 
 	return &out, diags
