@@ -78,6 +78,9 @@ Files listed in `.genignore` are **not** overwritten by Speakeasy even though si
 | `examples/use-cases/**`, `examples/tutorials/**` | Tutorial Terraform configs |
 | `examples/resources/**` | Minimal per-resource examples for registry docs (curated, in `.genignore`) |
 | `tests/**` | **Entirely hand-written** — acceptance tests, example tests, testdata, utilities; nothing here is generated |
+| `internal/provider/portal_visibility.go`, `internal/provider/documentation_placement.go`, `internal/provider/portal_navigation.go` | Hand-written portal and documentation navigation behavior |
+| `internal/provider/api_link_request.go`, `internal/provider/documentation_api_request.go`, `internal/provider/documentation_portal_request.go`, `internal/provider/portal_link_request.go` | Hand-written request builders used by generated resource hooks |
+| `internal/planmodifiers/objectplanmodifier/portal_structure.go` | Hand-written plan modifier that preserves APIM-managed navigation when omitted |
 | `internal/provider/gravitee_cloud.go` | Gravitee Cloud auth / server URL resolution |
 | `internal/provider/customtypes/**` | `TrimmedString`, `RFC3339` custom Terraform types (referenced from overlays) |
 | `internal/planmodifiers/stringplanmodifier/immutable.go`, `normalize_path.go`, `trim_trailing_slash.go` | Custom plan modifiers |
@@ -87,6 +90,8 @@ Files listed in `.genignore` are **not** overwritten by Speakeasy even though si
 | `internal/listkeys/` | Reads the identifying attributes of a list's elements, for the validators and modifiers above |
 | `internal/sdk/internal/hooks/registration.go` | Generated once, then free to edit |
 | `hack/`, `Makefile`, CI config | Project infrastructure |
+
+The generated resource files contain `GRAVITEE ... REQUEST` regions that call the hand-written request builders above. `make lint` checks that both create and update regions remain present after regeneration.
 
 Most files under `internal/planmodifiers/` and `internal/validators/` are Speakeasy-generated scaffolding; only the custom modifiers and validators listed above are hand-maintained.
 
@@ -112,8 +117,8 @@ Config: `.speakeasy/gen.yaml`, `.speakeasy/gen.lock`, `.speakeasy/workflow.yaml`
 
 ### Provider structure (`internal/provider/`)
 
-- **Resources** (8): `apim_apiv4`, `apim_application`, `apim_catalog_mcp_server`, `apim_dictionary`, `apim_group`, `apim_mcp_proxy`, `apim_shared_policy_group`, `apim_subscription`
-- **Data sources** (8): mirror the resources above for read-only access
+- **Resources** (15): `apim_apiv4`, `apim_api_link`, `apim_application`, `apim_catalog_mcp_server`, `apim_dictionary`, `apim_documentation_api`, `apim_documentation_portal`, `apim_group`, `apim_mcp_proxy`, `apim_portal`, `apim_portal_link`, `apim_portal_listing`, `apim_portal_theme`, `apim_shared_policy_group`, `apim_subscription`
+- **Data sources** (15): mirror the resources above for read-only access
 - Each resource has `*_resource.go` (CRUD) and `*_resource_sdk.go` (type mapping); data sources follow the same pattern
 - `provider.go` — provider config, auth, schema (generated, with `// BEGIN GRAVITEE CLOUD INIT` hook)
 - `reflect/` and `typeconvert/` — Terraform ↔ SDK type conversion (generated)
@@ -121,7 +126,7 @@ Config: `.speakeasy/gen.yaml`, `.speakeasy/gen.lock`, `.speakeasy/workflow.yaml`
 
 ### SDK (`internal/sdk/`)
 
-Generated Go HTTP client. Entry point: `graviteeapim.go`. API groups: `apis.go`, `applications.go`, `dictionaries.go`, `groups.go`, `sharedpolicygroups.go`, `subscriptions.go`, `aicatalog.go`, `mcpproxies.go`. Models in `models/operations/` and `models/shared/`.
+Generated Go HTTP client. Entry point: `graviteeapim.go`. API groups: `apis.go`, `apilinks.go`, `applications.go`, `dictionaries.go`, `apidocumentations.go`, `portaldocumentations.go`, `groups.go`, `portals.go`, `portallinks.go`, `portallistings.go`, `themes.go`, `sharedpolicygroups.go`, `subscriptions.go`, `aicatalog.go`, `mcpproxies.go`. Models in `models/operations/` and `models/shared/`.
 
 ### Tests (`tests/`)
 
