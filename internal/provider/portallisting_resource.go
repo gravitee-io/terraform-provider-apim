@@ -14,6 +14,7 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
 	speakeasy_objectvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/objectvalidators"
 	speakeasy_stringvalidators "github.com/gravitee-io/terraform-provider-apim/internal/validators/stringvalidators"
+	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -105,6 +106,9 @@ func (r *PortalListingResource) Schema(ctx context.Context, req resource.SchemaR
 					},
 				},
 				Description: `List of APIs to publish to the portal. Use each entry's order to control display order relative to siblings at the same location.`,
+				Validators: []validator.List{
+					listvalidator.SizeAtLeast(1),
+				},
 			},
 			"environment_id": schema.StringAttribute{
 				Computed: true,

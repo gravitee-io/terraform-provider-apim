@@ -9,7 +9,7 @@ type PortalSpec struct {
 	Hrid string `json:"hrid"`
 	// Display name of the portal
 	Name string `json:"name"`
-	// Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, `top_navbar` must be an explicit list: use `structure = { top_navbar = [] }` to clear navigation. `structure = {}` and `structure = { top_navbar = null }` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit `top_navbar` within a configured structure.
+	// Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, omitted areas preserve their existing values. Set `top_navbar = []` to clear the navigation area.
 	Structure *PortalNavigationStructure `json:"structure,omitempty"`
 	// Deprecated. Use `structure.topNavbar` instead. `navigation` and `structure` cannot be set at the same time;
 	// when only `navigation` is provided, it is mapped to `structure.topNavbar` for backward compatibility.

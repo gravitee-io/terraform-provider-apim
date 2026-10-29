@@ -17,7 +17,7 @@ type HTTPListener struct {
 	Servers []string `json:"servers,omitempty"`
 	// One of the possible context paths of this API
 	Paths []PathV4 `json:"paths,omitempty"`
-	// Path patterns used to group analytics by API path (e.g. `/products/:productId`).
+	// Path patterns used to group analytics by API path. Set this to [] to clear previously configured path mappings; omitting it preserves the current value.
 	PathMappings []string `json:"pathMappings,omitempty"`
 	// Http listener Cross-Origin Resource Sharing
 	Cors *Cors `json:"cors,omitempty"`

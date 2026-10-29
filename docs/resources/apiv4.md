@@ -376,7 +376,7 @@ Optional:
 
 - `cors` (Attributes) Http listener Cross-Origin Resource Sharing (see [below for nested schema](#nestedatt--listeners--http--cors))
 - `entrypoints` (Attributes List) A list of possible entrypoint of the same type. (see [below for nested schema](#nestedatt--listeners--http--entrypoints))
-- `path_mappings` (List of String) Path patterns used to group analytics by API path (e.g. `/products/:productId`).
+- `path_mappings` (List of String) Path patterns used to group analytics by API path. Set this to [] to clear previously configured path mappings; omitting it preserves the current value.
 - `paths` (Attributes List) One of the possible context paths of this API (see [below for nested schema](#nestedatt--listeners--http--paths))
 - `request_validation` (Attributes) Validation the Gateway applies to incoming requests before running flows. (see [below for nested schema](#nestedatt--listeners--http--request_validation))
 - `servers` (List of String) Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
@@ -434,7 +434,7 @@ Optional:
 
 Optional:
 
-- `reject_null_byte` (Boolean) Reject requests whose path or query contains a null byte. Default: false
+- `reject_null_byte` (Boolean) Reject requests whose path or query contains a null byte. Set to false to clear the enabled setting. Default: false
 
 
 

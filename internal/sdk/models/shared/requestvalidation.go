@@ -9,7 +9,7 @@ import (
 
 // RequestValidation - Validation the Gateway applies to incoming requests before running flows.
 type RequestValidation struct {
-	// Reject requests whose path or query contains a null byte.
+	// Reject requests whose path or query contains a null byte. Set to false to clear the enabled setting.
 	RejectNullByte *bool `default:"false" json:"rejectNullByte"`
 }
 

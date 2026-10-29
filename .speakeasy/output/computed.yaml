@@ -3311,7 +3311,7 @@ components:
               items:
                 $ref: "#/components/schemas/PathV4"
             pathMappings:
-              description: Path patterns used to group analytics by API path (e.g. `/products/:productId`).
+              description: Path patterns used to group analytics by API path. Set this to [] to clear previously configured path mappings; omitting it preserves the current value.
               type: array
               items:
                 type: string
@@ -3326,12 +3326,14 @@ components:
               $ref: "#/components/schemas/RequestValidation"
               x-speakeasy-param-computed: true
               x-speakeasy-param-suppress-computed-diff: true
+              description: >-
+                Request validation settings. To disable the current setting, configure reject_null_byte = false; omitting this block preserves the current value.
     RequestValidation:
       description: Validation the Gateway applies to incoming requests before running flows.
       type: object
       properties:
         rejectNullByte:
-          description: Reject requests whose path or query contains a null byte.
+          description: Reject requests whose path or query contains a null byte. Set to false to clear the enabled setting.
           type: boolean
           default: false
           x-speakeasy-param-computed: false
@@ -4474,7 +4476,7 @@ components:
         - PUBLIC
         - PRIVATE
     PortalNavigationStructure:
-      description: 'Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, `top_navbar` must be an explicit list: use `structure = { top_navbar = [] }` to clear navigation. `structure = {}` and `structure = { top_navbar = null }` are rejected rather than clearing entries implicitly. TBD (to be discussed): requiring an explicit `top_navbar` within a configured structure.'
+      description: Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, omitted areas preserve their existing values. Set `top_navbar = []` to clear the navigation area.
       type: object
       properties:
         topNavbar:
@@ -4581,6 +4583,7 @@ components:
           items:
             $ref: "#/components/schemas/PortalListingApiEntry"
           x-speakeasy-param-computed: false
+          minItems: 1
       required:
         - hrid
         - apis

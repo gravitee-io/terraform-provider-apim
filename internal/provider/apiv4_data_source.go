@@ -963,7 +963,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								"path_mappings": schema.ListAttribute{
 									Computed:    true,
 									ElementType: types.StringType,
-									Description: `Path patterns used to group analytics by API path (e.g. ` + "`" + `/products/:productId` + "`" + `).`,
+									Description: `Path patterns used to group analytics by API path. Set this to [] to clear previously configured path mappings; omitting it preserves the current value.`,
 								},
 								"paths": schema.ListNestedAttribute{
 									Computed: true,
@@ -989,7 +989,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Attributes: map[string]schema.Attribute{
 										"reject_null_byte": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Reject requests whose path or query contains a null byte.`,
+											Description: `Reject requests whose path or query contains a null byte. Set to false to clear the enabled setting.`,
 										},
 									},
 									Description: `Validation the Gateway applies to incoming requests before running flows.`,
