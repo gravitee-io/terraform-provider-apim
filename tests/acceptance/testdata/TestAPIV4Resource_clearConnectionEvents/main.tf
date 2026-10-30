@@ -38,6 +38,9 @@ resource "apim_apiv4" "test" {
     {
       name = "Default Native endpoint group"
       type = "native-kafka"
+      load_balancer = {
+        type = "ROUND_ROBIN"
+      }
       endpoints = [
         {
           configuration = jsonencode({

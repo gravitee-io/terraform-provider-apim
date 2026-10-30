@@ -14,6 +14,11 @@ variable "clear" {
   type = bool
 }
 
+variable "omit_settings" {
+  type    = bool
+  default = false
+}
+
 resource "apim_apiv4" "test" {
   environment_id  = var.environment_id
   hrid            = var.hrid
@@ -47,11 +52,7 @@ resource "apim_apiv4" "test" {
 
   listeners = [
     {
-      http = {
-        path_mappings = var.clear ? [] : ["/${var.hrid}/*"]
-        request_validation = {
-          reject_null_byte = !var.clear
-        }
+      http = merge({
         entrypoints = [
           {
             type = "http-proxy"
@@ -63,7 +64,11 @@ resource "apim_apiv4" "test" {
           }
         ]
         type = "HTTP"
-      }
+      }, var.omit_settings ? {} : {
+        path_mappings = var.clear ? [] : ["/${var.hrid}/*"]
+      }, var.omit_settings ? {} : {
+        request_validation = { reject_null_byte = !var.clear }
+      })
     }
   ]
 

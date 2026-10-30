@@ -11,20 +11,31 @@ actions:
       x-speakeasy-param-computed: false
 
   - target: $.components.schemas.HttpListener.allOf[*].properties.pathMappings
-    description: Preserve omitted listener path mappings without perpetual unknown plans
+    description: Allow removing listener path mappings from configuration
     update:
-      x-speakeasy-param-computed: true
-      x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-param-computed: false
+      x-speakeasy-param-suppress-computed-diff: false
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+      description: >-
+        Path patterns used to group analytics by API path. Remove this attribute
+        or set it to [] to clear previously configured path mappings.
   - target: $.components.schemas.HttpListener.allOf[*].properties.requestValidation
-    description: Preserve omitted listener validation without perpetual unknown plans
+    description: Allow removing listener validation from configuration
     update:
-      x-speakeasy-param-computed: true
-      x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-param-computed: false
+      x-speakeasy-param-suppress-computed-diff: false
   - target: $.components.schemas.RequestValidation
-    description: Referenced listener validation also needs stable computed planning
+    description: Allow removing referenced listener validation from configuration
     update:
-      x-speakeasy-param-computed: true
-      x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-param-computed: false
+      x-speakeasy-param-suppress-computed-diff: false
+
+  - target: $.components.schemas.RequestValidation.properties.rejectNullByte
+    description: Explain how to clear the request validation setting
+    update:
+      description: >-
+        Reject requests whose path or query contains a null byte. Remove the
+        request_validation block or set this to false to clear the enabled setting.
 
 
   # Entity management
@@ -141,7 +152,11 @@ actions:
   - target: $.components.schemas.Analytics.properties.connectionEvents
     description: Treat an omitted event selection and an empty response as equivalent
     update:
-      x-speakeasy-param-computed: true
+      description: |-
+        Which connection lifecycle events the gateway reports, among `CONNECTED`, `DISCONNECTED`, and `ERROR`. Only applicable to Native v4 APIs.
+        Remove this attribute or set it to `[]` to clear the selection. When absent or empty, the gateway reports `CONNECTED` and `ERROR`: `DISCONNECTED` is opt-in. To report nothing, set `reporter_metrics_enabled` to false.
+        `ERROR` covers every failure status the gateway emits (`CONNECTION_ERROR`, `SESSION_ERROR`, `INTERNAL_ERROR`).
+      x-speakeasy-param-computed: false
       x-speakeasy-param-suppress-computed-diff: false
       x-speakeasy-plan-modifiers: IgnoreEmptyList
   - target: $.components.schemas.Operator
