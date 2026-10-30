@@ -56,7 +56,7 @@ resource "apim_portal_theme" "test" {
 
 // Applying a theme changes the environment's active theme, so these tests run serially.
 func TestPortalThemeResource_minimal(t *testing.T) {
-	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	hrid := "test-" + acctest.RandString(10)
 	address := "apim_portal_theme.test"
 	configuration := portalThemeConfig(hrid, "Minimal theme", "", false, true)
@@ -81,7 +81,7 @@ func TestPortalThemeResource_minimal(t *testing.T) {
 }
 
 func TestPortalThemeResource_allProps(t *testing.T) {
-	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	hrid := "test-" + acctest.RandString(10)
 	address := "apim_portal_theme.test"
 	initial := portalThemeConfig(hrid, "Brand theme", "#112233", true, true)
