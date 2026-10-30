@@ -107,6 +107,11 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			`* Subscriptions` + "\n" +
 			`* Group` + "\n" +
 			`* Dictionaries` + "\n" +
+			`* Portals` + "\n" +
+			`* Portal Listings` + "\n" +
+			`* Portal and API Documentation` + "\n" +
+			`* Portal and API Links` + "\n" +
+			`* Portal Themes` + "\n" +
 			`* MCP Catalog Servers` + "\n" +
 			`* MCP Proxies` + "\n" +
 			`` + "\n" +
@@ -249,11 +254,18 @@ func (p *ApimProvider) Actions(_ context.Context) []func() action.Action {
 func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewApiv4Resource,
+		NewAPILinkResource,
 		NewApplicationResource,
 		NewCatalogMcpServerResource,
 		NewDictionaryResource,
+		NewDocumentationAPIResource,
+		NewDocumentationPortalResource,
 		NewGroupResource,
 		NewMcpProxyResource,
+		NewPortalResource,
+		NewPortalLinkResource,
+		NewPortalListingResource,
+		NewPortalThemeResource,
 		NewSharedPolicyGroupResource,
 		NewSubscriptionResource,
 	}
@@ -262,11 +274,18 @@ func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource
 func (p *ApimProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewApiv4DataSource,
+		NewAPILinkDataSource,
 		NewApplicationDataSource,
 		NewCatalogMcpServerDataSource,
 		NewDictionaryDataSource,
+		NewDocumentationAPIDataSource,
+		NewDocumentationPortalDataSource,
 		NewGroupDataSource,
 		NewMcpProxyDataSource,
+		NewPortalDataSource,
+		NewPortalLinkDataSource,
+		NewPortalListingDataSource,
+		NewPortalThemeDataSource,
 		NewSharedPolicyGroupDataSource,
 		NewSubscriptionDataSource,
 	}

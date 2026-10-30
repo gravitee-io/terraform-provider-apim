@@ -13,6 +13,7 @@ import (
 func TestDocumentationPortalResource_nextGen(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
+	lockPortalAcceptanceTest(t)
 	hrid := "test-" + acctest.RandString(10)
 	address := "apim_documentation_portal.test"
 	pageConfig := func(area string) string {
@@ -74,6 +75,7 @@ resource "apim_documentation_portal" "test" {
 func TestDocumentationPortalResource_minimal(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
+	lockPortalAcceptanceTest(t)
 
 	randomId := "test-" + acctest.RandString(10)
 	portalHrid := "api-" + randomId
@@ -109,6 +111,7 @@ func TestDocumentationPortalResource_minimal(t *testing.T) {
 func TestDocumentationPortalResource_update(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
+	lockPortalAcceptanceTest(t)
 
 	randomId := "test-" + acctest.RandString(10)
 	portalHrid := "portal-" + randomId

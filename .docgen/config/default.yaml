@@ -184,6 +184,12 @@ chunks:
   - template: examples/use-cases/portal-next-gen/api.tf
     exportedAs: PortalNextGenAPI
     required: true
+  - template: examples/use-cases/portal-next-gen/theme.tf
+    exportedAs: PortalNextGenTheme
+    required: true
+  - template: examples/use-cases/portal-next-gen/links.tf
+    exportedAs: PortalNextGenLinks
+    required: true
   - template: examples/use-cases/mcp-studio/catalog-server.tf
     exportedAs: McpStudioCatalogServer
     required: true

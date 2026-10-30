@@ -9,6 +9,16 @@ actions:
     update:
       x-speakeasy-param-computed: true
 
+  - target: $.components.schemas.DocumentationArea
+    description: Shared by portal and API pages, so say where HOMEPAGE applies
+    update:
+      description: >-
+        Where the documentation page appears. `TOP_NAVBAR` (default) places the page in the
+        navigation. `HOMEPAGE` makes a portal page the portal's homepage: APIM rejects it on API
+        documentation. A portal has one homepage. Applying it replaces a homepage created in the
+        Console, and a second homepage managed by the Automation API with a different HRID fails
+        with 409.
+
   - target: $.components.schemas
     description: Create an alias to a specific type
     update:

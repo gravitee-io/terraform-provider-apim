@@ -17,7 +17,8 @@ type SharedPolicyGroupSpec struct {
 	Name string `json:"name"`
 	// The execution phase of a shared policy group policy. Only phases compatible with PROXY and MESSAGE API types are supported.
 	Phase FlowPhase `json:"phase"`
-	// SharedPolicyGroup Steps
+	// SharedPolicyGroup Steps.
+	// A GET returns them only to a caller with the `SHARED_POLICY_GROUP` `UPDATE` permission on the environment.
 	Steps []StepV4 `json:"steps,omitempty"`
 }
 

@@ -57,7 +57,8 @@ resource "apim_shared_policy_group" "example" {
 - `environment_id` (String) environment ID
 - `organization_id` (String) organization ID
 - `prerequisite_message` (String) The prerequisite message of the shared policy group. This message is displayed to the user to help understand the prerequisite to use the shared policy group.
-- `steps` (Attributes List) SharedPolicyGroup Steps (see [below for nested schema](#nestedatt--steps))
+- `steps` (Attributes List) SharedPolicyGroup Steps.
+A GET returns them only to a caller with the `SHARED_POLICY_GROUP` `UPDATE` permission on the environment. (see [below for nested schema](#nestedatt--steps))
 
 ### Read-Only
 

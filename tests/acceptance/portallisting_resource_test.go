@@ -14,6 +14,7 @@ import (
 func TestPortalListingResource_minimal(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
+	lockPortalAcceptanceTest(t)
 
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"
@@ -51,6 +52,7 @@ func TestPortalListingResource_minimal(t *testing.T) {
 func TestPortalListingResource_update(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
+	lockPortalAcceptanceTest(t)
 
 	environmentId := "DEFAULT"
 	organizationId := "DEFAULT"

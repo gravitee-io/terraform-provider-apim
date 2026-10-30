@@ -58,6 +58,11 @@ func Pointer[T any](v T) *T { return &v }
 // * Subscriptions
 // * Group
 // * Dictionaries
+// * Portals
+// * Portal Listings
+// * Portal and API Documentation
+// * Portal and API Links
+// * Portal Themes
 // * MCP Catalog Servers
 // * MCP Proxies
 //
@@ -76,6 +81,18 @@ type GraviteeApim struct {
 	// Everything about subscriptions
 	Subscriptions      *Subscriptions
 	SharedPolicyGroups *SharedPolicyGroups
+	// Everything about Portals (next-gen developer portal)
+	Portals *Portals
+	// Everything about Portal Listings (publishing APIs to a portal)
+	PortalListings *PortalListings
+	// Everything about Portal Documentations
+	PortalDocumentations *PortalDocumentations
+	// Everything about Portal Links (external navigation entries in a portal's navigation)
+	PortalLinks *PortalLinks
+	Themes      *Themes
+	// Everything about API Documentations (next-gen portal)
+	APIDocumentations *APIDocumentations
+	APILinks          *APILinks
 	// Upstream MCP servers registered in the AI Catalog.
 	AICatalog *AICatalog
 	// MCP proxies exposing an upstream MCP server through the gateway.
@@ -202,6 +219,13 @@ func New(opts ...SDKOption) *GraviteeApim {
 	sdk.Dictionaries = newDictionaries(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.Subscriptions = newSubscriptions(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.SharedPolicyGroups = newSharedPolicyGroups(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Portals = newPortals(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.PortalListings = newPortalListings(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.PortalDocumentations = newPortalDocumentations(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.PortalLinks = newPortalLinks(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.Themes = newThemes(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APIDocumentations = newAPIDocumentations(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.APILinks = newAPILinks(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.AICatalog = newAICatalog(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.MCPProxies = newMCPProxies(sdk, sdk.sdkConfiguration, sdk.hooks)
 

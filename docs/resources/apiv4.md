@@ -254,6 +254,9 @@ Default: true
 - `organization_id` (String) organization ID
 - `pages` (Attributes List) Pages for the API (classic portal). Elements positioned earlier in the list are displayed first, with subsequent elements appearing below. (see [below for nested schema](#nestedatt--pages))
 - `plans` (Attributes List) Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority. (see [below for nested schema](#nestedatt--plans))
+- `portal_navigation` (Attributes List) The API's internal documentation navigation tree for the next-gen portal.
+Paths are ordered — the order in the list is preserved.
+Intermediate folders are implicitly created if not listed explicitly. (see [below for nested schema](#nestedatt--portal_navigation))
 - `properties` (Attributes List) Properties usable using EL. (see [below for nested schema](#nestedatt--properties))
 - `resources` (Attributes List) Data resources usable in policy to access (mostly) external data (authentication, cache, registries...). (see [below for nested schema](#nestedatt--resources))
 - `response_templates` (Map of Map of Object) Map of content-type dependent Response Templates for the API (Not applicable for Native
@@ -373,7 +376,9 @@ Optional:
 
 - `cors` (Attributes) Http listener Cross-Origin Resource Sharing (see [below for nested schema](#nestedatt--listeners--http--cors))
 - `entrypoints` (Attributes List) A list of possible entrypoint of the same type. (see [below for nested schema](#nestedatt--listeners--http--entrypoints))
+- `path_mappings` (List of String) Path patterns used to group analytics by API path. Set this attribute to [] to clear previously configured path mappings. Omitting it preserves the existing mappings.
 - `paths` (Attributes List) One of the possible context paths of this API (see [below for nested schema](#nestedatt--listeners--http--paths))
+- `request_validation` (Attributes) Validation the Gateway applies to incoming requests before running flows. (see [below for nested schema](#nestedatt--listeners--http--request_validation))
 - `servers` (List of String) Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
 - `type` (String) Listener type. Not Null; must be one of ["HTTP", "SUBSCRIPTION", "TCP", "KAFKA"]
 
@@ -388,6 +393,7 @@ Optional:
 - `allow_origin` (List of String) `Access-Control-Allow-Origin`: The origin parameter specifies a URI that may access the resource. Scheme, domain and port are part of the same-origin definition.
 If you choose to enable '*' it means that is allows all requests, regardless of origin. URIs RegExp patterns that may access the resource
 Default: []
+- `allow_private_network` (Boolean) `Access-Control-Allow-Private-Network`: Allow private network access (PNA) requests during CORS preflight. Default: false
 - `enabled` (Boolean) Enable CORS
 - `expose_headers` (List of String) `Access-Control-Expose-Headers`: This header lets a server whitelist headers that browsers are allowed to access. Default: []
 - `max_age` (Number) How long (in seconds) the results of a preflight request can be cached (-1 if disabled). Default: -1
@@ -421,6 +427,14 @@ Optional:
 - `host` (String) Virtual host required to access this API. (`Host` or `:Authority` headers, remote address for websockets)
 - `override_access` (Boolean) Override default organization entrypoint with `host`
 - `path` (String) Default: "/"
+
+
+<a id="nestedatt--listeners--http--request_validation"></a>
+### Nested Schema for `listeners.http.request_validation`
+
+Optional:
+
+- `reject_null_byte` (Boolean) Reject requests whose path or query contains a null byte. Remove the request_validation block or set this to false to clear the enabled setting. Default: false
 
 
 
@@ -520,6 +534,9 @@ Optional:
 
 Optional:
 
+- `connection_events` (List of String) Which connection lifecycle events the gateway reports, among `CONNECTED`, `DISCONNECTED`, and `ERROR`. Only applicable to Native v4 APIs.
+Set this attribute to `[]` to clear the selection. Omitting it preserves the existing selection. When the selection is empty, the gateway reports `CONNECTED` and `ERROR`: `DISCONNECTED` is opt-in. To report nothing, set `reporter_metrics_enabled` to false.
+`ERROR` covers every failure status the gateway emits (`CONNECTION_ERROR`, `SESSION_ERROR`, `INTERNAL_ERROR`).
 - `enabled` (Boolean) Whether or not analytics are enabled.
 - `logging` (Attributes) API logging configuration (Not for native APIs) (see [below for nested schema](#nestedatt--analytics--logging))
 - `otel_logs` (Attributes) (see [below for nested schema](#nestedatt--analytics--otel_logs))
@@ -606,7 +623,41 @@ Not Null; must be one of ["PROBABILITY", "TEMPORAL", "COUNT", "WINDOWED_COUNT"]
 Optional:
 
 - `enabled` (Boolean) Enable OpenTelemetry tracing
+- `redaction` (Attributes) Masking rules applied to span attributes before traces are exported. (see [below for nested schema](#nestedatt--analytics--tracing--redaction))
 - `verbose` (Boolean) Enable technical tracing to get more details on request execution. Be careful this settings can generate more noise and can impact performance.
+
+<a id="nestedatt--analytics--tracing--redaction"></a>
+### Nested Schema for `analytics.tracing.redaction`
+
+Optional:
+
+- `default_replacement` (String) Fallback replacement text for FULL masking rules with no per-rule replacement. Defaults to [REDACTED].
+- `rules` (Attributes List) (see [below for nested schema](#nestedatt--analytics--tracing--redaction--rules))
+
+<a id="nestedatt--analytics--tracing--redaction--rules"></a>
+### Nested Schema for `analytics.tracing.redaction.rules`
+
+Optional:
+
+- `attribute_name_pattern` (String) Glob pattern, short name (no dots — matches anywhere in key hierarchy),
+or regex:-prefixed Java regex matching the span attribute key.
+Not Null
+- `masking_strategy` (Attributes) (see [below for nested schema](#nestedatt--analytics--tracing--redaction--rules--masking_strategy))
+- `value_pattern` (String) Optional Java regex (partial match). Rule only fires when the attribute value matches.
+
+<a id="nestedatt--analytics--tracing--redaction--rules--masking_strategy"></a>
+### Nested Schema for `analytics.tracing.redaction.rules.masking_strategy`
+
+Optional:
+
+- `prefix_length` (Number) PARTIAL only — number of leading characters to keep visible. Default: 0
+- `replacement` (String) For FULL: replacement text (default [REDACTED]).
+For PARTIAL: single mask character (default *).
+- `suffix_length` (Number) PARTIAL only — number of trailing characters to keep visible. Default: 0
+- `type` (String) FULL replaces the entire value; PARTIAL keeps a visible prefix and/or suffix. Not Null; must be one of ["FULL", "PARTIAL"]
+
+
+
 
 
 
@@ -1039,6 +1090,21 @@ Optional:
 - `configuration` (String) JSON Object to configure specific attributes of a Plan. Parsed as JSON.
 - `type` (String) API Plan security implementation. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS", "API_KEY"]
 
+
+
+<a id="nestedatt--portal_navigation"></a>
+### Nested Schema for `portal_navigation`
+
+Optional:
+
+- `display_name` (String) Optional human-friendly label for this path node.
+Listing a path explicitly is the only way to attach a displayName.
+- `order` (Number) Optional display order of this node relative to its siblings at the same level.
+Listing a path explicitly is the only way to attach an order.
+- `path` (String) A slash-separated path defining the navigation hierarchy.
+Intermediate folders are implicitly created if not listed explicitly.
+Not Null
+- `visibility` (String) Declared visibility; omitted values inherit from the parent navigation item. must be one of ["PUBLIC", "PRIVATE"]
 
 
 <a id="nestedatt--properties"></a>

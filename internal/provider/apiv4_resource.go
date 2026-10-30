@@ -90,6 +90,7 @@ type Apiv4ResourceModel struct {
 	OrganizationID                   types.String                                   `tfsdk:"organization_id"`
 	Pages                            []tfTypes.PageV4                               `tfsdk:"pages"`
 	Plans                            []tfTypes.PlanV4                               `tfsdk:"plans"`
+	PortalNavigation                 []tfTypes.NavigationPath                       `tfsdk:"portal_navigation"`
 	Properties                       []tfTypes.Property                             `tfsdk:"properties"`
 	Resources                        []tfTypes.APIResource                          `tfsdk:"resources"`
 	ResponseTemplates                map[string]map[string]tfTypes.ResponseTemplate `tfsdk:"response_templates"`
@@ -128,6 +129,21 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
 				},
 				Attributes: map[string]schema.Attribute{
+					"connection_events": schema.ListAttribute{
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							custom_listplanmodifier.IgnoreEmptyList(),
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
+						ElementType: types.StringType,
+						MarkdownDescription: `Which connection lifecycle events the gateway reports, among ` + "`" + `CONNECTED` + "`" + `, ` + "`" + `DISCONNECTED` + "`" + `, and ` + "`" + `ERROR` + "`" + `. Only applicable to Native v4 APIs.` + "\n" +
+							`Set this attribute to ` + "`" + `[]` + "`" + ` to clear the selection. Omitting it preserves the existing selection. When the selection is empty, the gateway reports ` + "`" + `CONNECTED` + "`" + ` and ` + "`" + `ERROR` + "`" + `: ` + "`" + `DISCONNECTED` + "`" + ` is opt-in. To report nothing, set ` + "`" + `reporter_metrics_enabled` + "`" + ` to false.` + "\n" +
+							`` + "`" + `ERROR` + "`" + ` covers every failure status the gateway emits (` + "`" + `CONNECTION_ERROR` + "`" + `, ` + "`" + `SESSION_ERROR` + "`" + `, ` + "`" + `INTERNAL_ERROR` + "`" + `).`,
+						Validators: []validator.List{
+							listvalidator.UniqueValues(),
+						},
+					},
 					"enabled": schema.BoolAttribute{
 						Optional:    true,
 						Description: `Whether or not analytics are enabled.`,
@@ -276,6 +292,89 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							"enabled": schema.BoolAttribute{
 								Optional:    true,
 								Description: `Enable OpenTelemetry tracing`,
+							},
+							"redaction": schema.SingleNestedAttribute{
+								Computed: true,
+								Optional: true,
+								PlanModifiers: []planmodifier.Object{
+									speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+								},
+								Attributes: map[string]schema.Attribute{
+									"default_replacement": schema.StringAttribute{
+										Optional:    true,
+										Description: `Fallback replacement text for FULL masking rules with no per-rule replacement. Defaults to [REDACTED].`,
+									},
+									"rules": schema.ListNestedAttribute{
+										Optional: true,
+										NestedObject: schema.NestedAttributeObject{
+											Validators: []validator.Object{
+												speakeasy_objectvalidators.NotNull(),
+											},
+											PlanModifiers: []planmodifier.Object{
+												speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+											},
+											Attributes: map[string]schema.Attribute{
+												"attribute_name_pattern": schema.StringAttribute{
+													Optional: true,
+													MarkdownDescription: `Glob pattern, short name (no dots — matches anywhere in key hierarchy),` + "\n" +
+														`or regex:-prefixed Java regex matching the span attribute key.` + "\n" +
+														`Not Null`,
+													Validators: []validator.String{
+														speakeasy_stringvalidators.NotNull(),
+													},
+												},
+												"masking_strategy": schema.SingleNestedAttribute{
+													Computed: true,
+													Optional: true,
+													PlanModifiers: []planmodifier.Object{
+														speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+													},
+													Attributes: map[string]schema.Attribute{
+														"prefix_length": schema.Int64Attribute{
+															Computed:    true,
+															Optional:    true,
+															Default:     int64default.StaticInt64(0),
+															Description: `PARTIAL only — number of leading characters to keep visible. Default: 0`,
+															Validators: []validator.Int64{
+																int64validator.AtLeast(0),
+															},
+														},
+														"replacement": schema.StringAttribute{
+															Optional: true,
+															MarkdownDescription: `For FULL: replacement text (default [REDACTED]).` + "\n" +
+																`For PARTIAL: single mask character (default *).`,
+														},
+														"suffix_length": schema.Int64Attribute{
+															Computed:    true,
+															Optional:    true,
+															Default:     int64default.StaticInt64(0),
+															Description: `PARTIAL only — number of trailing characters to keep visible. Default: 0`,
+															Validators: []validator.Int64{
+																int64validator.AtLeast(0),
+															},
+														},
+														"type": schema.StringAttribute{
+															Optional:    true,
+															Description: `FULL replaces the entire value; PARTIAL keeps a visible prefix and/or suffix. Not Null; must be one of ["FULL", "PARTIAL"]`,
+															Validators: []validator.String{
+																speakeasy_stringvalidators.NotNull(),
+																stringvalidator.OneOf(
+																	"FULL",
+																	"PARTIAL",
+																),
+															},
+														},
+													},
+												},
+												"value_pattern": schema.StringAttribute{
+													Optional:    true,
+													Description: `Optional Java regex (partial match). Rule only fires when the attribute value matches.`,
+												},
+											},
+										},
+									},
+								},
+								Description: `Masking rules applied to span attributes before traces are exported.`,
 							},
 							"verbose": schema.BoolAttribute{
 								Optional:    true,
@@ -741,16 +840,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									"name": schema.StringAttribute{
 										Optional:    true,
 										Description: `The name of the step`,
-										Validators: []validator.String{
-											stringvalidator.UTF8LengthAtMost(64),
-										},
 									},
 									"policy": schema.StringAttribute{
 										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
-											stringvalidator.UTF8LengthAtMost(64),
 										},
 									},
 								},
@@ -806,16 +901,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									"name": schema.StringAttribute{
 										Optional:    true,
 										Description: `The name of the step`,
-										Validators: []validator.String{
-											stringvalidator.UTF8LengthAtMost(64),
-										},
 									},
 									"policy": schema.StringAttribute{
 										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
-											stringvalidator.UTF8LengthAtMost(64),
 										},
 									},
 								},
@@ -878,16 +969,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									"name": schema.StringAttribute{
 										Optional:    true,
 										Description: `The name of the step`,
-										Validators: []validator.String{
-											stringvalidator.UTF8LengthAtMost(64),
-										},
 									},
 									"policy": schema.StringAttribute{
 										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
-											stringvalidator.UTF8LengthAtMost(64),
 										},
 									},
 								},
@@ -943,16 +1030,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									"name": schema.StringAttribute{
 										Optional:    true,
 										Description: `The name of the step`,
-										Validators: []validator.String{
-											stringvalidator.UTF8LengthAtMost(64),
-										},
 									},
 									"policy": schema.StringAttribute{
 										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
-											stringvalidator.UTF8LengthAtMost(64),
 										},
 									},
 								},
@@ -1008,16 +1091,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									"name": schema.StringAttribute{
 										Optional:    true,
 										Description: `The name of the step`,
-										Validators: []validator.String{
-											stringvalidator.UTF8LengthAtMost(64),
-										},
 									},
 									"policy": schema.StringAttribute{
 										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
-											stringvalidator.UTF8LengthAtMost(64),
 										},
 									},
 								},
@@ -1284,16 +1363,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									"name": schema.StringAttribute{
 										Optional:    true,
 										Description: `The name of the step`,
-										Validators: []validator.String{
-											stringvalidator.UTF8LengthAtMost(64),
-										},
 									},
 									"policy": schema.StringAttribute{
 										Optional:    true,
 										Description: `The policy of the step (plugin ID). Not Null`,
 										Validators: []validator.String{
 											speakeasy_stringvalidators.NotNull(),
-											stringvalidator.UTF8LengthAtMost(64),
 										},
 									},
 								},
@@ -1337,7 +1412,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Description: `Human-readable ID of a spec. Requires replacement if changed.`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{
@@ -1427,6 +1502,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												listvalidator.UniqueValues(),
 											},
 										},
+										"allow_private_network": schema.BoolAttribute{
+											Computed:    true,
+											Optional:    true,
+											Default:     booldefault.StaticBool(false),
+											Description: `` + "`" + `Access-Control-Allow-Private-Network` + "`" + `: Allow private network access (PNA) requests during CORS preflight. Default: false`,
+										},
 										"enabled": schema.BoolAttribute{
 											Optional:    true,
 											Description: `Enable CORS`,
@@ -1507,6 +1588,16 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										listvalidator.SizeAtLeast(1),
 									},
 								},
+								"path_mappings": schema.ListAttribute{
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										custom_listplanmodifier.IgnoreEmptyList(),
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
+									ElementType: types.StringType,
+									Description: `Path patterns used to group analytics by API path. Set this attribute to [] to clear previously configured path mappings. Omitting it preserves the existing mappings.`,
+								},
 								"paths": schema.ListNestedAttribute{
 									Computed: true,
 									Optional: true,
@@ -1542,6 +1633,18 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									Validators: []validator.List{
 										listvalidator.SizeAtLeast(1),
 									},
+								},
+								"request_validation": schema.SingleNestedAttribute{
+									Optional: true,
+									Attributes: map[string]schema.Attribute{
+										"reject_null_byte": schema.BoolAttribute{
+											Computed:    true,
+											Optional:    true,
+											Default:     booldefault.StaticBool(false),
+											Description: `Reject requests whose path or query contains a null byte. Remove the request_validation block or set this to false to clear the enabled setting. Default: false`,
+										},
+									},
+									Description: `Validation the Gateway applies to incoming requests before running flows.`,
 								},
 								"servers": schema.ListAttribute{
 									Computed: true,
@@ -2034,7 +2137,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 								stringvalidator.UTF8LengthAtMost(256),
-								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 							},
 						},
 						"name": schema.StringAttribute{
@@ -2044,7 +2147,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								`Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
-								stringvalidator.UTF8LengthAtMost(64),
 							},
 						},
 						"parent_hrid": schema.StringAttribute{
@@ -2069,9 +2171,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								"type": schema.StringAttribute{
 									Optional:    true,
 									Description: `The type of the page source (fetcher plugin ID).`,
-									Validators: []validator.String{
-										stringvalidator.UTF8LengthAtMost(64),
-									},
 								},
 							},
 							MarkdownDescription: `Allow you to fetch pages from various external sources, ` + "\n" +
@@ -2224,16 +2323,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												"name": schema.StringAttribute{
 													Optional:    true,
 													Description: `The name of the step`,
-													Validators: []validator.String{
-														stringvalidator.UTF8LengthAtMost(64),
-													},
 												},
 												"policy": schema.StringAttribute{
 													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
-														stringvalidator.UTF8LengthAtMost(64),
 													},
 												},
 											},
@@ -2289,16 +2384,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												"name": schema.StringAttribute{
 													Optional:    true,
 													Description: `The name of the step`,
-													Validators: []validator.String{
-														stringvalidator.UTF8LengthAtMost(64),
-													},
 												},
 												"policy": schema.StringAttribute{
 													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
-														stringvalidator.UTF8LengthAtMost(64),
 													},
 												},
 											},
@@ -2361,16 +2452,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												"name": schema.StringAttribute{
 													Optional:    true,
 													Description: `The name of the step`,
-													Validators: []validator.String{
-														stringvalidator.UTF8LengthAtMost(64),
-													},
 												},
 												"policy": schema.StringAttribute{
 													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
-														stringvalidator.UTF8LengthAtMost(64),
 													},
 												},
 											},
@@ -2426,16 +2513,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												"name": schema.StringAttribute{
 													Optional:    true,
 													Description: `The name of the step`,
-													Validators: []validator.String{
-														stringvalidator.UTF8LengthAtMost(64),
-													},
 												},
 												"policy": schema.StringAttribute{
 													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
-														stringvalidator.UTF8LengthAtMost(64),
 													},
 												},
 											},
@@ -2491,16 +2574,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												"name": schema.StringAttribute{
 													Optional:    true,
 													Description: `The name of the step`,
-													Validators: []validator.String{
-														stringvalidator.UTF8LengthAtMost(64),
-													},
 												},
 												"policy": schema.StringAttribute{
 													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
-														stringvalidator.UTF8LengthAtMost(64),
 													},
 												},
 											},
@@ -2767,16 +2846,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												"name": schema.StringAttribute{
 													Optional:    true,
 													Description: `The name of the step`,
-													Validators: []validator.String{
-														stringvalidator.UTF8LengthAtMost(64),
-													},
 												},
 												"policy": schema.StringAttribute{
 													Optional:    true,
 													Description: `The policy of the step (plugin ID). Not Null`,
 													Validators: []validator.String{
 														speakeasy_stringvalidators.NotNull(),
-														stringvalidator.UTF8LengthAtMost(64),
 													},
 												},
 											},
@@ -2814,7 +2889,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 								stringvalidator.UTF8LengthAtMost(256),
-								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+								stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 							},
 						},
 						"mode": schema.StringAttribute{
@@ -2834,7 +2909,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `Name of the plan. Not Null`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
-								stringvalidator.UTF8LengthAtMost(64),
 							},
 						},
 						"security": schema.SingleNestedAttribute{
@@ -2923,6 +2997,52 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 				},
 				Description: `Available plans for the API to define API security. You must provide a plan if ` + "`" + `state` + "`" + ` is ` + "`" + `STARTED` + "`" + `. Plans are prioritized by their position in the list, with earlier entries having higher priority.`,
+			},
+			"portal_navigation": schema.ListNestedAttribute{
+				Computed: true,
+				Optional: true,
+				PlanModifiers: []planmodifier.List{
+					custom_listplanmodifier.IgnoreEmptyList(),
+				},
+				NestedObject: schema.NestedAttributeObject{
+					Validators: []validator.Object{
+						speakeasy_objectvalidators.NotNull(),
+					},
+					Attributes: map[string]schema.Attribute{
+						"display_name": schema.StringAttribute{
+							Optional: true,
+							MarkdownDescription: `Optional human-friendly label for this path node.` + "\n" +
+								`Listing a path explicitly is the only way to attach a displayName.`,
+						},
+						"order": schema.Int64Attribute{
+							Optional: true,
+							MarkdownDescription: `Optional display order of this node relative to its siblings at the same level.` + "\n" +
+								`Listing a path explicitly is the only way to attach an order.`,
+						},
+						"path": schema.StringAttribute{
+							Optional: true,
+							MarkdownDescription: `A slash-separated path defining the navigation hierarchy.` + "\n" +
+								`Intermediate folders are implicitly created if not listed explicitly.` + "\n" +
+								`Not Null`,
+							Validators: []validator.String{
+								speakeasy_stringvalidators.NotNull(),
+							},
+						},
+						"visibility": schema.StringAttribute{
+							Optional:    true,
+							Description: `Declared visibility; omitted values inherit from the parent navigation item. must be one of ["PUBLIC", "PRIVATE"]`,
+							Validators: []validator.String{
+								stringvalidator.OneOf(
+									"PUBLIC",
+									"PRIVATE",
+								),
+							},
+						},
+					},
+				},
+				MarkdownDescription: `The API's internal documentation navigation tree for the next-gen portal.` + "\n" +
+					`Paths are ordered — the order in the list is preserved.` + "\n" +
+					`Intermediate folders are implicitly created if not listed explicitly.`,
 			},
 			"properties": schema.ListNestedAttribute{
 				Computed: true,
@@ -3119,7 +3239,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Required:    true,
 				Description: `API's version. It's a simple string only used to help manage API versioning.`,
 				Validators: []validator.String{
-					stringvalidator.UTF8LengthBetween(1, 64),
+					stringvalidator.UTF8LengthAtLeast(1),
 				},
 			},
 			"visibility": schema.StringAttribute{

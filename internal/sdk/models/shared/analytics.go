@@ -4,8 +4,39 @@
 package shared
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
+
+type ConnectionEvent string
+
+const (
+	ConnectionEventConnected    ConnectionEvent = "CONNECTED"
+	ConnectionEventDisconnected ConnectionEvent = "DISCONNECTED"
+	ConnectionEventError        ConnectionEvent = "ERROR"
+)
+
+func (e ConnectionEvent) ToPointer() *ConnectionEvent {
+	return &e
+}
+func (e *ConnectionEvent) UnmarshalJSON(data []byte) error {
+	var v string
+	if err := json.Unmarshal(data, &v); err != nil {
+		return err
+	}
+	switch v {
+	case "CONNECTED":
+		fallthrough
+	case "DISCONNECTED":
+		fallthrough
+	case "ERROR":
+		*e = ConnectionEvent(v)
+		return nil
+	default:
+		return fmt.Errorf("invalid value for ConnectionEvent: %v", v)
+	}
+}
 
 // Analytics - API analytics configuration to enable/disable what can be observed.
 type Analytics struct {
@@ -14,8 +45,12 @@ type Analytics struct {
 	// Enable the connection-metrics reporter on the gateway. Only applicable to Native v4 APIs; ignored on HTTP v4 requests and omitted from HTTP v4 responses.
 	// Server-side default for Native v4 on create is `true`.
 	// Independent of the parent `enabled` flag: event-metrics reporting and the connection-metrics reporter are gated separately.
-	ReporterMetricsEnabled *bool       `default:"true" json:"reporterMetricsEnabled"`
-	OtelLogs               *OtelLogsV4 `json:"otelLogs,omitempty"`
+	ReporterMetricsEnabled *bool `default:"true" json:"reporterMetricsEnabled"`
+	// Which connection lifecycle events the gateway reports, among `CONNECTED`, `DISCONNECTED`, and `ERROR`. Only applicable to Native v4 APIs.
+	// Set this attribute to `[]` to clear the selection. Omitting it preserves the existing selection. When the selection is empty, the gateway reports `CONNECTED` and `ERROR`: `DISCONNECTED` is opt-in. To report nothing, set `reporter_metrics_enabled` to false.
+	// `ERROR` covers every failure status the gateway emits (`CONNECTION_ERROR`, `SESSION_ERROR`, `INTERNAL_ERROR`).
+	ConnectionEvents []ConnectionEvent `json:"connectionEvents,omitempty"`
+	OtelLogs         *OtelLogsV4       `json:"otelLogs,omitempty"`
 	// API analytics sampling (message API only). This is meant to log only a portion to avoid overflowing the log sink.
 	Sampling *Sampling `json:"sampling,omitempty"`
 	// API logging configuration (Not for native APIs)
@@ -47,6 +82,13 @@ func (a *Analytics) GetReporterMetricsEnabled() *bool {
 		return nil
 	}
 	return a.ReporterMetricsEnabled
+}
+
+func (a *Analytics) GetConnectionEvents() []ConnectionEvent {
+	if a == nil {
+		return nil
+	}
+	return a.ConnectionEvents
 }
 
 func (a *Analytics) GetOtelLogs() *OtelLogsV4 {

@@ -18,6 +18,11 @@ You can manage with Terraform the following:
 * Subscriptions
 * Group
 * Dictionaries
+* Portals
+* Portal Listings
+* Portal and API Documentation
+* Portal and API Links
+* Portal Themes
 * MCP Catalog Servers
 * MCP Proxies
 
@@ -83,22 +88,36 @@ Available configuration:
 ### Managed Resources
 
 * [apim_apiv4](docs/resources/apiv4.md)
+* [apim_api_link](docs/resources/api_link.md)
 * [apim_application](docs/resources/application.md)
 * [apim_catalog_mcp_server](docs/resources/catalog_mcp_server.md)
 * [apim_dictionary](docs/resources/dictionary.md)
+* [apim_documentation_api](docs/resources/documentation_api.md)
+* [apim_documentation_portal](docs/resources/documentation_portal.md)
 * [apim_group](docs/resources/group.md)
 * [apim_mcp_proxy](docs/resources/mcp_proxy.md)
+* [apim_portal](docs/resources/portal.md)
+* [apim_portal_link](docs/resources/portal_link.md)
+* [apim_portal_listing](docs/resources/portal_listing.md)
+* [apim_portal_theme](docs/resources/portal_theme.md)
 * [apim_shared_policy_group](docs/resources/shared_policy_group.md)
 * [apim_subscription](docs/resources/subscription.md)
 
 ### Data Sources
 
 * [apim_apiv4](docs/data-sources/apiv4.md)
+* [apim_api_link](docs/data-sources/api_link.md)
 * [apim_application](docs/data-sources/application.md)
 * [apim_catalog_mcp_server](docs/data-sources/catalog_mcp_server.md)
 * [apim_dictionary](docs/data-sources/dictionary.md)
+* [apim_documentation_api](docs/data-sources/documentation_api.md)
+* [apim_documentation_portal](docs/data-sources/documentation_portal.md)
 * [apim_group](docs/data-sources/group.md)
 * [apim_mcp_proxy](docs/data-sources/mcp_proxy.md)
+* [apim_portal](docs/data-sources/portal.md)
+* [apim_portal_link](docs/data-sources/portal_link.md)
+* [apim_portal_listing](docs/data-sources/portal_listing.md)
+* [apim_portal_theme](docs/data-sources/portal_theme.md)
 * [apim_shared_policy_group](docs/data-sources/shared_policy_group.md)
 * [apim_subscription](docs/data-sources/subscription.md)
 <!-- End Available Resources and Data Sources [operations] -->
