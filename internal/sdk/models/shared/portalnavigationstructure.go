@@ -3,17 +3,17 @@
 
 package shared
 
-// PortalNavigationStructure - Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, omitted areas preserve their existing values. Set `top_navbar = []` to clear the navigation area.
+// PortalNavigationStructure - Portal navigation grouped by area. The `structure` object and its `top_navbar` list are required. Configure the complete navigation you want after every update. Set `top_navbar = []` to clear all entries.
 type PortalNavigationStructure struct {
 	// Top navbar entries as an ordered list of paths.
 	// Intermediate folders are implicitly created if not listed explicitly.
 	//
-	TopNavbar []PortalNavigationPath `json:"topNavbar,omitempty"`
+	TopNavbar []PortalNavigationPath `json:"topNavbar"`
 }
 
 func (p *PortalNavigationStructure) GetTopNavbar() []PortalNavigationPath {
 	if p == nil {
-		return nil
+		return []PortalNavigationPath{}
 	}
 	return p.TopNavbar
 }

@@ -22,25 +22,21 @@ func (r *PortalResourceModel) RefreshFromSharedPortalState(ctx context.Context, 
 		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
-		if resp.Structure == nil {
-			r.Structure = nil
-		} else {
-			r.Structure = &tfTypes.PortalNavigationStructure{}
-			r.Structure.TopNavbar = []tfTypes.PortalNavigationPath{}
+		r.Structure = &tfTypes.PortalNavigationStructure{}
+		r.Structure.TopNavbar = []tfTypes.PortalNavigationPath{}
 
-			for _, topNavbarItem := range resp.Structure.TopNavbar {
-				var topNavbar tfTypes.PortalNavigationPath
+		for _, topNavbarItem := range resp.Structure.TopNavbar {
+			var topNavbar tfTypes.PortalNavigationPath
 
-				topNavbar.DisplayName = types.StringPointerValue(topNavbarItem.DisplayName)
-				topNavbar.Path = types.StringValue(topNavbarItem.Path)
-				if topNavbarItem.Visibility != nil {
-					topNavbar.Visibility = types.StringValue(string(*topNavbarItem.Visibility))
-				} else {
-					topNavbar.Visibility = types.StringNull()
-				}
-
-				r.Structure.TopNavbar = append(r.Structure.TopNavbar, topNavbar)
+			topNavbar.DisplayName = types.StringPointerValue(topNavbarItem.DisplayName)
+			topNavbar.Path = types.StringValue(topNavbarItem.Path)
+			if topNavbarItem.Visibility != nil {
+				topNavbar.Visibility = types.StringValue(string(*topNavbarItem.Visibility))
+			} else {
+				topNavbar.Visibility = types.StringNull()
 			}
+
+			r.Structure.TopNavbar = append(r.Structure.TopNavbar, topNavbar)
 		}
 	}
 
@@ -141,34 +137,31 @@ func (r *PortalResourceModel) ToSharedPortalSpec(ctx context.Context) (*shared.P
 	var name string
 	name = r.Name.ValueString()
 
-	var structure *shared.PortalNavigationStructure
-	if r.Structure != nil {
-		topNavbar := make([]shared.PortalNavigationPath, 0, len(r.Structure.TopNavbar))
-		for topNavbarIndex := range r.Structure.TopNavbar {
-			var path string
-			path = r.Structure.TopNavbar[topNavbarIndex].Path.ValueString()
+	topNavbar := make([]shared.PortalNavigationPath, 0, len(r.Structure.TopNavbar))
+	for topNavbarIndex := range r.Structure.TopNavbar {
+		var path string
+		path = r.Structure.TopNavbar[topNavbarIndex].Path.ValueString()
 
-			displayName := new(string)
-			if !r.Structure.TopNavbar[topNavbarIndex].DisplayName.IsUnknown() && !r.Structure.TopNavbar[topNavbarIndex].DisplayName.IsNull() {
-				*displayName = r.Structure.TopNavbar[topNavbarIndex].DisplayName.ValueString()
-			} else {
-				displayName = nil
-			}
-			visibility := new(shared.DeclaredPortalVisibility)
-			if !r.Structure.TopNavbar[topNavbarIndex].Visibility.IsUnknown() && !r.Structure.TopNavbar[topNavbarIndex].Visibility.IsNull() {
-				*visibility = shared.DeclaredPortalVisibility(r.Structure.TopNavbar[topNavbarIndex].Visibility.ValueString())
-			} else {
-				visibility = nil
-			}
-			topNavbar = append(topNavbar, shared.PortalNavigationPath{
-				Path:        path,
-				DisplayName: displayName,
-				Visibility:  visibility,
-			})
+		displayName := new(string)
+		if !r.Structure.TopNavbar[topNavbarIndex].DisplayName.IsUnknown() && !r.Structure.TopNavbar[topNavbarIndex].DisplayName.IsNull() {
+			*displayName = r.Structure.TopNavbar[topNavbarIndex].DisplayName.ValueString()
+		} else {
+			displayName = nil
 		}
-		structure = &shared.PortalNavigationStructure{
-			TopNavbar: topNavbar,
+		visibility := new(shared.DeclaredPortalVisibility)
+		if !r.Structure.TopNavbar[topNavbarIndex].Visibility.IsUnknown() && !r.Structure.TopNavbar[topNavbarIndex].Visibility.IsNull() {
+			*visibility = shared.DeclaredPortalVisibility(r.Structure.TopNavbar[topNavbarIndex].Visibility.ValueString())
+		} else {
+			visibility = nil
 		}
+		topNavbar = append(topNavbar, shared.PortalNavigationPath{
+			Path:        path,
+			DisplayName: displayName,
+			Visibility:  visibility,
+		})
+	}
+	structure := shared.PortalNavigationStructure{
+		TopNavbar: topNavbar,
 	}
 	activeThemeHrid := new(string)
 	if !r.ActiveThemeHrid.IsUnknown() && !r.ActiveThemeHrid.IsNull() {
