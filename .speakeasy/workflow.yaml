@@ -21,6 +21,7 @@ sources:
             - location: .speakeasy/overlays/portal.yaml
             - location: .speakeasy/overlays/portal-listing.yaml
             - location: .speakeasy/overlays/portal-link.yaml
+            - location: .speakeasy/overlays/api-link.yaml
             - location: .speakeasy/overlays/documentation-portal.yaml
             - location: .speakeasy/overlays/documentation-api.yaml
             - location: .speakeasy/overlays/aim/common.yaml
