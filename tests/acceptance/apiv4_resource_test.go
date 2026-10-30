@@ -60,6 +60,103 @@ func TestAPIV4Resource_minimal(t *testing.T) {
 	})
 }
 
+// Verifies explicit clearing of HTTP listener settings converges after refresh.
+func TestAPIV4Resource_clearComputedListenerSettings(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId := "test-" + acctest.RandString(10)
+	resourceAddress := "apim_apiv4.test"
+	clearCheck := resource.ComposeTestCheckFunc(
+		resource.TestCheckResourceAttr(resourceAddress, "listeners.0.http.path_mappings.#", "0"),
+		resource.TestCheckResourceAttr(resourceAddress, "listeners.0.http.request_validation.reject_null_byte", "false"),
+	)
+	resource.Test(t, resource.TestCase{Steps: []resource.TestStep{
+		{
+			ProtoV6ProviderFactories: testProviders(),
+			ConfigDirectory:          config.TestNameDirectory(),
+			ConfigVariables: config.Variables{
+				"environment_id":  config.StringVariable(environmentId),
+				"hrid":            config.StringVariable(randomId),
+				"organization_id": config.StringVariable(organizationId),
+				"clear":           config.BoolVariable(false),
+			},
+			Check: resource.ComposeTestCheckFunc(
+				resource.TestCheckResourceAttr(resourceAddress, "listeners.0.http.path_mappings.#", "1"),
+				resource.TestCheckResourceAttr(resourceAddress, "listeners.0.http.request_validation.reject_null_byte", "true"),
+			),
+		},
+		{
+			ProtoV6ProviderFactories: testProviders(),
+			ConfigDirectory:          config.TestNameDirectory(),
+			ConfigVariables: config.Variables{
+				"environment_id":  config.StringVariable(environmentId),
+				"hrid":            config.StringVariable(randomId),
+				"organization_id": config.StringVariable(organizationId),
+				"clear":           config.BoolVariable(true),
+			},
+			Check: clearCheck,
+		},
+		{
+			ProtoV6ProviderFactories: testProviders(),
+			ConfigDirectory:          config.TestNameDirectory(),
+			ConfigVariables: config.Variables{
+				"environment_id":  config.StringVariable(environmentId),
+				"hrid":            config.StringVariable(randomId),
+				"organization_id": config.StringVariable(organizationId),
+				"clear":           config.BoolVariable(true),
+			},
+			PlanOnly: true,
+			Check:    clearCheck,
+		},
+	}})
+}
+
+// Verifies an explicit empty selection clears it and remains stable when omitted.
+func TestAPIV4Resource_clearConnectionEvents(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
+	t.Parallel()
+
+	resourceAddress := "apim_apiv4.test"
+	randomId := "test-" + acctest.RandString(10)
+	emptyEventsCheck := resource.TestCheckResourceAttr(resourceAddress, "analytics.connection_events.#", "0")
+	resource.Test(t, resource.TestCase{Steps: []resource.TestStep{
+		{
+			ProtoV6ProviderFactories: testProviders(),
+			ConfigDirectory:          config.TestNameDirectory(),
+			ConfigVariables: config.Variables{
+				"hrid":         config.StringVariable(randomId),
+				"omit_events":  config.BoolVariable(false),
+				"empty_events": config.BoolVariable(false),
+			},
+			Check: resource.TestCheckResourceAttr(resourceAddress, "analytics.connection_events.#", "1"),
+		},
+		{
+			ProtoV6ProviderFactories: testProviders(),
+			ConfigDirectory:          config.TestNameDirectory(),
+			ConfigVariables: config.Variables{
+				"hrid":         config.StringVariable(randomId),
+				"omit_events":  config.BoolVariable(false),
+				"empty_events": config.BoolVariable(true),
+			},
+			Check: emptyEventsCheck,
+		},
+		{
+			ProtoV6ProviderFactories: testProviders(),
+			ConfigDirectory:          config.TestNameDirectory(),
+			ConfigVariables: config.Variables{
+				"hrid":         config.StringVariable(randomId),
+				"omit_events":  config.BoolVariable(true),
+				"empty_events": config.BoolVariable(false),
+			},
+			PlanOnly: true,
+			Check:    emptyEventsCheck,
+		},
+	}})
+}
+
 // Verifies the create, read, import, and delete lifecycle of the
 // `apim_apiv4` resource.
 func TestAPIV4Resource_all(t *testing.T) {
