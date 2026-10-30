@@ -9,11 +9,11 @@ import (
 )
 
 func (data *DocumentationPortalResourceModel) toConfiguredDocumentationPortalRequest(ctx context.Context, config tfsdk.Config, plan tfsdk.Plan) (*operations.CreateOrUpdatePortalDocumentationRequest, diag.Diagnostics) {
-	visibility, diags := configuredPortalVisibility(ctx, config, plan)
+	visibility, diags := configuredPortalVisibility(ctx, config)
 	if diags.HasError() {
 		return nil, diags
 	}
-	location, order, placementDiags := configuredDocumentationPlacement(ctx, config, plan)
+	location, order, placementDiags := configuredDocumentationPlacement(ctx, config)
 	diags.Append(placementDiags...)
 	if diags.HasError() {
 		return nil, diags
