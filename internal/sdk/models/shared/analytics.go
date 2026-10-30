@@ -47,7 +47,7 @@ type Analytics struct {
 	// Independent of the parent `enabled` flag: event-metrics reporting and the connection-metrics reporter are gated separately.
 	ReporterMetricsEnabled *bool `default:"true" json:"reporterMetricsEnabled"`
 	// Which connection lifecycle events the gateway reports, among `CONNECTED`, `DISCONNECTED`, and `ERROR`. Only applicable to Native v4 APIs.
-	// When absent or empty, the gateway reports `CONNECTED` and `ERROR`: `DISCONNECTED` is opt-in. To report nothing, set `reporter_metrics_enabled` to false.
+	// Remove this attribute or set it to `[]` to clear the selection. When absent or empty, the gateway reports `CONNECTED` and `ERROR`: `DISCONNECTED` is opt-in. To report nothing, set `reporter_metrics_enabled` to false.
 	// `ERROR` covers every failure status the gateway emits (`CONNECTION_ERROR`, `SESSION_ERROR`, `INTERNAL_ERROR`).
 	ConnectionEvents []ConnectionEvent `json:"connectionEvents,omitempty"`
 	OtelLogs         *OtelLogsV4       `json:"otelLogs,omitempty"`

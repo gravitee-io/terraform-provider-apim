@@ -376,7 +376,7 @@ Optional:
 
 - `cors` (Attributes) Http listener Cross-Origin Resource Sharing (see [below for nested schema](#nestedatt--listeners--http--cors))
 - `entrypoints` (Attributes List) A list of possible entrypoint of the same type. (see [below for nested schema](#nestedatt--listeners--http--entrypoints))
-- `path_mappings` (List of String) Path patterns used to group analytics by API path. Set this to [] to clear previously configured path mappings; omitting it preserves the current value.
+- `path_mappings` (List of String) Path patterns used to group analytics by API path. Remove this attribute or set it to [] to clear previously configured path mappings.
 - `paths` (Attributes List) One of the possible context paths of this API (see [below for nested schema](#nestedatt--listeners--http--paths))
 - `request_validation` (Attributes) Validation the Gateway applies to incoming requests before running flows. (see [below for nested schema](#nestedatt--listeners--http--request_validation))
 - `servers` (List of String) Restrict the API to a given "server id", when the gateway runs in multiple servers mode (several ports per protocol).
@@ -434,7 +434,7 @@ Optional:
 
 Optional:
 
-- `reject_null_byte` (Boolean) Reject requests whose path or query contains a null byte. Set to false to clear the enabled setting. Default: false
+- `reject_null_byte` (Boolean) Reject requests whose path or query contains a null byte. Remove the request_validation block or set this to false to clear the enabled setting. Default: false
 
 
 
@@ -535,7 +535,7 @@ Optional:
 Optional:
 
 - `connection_events` (List of String) Which connection lifecycle events the gateway reports, among `CONNECTED`, `DISCONNECTED`, and `ERROR`. Only applicable to Native v4 APIs.
-When absent or empty, the gateway reports `CONNECTED` and `ERROR`: `DISCONNECTED` is opt-in. To report nothing, set `reporter_metrics_enabled` to false.
+Remove this attribute or set it to `[]` to clear the selection. When absent or empty, the gateway reports `CONNECTED` and `ERROR`: `DISCONNECTED` is opt-in. To report nothing, set `reporter_metrics_enabled` to false.
 `ERROR` covers every failure status the gateway emits (`CONNECTION_ERROR`, `SESSION_ERROR`, `INTERNAL_ERROR`).
 - `enabled` (Boolean) Whether or not analytics are enabled.
 - `logging` (Attributes) API logging configuration (Not for native APIs) (see [below for nested schema](#nestedatt--analytics--logging))
