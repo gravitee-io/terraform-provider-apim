@@ -142,14 +142,15 @@ func TestPortalResource_emptyStructure(t *testing.T) {
 	hrid := "test-" + acctest.RandString(10)
 	path := "/guides-" + hrid
 	validConfig := portalStructureConfig(hrid, "Configured navigation", fmt.Sprintf(`structure = { top_navbar = [{ path = %q }] }`, path))
+	clearConfig := portalStructureConfig(hrid, "Clear navigation", "structure = { top_navbar = [] }")
 	resource.Test(t, resource.TestCase{Steps: []resource.TestStep{
 		{ProtoV6ProviderFactories: testProviders(), Config: validConfig},
 		{
 			ProtoV6ProviderFactories: testProviders(),
-			Config:                   portalStructureConfig(hrid, "Clear navigation", "structure = { top_navbar = [] }"),
+			Config:                   clearConfig,
 			Check:                    resource.TestCheckResourceAttr("apim_portal.test", "structure.top_navbar.#", "0"),
 		},
-		{ProtoV6ProviderFactories: testProviders(), Config: validConfig, PlanOnly: true},
+		{ProtoV6ProviderFactories: testProviders(), Config: clearConfig, PlanOnly: true},
 	}})
 }
 
