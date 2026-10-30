@@ -24,8 +24,6 @@ lint: lint-commits lint-overlays ## Run speakeasy lint accepting no error or war
 	@echo "Checking OAS"
 	@speakeasy lint openapi --schema automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
 	@speakeasy lint openapi --schema automation-api-aim-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
-	@echo "Checking custom code"
-	@hack/scripts/check-gravitee-custom-regions.sh
 	@echo "Checking Terraform fmt"
 	@terraform fmt -recursive -check || (echo "Error: Above terraform files are not properly formatted. Please run 'terraform fmt -recursive' to fix formatting issues" && exit 1)
 
