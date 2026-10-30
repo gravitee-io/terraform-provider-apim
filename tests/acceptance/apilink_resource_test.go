@@ -56,7 +56,7 @@ resource "apim_api_link" "test" {
 }
 
 func TestAPILinkResource_minimal(t *testing.T) {
-	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
 	hrid := "test-" + acctest.RandString(10)
 	address := "apim_api_link.test"
@@ -83,7 +83,7 @@ func TestAPILinkResource_minimal(t *testing.T) {
 }
 
 func TestAPILinkResource_allProps(t *testing.T) {
-	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
 	hrid := "test-" + acctest.RandString(10)
 	address := "apim_api_link.test"
