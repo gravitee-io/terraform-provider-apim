@@ -22,8 +22,6 @@ actions:
       x-speakeasy-entity:
         Portal
       required:
-        - hrid
-        - name
         - structure
   - target: $.paths["/organizations/{orgId}/environments/{envId}/portals"].put
     update:
@@ -47,7 +45,7 @@ actions:
       x-speakeasy-param-computed: false
 
   - target: $.components.schemas.PortalSpec.properties.structure
-    description: Require an explicit structure object; leave individual areas unchanged when omitted
+    description: Require the complete desired portal navigation structure
     update:
       x-speakeasy-param-computed: false
 
