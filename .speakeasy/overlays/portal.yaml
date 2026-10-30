@@ -52,14 +52,16 @@ actions:
       x-speakeasy-param-computed: false
 
   - target: $.components.schemas.PortalNavigationStructure.properties.topNavbar
-    description: Omit this area to preserve its existing navigation; use an empty list to clear it
+    description: The complete desired top navbar navigation. Set an empty list to clear all entries.
     update:
-      x-speakeasy-param-computed: true
+      x-speakeasy-param-computed: false
 
   - target: $.components.schemas.PortalNavigationStructure
-    description: Areas omitted from the structure retain their existing portal configuration
+    description: The explicit desired portal navigation structure
     update:
+      required:
+        - topNavbar
       description: >-
-        Portal navigation grouped by area. The `structure` object is required.
-        Omit `top_navbar` or set it to null to preserve its existing navigation.
-        Set `top_navbar = []` to clear all navigation entries.
+        Portal navigation grouped by area. The `structure` object and its
+        `top_navbar` list are required. Configure the complete navigation you
+        want after every update. Set `top_navbar = []` to clear all entries.

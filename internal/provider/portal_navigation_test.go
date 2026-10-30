@@ -30,7 +30,7 @@ var portalTestSchema = schema.Schema{Attributes: map[string]schema.Attribute{
 		Required: true,
 		Attributes: map[string]schema.Attribute{
 			"top_navbar": schema.ListNestedAttribute{
-				Optional: true, Computed: true,
+				Required: true,
 				NestedObject: schema.NestedAttributeObject{Attributes: map[string]schema.Attribute{
 					"path": schema.StringAttribute{Required: true}, "display_name": schema.StringAttribute{Optional: true},
 					"visibility": schema.StringAttribute{Optional: true, Computed: true},
@@ -78,6 +78,8 @@ func TestPortalResourceSchema_usesStructureOnly(t *testing.T) {
 	}
 	if structure, ok := response.Schema.Attributes["structure"].(schema.SingleNestedAttribute); !ok || !structure.Required {
 		t.Fatal("portal resource structure must be required")
+	} else if navbar, ok := structure.Attributes["top_navbar"].(schema.ListNestedAttribute); !ok || !navbar.Required {
+		t.Fatal("portal resource top_navbar must be required")
 	}
 
 	var dataSourceResponse datasource.SchemaResponse
@@ -123,8 +125,7 @@ func TestConfiguredPortalRequest(t *testing.T) {
 		{"omitted computed visibility", newStructure, unknownVisibility, nil, `{"hrid":"test-portal","name":"Test Portal","structure":{"topNavbar":[{"path":"/new"}]}}`, false},
 		{"configured unknown visibility rejected", unknownVisibility, unknownVisibility, nil, "", true},
 		{"explicitly clear top navbar", emptyStructure, emptyStructure, nil, `{"hrid":"test-portal","name":"Test Portal","structure":{"topNavbar":[]}}`, false},
-		{"create with null top navbar", emptyStructureConfig, unknownStructure, nil, `{"hrid":"test-portal","name":"Test Portal","structure":{}}`, false},
-		{"null top navbar preserves existing navigation", emptyStructureConfig, portalTestStructure(portalTestNavigation("/old")), &tfTypes.PortalNavigationStructure{TopNavbar: []tfTypes.PortalNavigationPath{{Path: types.StringValue("/old"), DisplayName: types.StringNull()}}}, `{"hrid":"test-portal","name":"Test Portal","structure":{}}`, false},
+		{"null top navbar rejected", emptyStructureConfig, unknownStructure, nil, "", true},
 		{"missing required structure", nullStructure, types.ObjectUnknown(portalTestStructureTypes), nil, "", true},
 		{"unknown structure rejected", unknownStructure, unknownStructure, nil, "", true},
 		{"unknown path rejected", unknownPathStructure, unknownPathStructure, nil, "", true},

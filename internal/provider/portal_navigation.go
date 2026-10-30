@@ -23,11 +23,15 @@ func (data *PortalResourceModel) toConfiguredPortalRequest(ctx context.Context, 
 
 	requestData := *data
 	if configStructure.IsNull() {
-		diags.AddAttributeError(path.Root("structure"), "Missing portal structure", "Configure the required structure object. Omit top_navbar to preserve existing navigation, or set it to [] to clear navigation.")
+		diags.AddAttributeError(path.Root("structure"), "Missing portal structure", "Configure the required structure object and its complete top_navbar list. Set top_navbar to [] to clear navigation.")
 	} else {
 		// Omitted computed fields may be unknown in the plan, but must not be sent from prior state.
 		structure := configuredPortalStructure(ctx, configStructure, planStructure)
 		diags.Append(knownPortalStructureInput(ctx, configStructure)...)
+		configNavbar, configNavbarOK := configStructure.Attributes()["top_navbar"].(types.List)
+		if !diags.HasError() && (!configNavbarOK || configNavbar.IsNull()) {
+			diags.AddAttributeError(path.Root("structure").AtName("top_navbar"), "Missing portal top navbar", "Configure the complete desired navigation list. Set top_navbar to [] to clear all entries.")
+		}
 		diags.Append(knownPortalStructureInput(ctx, structure)...)
 		if !diags.HasError() {
 			diags.Append(structure.As(ctx, &requestData.Structure, basetypes.ObjectAsOptions{})...)
