@@ -9,7 +9,7 @@ import (
 )
 
 func (data *PortalLinkResourceModel) toConfiguredPortalLinkRequest(ctx context.Context, config tfsdk.Config, plan tfsdk.Plan) (*operations.CreateOrUpdatePortalLinkRequest, diag.Diagnostics) {
-	visibility, diags := configuredPortalVisibility(ctx, config, plan)
+	visibility, diags := configuredPortalVisibility(ctx, config)
 	if diags.HasError() {
 		return nil, diags
 	}
