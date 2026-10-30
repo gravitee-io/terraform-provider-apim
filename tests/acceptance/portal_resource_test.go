@@ -12,7 +12,7 @@ import (
 )
 
 func TestPortalResource_minimal(t *testing.T) {
-	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
 
 	randomId := "test-" + acctest.RandString(10)
@@ -57,7 +57,7 @@ resource "apim_portal" "test" {
 }
 
 func TestPortalResource_structureLifecycle(t *testing.T) {
-	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
 	hrid := "test-" + acctest.RandString(10)
 	address := "apim_portal.test"
@@ -138,7 +138,7 @@ removed {
 }
 
 func TestPortalResource_emptyStructure(t *testing.T) {
-	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
 	hrid := "test-" + acctest.RandString(10)
 	path := "/guides-" + hrid
@@ -171,7 +171,7 @@ func TestPortalResource_emptyStructure(t *testing.T) {
 }
 
 func TestPortalResource_visibility(t *testing.T) {
-	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
 	hrid := "test-" + acctest.RandString(10)
 	parent := "/visibility-" + hrid
@@ -202,7 +202,7 @@ func TestPortalResource_visibility(t *testing.T) {
 }
 
 func TestPortalResource_update(t *testing.T) {
-	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
 
 	randomId := "test-" + acctest.RandString(10)
