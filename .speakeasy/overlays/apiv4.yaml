@@ -4,6 +4,39 @@ info:
   title: V4API Terraform overlay
   version: 0.0.1
 actions:
+  - target: $.components.schemas.NavigationPath.properties.visibility
+    description: Keep the declared visibility; inheritance is resolved in the navigation tree
+    update:
+      $ref: "#/components/schemas/DeclaredPortalVisibility"
+      x-speakeasy-param-computed: false
+
+  - target: $.components.schemas.HttpListener.allOf[*].properties.pathMappings
+    description: Allow explicitly clearing listener path mappings
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+      description: >-
+        Path patterns used to group analytics by API path. Set this attribute
+        to [] to clear previously configured path mappings. Omitting it preserves
+        the existing mappings.
+  - target: $.components.schemas.HttpListener.allOf[*].properties.requestValidation
+    description: Allow removing listener validation from configuration
+    update:
+      x-speakeasy-param-computed: false
+      x-speakeasy-param-suppress-computed-diff: false
+  - target: $.components.schemas.RequestValidation
+    description: Allow removing referenced listener validation from configuration
+    update:
+      x-speakeasy-param-computed: false
+      x-speakeasy-param-suppress-computed-diff: false
+
+  - target: $.components.schemas.RequestValidation.properties.rejectNullByte
+    description: Explain how to clear the request validation setting
+    update:
+      description: >-
+        Reject requests whose path or query contains a null byte. Remove the
+        request_validation block or set this to false to clear the enabled setting.
 
 
   # Entity management
@@ -117,6 +150,16 @@ actions:
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.Analytics.properties.connectionEvents
+    description: Treat an omitted event selection and an empty response as equivalent
+    update:
+      description: |-
+        Which connection lifecycle events the gateway reports, among `CONNECTED`, `DISCONNECTED`, and `ERROR`. Only applicable to Native v4 APIs.
+        Set this attribute to `[]` to clear the selection. Omitting it preserves the existing selection. When the selection is empty, the gateway reports `CONNECTED` and `ERROR`: `DISCONNECTED` is opt-in. To report nothing, set `reporter_metrics_enabled` to false.
+        `ERROR` covers every failure status the gateway emits (`CONNECTION_ERROR`, `SESSION_ERROR`, `INTERNAL_ERROR`).
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
   - target: $.components.schemas.Operator
     update:
       x-speakeasy-param-computed: true
@@ -210,6 +253,11 @@ actions:
       x-speakeasy-plan-modifiers: IgnoreEmptyList
   - target: $.components.schemas.ApiV4Spec.properties.pages
     description: Prevent empty array to create plan diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
+  - target: $.components.schemas.ApiV4Spec.properties.portalNavigation
+    description: Next-gen portal navigation is API-computed and should not create plan diffs
     update:
       x-speakeasy-param-computed: true
       x-speakeasy-plan-modifiers: IgnoreEmptyList
