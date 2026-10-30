@@ -102,7 +102,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						Computed:    true,
 						ElementType: types.StringType,
 						MarkdownDescription: `Which connection lifecycle events the gateway reports, among ` + "`" + `CONNECTED` + "`" + `, ` + "`" + `DISCONNECTED` + "`" + `, and ` + "`" + `ERROR` + "`" + `. Only applicable to Native v4 APIs.` + "\n" +
-							`When absent or empty, the gateway reports ` + "`" + `CONNECTED` + "`" + ` and ` + "`" + `ERROR` + "`" + `: ` + "`" + `DISCONNECTED` + "`" + ` is opt-in. To report nothing, set ` + "`" + `reporter_metrics_enabled` + "`" + ` to false.` + "\n" +
+							`Remove this attribute or set it to ` + "`" + `[]` + "`" + ` to clear the selection. When absent or empty, the gateway reports ` + "`" + `CONNECTED` + "`" + ` and ` + "`" + `ERROR` + "`" + `: ` + "`" + `DISCONNECTED` + "`" + ` is opt-in. To report nothing, set ` + "`" + `reporter_metrics_enabled` + "`" + ` to false.` + "\n" +
 							`` + "`" + `ERROR` + "`" + ` covers every failure status the gateway emits (` + "`" + `CONNECTION_ERROR` + "`" + `, ` + "`" + `SESSION_ERROR` + "`" + `, ` + "`" + `INTERNAL_ERROR` + "`" + `).`,
 					},
 					"enabled": schema.BoolAttribute{
@@ -962,7 +962,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								"path_mappings": schema.ListAttribute{
 									Computed:    true,
 									ElementType: types.StringType,
-									Description: `Path patterns used to group analytics by API path.`,
+									Description: `Path patterns used to group analytics by API path. Remove this attribute or set it to [] to clear previously configured path mappings.`,
 								},
 								"paths": schema.ListNestedAttribute{
 									Computed: true,
@@ -988,7 +988,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 									Attributes: map[string]schema.Attribute{
 										"reject_null_byte": schema.BoolAttribute{
 											Computed:    true,
-											Description: `Reject requests whose path or query contains a null byte. Set to false to clear the enabled setting.`,
+											Description: `Reject requests whose path or query contains a null byte. Remove the request_validation block or set this to false to clear the enabled setting.`,
 										},
 									},
 									Description: `Validation the Gateway applies to incoming requests before running flows.`,
