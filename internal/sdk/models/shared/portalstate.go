@@ -9,8 +9,8 @@ type PortalState struct {
 	Hrid string `json:"hrid"`
 	// Display name of the portal
 	Name string `json:"name"`
-	// Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, omitted areas preserve their existing values. Set `top_navbar = []` to clear the navigation area.
-	Structure *PortalNavigationStructure `json:"structure,omitempty"`
+	// Portal navigation grouped by area. The `structure` object is required. Omit `top_navbar` or set it to null to preserve its existing navigation. Set `top_navbar = []` to clear all navigation entries.
+	Structure PortalNavigationStructure `json:"structure"`
 	// Deprecated. Use `structure.topNavbar` instead. `navigation` and `structure` cannot be set at the same time;
 	// when only `navigation` is provided, it is mapped to `structure.topNavbar` for backward compatibility.
 	//
@@ -43,9 +43,9 @@ func (p *PortalState) GetName() string {
 	return p.Name
 }
 
-func (p *PortalState) GetStructure() *PortalNavigationStructure {
+func (p *PortalState) GetStructure() PortalNavigationStructure {
 	if p == nil {
-		return nil
+		return PortalNavigationStructure{}
 	}
 	return p.Structure
 }

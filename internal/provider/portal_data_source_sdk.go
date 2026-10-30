@@ -22,25 +22,21 @@ func (r *PortalDataSourceModel) RefreshFromSharedPortalState(ctx context.Context
 		r.ID = types.StringPointerValue(resp.ID)
 		r.Name = types.StringValue(resp.Name)
 		r.OrganizationID = types.StringPointerValue(resp.OrganizationID)
-		if resp.Structure == nil {
-			r.Structure = nil
-		} else {
-			r.Structure = &tfTypes.PortalNavigationStructure{}
-			r.Structure.TopNavbar = []tfTypes.PortalNavigationPath{}
+		r.Structure = &tfTypes.PortalNavigationStructure{}
+		r.Structure.TopNavbar = []tfTypes.PortalNavigationPath{}
 
-			for _, topNavbarItem := range resp.Structure.TopNavbar {
-				var topNavbar tfTypes.PortalNavigationPath
+		for _, topNavbarItem := range resp.Structure.TopNavbar {
+			var topNavbar tfTypes.PortalNavigationPath
 
-				topNavbar.DisplayName = types.StringPointerValue(topNavbarItem.DisplayName)
-				topNavbar.Path = types.StringValue(topNavbarItem.Path)
-				if topNavbarItem.Visibility != nil {
-					topNavbar.Visibility = types.StringValue(string(*topNavbarItem.Visibility))
-				} else {
-					topNavbar.Visibility = types.StringNull()
-				}
-
-				r.Structure.TopNavbar = append(r.Structure.TopNavbar, topNavbar)
+			topNavbar.DisplayName = types.StringPointerValue(topNavbarItem.DisplayName)
+			topNavbar.Path = types.StringValue(topNavbarItem.Path)
+			if topNavbarItem.Visibility != nil {
+				topNavbar.Visibility = types.StringValue(string(*topNavbarItem.Visibility))
+			} else {
+				topNavbar.Visibility = types.StringNull()
 			}
+
+			r.Structure.TopNavbar = append(r.Structure.TopNavbar, topNavbar)
 		}
 	}
 

@@ -8,7 +8,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	custom_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
@@ -109,13 +108,10 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Description: `organization ID`,
 			},
 			"structure": schema.SingleNestedAttribute{
-				Computed: true,
-				Optional: true,
-				PlanModifiers: []planmodifier.Object{
-					custom_objectplanmodifier.PortalStructure(),
-				},
+				Required: true,
 				Attributes: map[string]schema.Attribute{
 					"top_navbar": schema.ListNestedAttribute{
+						Computed: true,
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
 							Validators: []validator.Object{
@@ -152,7 +148,7 @@ func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							`Intermediate folders are implicitly created if not listed explicitly.`,
 					},
 				},
-				Description: `Portal navigation grouped by area. Omitting ` + "`" + `structure` + "`" + ` preserves existing navigation, including after import and during unrelated updates. When ` + "`" + `structure` + "`" + ` is configured, omitted areas preserve their existing values. Set ` + "`" + `top_navbar = []` + "`" + ` to clear the navigation area.`,
+				Description: `Portal navigation grouped by area. The ` + "`" + `structure` + "`" + ` object is required. Omit ` + "`" + `top_navbar` + "`" + ` or set it to null to preserve its existing navigation. Set ` + "`" + `top_navbar = []` + "`" + ` to clear all navigation entries.`,
 			},
 		},
 	}
