@@ -90,7 +90,7 @@ Files listed in `.genignore` are **not** overwritten by Speakeasy even though si
 | `internal/sdk/internal/hooks/registration.go` | Generated once, then free to edit |
 | `hack/`, `Makefile`, CI config | Project infrastructure |
 
-The generated resource files contain `GRAVITEE ... REQUEST` regions that call the hand-written request builders above. `make lint` checks that both create and update regions remain present after regeneration.
+The generated resource files contain `GRAVITEE ... REQUEST` regions that call the hand-written request builders above. Speakeasy persistent edits preserve these regions during regeneration.
 
 Most files under `internal/planmodifiers/` and `internal/validators/` are Speakeasy-generated scaffolding; only the custom modifiers and validators listed above are hand-maintained.
 
@@ -197,4 +197,3 @@ Do not hand-edit `templates/guides/docgen_*.md` or `docs/` — they are generate
 - CircleCI runs the acceptance and example tests on every push, across a matrix of Terraform versions (1.9.x, latest) × APIM versions (4.10.x, 4.11.x, 4.12.x, 4.13.x, master-latest). They need Docker, and the ACR credentials and APIM license come from Keeper. A CircleCI scheduled trigger on `main` (`trigger=acceptance`, `notify=true`) runs them nightly and posts to Slack. Unit tests and the base OAS check stay on GitHub Actions
 - CI re-fetches both OpenAPI inputs and fails on a diff: the base document against APIM `master`, the AI Management fragment against the tag in `AIM_OAS_REF` (`make verify-aim-oas`, run in CircleCI by `hack/scripts/verify-aim-oas.mjs`: the repository is private and CircleCI holds the GitHub token, in Keeper). Neither file is edited by hand; a PR does not sync the base document unless it implements what the sync brings
 - Issues tracked at github.com/gravitee-io/issues with tag `project: GKO`
-- `make lint` verifies the `// BEGIN GRAVITEE CLOUD INIT` marker is present in `provider.go`
