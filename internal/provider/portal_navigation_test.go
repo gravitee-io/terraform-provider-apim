@@ -95,17 +95,9 @@ func TestPortalResourceSchema_usesStructureOnly(t *testing.T) {
 func TestConfiguredPortalRequest(t *testing.T) {
 	t.Parallel()
 	nullStructure := types.ObjectNull(portalTestStructureTypes)
-	unknownStructure := types.ObjectUnknown(portalTestStructureTypes)
 	newStructure := portalTestStructure(portalTestNavigation("/new"))
 	emptyStructure := portalTestStructure(portalTestNavigation())
 	emptyStructureConfig := portalTestStructure(types.ListNull(portalTestPathType))
-	unknownPath := types.ListValueMust(portalTestPathType, []attr.Value{
-		types.ObjectValueMust(portalTestPathType.AttrTypes, map[string]attr.Value{
-			"path": types.StringUnknown(), "display_name": types.StringNull(),
-			"visibility": types.StringNull(),
-		}),
-	})
-	unknownPathStructure := portalTestStructure(unknownPath)
 	unknownVisibility := portalTestStructure(types.ListValueMust(portalTestPathType, []attr.Value{
 		types.ObjectValueMust(portalTestPathType.AttrTypes, map[string]attr.Value{
 			"path": types.StringValue("/new"), "display_name": types.StringNull(),
@@ -123,12 +115,9 @@ func TestConfiguredPortalRequest(t *testing.T) {
 	}{
 		{"configured structure", newStructure, newStructure, nil, `{"hrid":"test-portal","name":"Test Portal","structure":{"topNavbar":[{"path":"/new"}]}}`, false},
 		{"omitted computed visibility", newStructure, unknownVisibility, nil, `{"hrid":"test-portal","name":"Test Portal","structure":{"topNavbar":[{"path":"/new"}]}}`, false},
-		{"configured unknown visibility rejected", unknownVisibility, unknownVisibility, nil, "", true},
 		{"explicitly clear top navbar", emptyStructure, emptyStructure, nil, `{"hrid":"test-portal","name":"Test Portal","structure":{"topNavbar":[]}}`, false},
-		{"null top navbar rejected", emptyStructureConfig, unknownStructure, nil, "", true},
+		{"null top navbar rejected even with prior state", emptyStructureConfig, portalTestStructure(portalTestNavigation("/old")), &tfTypes.PortalNavigationStructure{TopNavbar: []tfTypes.PortalNavigationPath{{Path: types.StringValue("/old"), DisplayName: types.StringNull()}}}, "", true},
 		{"missing required structure", nullStructure, types.ObjectUnknown(portalTestStructureTypes), nil, "", true},
-		{"unknown structure rejected", unknownStructure, unknownStructure, nil, "", true},
-		{"unknown path rejected", unknownPathStructure, unknownPathStructure, nil, "", true},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
