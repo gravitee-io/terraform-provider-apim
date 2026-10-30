@@ -64,9 +64,9 @@ resource "apim_apiv4" "test" {
           }
         ]
         type = "HTTP"
-      }, var.omit_settings ? {} : {
+        }, var.omit_settings ? {} : {
         path_mappings = var.clear ? [] : ["/${var.hrid}/*"]
-      }, var.omit_settings ? {} : {
+        }, var.omit_settings ? {} : {
         request_validation = { reject_null_byte = !var.clear }
       })
     }
