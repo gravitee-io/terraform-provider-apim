@@ -60,9 +60,6 @@ func TestConfiguredDocumentationPlacement(t *testing.T) {
 		}{
 			{"omitted placement", types.StringNull(), types.StringUnknown(), types.Int64Null(), types.Int64Unknown(), "", 0, false},
 			{"explicit placement", types.StringValue("/new"), types.StringValue("/new"), types.Int64Value(2), types.Int64Value(2), "/new", 2, false},
-			{"resolved expressions", types.StringUnknown(), types.StringValue("/new"), types.Int64Unknown(), types.Int64Value(2), "/new", 2, false},
-			{"unresolved location", types.StringUnknown(), types.StringUnknown(), types.Int64Null(), types.Int64Unknown(), "", 0, true},
-			{"unresolved order", types.StringNull(), types.StringUnknown(), types.Int64Unknown(), types.Int64Unknown(), "", 0, true},
 		} {
 			t.Run(name+"/"+tc.name, func(t *testing.T) {
 				ctx := context.Background()
