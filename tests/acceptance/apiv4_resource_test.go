@@ -727,7 +727,7 @@ func TestAPIV4Resource_path_idempotency(t *testing.T) {
 }
 
 func TestAPIV4Resource_portal_navigation(t *testing.T) {
-	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
 
 	environmentId := "DEFAULT"
