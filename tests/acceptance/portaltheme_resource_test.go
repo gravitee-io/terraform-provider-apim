@@ -34,7 +34,7 @@ func portalThemeConfig(hrid, name, primary string, full, attached bool) string {
 resource "apim_portal" "attached" {
   hrid = %q
   name = "Themed portal"
-  structure = {}
+  structure = { top_navbar = [] }
   active_theme_hrid = apim_portal_theme.test.hrid
 }
 `, "portal-"+hrid)

@@ -14,6 +14,6 @@ resource "apim_portal_theme" "brand" {
 resource "apim_portal" "developer-portal" {
   hrid              = "developer-portal"
   name              = "Developer Portal"
-  structure         = {}
+  structure         = { top_navbar = [] }
   active_theme_hrid = apim_portal_theme.brand.hrid
 }
