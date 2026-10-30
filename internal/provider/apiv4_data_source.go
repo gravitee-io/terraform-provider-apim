@@ -962,7 +962,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 								"path_mappings": schema.ListAttribute{
 									Computed:    true,
 									ElementType: types.StringType,
-									Description: `Path patterns used to group analytics by API path. Set this to [] to clear previously configured path mappings; omitting it preserves the current value.`,
+									Description: `Path patterns used to group analytics by API path.`,
 								},
 								"paths": schema.ListNestedAttribute{
 									Computed: true,
