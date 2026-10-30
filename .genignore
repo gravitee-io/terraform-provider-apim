@@ -22,6 +22,9 @@ examples/resources/apim_portal/import.sh
 examples/resources/apim_portal_listing/resource.tf
 examples/resources/apim_portal_listing/import-by-string-id.tf
 examples/resources/apim_portal_listing/import.sh
+examples/resources/apim_documentation_portal/resource.tf
+examples/resources/apim_documentation_portal/import-by-string-id.tf
+examples/resources/apim_documentation_portal/import.sh
 examples/resources/apim_catalog_mcp_server/resource.tf
 examples/resources/apim_catalog_mcp_server/import-by-string-id.tf
 examples/resources/apim_catalog_mcp_server/import.sh
