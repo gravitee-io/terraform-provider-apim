@@ -22,13 +22,13 @@ func (data *PortalResourceModel) toConfiguredPortalRequest(ctx context.Context, 
 	}
 
 	requestData := *data
-	if !configStructure.IsNull() {
+	if configStructure.IsNull() {
+		diags.AddAttributeError(path.Root("structure"), "Missing portal structure", "Configure the required structure object. Omit top_navbar to preserve existing navigation, or set it to [] to clear navigation.")
+	} else {
 		// Omitted computed fields may be unknown in the plan, but must not be sent from prior state.
 		structure := configuredPortalStructure(ctx, configStructure, planStructure)
+		diags.Append(knownPortalStructureInput(ctx, configStructure)...)
 		diags.Append(knownPortalStructureInput(ctx, structure)...)
-		if !diags.HasError() && structure.Attributes()["top_navbar"].IsNull() {
-			diags.AddAttributeError(path.Root("structure").AtName("top_navbar"), "Missing portal top navbar", "Set structure.top_navbar to an explicit list. Use [] to clear navigation, or omit structure to preserve navigation.")
-		}
 		if !diags.HasError() {
 			diags.Append(structure.As(ctx, &requestData.Structure, basetypes.ObjectAsOptions{})...)
 		}
@@ -43,12 +43,21 @@ func (data *PortalResourceModel) toConfiguredPortalRequest(ctx context.Context, 
 }
 
 func configuredPortalStructure(ctx context.Context, config, plan types.Object) types.Object {
-	if config.IsUnknown() || plan.IsNull() || plan.IsUnknown() {
+	if config.IsUnknown() {
 		return plan
 	}
 	configNavbar, configOK := config.Attributes()["top_navbar"].(types.List)
+	if !configOK || configNavbar.IsUnknown() {
+		return plan
+	}
+	if configNavbar.IsNull() {
+		return config
+	}
+	if plan.IsNull() || plan.IsUnknown() {
+		return plan
+	}
 	planNavbar, planOK := plan.Attributes()["top_navbar"].(types.List)
-	if !configOK || !planOK || configNavbar.IsNull() || configNavbar.IsUnknown() || planNavbar.IsNull() || planNavbar.IsUnknown() {
+	if !planOK || planNavbar.IsNull() || planNavbar.IsUnknown() {
 		return plan
 	}
 	configured := configNavbar.Elements()

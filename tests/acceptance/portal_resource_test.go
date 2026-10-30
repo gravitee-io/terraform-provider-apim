@@ -2,7 +2,6 @@ package acceptance_test
 
 import (
 	"fmt"
-	"regexp"
 	"testing"
 
 	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
@@ -84,8 +83,8 @@ func TestPortalResource_structureLifecycle(t *testing.T) {
 			Check:                    checkPaths(count, firstPath),
 		}
 	}
-	retainedConfig := portalStructureConfig(hrid, "Unmanaged navigation rename", "")
-	importedConfig := portalStructureConfig(hrid, "Imported unmanaged navigation rename", "")
+	retainedConfig := portalStructureConfig(hrid, "Unmanaged navigation rename", "structure = {}")
+	importedConfig := portalStructureConfig(hrid, "Imported unmanaged navigation rename", "structure = {}")
 	forgetConfig := `provider "apim" {
   organization_id = "DEFAULT"
   environment_id  = "DEFAULT"
@@ -105,8 +104,8 @@ removed {
 		step("Repeat navigation order", updatedConfig, "2", "/reference-"+hrid),
 		step("Clear structure", "structure = { top_navbar = [] }", "0", ""),
 		step("Restore structure", newConfig, "1", "/guides-"+hrid),
-		step("Null structure rename", "structure = null", "1", "/guides-"+hrid),
-		step("Unmanaged navigation rename", "", "1", "/guides-"+hrid),
+		step("Empty structure rename", "structure = {}", "1", "/guides-"+hrid),
+		step("Preserve navigation during rename", "structure = {}", "1", "/guides-"+hrid),
 		{ProtoV6ProviderFactories: testProviders(), Config: retainedConfig, PlanOnly: true},
 		{ProtoV6ProviderFactories: testProviders(), Config: forgetConfig},
 		{
@@ -145,32 +144,27 @@ func TestPortalResource_emptyStructure(t *testing.T) {
 	path := "/guides-" + hrid
 	validConfig := portalStructureConfig(hrid, "Preserved navigation", fmt.Sprintf(`structure = { top_navbar = [{ path = %q }] }`, path))
 	resource.Test(t, resource.TestCase{Steps: []resource.TestStep{
+		{ProtoV6ProviderFactories: testProviders(), Config: validConfig},
 		{
 			ProtoV6ProviderFactories: testProviders(),
-			Config:                   portalStructureConfig(hrid, "Empty structure", "structure = {}"),
-			ExpectError:              regexp.MustCompile("Missing portal top navbar"),
-		},
-		{
-			ProtoV6ProviderFactories: testProviders(),
-			Config:                   validConfig,
-		},
-		{
-			ProtoV6ProviderFactories: testProviders(),
-			Config:                   portalStructureConfig(hrid, "Empty structure update", "structure = {}"),
-			ExpectError:              regexp.MustCompile("Missing portal top navbar"),
-		},
-		{
-			ProtoV6ProviderFactories: testProviders(),
-			Config:                   portalStructureConfig(hrid, "Null navbar", "structure = { top_navbar = null }"),
-			ExpectError:              regexp.MustCompile("Missing portal top navbar"),
-		},
-		{
-			ProtoV6ProviderFactories: testProviders(),
-			Config:                   validConfig,
+			Config:                   portalStructureConfig(hrid, "Preserve with empty structure", "structure = {}"),
 			Check: resource.ComposeTestCheckFunc(
 				resource.TestCheckResourceAttr("apim_portal.test", "structure.top_navbar.#", "1"),
 				resource.TestCheckResourceAttr("apim_portal.test", "structure.top_navbar.0.path", path),
 			),
+		},
+		{
+			ProtoV6ProviderFactories: testProviders(),
+			Config:                   portalStructureConfig(hrid, "Preserve with null navbar", "structure = { top_navbar = null }"),
+			Check: resource.ComposeTestCheckFunc(
+				resource.TestCheckResourceAttr("apim_portal.test", "structure.top_navbar.#", "1"),
+				resource.TestCheckResourceAttr("apim_portal.test", "structure.top_navbar.0.path", path),
+			),
+		},
+		{
+			ProtoV6ProviderFactories: testProviders(),
+			Config:                   portalStructureConfig(hrid, "Clear with empty navbar", "structure = { top_navbar = [] }"),
+			Check:                    resource.TestCheckResourceAttr("apim_portal.test", "structure.top_navbar.#", "0"),
 		},
 		{ProtoV6ProviderFactories: testProviders(), Config: validConfig, PlanOnly: true},
 	}})

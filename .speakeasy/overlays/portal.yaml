@@ -21,6 +21,10 @@ actions:
     update:
       x-speakeasy-entity:
         Portal
+      required:
+        - hrid
+        - name
+        - structure
   - target: $.paths["/organizations/{orgId}/environments/{envId}/portals"].put
     update:
       x-speakeasy-entity-operation: Portal#create,update
@@ -43,21 +47,19 @@ actions:
       x-speakeasy-param-computed: false
 
   - target: $.components.schemas.PortalSpec.properties.structure
-    description: Preserve APIM-managed navigation when structure is omitted
+    description: Require an explicit structure object; leave individual areas unchanged when omitted
+    update:
+      x-speakeasy-param-computed: false
+
+  - target: $.components.schemas.PortalNavigationStructure.properties.topNavbar
+    description: Omit this area to preserve its existing navigation; use an empty list to clear it
     update:
       x-speakeasy-param-computed: true
-      x-speakeasy-plan-modifiers: PortalStructure
 
   - target: $.components.schemas.PortalNavigationStructure
-    description: Preserve APIM-managed navigation when structure is omitted
+    description: Areas omitted from the structure retain their existing portal configuration
     update:
-      x-speakeasy-param-computed: true
-      x-speakeasy-plan-modifiers: PortalStructure
       description: >-
-        Portal navigation grouped by area. Omitting `structure` preserves
-        existing navigation, including after import and during unrelated
-        updates. When `structure` is configured, `top_navbar` must be an explicit list: use
-        `structure = { top_navbar = [] }` to clear navigation. `structure = {}`
-        and `structure = { top_navbar = null }` are rejected rather than clearing
-        entries implicitly. TBD (to be discussed): requiring an explicit
-        `top_navbar` within a configured structure.
+        Portal navigation grouped by area. The `structure` object is required.
+        Omit `top_navbar` or set it to null to preserve its existing navigation.
+        Set `top_navbar = []` to clear all navigation entries.
