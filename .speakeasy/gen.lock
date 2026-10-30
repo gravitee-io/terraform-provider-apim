@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 11f09b2d4c84dc2417881cb08901be4b
+  docChecksum: 0979e2c4d9fd8e728071144eca2b4b3c
   docVersion: 1.0.0
   speakeasyVersion: 1.801.0
   generationVersion: 2.946.0
   releaseVersion: 1.0.0
   configChecksum: dafa9022af3424087ece549f51242510
 persistentEdits:
-  generation_id: af127ba6-e155-4b69-b9f7-c658e7de1858
-  pristine_commit_hash: b8dd87b14bb527d6772ff0ce32d0566459053e5d
-  pristine_tree_hash: f89c866fc3baff322bbe21f8f096f245c319ae6b
+  generation_id: 8a49ce2d-75ef-4dce-a60d-3abe7a2e9e90
+  pristine_commit_hash: d24a6026c736d6d14324a65ea99365a9274073a8
+  pristine_tree_hash: df0f26b06b307ad3ad87176d6c2efff72aba550c
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -35,32 +35,26 @@ trackedFiles:
     id: 3aed33ce6e6f
     last_write_checksum: sha1:02c32c9430f37507b3eacd41cdc36f080809e92d
     pristine_git_object: 8e707bb129af1da185ba30b4c289b0160819c437
-    deleted: true
   examples/data-sources/apim_api_link/data-source.tf:
     id: b5793ea80a3b
     last_write_checksum: sha1:861b452b7fdfc290c8b38e48837e1891c9b093a6
     pristine_git_object: be7a90bfaa1d894712bee255380e55e71d548cf0
-    deleted: true
   examples/data-sources/apim_apiv4/data-source.tf:
     id: ebd7d6a2592b
     last_write_checksum: sha1:eabfeec280eb508836119ce625dd98628f384cea
     pristine_git_object: 14b02ca74ffdf5035f36eb69b1aaac159d892164
-    deleted: true
   examples/data-sources/apim_application/data-source.tf:
     id: 65546ae3c074
     last_write_checksum: sha1:f3b11d3ade11050fefff8d6699c54a42983bafcc
     pristine_git_object: d2ea716c15de1fac55acce7b93ea58ad29be1568
-    deleted: true
   examples/data-sources/apim_catalog_mcp_server/data-source.tf:
     id: 53a31f294f50
     last_write_checksum: sha1:f5ceb26e235ed8b2307dd69aab46795e6913ae06
     pristine_git_object: e158e6b5f66a965c3cd5e4e79302d02f633e661e
-    deleted: true
   examples/data-sources/apim_dictionary/data-source.tf:
     id: 6c7733ed26d6
     last_write_checksum: sha1:701c3445663ec80c9140e153fa2280fd80aadae1
     pristine_git_object: 57bd460758ad87bb4d314eca7398971e25f4b7c9
-    deleted: true
   examples/data-sources/apim_documentation/data-source.tf:
     id: b696fe692ba9
     last_write_checksum: sha1:f9ed9398a1d6a4de9e17d2c19932f5ef3869edf9
@@ -70,52 +64,42 @@ trackedFiles:
     id: 7e13a815d5a3
     last_write_checksum: sha1:279141e3c196dcbb7267e468856a874c5c15ea98
     pristine_git_object: bd46f98a96428597bad0e0ff406251b81d128917
-    deleted: true
   examples/data-sources/apim_documentation_portal/data-source.tf:
     id: 17c2ed0526b5
     last_write_checksum: sha1:c162ede101449509ba246305953a37bbf2a0e2bb
     pristine_git_object: d41daf83391bf317e791726929ef6b6bcdfc8a40
-    deleted: true
   examples/data-sources/apim_group/data-source.tf:
     id: 98b93d66233a
     last_write_checksum: sha1:89a08eb7ad4ea01cb4c4b494a44a674f8eae13c2
     pristine_git_object: be23cd970d1399aea1c9b10af16ec0331e2f6b19
-    deleted: true
   examples/data-sources/apim_mcp_proxy/data-source.tf:
     id: 0302d1ad14d0
     last_write_checksum: sha1:67c3eefa24b7e528442bc74c5d696fb9314a153f
     pristine_git_object: 1cfe65b0a7762cffc42fd49445c9f526b0d9c9ff
-    deleted: true
   examples/data-sources/apim_portal/data-source.tf:
     id: c9a23644cbb2
     last_write_checksum: sha1:830bdef7d13ea5913c12b349bca45941e1bd1762
     pristine_git_object: 71ab826ac7a3588a2b65498d2195a68ead52481b
-    deleted: true
   examples/data-sources/apim_portal_link/data-source.tf:
     id: 4524bde03ee2
     last_write_checksum: sha1:7c91158313cee10b45e60eff3065c4263d8b17b9
     pristine_git_object: 5c0a4644a51af3a448cb48fb4916448d05e14c77
-    deleted: true
   examples/data-sources/apim_portal_listing/data-source.tf:
     id: 5431e08dcab6
     last_write_checksum: sha1:762e134aa813504d9d5f97620cac328b18929173
     pristine_git_object: ec1460ea8cf724c7d47000e13cc41b3a650e2134
-    deleted: true
   examples/data-sources/apim_portal_theme/data-source.tf:
     id: da77c1bfb501
     last_write_checksum: sha1:324da1944e5af070f10c10e047c313386369b5cb
     pristine_git_object: eb92c4e389044de4505b35c66cad515aab1497d6
-    deleted: true
   examples/data-sources/apim_shared_policy_group/data-source.tf:
     id: 8014342c8075
     last_write_checksum: sha1:ab550120d7500431354a81905a426b1d5399ac24
     pristine_git_object: ba16f5e0f384411778387b6bdc25a05494a83b68
-    deleted: true
   examples/data-sources/apim_subscription/data-source.tf:
     id: 7d222c50b5e5
     last_write_checksum: sha1:99fa082e08e2447307208b6a47349b92294eadee
     pristine_git_object: 7b6d309036caadf342e220760efa8897491c94cd
-    deleted: true
   examples/provider/provider.tf:
     id: 954e955c0240
     last_write_checksum: sha1:39d294c9b291aab7a0f02f6af5671425d3093733
@@ -282,16 +266,16 @@ trackedFiles:
     pristine_git_object: 23a636dfe9c1ea5c7098c3b1e23d9201ad94f069
   internal/provider/apiv4_data_source.go:
     id: 1b5cb67c37e9
-    last_write_checksum: sha1:251c57976b3603cd8be2c2b451689ae3935a2e99
-    pristine_git_object: 9eec1c98fcecd55c30c90130e94a5889b56947c0
+    last_write_checksum: sha1:f630992116ea7d4c5170eeaf62c1f9e7213d6dd3
+    pristine_git_object: eed3bede47bf9f7eec0663f43f53c55030d317ec
   internal/provider/apiv4_data_source_sdk.go:
     id: 0f327fef7ee2
     last_write_checksum: sha1:8f9ef8ef8c979fde1a17d52c39a1794db90c3c76
     pristine_git_object: 83efd9bcb98bb486d574b397c195a6555c5d5d51
   internal/provider/apiv4_resource.go:
     id: 333e3a57e1ff
-    last_write_checksum: sha1:fa15d4bafbcda7a1b0a2cd730aa7db6142ded1ca
-    pristine_git_object: 6360c5ed6486f13f03d56986c62882b873642873
+    last_write_checksum: sha1:3df36e0a957fa8c204f1b88936ce2abe1254a2bd
+    pristine_git_object: 527ac6ee3dd95b26ff9a705a6bd9f8229e3aeafc
   internal/provider/apiv4_resource_sdk.go:
     id: ba8026d69f87
     last_write_checksum: sha1:55f4ee299d1616a18cb84a7740a469e99c6505dd
@@ -1460,8 +1444,8 @@ trackedFiles:
     pristine_git_object: c0a2e808c8d977f058ee34441e41086e72f6a8ca
   internal/sdk/models/shared/analytics.go:
     id: 7126032f3891
-    last_write_checksum: sha1:a84127ce1d82d4b2ae53f3aaa20c178b27097428
-    pristine_git_object: acd95e9ce7c57e4af7351243af4bfc41949aa119
+    last_write_checksum: sha1:e9e75b72b6e0edaded0a91b605215bc2623c56a7
+    pristine_git_object: 416fbf3c7a922fb98935c7c6a15cc35e576f7e17
   internal/sdk/models/shared/apikeyspec.go:
     id: 05af8b419800
     last_write_checksum: sha1:11ce0dc2d7e1e071ce7609cf7271585829c9b6d1
@@ -1653,8 +1637,8 @@ trackedFiles:
     pristine_git_object: 86395ce829485ab7883cf5281c3ae95f94acbbeb
   internal/sdk/models/shared/httplistener.go:
     id: 1ed1ea7d46a3
-    last_write_checksum: sha1:bb394e50fe8184fc5978574ffbac7ebc55e6f6a1
-    pristine_git_object: 57817042746ef0ca8cdd69ad4a8c266df6fd1eaa
+    last_write_checksum: sha1:a5eb5727d47627cd00ebd626485869556ad2664e
+    pristine_git_object: a78e0b371094cd40c732118ac403677f2a14f923
   internal/sdk/models/shared/httpmethod.go:
     id: 30f139dd0ff9
     last_write_checksum: sha1:3a13d70675a9e9cbf57bb3b9a52c03f7b50c56c4
