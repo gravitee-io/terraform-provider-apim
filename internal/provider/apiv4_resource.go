@@ -1587,7 +1587,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"path_mappings": schema.ListAttribute{
-									Optional:    true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										custom_listplanmodifier.IgnoreEmptyList(),
+									},
 									ElementType: types.StringType,
 									Description: `Path patterns used to group analytics by API path.`,
 								},
