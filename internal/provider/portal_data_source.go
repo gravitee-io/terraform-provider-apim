@@ -116,7 +116,7 @@ func (r *PortalDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 							`Intermediate folders are implicitly created if not listed explicitly.`,
 					},
 				},
-				Description: `Portal navigation grouped by area. Omitting ` + "`" + `structure` + "`" + ` preserves existing navigation, including after import and during unrelated updates. When ` + "`" + `structure` + "`" + ` is configured, omitted areas preserve their existing values. Set ` + "`" + `top_navbar = []` + "`" + ` to clear the navigation area.`,
+				Description: `Portal navigation grouped by area. The ` + "`" + `structure` + "`" + ` object and its ` + "`" + `top_navbar` + "`" + ` list are required. Configure the complete navigation you want after every update. Set ` + "`" + `top_navbar = []` + "`" + ` to clear all entries.`,
 			},
 		},
 	}

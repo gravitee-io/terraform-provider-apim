@@ -80,7 +80,6 @@ Files listed in `.genignore` are **not** overwritten by Speakeasy even though si
 | `tests/**` | **Entirely hand-written** — acceptance tests, example tests, testdata, utilities; nothing here is generated |
 | `internal/provider/portal_visibility.go`, `internal/provider/documentation_placement.go`, `internal/provider/portal_navigation.go` | Hand-written portal and documentation navigation behavior |
 | `internal/provider/api_link_request.go`, `internal/provider/documentation_api_request.go`, `internal/provider/documentation_portal_request.go`, `internal/provider/portal_link_request.go` | Hand-written request builders used by generated resource hooks |
-| `internal/planmodifiers/objectplanmodifier/portal_structure.go` | Hand-written plan modifier that preserves APIM-managed navigation when omitted |
 | `internal/provider/gravitee_cloud.go` | Gravitee Cloud auth / server URL resolution |
 | `internal/provider/customtypes/**` | `TrimmedString`, `RFC3339` custom Terraform types (referenced from overlays) |
 | `internal/planmodifiers/stringplanmodifier/immutable.go`, `normalize_path.go`, `trim_trailing_slash.go` | Custom plan modifiers |

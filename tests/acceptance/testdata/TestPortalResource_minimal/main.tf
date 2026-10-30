@@ -8,7 +8,7 @@ variable "hrid" {
 }
 
 resource "apim_portal" "test" {
-  hrid = var.hrid
-  name = "Test Portal"
+  hrid      = var.hrid
+  name      = "Test Portal"
   structure = { top_navbar = [] }
 }

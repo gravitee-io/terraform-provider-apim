@@ -4475,7 +4475,7 @@ components:
         - PUBLIC
         - PRIVATE
     PortalNavigationStructure:
-      description: Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, omitted areas preserve their existing values. Set `top_navbar = []` to clear the navigation area.
+      description: Portal navigation grouped by area. The `structure` object and its `top_navbar` list are required. Configure the complete navigation you want after every update. Set `top_navbar = []` to clear all entries.
       type: object
       properties:
         topNavbar:
@@ -4486,8 +4486,8 @@ components:
           items:
             $ref: "#/components/schemas/PortalNavigationPath"
           x-speakeasy-param-computed: false
-      x-speakeasy-param-computed: true
-      x-speakeasy-plan-modifiers: PortalStructure
+      required:
+        - topNavbar
     PortalSpec:
       description: Specification of a Portal resource. Represents a next-gen developer portal instance.
       type: object
@@ -4503,8 +4503,7 @@ components:
           x-speakeasy-param-computed: false
         structure:
           $ref: "#/components/schemas/PortalNavigationStructure"
-          x-speakeasy-param-computed: true
-          x-speakeasy-plan-modifiers: PortalStructure
+          x-speakeasy-param-computed: false
         navigation:
           type: array
           deprecated: true
@@ -4525,6 +4524,7 @@ components:
       required:
         - hrid
         - name
+        - structure
       x-speakeasy-entity: Portal
     PortalState:
       description: State of a Portal that has been created/updated.

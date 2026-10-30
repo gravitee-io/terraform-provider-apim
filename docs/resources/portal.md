@@ -43,13 +43,13 @@ resource "apim_portal" "developer-portal" {
 
 - `hrid` (String) A unique human readable id identifying this resource. Requires replacement if changed.
 - `name` (String) Display name of the portal
+- `structure` (Attributes) Portal navigation grouped by area. The `structure` object and its `top_navbar` list are required. Configure the complete navigation you want after every update. Set `top_navbar = []` to clear all entries. (see [below for nested schema](#nestedatt--structure))
 
 ### Optional
 
 - `active_theme_hrid` (String) HRID of the theme the portal uses. Applying the portal with it enables that theme and disables the other next-gen portal themes of the environment. Leaving it unset disables the theme the portal used and re-enables another theme of the environment, preferring one that the Automation API doesn't manage, then the most recently updated. The portal shows the default theme when the environment has no other theme.
 - `environment_id` (String) environment ID
 - `organization_id` (String) organization ID
-- `structure` (Attributes) Portal navigation grouped by area. Omitting `structure` preserves existing navigation, including after import and during unrelated updates. When `structure` is configured, omitted areas preserve their existing values. Set `top_navbar = []` to clear the navigation area. (see [below for nested schema](#nestedatt--structure))
 
 ### Read-Only
 
@@ -58,7 +58,7 @@ resource "apim_portal" "developer-portal" {
 <a id="nestedatt--structure"></a>
 ### Nested Schema for `structure`
 
-Optional:
+Required:
 
 - `top_navbar` (Attributes List) Top navbar entries as an ordered list of paths.
 Intermediate folders are implicitly created if not listed explicitly. (see [below for nested schema](#nestedatt--structure--top_navbar))
