@@ -130,10 +130,15 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 				Attributes: map[string]schema.Attribute{
 					"connection_events": schema.ListAttribute{
-						Optional:    true,
+						Computed: true,
+						Optional: true,
+						PlanModifiers: []planmodifier.List{
+							custom_listplanmodifier.IgnoreEmptyList(),
+							speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+						},
 						ElementType: types.StringType,
 						MarkdownDescription: `Which connection lifecycle events the gateway reports, among ` + "`" + `CONNECTED` + "`" + `, ` + "`" + `DISCONNECTED` + "`" + `, and ` + "`" + `ERROR` + "`" + `. Only applicable to Native v4 APIs.` + "\n" +
-							`Remove this attribute or set it to ` + "`" + `[]` + "`" + ` to clear the selection. When absent or empty, the gateway reports ` + "`" + `CONNECTED` + "`" + ` and ` + "`" + `ERROR` + "`" + `: ` + "`" + `DISCONNECTED` + "`" + ` is opt-in. To report nothing, set ` + "`" + `reporter_metrics_enabled` + "`" + ` to false.` + "\n" +
+							`Set this attribute to ` + "`" + `[]` + "`" + ` to clear the selection. Omitting it preserves the existing selection. When the selection is empty, the gateway reports ` + "`" + `CONNECTED` + "`" + ` and ` + "`" + `ERROR` + "`" + `: ` + "`" + `DISCONNECTED` + "`" + ` is opt-in. To report nothing, set ` + "`" + `reporter_metrics_enabled` + "`" + ` to false.` + "\n" +
 							`` + "`" + `ERROR` + "`" + ` covers every failure status the gateway emits (` + "`" + `CONNECTION_ERROR` + "`" + `, ` + "`" + `SESSION_ERROR` + "`" + `, ` + "`" + `INTERNAL_ERROR` + "`" + `).`,
 						Validators: []validator.List{
 							listvalidator.UniqueValues(),
@@ -1584,9 +1589,14 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 								},
 								"path_mappings": schema.ListAttribute{
-									Optional:    true,
+									Computed: true,
+									Optional: true,
+									PlanModifiers: []planmodifier.List{
+										custom_listplanmodifier.IgnoreEmptyList(),
+										speakeasy_listplanmodifier.SuppressDiff(speakeasy_listplanmodifier.ExplicitSuppress),
+									},
 									ElementType: types.StringType,
-									Description: `Path patterns used to group analytics by API path. Remove this attribute or set it to [] to clear previously configured path mappings.`,
+									Description: `Path patterns used to group analytics by API path. Set this attribute to [] to clear previously configured path mappings. Omitting it preserves the existing mappings.`,
 								},
 								"paths": schema.ListNestedAttribute{
 									Computed: true,
