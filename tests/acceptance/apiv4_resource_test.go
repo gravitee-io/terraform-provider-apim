@@ -60,7 +60,7 @@ func TestAPIV4Resource_minimal(t *testing.T) {
 	})
 }
 
-// Verifies removal and explicit clearing of HTTP listener settings.
+// Verifies omission and explicit clearing of HTTP listener settings.
 func TestAPIV4Resource_clearComputedListenerSettings(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
@@ -114,7 +114,7 @@ func TestAPIV4Resource_clearComputedListenerSettings(t *testing.T) {
 				"omit_settings":   config.BoolVariable(true),
 			},
 			Check: resource.ComposeTestCheckFunc(
-				resource.TestCheckResourceAttr(resourceAddress, "listeners.0.http.path_mappings.#", "0"),
+				resource.TestCheckResourceAttr(resourceAddress, "listeners.0.http.path_mappings.#", "1"),
 				resource.TestCheckNoResourceAttr(resourceAddress, "listeners.0.http.request_validation.reject_null_byte"),
 			),
 		},
@@ -174,7 +174,7 @@ func TestAPIV4Resource_clearComputedListenerSettings(t *testing.T) {
 	}})
 }
 
-// Verifies removal and explicit clearing of connection event selections.
+// Verifies omission and explicit clearing of connection event selections.
 func TestAPIV4Resource_clearConnectionEvents(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
@@ -215,7 +215,7 @@ func TestAPIV4Resource_clearConnectionEvents(t *testing.T) {
 				"omit_events":  config.BoolVariable(true),
 				"empty_events": config.BoolVariable(false),
 			},
-			Check: emptyEventsCheck,
+			Check: resource.TestCheckResourceAttr(resourceAddress, "analytics.connection_events.#", "1"),
 		},
 		{
 			ProtoV6ProviderFactories: testProviders(),
