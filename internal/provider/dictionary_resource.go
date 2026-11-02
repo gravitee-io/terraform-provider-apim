@@ -9,7 +9,6 @@ import (
 	"encoding/json"
 	"fmt"
 	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
-	custom_mapplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/mapplanmodifier"
 	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
@@ -260,11 +259,7 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Description: `Secret properties, keyed by the property key. APIM encrypts the values and never returns them: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. Removing a key, or the attribute, deletes the secret. A key must not appear in both ` + "`" + `properties` + "`" + ` and ` + "`" + `encrypted_properties` + "`" + `. To make a secret plain again, remove it from ` + "`" + `encrypted_properties` + "`" + `, apply, then add it to ` + "`" + `properties` + "`" + `: APIM keeps a secret key encrypted otherwise. Requires APIM 4.13 or later.`,
 					},
 					"properties": schema.MapAttribute{
-						Computed: true,
-						Optional: true,
-						PlanModifiers: []planmodifier.Map{
-							custom_mapplanmodifier.EmptyMapWhenNull(),
-						},
+						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Dictionary data are key/value pairs for ` + "`" + `MANUAL` + "`" + ` properties`,
 					},
