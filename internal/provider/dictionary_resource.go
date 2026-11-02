@@ -18,6 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -80,6 +81,19 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"dynamic": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
+					"encryption": schema.SingleNestedAttribute{
+						Computed: true,
+						Optional: true,
+						Attributes: map[string]schema.Attribute{
+							"encrypt_on_fetch": schema.BoolAttribute{
+								Computed:    true,
+								Optional:    true,
+								Default:     booldefault.StaticBool(false),
+								Description: `Encrypt every fetched value instead of relying on per-key classification. Default: false`,
+							},
+						},
+						Description: `Encryption of the values the provider fetches. Omitting it keeps the current policy; set ` + "`" + `encrypt_on_fetch = false` + "`" + ` to stop encrypting. Requires APIM 4.13 or later.`,
+					},
 					"provider": schema.SingleNestedAttribute{
 						Required: true,
 						Attributes: map[string]schema.Attribute{
@@ -227,8 +241,22 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"manual": schema.SingleNestedAttribute{
 				Optional: true,
 				Attributes: map[string]schema.Attribute{
+					"encrypted_properties": schema.MapNestedAttribute{
+						Optional: true,
+						NestedObject: schema.NestedAttributeObject{
+							Attributes: map[string]schema.Attribute{
+								"value": schema.StringAttribute{
+									Required:    true,
+									Sensitive:   true,
+									Description: `The plaintext value to encrypt on save.`,
+								},
+							},
+						},
+						Description: `Secret properties, keyed by the property key. APIM encrypts the values and never returns them: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. Removing a key, or the attribute, deletes the secret. A key must not appear in both ` + "`" + `properties` + "`" + ` and ` + "`" + `encrypted_properties` + "`" + `. To make a secret plain again, remove it from ` + "`" + `encrypted_properties` + "`" + `, apply, then add it to ` + "`" + `properties` + "`" + `: APIM keeps a secret key encrypted otherwise. Requires APIM 4.13 or later.`,
+					},
 					"properties": schema.MapAttribute{
-						Required:    true,
+						Computed:    true,
+						Optional:    true,
 						ElementType: types.StringType,
 						Description: `Dictionary data are key/value pairs for ` + "`" + `MANUAL` + "`" + ` properties`,
 					},

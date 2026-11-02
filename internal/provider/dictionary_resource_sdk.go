@@ -22,6 +22,12 @@ func (r *DictionaryResourceModel) RefreshFromSharedDictionaryState(ctx context.C
 			r.Dynamic = nil
 		} else {
 			r.Dynamic = &tfTypes.DynamicDictionarySpec{}
+			if resp.Dynamic.Encryption == nil {
+				r.Dynamic.Encryption = nil
+			} else {
+				r.Dynamic.Encryption = &tfTypes.DictionaryEncryptionPolicy{}
+				r.Dynamic.Encryption.EncryptOnFetch = types.BoolPointerValue(resp.Dynamic.Encryption.EncryptOnFetch)
+			}
 			if r.Dynamic.Provider == nil {
 				r.Dynamic.Provider = &tfTypes.DictionaryProvider{}
 			}
@@ -54,12 +60,16 @@ func (r *DictionaryResourceModel) RefreshFromSharedDictionaryState(ctx context.C
 		if resp.Manual == nil {
 			r.Manual = nil
 		} else {
+			manualPriorData := r.Manual
 			r.Manual = &tfTypes.ManualDictionarySpec{}
 			if len(resp.Manual.Properties) > 0 {
 				r.Manual.Properties = make(map[string]types.String, len(resp.Manual.Properties))
 				for key, value := range resp.Manual.Properties {
 					r.Manual.Properties[key] = types.StringValue(value)
 				}
+			}
+			if manualPriorData != nil {
+				r.Manual.EncryptedProperties = manualPriorData.EncryptedProperties
 			}
 		}
 		r.Name = types.StringValue(resp.Name)
@@ -183,8 +193,19 @@ func (r *DictionaryResourceModel) ToSharedDictionarySpec(ctx context.Context) (*
 
 			properties[propertiesKey] = propertiesInst
 		}
+		encryptedProperties := make(map[string]shared.EncryptableValue)
+		for encryptedPropertiesKey := range r.Manual.EncryptedProperties {
+			var value string
+			value = r.Manual.EncryptedProperties[encryptedPropertiesKey].Value.ValueString()
+
+			encryptedPropertiesInst := shared.EncryptableValue{
+				Value: value,
+			}
+			encryptedProperties[encryptedPropertiesKey] = encryptedPropertiesInst
+		}
 		manual = &shared.ManualDictionarySpec{
-			Properties: properties,
+			Properties:          properties,
+			EncryptedProperties: encryptedProperties,
 		}
 	}
 	var dynamic *shared.DynamicDictionarySpec
@@ -204,12 +225,12 @@ func (r *DictionaryResourceModel) ToSharedDictionarySpec(ctx context.Context) (*
 				var name1 string
 				name1 = r.Dynamic.Provider.HTTP.Headers[headersIndex].Name.ValueString()
 
-				var value string
-				value = r.Dynamic.Provider.HTTP.Headers[headersIndex].Value.ValueString()
+				var value1 string
+				value1 = r.Dynamic.Provider.HTTP.Headers[headersIndex].Value.ValueString()
 
 				headers = append(headers, shared.Header{
 					Name:  name1,
-					Value: value,
+					Value: value1,
 				})
 			}
 			useSystemProxy := new(bool)
@@ -248,9 +269,22 @@ func (r *DictionaryResourceModel) ToSharedDictionarySpec(ctx context.Context) (*
 			Rate: rate,
 			Unit: unit,
 		}
+		var encryption *shared.DictionaryEncryptionPolicy
+		if r.Dynamic.Encryption != nil {
+			encryptOnFetch := new(bool)
+			if !r.Dynamic.Encryption.EncryptOnFetch.IsUnknown() && !r.Dynamic.Encryption.EncryptOnFetch.IsNull() {
+				*encryptOnFetch = r.Dynamic.Encryption.EncryptOnFetch.ValueBool()
+			} else {
+				encryptOnFetch = nil
+			}
+			encryption = &shared.DictionaryEncryptionPolicy{
+				EncryptOnFetch: encryptOnFetch,
+			}
+		}
 		dynamic = &shared.DynamicDictionarySpec{
-			Provider: provider,
-			Trigger:  trigger,
+			Provider:   provider,
+			Trigger:    trigger,
+			Encryption: encryption,
 		}
 	}
 	out := shared.DictionarySpec{

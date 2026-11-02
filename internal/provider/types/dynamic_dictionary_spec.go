@@ -4,6 +4,7 @@
 package types
 
 type DynamicDictionarySpec struct {
-	Provider *DictionaryProvider `tfsdk:"provider"`
-	Trigger  *DictionaryTrigger  `tfsdk:"trigger"`
+	Encryption *DictionaryEncryptionPolicy `tfsdk:"encryption"`
+	Provider   *DictionaryProvider         `tfsdk:"provider"`
+	Trigger    *DictionaryTrigger          `tfsdk:"trigger"`
 }

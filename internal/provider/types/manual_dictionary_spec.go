@@ -8,5 +8,6 @@ import (
 )
 
 type ManualDictionarySpec struct {
-	Properties map[string]types.String `tfsdk:"properties"`
+	EncryptedProperties map[string]EncryptableValue `tfsdk:"encrypted_properties"`
+	Properties          map[string]types.String     `tfsdk:"properties"`
 }
