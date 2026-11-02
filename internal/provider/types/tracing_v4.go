@@ -8,6 +8,7 @@ import (
 )
 
 type TracingV4 struct {
-	Enabled types.Bool `tfsdk:"enabled"`
-	Verbose types.Bool `tfsdk:"verbose"`
+	Enabled   types.Bool              `tfsdk:"enabled"`
+	Redaction *TracingRedactionConfig `tfsdk:"redaction"`
+	Verbose   types.Bool              `tfsdk:"verbose"`
 }

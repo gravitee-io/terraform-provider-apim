@@ -4,7 +4,7 @@ page_title: "apim Provider"
 description: |-
   Gravitee: Gravitee API Management Terraform Provider
   You can manage with Terraform the following:
-  APIs (V4 of all types)Shared Policy GroupsApplicationsSubscriptionsGroupDictionariesMCP Catalog ServersMCP Proxies
+  APIs (V4 of all types)Shared Policy GroupsApplicationsSubscriptionsGroupDictionariesNext-gen portals (APIM 4.13 or later): portals, portal listings, portal and API documentation, portal and API links, portal themesMCP Catalog ServersMCP Proxies
   Get started with APIM + Terraform and learn about changes and known limitations https://documentation.gravitee.io/apim/terraform
   Checkout other sections to configure, authenticate and start working with Gravitee resources
 ---
@@ -20,6 +20,7 @@ You can manage with Terraform the following:
 * Subscriptions
 * Group
 * Dictionaries
+* Next-gen portals (APIM 4.13 or later): portals, portal listings, portal and API documentation, portal and API links, portal themes
 * MCP Catalog Servers
 * MCP Proxies
 

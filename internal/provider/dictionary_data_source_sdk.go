@@ -22,6 +22,12 @@ func (r *DictionaryDataSourceModel) RefreshFromSharedDictionaryState(ctx context
 			r.Dynamic = nil
 		} else {
 			r.Dynamic = &tfTypes.DynamicDictionarySpec{}
+			if resp.Dynamic.Encryption == nil {
+				r.Dynamic.Encryption = nil
+			} else {
+				r.Dynamic.Encryption = &tfTypes.DictionaryEncryptionPolicy{}
+				r.Dynamic.Encryption.EncryptOnFetch = types.BoolPointerValue(resp.Dynamic.Encryption.EncryptOnFetch)
+			}
 			if r.Dynamic.Provider == nil {
 				r.Dynamic.Provider = &tfTypes.DictionaryProvider{}
 			}
@@ -54,7 +60,7 @@ func (r *DictionaryDataSourceModel) RefreshFromSharedDictionaryState(ctx context
 		if resp.Manual == nil {
 			r.Manual = nil
 		} else {
-			r.Manual = &tfTypes.ManualDictionarySpec{}
+			r.Manual = &tfTypes.ManualDictionarySpec1{}
 			if len(resp.Manual.Properties) > 0 {
 				r.Manual.Properties = make(map[string]types.String, len(resp.Manual.Properties))
 				for key, value := range resp.Manual.Properties {
