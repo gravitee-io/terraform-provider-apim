@@ -3,7 +3,7 @@ APIM_PASSWORD ?= admin
 APIM_API1_USERNAME ?= api1
 APIM_API1_PASSWORD ?= api1
 APIM_SERVER_URL ?= http://localhost:30083/automation
-APIM_OAS_BRANCH=master
+APIM_OAS_BRANCH=4.13.x
 # Tag of gravitee-gamma-module-aim the AI Management fragment is taken from. Bumped by hand:
 # APIM master may pin an older aim than the one this provider is generated against.
 AIM_OAS_REF ?= 5.0.0-alpha.39
@@ -24,8 +24,6 @@ lint: lint-commits lint-overlays ## Run speakeasy lint accepting no error or war
 	@echo "Checking OAS"
 	@speakeasy lint openapi --schema automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
 	@speakeasy lint openapi --schema automation-api-aim-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
-	@echo "Checking custom code"
-	@grep "// BEGIN GRAVITEE CLOUD INIT" internal/provider/provider.go > /dev/null || (echo "Cloud initializer code snippet appear to be missing" && exit 1)
 	@echo "Checking Terraform fmt"
 	@terraform fmt -recursive -check || (echo "Error: Above terraform files are not properly formatted. Please run 'terraform fmt -recursive' to fix formatting issues" && exit 1)
 

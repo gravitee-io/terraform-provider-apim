@@ -1,0 +1,41 @@
+---
+page_title: "Dictionary Encryption"
+subcategory: "Dictionary"
+---
+
+# Dictionary Encryption
+
+-> **NOTE:** Dictionary encryption requires APIM 4.13 or later.
+
+This example stores a backend API key as a secret in a manual dictionary, encrypts every value a
+dynamic dictionary fetches, and has an API send the secret to its backend.
+
+## Secret properties
+
+APIM encrypts the values of `encrypted_properties` and never returns them. Terraform keeps the
+values it sent in its state, in plain text: protect the state as you would the secret itself.
+Terraform does not see a change made to a secret in the Console.
+
+Removing a key from `encrypted_properties`, or removing the whole attribute, deletes the secret.
+A key cannot be in both `properties` and `encrypted_properties`: APIM rejects it.
+
+A manual dictionary needs at least one property, plain or secret.
+
+## Making a secret plain again
+
+It takes two applies: remove the key from `encrypted_properties` and apply, then add it to
+`properties` and apply. APIM keeps a secret key encrypted otherwise.
+
+## Fetched values
+
+`encrypt_on_fetch = true` encrypts every value the dynamic dictionary's provider fetches. Omitting
+`encryption` keeps the current policy; set `encrypt_on_fetch = false` to stop encrypting.
+
+## Using a secret
+
+An API reads a secret property like a plain one, with the dictionary HRID and the key:
+`{#dictionaries['encrypted']['backend-api-key']}`. The gateway decrypts it.
+
+```terraform
+{{ .DictionaryEncryption.Content }}
+```

@@ -49,3 +49,38 @@ actions:
     description: HTTP headers when unset are returned as empty list
     update:
       x-speakeasy-plan-modifiers: IgnoreEmptyList
+  # Encryption (APIM 4.13+)
+  - target: $.components.schemas.ManualDictionarySpec.properties.encryptedProperties
+    description: Secret values are never read back; Terraform keeps what it sent
+    update:
+      writeOnly: true
+      description: >-
+        Secret properties, keyed by the property key. APIM encrypts the values and never returns
+        them: Terraform keeps the configured values in its state and does not detect a change
+        made outside Terraform. Removing a key, or the attribute, deletes the secret. A key must
+        not appear in both `properties` and `encrypted_properties`. To make a secret plain
+        again, remove it from `encrypted_properties`, apply, then add it to `properties`: APIM
+        keeps a secret key encrypted otherwise. Requires APIM 4.13 or later.
+  - target: $.components.schemas.EncryptableValue.properties.value
+    update:
+      x-speakeasy-param-sensitive: true
+  - target: $.components.schemas.ManualDictionarySpec.properties.properties
+    description: >-
+      Optional since a dictionary can hold only secrets. Not computed: APIM returns an empty map
+      then, which the read maps to null, as an omitted attribute plans.
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.DynamicDictionarySpec.properties.encryption
+    description: APIM returns the policy and keeps it when an update omits it
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.DictionaryEncryptionPolicy
+    description: >-
+      encryption is a $ref, so the suppression above does not reach the generated attribute;
+      set it on the referenced object too, as for GroupDefaultMemberRoles.
+    update:
+      x-speakeasy-param-suppress-computed-diff: true
+      description: >-
+        Encryption of the values the provider fetches. Omitting it keeps the current policy; set
+        `encrypt_on_fetch = false` to stop encrypting. Requires APIM 4.13 or later.

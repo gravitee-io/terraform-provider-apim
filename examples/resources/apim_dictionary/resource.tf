@@ -41,3 +41,27 @@ resource "apim_dictionary" "dynamic" {
     }
   }
 }
+
+variable "api_key" {
+  type      = string
+  sensitive = true
+}
+
+# Requires APIM 4.13 or later
+resource "apim_dictionary" "manual" {
+  hrid     = "manual"
+  name     = "[Terraform] Manual dictionary"
+  deployed = true
+  type     = "MANUAL"
+  manual = {
+    properties = {
+      env = "production"
+    }
+    # Encrypted by APIM and never returned
+    encrypted_properties = {
+      "api-key" = {
+        value = var.api_key
+      }
+    }
+  }
+}
