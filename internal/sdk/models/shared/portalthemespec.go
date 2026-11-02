@@ -3,7 +3,7 @@
 
 package shared
 
-// PortalThemeSpec - A next-gen portal theme. Applying a theme activates it for the environment and disables the other next-gen themes. Reference this resource's hrid from a portal's active_theme_hrid to establish the dependency: APIM rejects deleting a theme that a portal still uses.
+// PortalThemeSpec - A next-gen portal theme. Applying a theme stores it without enabling it: a portal's `active_theme_hrid` enables it. APIM rejects deleting a theme that a portal still uses.
 type PortalThemeSpec struct {
 	// A unique human readable id identifying this resource
 	Hrid string `json:"hrid"`

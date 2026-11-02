@@ -107,11 +107,7 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			`* Subscriptions` + "\n" +
 			`* Group` + "\n" +
 			`* Dictionaries` + "\n" +
-			`* Portals` + "\n" +
-			`* Portal Listings` + "\n" +
-			`* Portal and API Documentation` + "\n" +
-			`* Portal and API Links` + "\n" +
-			`* Portal Themes` + "\n" +
+			`* Next-gen portals (APIM 4.13 or later): portals, portal listings, portal and API documentation, portal and API links, portal themes` + "\n" +
 			`* MCP Catalog Servers` + "\n" +
 			`* MCP Proxies` + "\n" +
 			`` + "\n" +

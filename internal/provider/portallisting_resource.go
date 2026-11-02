@@ -63,7 +63,7 @@ func (r *PortalListingResource) Metadata(ctx context.Context, req resource.Metad
 
 func (r *PortalListingResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "PortalListing Resource",
+		MarkdownDescription: "APIs published in a next-gen portal's navigation. Requires APIM 4.13 or later.",
 		Attributes: map[string]schema.Attribute{
 			"apis": schema.ListNestedAttribute{
 				Required: true,

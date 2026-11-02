@@ -56,7 +56,7 @@ func (r *PortalDataSource) Metadata(ctx context.Context, req datasource.Metadata
 // Schema defines the schema for the data source.
 func (r *PortalDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Portal DataSource",
+		MarkdownDescription: "A next-gen developer portal. Requires APIM 4.13 or later.",
 
 		Attributes: map[string]schema.Attribute{
 			"active_theme_hrid": schema.StringAttribute{

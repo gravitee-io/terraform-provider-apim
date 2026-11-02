@@ -3040,8 +3040,8 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 					},
 				},
-				MarkdownDescription: `The API's internal documentation navigation tree for the next-gen portal.` + "\n" +
-					`Paths are ordered — the order in the list is preserved.` + "\n" +
+				MarkdownDescription: `The API's internal documentation navigation tree for the next-gen portal. Requires APIM 4.13 or later.` + "\n" +
+					`` + "`" + `order` + "`" + ` sets the display order of a path among its siblings.` + "\n" +
 					`Intermediate folders are implicitly created if not listed explicitly.`,
 			},
 			"properties": schema.ListNestedAttribute{

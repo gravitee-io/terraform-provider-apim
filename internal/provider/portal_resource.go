@@ -62,7 +62,7 @@ func (r *PortalResource) Metadata(ctx context.Context, req resource.MetadataRequ
 
 func (r *PortalResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "Portal Resource",
+		MarkdownDescription: "A next-gen developer portal. Requires APIM 4.13 or later.",
 		Attributes: map[string]schema.Attribute{
 			"active_theme_hrid": schema.StringAttribute{
 				Optional:    true,
