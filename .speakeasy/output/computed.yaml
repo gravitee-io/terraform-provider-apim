@@ -24,11 +24,7 @@ info:
     * Subscriptions
     * Group
     * Dictionaries
-    * Portals
-    * Portal Listings
-    * Portal and API Documentation
-    * Portal and API Links
-    * Portal Themes
+    * Next-gen portals (APIM 4.13 or later): portals, portal listings, portal and API documentation, portal and API links, portal themes
     * MCP Catalog Servers
     * MCP Proxies
 
@@ -1839,8 +1835,8 @@ components:
         portalNavigation:
           type: array
           description: |
-            The API's internal documentation navigation tree for the next-gen portal.
-            Paths are ordered — the order in the list is preserved.
+            The API's internal documentation navigation tree for the next-gen portal. Requires APIM 4.13 or later.
+            `order` sets the display order of a path among its siblings.
             Intermediate folders are implicitly created if not listed explicitly.
           items:
             $ref: "#/components/schemas/NavigationPath"
@@ -4527,6 +4523,7 @@ components:
         - name
         - structure
       x-speakeasy-entity: Portal
+      x-speakeasy-entity-description: A next-gen developer portal. Requires APIM 4.13 or later.
     PortalState:
       description: State of a Portal that has been created/updated.
       allOf:
@@ -4585,6 +4582,7 @@ components:
         - hrid
         - apis
       x-speakeasy-entity: PortalListing
+      x-speakeasy-entity-description: APIs published in a next-gen portal's navigation. Requires APIM 4.13 or later.
     PortalListingStatus:
       description: Status information for a Portal Listing after import.
       allOf:
@@ -4750,7 +4748,7 @@ components:
     # Theme schemas
     PortalThemeSpec:
       description: |-
-        A next-gen portal theme. Applying a theme activates it for the environment and disables the other next-gen themes. Reference this resource's hrid from a portal's active_theme_hrid to establish the dependency: APIM rejects deleting a theme that a portal still uses.
+        A next-gen portal theme. Applying a theme stores it without enabling it: a portal's `active_theme_hrid` enables it. APIM rejects deleting a theme that a portal still uses.
       type: object
       properties:
         hrid:
@@ -4788,6 +4786,8 @@ components:
         - name
         - definition
       x-speakeasy-entity: PortalTheme
+      x-speakeasy-entity-description: >-
+        A next-gen portal theme. Applying a theme stores it without enabling it: a portal's `active_theme_hrid` enables it. APIM rejects deleting a theme that a portal still uses. Requires APIM 4.13 or later.
     PortalThemeState:
       description: State of a Theme that has been created/updated.
       allOf:

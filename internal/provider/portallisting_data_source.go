@@ -55,7 +55,7 @@ func (r *PortalListingDataSource) Metadata(ctx context.Context, req datasource.M
 // Schema defines the schema for the data source.
 func (r *PortalListingDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "PortalListing DataSource",
+		MarkdownDescription: "APIs published in a next-gen portal's navigation. Requires APIM 4.13 or later.",
 
 		Attributes: map[string]schema.Attribute{
 			"apis": schema.ListNestedAttribute{

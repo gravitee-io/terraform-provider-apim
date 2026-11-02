@@ -15,7 +15,7 @@ This example ties together the next-gen portal resources:
 
 -> **NOTE:** These resources require APIM 4.13 or later.
 
-~> **WARNING:** Multiple portals are not supported make sure you create one portal per environment.
+~> **WARNING:** Multiple portals are not supported: create one portal per environment.
 
 ## Portal and listing
 

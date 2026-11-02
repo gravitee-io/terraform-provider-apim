@@ -18,11 +18,7 @@ You can manage with Terraform the following:
 * Subscriptions
 * Group
 * Dictionaries
-* Portals
-* Portal Listings
-* Portal and API Documentation
-* Portal and API Links
-* Portal Themes
+* Next-gen portals (APIM 4.13 or later): portals, portal listings, portal and API documentation, portal and API links, portal themes
 * MCP Catalog Servers
 * MCP Proxies
 

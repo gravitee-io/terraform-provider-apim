@@ -3,12 +3,12 @@
 page_title: "apim_portal_listing Resource - terraform-provider-apim"
 subcategory: ""
 description: |-
-  PortalListing Resource
+  APIs published in a next-gen portal's navigation. Requires APIM 4.13 or later.
 ---
 
 # apim_portal_listing (Resource)
 
-PortalListing Resource
+APIs published in a next-gen portal's navigation. Requires APIM 4.13 or later.
 
 ## Example Usage
 

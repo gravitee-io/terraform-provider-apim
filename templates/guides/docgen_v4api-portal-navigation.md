@@ -7,8 +7,10 @@ subcategory: "V4 API"
 
 This example demonstrates how to declare an API's internal documentation navigation tree for the next-gen portal using the `portal_navigation` attribute on `apim_apiv4`.
 
-Paths are ordered — the order in the list is preserved.
+`order` sets the display order of a path among its siblings.
 Intermediate folders are implicitly created when child paths are declared.
+
+-> **NOTE:** `portal_navigation` requires APIM 4.13 or later.
 
 ```terraform
 resource "apim_apiv4" "with-portal-navigation" {

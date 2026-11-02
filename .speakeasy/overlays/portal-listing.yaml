@@ -16,6 +16,7 @@ actions:
     update:
       x-speakeasy-entity:
         PortalListing
+      x-speakeasy-entity-description: APIs published in a next-gen portal's navigation. Requires APIM 4.13 or later.
   - target: $.components.schemas.PortalListingSpec.properties.apis
     description: At least one API must be included in a portal listing
     update:

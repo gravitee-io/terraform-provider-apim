@@ -260,6 +260,10 @@ actions:
     description: Next-gen portal navigation is API-computed and should not create plan diffs
     update:
       x-speakeasy-param-computed: true
+      description: |
+        The API's internal documentation navigation tree for the next-gen portal. Requires APIM 4.13 or later.
+        `order` sets the display order of a path among its siblings.
+        Intermediate folders are implicitly created if not listed explicitly.
       x-speakeasy-plan-modifiers: IgnoreEmptyList
   - target: $.components.schemas.ApiV4Spec.properties.flows
     description: Prevent empty array to create plan diff

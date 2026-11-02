@@ -21,6 +21,7 @@ actions:
     update:
       x-speakeasy-entity:
         Portal
+      x-speakeasy-entity-description: A next-gen developer portal. Requires APIM 4.13 or later.
       required:
         - structure
   - target: $.paths["/organizations/{orgId}/environments/{envId}/portals"].put

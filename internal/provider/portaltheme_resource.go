@@ -63,7 +63,7 @@ func (r *PortalThemeResource) Metadata(ctx context.Context, req resource.Metadat
 
 func (r *PortalThemeResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "PortalTheme Resource",
+		MarkdownDescription: "A next-gen portal theme. Applying a theme stores it without enabling it: a portal's `active_theme_hrid` enables it. APIM rejects deleting a theme that a portal still uses. Requires APIM 4.13 or later.",
 		Attributes: map[string]schema.Attribute{
 			"background_image": schema.StringAttribute{
 				Computed:    true,

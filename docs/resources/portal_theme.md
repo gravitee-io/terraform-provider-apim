@@ -3,12 +3,12 @@
 page_title: "apim_portal_theme Resource - terraform-provider-apim"
 subcategory: ""
 description: |-
-  PortalTheme Resource
+  A next-gen portal theme. Applying a theme stores it without enabling it: a portal's active_theme_hrid enables it. APIM rejects deleting a theme that a portal still uses. Requires APIM 4.13 or later.
 ---
 
 # apim_portal_theme (Resource)
 
-PortalTheme Resource
+A next-gen portal theme. Applying a theme stores it without enabling it: a portal's `active_theme_hrid` enables it. APIM rejects deleting a theme that a portal still uses. Requires APIM 4.13 or later.
 
 ## Example Usage
 

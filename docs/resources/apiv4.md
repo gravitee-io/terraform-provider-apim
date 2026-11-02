@@ -254,8 +254,8 @@ Default: true
 - `organization_id` (String) organization ID
 - `pages` (Attributes List) Pages for the API (classic portal). Elements positioned earlier in the list are displayed first, with subsequent elements appearing below. (see [below for nested schema](#nestedatt--pages))
 - `plans` (Attributes List) Available plans for the API to define API security. You must provide a plan if `state` is `STARTED`. Plans are prioritized by their position in the list, with earlier entries having higher priority. (see [below for nested schema](#nestedatt--plans))
-- `portal_navigation` (Attributes List) The API's internal documentation navigation tree for the next-gen portal.
-Paths are ordered — the order in the list is preserved.
+- `portal_navigation` (Attributes List) The API's internal documentation navigation tree for the next-gen portal. Requires APIM 4.13 or later.
+`order` sets the display order of a path among its siblings.
 Intermediate folders are implicitly created if not listed explicitly. (see [below for nested schema](#nestedatt--portal_navigation))
 - `properties` (Attributes List) Properties usable using EL. (see [below for nested schema](#nestedatt--properties))
 - `resources` (Attributes List) Data resources usable in policy to access (mostly) external data (authentication, cache, registries...). (see [below for nested schema](#nestedatt--resources))

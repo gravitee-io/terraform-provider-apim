@@ -59,7 +59,7 @@ func (r *PortalThemeDataSource) Metadata(ctx context.Context, req datasource.Met
 // Schema defines the schema for the data source.
 func (r *PortalThemeDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "PortalTheme DataSource",
+		MarkdownDescription: "A next-gen portal theme. Applying a theme stores it without enabling it: a portal's `active_theme_hrid` enables it. APIM rejects deleting a theme that a portal still uses. Requires APIM 4.13 or later.",
 
 		Attributes: map[string]schema.Attribute{
 			"background_image": schema.StringAttribute{

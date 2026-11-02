@@ -3,12 +3,12 @@
 page_title: "apim_portal Resource - terraform-provider-apim"
 subcategory: ""
 description: |-
-  Portal Resource
+  A next-gen developer portal. Requires APIM 4.13 or later.
 ---
 
 # apim_portal (Resource)
 
-Portal Resource
+A next-gen developer portal. Requires APIM 4.13 or later.
 
 ## Example Usage
 
