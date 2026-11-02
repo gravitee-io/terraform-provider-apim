@@ -45,7 +45,7 @@ type DictionaryDataSourceModel struct {
 	EnvironmentID  types.String                   `tfsdk:"environment_id"`
 	Hrid           types.String                   `tfsdk:"hrid"`
 	ID             types.String                   `tfsdk:"id"`
-	Manual         *tfTypes.ManualDictionarySpec  `tfsdk:"manual"`
+	Manual         *tfTypes.ManualDictionarySpec1 `tfsdk:"manual"`
 	Name           types.String                   `tfsdk:"name"`
 	OrganizationID types.String                   `tfsdk:"organization_id"`
 	Type           types.String                   `tfsdk:"type"`
@@ -74,6 +74,16 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 			"dynamic": schema.SingleNestedAttribute{
 				Computed: true,
 				Attributes: map[string]schema.Attribute{
+					"encryption": schema.SingleNestedAttribute{
+						Computed: true,
+						Attributes: map[string]schema.Attribute{
+							"encrypt_on_fetch": schema.BoolAttribute{
+								Computed:    true,
+								Description: `Encrypt every fetched value instead of relying on per-key classification.`,
+							},
+						},
+						Description: `Encryption of the values the provider fetches. Omitting it keeps the current policy; set ` + "`" + `encrypt_on_fetch = false` + "`" + ` to stop encrypting. Requires APIM 4.13 or later.`,
+					},
 					"provider": schema.SingleNestedAttribute{
 						Computed: true,
 						Attributes: map[string]schema.Attribute{
@@ -151,7 +161,7 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 				Description: `A unique human readable id identifying this resource`,
 				Validators: []validator.String{
 					stringvalidator.UTF8LengthAtMost(256),
-					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$`).String()),
+					stringvalidator.RegexMatches(regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`), "must match pattern "+regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_.-]+[a-zA-Z0-9]$`).String()),
 				},
 			},
 			"id": schema.StringAttribute{
