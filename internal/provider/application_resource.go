@@ -502,8 +502,6 @@ func (r *ApplicationResource) Create(ctx context.Context, req resource.CreateReq
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateOrUpdateApplicationsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -601,8 +599,6 @@ func (r *ApplicationResource) Read(ctx context.Context, req resource.ReadRequest
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetApplicationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -664,8 +660,6 @@ func (r *ApplicationResource) Update(ctx context.Context, req resource.UpdateReq
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsCreateOrUpdateApplicationsRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -771,8 +765,6 @@ func (r *ApplicationResource) Delete(ctx context.Context, req resource.DeleteReq
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteApplicationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

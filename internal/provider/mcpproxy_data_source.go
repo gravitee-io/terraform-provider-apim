@@ -659,8 +659,6 @@ func (r *McpProxyDataSource) Read(ctx context.Context, req datasource.ReadReques
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetAimMcpProxyRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

@@ -242,8 +242,6 @@ func (r *GroupResource) Create(ctx context.Context, req resource.CreateRequest, 
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateOrUpdateGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -303,8 +301,6 @@ func (r *GroupResource) Read(ctx context.Context, req resource.ReadRequest, resp
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsGetGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -367,8 +363,6 @@ func (r *GroupResource) Update(ctx context.Context, req resource.UpdateRequest, 
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsCreateOrUpdateGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -437,8 +431,6 @@ func (r *GroupResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
