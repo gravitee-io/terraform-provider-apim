@@ -213,8 +213,6 @@ func (r *PortalThemeDataSource) Read(ctx context.Context, req datasource.ReadReq
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetPortalThemeRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

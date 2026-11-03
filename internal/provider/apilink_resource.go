@@ -195,8 +195,6 @@ func (r *APILinkResource) Create(ctx context.Context, req resource.CreateRequest
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	// BEGIN GRAVITEE API LINK REQUEST
 	request, requestDiags := data.toConfiguredAPILinkRequest(ctx, req.Config, req.Plan)
 	// END GRAVITEE API LINK REQUEST
@@ -259,8 +257,6 @@ func (r *APILinkResource) Read(ctx context.Context, req resource.ReadRequest, re
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetAPILinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -322,8 +318,6 @@ func (r *APILinkResource) Update(ctx context.Context, req resource.UpdateRequest
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	// BEGIN GRAVITEE API LINK REQUEST
 	request, requestDiags := data.toConfiguredAPILinkRequest(ctx, req.Config, req.Plan)
@@ -394,8 +388,6 @@ func (r *APILinkResource) Delete(ctx context.Context, req resource.DeleteRequest
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteAPILinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

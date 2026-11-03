@@ -88,6 +88,7 @@ func (s *Dictionaries) CreateOrUpdate(ctx context.Context, request operations.Cr
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "createOrUpdateDictionaries")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
@@ -341,6 +342,7 @@ func (s *Dictionaries) Get(ctx context.Context, request operations.GetDictionary
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "getDictionary")
 	req, err := http.NewRequestWithContext(ctx, "GET", opURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

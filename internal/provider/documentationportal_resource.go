@@ -200,8 +200,6 @@ func (r *DocumentationPortalResource) Create(ctx context.Context, req resource.C
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	// BEGIN GRAVITEE PORTAL DOCUMENTATION REQUEST
 	request, requestDiags := data.toConfiguredDocumentationPortalRequest(ctx, req.Config, req.Plan)
 	// END GRAVITEE PORTAL DOCUMENTATION REQUEST
@@ -301,8 +299,6 @@ func (r *DocumentationPortalResource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetPortalDocumentationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -364,8 +360,6 @@ func (r *DocumentationPortalResource) Update(ctx context.Context, req resource.U
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	// BEGIN GRAVITEE PORTAL DOCUMENTATION REQUEST
 	request, requestDiags := data.toConfiguredDocumentationPortalRequest(ctx, req.Config, req.Plan)
@@ -473,8 +467,6 @@ func (r *DocumentationPortalResource) Delete(ctx context.Context, req resource.D
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeletePortalDocumentationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

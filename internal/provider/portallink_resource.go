@@ -195,8 +195,6 @@ func (r *PortalLinkResource) Create(ctx context.Context, req resource.CreateRequ
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	// BEGIN GRAVITEE PORTAL LINK REQUEST
 	request, requestDiags := data.toConfiguredPortalLinkRequest(ctx, req.Config, req.Plan)
 	// END GRAVITEE PORTAL LINK REQUEST
@@ -259,8 +257,6 @@ func (r *PortalLinkResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetPortalLinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -322,8 +318,6 @@ func (r *PortalLinkResource) Update(ctx context.Context, req resource.UpdateRequ
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	// BEGIN GRAVITEE PORTAL LINK REQUEST
 	request, requestDiags := data.toConfiguredPortalLinkRequest(ctx, req.Config, req.Plan)
@@ -394,8 +388,6 @@ func (r *PortalLinkResource) Delete(ctx context.Context, req resource.DeleteRequ
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeletePortalLinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
