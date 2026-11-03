@@ -88,6 +88,7 @@ func (s *Subscriptions) Update(ctx context.Context, request operations.CreateOrU
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "createOrUpdateApiSubscriptions")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

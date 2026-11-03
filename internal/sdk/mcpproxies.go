@@ -112,6 +112,7 @@ func (s *MCPProxies) CreateOrUpdate(ctx context.Context, request operations.Crea
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "createOrUpdateAimMcpProxy")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
