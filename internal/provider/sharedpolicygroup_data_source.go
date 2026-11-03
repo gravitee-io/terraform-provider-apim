@@ -195,8 +195,6 @@ func (r *SharedPolicyGroupDataSource) Read(ctx context.Context, req datasource.R
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetPolicyGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

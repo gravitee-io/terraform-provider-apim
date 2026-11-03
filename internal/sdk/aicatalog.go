@@ -93,6 +93,7 @@ func (s *AICatalog) CreateOrUpdate(ctx context.Context, request operations.Creat
 		defer cancel()
 	}
 
+	ctx = utils.WithOperation(ctx, "createOrUpdateAimCatalogMcpServer")
 	req, err := http.NewRequestWithContext(ctx, "PUT", opURL, bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)

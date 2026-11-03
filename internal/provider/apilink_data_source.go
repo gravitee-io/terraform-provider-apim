@@ -165,8 +165,6 @@ func (r *APILinkDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetAPILinkRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

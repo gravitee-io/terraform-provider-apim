@@ -204,8 +204,6 @@ func (r *PortalListingResource) Create(ctx context.Context, req resource.CreateR
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateOrUpdatePortalListingRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -265,8 +263,6 @@ func (r *PortalListingResource) Read(ctx context.Context, req resource.ReadReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsGetPortalListingRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -329,8 +325,6 @@ func (r *PortalListingResource) Update(ctx context.Context, req resource.UpdateR
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsCreateOrUpdatePortalListingRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -399,8 +393,6 @@ func (r *PortalListingResource) Delete(ctx context.Context, req resource.DeleteR
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeletePortalListingRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

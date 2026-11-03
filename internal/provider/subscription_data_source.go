@@ -183,8 +183,6 @@ func (r *SubscriptionDataSource) Read(ctx context.Context, req datasource.ReadRe
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetAPISubscriptionRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
