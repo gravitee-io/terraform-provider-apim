@@ -167,8 +167,6 @@ func (r *DocumentationAPIDataSource) Read(ctx context.Context, req datasource.Re
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetAPIDocumentationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

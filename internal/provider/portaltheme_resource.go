@@ -244,8 +244,6 @@ func (r *PortalThemeResource) Create(ctx context.Context, req resource.CreateReq
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateOrUpdatePortalThemeRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -305,8 +303,6 @@ func (r *PortalThemeResource) Read(ctx context.Context, req resource.ReadRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsGetPortalThemeRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -369,8 +365,6 @@ func (r *PortalThemeResource) Update(ctx context.Context, req resource.UpdateReq
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsCreateOrUpdatePortalThemeRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -439,8 +433,6 @@ func (r *PortalThemeResource) Delete(ctx context.Context, req resource.DeleteReq
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeletePortalThemeRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

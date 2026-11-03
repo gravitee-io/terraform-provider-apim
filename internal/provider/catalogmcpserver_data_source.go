@@ -230,8 +230,6 @@ func (r *CatalogMcpServerDataSource) Read(ctx context.Context, req datasource.Re
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetAimCatalogMcpServerRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
