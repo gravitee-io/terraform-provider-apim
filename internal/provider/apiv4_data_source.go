@@ -1898,8 +1898,6 @@ func (r *Apiv4DataSource) Read(ctx context.Context, req datasource.ReadRequest, 
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetAPIRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

@@ -3306,8 +3306,6 @@ func (r *Apiv4Resource) Create(ctx context.Context, req resource.CreateRequest, 
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateOrUpdateApisRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -3405,8 +3403,6 @@ func (r *Apiv4Resource) Read(ctx context.Context, req resource.ReadRequest, resp
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetAPIRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -3468,8 +3464,6 @@ func (r *Apiv4Resource) Update(ctx context.Context, req resource.UpdateRequest, 
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsCreateOrUpdateApisRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -3575,8 +3569,6 @@ func (r *Apiv4Resource) Delete(ctx context.Context, req resource.DeleteRequest, 
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteAPIRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

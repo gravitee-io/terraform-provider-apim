@@ -200,8 +200,6 @@ func (r *DocumentationAPIResource) Create(ctx context.Context, req resource.Crea
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	// BEGIN GRAVITEE API DOCUMENTATION REQUEST
 	request, requestDiags := data.toConfiguredDocumentationAPIRequest(ctx, req.Config, req.Plan)
 	// END GRAVITEE API DOCUMENTATION REQUEST
@@ -301,8 +299,6 @@ func (r *DocumentationAPIResource) Read(ctx context.Context, req resource.ReadRe
 		return
 	}
 
-	ctx = withSensitiveValues(ctx, req.State)
-
 	request, requestDiags := data.ToOperationsGetAPIDocumentationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -364,8 +360,6 @@ func (r *DocumentationAPIResource) Update(ctx context.Context, req resource.Upda
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	// BEGIN GRAVITEE API DOCUMENTATION REQUEST
 	request, requestDiags := data.toConfiguredDocumentationAPIRequest(ctx, req.Config, req.Plan)
@@ -473,8 +467,6 @@ func (r *DocumentationAPIResource) Delete(ctx context.Context, req resource.Dele
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeleteAPIDocumentationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)

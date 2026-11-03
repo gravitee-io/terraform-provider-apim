@@ -170,8 +170,6 @@ func (r *PortalDataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetPortalRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

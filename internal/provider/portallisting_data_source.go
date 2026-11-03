@@ -162,8 +162,6 @@ func (r *PortalListingDataSource) Read(ctx context.Context, req datasource.ReadR
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetPortalListingRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

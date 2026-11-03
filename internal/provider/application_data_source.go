@@ -313,8 +313,6 @@ func (r *ApplicationDataSource) Read(ctx context.Context, req datasource.ReadReq
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config)
-
 	request, requestDiags := data.ToOperationsGetApplicationRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 

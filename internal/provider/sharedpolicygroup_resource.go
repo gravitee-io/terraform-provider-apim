@@ -259,8 +259,6 @@ func (r *SharedPolicyGroupResource) Create(ctx context.Context, req resource.Cre
 		data.OrganizationID = r.OrganizationID
 	}
 
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
-
 	request, requestDiags := data.ToOperationsCreateOrUpdatePolicyGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
 
@@ -320,8 +318,6 @@ func (r *SharedPolicyGroupResource) Read(ctx context.Context, req resource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsGetPolicyGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -384,8 +380,6 @@ func (r *SharedPolicyGroupResource) Update(ctx context.Context, req resource.Upd
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
 	request, requestDiags := data.ToOperationsCreateOrUpdatePolicyGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
@@ -454,8 +448,6 @@ func (r *SharedPolicyGroupResource) Delete(ctx context.Context, req resource.Del
 	if (data.OrganizationID.IsNull() || data.OrganizationID.IsUnknown()) && !r.OrganizationID.IsUnknown() {
 		data.OrganizationID = r.OrganizationID
 	}
-
-	ctx = withSensitiveValues(ctx, req.State)
 
 	request, requestDiags := data.ToOperationsDeletePolicyGroupRequest(ctx)
 	resp.Diagnostics.Append(requestDiags...)
