@@ -70,7 +70,10 @@ export async function waitForPipeline(id, { timeout = 15 * 60_000, interval = 10
     if (pipeline.state === "errored") {
       throw new Error(`Pipeline errored: ${JSON.stringify(pipeline.errors)}`);
     }
-    const { items: workflows } = await get(`${API_BASE}/pipeline/${id}/workflow`);
+    // CircleCI answers 404 until it has set up the pipeline's workflows.
+    const { items: workflows } = await get(`${API_BASE}/pipeline/${id}/workflow`, {
+      notFound: { items: [] },
+    });
     const settled =
       workflows.length > 0 &&
       workflows.every((w) => !PENDING_WORKFLOW_STATUSES.includes(w.status));
@@ -82,10 +85,13 @@ export async function waitForPipeline(id, { timeout = 15 * 60_000, interval = 10
   throw new Error(`Pipeline ${id} still running after ${timeout / 1000}s`);
 }
 
-async function get(url) {
+async function get(url, { notFound } = {}) {
   const response = await fetch(url, {
     headers: { "Circle-Token": CIRCLECI_TOKEN, Accept: "application/json" },
   });
+  if (response.status === 404 && notFound !== undefined) {
+    return notFound;
+  }
   if (!response.ok) {
     throw new Error(`GET ${url} answered HTTP ${response.status}`);
   }
