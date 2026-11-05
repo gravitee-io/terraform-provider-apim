@@ -7,7 +7,7 @@ terraform {
 }
 
 provider "apim" {
-  # Can be set/overriden with APIM_SERVER_URL environment variable
+  # Can be set/overridden with APIM_SERVER_URL environment variable
   # Automatically set with when cloud_auth is set
   #server_url = "http://localhost:8083/automation"
 
