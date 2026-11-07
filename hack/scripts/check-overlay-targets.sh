@@ -4,7 +4,7 @@ set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 work=$(mktemp -d); trap 'rm -rf "$work"' EXIT
 overlays=$(yq -e '.sources.automation-api.overlays[].location' .speakeasy/workflow.yaml)
-speakeasy merge -s automation-api-oas.yaml -s automation-api-aim-oas.yaml -o "$work/0.yaml" >/dev/null
+speakeasy merge -s automation-api-oas.yaml -s automation-api-aim-oas.yaml -s automation-api-authz-oas.yaml -o "$work/0.yaml" >/dev/null
 i=0
 for overlay in $overlays; do
   case "$overlay" in

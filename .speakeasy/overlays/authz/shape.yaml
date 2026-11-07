@@ -1,0 +1,161 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: AuthZ shape overlay
+  version: 0.0.1
+actions:
+
+  # Applied before the common overlays: it gives the AuthZ fragment the shape the
+  # rest of the document has, so the common overlays apply to it. One block per
+  # kind, so a kind can leave the source with its resource.
+  #
+  # Parameters: the fragment declares its own Authz*Param components. The shared
+  # ones carry the provider-level organization and environment, force-new on hrid
+  # and the ignored dryRun (common/oas.yaml, common/param.yaml). An update appends
+  # to a list, so each list is removed before it is declared again. A delete loses
+  # dryRun: Terraform never previews a delete.
+  #
+  # Refusals: a refused apply answers 400 with the state and its findings. Left to
+  # the default response, the body is reported as it is, findings included.
+
+  ## Schemas
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/schemas"].parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/schemas"].put.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/schemas"].put
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/dryRunQueryParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/schemas"].put.responses["400"]
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/schemas/{hrid}"].parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/schemas/{hrid}"]
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/schemas/{hrid}"].get
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/schemas/{hrid}"].delete
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+
+  ## PDP gateways
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/pdps"].parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/pdps"].put.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/pdps"].put
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/dryRunQueryParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/pdps"].put.responses["400"]
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/pdps/{hrid}"].parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/pdps/{hrid}"]
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/pdps/{hrid}"].get
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/pdps/{hrid}"].delete.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/pdps/{hrid}"].delete
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+
+  ## Entities
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/entities"].parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/entities"].put.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/entities"].put
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/dryRunQueryParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/entities"].put.responses["400"]
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/entities/{hrid}"].parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/entities/{hrid}"]
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/entities/{hrid}"].get
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/entities/{hrid}"].delete.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/entities/{hrid}"].delete
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+
+  ## Policies
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/policies"].parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/policies"].put.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/policies"].put
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/dryRunQueryParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/policies"].put.responses["400"]
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/policies/{hrid}"].parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/policies/{hrid}"]
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/policies/{hrid}"].get
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/policies/{hrid}"].delete.parameters
+    remove: true
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/policies/{hrid}"].delete
+    update:
+      parameters:
+        - $ref: '#/components/parameters/orgIdParam'
+        - $ref: '#/components/parameters/envIdParam'
+        - $ref: '#/components/parameters/hridParam'
