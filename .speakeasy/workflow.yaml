@@ -32,6 +32,7 @@ sources:
             - location: .speakeasy/overlays/aim/mcp-proxy.yaml
             - location: .speakeasy/overlays/authz/common.yaml
             - location: .speakeasy/overlays/authz/pdp.yaml
+            - location: .speakeasy/overlays/authz/schema.yaml
             - location: .speakeasy/speakeasy-modifications-overlay.yaml
         output: .speakeasy/output/computed.yaml
         registry:

@@ -46,4 +46,7 @@ examples/resources/apim_mcp_proxy/import.sh
 examples/resources/apim_authz_pdp/resource.tf
 examples/resources/apim_authz_pdp/import-by-string-id.tf
 examples/resources/apim_authz_pdp/import.sh
+examples/resources/apim_authz_schema/resource.tf
+examples/resources/apim_authz_schema/import-by-string-id.tf
+examples/resources/apim_authz_schema/import.sh
 CONTRIBUTING.md
