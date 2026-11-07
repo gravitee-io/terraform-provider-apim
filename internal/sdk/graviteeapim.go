@@ -93,6 +93,14 @@ type GraviteeApim struct {
 	AICatalog *AICatalog
 	// MCP proxies exposing an upstream MCP server through the gateway.
 	MCPProxies *MCPProxies
+	// GAPL schema documents, each enforced by the PDP gateway its target names.
+	AuthorizationSchemas *AuthorizationSchemas
+	// PDP gateways, each the engine of a targetPdpId on the gateways of a sharding tag, with their AuthZEN endpoint.
+	AuthorizationPDPGateways *AuthorizationPDPGateways
+	// The principals and resources that policies reference, with their parents, attributes and PDP gateway targets.
+	AuthorizationEntities *AuthorizationEntities
+	// GAPL policies, deployed on every apply to the PDP gateways their targets name.
+	AuthorizationPolicies *AuthorizationPolicies
 
 	sdkConfiguration config.SDKConfiguration
 	hooks            *hooks.Hooks
@@ -224,6 +232,10 @@ func New(opts ...SDKOption) *GraviteeApim {
 	sdk.APILinks = newAPILinks(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.AICatalog = newAICatalog(sdk, sdk.sdkConfiguration, sdk.hooks)
 	sdk.MCPProxies = newMCPProxies(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.AuthorizationSchemas = newAuthorizationSchemas(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.AuthorizationPDPGateways = newAuthorizationPDPGateways(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.AuthorizationEntities = newAuthorizationEntities(sdk, sdk.sdkConfiguration, sdk.hooks)
+	sdk.AuthorizationPolicies = newAuthorizationPolicies(sdk, sdk.sdkConfiguration, sdk.hooks)
 
 	return sdk
 }
