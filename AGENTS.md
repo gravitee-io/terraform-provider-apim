@@ -18,7 +18,8 @@ make speakeasy
 # Generate guide markdown only (graviteeio/doc-gen Docker image)
 make doc-gen
 
-# Lint (OAS + overlay targets + Terraform fmt + commitlint + cloud-init marker check)
+# Lint (OAS + overlay targets + Terraform fmt + commitlint + cloud-init marker check);
+# the AuthZ fragment fails on any lint error or warning (hack/scripts/lint-oas.sh)
 make lint
 make lint-overlays     # fail on an overlay action whose target matches nothing (speakeasy + yq)
 make lint-fix          # fix Terraform formatting
@@ -29,6 +30,10 @@ make sync-oas
 # Sync the AI Management fragment from gravitee-gamma-module-aim at AIM_OAS_REF
 # (private repository: needs an authenticated gh)
 make sync-aim-oas
+
+# Sync the AuthZ fragment from gravitee-gamma-module-authz at AUTHZ_OAS_REF
+# (private repository: needs an authenticated gh)
+make sync-authz-oas
 
 # Unit tests (no APIM required)
 make unit-tests
@@ -58,7 +63,7 @@ make stop-cluster
 
 | Output | Tool | Source |
 |--------|------|--------|
-| `internal/sdk/`, most of `internal/provider/`, `internal/planmodifiers/`, `internal/validators/`, `main.go` | Speakeasy | `automation-api-oas.yaml` + `automation-api-aim-oas.yaml` + `.speakeasy/overlays/` |
+| `internal/sdk/`, most of `internal/provider/`, `internal/planmodifiers/`, `internal/validators/`, `main.go` | Speakeasy | `automation-api-oas.yaml` + `automation-api-aim-oas.yaml` + `automation-api-authz-oas.yaml` + `.speakeasy/overlays/` |
 | `docs/index.md`, `docs/resources/*.md` | tfplugindocs (`go generate` in `main.go`, run as part of `make speakeasy`) | Provider schema + `examples/` + `templates/` |
 | `templates/guides/docgen_*.md` | doc-gen (`make doc-gen`) | `.docgen/config/default.yaml` + `.docgen/config/tmpl/*.md.tmpl` + `examples/use-cases/` chunks |
 
@@ -72,6 +77,7 @@ Files listed in `.genignore` are **not** overwritten by Speakeasy even though si
 |------|---------|
 | `automation-api-oas.yaml` | Base OpenAPI spec (synced via `make sync-oas`) |
 | `automation-api-aim-oas.yaml` | AI Management fragment: MCP catalog servers and MCP proxies (synced via `make sync-aim-oas`, tag in `AIM_OAS_REF`) |
+| `automation-api-authz-oas.yaml` | AuthZ fragment: PDP gateways, schemas, entities and policies (synced via `make sync-authz-oas`, ref in `AUTHZ_OAS_REF`) |
 | `.speakeasy/overlays/**`, `.speakeasy/workflow.yaml`, `.speakeasy/speakeasy-modifications-overlay.yaml` | Schema and generation customizations |
 | `.genignore` | Files Speakeasy must preserve |
 | `.docgen/config/default.yaml`, `.docgen/config/tmpl/*.md.tmpl` | Guide prose and chunk wiring |
@@ -82,8 +88,8 @@ Files listed in `.genignore` are **not** overwritten by Speakeasy even though si
 | `internal/provider/api_link_request.go`, `internal/provider/documentation_api_request.go`, `internal/provider/documentation_portal_request.go`, `internal/provider/portal_link_request.go` | Hand-written request builders used by generated resource hooks |
 | `internal/provider/gravitee_cloud.go` | Gravitee Cloud auth / server URL resolution |
 | `internal/provider/customtypes/**` | `TrimmedString`, `RFC3339` custom Terraform types (referenced from overlays) |
-| `internal/planmodifiers/stringplanmodifier/immutable.go`, `normalize_path.go`, `trim_trailing_slash.go`, `ignore_undeclared_fields.go` | Custom plan modifiers |
-| `internal/planmodifiers/listplanmodifier/ignore_empty_list.go`, `no_removal_by_name.go` | Custom plan modifiers |
+| `internal/planmodifiers/stringplanmodifier/immutable.go`, `normalize_path.go`, `trim_trailing_slash.go`, `ignore_undeclared_fields.go`, `empty_object_when_omitted.go`, `deployed_on_apply.go` | Custom plan modifiers |
+| `internal/planmodifiers/listplanmodifier/ignore_empty_list.go`, `no_removal_by_name.go`, `keep_state_order.go` | Custom plan modifiers |
 | `internal/planmodifiers/mapplanmodifier/response_template.go` | Custom plan modifier |
 | `internal/validators/listvalidators/sorted_by*.go` | Custom validators: lists the platform reports in its own order |
 | `internal/listkeys/` | Reads the identifying attributes of a list's elements, for the validators and modifiers above |
@@ -99,7 +105,7 @@ Most files under `internal/planmodifiers/` and `internal/validators/` are Speake
 ### Code generation flow
 
 ```
-automation-api-oas.yaml + automation-api-aim-oas.yaml + .speakeasy/overlays/
+automation-api-oas.yaml + automation-api-aim-oas.yaml + automation-api-authz-oas.yaml + .speakeasy/overlays/
         │
         ├─► Speakeasy ──► internal/sdk/, internal/provider/, main.go
         │                      │
@@ -116,8 +122,8 @@ Config: `.speakeasy/gen.yaml`, `.speakeasy/gen.lock`, `.speakeasy/workflow.yaml`
 
 ### Provider structure (`internal/provider/`)
 
-- **Resources** (15): `apim_apiv4`, `apim_api_link`, `apim_application`, `apim_catalog_mcp_server`, `apim_dictionary`, `apim_documentation_api`, `apim_documentation_portal`, `apim_group`, `apim_mcp_proxy`, `apim_portal`, `apim_portal_link`, `apim_portal_listing`, `apim_portal_theme`, `apim_shared_policy_group`, `apim_subscription`
-- **Data sources** (15): mirror the resources above for read-only access
+- **Resources** (19): `apim_apiv4`, `apim_api_link`, `apim_application`, `apim_authz_entity`, `apim_authz_pdp`, `apim_authz_policy`, `apim_authz_schema`, `apim_catalog_mcp_server`, `apim_dictionary`, `apim_documentation_api`, `apim_documentation_portal`, `apim_group`, `apim_mcp_proxy`, `apim_portal`, `apim_portal_link`, `apim_portal_listing`, `apim_portal_theme`, `apim_shared_policy_group`, `apim_subscription`
+- **Data sources** (19): mirror the resources above for read-only access
 - Each resource has `*_resource.go` (CRUD) and `*_resource_sdk.go` (type mapping); data sources follow the same pattern
 - `provider.go` — provider config, auth, schema (generated, with `// BEGIN GRAVITEE CLOUD INIT` hook)
 - `reflect/` and `typeconvert/` — Terraform ↔ SDK type conversion (generated)
@@ -125,7 +131,7 @@ Config: `.speakeasy/gen.yaml`, `.speakeasy/gen.lock`, `.speakeasy/workflow.yaml`
 
 ### SDK (`internal/sdk/`)
 
-Generated Go HTTP client. Entry point: `graviteeapim.go`. API groups: `apis.go`, `apilinks.go`, `applications.go`, `dictionaries.go`, `apidocumentations.go`, `portaldocumentations.go`, `groups.go`, `portals.go`, `portallinks.go`, `portallistings.go`, `themes.go`, `sharedpolicygroups.go`, `subscriptions.go`, `aicatalog.go`, `mcpproxies.go`. Models in `models/operations/` and `models/shared/`.
+Generated Go HTTP client. Entry point: `graviteeapim.go`. API groups: `apis.go`, `apilinks.go`, `applications.go`, `dictionaries.go`, `apidocumentations.go`, `portaldocumentations.go`, `groups.go`, `portals.go`, `portallinks.go`, `portallistings.go`, `themes.go`, `sharedpolicygroups.go`, `subscriptions.go`, `aicatalog.go`, `mcpproxies.go`, `authorizationschemas.go`, `authorizationpdpgateways.go`, `authorizationentities.go`, `authorizationpolicies.go`. Models in `models/operations/` and `models/shared/`.
 
 ### Tests (`tests/`)
 
@@ -154,7 +160,9 @@ Provider supports three auth methods:
 
 To change schema behavior (plan modifiers, computed fields, validators, defaults, suppress diffs, etc.), update `.speakeasy/overlays/` and regenerate with `make speakeasy`. Never edit generated files directly.
 
-The source has two inputs (`.speakeasy/workflow.yaml`). The AI Management fragment comes from a Gamma module, with its own `Aim*` components and its unions written as a discriminator on a base schema. `.speakeasy/overlays/aim/*-shape.yaml` run before the common overlays and give it the shape of the base document: the shared parameter components, and a `oneOf` per union. `.speakeasy/overlays/aim/<resource>.yaml` then carry the behaviour, as the other resource overlays do.
+The source has three inputs (`.speakeasy/workflow.yaml`). The AI Management fragment comes from a Gamma module, with its own `Aim*` components and its unions written as a discriminator on a base schema. `.speakeasy/overlays/aim/*-shape.yaml` run before the common overlays and give it the shape of the base document: the shared parameter components, and a `oneOf` per union. `.speakeasy/overlays/aim/<resource>.yaml` then carry the behaviour, as the other resource overlays do. The AuthZ fragment comes from another Gamma module, with its own `Authz*` components and no union: `.speakeasy/overlays/authz/shape.yaml` gives its operations the shared parameter components, and `.speakeasy/overlays/authz/<kind>.yaml` carry the behaviour.
+
+An extension written beside a `$ref` is ignored: set it on the component. A property that is a `$ref` is computed unless its component sets `x-speakeasy-param-computed: false`, and an optional computed attribute removed from the configuration keeps the state's value.
 
 Two things in the AI Management overlays are there because of the generator, and are explained where they are declared:
 
@@ -162,6 +170,8 @@ Two things in the AI Management overlays are there because of the generator, and
 - The authentication blocks (`server_connection.auth`, `proxy.upstream_auth`, `studio.upstream_auth`) are write-only as a whole. The code Speakeasy generates to keep a write-only attribute nested deeper than that dereferences a nil prior state, on import and on every read of a studio.
 
 An overlay target cannot use `value`, `count`, `length`, `match` or `search` as a name inside a filter (`[?@.properties.value]`): they are JSONPath function names and the overlay fails to parse.
+
+Persistent edits keep each generation as `refs/speakeasy/gen/<generation_id>`, and `gen.lock` names the last one. CI regenerates from a fresh clone, so that ref has to be on `origin`: Speakeasy pushes it from a regular clone. In a git worktree it writes the ref and its objects to the worktree's own git dir, where git cannot read them, pushes nothing, and the next run fails to fetch the snapshot: copy them to the common git dir, and push the ref with the branch.
 
 An overlay action whose target matches nothing is ignored without an error: `make lint-overlays` fails on it. It cannot catch a misspelled extension name: after a generation, grep `.speakeasy/output/computed.yaml` and the generated resource for each annotation you added.
 
@@ -195,5 +205,5 @@ Do not hand-edit `templates/guides/docgen_*.md` or `docs/` — they are generate
 - Import IDs are JSON-encoded composite keys (see acceptance test files for format)
 - APIM compatibility: 4.9+
 - CircleCI runs the acceptance and example tests on every push, across a matrix of Terraform versions (1.9.x, latest) × APIM versions (4.10.x, 4.11.x, 4.12.x, 4.13.x, master-latest). They need Docker, and the ACR credentials and APIM license come from Keeper. A CircleCI scheduled trigger on `main` (`trigger=acceptance`, `notify=true`) runs them nightly and posts to Slack. Unit tests and the base OAS check stay on GitHub Actions
-- CI re-fetches both OpenAPI inputs and fails on a diff: the base document against APIM `master`, the AI Management fragment against the tag in `AIM_OAS_REF` (`make verify-aim-oas`, run in CircleCI by `hack/scripts/verify-aim-oas.mjs`: the repository is private and CircleCI holds the GitHub token, in Keeper). Neither file is edited by hand; a PR does not sync the base document unless it implements what the sync brings
+- CI re-fetches the three OpenAPI inputs and fails on a diff: the base document against APIM `master`, the AI Management fragment against the tag in `AIM_OAS_REF` (`make verify-aim-oas`, run in CircleCI by `hack/scripts/verify-aim-oas.mjs`: the repository is private and CircleCI holds the GitHub token, in Keeper), the AuthZ fragment against `AUTHZ_OAS_REF` the same way (`make verify-authz-oas`, `hack/scripts/verify-authz-oas.mjs`). No input is edited by hand; a PR does not sync the base document unless it implements what the sync brings
 - Issues tracked at github.com/gravitee-io/issues with tag `project: GKO`
