@@ -19,6 +19,21 @@ jobs:
         run: |
           npm ci
           npx zx verify-aim-oas.mjs --branch "${{ github.head_ref }}"
+  verify-authz-oas:
+    name: Verify AuthZ OAS matches upstream
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Run the check in CircleCI, where the token that reads the authz repository lives
+        working-directory: hack/scripts
+        env:
+          CIRCLECI_TOKEN: ${{ secrets.CIRCLECI_TOKEN }}
+        run: |
+          npm ci
+          npx zx verify-authz-oas.mjs --branch "${{ github.head_ref }}"
   lint:
     permissions:
       contents: read
