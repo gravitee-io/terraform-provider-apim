@@ -266,3 +266,63 @@ actions:
       x-speakeasy-name-override: delete
     x-speakeasy-metadata:
       type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/authz/schemas"]["put"]
+    update:
+      x-speakeasy-name-override: createOrUpdate
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/authz/schemas/{hrid}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/authz/schemas/{hrid}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/authz/pdps"]["put"]
+    update:
+      x-speakeasy-name-override: createOrUpdate
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/authz/pdps/{hrid}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/authz/pdps/{hrid}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/authz/entities"]["put"]
+    update:
+      x-speakeasy-name-override: createOrUpdate
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/authz/entities/{hrid}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/authz/entities/{hrid}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/authz/policies"]["put"]
+    update:
+      x-speakeasy-name-override: createOrUpdate
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/authz/policies/{hrid}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      type: method-name
+  - target: $["paths"]["/organizations/{orgId}/environments/{envId}/authz/policies/{hrid}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      type: method-name

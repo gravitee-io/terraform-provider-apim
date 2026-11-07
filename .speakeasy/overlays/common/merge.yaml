@@ -5,8 +5,8 @@ info:
   version: 0.0.1
 actions:
 
-  # The source has two inputs: the Automation API document and the AI Management
-  # fragment, which declares no security. When inputs differ, the merge may move
+  # The source has three inputs: the Automation API document, and the AI Management
+  # and AuthZ fragments, which declare no security. When inputs differ, the merge may move
   # the root security onto each operation of the document that carried it and
   # leave the others without any. Put it back at the root, for every operation.
   - target: $.paths.*.*.security

@@ -7,6 +7,9 @@ APIM_OAS_BRANCH=4.13.x
 # Tag of gravitee-gamma-module-aim the AI Management fragment is taken from. Bumped by hand:
 # APIM master may pin an older aim than the one this provider is generated against.
 AIM_OAS_REF ?= 5.0.0-alpha.39
+# Ref of gravitee-gamma-module-authz the AuthZ fragment is taken from. Bumped by hand, as
+# AIM_OAS_REF. The head of gravitee-gamma-module-authz#336 (policies) until a release carries it.
+AUTHZ_OAS_REF ?= b42ba38ec7273461a30fb43ff88c960f8bda8974
 
 .PHONY: speakeasy
 speakeasy: ## Run speakeasy generation with curated examples and docs
@@ -24,6 +27,7 @@ lint: lint-commits lint-overlays ## Run speakeasy lint accepting no error or war
 	@echo "Checking OAS"
 	@speakeasy lint openapi --schema automation-api-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
 	@speakeasy lint openapi --schema automation-api-aim-oas.yaml --max-validation-errors 0 --max-validation-warnings 0 --non-interactive
+	@hack/scripts/lint-oas.sh automation-api-authz-oas.yaml
 	@echo "Checking Terraform fmt"
 	@terraform fmt -recursive -check || (echo "Error: Above terraform files are not properly formatted. Please run 'terraform fmt -recursive' to fix formatting issues" && exit 1)
 
@@ -61,6 +65,14 @@ sync-aim-oas: ## Copy the AI Management OAS fragment from gravitee-gamma-module-
 .PHONY: verify-aim-oas
 verify-aim-oas: sync-aim-oas ## Fail when the AI Management OAS fragment differs from gravitee-gamma-module-aim at AIM_OAS_REF (runs in CircleCI)
 	@git diff --exit-code -- automation-api-aim-oas.yaml || (echo "automation-api-aim-oas.yaml differs from gravitee-gamma-module-aim at ${AIM_OAS_REF}" && exit 1)
+
+.PHONY: sync-authz-oas
+sync-authz-oas: ## Copy the AuthZ OAS fragment from gravitee-gamma-module-authz (private: needs an authenticated gh)
+	gh api -H "Accept: application/vnd.github.raw" "repos/gravitee-io/gravitee-gamma-module-authz/contents/src/main/resources/openapi/openapi-automation.yaml?ref=${AUTHZ_OAS_REF}" > automation-api-authz-oas.yaml
+
+.PHONY: verify-authz-oas
+verify-authz-oas: sync-authz-oas ## Fail when the AuthZ OAS fragment differs from gravitee-gamma-module-authz at AUTHZ_OAS_REF (runs in CircleCI)
+	@git diff --exit-code -- automation-api-authz-oas.yaml || (echo "automation-api-authz-oas.yaml differs from gravitee-gamma-module-authz at ${AUTHZ_OAS_REF}" && exit 1)
 
 PRE_TEST_DIR = "$(shell pwd)/examples/use-cases/application-simple"
 

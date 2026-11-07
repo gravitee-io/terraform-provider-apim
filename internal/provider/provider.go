@@ -110,6 +110,7 @@ func (p *ApimProvider) Schema(ctx context.Context, req provider.SchemaRequest, r
 			`* Next-gen portals (APIM 4.13 or later): portals, portal listings, portal and API documentation, portal and API links, portal themes` + "\n" +
 			`* MCP Catalog Servers` + "\n" +
 			`* MCP Proxies` + "\n" +
+			`* Authorization (APIM 4.14 or later): PDP gateways, schemas, entities and policies` + "\n" +
 			`` + "\n" +
 			`[Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)` + "\n" +
 			`` + "\n" +
@@ -252,6 +253,10 @@ func (p *ApimProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewApiv4Resource,
 		NewAPILinkResource,
 		NewApplicationResource,
+		NewAuthzEntityResource,
+		NewAuthzPdpResource,
+		NewAuthzPolicyResource,
+		NewAuthzSchemaResource,
 		NewCatalogMcpServerResource,
 		NewDictionaryResource,
 		NewDocumentationAPIResource,
@@ -272,6 +277,10 @@ func (p *ApimProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewApiv4DataSource,
 		NewAPILinkDataSource,
 		NewApplicationDataSource,
+		NewAuthzEntityDataSource,
+		NewAuthzPdpDataSource,
+		NewAuthzPolicyDataSource,
+		NewAuthzSchemaDataSource,
 		NewCatalogMcpServerDataSource,
 		NewDictionaryDataSource,
 		NewDocumentationAPIDataSource,

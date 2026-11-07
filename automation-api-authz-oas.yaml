@@ -1,0 +1,947 @@
+openapi: 3.1.0
+info:
+    title: Gravitee.io - Automation API - Authorization
+    description: The Authorization Management resources of the APIM automation API.
+    contact:
+        name: Authorization Management team
+        url: https://www.gravitee.io/
+    license:
+        name: Apache 2.0
+        url: https://www.apache.org/licenses/LICENSE-2.0.html
+    version: 1.0.0
+servers:
+    - url: 'https://eu.cloudgate.gravitee.io/apim/automation'
+tags:
+    - name: Authorization Schemas
+      description: GAPL schema documents, each enforced by the PDP gateway its target names.
+    - name: Authorization PDP Gateways
+      description: PDP gateways, each the engine of a targetPdpId on the gateways of a sharding tag, with their AuthZEN endpoint.
+    - name: Authorization Entities
+      description: The principals and resources that policies reference, with their parents, attributes and PDP gateway targets.
+    - name: Authorization Policies
+      description: GAPL policies, deployed on every apply to the PDP gateways their targets name.
+paths:
+    /organizations/{orgId}/environments/{envId}/authz/schemas:
+        parameters:
+            - $ref: '#/components/parameters/AuthzOrgIdParam'
+            - $ref: '#/components/parameters/AuthzEnvIdParam'
+        put:
+            operationId: createOrUpdateAuthzSchema
+            tags:
+                - Authorization Schemas
+            summary: Create or update an authorization schema from its spec
+            description: |
+                Create or update a GAPL schema document, identified by the `hrid` carried in the body. Re-applying an
+                unchanged spec is a no-op. The document is replaced whole and published to the PDP gateway its `target`
+                names; a document without a target is stored and published nowhere. Findings that prevent the apply — a
+                document that does not parse, a target no PDP gateway answers to, a gateway that already holds another
+                document, a declaration that conflicts with a document composed on the same PDP — are reported in
+                `errors.severe` with a `400`, and nothing is persisted. A dry run performs the same checks.
+            parameters:
+                - $ref: '#/components/parameters/AuthzDryRunQueryParam'
+            requestBody:
+                description: Authorization schema specification
+                content:
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/AuthzSchemaSpec'
+                required: true
+            responses:
+                '200':
+                    description: State of the created or updated schema, or the dry-run preview
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzSchemaState'
+                '400':
+                    description: |
+                        The spec was rejected: the body is the preview of the declaration, with the findings in
+                        `errors.severe`. A request the host rejects before the module sees it, a missing `hrid` for
+                        instance, answers the platform error shape instead.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzSchemaState'
+                '401':
+                    $ref: '#/components/responses/AuthzUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AuthzUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AuthzNotFound'
+                default:
+                    $ref: '#/components/responses/AuthzError'
+    /organizations/{orgId}/environments/{envId}/authz/schemas/{hrid}:
+        parameters:
+            - $ref: '#/components/parameters/AuthzOrgIdParam'
+            - $ref: '#/components/parameters/AuthzEnvIdParam'
+            - $ref: '#/components/parameters/AuthzHridParam'
+        get:
+            operationId: getAuthzSchema
+            tags:
+                - Authorization Schemas
+            summary: Get one authorization schema
+            description: Get an authorization schema using its HRID.
+            responses:
+                '200':
+                    description: Authorization schema successfully retrieved
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzSchemaState'
+                '401':
+                    $ref: '#/components/responses/AuthzUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AuthzUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AuthzNotFound'
+                default:
+                    $ref: '#/components/responses/AuthzError'
+        delete:
+            operationId: deleteAuthzSchema
+            tags:
+                - Authorization Schemas
+            summary: Delete one authorization schema
+            description: Withdraw an authorization schema from the PDP gateway it targets and delete it, using its HRID.
+            responses:
+                '204':
+                    description: Authorization schema successfully deleted
+                '401':
+                    $ref: '#/components/responses/AuthzUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AuthzUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AuthzNotFound'
+                default:
+                    $ref: '#/components/responses/AuthzError'
+    /organizations/{orgId}/environments/{envId}/authz/pdps:
+        parameters:
+            - $ref: '#/components/parameters/AuthzOrgIdParam'
+            - $ref: '#/components/parameters/AuthzEnvIdParam'
+        put:
+            operationId: createOrUpdateAuthzPdp
+            tags:
+                - Authorization PDP Gateways
+            summary: Create or update a PDP gateway from its spec
+            description: |
+                Create or update a PDP gateway, identified by the `hrid` carried in the body. Re-applying an unchanged spec
+                is a no-op. `targetPdpId` and `tag` are fixed at creation; a renamed PDP is republished; a `strict` change
+                applies to every PDP of the targetPdpId; the endpoint is created, replaced or deleted to match `endpoint`.
+                Findings that prevent the apply — a changed `targetPdpId` or `tag`, a routing scope another PDP holds, a
+                `strict` that disagrees with the registered PDPs of the targetPdpId on create, an endpoint path another API
+                uses — are reported in `errors.severe` with a `400`, and nothing is persisted. A dry run performs the same
+                checks. Changing the strict value of the engine, by declaring `strict: true` on the first PDP of a
+                targetPdpId or another value on an existing PDP, also needs the `ENVIRONMENT_AUTHZ_PDP` `UPDATE` and `READ`
+                permissions; a new PDP that agrees with its engine does not.
+            parameters:
+                - $ref: '#/components/parameters/AuthzDryRunQueryParam'
+            requestBody:
+                description: PDP gateway specification
+                content:
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/AuthzPdpSpec'
+                required: true
+            responses:
+                '200':
+                    description: State of the created or updated PDP gateway, or the dry-run preview
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzPdpState'
+                '400':
+                    description: |
+                        The spec was rejected: the body is the preview of the declaration, with the findings in
+                        `errors.severe`. A request the host rejects before the module sees it, a missing `hrid` for
+                        instance, answers the platform error shape instead.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzPdpState'
+                '401':
+                    $ref: '#/components/responses/AuthzUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AuthzUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AuthzNotFound'
+                default:
+                    $ref: '#/components/responses/AuthzError'
+    /organizations/{orgId}/environments/{envId}/authz/pdps/{hrid}:
+        parameters:
+            - $ref: '#/components/parameters/AuthzOrgIdParam'
+            - $ref: '#/components/parameters/AuthzEnvIdParam'
+            - $ref: '#/components/parameters/AuthzHridParam'
+        get:
+            operationId: getAuthzPdp
+            tags:
+                - Authorization PDP Gateways
+            summary: Get one PDP gateway
+            description: Get a PDP gateway, with its endpoint, using its HRID.
+            responses:
+                '200':
+                    description: PDP gateway successfully retrieved
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzPdpState'
+                '401':
+                    $ref: '#/components/responses/AuthzUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AuthzUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AuthzNotFound'
+                default:
+                    $ref: '#/components/responses/AuthzError'
+        delete:
+            operationId: deleteAuthzPdp
+            tags:
+                - Authorization PDP Gateways
+            summary: Delete one PDP gateway
+            description: |
+                Delete a PDP gateway and its endpoint, using its HRID. The policies, entities and schemas that targeted
+                its routing scope stop targeting it; a declared one that still names it is refused on its next apply.
+                A delete that would leave a policy or an entity with no target, which moves it to the default engine on
+                every gateway, is refused with a `409`, and nothing is deleted. Deleting the untagged `default` PDP
+                gateway is never refused, and narrows no schema.
+
+                With `dryRun=true` nothing is deleted, and the answer is the PDP gateway's state with one
+                `errors.warning` per endpoint the delete would remove, then one per policy, entity and schema whose
+                `targets` would lose the routing scope, naming its id, and an entity's `source`. It names at most 20
+                policies, entities and schemas, then counts the rest in one more warning. A kind the caller cannot read
+                (`ENVIRONMENT_AUTHZ_POLICIES`, `ENVIRONMENT_AUTHZ_ENTITIES`, `ENVIRONMENT_AUTHZ_SCHEMA`) is counted in
+                one warning instead of named. A dry run of a delete that would be refused answers one `errors.severe`
+                carrying the reason the `409` gives.
+
+                **The dry run needs APIM 4.14 or later.** APIM 4.13 ignores `dryRun` on a delete and deletes the PDP
+                gateway.
+            parameters:
+                - $ref: '#/components/parameters/AuthzDryRunQueryParam'
+            responses:
+                '200':
+                    description: Dry run only, on APIM 4.14 or later. The state of the PDP gateway, and what deleting it would remove and narrow.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzPdpState'
+                '204':
+                    description: PDP gateway successfully deleted
+                '401':
+                    $ref: '#/components/responses/AuthzUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AuthzUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AuthzNotFound'
+                '409':
+                    description: The delete would leave a policy or an entity with no target.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzAutomationHttpError'
+                default:
+                    $ref: '#/components/responses/AuthzError'
+    /organizations/{orgId}/environments/{envId}/authz/entities:
+        parameters:
+            - $ref: '#/components/parameters/AuthzOrgIdParam'
+            - $ref: '#/components/parameters/AuthzEnvIdParam'
+        put:
+            operationId: createOrUpdateAuthzEntity
+            tags:
+                - Authorization Entities
+            summary: Create or update an authorization entity from its spec
+            description: |
+                Create or update an authorization entity, identified by the `hrid` carried in the body. Re-applying an
+                unchanged spec is a no-op. `parents`, `attributes`, `targets` and `active` apply exactly as declared;
+                an empty `targets` falls back to the default engine on every gateway, as in the Console. `entityId`,
+                `kind` and `entityType` are fixed at creation.
+
+                An entity is created here, and only an entity created here is managed here: a spec whose `entityId` is
+                held by another entity is refused, and the finding names that entity's `source` (`automation` for the
+                ones declared here, `local` for the Console, `scim.*`, `gravitee_am`, `gravitee-catalog`, and so on for
+                the others). An entity declared here that a Console edit or the AM sync relabelled gets its `source` back
+                to `automation` on the next apply, with the rest of the spec.
+
+                Refused, never repaired: an `entityType` that is not spelled the way the engine spells it, a `kind` that
+                contradicts the type, duplicate or cyclic `parents`, an `Action` entity with `targets`, an attribute key
+                that starts with `_` (reserved to the module), a target no PDP gateway answers to, and a violation of
+                the schema of a strict PDP gateway. Findings that prevent the apply are reported in `errors.severe`
+                with a `400`, and nothing is persisted. A dry run performs the same checks.
+
+                The message of a schema violation names the schema's types and attributes only for a caller that can
+                read schemas.
+            parameters:
+                - $ref: '#/components/parameters/AuthzDryRunQueryParam'
+            requestBody:
+                description: Authorization entity specification
+                content:
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/AuthzEntitySpec'
+                required: true
+            responses:
+                '200':
+                    description: State of the created or updated entity, or the dry-run preview
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzEntityState'
+                '400':
+                    description: |
+                        The spec was rejected: the body is the preview of the declaration, with the findings in
+                        `errors.severe`. A request the host rejects before the module sees it, a missing `hrid` for
+                        instance, answers the platform error shape instead.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzEntityState'
+                '401':
+                    $ref: '#/components/responses/AuthzUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AuthzUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AuthzNotFound'
+                default:
+                    $ref: '#/components/responses/AuthzError'
+    /organizations/{orgId}/environments/{envId}/authz/entities/{hrid}:
+        parameters:
+            - $ref: '#/components/parameters/AuthzOrgIdParam'
+            - $ref: '#/components/parameters/AuthzEnvIdParam'
+            - $ref: '#/components/parameters/AuthzHridParam'
+        get:
+            operationId: getAuthzEntity
+            tags:
+                - Authorization Entities
+            summary: Get one authorization entity
+            description: |
+                Get an authorization entity using its HRID. The state is a valid spec: `targets`, `parents` and the
+                keys of `attributes` are sorted, and the attributes the module manages itself (keys that start with
+                `_`) are left out.
+            responses:
+                '200':
+                    description: Authorization entity successfully retrieved
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzEntityState'
+                '401':
+                    $ref: '#/components/responses/AuthzUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AuthzUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AuthzNotFound'
+                default:
+                    $ref: '#/components/responses/AuthzError'
+        delete:
+            operationId: deleteAuthzEntity
+            tags:
+                - Authorization Entities
+            summary: Delete one authorization entity
+            description: |
+                Delete an authorization entity using its HRID, and withdraw it from the PDP gateways it targets.
+
+                The delete cascades, as in the Console: the RESOURCE entities that have it as a parent are deleted with
+                it (an MCP server takes its tools), and the PRINCIPAL entities that have it as a parent are kept and
+                lose that parent (a group does not take its members). Policies are never deleted; a policy that names
+                the entity keeps its text. A delete that would remove or detach more entities than the cascade limit
+                is refused with a `413`; the members a deleted PRINCIPAL lets go of do not count, so a group can be
+                deleted however many members it has.
+
+                Other manifests that declare an entity the delete removed or detached then differ from the platform
+                until their next apply. With `dryRun=true` nothing is deleted, and the answer lists each entity the
+                delete would remove or detach, with its `source`, one `errors.warning` per entity. It names at most as
+                many entities as the cascade limit, then counts the rest in one more warning: a group's members do not
+                count against the limit, so there can be more. A dry run over the cascade limit answers one
+                `errors.severe` that counts them instead.
+
+                **The dry run needs APIM 4.14 or later.** APIM 4.13 ignores `dryRun` on a delete and deletes the entity,
+                with its cascade.
+            parameters:
+                - $ref: '#/components/parameters/AuthzDryRunQueryParam'
+            responses:
+                '200':
+                    description: Dry run only, on APIM 4.14 or later. The state of the entity, and what deleting it would remove or detach.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzEntityState'
+                '204':
+                    description: Authorization entity successfully deleted
+                '401':
+                    $ref: '#/components/responses/AuthzUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AuthzUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AuthzNotFound'
+                '413':
+                    description: The delete would remove or detach more entities than the cascade limit allows.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzAutomationHttpError'
+                default:
+                    $ref: '#/components/responses/AuthzError'
+    /organizations/{orgId}/environments/{envId}/authz/policies:
+        parameters:
+            - $ref: '#/components/parameters/AuthzOrgIdParam'
+            - $ref: '#/components/parameters/AuthzEnvIdParam'
+        put:
+            operationId: createOrUpdateAuthzPolicy
+            tags:
+                - Authorization Policies
+            summary: Create or update an authorization policy from its spec, and deploy it
+            description: |
+                Create or update an authorization policy, identified by the `hrid` carried in the body, and deploy it to
+                the PDP gateways its `targets` name. Every apply leaves the policy `DEPLOYED`: a policy disabled in the
+                Console is deployed again by the next apply, with a warning that says so. Re-applying an unchanged spec
+                of a deployed policy is a no-op. `name`, `policyText` and `targets` apply exactly as declared; an empty
+                `targets` falls back to the default engine on every gateway, as in the Console. `entityId` and
+                `policyType` are fixed at creation.
+
+                The manifest names the `entityId`, which the Console derives from the name. It is held by one policy of
+                the environment: a spec whose `entityId` another policy holds is refused, and the finding names that
+                policy.
+
+                Refused, never repaired: a `policyText` that does not parse, a template (`?principal`, `?resource`), a
+                target no PDP gateway answers to, and a violation of the schema of a strict PDP gateway among the
+                targets. Findings that prevent the apply are reported in `errors.severe` with a `400`, and nothing is
+                persisted. A dry run performs the same checks.
+
+                Reported in `errors.warning`, without stopping the apply: a policy that names `MCPServer` or `MCPTool`
+                and whose `targets` leave out `default` and `*`, since an MCP proxy asks the default engine only; and a
+                catalog item written with its catalog id, `MCPTool::"mcp-tool.postman-studio.read_wiki_structure"`, with
+                the `authPolicyRef` the gateway asks about, `MCPTool::"postman-studio.read_wiki_structure"`.
+
+                Deploying needs the `ENVIRONMENT_AUTHZ_PDP` `UPDATE` permission, as the Console's deploy does, on every
+                apply and dry run. The message of a schema violation names the schema's types and attributes only for a
+                caller that can read schemas.
+            parameters:
+                - $ref: '#/components/parameters/AuthzDryRunQueryParam'
+            requestBody:
+                description: Authorization policy specification
+                content:
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/AuthzPolicySpec'
+                required: true
+            responses:
+                '200':
+                    description: State of the created or updated policy, or the dry-run preview
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzPolicyState'
+                '400':
+                    description: |
+                        The spec was rejected: the body is the preview of the declaration, with the findings in
+                        `errors.severe`. A request the host rejects before the module sees it, a missing `hrid` for
+                        instance, answers the platform error shape instead.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzPolicyState'
+                '401':
+                    $ref: '#/components/responses/AuthzUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AuthzUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AuthzNotFound'
+                default:
+                    $ref: '#/components/responses/AuthzError'
+    /organizations/{orgId}/environments/{envId}/authz/policies/{hrid}:
+        parameters:
+            - $ref: '#/components/parameters/AuthzOrgIdParam'
+            - $ref: '#/components/parameters/AuthzEnvIdParam'
+            - $ref: '#/components/parameters/AuthzHridParam'
+        get:
+            operationId: getAuthzPolicy
+            tags:
+                - Authorization Policies
+            summary: Get one authorization policy
+            description: |
+                Get an authorization policy using its HRID. The state is a valid spec, with `targets` sorted, and
+                `policyStatus` tells whether the PDP gateways enforce it: `DISABLED` after a disable in the Console,
+                until the next apply.
+            responses:
+                '200':
+                    description: Authorization policy successfully retrieved
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzPolicyState'
+                '401':
+                    $ref: '#/components/responses/AuthzUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AuthzUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AuthzNotFound'
+                default:
+                    $ref: '#/components/responses/AuthzError'
+        delete:
+            operationId: deleteAuthzPolicy
+            tags:
+                - Authorization Policies
+            summary: Delete one authorization policy
+            description: |
+                Withdraw an authorization policy from the PDP gateways it targets and delete it, using its HRID. The
+                entities it names are kept. With `dryRun=true` nothing is deleted, and the answer is the policy's state:
+                the delete takes nothing else with it. The dry run needs APIM 4.14: a 4.13 host ignores `dryRun` on a
+                delete, and deletes the policy.
+
+                Withdrawing a `DEPLOYED` policy needs the `ENVIRONMENT_AUTHZ_PDP` `UPDATE` permission, as the Console's
+                disable does, dry run included: deleting a `forbid` widens access. A policy no gateway enforces needs
+                only the permission to delete policies.
+            parameters:
+                - $ref: '#/components/parameters/AuthzDryRunQueryParam'
+            responses:
+                '200':
+                    description: Dry run only. The state of the policy.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AuthzPolicyState'
+                '204':
+                    description: Authorization policy successfully deleted
+                '401':
+                    $ref: '#/components/responses/AuthzUnauthenticated'
+                '403':
+                    $ref: '#/components/responses/AuthzUnauthorized'
+                '404':
+                    $ref: '#/components/responses/AuthzNotFound'
+                default:
+                    $ref: '#/components/responses/AuthzError'
+components:
+    schemas:
+        AuthzHrid:
+            type: string
+            description: A unique human readable id identifying this resource
+            pattern: '^[a-zA-Z0-9][a-zA-Z0-9_-]+[a-zA-Z0-9]$'
+            maxLength: 256
+            examples:
+                - travel-schema
+        AuthzRoutingScope:
+            type: string
+            description: |
+                The routing scope of a PDP gateway: `targetPdpId@tag` for a tagged gateway, `targetPdpId` for an untagged
+                one, or `default`. Written exactly as the gateway reports it; a PDP id or a bare `targetPdpId` naming a
+                tagged gateway is rejected, never resolved.
+            pattern: '^[A-Za-z0-9_.-]+(@-?[a-z0-9]+(-[a-z0-9]+)*)?$'
+            maxLength: 320
+            examples:
+                - orders@eu
+        AuthzSchemaSpec:
+            type: object
+            description: |
+                Specification of a GAPL schema document. `name` and `schema` converge on re-apply, and so does `target`:
+                a document moved to another gateway is withdrawn from the one it leaves.
+            properties:
+                hrid:
+                    $ref: '#/components/schemas/AuthzHrid'
+                name:
+                    type: string
+                    description: Display name of the document; converges on re-apply
+                    minLength: 1
+                    maxLength: 255
+                    examples:
+                        - Travel schema
+                target:
+                    description: |
+                        The PDP gateway that enforces this document, as its routing scope or `default`. One document per
+                        gateway: a target another document holds is rejected. `*` is rejected, since it would join the
+                        composition of every PDP. Without a target the document is stored and published nowhere.
+                    $ref: '#/components/schemas/AuthzRoutingScope'
+                schema:
+                    type: string
+                    description: The GAPL schema text, replaced whole on every apply
+                    minLength: 1
+                    examples:
+                        - |
+                            entity User in Group;
+                            entity Hotel;
+                            action read appliesTo { principal: User, resource: Hotel };
+            required:
+                - hrid
+                - name
+                - schema
+        AuthzEntityParent:
+            type: object
+            description: A parent of an entity, as the engine spells it. Declared once, and never cyclic.
+            properties:
+                entityType:
+                    type: string
+                    description: Canonical type of the parent
+                    pattern: '^[_a-zA-Z][_a-zA-Z0-9]*(?:::[_a-zA-Z][_a-zA-Z0-9]*)*$'
+                    maxLength: 255
+                    examples:
+                        - Group
+                entityId:
+                    type: string
+                    description: Id of the parent, under the same rule as an entity's `entityId`
+                    minLength: 1
+                    maxLength: 255
+                    examples:
+                        - travel
+            required:
+                - entityType
+                - entityId
+        AuthzEntitySpec:
+            type: object
+            description: |
+                Specification of an authorization entity. `entityId`, `kind` and `entityType` are fixed at creation;
+                `attributes`, `parents`, `targets` and `active` converge on re-apply and apply exactly as declared.
+            properties:
+                hrid:
+                    $ref: '#/components/schemas/AuthzHrid'
+                entityId:
+                    type: string
+                    description: |
+                        Id of the entity in policies, without its type: `postman-studio.read_wiki_structure`, not
+                        `MCPTool::"postman-studio.read_wiki_structure"`. Fixed at creation; held by one entity of the
+                        environment.
+                    minLength: 1
+                    maxLength: 255
+                    examples:
+                        - agents
+                kind:
+                    type: string
+                    description: Whether the entity acts (`PRINCIPAL`) or is acted upon (`RESOURCE`). Fixed at creation.
+                    enum:
+                        - PRINCIPAL
+                        - RESOURCE
+                entityType:
+                    type: string
+                    description: |
+                        Type of the entity, spelled the way the engine spells it: `Group`, not `group`; `MCPTool`, not
+                        `mcptool`. Fixed at creation. A built-in type fixes the `kind`.
+                    pattern: '^[_a-zA-Z][_a-zA-Z0-9]*(?:::[_a-zA-Z][_a-zA-Z0-9]*)*$'
+                    maxLength: 255
+                    examples:
+                        - Group
+                attributes:
+                    type: object
+                    description: |
+                        The attributes of the entity, replaced whole on every apply. A key that starts with `_` is
+                        reserved to the module and refused.
+                    additionalProperties: true
+                    examples:
+                        - department: travel
+                parents:
+                    type: array
+                    description: The entities this one is a member of; replaced whole on every apply
+                    items:
+                        $ref: '#/components/schemas/AuthzEntityParent'
+                active:
+                    type: boolean
+                    description: Whether the entity is published to the PDP gateways it targets
+                    default: true
+                targets:
+                    type: array
+                    description: |
+                        The PDP gateways the entity is published to, each as the gateway reports its routing scope, or
+                        `default`, or `*` for every gateway. An empty list falls back to the default engine on every gateway. Not allowed on an `Action`
+                        entity.
+                    items:
+                        type: string
+                        pattern: '^(\*|[A-Za-z0-9_.-]+(@-?[a-z0-9]+(-[a-z0-9]+)*)?)$'
+                        maxLength: 320
+                    examples:
+                        - - orders@eu
+            required:
+                - hrid
+                - entityId
+                - kind
+                - entityType
+        AuthzEntityState:
+            description: State of an authorization entity that has been created or updated, in the shape of its spec.
+            allOf:
+                - $ref: '#/components/schemas/AuthzEntitySpec'
+                - $ref: '#/components/schemas/AuthzResourceStatus'
+        AuthzPolicySpec:
+            type: object
+            description: |
+                Specification of an authorization policy, deployed on every apply. `entityId` and `policyType` are fixed
+                at creation; `name`, `policyText` and `targets` converge on re-apply and apply exactly as declared.
+            properties:
+                hrid:
+                    $ref: '#/components/schemas/AuthzHrid'
+                entityId:
+                    type: string
+                    description: |
+                        Id of the policy in the engine and in the Console: `policy.` then one or more segments separated
+                        by `.`. Held by one policy of the environment, and fixed at creation.
+                    pattern: '^policy(\.[A-Za-z0-9_:-]+)+$'
+                    maxLength: 255
+                    examples:
+                        - policy.hotel-booking-read
+                name:
+                    type: string
+                    description: Display name of the policy; converges on re-apply
+                    minLength: 1
+                    maxLength: 255
+                    examples:
+                        - Hotel booking — read access
+                policyType:
+                    type: string
+                    description: What the policy governs, as the Console groups policies. Fixed at creation.
+                    enum:
+                        - MCP
+                        - AGENT
+                        - MODEL
+                        - API
+                        - CUSTOM
+                policyText:
+                    type: string
+                    description: |
+                        The GAPL text, one or more `permit` and `forbid` statements, replaced whole on every apply. A
+                        template, with `?principal` or `?resource` in its scope, is refused.
+                    minLength: 1
+                    examples:
+                        - permit(principal in Group::"agents", action == Action::"read", resource == Resource::"searchHotels");
+                targets:
+                    type: array
+                    description: |
+                        The PDP gateways the policy is deployed to, each as the gateway reports its routing scope, or
+                        `default`, or `*` for every gateway. An empty list falls back to the default engine on every
+                        gateway. An MCP proxy asks the default engine only.
+                    items:
+                        type: string
+                        pattern: '^(\*|[A-Za-z0-9_.-]+(@-?[a-z0-9]+(-[a-z0-9]+)*)?)$'
+                        maxLength: 320
+                    examples:
+                        - - orders@eu
+            required:
+                - hrid
+                - entityId
+                - name
+                - policyType
+                - policyText
+        AuthzPolicyDeployment:
+            type: object
+            description: Whether the PDP gateways enforce the policy; read-only.
+            properties:
+                policyStatus:
+                    type: string
+                    description: |
+                        `DEPLOYED` after every apply. `DISABLED` once the policy is disabled in the Console, until the next
+                        apply deploys it again.
+                    readOnly: true
+                    enum:
+                        - DRAFT
+                        - DEPLOYED
+                        - DISABLED
+        AuthzPolicyState:
+            description: State of an authorization policy that has been created or updated, in the shape of its spec.
+            allOf:
+                - $ref: '#/components/schemas/AuthzPolicySpec'
+                - $ref: '#/components/schemas/AuthzResourceStatus'
+                - $ref: '#/components/schemas/AuthzPolicyDeployment'
+        AuthzResourceStatus:
+            type: object
+            description: Envelope the Automation API stamps on every state; read-only.
+            properties:
+                id:
+                    type: string
+                    description: Resource UUID
+                    readOnly: true
+                environmentId:
+                    type: string
+                    description: The environment ID
+                    readOnly: true
+                organizationId:
+                    type: string
+                    description: The organization ID
+                    readOnly: true
+                errors:
+                    readOnly: true
+                    $ref: '#/components/schemas/AuthzErrors'
+        AuthzErrors:
+            type: object
+            description: Findings about the applied spec
+            properties:
+                severe:
+                    type: array
+                    description: Findings that prevented the apply; nothing was persisted
+                    items:
+                        type: string
+                warning:
+                    type: array
+                    description: Findings that did not prevent the apply
+                    items:
+                        type: string
+        AuthzSchemaState:
+            description: State of an authorization schema that has been created or updated, in the shape of its spec.
+            allOf:
+                - $ref: '#/components/schemas/AuthzSchemaSpec'
+                - $ref: '#/components/schemas/AuthzResourceStatus'
+        AuthzTargetPdpId:
+            type: string
+            description: |
+                The PDP engine the gateway runs. Every PDP gateway of one targetPdpId shares the engine, and its `strict`
+                value.
+            pattern: '^[A-Za-z0-9_.-]+$'
+            maxLength: 255
+            examples:
+                - orders
+        AuthzShardingTag:
+            type: string
+            description: An APIM sharding tag key, which selects the gateway nodes that run the PDP.
+            pattern: '^-?[a-z0-9]+(-[a-z0-9]+)*$'
+            maxLength: 64
+            examples:
+                - eu
+        AuthzPdpEndpoint:
+            type: object
+            description: |
+                The AuthZEN endpoint of the PDP: an API that listens on `path` and on the matching AuthZEN discovery path.
+            properties:
+                path:
+                    type: string
+                    description: |
+                        Context path of the endpoint, unique among the APIs of the environment, and outside
+                        `/.well-known/authzen-configuration`. Written the way APIM stores it, without the trailing slash,
+                        so the state reads it back as declared: `/authz/orders-eu`, not `authz//orders-eu/`. A changed
+                        path replaces the endpoint.
+                    minLength: 1
+                    examples:
+                        - /authz/orders-eu
+            required:
+                - path
+        AuthzPdpSpec:
+            type: object
+            description: |
+                Specification of a PDP gateway. `targetPdpId` and `tag` are fixed at creation; `name`, `strict` and
+                `endpoint` converge on re-apply.
+            properties:
+                hrid:
+                    $ref: '#/components/schemas/AuthzHrid'
+                name:
+                    type: string
+                    description: Display name of the PDP gateway; converges on re-apply
+                    minLength: 1
+                    maxLength: 255
+                    examples:
+                        - Orders PDP (EU)
+                targetPdpId:
+                    description: The PDP engine the gateway runs; fixed at creation.
+                    $ref: '#/components/schemas/AuthzTargetPdpId'
+                tag:
+                    description: The sharding tag of the gateways that run the PDP; fixed at creation. Absent for an untagged gateway.
+                    $ref: '#/components/schemas/AuthzShardingTag'
+                strict:
+                    type: boolean
+                    description: |
+                        Whether the engine checks policies and entities against its schema. Shared by every PDP of the
+                        targetPdpId: on create it has to agree with the registered ones, and a change on an existing PDP
+                        changes them all, with a warning naming each.
+                    default: false
+                endpoint:
+                    description: The AuthZEN endpoint of the PDP. Absent, the PDP has none, and an existing one is deleted.
+                    $ref: '#/components/schemas/AuthzPdpEndpoint'
+            required:
+                - hrid
+                - name
+                - targetPdpId
+        AuthzPdpGatewayStatus:
+            type: object
+            description: What the platform derives from a PDP gateway; read-only.
+            properties:
+                routingScope:
+                    type: string
+                    description: '`targetPdpId@tag`, or `targetPdpId` untagged: what the targets of other resources name'
+                    readOnly: true
+                    examples:
+                        - orders@eu
+                wellKnownPath:
+                    type: string
+                    description: |
+                        The AuthZEN discovery path of the endpoint. Absent without an endpoint, or when another API already
+                        held that path when the endpoint was created.
+                    readOnly: true
+                    examples:
+                        - /.well-known/authzen-configuration/authz/orders-eu
+        AuthzPdpState:
+            description: State of a PDP gateway that has been created or updated, in the shape of its spec.
+            allOf:
+                - $ref: '#/components/schemas/AuthzPdpSpec'
+                - $ref: '#/components/schemas/AuthzResourceStatus'
+                - $ref: '#/components/schemas/AuthzPdpGatewayStatus'
+        AuthzAutomationHttpError:
+            type: object
+            description: An error returned by the Automation API when a request could not be served.
+            properties:
+                httpStatus:
+                    type: integer
+                    format: int32
+                    description: HTTP status code
+                    examples:
+                        - 404
+                message:
+                    type: string
+                    description: Human readable message
+                    examples:
+                        - 'Resource [travel-schema] does not exist'
+                technicalCode:
+                    type: string
+                    description: Stable technical code of the error
+                    examples:
+                        - hrid.notFound
+                parameters:
+                    type: object
+                    description: Values interpolated into the message, keyed by placeholder name
+                    additionalProperties:
+                        type: string
+    responses:
+        AuthzUnauthenticated:
+            description: Authentication is required
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/AuthzAutomationHttpError'
+        AuthzUnauthorized:
+            description: The caller lacks the permission, or the license does not include Authorization Management
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/AuthzAutomationHttpError'
+        AuthzNotFound:
+            description: No resource with this HRID, or Authorization Management is not available on this installation
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/AuthzAutomationHttpError'
+        AuthzError:
+            description: Unexpected error
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/AuthzAutomationHttpError'
+    parameters:
+        AuthzOrgIdParam:
+            name: orgId
+            in: path
+            required: true
+            description: Id of an organization
+            schema:
+                type: string
+                default: DEFAULT
+        AuthzEnvIdParam:
+            name: envId
+            in: path
+            required: true
+            description: Id of an environment
+            schema:
+                type: string
+                default: DEFAULT
+        AuthzHridParam:
+            name: hrid
+            in: path
+            required: true
+            description: Human-readable ID of the resource
+            schema:
+                type: string
+        AuthzDryRunQueryParam:
+            name: dryRun
+            in: query
+            description: |
+                Preview the result of the apply without persisting anything. The same validation runs as for a real apply
+                and the findings are reported in the returned state.
+            schema:
+                type: boolean
+                default: false

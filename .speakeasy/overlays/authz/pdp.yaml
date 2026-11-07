@@ -1,0 +1,63 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: AuthZ PDP gateway overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.components.schemas.AuthzPdpSpec
+    update:
+      x-speakeasy-entity:
+        AuthzPdp
+      x-speakeasy-entity-description: >-
+        A PDP gateway: the authorization engine of a `target_pdp_id`, run on the
+        gateways of a sharding `tag`, with its AuthZEN endpoint. APIM refuses with
+        a `409` the delete of a PDP gateway that is the only target of an entity or
+        a policy, and deletes nothing; the untagged `default` PDP gateway can
+        always be deleted. Requires APIM 4.14 or later.
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/pdps"].put
+    update:
+      x-speakeasy-entity-operation: AuthzPdp#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/pdps/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: AuthzPdp#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/pdps/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: AuthzPdp#delete
+
+  # Immutable
+  # The platform refuses another targetPdpId or tag on an existing PDP. Refused at
+  # plan time rather than replaced: a replacement deletes first, and a PDP that is
+  # the only target of an entity or a policy refuses its delete with a 409. Set on
+  # the components: the properties are $ref, and an extension beside a $ref is
+  # ignored. Neither component is used anywhere else.
+  - target: $.components.schemas.AuthzTargetPdpId
+    update:
+      x-speakeasy-plan-modifiers: Immutable
+  - target: $.components.schemas.AuthzShardingTag
+    update:
+      x-speakeasy-plan-modifiers: Immutable
+
+  # Computed
+  # Computed, a tag left out of the configuration would keep the state's, and
+  # Immutable would never see the change.
+  - target: $.components.schemas.AuthzTargetPdpId
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AuthzShardingTag
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+  - target: $.components.schemas.AuthzPdpEndpoint
+    description: Ignored by speakeasy (because used as $ref) so setting computed false for the component
+    update:
+      x-speakeasy-param-computed: false
+
+  # Derived by the platform. Computed without suppress-computed-diff: both change
+  # when the endpoint does, and a suppressed diff plans the old value.
+  - target: $.components.schemas.AuthzPdpGatewayStatus.properties.*
+    description: Reported by the platform only
+    update:
+      x-speakeasy-param-computed: true
