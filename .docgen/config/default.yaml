@@ -71,6 +71,8 @@ outputs:
    target: templates/guides/docgen_portal-next-gen.md
  - template: {{ .RootDir }}/tmpl/mcp-studio.md.tmpl
    target: templates/guides/docgen_mcp-studio.md
+ - template: {{ .RootDir }}/tmpl/authorization.md.tmpl
+   target: templates/guides/docgen_authorization.md
 chunks:
   - template: examples/use-cases/v4api-proxy/proxy-api.tf
     exportedAs: V4ApiSimple
@@ -203,4 +205,16 @@ chunks:
     required: true
   - template: examples/use-cases/mcp-studio/studio.tf
     exportedAs: McpStudioStudio
+    required: true
+  - template: examples/use-cases/authorization/pdp.tf
+    exportedAs: AuthorizationPdp
+    required: true
+  - template: examples/use-cases/authorization/schema.tf
+    exportedAs: AuthorizationSchema
+    required: true
+  - template: examples/use-cases/authorization/entities.tf
+    exportedAs: AuthorizationEntities
+    required: true
+  - template: examples/use-cases/authorization/policy.tf
+    exportedAs: AuthorizationPolicy
     required: true
