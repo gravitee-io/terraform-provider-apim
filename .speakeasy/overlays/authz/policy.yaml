@@ -1,0 +1,52 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: AuthZ policy overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.components.schemas.AuthzPolicySpec
+    update:
+      x-speakeasy-entity:
+        AuthzPolicy
+      x-speakeasy-entity-description: >-
+        A GAPL policy, deployed on every apply to the PDP gateways its `targets`
+        name. Deleting a policy withdraws it from those gateways and keeps the
+        entities it names. Requires APIM 4.14 or later.
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/policies"].put
+    update:
+      x-speakeasy-entity-operation: AuthzPolicy#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/policies/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: AuthzPolicy#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/policies/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: AuthzPolicy#delete
+
+  # Immutable
+  # The platform refuses another entityId or policyType on an existing policy.
+  # Refused at plan time rather than replaced: a replacement withdraws the policy
+  # before deploying the new one, which widens access for a forbid.
+  - target: $.components.schemas.AuthzPolicySpec.properties.entityId
+    update:
+      x-speakeasy-plan-modifiers: Immutable
+  - target: $.components.schemas.AuthzPolicySpec.properties.policyType
+    update:
+      x-speakeasy-plan-modifiers: Immutable
+
+  # Targets: reported sorted, as an entity's (entity.yaml).
+  - target: $.components.schemas.AuthzPolicySpec.properties.targets
+    update:
+      default: []
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: KeepStateOrder
+
+  # Read-only. Computed without suppress-computed-diff: a disable in the Console
+  # turns it DISABLED, and the next apply deploys it again. DeployedOnApply plans
+  # DEPLOYED for a change to an existing policy rather than an unknown status,
+  # which would plan an update for targets declared in another order.
+  - target: $.components.schemas.AuthzPolicyDeployment.properties.policyStatus
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: DeployedOnApply
