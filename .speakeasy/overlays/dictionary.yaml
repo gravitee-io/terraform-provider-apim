@@ -51,25 +51,38 @@ actions:
       x-speakeasy-plan-modifiers: IgnoreEmptyList
   # Encryption (APIM 4.13+)
   - target: $.components.schemas.ManualDictionarySpec.properties.encryptedProperties
-    description: Secret values are never read back; Terraform keeps what it sent
+    description: >-
+      APIM reads every value back as the same mask; writeOnly keeps the read from replacing the
+      configured values in state, so a refresh plans nothing.
     update:
       writeOnly: true
       description: >-
-        Secret properties, keyed by the property key. APIM encrypts the values and never returns
-        them: Terraform keeps the configured values in its state and does not detect a change
-        made outside Terraform. Removing a key, or the attribute, deletes the secret. A key must
-        not appear in both `properties` and `encrypted_properties`. To make a secret plain
-        again, remove it from `encrypted_properties`, apply, then add it to `properties`: APIM
-        keeps a secret key encrypted otherwise. Requires APIM 4.13 or later.
+        Secret properties, keyed by the property key. APIM encrypts the values and a read returns
+        each of them masked as `••••••••••••`: Terraform keeps the configured values in its state
+        and does not detect a change made outside Terraform. A value of `••••••••••••` keeps the
+        value APIM stores for that key, for instance after an import. Removing a key, or the
+        attribute, deletes the secret. A key must not appear in both `properties` and
+        `encrypted_properties`. To make a secret plain again, remove it from
+        `encrypted_properties`, apply, then add it to `properties`: APIM rejects the move in a
+        single apply with `dictionary.property.encryptedToPlain`. Requires APIM 4.13 or later.
   - target: $.components.schemas.EncryptableValue.properties.value
+    description: The upstream description names the API read, which writeOnly above keeps out of state
     update:
       x-speakeasy-param-sensitive: true
+      description: >-
+        The plaintext to encrypt, or `••••••••••••` to keep the value APIM stores for this key.
+        APIM rejects the mask for a key it does not hold encrypted with
+        `dictionary.property.maskedValue`.
   - target: $.components.schemas.ManualDictionarySpec.properties.properties
     description: >-
       Optional since a dictionary can hold only secrets. Not computed: APIM returns an empty map
-      then, which the read maps to null, as an omitted attribute plans.
+      then, which the read maps to null, as an omitted attribute plans. The upstream description
+      names `encryptedProperties`, the API field.
     update:
       x-speakeasy-param-computed: false
+      description: >-
+        Plain properties, keyed by the property key. A key APIM holds encrypted cannot move here in
+        a single apply: see `encrypted_properties`.
   - target: $.components.schemas.DynamicDictionarySpec.properties.encryption
     description: APIM returns the policy and keeps it when an update omits it
     update:
