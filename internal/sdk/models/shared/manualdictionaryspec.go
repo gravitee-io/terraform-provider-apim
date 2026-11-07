@@ -5,9 +5,9 @@ package shared
 
 // ManualDictionarySpec - A manual dictionary with static key/value properties.
 type ManualDictionarySpec struct {
-	// Dictionary data are key/value pairs for `MANUAL` properties
+	// Plain properties, keyed by the property key. A key APIM holds encrypted cannot move here in a single apply: see `encrypted_properties`.
 	Properties map[string]string `json:"properties,omitempty"`
-	// Secret properties, keyed by the property key. APIM encrypts the values and never returns them: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. Removing a key, or the attribute, deletes the secret. A key must not appear in both `properties` and `encrypted_properties`. To make a secret plain again, remove it from `encrypted_properties`, apply, then add it to `properties`: APIM keeps a secret key encrypted otherwise. Requires APIM 4.13 or later.
+	// Secret properties, keyed by the property key. APIM encrypts the values and a read returns each of them masked as `••••••••••••`: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. A value of `••••••••••••` keeps the value APIM stores for that key, for instance after an import. Removing a key, or the attribute, deletes the secret. A key must not appear in both `properties` and `encrypted_properties`. To make a secret plain again, remove it from `encrypted_properties`, apply, then add it to `properties`: APIM rejects the move in a single apply with `dictionary.property.encryptedToPlain`. Requires APIM 4.13 or later.
 	EncryptedProperties map[string]EncryptableValue `json:"encryptedProperties,omitempty"`
 }
 

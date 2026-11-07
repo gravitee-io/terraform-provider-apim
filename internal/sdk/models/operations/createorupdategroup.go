@@ -46,8 +46,10 @@ type CreateOrUpdateGroupRequest struct {
 	OrganizationID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=orgId"`
 	// environment ID
 	EnvironmentID *string `default:"DEFAULT" pathParam:"style=simple,explode=false,name=envId"`
-	// For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting
-	// the state of the underlying spec.
+	// For modifying requests, validates the request without persisting it. A dry run runs every check the same
+	// request runs without `dryRun` and fails with the same error, so a request a dry run accepts is accepted when
+	// sent without `dryRun`, unless the stored state changes in between. Only the write and its side effects
+	// (deployment, events, audit) are skipped.
 	//
 	DryRun *bool `default:"false" queryParam:"style=form,explode=true,name=dryRun"`
 	// When true, the HRID path or spec value is treated as an existing UUID rather than

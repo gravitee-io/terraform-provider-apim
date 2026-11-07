@@ -5,7 +5,7 @@ package shared
 
 // ManualDictionarySpecOutput - A manual dictionary with static key/value properties.
 type ManualDictionarySpecOutput struct {
-	// Dictionary data are key/value pairs for `MANUAL` properties
+	// Plain properties, keyed by the property key. A key APIM holds encrypted cannot move here in a single apply: see `encrypted_properties`.
 	Properties map[string]string `json:"properties,omitempty"`
 }
 

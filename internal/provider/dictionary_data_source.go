@@ -174,7 +174,7 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 					"properties": schema.MapAttribute{
 						Computed:    true,
 						ElementType: types.StringType,
-						Description: `Dictionary data are key/value pairs for ` + "`" + `MANUAL` + "`" + ` properties`,
+						Description: `Plain properties, keyed by the property key. A key APIM holds encrypted cannot move here in a single apply: see ` + "`" + `encrypted_properties` + "`" + `.`,
 					},
 				},
 				Description: `A manual dictionary with static key/value properties.`,
