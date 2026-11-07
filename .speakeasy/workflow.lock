@@ -33,10 +33,12 @@ workflow:
             inputs:
                 - location: automation-api-oas.yaml
                 - location: automation-api-aim-oas.yaml
+                - location: automation-api-authz-oas.yaml
             overlays:
                 - location: .speakeasy/overlays/common/merge.yaml
                 - location: .speakeasy/overlays/aim/catalog-mcp-server-shape.yaml
                 - location: .speakeasy/overlays/aim/mcp-proxy-shape.yaml
+                - location: .speakeasy/overlays/authz/shape.yaml
                 - location: .speakeasy/overlays/common/oas.yaml
                 - location: .speakeasy/overlays/common/param.yaml
                 - location: .speakeasy/overlays/common/schema.yaml
@@ -56,6 +58,11 @@ workflow:
                 - location: .speakeasy/overlays/aim/common.yaml
                 - location: .speakeasy/overlays/aim/catalog-mcp-server.yaml
                 - location: .speakeasy/overlays/aim/mcp-proxy.yaml
+                - location: .speakeasy/overlays/authz/common.yaml
+                - location: .speakeasy/overlays/authz/pdp.yaml
+                - location: .speakeasy/overlays/authz/schema.yaml
+                - location: .speakeasy/overlays/authz/entity.yaml
+                - location: .speakeasy/overlays/authz/policy.yaml
                 - location: .speakeasy/speakeasy-modifications-overlay.yaml
             output: .speakeasy/output/computed.yaml
             registry:

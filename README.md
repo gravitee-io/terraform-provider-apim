@@ -21,6 +21,7 @@ You can manage with Terraform the following:
 * Next-gen portals (APIM 4.13 or later): portals, portal listings, portal and API documentation, portal and API links, portal themes
 * MCP Catalog Servers
 * MCP Proxies
+* Authorization (APIM 4.14 or later): PDP gateways, schemas, entities and policies
 
 [Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)
 
@@ -47,7 +48,7 @@ terraform {
   required_providers {
     apim = {
       source  = "gravitee-io/apim"
-      version = "1.0.0"
+      version = "1.2.0"
     }
   }
 }
@@ -86,6 +87,10 @@ Available configuration:
 * [apim_apiv4](docs/resources/apiv4.md)
 * [apim_api_link](docs/resources/api_link.md)
 * [apim_application](docs/resources/application.md)
+* [apim_authz_entity](docs/resources/authz_entity.md)
+* [apim_authz_pdp](docs/resources/authz_pdp.md)
+* [apim_authz_policy](docs/resources/authz_policy.md)
+* [apim_authz_schema](docs/resources/authz_schema.md)
 * [apim_catalog_mcp_server](docs/resources/catalog_mcp_server.md)
 * [apim_dictionary](docs/resources/dictionary.md)
 * [apim_documentation_api](docs/resources/documentation_api.md)
@@ -104,6 +109,10 @@ Available configuration:
 * [apim_apiv4](docs/data-sources/apiv4.md)
 * [apim_api_link](docs/data-sources/api_link.md)
 * [apim_application](docs/data-sources/application.md)
+* [apim_authz_entity](docs/data-sources/authz_entity.md)
+* [apim_authz_pdp](docs/data-sources/authz_pdp.md)
+* [apim_authz_policy](docs/data-sources/authz_policy.md)
+* [apim_authz_schema](docs/data-sources/authz_schema.md)
 * [apim_catalog_mcp_server](docs/data-sources/catalog_mcp_server.md)
 * [apim_dictionary](docs/data-sources/dictionary.md)
 * [apim_documentation_api](docs/data-sources/documentation_api.md)
