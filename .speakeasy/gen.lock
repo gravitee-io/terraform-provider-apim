@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 92f716d08548e81141dc5349e05b3ab5
+  docChecksum: d930fa6f0f4d07dcf10efa84a483c3c8
   docVersion: 1.0.0
   speakeasyVersion: 1.806.0
   generationVersion: 2.956.1
   releaseVersion: 1.2.0
   configChecksum: cdc5cdf1e8857328e4e0628ec0e1eb01
 persistentEdits:
-  generation_id: fe991873-964a-47aa-8625-d22f079de8aa
-  pristine_commit_hash: dd31a2878c7acc9853bc1f03a7cd46cfdb234a22
-  pristine_tree_hash: 74185c4974acb04331e88e340fe9c86ec547b930
+  generation_id: 5bd6ecfd-1fe7-414e-97ff-3b17dd4ccfdf
+  pristine_commit_hash: 8ad370cf6fe7a580f73dc795ad638c12d5fba56e
+  pristine_tree_hash: de704c6d87ffe0857d6c19b8a075a9807ebb9185
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -50,6 +50,26 @@ trackedFiles:
     id: 65546ae3c074
     last_write_checksum: sha1:f3b11d3ade11050fefff8d6699c54a42983bafcc
     pristine_git_object: d2ea716c15de1fac55acce7b93ea58ad29be1568
+    deleted: true
+  examples/data-sources/apim_authz_entity/data-source.tf:
+    id: 13892bec1053
+    last_write_checksum: sha1:811baf35b80b68c8353d6e43c7d7eb9487f76004
+    pristine_git_object: a317dd07f275fba85228b52d7a22bfd8c6951be6
+    deleted: true
+  examples/data-sources/apim_authz_pdp/data-source.tf:
+    id: 3e1310240280
+    last_write_checksum: sha1:8bc374979490633459509af438925f0059b1ab80
+    pristine_git_object: 3b5f2ecbb96d9780a333359049f53ffa15581232
+    deleted: true
+  examples/data-sources/apim_authz_policy/data-source.tf:
+    id: 5e584d4ada97
+    last_write_checksum: sha1:da4d672d1dfeddcca3151184407909b854514e41
+    pristine_git_object: 6313c72f6e294ea7f3c3ade266c4568079967e4b
+    deleted: true
+  examples/data-sources/apim_authz_schema/data-source.tf:
+    id: bcbd4a3ab161
+    last_write_checksum: sha1:927d2b646651bcee65adc5c71ddec550c4460195
+    pristine_git_object: 73aa65c6cc0ff6a01391a494dab6092bd44ef4fb
     deleted: true
   examples/data-sources/apim_catalog_mcp_server/data-source.tf:
     id: 53a31f294f50
@@ -312,6 +332,70 @@ trackedFiles:
     id: e222f1f0cfa7
     last_write_checksum: sha1:4bef55414aacc56a065cb5f613bd9bd5575de2e1
     pristine_git_object: 47ceb50bd00ee52f976caae9492548157ca832ea
+  internal/provider/authzentity_data_source.go:
+    id: 282e0c7e5f55
+    last_write_checksum: sha1:793093bec2675059f49ed697a24e7a9132bf4868
+    pristine_git_object: cde7c8bca7278e61d194ac53ab4c4fe5ecc8e5fc
+  internal/provider/authzentity_data_source_sdk.go:
+    id: 7b2220eaf13b
+    last_write_checksum: sha1:457b72ab5698416bb95174150af7371ae6a17914
+    pristine_git_object: 59e79d62fb2891b57f15babf4aacafd06d647eb4
+  internal/provider/authzentity_resource.go:
+    id: 575a3328451f
+    last_write_checksum: sha1:565791834a162e1da1b12d2cca93e186edfcbe92
+    pristine_git_object: 0a6c33ada3ae63044302eda07ad73e3ddbfe7d62
+  internal/provider/authzentity_resource_sdk.go:
+    id: 9400aa58a55e
+    last_write_checksum: sha1:f815a706af9371412c8ff4cda3f7ae58d02b872f
+    pristine_git_object: 910a207ad757fdabd8529dd6b7546b187ea9a0ef
+  internal/provider/authzpdp_data_source.go:
+    id: 6088cad615d6
+    last_write_checksum: sha1:026560d424c554ee86f1bf03a641ee807076a2ce
+    pristine_git_object: 3f0aa1fe0652603f0d8e98a503aeb535dd8020b5
+  internal/provider/authzpdp_data_source_sdk.go:
+    id: 5d18073e9643
+    last_write_checksum: sha1:69a8effbab9b79ccb40d7f906871ff4243576a25
+    pristine_git_object: 6a1dc7f84b739a29176a8433be8350dbe7dd0a52
+  internal/provider/authzpdp_resource.go:
+    id: 4ec37f1d31b8
+    last_write_checksum: sha1:735a66fa26581986e9bdaed0a46d409ee92d0827
+    pristine_git_object: 506250ad817a3cfd12fc4913f3d8eee9d97090da
+  internal/provider/authzpdp_resource_sdk.go:
+    id: 1f7e5316fbe0
+    last_write_checksum: sha1:a7e6d2a1f4241634950726c949f278ca03e1149c
+    pristine_git_object: b04e9cb19a150795667ff89728b57f8895ce969a
+  internal/provider/authzpolicy_data_source.go:
+    id: 9540727006d0
+    last_write_checksum: sha1:eb16947753c9e0ae376198185087d8995b4eb472
+    pristine_git_object: 298f41547abd750a52ee27e7e81f74051bfd267a
+  internal/provider/authzpolicy_data_source_sdk.go:
+    id: 5d96404e70ee
+    last_write_checksum: sha1:9b1a742bf33477509dea92456cd3df386867d1e5
+    pristine_git_object: ff46483bbf22379119fafe231f57084b0dc050ae
+  internal/provider/authzpolicy_resource.go:
+    id: 6cf06fcb3ef6
+    last_write_checksum: sha1:4087380f9b0c0ed8cb79099d7fe7d04b4be01968
+    pristine_git_object: b05a1444097ccbe14104c3396681eb5ff41b578c
+  internal/provider/authzpolicy_resource_sdk.go:
+    id: de0a20f50b06
+    last_write_checksum: sha1:656c4811883179173fbbce9f68196f8a98086d3e
+    pristine_git_object: d157daed9200c9af33fe80065ac0da2db4ecba39
+  internal/provider/authzschema_data_source.go:
+    id: 9cc4b12699a9
+    last_write_checksum: sha1:d6eefca7b0852f4d3149276d3157a71b74faac17
+    pristine_git_object: c9cbdc09c3ce68a1fa86b99fb14d560fa972bedf
+  internal/provider/authzschema_data_source_sdk.go:
+    id: d30e3f1ab253
+    last_write_checksum: sha1:c76de1105c8dccf2b53a90979b324247bb0a906d
+    pristine_git_object: f38c939db38ffddab3e26209dc1cbfb66dc867c7
+  internal/provider/authzschema_resource.go:
+    id: 7dd614c17549
+    last_write_checksum: sha1:98177228b9a70ae829e654fd3180a30056b1beb8
+    pristine_git_object: 042fc75eda761de86bb0a4042bdc8427d420af84
+  internal/provider/authzschema_resource_sdk.go:
+    id: 55271707a85b
+    last_write_checksum: sha1:808c7802d7ed40c09b0def2037033345f179d334
+    pristine_git_object: c882b8b7ef760a00fe1a56a59178d6404c638ec8
   internal/provider/catalogmcpserver_data_source.go:
     id: 7efb451356df
     last_write_checksum: sha1:e845f0a8382f1065a8cd189b8fefdf3be05a9bfb
@@ -474,8 +558,8 @@ trackedFiles:
     pristine_git_object: b53072f4b1bde1f58beef04bca97d6d26d678dfe
   internal/provider/provider.go:
     id: 1e7e86841cf3
-    last_write_checksum: sha1:d755198cf4013f2cd062ab84c451109af15d74eb
-    pristine_git_object: 32f01c861269fcdfce223c1a6e96013776aad1e3
+    last_write_checksum: sha1:ee98b70870754d488d4e2a892f77f33b85c5a57d
+    pristine_git_object: 783717b39794563625ec450b83f864ddf9636ae7
   internal/provider/reflect/diags.go:
     id: 35b6b44972e2
     last_write_checksum: sha1:42e02d5e7e31b0a5d4e14deb739cf5020c79f2e0
@@ -781,6 +865,14 @@ trackedFiles:
     id: 6c9303cd900a
     last_write_checksum: sha1:0c7bcc0117dc8918b09673e5b28da3e7d000ec50
     pristine_git_object: 96893d5fbb0bc08aa9af51c7a5834fca5db9ea3f
+  internal/provider/types/authz_entity_parent.go:
+    id: 3a8e80f23ed6
+    last_write_checksum: sha1:cbedcdc60aeb7fa119347d797cef3592782c4428
+    pristine_git_object: d23226d0b48c25cb98026bdf5b998d59c84d26c9
+  internal/provider/types/authz_pdp_endpoint.go:
+    id: 6760ae9c1914
+    last_write_checksum: sha1:e1ec2a17ee0ba03f21308cf1a47ff2b590331748
+    pristine_git_object: 98984c1465fe28f20cca9185e9627007b36d6d35
   internal/provider/types/channel_selector.go:
     id: ffed5b933a69
     last_write_checksum: sha1:e97b9eb715061eedc3267ea5a0159d1ed194597c
@@ -1098,6 +1190,22 @@ trackedFiles:
     id: 5006ded62046
     last_write_checksum: sha1:8a4edd2becae887555eed346b8651b42a807b21a
     pristine_git_object: c4bb8fec726c377dc56b7210ac1867c5e9c809ff
+  internal/sdk/authorizationentities.go:
+    id: 4175442ad2ba
+    last_write_checksum: sha1:b58f7eb21187c54f745ed7f96ad794e9a52a8b4c
+    pristine_git_object: 2dfe3ec9a4c498dbd9b895f08b60476422e5bc27
+  internal/sdk/authorizationpdpgateways.go:
+    id: bdfed92b8085
+    last_write_checksum: sha1:75ec1c1fc14426f3bd9e1feb7917ade935789962
+    pristine_git_object: adcb9ee264b03584605fbb93f461b3482fd33f5a
+  internal/sdk/authorizationpolicies.go:
+    id: 78edb21bd749
+    last_write_checksum: sha1:e11d5e636f0702f1d36e75317053f64a44aec109
+    pristine_git_object: 60753bac3587d5a73cb1c6b0746f2335e8661572
+  internal/sdk/authorizationschemas.go:
+    id: 023e1d903e17
+    last_write_checksum: sha1:61aaf20143c4e57b6d3ee8cf21b71dd9e039f6b8
+    pristine_git_object: 4a7c8bd26c54a262ac408fdceabadbbfa5b1bee9
   internal/sdk/dictionaries.go:
     id: bb8d8a3190fb
     last_write_checksum: sha1:0846ee64ca58ab85f7080ddc4a1b924056aa77ce
@@ -1108,8 +1216,8 @@ trackedFiles:
     pristine_git_object: 748c4bab704e399fd73706ce2a0478fc4a298117
   internal/sdk/graviteeapim.go:
     id: 1f2cf575c2fd
-    last_write_checksum: sha1:d66c14854ef87bc4622e73e1c8bbc98c6b608e48
-    pristine_git_object: 4350276f9a4280d38329df52db825a86b56f2014
+    last_write_checksum: sha1:707c1623cd64ade54fd6f0590d0a3ec6cd5818c1
+    pristine_git_object: 1fdd5c2e8c04576191f33768c513b355978df572
   internal/sdk/groups.go:
     id: 2bfe17bcb000
     last_write_checksum: sha1:709108650e6e2f0612bad64fe38a49f88aefd495
@@ -1218,6 +1326,22 @@ trackedFiles:
     id: abfc8c92b8d2
     last_write_checksum: sha1:be151c745c49565216519a37f47f643bc8000fe6
     pristine_git_object: cf1d3e275386e962a2bc6ef2921e1ed6a1bf363d
+  internal/sdk/models/operations/createorupdateauthzentity.go:
+    id: a4b627010357
+    last_write_checksum: sha1:606a3fdc0513790309c91d1fb61335ae33644e8d
+    pristine_git_object: d0d5a2f07447be2f3057cc8c5edf303e3226b52b
+  internal/sdk/models/operations/createorupdateauthzpdp.go:
+    id: dd3b49b4fb8b
+    last_write_checksum: sha1:69e43c33326dd04ea2b44d9f90fca17e52652ba8
+    pristine_git_object: 0aae08aff28a70afc0d26bc399efbfedaac95922
+  internal/sdk/models/operations/createorupdateauthzpolicy.go:
+    id: 9b6d676f56de
+    last_write_checksum: sha1:edc9decebf6d906d555645b7ceb7e30d64a33992
+    pristine_git_object: 5652a5b34e0e2fe1a049270bf6acb8d36bb19bdc
+  internal/sdk/models/operations/createorupdateauthzschema.go:
+    id: f48a871734d0
+    last_write_checksum: sha1:16fdf6fa29e4675f4b8a81585d0bf12f610a0660
+    pristine_git_object: 9a07e5ff675c307d1b7630db4cbb880f853d414e
   internal/sdk/models/operations/createorupdatedictionaries.go:
     id: 456099f6d215
     last_write_checksum: sha1:4b879c5bf1472ef4f36fedee398036f164e365a9
@@ -1278,6 +1402,22 @@ trackedFiles:
     id: 2a25b08fb4aa
     last_write_checksum: sha1:6c7b6836f47e5d87b1cf339dd155aa5a3221c424
     pristine_git_object: 97531ad386bbcd940f589cac2c8856f8621e3f11
+  internal/sdk/models/operations/deleteauthzentity.go:
+    id: 1a3fa64750d2
+    last_write_checksum: sha1:5ee53a9bb400642cfcab7a2b3d600cbc39cf1d1f
+    pristine_git_object: 08ffbbd767ead7bff4725c89e24fe25d106764b0
+  internal/sdk/models/operations/deleteauthzpdp.go:
+    id: db2031fc4bf4
+    last_write_checksum: sha1:805f379ebac47f888dcb147073ef46d6abde532f
+    pristine_git_object: 78bce945b6a6c21f97a9b84b651790e365e006b4
+  internal/sdk/models/operations/deleteauthzpolicy.go:
+    id: 8fa6cd7d8936
+    last_write_checksum: sha1:5b5b49b31b4d233a38bd3ad89c7b91fa76832523
+    pristine_git_object: 5d83b5ef5fa148b55c02a3297defeacad367cfba
+  internal/sdk/models/operations/deleteauthzschema.go:
+    id: a260a3d672b4
+    last_write_checksum: sha1:c7ea99ecea5ab196acd71cb28d77a3f46ff2fff9
+    pristine_git_object: dd151fd24080835b73e2dc88a00b17da8456fef9
   internal/sdk/models/operations/deletedictionary.go:
     id: d0f9b192c80e
     last_write_checksum: sha1:9efc39a8d5680bc3609ce75b951c6e748184bb84
@@ -1338,6 +1478,22 @@ trackedFiles:
     id: 42beb30dc36f
     last_write_checksum: sha1:f2935b21b0f7ad3d3c82021dd0c635ccf76a74a9
     pristine_git_object: 79cf43c46a48ffc392e3908acea6239ba58a3101
+  internal/sdk/models/operations/getauthzentity.go:
+    id: 9b42ed2ba8de
+    last_write_checksum: sha1:9d211de9506226ba6d8b4fe8ef57ef1d54e3f74c
+    pristine_git_object: 77d0a8c2c855045c9873cba2b13224638c1aae28
+  internal/sdk/models/operations/getauthzpdp.go:
+    id: 99c0802993e3
+    last_write_checksum: sha1:dd42d56de2ff37ea556979fe1d3cab8847ce8d87
+    pristine_git_object: 0f6187f5296024e9e6a8d40adb361d6b51c05364
+  internal/sdk/models/operations/getauthzpolicy.go:
+    id: 087a71aaed37
+    last_write_checksum: sha1:edc56c9c1e2b65f9df543a525d1c8edd11a01da1
+    pristine_git_object: c8cc4140e36aa5565e9cf708f562d3ce9d86582a
+  internal/sdk/models/operations/getauthzschema.go:
+    id: 80f6c29d446e
+    last_write_checksum: sha1:07ba5b5b09c53c0524c6647c6b9088711483cec2
+    pristine_git_object: 9f1939463827f008f685747bbea9cbe94dbed89f
   internal/sdk/models/operations/getdictionary.go:
     id: b7634c97510d
     last_write_checksum: sha1:48faf778ea2eba62cd431f8b89e6338abdc8d4cb
@@ -1527,6 +1683,54 @@ trackedFiles:
     id: 22eaf98fbe99
     last_write_checksum: sha1:c6e13535c3a2fabde96c55866bc2688399c675bc
     pristine_git_object: 2849a9d52061899dac2f3d2e75b3735828604285
+  internal/sdk/models/shared/authzautomationhttperror.go:
+    id: 7905fb6f45b7
+    last_write_checksum: sha1:1c04017fd603b58dac092e5398299896ab1f0359
+    pristine_git_object: f5bd9d17242d39e93ed6d041784133f0baf6a70d
+  internal/sdk/models/shared/authzentityparent.go:
+    id: 6d1401c1e355
+    last_write_checksum: sha1:458332e27f76a535d4d7a8111213eb360af4b396
+    pristine_git_object: 2c6b8a2e9154087e4f6bf92d67cd48f1c7362cd4
+  internal/sdk/models/shared/authzentityspec.go:
+    id: 5516700e48c8
+    last_write_checksum: sha1:a22646352799525616b02a9e9d49933e2735e26e
+    pristine_git_object: 615862f74daa1252a1d604110e699f391ba98947
+  internal/sdk/models/shared/authzentitystate.go:
+    id: 707707cdfbb3
+    last_write_checksum: sha1:21aeaea9184103fe0579b6c8a0dd0ccbd0abc3a1
+    pristine_git_object: 9d1197e6c81928b57af187cb0e2daae0ee60b050
+  internal/sdk/models/shared/authzerrors.go:
+    id: 8dc797c035ba
+    last_write_checksum: sha1:fe78abaad2d3d6ef1d18a46ec06a14b802238d30
+    pristine_git_object: 39206ab7f431fb02770be006bf0074df0f0afd50
+  internal/sdk/models/shared/authzpdpendpoint.go:
+    id: 7dfddfe4f307
+    last_write_checksum: sha1:3c1b2d9ac13c36ed713d531bdc09bb352f4d0532
+    pristine_git_object: 9190303a54bd1e9f5bec02c0adc033833b8f0ec7
+  internal/sdk/models/shared/authzpdpspec.go:
+    id: ef68f007f1b2
+    last_write_checksum: sha1:45e81060bbe4d6e8e956588e9eb9f599c0b5268d
+    pristine_git_object: 7985352bc462dc8c3e5bf149bf03e138d37946e8
+  internal/sdk/models/shared/authzpdpstate.go:
+    id: bab022165970
+    last_write_checksum: sha1:e533df097910402fa8ec02e2afcee448f6ca67dc
+    pristine_git_object: f861f81fa49311ea85aed691a884c77a5597615c
+  internal/sdk/models/shared/authzpolicyspec.go:
+    id: 618209655f87
+    last_write_checksum: sha1:557d196a1e12a0a6179acf80f80b60e7beddbe4e
+    pristine_git_object: 4c283f5872309d3d707cce82df0639245c09ad44
+  internal/sdk/models/shared/authzpolicystate.go:
+    id: 02cb54ae7989
+    last_write_checksum: sha1:6c99b93d58434fc96610a6d5252bd9e3099d0013
+    pristine_git_object: 6c89dec250c5a89f14db8380bc769304b31d37f2
+  internal/sdk/models/shared/authzschemaspec.go:
+    id: 317736e70e08
+    last_write_checksum: sha1:05270b258b17c1ae6a010c50ea1a34a27e99e30d
+    pristine_git_object: 814e4b2f80452640970a06e930d4a7750fe4b5d0
+  internal/sdk/models/shared/authzschemastate.go:
+    id: e3062c999cfb
+    last_write_checksum: sha1:92d17b96b5475fb5c07ee167904b5ce2fb7f7ad8
+    pristine_git_object: fe61b20875ec9b5f7d24808a7288f14fb7aefdda
   internal/sdk/models/shared/channelselector.go:
     id: 6c7f4820b85c
     last_write_checksum: sha1:30a6edc150bf7e1788ac405e265588c1cd1f9111
@@ -2880,6 +3084,184 @@ examples:
           application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
         default:
           application/json: {"httpStatus": 400, "message": "entityId [mcp-server.github] is already used by another MCP server", "technicalCode": "mcp-server.already-exists"}
+  createOrUpdateAuthzSchema:
+    speakeasy-default-create-or-update-authz-schema:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+        query:
+          dryRun: true
+      requestBody:
+        application/json: {"hrid": "travel-schema", "name": "Travel schema", "target": "orders@eu", "schema": "entity User in Group;\nentity Hotel;\naction read appliesTo { principal: User, resource: Hotel };\n"}
+      responses:
+        "200":
+          application/json: {"hrid": "travel-schema", "name": "Travel schema", "target": "orders@eu", "schema": "entity User in Group;\nentity Hotel;\naction read appliesTo { principal: User, resource: Hotel };\n"}
+        "401":
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+        default:
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+  getAuthzSchema:
+    speakeasy-default-get-authz-schema:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "travel-schema", "name": "Travel schema", "target": "orders@eu", "schema": "entity User in Group;\nentity Hotel;\naction read appliesTo { principal: User, resource: Hotel };\n"}
+        "401":
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+        default:
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+  deleteAuthzSchema:
+    speakeasy-default-delete-authz-schema:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "401":
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+        default:
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+  createOrUpdateAuthzPdp:
+    speakeasy-default-create-or-update-authz-pdp:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+        query:
+          dryRun: true
+      requestBody:
+        application/json: {"hrid": "travel-schema", "name": "Orders PDP (EU)", "targetPdpId": "orders", "tag": "eu", "strict": false, "endpoint": {"path": "/authz/orders-eu"}}
+      responses:
+        "200":
+          application/json: {"hrid": "travel-schema", "name": "Orders PDP (EU)", "targetPdpId": "orders", "tag": "eu", "strict": false, "endpoint": {"path": "/authz/orders-eu"}, "routingScope": "orders@eu", "wellKnownPath": "/.well-known/authzen-configuration/authz/orders-eu"}
+        "401":
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+        default:
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+  getAuthzPdp:
+    speakeasy-default-get-authz-pdp:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "travel-schema", "name": "Orders PDP (EU)", "targetPdpId": "orders", "tag": "eu", "strict": false, "endpoint": {"path": "/authz/orders-eu"}, "routingScope": "orders@eu", "wellKnownPath": "/.well-known/authzen-configuration/authz/orders-eu"}
+        "401":
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+        default:
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+  deleteAuthzPdp:
+    speakeasy-default-delete-authz-pdp:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "travel-schema", "name": "Orders PDP (EU)", "targetPdpId": "orders", "tag": "eu", "strict": false, "endpoint": {"path": "/authz/orders-eu"}, "routingScope": "orders@eu", "wellKnownPath": "/.well-known/authzen-configuration/authz/orders-eu"}
+        "401":
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+        default:
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+  createOrUpdateAuthzEntity:
+    speakeasy-default-create-or-update-authz-entity:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+        query:
+          dryRun: true
+      requestBody:
+        application/json: {"hrid": "travel-schema", "entityId": "agents", "kind": "RESOURCE", "entityType": "Group", "parents": [], "active": true, "targets": ["orders@eu"]}
+      responses:
+        "200":
+          application/json: {"hrid": "travel-schema", "entityId": "agents", "kind": "PRINCIPAL", "entityType": "Group", "parents": [], "active": true, "targets": ["orders@eu"]}
+        "401":
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+        default:
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+  getAuthzEntity:
+    speakeasy-default-get-authz-entity:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "travel-schema", "entityId": "agents", "kind": "RESOURCE", "entityType": "Group", "parents": [], "active": true, "targets": ["orders@eu"]}
+        "401":
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+        default:
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+  deleteAuthzEntity:
+    speakeasy-default-delete-authz-entity:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "travel-schema", "entityId": "agents", "kind": "PRINCIPAL", "entityType": "Group", "parents": [], "active": true, "targets": ["orders@eu"]}
+        "401":
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+        default:
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+  createOrUpdateAuthzPolicy:
+    speakeasy-default-create-or-update-authz-policy:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+        query:
+          dryRun: true
+      requestBody:
+        application/json: {"hrid": "travel-schema", "entityId": "policy.hotel-booking-read", "name": "Hotel booking — read access", "policyType": "API", "policyText": "permit(principal in Group::\"agents\", action == Action::\"read\", resource == Resource::\"searchHotels\");", "targets": ["orders@eu"]}
+      responses:
+        "200":
+          application/json: {"hrid": "travel-schema", "entityId": "policy.hotel-booking-read", "name": "Hotel booking — read access", "policyType": "CUSTOM", "policyText": "permit(principal in Group::\"agents\", action == Action::\"read\", resource == Resource::\"searchHotels\");", "targets": ["orders@eu"]}
+        "401":
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+        default:
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+  getAuthzPolicy:
+    speakeasy-default-get-authz-policy:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "travel-schema", "entityId": "policy.hotel-booking-read", "name": "Hotel booking — read access", "policyType": "MCP", "policyText": "permit(principal in Group::\"agents\", action == Action::\"read\", resource == Resource::\"searchHotels\");", "targets": ["orders@eu"]}
+        "401":
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+        default:
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+  deleteAuthzPolicy:
+    speakeasy-default-delete-authz-policy:
+      parameters:
+        path:
+          orgId: "dedd0e0f-b3e9-4d2f-89cd-b2a9de7cb145"
+          envId: "a44e0d1b-9fa9-4d64-8b76-3634623a2e27"
+          hrid: "my_demo_api"
+      responses:
+        "200":
+          application/json: {"hrid": "travel-schema", "entityId": "policy.hotel-booking-read", "name": "Hotel booking — read access", "policyType": "AGENT", "policyText": "permit(principal in Group::\"agents\", action == Action::\"read\", resource == Resource::\"searchHotels\");", "targets": ["orders@eu"]}
+        "401":
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
+        default:
+          application/json: {"httpStatus": 404, "message": "Resource [travel-schema] does not exist", "technicalCode": "hrid.notFound"}
 examplesVersion: 1.0.2
 generatedFiles:
   - .gitattributes
