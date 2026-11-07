@@ -1,0 +1,67 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: AuthZ entity overlay
+  version: 0.0.1
+actions:
+
+  # Entity management
+  - target: $.components.schemas.AuthzEntitySpec
+    update:
+      x-speakeasy-entity:
+        AuthzEntity
+      x-speakeasy-entity-description: >-
+        An authorization entity, a principal or a resource that policies name,
+        with its parents, attributes and PDP gateway targets. Deleting an entity
+        deletes the RESOURCE entities that have it as a parent, and detaches the
+        PRINCIPAL ones; APIM refuses with a `413` a delete that would remove or
+        detach more entities than its cascade limit. Requires APIM 4.14 or later.
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/entities"].put
+    update:
+      x-speakeasy-entity-operation: AuthzEntity#create,update
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/entities/{hrid}"].get
+    update:
+      x-speakeasy-entity-operation: AuthzEntity#read
+  - target: $.paths["/organizations/{orgId}/environments/{envId}/authz/entities/{hrid}"].delete
+    update:
+      x-speakeasy-entity-operation: AuthzEntity#delete
+
+  # Immutable
+  # The platform refuses another entityId, kind or entityType on an existing
+  # entity. Refused at plan time rather than replaced: deleting an entity deletes
+  # the RESOURCE entities that have it as a parent.
+  - target: $.components.schemas.AuthzEntitySpec.properties.entityId
+    update:
+      x-speakeasy-plan-modifiers: Immutable
+  - target: $.components.schemas.AuthzEntitySpec.properties.kind
+    update:
+      x-speakeasy-plan-modifiers: Immutable
+  - target: $.components.schemas.AuthzEntitySpec.properties.entityType
+    update:
+      x-speakeasy-plan-modifiers: Immutable
+
+  # Attributes as JSON: free-form values, compared as JSON, so the key order and
+  # spacing APIM reports them in make no diff. The platform reports {} for an entity without
+  # attributes and replaces them whole: left out, they plan {}, which needs them
+  # computed.
+  - target: $.components.schemas.AuthzEntitySpec.properties.attributes
+    update:
+      x-speakeasy-type-override: any
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: EmptyObjectWhenOmitted
+
+  # Lists the platform reports sorted. KeepStateOrder plans the state's order when
+  # the declared list holds the same elements, which needs them computed, and
+  # plans [] for a list left out. The generator ignores a default on a list of
+  # objects, so parents relies on the modifier alone. Computed, parents gets its
+  # entity_type and entity_id as optional: the platform refuses a parent without
+  # both on apply.
+  - target: $.components.schemas.AuthzEntitySpec.properties.parents
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: KeepStateOrder
+  - target: $.components.schemas.AuthzEntitySpec.properties.targets
+    update:
+      default: []
+      x-speakeasy-param-computed: true
+      x-speakeasy-plan-modifiers: KeepStateOrder
