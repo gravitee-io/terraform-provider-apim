@@ -252,16 +252,19 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 								"value": schema.StringAttribute{
 									Required:    true,
 									Sensitive:   true,
-									Description: `The plaintext value to encrypt on save.`,
+									Description: `The plaintext to encrypt, or ` + "`" + `••••••••••••` + "`" + ` to keep the value APIM stores for this key. APIM rejects the mask for a key it does not hold encrypted with ` + "`" + `dictionary.property.maskedValue` + "`" + `.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 							},
 						},
-						Description: `Secret properties, keyed by the property key. APIM encrypts the values and never returns them: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. Removing a key, or the attribute, deletes the secret. A key must not appear in both ` + "`" + `properties` + "`" + ` and ` + "`" + `encrypted_properties` + "`" + `. To make a secret plain again, remove it from ` + "`" + `encrypted_properties` + "`" + `, apply, then add it to ` + "`" + `properties` + "`" + `: APIM keeps a secret key encrypted otherwise. Requires APIM 4.13 or later.`,
+						Description: `Secret properties, keyed by the property key. APIM encrypts the values and a read returns each of them masked as ` + "`" + `••••••••••••` + "`" + `: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. A value of ` + "`" + `••••••••••••` + "`" + ` keeps the value APIM stores for that key, for instance after an import. Removing a key, or the attribute, deletes the secret. A key must not appear in both ` + "`" + `properties` + "`" + ` and ` + "`" + `encrypted_properties` + "`" + `. To make a secret plain again, remove it from ` + "`" + `encrypted_properties` + "`" + `, apply, then add it to ` + "`" + `properties` + "`" + `: APIM rejects the move in a single apply with ` + "`" + `dictionary.property.encryptedToPlain` + "`" + `. Requires APIM 4.13 or later.`,
 					},
 					"properties": schema.MapAttribute{
 						Optional:    true,
 						ElementType: types.StringType,
-						Description: `Dictionary data are key/value pairs for ` + "`" + `MANUAL` + "`" + ` properties`,
+						Description: `Plain properties, keyed by the property key. A key APIM holds encrypted cannot move here in a single apply: see ` + "`" + `encrypted_properties` + "`" + `.`,
 					},
 				},
 				Description: `A manual dictionary with static key/value properties.`,
