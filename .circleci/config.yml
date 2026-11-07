@@ -17,6 +17,7 @@ parameters:
       - release_notification
       - publish_changelog
       - verify_aim_oas
+      - verify_authz_oas
       - acceptance
       - none
   changelog_path:
@@ -351,6 +352,20 @@ jobs:
           name: Verify the AI Management OAS fragment matches its tag
           command: make verify-aim-oas
 
+  verify-authz-oas:
+    docker:
+      - image: cimg/base:stable
+    resource_class: small
+    steps:
+      - checkout
+      - keeper/env-export:
+          secret-url: keeper://TIlcGPFq4rN5GvgnZb9hng/field/password
+          var-name: GITHUB_TOKEN
+      - gh/setup
+      - run:
+          name: Verify the AuthZ OAS fragment matches its ref
+          command: make verify-authz-oas
+
   acceptance:
     parameters:
       apim-image-tag:
@@ -482,6 +497,16 @@ workflows:
     jobs:
       - verify-aim-oas:
           name: Verify AI Management OAS matches upstream
+          context: cicd-orchestrator
+
+  verify-authz-oas:
+    when:
+      equal:
+        - << pipeline.parameters.trigger >>
+        - verify_authz_oas
+    jobs:
+      - verify-authz-oas:
+          name: Verify AuthZ OAS matches upstream
           context: cicd-orchestrator
 
   # Runs on every push (webhook pipelines keep the default trigger) and from the nightly scheduled trigger
