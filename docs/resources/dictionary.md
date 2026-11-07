@@ -171,15 +171,15 @@ Optional:
 
 Optional:
 
-- `encrypted_properties` (Attributes Map) Secret properties, keyed by the property key. APIM encrypts the values and never returns them: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. Removing a key, or the attribute, deletes the secret. A key must not appear in both `properties` and `encrypted_properties`. To make a secret plain again, remove it from `encrypted_properties`, apply, then add it to `properties`: APIM keeps a secret key encrypted otherwise. Requires APIM 4.13 or later. (see [below for nested schema](#nestedatt--manual--encrypted_properties))
-- `properties` (Map of String) Dictionary data are key/value pairs for `MANUAL` properties
+- `encrypted_properties` (Attributes Map) Secret properties, keyed by the property key. APIM encrypts the values and a read returns each of them masked as `••••••••••••`: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. A value of `••••••••••••` keeps the value APIM stores for that key, for instance after an import. Removing a key, or the attribute, deletes the secret. A key must not appear in both `properties` and `encrypted_properties`. To make a secret plain again, remove it from `encrypted_properties`, apply, then add it to `properties`: APIM rejects the move in a single apply with `dictionary.property.encryptedToPlain`. Requires APIM 4.13 or later. (see [below for nested schema](#nestedatt--manual--encrypted_properties))
+- `properties` (Map of String) Plain properties, keyed by the property key. A key APIM holds encrypted cannot move here in a single apply: see `encrypted_properties`.
 
 <a id="nestedatt--manual--encrypted_properties"></a>
 ### Nested Schema for `manual.encrypted_properties`
 
 Required:
 
-- `value` (String, Sensitive) The plaintext value to encrypt on save.
+- `value` (String, Sensitive) The plaintext to encrypt, or `••••••••••••` to keep the value APIM stores for this key. APIM rejects the mask for a key it does not hold encrypted with `dictionary.property.maskedValue`.
 
 ## Import
 
