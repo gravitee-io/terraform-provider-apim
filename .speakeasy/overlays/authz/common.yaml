@@ -1,0 +1,28 @@
+overlay: 1.0.0
+x-speakeasy-jsonpath: rfc9535
+info:
+  title: AuthZ common overlay
+  version: 0.0.1
+actions:
+
+  # AuthzResourceStatus is to the AuthZ resources what BaseStatus is to the
+  # others (common/schema.yaml).
+  - target: $.components.schemas.AuthzResourceStatus.properties.id
+    description: API-assigned UUID, computed and suppress diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.AuthzResourceStatus.properties.organizationId
+    description: API-returned org ID, suppress diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.AuthzResourceStatus.properties.environmentId
+    description: API-returned env ID, suppress diff
+    update:
+      x-speakeasy-param-computed: true
+      x-speakeasy-param-suppress-computed-diff: true
+  - target: $.components.schemas.AuthzErrors
+    description: Intentionally ignored for Terraform state
+    update:
+      x-speakeasy-terraform-ignore: true
