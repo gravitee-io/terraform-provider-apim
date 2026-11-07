@@ -72,7 +72,7 @@ func (r *AuthzEntityResource) Metadata(ctx context.Context, req resource.Metadat
 
 func (r *AuthzEntityResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "AuthzEntity Resource",
+		MarkdownDescription: "An authorization entity, a principal or a resource that policies name, with its parents, attributes and PDP gateway targets. Deleting an entity deletes the RESOURCE entities that have it as a parent, and detaches the PRINCIPAL ones; APIM refuses with a `413` a delete that would remove or detach more entities than its cascade limit. Requires APIM 4.14 or later.",
 		Attributes: map[string]schema.Attribute{
 			"active": schema.BoolAttribute{
 				Computed:    true,

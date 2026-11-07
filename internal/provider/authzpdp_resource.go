@@ -66,7 +66,7 @@ func (r *AuthzPdpResource) Metadata(ctx context.Context, req resource.MetadataRe
 
 func (r *AuthzPdpResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "AuthzPdp Resource",
+		MarkdownDescription: "A PDP gateway: the authorization engine of a `target_pdp_id`, run on the gateways of a sharding `tag`, with its AuthZEN endpoint. APIM refuses with a `409` the delete of a PDP gateway that is the only target of an entity or a policy, and deletes nothing; the untagged `default` PDP gateway can always be deleted. Requires APIM 4.14 or later.",
 		Attributes: map[string]schema.Attribute{
 			"endpoint": schema.SingleNestedAttribute{
 				Optional: true,

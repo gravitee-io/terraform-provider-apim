@@ -61,6 +61,7 @@ func Pointer[T any](v T) *T { return &v }
 // * Next-gen portals (APIM 4.13 or later): portals, portal listings, portal and API documentation, portal and API links, portal themes
 // * MCP Catalog Servers
 // * MCP Proxies
+// * Authorization (APIM 4.14 or later): PDP gateways, schemas, entities and policies
 //
 // [Get started with APIM + Terraform and learn about changes and known limitations](https://documentation.gravitee.io/apim/terraform)
 //

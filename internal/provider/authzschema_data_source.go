@@ -55,7 +55,7 @@ func (r *AuthzSchemaDataSource) Metadata(ctx context.Context, req datasource.Met
 // Schema defines the schema for the data source.
 func (r *AuthzSchemaDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "AuthzSchema DataSource",
+		MarkdownDescription: "A GAPL schema document, enforced by the PDP gateway its `target` names. Without a target the document is stored and published nowhere; a target another schema holds is refused. Requires APIM 4.14 or later.",
 
 		Attributes: map[string]schema.Attribute{
 			"environment_id": schema.StringAttribute{

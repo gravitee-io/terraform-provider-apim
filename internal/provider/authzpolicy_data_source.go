@@ -58,7 +58,7 @@ func (r *AuthzPolicyDataSource) Metadata(ctx context.Context, req datasource.Met
 // Schema defines the schema for the data source.
 func (r *AuthzPolicyDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "AuthzPolicy DataSource",
+		MarkdownDescription: "A GAPL policy, deployed on every apply to the PDP gateways its `targets` name. Deleting a policy withdraws it from those gateways and keeps the entities it names. Requires APIM 4.14 or later.",
 
 		Attributes: map[string]schema.Attribute{
 			"entity_id": schema.StringAttribute{

@@ -61,7 +61,7 @@ func (r *AuthzEntityDataSource) Metadata(ctx context.Context, req datasource.Met
 // Schema defines the schema for the data source.
 func (r *AuthzEntityDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "AuthzEntity DataSource",
+		MarkdownDescription: "An authorization entity, a principal or a resource that policies name, with its parents, attributes and PDP gateway targets. Deleting an entity deletes the RESOURCE entities that have it as a parent, and detaches the PRINCIPAL ones; APIM refuses with a `413` a delete that would remove or detach more entities than its cascade limit. Requires APIM 4.14 or later.",
 
 		Attributes: map[string]schema.Attribute{
 			"active": schema.BoolAttribute{

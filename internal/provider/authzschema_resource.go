@@ -59,7 +59,7 @@ func (r *AuthzSchemaResource) Metadata(ctx context.Context, req resource.Metadat
 
 func (r *AuthzSchemaResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "AuthzSchema Resource",
+		MarkdownDescription: "A GAPL schema document, enforced by the PDP gateway its `target` names. Without a target the document is stored and published nowhere; a target another schema holds is refused. Requires APIM 4.14 or later.",
 		Attributes: map[string]schema.Attribute{
 			"environment_id": schema.StringAttribute{
 				Computed: true,

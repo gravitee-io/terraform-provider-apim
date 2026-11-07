@@ -66,7 +66,7 @@ func (r *AuthzPolicyResource) Metadata(ctx context.Context, req resource.Metadat
 
 func (r *AuthzPolicyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		MarkdownDescription: "AuthzPolicy Resource",
+		MarkdownDescription: "A GAPL policy, deployed on every apply to the PDP gateways its `targets` name. Deleting a policy withdraws it from those gateways and keeps the entities it names. Requires APIM 4.14 or later.",
 		Attributes: map[string]schema.Attribute{
 			"entity_id": schema.StringAttribute{
 				Required: true,
