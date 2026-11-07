@@ -5,7 +5,7 @@ package shared
 
 // EncryptableValue - A secret property value.
 type EncryptableValue struct {
-	// The plaintext value to encrypt on save.
+	// The plaintext to encrypt, or `••••••••••••` to keep the value APIM stores for this key. APIM rejects the mask for a key it does not hold encrypted with `dictionary.property.maskedValue`.
 	Value string `json:"value"`
 }
 

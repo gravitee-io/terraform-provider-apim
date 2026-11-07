@@ -1,6 +1,7 @@
 package acceptance_test
 
 import (
+	"regexp"
 	"testing"
 
 	"github.com/gravitee-io/terraform-provider-apim/tests/utils"
@@ -189,8 +190,8 @@ func TestDictionaryResource_dynamic_update(t *testing.T) {
 	})
 }
 
-// Verifies the secret properties of a manual dictionary: APIM never returns
-// their values, so Terraform keeps what it sent and shows no drift.
+// Verifies the secret properties of a manual dictionary: APIM returns their
+// values masked, so Terraform keeps what it sent and shows no drift.
 func TestDictionaryResource_manual_encrypted(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
@@ -199,6 +200,7 @@ func TestDictionaryResource_manual_encrypted(t *testing.T) {
 	organizationId := "DEFAULT"
 	randomId := "test-" + acctest.RandString(10)
 	resourceAddress := "apim_dictionary.test"
+	mask := "••••••••••••"
 	plain := config.MapVariable(map[string]config.Variable{"env": config.StringVariable("test")})
 	madePlain := config.MapVariable(map[string]config.Variable{
 		"env":     config.StringVariable("test"),
@@ -265,6 +267,27 @@ func TestDictionaryResource_manual_encrypted(t *testing.T) {
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables:          variables(plain, "r0tated", true),
 				Check:                    resource.TestCheckResourceAttr(resourceAddress, "manual.encrypted_properties.api-key.value", "r0tated"),
+			},
+			// Verifies an empty secret is refused when planning.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, "", true),
+				PlanOnly:                 true,
+				ExpectError:              regexp.MustCompile(`UTF-8 character count\s+must be at least 1`),
+			},
+			// Verifies the mask is accepted: APIM keeps the stored value, which a read cannot show.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, mask, true),
+				Check:                    resource.TestCheckResourceAttr(resourceAddress, "manual.encrypted_properties.api-key.value", mask),
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, mask, true),
+				PlanOnly:                 true,
 			},
 			// Verifies the secret removal.
 			{

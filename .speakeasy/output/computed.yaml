@@ -2370,14 +2370,15 @@ components:
       properties:
         properties:
           type: object
-          description: Dictionary data are key/value pairs for `MANUAL` properties
+          description: >-
+            Plain properties, keyed by the property key. A key APIM holds encrypted cannot move here in a single apply: see `encrypted_properties`.
           additionalProperties:
             type: string
           x-speakeasy-param-computed: false
         encryptedProperties:
           type: object
           description: >-
-            Secret properties, keyed by the property key. APIM encrypts the values and never returns them: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. Removing a key, or the attribute, deletes the secret. A key must not appear in both `properties` and `encrypted_properties`. To make a secret plain again, remove it from `encrypted_properties`, apply, then add it to `properties`: APIM keeps a secret key encrypted otherwise. Requires APIM 4.13 or later.
+            Secret properties, keyed by the property key. APIM encrypts the values and a read returns each of them masked as `••••••••••••`: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. A value of `••••••••••••` keeps the value APIM stores for that key, for instance after an import. Removing a key, or the attribute, deletes the secret. A key must not appear in both `properties` and `encrypted_properties`. To make a secret plain again, remove it from `encrypted_properties`, apply, then add it to `properties`: APIM rejects the move in a single apply with `dictionary.property.encryptedToPlain`. Requires APIM 4.13 or later.
           additionalProperties:
             $ref: "#/components/schemas/EncryptableValue"
           x-speakeasy-param-computed: false
@@ -2388,9 +2389,10 @@ components:
       type: object
       properties:
         value:
-          description: The plaintext value to encrypt on save.
+          description: >-
+            The plaintext to encrypt, or `••••••••••••` to keep the value APIM stores for this key. APIM rejects the mask for a key it does not hold encrypted with `dictionary.property.maskedValue`.
           type: string
-          writeOnly: true
+          minLength: 1
           x-speakeasy-param-computed: false
           x-speakeasy-param-sensitive: true
       required:
@@ -6239,7 +6241,11 @@ components:
     dryRunQueryParam:
       name: dryRun
       in: query
-      description: "For modifying requests, this parameter allow you to test the result of an endpoint without actually persisting \nthe state of the underlying spec.\n"
+      description: |
+        For modifying requests, validates the request without persisting it. A dry run runs every check the same
+        request runs without `dryRun` and fails with the same error, so a request a dry run accepts is accepted when
+        sent without `dryRun`, unless the stored state changes in between. Only the write and its side effects
+        (deployment, events, audit) are skipped.
       schema:
         type: boolean
         default: false
