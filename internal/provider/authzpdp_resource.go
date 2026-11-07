@@ -140,7 +140,6 @@ func (r *AuthzPdpResource) Schema(ctx context.Context, req resource.SchemaReques
 					`Default: false`,
 			},
 			"tag": schema.StringAttribute{
-				Computed: true,
 				Optional: true,
 				PlanModifiers: []planmodifier.String{
 					custom_stringplanmodifier.Immutable(),

@@ -111,7 +111,6 @@ func (r *AuthzSchemaResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"target": schema.StringAttribute{
-				Computed: true,
 				Optional: true,
 				MarkdownDescription: `The routing scope of a PDP gateway: ` + "`" + `targetPdpId@tag` + "`" + ` for a tagged gateway, ` + "`" + `targetPdpId` + "`" + ` for an untagged` + "\n" +
 					`one, or ` + "`" + `default` + "`" + `. Written exactly as the gateway reports it; a PDP id or a bare ` + "`" + `targetPdpId` + "`" + ` naming a` + "\n" +
