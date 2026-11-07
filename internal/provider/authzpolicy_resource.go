@@ -124,6 +124,9 @@ func (r *AuthzPolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 			},
 			"policy_status": schema.StringAttribute{
 				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.DeployedOnApply(),
+				},
 				MarkdownDescription: `` + "`" + `DEPLOYED` + "`" + ` after every apply. ` + "`" + `DISABLED` + "`" + ` once the policy is disabled in the Console, until the next` + "\n" +
 					`apply deploys it again.`,
 			},

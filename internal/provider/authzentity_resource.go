@@ -82,7 +82,11 @@ func (r *AuthzEntityResource) Schema(ctx context.Context, req resource.SchemaReq
 			},
 			"attributes": schema.StringAttribute{
 				CustomType: jsontypes.NormalizedType{},
+				Computed:   true,
 				Optional:   true,
+				PlanModifiers: []planmodifier.String{
+					custom_stringplanmodifier.EmptyObjectWhenOmitted(),
+				},
 				MarkdownDescription: `The attributes of the entity, replaced whole on every apply. A key that starts with ` + "`" + `_` + "`" + ` is` + "\n" +
 					`reserved to the module and refused.` + "\n" +
 					`Parsed as JSON.`,
