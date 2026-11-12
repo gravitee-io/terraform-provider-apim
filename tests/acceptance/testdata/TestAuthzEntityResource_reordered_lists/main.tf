@@ -43,6 +43,11 @@ locals {
     { entity_type = "Group", entity_id = apim_authz_entity.parent_1.entity_id },
     { entity_type = "Group", entity_id = apim_authz_entity.parent_2.entity_id },
   ]
+  # Indexes, not `var.reversed ? reverse(local.parents) : local.parents`:
+  # Terraform 1.9 validates a conditional on a variable whose branches have
+  # the same length as objects whose keys are null, and the provider refuses
+  # a parent without entity_type or entity_id. Terraform 1.5 does not.
+  order = var.reversed ? [1, 0] : [0, 1]
 }
 
 resource "apim_authz_entity" "test" {
@@ -50,6 +55,6 @@ resource "apim_authz_entity" "test" {
   entity_id   = var.hrid
   kind        = "PRINCIPAL"
   entity_type = "User"
-  targets     = var.reversed ? reverse(local.targets) : local.targets
-  parents     = var.reversed ? reverse(local.parents) : local.parents
+  targets     = [for i in local.order : local.targets[i]]
+  parents     = [for i in local.order : local.parents[i]]
 }
