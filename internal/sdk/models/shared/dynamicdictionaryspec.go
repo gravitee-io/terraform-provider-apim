@@ -9,7 +9,7 @@ type DynamicDictionarySpec struct {
 	Provider DictionaryProvider `json:"provider"`
 	// Renewal configuration for a 'DYNAMIC' dictionary
 	Trigger DictionaryTrigger `json:"trigger"`
-	// Encryption of the values the provider fetches. Omitting it sends `encrypt_on_fetch = false`, so removing the block turns encryption off. Requires APIM 4.13.2 or later.
+	// Encryption of the values the provider fetches. Omitting it turns encryption off, so removing the block takes effect. Values already encrypted stay encrypted. Requires APIM 4.13.2 or later.
 	Encryption *DictionaryEncryptionPolicy `json:"encryption,omitempty"`
 }
 

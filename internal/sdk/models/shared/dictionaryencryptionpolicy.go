@@ -7,9 +7,9 @@ import (
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
 )
 
-// DictionaryEncryptionPolicy - Encryption of the values the provider fetches. Omitting it sends `encrypt_on_fetch = false`, so removing the block turns encryption off. Requires APIM 4.13.2 or later.
+// DictionaryEncryptionPolicy - Encryption of the values the provider fetches. Omitting it turns encryption off, so removing the block takes effect. Values already encrypted stay encrypted. Requires APIM 4.13.2 or later.
 type DictionaryEncryptionPolicy struct {
-	// Store every fetched value encrypted, from the first fetch. When false, APIM keeps each key's stored classification.
+	// Store every fetched value encrypted, from the first fetch. When false, APIM keeps each key's stored classification: a value already encrypted stays encrypted.
 	EncryptOnFetch *bool `default:"false" json:"encryptOnFetch"`
 }
 
