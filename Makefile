@@ -7,9 +7,9 @@ APIM_OAS_BRANCH=4.13.x
 # Tag of gravitee-gamma-module-aim the AI Management fragment is taken from. Bumped by hand:
 # APIM master may pin an older aim than the one this provider is generated against.
 AIM_OAS_REF ?= 5.0.0-alpha.39
-# Ref of gravitee-gamma-module-authz the AuthZ fragment is taken from. Bumped by hand, as
-# AIM_OAS_REF. The head of gravitee-gamma-module-authz#336 (policies) until a release carries it.
-AUTHZ_OAS_REF ?= b42ba38ec7273461a30fb43ff88c960f8bda8974
+# Tag of gravitee-gamma-module-authz the AuthZ fragment is taken from. Bumped by hand, as
+# AIM_OAS_REF.
+AUTHZ_OAS_REF ?= 3.21.0
 
 .PHONY: speakeasy
 speakeasy: ## Run speakeasy generation with curated examples and docs
