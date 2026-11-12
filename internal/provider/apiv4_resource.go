@@ -649,8 +649,11 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `API Endpoint Group Services`,
 						},
 						"shared_configuration": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
-							Optional:    true,
+							CustomType: jsontypes.NormalizedType{},
+							Optional:   true,
+							PlanModifiers: []planmodifier.String{
+								custom_stringplanmodifier.IgnoreUndeclaredFields(),
+							},
 							Description: `JSON configuration for the ` + "`" + `type` + "`" + ` of ` + "`" + `endpoints` + "`" + ` that will be shared across all endpoints. Parsed as JSON.`,
 						},
 						"type": schema.StringAttribute{
