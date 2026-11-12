@@ -260,10 +260,15 @@ paths:
                 to `automation` on the next apply, with the rest of the spec.
 
                 Refused, never repaired: an `entityType` that is not spelled the way the engine spells it, a `kind` that
-                contradicts the type, duplicate or cyclic `parents`, an `Action` entity with `targets`, an attribute key
-                that starts with `_` (reserved to the module), a target no PDP gateway answers to, and a violation of
-                the schema of a strict PDP gateway. Findings that prevent the apply are reported in `errors.severe`
-                with a `400`, and nothing is persisted. A dry run performs the same checks.
+                contradicts the type, duplicate or cyclic `parents`, a parent of a `RESOURCE` that names no existing
+                entity of that type, an `Action` entity with `targets`, an attribute key that starts with `_`
+                (reserved to the module), a target no PDP gateway answers to, and a violation of the schema of a strict
+                PDP gateway. Findings that prevent the apply are reported in `errors.severe` with a `400`, and nothing
+                is persisted. A dry run performs the same checks.
+
+                A `RESOURCE` is deleted with its parent, so it is not declared under one that does not exist: declare
+                the parent first. A parent the stored entity already holds is kept. A `PRINCIPAL` outlives its parent
+                and may name one that does not exist.
 
                 The message of a schema violation names the schema's types and attributes only for a caller that can
                 read schemas.
