@@ -79,10 +79,10 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 						Attributes: map[string]schema.Attribute{
 							"encrypt_on_fetch": schema.BoolAttribute{
 								Computed:    true,
-								Description: `Encrypt every fetched value instead of relying on per-key classification.`,
+								Description: `Store every fetched value encrypted, from the first fetch. When false, APIM keeps each key's stored classification.`,
 							},
 						},
-						Description: `Encryption of the values the provider fetches. Omitting it keeps the current policy; set ` + "`" + `encrypt_on_fetch = false` + "`" + ` to stop encrypting. Requires APIM 4.13 or later.`,
+						Description: `Encryption of the values the provider fetches. Omitting it sends ` + "`" + `encrypt_on_fetch = false` + "`" + `, so removing the block turns encryption off. Requires APIM 4.13.2 or later.`,
 					},
 					"provider": schema.SingleNestedAttribute{
 						Computed: true,
@@ -174,7 +174,7 @@ func (r *DictionaryDataSource) Schema(ctx context.Context, req datasource.Schema
 					"properties": schema.MapAttribute{
 						Computed:    true,
 						ElementType: types.StringType,
-						Description: `Dictionary data are key/value pairs for ` + "`" + `MANUAL` + "`" + ` properties`,
+						Description: `Plain properties, keyed by the property key. A key APIM holds encrypted cannot be listed here: declare it under ` + "`" + `encrypted_properties` + "`" + `.`,
 					},
 				},
 				Description: `A manual dictionary with static key/value properties.`,

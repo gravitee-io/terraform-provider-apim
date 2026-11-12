@@ -5,7 +5,7 @@ package shared
 
 // EncryptableValue - A secret property value.
 type EncryptableValue struct {
-	// The plaintext value to encrypt on save.
+	// The plaintext value. APIM stores it encrypted and never returns it.
 	Value string `json:"value"`
 }
 

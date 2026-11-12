@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
-	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
+	custom_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
@@ -86,17 +86,17 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							custom_objectplanmodifier.DisableEncryptionWhenOmitted(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"encrypt_on_fetch": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(false),
-								Description: `Encrypt every fetched value instead of relying on per-key classification. Default: false`,
+								Description: `Store every fetched value encrypted, from the first fetch. When false, APIM keeps each key's stored classification. Default: false`,
 							},
 						},
-						Description: `Encryption of the values the provider fetches. Omitting it keeps the current policy; set ` + "`" + `encrypt_on_fetch = false` + "`" + ` to stop encrypting. Requires APIM 4.13 or later.`,
+						Description: `Encryption of the values the provider fetches. Omitting it sends ` + "`" + `encrypt_on_fetch = false` + "`" + `, so removing the block turns encryption off. Requires APIM 4.13.2 or later.`,
 					},
 					"provider": schema.SingleNestedAttribute{
 						Required: true,
@@ -252,16 +252,19 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 								"value": schema.StringAttribute{
 									Required:    true,
 									Sensitive:   true,
-									Description: `The plaintext value to encrypt on save.`,
+									Description: `The plaintext value. APIM stores it encrypted and never returns it.`,
+									Validators: []validator.String{
+										stringvalidator.UTF8LengthAtLeast(1),
+									},
 								},
 							},
 						},
-						Description: `Secret properties, keyed by the property key. APIM encrypts the values and never returns them: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. Removing a key, or the attribute, deletes the secret. A key must not appear in both ` + "`" + `properties` + "`" + ` and ` + "`" + `encrypted_properties` + "`" + `. To make a secret plain again, remove it from ` + "`" + `encrypted_properties` + "`" + `, apply, then add it to ` + "`" + `properties` + "`" + `: APIM keeps a secret key encrypted otherwise. Requires APIM 4.13 or later.`,
+						Description: `Secret properties, keyed by the property key. Terraform sends the values as plaintext and APIM stores them encrypted. A read returns each key with its value masked, so Terraform keeps the configured values in its state and does not detect a value changed outside Terraform. Removing a key, or the attribute, deletes the secret. A key must not appear in both ` + "`" + `properties` + "`" + ` and ` + "`" + `encrypted_properties` + "`" + `. A key APIM holds encrypted must be declared here: declaring it under ` + "`" + `properties` + "`" + ` is rejected with ` + "`" + `dictionary.property.encryptedToPlain` + "`" + `. To make a secret plain again, remove it from ` + "`" + `encrypted_properties` + "`" + ` and apply, then add it to ` + "`" + `properties` + "`" + ` and apply. Requires APIM 4.13.2 or later; earlier versions ignore this attribute and store nothing.`,
 					},
 					"properties": schema.MapAttribute{
 						Optional:    true,
 						ElementType: types.StringType,
-						Description: `Dictionary data are key/value pairs for ` + "`" + `MANUAL` + "`" + ` properties`,
+						Description: `Plain properties, keyed by the property key. A key APIM holds encrypted cannot be listed here: declare it under ` + "`" + `encrypted_properties` + "`" + `.`,
 					},
 				},
 				Description: `A manual dictionary with static key/value properties.`,
