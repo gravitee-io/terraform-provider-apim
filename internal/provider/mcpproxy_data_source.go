@@ -131,7 +131,7 @@ func (r *McpProxyDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
-										Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. Parsed as JSON.`,
+										Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Computed:    true,
@@ -164,7 +164,7 @@ func (r *McpProxyDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 									"configuration": schema.StringAttribute{
 										CustomType:  jsontypes.NormalizedType{},
 										Computed:    true,
-										Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. Parsed as JSON.`,
+										Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Computed:    true,
@@ -371,7 +371,7 @@ func (r *McpProxyDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
-													Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. Parsed as JSON.`,
+													Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Computed:    true,
@@ -404,7 +404,7 @@ func (r *McpProxyDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 												"configuration": schema.StringAttribute{
 													CustomType:  jsontypes.NormalizedType{},
 													Computed:    true,
-													Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. Parsed as JSON.`,
+													Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Computed:    true,
