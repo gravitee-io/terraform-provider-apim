@@ -520,8 +520,10 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 									},
 								},
 								"user_info_endpoint": schema.StringAttribute{
+									Computed:    true,
 									Optional:    true,
-									Description: `UserInfo endpoint, same rule as ` + "`" + `introspectionEndpoint` + "`" + ``,
+									Default:     stringdefault.StaticString(`/userinfo`),
+									Description: `UserInfo endpoint, same rule as ` + "`" + `introspectionEndpoint` + "`" + `. Default: "/userinfo"`,
 								},
 							},
 							Validators: []validator.Object{
