@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"math/big"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -12,7 +13,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
 
 // IgnoreUndeclaredFields returns a plan modifier for a JSON configuration APIM stores with the default of every field
@@ -64,23 +64,14 @@ func isKnown(value types.String) bool {
 
 // sameListLengths reports whether every list on the path has as many items in the configuration as in the state.
 func sameListLengths(ctx context.Context, req planmodifier.StringRequest) bool {
-	at := path.Empty()
-	for _, step := range req.Path.Steps() {
-		switch step := step.(type) {
-		case path.PathStepAttributeName:
-			at = at.AtName(string(step))
-		case path.PathStepElementKeyString:
-			at = at.AtMapKey(string(step))
-		case path.PathStepElementKeyValue:
-			at = at.AtSetValue(step.Value)
-		case path.PathStepElementKeyInt:
-			configured, configKnown := listLength(ctx, req.Config, at)
-			stored, stateKnown := listLength(ctx, req.State, at)
-			if !configKnown || !stateKnown || configured != stored {
-				return false
-			}
-			at = at.AtListIndex(int(step))
-		default:
+	for at := req.Path; len(at.Steps()) > 0; at = at.ParentPath() {
+		step, _ := at.Steps().LastStep()
+		if _, isListItem := step.(path.PathStepElementKeyInt); !isListItem {
+			continue
+		}
+		configured, configKnown := listLength(ctx, req.Config, at.ParentPath())
+		stored, stateKnown := listLength(ctx, req.State, at.ParentPath())
+		if !configKnown || !stateKnown || configured != stored {
 			return false
 		}
 	}
@@ -92,7 +83,8 @@ func sameListLengths(ctx context.Context, req planmodifier.StringRequest) bool {
 // hold defaults in the state and would always differ.
 var identityAttributes = []string{"policy", "type"}
 
-// sameIdentity reports whether the siblings naming the plugin are the same in the configuration and in the state.
+// sameIdentity reports whether the siblings naming the plugin that the configuration declares are the same in the
+// state. A sibling left out tells nothing: APIM may report a value for it.
 func sameIdentity(ctx context.Context, req planmodifier.StringRequest) bool {
 	parent := req.Path.ParentPath()
 	for _, name := range identityAttributes {
@@ -101,8 +93,14 @@ func sameIdentity(ctx context.Context, req planmodifier.StringRequest) bool {
 			continue
 		}
 		configured, configFound := valueAt(ctx, req.Config, sibling)
+		if !configFound {
+			return false
+		}
+		if configured.IsNull() {
+			continue
+		}
 		stored, stateFound := valueAt(ctx, req.State, sibling)
-		if !configFound || !stateFound || !configured.Equal(stored) {
+		if !stateFound || !configured.Equal(stored) {
 			return false
 		}
 	}
@@ -122,19 +120,11 @@ func valueAt(ctx context.Context, data attributeGetter, at path.Path) (attr.Valu
 }
 
 func listLength(ctx context.Context, data attributeGetter, at path.Path) (int, bool) {
-	value, found := valueAt(ctx, data, at)
-	if !found || value.IsNull() || value.IsUnknown() {
+	var list types.List
+	if diags := data.GetAttribute(ctx, at, &list); diags.HasError() || list.IsNull() || list.IsUnknown() {
 		return 0, false
 	}
-	list, ok := value.(basetypes.ListValuable)
-	if !ok {
-		return 0, false
-	}
-	listValue, diags := list.ToListValue(ctx)
-	if diags.HasError() {
-		return 0, false
-	}
-	return len(listValue.Elements()), true
+	return len(list.Elements()), true
 }
 
 func decodeJSON(document string) (any, error) {
@@ -185,12 +175,10 @@ func holds(stored, configured any) bool {
 	}
 }
 
-// sameNumber compares two JSON numbers by value: APIM may return 30000 for a configured 30000.0.
+// sameNumber compares two JSON numbers by their exact value: APIM may return 30000 for a configured 30000.0, and two
+// integers above 2^53 must not compare equal as float64 would.
 func sameNumber(a, b json.Number) bool {
-	if a == b {
-		return true
-	}
-	x, errX := a.Float64()
-	y, errY := b.Float64()
-	return errX == nil && errY == nil && x == y
+	x, okX := new(big.Rat).SetString(a.String())
+	y, okY := new(big.Rat).SetString(b.String())
+	return okX && okY && x.Cmp(y) == 0
 }

@@ -145,6 +145,15 @@ func TestIgnoreUndeclaredFields_JSON(t *testing.T) {
 			state:      types.StringValue(`{"limit":30000.0}`),
 			keepsState: true,
 		},
+		"integers above 2^53 that differ by one - plans the configuration": {
+			config: types.StringValue(`{"maxSize":9007199254740993}`),
+			state:  types.StringValue(`{"maxSize":9007199254740992}`),
+		},
+		"same number with an exponent - keeps the state": {
+			config:     types.StringValue(`{"limit":3e4}`),
+			state:      types.StringValue(`{"limit":30000}`),
+			keepsState: true,
+		},
 		"declared null where APIM has a value - plans the configuration": {
 			config: types.StringValue(`{"a":null}`),
 			state:  types.StringValue(`{"a":1}`),
@@ -241,6 +250,20 @@ func TestIgnoreUndeclaredFields_ListItemGuards(t *testing.T) {
 			at:     firstStep,
 			config: testResource{Flows: []testFlow{flow(step("rate-limit", `{}`))}},
 			state:  testResource{Flows: []testFlow{flow(step("quota", quotaStored))}},
+		},
+		"same endpoint group type, configuration contained in the stored one - keeps the state": {
+			at:         firstEndpointGroup,
+			config:     testResource{EndpointGroups: []testEndpointGroup{endpointGroup("http-proxy", httpConfigured)}},
+			state:      testResource{EndpointGroups: []testEndpointGroup{endpointGroup("http-proxy", httpStored)}},
+			keepsState: true,
+		},
+		"endpoint group type left out, APIM reports one - keeps the state": {
+			at: firstEndpointGroup,
+			config: testResource{EndpointGroups: []testEndpointGroup{
+				{Type: types.StringNull(), SharedConfiguration: types.StringValue(httpConfigured)},
+			}},
+			state:      testResource{EndpointGroups: []testEndpointGroup{endpointGroup("http-proxy", httpStored)}},
+			keepsState: true,
 		},
 		"endpoint group type changed at the same position - plans the configuration": {
 			at:     firstEndpointGroup,
