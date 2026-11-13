@@ -120,11 +120,28 @@ func TestAPIV4Resource_minimal_plugin_configuration(t *testing.T) {
 				ResourceName:             resourceAddress,
 				ImportState:              true,
 				ImportStateIdFunc:        importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
+				ImportStatePersist:       true,
 				ImportStateVerify:        true,
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
 					"version",
 					"listeners.0.http.paths.0.override_access",
+					// The configured JSON after an apply, APIM's with every default after an import.
+					"endpoint_groups.0.shared_configuration",
+				},
+			},
+			// After an import, the plan keeps APIM's configuration rather than the declared one.
+			// The plan is not empty: an import leaves notify_members unset.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          configDirectory("set_key"),
+				ConfigVariables:          variables,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectKnownValue(resourceAddress,
+							tfjsonpath.New("endpoint_groups").AtSliceIndex(0).AtMapKey("shared_configuration"),
+							knownvalue.StringRegexp(regexp.MustCompile(`"connectTimeout":3000[,}]`))),
+					},
 				},
 			},
 		},
@@ -375,6 +392,8 @@ func TestAPIV4Resource_all(t *testing.T) {
 					"notify_members",
 					"version",
 					"listeners.0.http.paths.0.override_access",
+					// The configured JSON after an apply, APIM's with every default after an import.
+					"endpoint_groups.0.shared_configuration",
 					"pages.1.homepage",
 					"pages.2.homepage",
 					"pages.3.homepage",
@@ -479,6 +498,8 @@ func TestAPIV4Resource_plans(t *testing.T) {
 					"notify_members",
 					"version",
 					"listeners.0.http.paths.0.override_access",
+					// The configured JSON after an apply, APIM's with every default after an import.
+					"endpoint_groups.0.shared_configuration",
 				},
 			},
 			// Verifies resource update.
@@ -606,6 +627,8 @@ func TestAPIV4Resource_pages(t *testing.T) {
 					"notify_members",
 					"version",
 					"listeners.0.http.paths.0.override_access",
+					// The configured JSON after an apply, APIM's with every default after an import.
+					"endpoint_groups.0.shared_configuration",
 				},
 			},
 			// Verifies resource update.
@@ -772,6 +795,8 @@ func TestAPIV4Resource_cors(t *testing.T) {
 					"notify_members",
 					"version",
 					"listeners.0.http.paths.0.override_access",
+					// The configured JSON after an apply, APIM's with every default after an import.
+					"endpoint_groups.0.shared_configuration",
 				},
 			},
 			// Update `allow_headers`.
