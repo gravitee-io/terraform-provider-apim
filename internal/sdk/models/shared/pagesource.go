@@ -8,7 +8,7 @@ package shared
 type PageSource struct {
 	// The type of the page source (fetcher plugin ID).
 	Type *string `json:"type,omitempty"`
-	// JSON object configuration of the fetch plugin.
+	// JSON object configuration of the fetch plugin. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.
 	Configuration any `json:"configuration,omitempty"`
 }
 

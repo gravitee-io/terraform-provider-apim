@@ -116,7 +116,7 @@ func (r *SharedPolicyGroupDataSource) Schema(ctx context.Context, req datasource
 						"configuration": schema.StringAttribute{
 							CustomType:  jsontypes.NormalizedType{},
 							Computed:    true,
-							Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+							Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
 							Computed:    true,

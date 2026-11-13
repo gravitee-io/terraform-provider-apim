@@ -11,7 +11,7 @@ import (
 type ServiceV4 struct {
 	// When the configuration overrides an inherited configuration.
 	OverrideConfiguration *bool `default:"false" json:"overrideConfiguration"`
-	// JSON configuration of the service.
+	// JSON configuration of the service. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.
 	Configuration any `json:"configuration"`
 	// Is the service enabled or not.
 	Enabled *bool `default:"true" json:"enabled"`

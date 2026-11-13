@@ -68,7 +68,7 @@ Required:
 Optional:
 
 - `channel` (String) The channel to consume
-- `entrypoint_configuration` (String) The configuration to use at subscription time to push to the target service. Parsed as JSON.
+- `entrypoint_configuration` (String) The configuration to use at subscription time to push to the target service. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 
 ## Import
 
