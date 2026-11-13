@@ -60,7 +60,16 @@ func (r *DictionaryDataSourceModel) RefreshFromSharedDictionaryState(ctx context
 		if resp.Manual == nil {
 			r.Manual = nil
 		} else {
-			r.Manual = &tfTypes.ManualDictionarySpec1{}
+			r.Manual = &tfTypes.ManualDictionarySpec{}
+			if len(resp.Manual.EncryptedProperties) > 0 {
+				r.Manual.EncryptedProperties = make(map[string]tfTypes.EncryptableValue, len(resp.Manual.EncryptedProperties))
+				for encryptableValueKey, encryptableValueValue := range resp.Manual.EncryptedProperties {
+					var encryptableValueResult tfTypes.EncryptableValue
+					encryptableValueResult.Value = types.StringValue(encryptableValueValue.Value)
+
+					r.Manual.EncryptedProperties[encryptableValueKey] = encryptableValueResult
+				}
+			}
 			if len(resp.Manual.Properties) > 0 {
 				r.Manual.Properties = make(map[string]types.String, len(resp.Manual.Properties))
 				for key, value := range resp.Manual.Properties {
