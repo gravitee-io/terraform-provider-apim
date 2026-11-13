@@ -261,10 +261,13 @@ func TestMcpProxyResource_identity_providers(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceAddress, "identity_providers.0.oauth2_generic.name", "keycloak"),
 					resource.TestCheckResourceAttr(resourceAddress, "plans.0.security.oauth2.provider", "keycloak"),
+					// Left out, the platform stores its default.
+					resource.TestCheckResourceAttr(resourceAddress, "identity_providers.0.oauth2_generic.user_info_endpoint", "/userinfo"),
 				),
 			},
-			// 2: the platform reports the issuer without its trailing slash and never
-			// returns the client secret. Neither shows as a change.
+			// 2: the platform reports the issuer without its trailing slash, fills the
+			// UserInfo endpoint left out, and never returns the client secret. None
+			// shows as a change.
 			{
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestStepDirectory(),
