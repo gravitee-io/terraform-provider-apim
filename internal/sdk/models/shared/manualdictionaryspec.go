@@ -5,9 +5,9 @@ package shared
 
 // ManualDictionarySpec - A manual dictionary with static key/value properties.
 type ManualDictionarySpec struct {
-	// Plain properties, keyed by the property key. A key APIM holds encrypted cannot move here in a single apply: see `encrypted_properties`.
+	// Plain properties, keyed by the property key. A key APIM holds encrypted is never among them.
 	Properties map[string]string `json:"properties,omitempty"`
-	// Secret properties, keyed by the property key. APIM encrypts the values and a read returns each of them masked as `••••••••••••`: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. A value of `••••••••••••` keeps the value APIM stores for that key, for instance after an import. Removing a key, or the attribute, deletes the secret. A key must not appear in both `properties` and `encrypted_properties`. To make a secret plain again, remove it from `encrypted_properties`, apply, then add it to `properties`: APIM rejects the move in a single apply with `dictionary.property.encryptedToPlain`. Requires APIM 4.13 or later.
+	// Secret properties, keyed by the property key. Terraform sends the values as plaintext and APIM stores them encrypted. Terraform keeps the configured values in its state and does not detect a secret changed or deleted outside Terraform. Removing a key, or the attribute, deletes the secret. A key must not appear in both `properties` and `encrypted_properties`. To make a secret plain again, remove it from `encrypted_properties` and apply, then add it to `properties` and apply. Requires APIM 4.13.2 or later; earlier versions ignore this attribute and store nothing. From APIM 4.13.3, a read returns each key with its value masked, a value of `••••••••••••` keeps the value APIM stores for that key (for instance after an import), and a key APIM holds encrypted must be declared here: declaring it under `properties`, or moving it there in one apply, is rejected with `dictionary.property.encryptedToPlain`. APIM 4.13.2 keeps such a key encrypted instead, and Terraform then plans to add it to `properties` on every run.
 	EncryptedProperties map[string]EncryptableValue `json:"encryptedProperties,omitempty"`
 }
 
