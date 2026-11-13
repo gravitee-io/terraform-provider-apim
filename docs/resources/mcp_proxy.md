@@ -227,7 +227,7 @@ Optional:
 Optional:
 
 - `condition` (String) Expression-language condition the step runs under; always when omitted
-- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) Human description of the step
 - `enabled` (Boolean) Whether the gateway runs the step; true when omitted. Default: true
 - `name` (String) Name of the step, shown in the policy studio. Not Null
@@ -240,7 +240,7 @@ Optional:
 Optional:
 
 - `condition` (String) Expression-language condition the step runs under; always when omitted
-- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) Human description of the step
 - `enabled` (Boolean) Whether the gateway runs the step; true when omitted. Default: true
 - `name` (String) Name of the step, shown in the policy studio. Not Null
@@ -345,7 +345,7 @@ Optional:
 Optional:
 
 - `condition` (String) Expression-language condition the step runs under; always when omitted
-- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) Human description of the step
 - `enabled` (Boolean) Whether the gateway runs the step; true when omitted. Default: true
 - `name` (String) Name of the step, shown in the policy studio. Not Null
@@ -358,7 +358,7 @@ Optional:
 Optional:
 
 - `condition` (String) Expression-language condition the step runs under; always when omitted
-- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) Human description of the step
 - `enabled` (Boolean) Whether the gateway runs the step; true when omitted. Default: true
 - `name` (String) Name of the step, shown in the policy studio. Not Null

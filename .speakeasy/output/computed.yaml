@@ -2614,7 +2614,7 @@ components:
           x-speakeasy-param-computed: false
         entrypointConfiguration:
           type: object
-          description: 'The configuration to use at subscription time to push to the target service. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+          description: 'The configuration to use at subscription time to push to the target service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
           example: |
             {
                 "callbackUrl": "https://webhook.site/aaaaaaaa-ffff-ffff-ffff-aaaaaaaa",
@@ -3122,13 +3122,13 @@ components:
           x-speakeasy-param-computed: false
         configuration:
           type: object
-          description: 'JSON Configuration specific to this endpoint that cannot be define at the group level. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+          description: 'JSON Configuration specific to this endpoint that cannot be define at the group level. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
           x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
         sharedConfigurationOverride:
           type: object
-          description: 'JSON Configuration that replaces the shared configuration defined at the group level. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+          description: 'JSON Configuration that replaces the shared configuration defined at the group level. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
           x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
@@ -3170,7 +3170,7 @@ components:
           $ref: "#/components/schemas/LoadBalancer"
           x-speakeasy-param-computed: false
         sharedConfiguration:
-          description: 'JSON configuration for the `type` of `endpoints` that will be shared across all endpoints. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+          description: 'JSON configuration for the `type` of `endpoints` that will be shared across all endpoints. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
           type: object
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
@@ -3225,7 +3225,7 @@ components:
           $ref: "#/components/schemas/Dlq"
           x-speakeasy-param-computed: false
         configuration:
-          description: 'JSON configuration for the selected `type`. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+          description: 'JSON configuration for the selected `type`. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
           type: object
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
@@ -3785,7 +3785,7 @@ components:
           x-speakeasy-param-computed: false
         configuration:
           type: object
-          description: 'JSON object configuration of the fetch plugin. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+          description: 'JSON object configuration of the fetch plugin. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
           x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
@@ -3818,7 +3818,7 @@ components:
           $ref: "#/components/schemas/PlanSecurityType"
           x-speakeasy-param-computed: false
         configuration:
-          description: 'JSON Object to configure specific attributes of a Plan. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+          description: 'JSON Object to configure specific attributes of a Plan. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
           type: object
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
@@ -3971,7 +3971,7 @@ components:
             - content-provider-inline-resource
           x-speakeasy-param-computed: false
         configuration:
-          description: 'JSON Object configuration specific to this resource. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+          description: 'JSON Object configuration specific to this resource. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
           type: object
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
@@ -4106,7 +4106,7 @@ components:
           x-speakeasy-param-computed: false
         configuration:
           type: object
-          description: 'JSON configuration of the service. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+          description: 'JSON configuration of the service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
           x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
@@ -4148,7 +4148,7 @@ components:
           x-speakeasy-param-computed: false
         configuration:
           type: object
-          description: 'JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+          description: 'JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
           x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
@@ -5910,7 +5910,7 @@ components:
         configuration:
           type: object
           additionalProperties: true
-          description: 'Configuration of the policy, free-form as the policy''s own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+          description: 'Configuration of the policy, free-form as the policy''s own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
           x-speakeasy-plan-modifiers: IgnoreUndeclaredFields

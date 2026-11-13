@@ -70,7 +70,7 @@ A GET returns them only to a caller with the `SHARED_POLICY_GROUP` `UPDATE` perm
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)

@@ -118,7 +118,7 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 						PlanModifiers: []planmodifier.String{
 							custom_stringplanmodifier.IgnoreUndeclaredFields(),
 						},
-						Description: `The configuration to use at subscription time to push to the target service. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
+						Description: `The configuration to use at subscription time to push to the target service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 					},
 					"entrypoint_id": schema.StringAttribute{
 						Required:    true,
