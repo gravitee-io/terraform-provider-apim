@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: db257847d4c807b7b6e74a765f1b6522
+  docChecksum: 2454a2fd62b4563161bb259607b0615d
   docVersion: 1.0.0
   speakeasyVersion: 1.806.0
   generationVersion: 2.956.1
   releaseVersion: 1.2.0
   configChecksum: cdc5cdf1e8857328e4e0628ec0e1eb01
 persistentEdits:
-  generation_id: 3f01db04-a6b3-46a6-8b22-a0c81d3c2b40
-  pristine_commit_hash: 9f10a04a930b788ab59ba3e51498cf5f01d67e67
-  pristine_tree_hash: ac3b85f40a7008ad8c85aca3e6e5c47b3e7e9741
+  generation_id: 80fca8b3-686b-4169-9e1c-da0c6fc68249
+  pristine_commit_hash: 0aa069f94185874cc28cc3a3bbc726adfc68c29f
+  pristine_tree_hash: 62c5f5b52b82a34aab80daeadeaa5369d5e58b9b
 features:
   terraform:
     additionalDependencies: 0.1.0
