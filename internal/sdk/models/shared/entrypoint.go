@@ -15,7 +15,7 @@ type Entrypoint struct {
 	Qos *Qos `default:"AUTO" json:"qos"`
 	// Dead Letter Queue to process undelivered messages.
 	Dlq *Dlq `json:"dlq,omitempty"`
-	// JSON configuration for the selected `type`.
+	// JSON configuration for the selected `type`. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.
 	Configuration any `json:"configuration,omitempty"`
 }
 

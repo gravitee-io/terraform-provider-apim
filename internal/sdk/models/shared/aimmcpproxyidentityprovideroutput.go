@@ -150,7 +150,7 @@ type GraviteeAmOutput struct {
 	// Client id the gateway introspects tokens with
 	ClientID *string `json:"clientId,omitempty"`
 	// UserInfo endpoint, same rule as `introspectionEndpoint`
-	UserInfoEndpoint *string `json:"userInfoEndpoint,omitempty"`
+	UserInfoEndpoint *string `default:"/userinfo" json:"userInfoEndpoint"`
 	// Name of the provider, the resource name on the proxy and the value plans reference
 	Name string `json:"name"`
 	// Kind of authorization server
@@ -411,7 +411,7 @@ type GraviteeAm struct {
 	//
 	ClientSecret *string `json:"clientSecret,omitempty"`
 	// UserInfo endpoint, same rule as `introspectionEndpoint`
-	UserInfoEndpoint *string `json:"userInfoEndpoint,omitempty"`
+	UserInfoEndpoint *string `default:"/userinfo" json:"userInfoEndpoint"`
 	// Name of the provider, the resource name on the proxy and the value plans reference
 	Name string `json:"name"`
 	// Kind of authorization server

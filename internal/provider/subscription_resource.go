@@ -113,9 +113,12 @@ func (r *SubscriptionResource) Schema(ctx context.Context, req resource.SchemaRe
 						Description: `The channel to consume`,
 					},
 					"entrypoint_configuration": schema.StringAttribute{
-						CustomType:  jsontypes.NormalizedType{},
-						Optional:    true,
-						Description: `The configuration to use at subscription time to push to the target service. Parsed as JSON.`,
+						CustomType: jsontypes.NormalizedType{},
+						Optional:   true,
+						PlanModifiers: []planmodifier.String{
+							custom_stringplanmodifier.IgnoreUndeclaredFields(),
+						},
+						Description: `The configuration to use at subscription time to push to the target service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 					},
 					"entrypoint_id": schema.StringAttribute{
 						Required:    true,

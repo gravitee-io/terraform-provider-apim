@@ -17,7 +17,7 @@ type StepV4 struct {
 	Enabled *bool `default:"true" json:"enabled"`
 	// The policy of the step (plugin ID)
 	Policy string `json:"policy"`
-	// JSON Object configuration of the policy used.
+	// JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.
 	Configuration any `json:"configuration,omitempty"`
 	// The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
 	Condition *string `json:"condition,omitempty"`

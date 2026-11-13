@@ -437,9 +437,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 								},
 								Attributes: map[string]schema.Attribute{
 									"configuration": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `JSON Configuration specific to this endpoint that cannot be define at the group level. Parsed as JSON.`,
+										CustomType: jsontypes.NormalizedType{},
+										Optional:   true,
+										PlanModifiers: []planmodifier.String{
+											custom_stringplanmodifier.IgnoreUndeclaredFields(),
+										},
+										Description: `JSON Configuration specific to this endpoint that cannot be define at the group level. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 									},
 									"inherit_configuration": schema.BoolAttribute{
 										Computed:    true,
@@ -475,9 +478,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 												},
 												Attributes: map[string]schema.Attribute{
 													"configuration": schema.StringAttribute{
-														CustomType:  jsontypes.NormalizedType{},
-														Optional:    true,
-														Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
+														CustomType: jsontypes.NormalizedType{},
+														Optional:   true,
+														PlanModifiers: []planmodifier.String{
+															custom_stringplanmodifier.IgnoreUndeclaredFields(),
+														},
+														Description: `JSON configuration of the service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.`,
 														Validators: []validator.String{
 															speakeasy_stringvalidators.NotNull(),
 														},
@@ -508,9 +514,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										Description: `API Endpoint Services`,
 									},
 									"shared_configuration_override": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `JSON Configuration that replaces the shared configuration defined at the group level. Parsed as JSON.`,
+										CustomType: jsontypes.NormalizedType{},
+										Optional:   true,
+										PlanModifiers: []planmodifier.String{
+											custom_stringplanmodifier.IgnoreUndeclaredFields(),
+										},
+										Description: `JSON Configuration that replaces the shared configuration defined at the group level. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 									},
 									"tenants": schema.ListAttribute{
 										Computed:    true,
@@ -579,9 +588,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
-											Optional:    true,
-											Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
+											CustomType: jsontypes.NormalizedType{},
+											Optional:   true,
+											PlanModifiers: []planmodifier.String{
+												custom_stringplanmodifier.IgnoreUndeclaredFields(),
+											},
+											Description: `JSON configuration of the service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
@@ -616,9 +628,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 									},
 									Attributes: map[string]schema.Attribute{
 										"configuration": schema.StringAttribute{
-											CustomType:  jsontypes.NormalizedType{},
-											Optional:    true,
-											Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
+											CustomType: jsontypes.NormalizedType{},
+											Optional:   true,
+											PlanModifiers: []planmodifier.String{
+												custom_stringplanmodifier.IgnoreUndeclaredFields(),
+											},
+											Description: `JSON configuration of the service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.`,
 											Validators: []validator.String{
 												speakeasy_stringvalidators.NotNull(),
 											},
@@ -649,9 +664,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `API Endpoint Group Services`,
 						},
 						"shared_configuration": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
-							Optional:    true,
-							Description: `JSON configuration for the ` + "`" + `type` + "`" + ` of ` + "`" + `endpoints` + "`" + ` that will be shared across all endpoints. Parsed as JSON.`,
+							CustomType: jsontypes.NormalizedType{},
+							Optional:   true,
+							PlanModifiers: []planmodifier.String{
+								custom_stringplanmodifier.IgnoreUndeclaredFields(),
+							},
+							Description: `JSON configuration for the ` + "`" + `type` + "`" + ` of ` + "`" + `endpoints` + "`" + ` that will be shared across all endpoints. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 						},
 						"type": schema.StringAttribute{
 							Optional:    true,
@@ -813,9 +831,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"configuration": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+										CustomType: jsontypes.NormalizedType{},
+										Optional:   true,
+										PlanModifiers: []planmodifier.String{
+											custom_stringplanmodifier.IgnoreUndeclaredFields(),
+										},
+										Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Optional:    true,
@@ -874,9 +895,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"configuration": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+										CustomType: jsontypes.NormalizedType{},
+										Optional:   true,
+										PlanModifiers: []planmodifier.String{
+											custom_stringplanmodifier.IgnoreUndeclaredFields(),
+										},
+										Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Optional:    true,
@@ -942,9 +966,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"configuration": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+										CustomType: jsontypes.NormalizedType{},
+										Optional:   true,
+										PlanModifiers: []planmodifier.String{
+											custom_stringplanmodifier.IgnoreUndeclaredFields(),
+										},
+										Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Optional:    true,
@@ -1003,9 +1030,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"configuration": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+										CustomType: jsontypes.NormalizedType{},
+										Optional:   true,
+										PlanModifiers: []planmodifier.String{
+											custom_stringplanmodifier.IgnoreUndeclaredFields(),
+										},
+										Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Optional:    true,
@@ -1064,9 +1094,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"configuration": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+										CustomType: jsontypes.NormalizedType{},
+										Optional:   true,
+										PlanModifiers: []planmodifier.String{
+											custom_stringplanmodifier.IgnoreUndeclaredFields(),
+										},
+										Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Optional:    true,
@@ -1336,9 +1369,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 									},
 									"configuration": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+										CustomType: jsontypes.NormalizedType{},
+										Optional:   true,
+										PlanModifiers: []planmodifier.String{
+											custom_stringplanmodifier.IgnoreUndeclaredFields(),
+										},
+										Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Optional:    true,
@@ -1543,9 +1579,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
-												Optional:    true,
-												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
+												CustomType: jsontypes.NormalizedType{},
+												Optional:   true,
+												PlanModifiers: []planmodifier.String{
+													custom_stringplanmodifier.IgnoreUndeclaredFields(),
+												},
+												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
 												Optional: true,
@@ -1690,9 +1729,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
-												Optional:    true,
-												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
+												CustomType: jsontypes.NormalizedType{},
+												Optional:   true,
+												PlanModifiers: []planmodifier.String{
+													custom_stringplanmodifier.IgnoreUndeclaredFields(),
+												},
+												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
 												Optional: true,
@@ -1793,9 +1835,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
-												Optional:    true,
-												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
+												CustomType: jsontypes.NormalizedType{},
+												Optional:   true,
+												PlanModifiers: []planmodifier.String{
+													custom_stringplanmodifier.IgnoreUndeclaredFields(),
+												},
+												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
 												Optional: true,
@@ -1882,9 +1927,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 										},
 										Attributes: map[string]schema.Attribute{
 											"configuration": schema.StringAttribute{
-												CustomType:  jsontypes.NormalizedType{},
-												Optional:    true,
-												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. Parsed as JSON.`,
+												CustomType: jsontypes.NormalizedType{},
+												Optional:   true,
+												PlanModifiers: []planmodifier.String{
+													custom_stringplanmodifier.IgnoreUndeclaredFields(),
+												},
+												Description: `JSON configuration for the selected ` + "`" + `type` + "`" + `. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 											},
 											"dlq": schema.SingleNestedAttribute{
 												Optional: true,
@@ -2164,9 +2212,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
-									Optional:    true,
-									Description: `JSON object configuration of the fetch plugin. Parsed as JSON.`,
+									CustomType: jsontypes.NormalizedType{},
+									Optional:   true,
+									PlanModifiers: []planmodifier.String{
+										custom_stringplanmodifier.IgnoreUndeclaredFields(),
+									},
+									Description: `JSON object configuration of the fetch plugin. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 								},
 								"type": schema.StringAttribute{
 									Optional:    true,
@@ -2296,9 +2347,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"configuration": schema.StringAttribute{
-													CustomType:  jsontypes.NormalizedType{},
-													Optional:    true,
-													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+													CustomType: jsontypes.NormalizedType{},
+													Optional:   true,
+													PlanModifiers: []planmodifier.String{
+														custom_stringplanmodifier.IgnoreUndeclaredFields(),
+													},
+													Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Optional:    true,
@@ -2357,9 +2411,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"configuration": schema.StringAttribute{
-													CustomType:  jsontypes.NormalizedType{},
-													Optional:    true,
-													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+													CustomType: jsontypes.NormalizedType{},
+													Optional:   true,
+													PlanModifiers: []planmodifier.String{
+														custom_stringplanmodifier.IgnoreUndeclaredFields(),
+													},
+													Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Optional:    true,
@@ -2425,9 +2482,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"configuration": schema.StringAttribute{
-													CustomType:  jsontypes.NormalizedType{},
-													Optional:    true,
-													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+													CustomType: jsontypes.NormalizedType{},
+													Optional:   true,
+													PlanModifiers: []planmodifier.String{
+														custom_stringplanmodifier.IgnoreUndeclaredFields(),
+													},
+													Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Optional:    true,
@@ -2486,9 +2546,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"configuration": schema.StringAttribute{
-													CustomType:  jsontypes.NormalizedType{},
-													Optional:    true,
-													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+													CustomType: jsontypes.NormalizedType{},
+													Optional:   true,
+													PlanModifiers: []planmodifier.String{
+														custom_stringplanmodifier.IgnoreUndeclaredFields(),
+													},
+													Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Optional:    true,
@@ -2547,9 +2610,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"configuration": schema.StringAttribute{
-													CustomType:  jsontypes.NormalizedType{},
-													Optional:    true,
-													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+													CustomType: jsontypes.NormalizedType{},
+													Optional:   true,
+													PlanModifiers: []planmodifier.String{
+														custom_stringplanmodifier.IgnoreUndeclaredFields(),
+													},
+													Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Optional:    true,
@@ -2819,9 +2885,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 													},
 												},
 												"configuration": schema.StringAttribute{
-													CustomType:  jsontypes.NormalizedType{},
-													Optional:    true,
-													Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+													CustomType: jsontypes.NormalizedType{},
+													Optional:   true,
+													PlanModifiers: []planmodifier.String{
+														custom_stringplanmodifier.IgnoreUndeclaredFields(),
+													},
+													Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Optional:    true,
@@ -2915,9 +2984,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Optional: true,
 							Attributes: map[string]schema.Attribute{
 								"configuration": schema.StringAttribute{
-									CustomType:  jsontypes.NormalizedType{},
-									Optional:    true,
-									Description: `JSON Object to configure specific attributes of a Plan. Parsed as JSON.`,
+									CustomType: jsontypes.NormalizedType{},
+									Optional:   true,
+									PlanModifiers: []planmodifier.String{
+										custom_stringplanmodifier.IgnoreUndeclaredFields(),
+									},
+									Description: `JSON Object to configure specific attributes of a Plan. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 								},
 								"type": schema.StringAttribute{
 									Computed:    true,
@@ -3097,9 +3169,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"configuration": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
-							Optional:    true,
-							Description: `JSON Object configuration specific to this resource. Not Null; Parsed as JSON.`,
+							CustomType: jsontypes.NormalizedType{},
+							Optional:   true,
+							PlanModifiers: []planmodifier.String{
+								custom_stringplanmodifier.IgnoreUndeclaredFields(),
+							},
+							Description: `JSON Object configuration specific to this resource. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.`,
 							Validators: []validator.String{
 								speakeasy_stringvalidators.NotNull(),
 							},
@@ -3165,9 +3240,12 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						Attributes: map[string]schema.Attribute{
 							"configuration": schema.StringAttribute{
-								CustomType:  jsontypes.NormalizedType{},
-								Optional:    true,
-								Description: `JSON configuration of the service. Not Null; Parsed as JSON.`,
+								CustomType: jsontypes.NormalizedType{},
+								Optional:   true,
+								PlanModifiers: []planmodifier.String{
+									custom_stringplanmodifier.IgnoreUndeclaredFields(),
+								},
+								Description: `JSON configuration of the service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.`,
 								Validators: []validator.String{
 									speakeasy_stringvalidators.NotNull(),
 								},

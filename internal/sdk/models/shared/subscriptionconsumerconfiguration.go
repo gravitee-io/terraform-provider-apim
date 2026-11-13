@@ -9,7 +9,7 @@ type SubscriptionConsumerConfiguration struct {
 	EntrypointID string `json:"entrypointId"`
 	// The channel to consume
 	Channel *string `json:"channel,omitempty"`
-	// The configuration to use at subscription time to push to the target service.
+	// The configuration to use at subscription time to push to the target service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.
 	EntrypointConfiguration any `json:"entrypointConfiguration,omitempty"`
 }
 

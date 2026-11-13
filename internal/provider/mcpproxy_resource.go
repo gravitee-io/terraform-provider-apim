@@ -181,9 +181,12 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 										Description: `Expression-language condition the step runs under; always when omitted`,
 									},
 									"configuration": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. Parsed as JSON.`,
+										CustomType: jsontypes.NormalizedType{},
+										Optional:   true,
+										PlanModifiers: []planmodifier.String{
+											custom_stringplanmodifier.IgnoreUndeclaredFields(),
+										},
+										Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Optional:    true,
@@ -229,9 +232,12 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 										Description: `Expression-language condition the step runs under; always when omitted`,
 									},
 									"configuration": schema.StringAttribute{
-										CustomType:  jsontypes.NormalizedType{},
-										Optional:    true,
-										Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. Parsed as JSON.`,
+										CustomType: jsontypes.NormalizedType{},
+										Optional:   true,
+										PlanModifiers: []planmodifier.String{
+											custom_stringplanmodifier.IgnoreUndeclaredFields(),
+										},
+										Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 									},
 									"description": schema.StringAttribute{
 										Optional:    true,
@@ -514,8 +520,10 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 									},
 								},
 								"user_info_endpoint": schema.StringAttribute{
+									Computed:    true,
 									Optional:    true,
-									Description: `UserInfo endpoint, same rule as ` + "`" + `introspectionEndpoint` + "`" + ``,
+									Default:     stringdefault.StaticString(`/userinfo`),
+									Description: `UserInfo endpoint, same rule as ` + "`" + `introspectionEndpoint` + "`" + `. Default: "/userinfo"`,
 								},
 							},
 							Validators: []validator.Object{
@@ -614,9 +622,12 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 													Description: `Expression-language condition the step runs under; always when omitted`,
 												},
 												"configuration": schema.StringAttribute{
-													CustomType:  jsontypes.NormalizedType{},
-													Optional:    true,
-													Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. Parsed as JSON.`,
+													CustomType: jsontypes.NormalizedType{},
+													Optional:   true,
+													PlanModifiers: []planmodifier.String{
+														custom_stringplanmodifier.IgnoreUndeclaredFields(),
+													},
+													Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Optional:    true,
@@ -662,9 +673,12 @@ func (r *McpProxyResource) Schema(ctx context.Context, req resource.SchemaReques
 													Description: `Expression-language condition the step runs under; always when omitted`,
 												},
 												"configuration": schema.StringAttribute{
-													CustomType:  jsontypes.NormalizedType{},
-													Optional:    true,
-													Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. Parsed as JSON.`,
+													CustomType: jsontypes.NormalizedType{},
+													Optional:   true,
+													PlanModifiers: []planmodifier.String{
+														custom_stringplanmodifier.IgnoreUndeclaredFields(),
+													},
+													Description: `Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 												},
 												"description": schema.StringAttribute{
 													Optional:    true,

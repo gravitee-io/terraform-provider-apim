@@ -13,7 +13,7 @@ type APIResource struct {
 	Name string `json:"name"`
 	// Resource type (resource plugin ID)
 	Type string `json:"type"`
-	// JSON Object configuration specific to this resource.
+	// JSON Object configuration specific to this resource. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.
 	Configuration any `json:"configuration"`
 	// Make it available or not.
 	Enabled *bool `default:"true" json:"enabled"`

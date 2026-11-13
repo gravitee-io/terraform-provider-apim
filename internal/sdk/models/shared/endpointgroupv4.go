@@ -11,7 +11,7 @@ type EndpointGroupV4 struct {
 	Type string `json:"type"`
 	// Load Balancer to distribute traffic between endpoints.
 	LoadBalancer *LoadBalancer `json:"loadBalancer,omitempty"`
-	// JSON configuration for the `type` of `endpoints` that will be shared across all endpoints.
+	// JSON configuration for the `type` of `endpoints` that will be shared across all endpoints. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.
 	SharedConfiguration any `json:"sharedConfiguration,omitempty"`
 	// All endpoints of this API.
 	Endpoints []EndpointV4 `json:"endpoints,omitempty"`

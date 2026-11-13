@@ -17,9 +17,9 @@ type EndpointV4 struct {
 	Weight *int `default:"1" json:"weight"`
 	// Enables shared configuration inheritance.
 	InheritConfiguration *bool `default:"false" json:"inheritConfiguration"`
-	// JSON Configuration specific to this endpoint that cannot be define at the group level.
+	// JSON Configuration specific to this endpoint that cannot be define at the group level. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.
 	Configuration any `json:"configuration,omitempty"`
-	// JSON Configuration that replaces the shared configuration defined at the group level.
+	// JSON Configuration that replaces the shared configuration defined at the group level. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.
 	SharedConfigurationOverride any `json:"sharedConfigurationOverride,omitempty"`
 	// API Endpoint Services
 	Services *EndpointServices `json:"services,omitempty"`

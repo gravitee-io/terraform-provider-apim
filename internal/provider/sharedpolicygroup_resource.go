@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
+	custom_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
@@ -167,9 +168,12 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							},
 						},
 						"configuration": schema.StringAttribute{
-							CustomType:  jsontypes.NormalizedType{},
-							Optional:    true,
-							Description: `JSON Object configuration of the policy used. Parsed as JSON.`,
+							CustomType: jsontypes.NormalizedType{},
+							Optional:   true,
+							PlanModifiers: []planmodifier.String{
+								custom_stringplanmodifier.IgnoreUndeclaredFields(),
+							},
+							Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
 							Optional:    true,
