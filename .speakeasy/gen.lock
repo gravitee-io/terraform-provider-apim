@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 2454a2fd62b4563161bb259607b0615d
+  docChecksum: 1ff92dc18c33ab8432e7de2ce33b1f30
   docVersion: 1.0.0
   speakeasyVersion: 1.806.0
   generationVersion: 2.956.1
   releaseVersion: 1.2.0
   configChecksum: cdc5cdf1e8857328e4e0628ec0e1eb01
 persistentEdits:
-  generation_id: 80fca8b3-686b-4169-9e1c-da0c6fc68249
-  pristine_commit_hash: 0aa069f94185874cc28cc3a3bbc726adfc68c29f
-  pristine_tree_hash: 62c5f5b52b82a34aab80daeadeaa5369d5e58b9b
+  generation_id: d265bec1-26f7-480f-accf-b52d14fccc76
+  pristine_commit_hash: 313c61c8822c41b97ebebec9228e3aa81269dd2f
+  pristine_tree_hash: b3a59b5cb3e01e91d76d5a98bfa3640f6088eb60
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -414,20 +414,20 @@ trackedFiles:
     pristine_git_object: 8c9ddb44cb69aea9d0190b8a3044a4248e3f8726
   internal/provider/dictionary_data_source.go:
     id: 4903f0ba16b5
-    last_write_checksum: sha1:e45e763628cc0d070ad30b062145cece6b47af1f
-    pristine_git_object: 21add865ded2261416e9c3d33e8a875328527b42
+    last_write_checksum: sha1:4352132335cdcf7ce9e5292e8e9e869fc3d516c1
+    pristine_git_object: 75b1f10554e309ed037cb7e6faff48da5480fe23
   internal/provider/dictionary_data_source_sdk.go:
     id: 2b0e2626c673
-    last_write_checksum: sha1:7e7181a404470d8b510a406ae986a9ba7e49aac3
-    pristine_git_object: caa1c551a7b742fdd3a922e198273281fed74ee6
+    last_write_checksum: sha1:668098e518ff8c757c6f6973d54163382f4b5eb8
+    pristine_git_object: aca0384890c29be748ea0a00e4a970b1e120dd05
   internal/provider/dictionary_resource.go:
     id: 4e5315a19546
-    last_write_checksum: sha1:17cfed188d7f174688d22ad13448b02223940d16
-    pristine_git_object: e809b113554140cef41911e308142c1094a7cbd8
+    last_write_checksum: sha1:4b00cc2f26ce38e9b270a61efa69ab072cb68770
+    pristine_git_object: 368d498448db3f69dc56bbb96e07a3294b4d94b0
   internal/provider/dictionary_resource_sdk.go:
     id: 1dc3aa1cf6a1
-    last_write_checksum: sha1:704db5f974f1790ae682cb617a7992afe3e00709
-    pristine_git_object: c7aa9906296df92cf1c6c86e46f8ac50d840f07e
+    last_write_checksum: sha1:4563984d11c946095daff7a53b73afdb5f8d385c
+    pristine_git_object: 816828199a4ae4e27da8ebe4ac0d34f511b4f740
   internal/provider/documentationapi_data_source.go:
     id: 381459a5a301
     last_write_checksum: sha1:0c8e7c0477aea13e38946387e17f8795bd8eca45
@@ -1009,10 +1009,6 @@ trackedFiles:
     id: b0338d3c8341
     last_write_checksum: sha1:6ce66b2acc7c77461f1a56567de856d38b404146
     pristine_git_object: 0412b3097af2a1345cbc9ec03b0e5b2943b0ffea
-  internal/provider/types/manual_dictionary_spec1.go:
-    id: 3f7fa3517447
-    last_write_checksum: sha1:520ec159797fddfb6a20e55e53b71853c51d8cb1
-    pristine_git_object: c5d502811349809b2e57711d293c72c9fe105624
   internal/provider/types/mcp.go:
     id: a090d9e14451
     last_write_checksum: sha1:f063fb1b13aabf0c93cc94960169e96ef1fc87ec
@@ -1753,8 +1749,8 @@ trackedFiles:
     pristine_git_object: eb353da24bad7b0b7f4786b61fe482d4651b0f10
   internal/sdk/models/shared/dictionaryencryptionpolicy.go:
     id: d08f8d356b18
-    last_write_checksum: sha1:5a24948f24b48af986850b4480154d043d73bd7e
-    pristine_git_object: fb240d500795c1f39e6a734e5c44a38895976667
+    last_write_checksum: sha1:2e93c37058df08c566d02785dbec92b0fd93a127
+    pristine_git_object: dbc7d1281c36742d844a238a95f83cdaaaca954f
   internal/sdk/models/shared/dictionaryprovider.go:
     id: 5e6f38a0f60b
     last_write_checksum: sha1:fee8ab841464f41d5b2fd9d01d68e2fad69c8382
@@ -1765,8 +1761,8 @@ trackedFiles:
     pristine_git_object: 177ed3903a7a7e9e211e33a010809ef5dd5a40b4
   internal/sdk/models/shared/dictionarystate.go:
     id: 6deb03255492
-    last_write_checksum: sha1:2511abcdae13b306bc277085ee9b251f1edb9d6b
-    pristine_git_object: 8fe5311330e76fe02548c1bdf5b022db6f20c3a3
+    last_write_checksum: sha1:50dc67cbb4136d27fb548f3a59150c1f61a4cc3e
+    pristine_git_object: 2da2fdbb566cfa9b1db3fc7395d0fd4cfb229a18
   internal/sdk/models/shared/dictionarytrigger.go:
     id: ca606c085f07
     last_write_checksum: sha1:4eca4e70de12d58999635f9f2a8cfdcec41aae85
@@ -1797,8 +1793,8 @@ trackedFiles:
     pristine_git_object: ba6cf62d17ccfcd8489eba539f9fc2d299dd8b6f
   internal/sdk/models/shared/dynamicdictionaryspec.go:
     id: d7c948965a7a
-    last_write_checksum: sha1:9e10fb11a67faa76db6dc366ac0126d14d483716
-    pristine_git_object: ea3eb7c1a97da56562e4169f240b6cd7f1b86ef7
+    last_write_checksum: sha1:51654b48be04c6b35408532c7fc7161fff5f97d7
+    pristine_git_object: 3c6ea70e53ea21656723d2b5e86bfca3bcd91174
   internal/sdk/models/shared/encryptablevalue.go:
     id: dafe50bf34db
     last_write_checksum: sha1:24e0a35c479b85efd0aa02e7a2c0ab126dafb50c
@@ -1925,12 +1921,8 @@ trackedFiles:
     pristine_git_object: c83de76e21ef8434e7b531ee03dec9a49de5ca3a
   internal/sdk/models/shared/manualdictionaryspec.go:
     id: 527ae8490113
-    last_write_checksum: sha1:406f5b94bffc201007d1f09c21776a96b543a022
-    pristine_git_object: 351aeeab237a71f9bdbdc7d0424e962f92d503de
-  internal/sdk/models/shared/manualdictionaryspecoutput.go:
-    id: abc8526174a0
-    last_write_checksum: sha1:cbf1635e1e848c09fda8fc4e93c925130556bf9a
-    pristine_git_object: e115e99619466a4e9b32ff0904cc90be77ffd1cc
+    last_write_checksum: sha1:99cfa6f22939466e208a59983e8d1ef76193b91d
+    pristine_git_object: 3c8af072e3021074162033b04f57d665f86582e8
   internal/sdk/models/shared/mcpselector.go:
     id: 8ccd9a2c4a58
     last_write_checksum: sha1:1da6e3375c30dc75bad0290720df0852db565440
@@ -2206,8 +2198,8 @@ trackedFiles:
     pristine_git_object: 7dd317fa2fd2a57418a81e5de40afff71765f799
   internal/sdk/redact/redact.go:
     id: c1be9124d2ee
-    last_write_checksum: sha1:0e3764c5d9b87489aaa14b9f3ca6d38ae87c5cca
-    pristine_git_object: 7f543a7bb06092a609f7c9d6ed6b7dbe1ab84ed6
+    last_write_checksum: sha1:6dabbb12b6a726a4041e95a08c7dabc562b94d5f
+    pristine_git_object: c79078beb51e8612f65e9e18957fae75658ac612
   internal/sdk/retry/config.go:
     id: 7ea5fa9128b6
     last_write_checksum: sha1:22068a7fd6e154053ff85678a7fdb6a0d02ac790

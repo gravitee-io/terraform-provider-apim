@@ -49,24 +49,28 @@ actions:
     description: HTTP headers when unset are returned as empty list
     update:
       x-speakeasy-plan-modifiers: IgnoreEmptyList
-  # Encryption (APIM 4.13+)
+  # Encryption (APIM 4.13.2+)
   - target: $.components.schemas.ManualDictionarySpec.properties.encryptedProperties
     description: >-
-      APIM reads every value back as the same mask; writeOnly keeps the read from replacing the
-      configured values in state, so a refresh plans nothing.
+      Not write-only: the read lists the secret keys APIM holds, and refreshKeepingSecrets
+      (dictionary_secrets.go) keeps the configured value of every key APIM reads back masked.
     update:
-      writeOnly: true
       description: >-
-        Secret properties, keyed by the property key. APIM encrypts the values and a read returns
-        each of them masked as `••••••••••••`: Terraform keeps the configured values in its state
-        and does not detect a change made outside Terraform. A value of `••••••••••••` keeps the
-        value APIM stores for that key, for instance after an import. Removing a key, or the
-        attribute, deletes the secret. A key must not appear in both `properties` and
-        `encrypted_properties`. To make a secret plain again, remove it from
-        `encrypted_properties`, apply, then add it to `properties`: APIM rejects the move in a
-        single apply with `dictionary.property.encryptedToPlain`. Requires APIM 4.13 or later.
+        Secret properties, keyed by the property key. Terraform sends the values as plaintext and
+        APIM stores them encrypted. Terraform keeps the configured values in its state: a secret
+        key added or removed outside Terraform plans a change, but a value changed outside
+        Terraform is not detected. Removing a key, or the attribute, deletes the secret. A key must
+        not appear in both `properties` and `encrypted_properties`.
+        To make a secret plain again, remove it from `encrypted_properties` and apply, then add it
+        to `properties` and apply. Requires APIM 4.13.2 or later; earlier versions ignore this
+        attribute and store nothing. From APIM 4.13.3, a read returns each key with its value
+        masked, a value of `••••••••••••` keeps the value APIM stores for that key (for instance
+        after an import), and a key APIM holds encrypted must be declared here: declaring it under
+        `properties`, or moving it there in one apply, is rejected with
+        `dictionary.property.encryptedToPlain`. APIM 4.13.2 keeps such a key encrypted instead,
+        and Terraform then plans to add it to `properties` on every run.
   - target: $.components.schemas.EncryptableValue.properties.value
-    description: The upstream description names the API read, which writeOnly above keeps out of state
+    description: The upstream description names the API read, which refreshKeepingSecrets keeps out of state
     update:
       x-speakeasy-param-sensitive: true
       description: >-
@@ -77,23 +81,30 @@ actions:
     description: >-
       Optional since a dictionary can hold only secrets. Not computed: APIM returns an empty map
       then, which the read maps to null, as an omitted attribute plans. The upstream description
-      names `encryptedProperties`, the API field.
+      names `encryptedProperties`, the API field, and the description is shared with the data
+      source, so it does not tell where to declare a secret.
     update:
       x-speakeasy-param-computed: false
       description: >-
-        Plain properties, keyed by the property key. A key APIM holds encrypted cannot move here in
-        a single apply: see `encrypted_properties`.
+        Plain properties, keyed by the property key. A key APIM holds encrypted is never among
+        them.
   - target: $.components.schemas.DynamicDictionarySpec.properties.encryption
-    description: APIM returns the policy and keeps it when an update omits it
+    description: APIM returns the policy, so it is computed
     update:
       x-speakeasy-param-computed: true
-      x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.DictionaryEncryptionPolicy
     description: >-
-      encryption is a $ref, so the suppression above does not reach the generated attribute;
-      set it on the referenced object too, as for GroupDefaultMemberRoles.
+      An omitted policy turns encryption off, as GKO does, instead of keeping the one APIM stores.
+      encryption is a $ref, so the modifier is set on the referenced object, as for
+      GroupDefaultMemberRoles.
     update:
-      x-speakeasy-param-suppress-computed-diff: true
+      x-speakeasy-plan-modifiers: DisableEncryptionWhenOmitted
       description: >-
-        Encryption of the values the provider fetches. Omitting it keeps the current policy; set
-        `encrypt_on_fetch = false` to stop encrypting. Requires APIM 4.13 or later.
+        Encryption of the values the provider fetches. Omitting it turns encryption off, so
+        removing the block takes effect. Values already encrypted stay encrypted. Requires APIM
+        4.13.2 or later.
+  - target: $.components.schemas.DictionaryEncryptionPolicy.properties.encryptOnFetch
+    update:
+      description: >-
+        Store every fetched value encrypted, from the first fetch. When false, APIM keeps each
+        key's stored classification: a value already encrypted stays encrypted.

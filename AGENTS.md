@@ -85,18 +85,20 @@ Files listed in `.genignore` are **not** overwritten by Speakeasy even though si
 | `examples/resources/**` | Minimal per-resource examples for registry docs (curated, in `.genignore`) |
 | `tests/**` | **Entirely hand-written** — acceptance tests, example tests, testdata, utilities; nothing here is generated |
 | `internal/provider/portal_visibility.go`, `internal/provider/documentation_placement.go`, `internal/provider/portal_navigation.go` | Hand-written portal and documentation navigation behavior |
-| `internal/provider/api_link_request.go`, `internal/provider/documentation_api_request.go`, `internal/provider/documentation_portal_request.go`, `internal/provider/portal_link_request.go` | Hand-written request builders used by generated resource hooks |
+| `internal/provider/api_link_request.go`, `internal/provider/dictionary_request.go`, `internal/provider/documentation_api_request.go`, `internal/provider/documentation_portal_request.go`, `internal/provider/portal_link_request.go` | Hand-written request builders used by generated resource hooks |
+| `internal/provider/dictionary_secrets.go` | Hand-written read step used by the generated dictionary resource: keeps the configured secrets over the masked read |
 | `internal/provider/gravitee_cloud.go` | Gravitee Cloud auth / server URL resolution |
 | `internal/provider/customtypes/**` | `TrimmedString`, `RFC3339` custom Terraform types (referenced from overlays) |
 | `internal/planmodifiers/stringplanmodifier/immutable.go`, `normalize_path.go`, `trim_trailing_slash.go`, `ignore_undeclared_fields.go`, `empty_object_when_omitted.go`, `deployed_on_apply.go` | Custom plan modifiers |
 | `internal/planmodifiers/listplanmodifier/ignore_empty_list.go`, `no_removal_by_name.go`, `keep_state_order.go` | Custom plan modifiers |
 | `internal/planmodifiers/mapplanmodifier/response_template.go` | Custom plan modifier |
+| `internal/planmodifiers/objectplanmodifier/disable_encryption_when_omitted.go` | Custom plan modifier |
 | `internal/validators/listvalidators/sorted_by*.go` | Custom validators: lists the platform reports in its own order |
 | `internal/listkeys/` | Reads the identifying attributes of a list's elements, for the validators and modifiers above |
 | `internal/sdk/internal/hooks/registration.go` | Generated once, then free to edit |
 | `hack/`, `Makefile`, CI config | Project infrastructure |
 
-The generated resource files contain `GRAVITEE ... REQUEST` regions that call the hand-written request builders above. Speakeasy persistent edits preserve these regions during regeneration.
+The generated resource files contain `GRAVITEE ... REQUEST` regions that call the hand-written request builders above, and the dictionary resource a `GRAVITEE DICTIONARY SECRETS` region that calls the read step. Speakeasy persistent edits preserve these regions during regeneration.
 
 Most files under `internal/planmodifiers/` and `internal/validators/` are Speakeasy-generated scaffolding; only the custom modifiers and validators listed above are hand-maintained.
 

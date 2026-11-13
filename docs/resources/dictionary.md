@@ -62,7 +62,7 @@ variable "api_key" {
   sensitive = true
 }
 
-# Requires APIM 4.13 or later
+# Requires APIM 4.13.2 or later
 resource "apim_dictionary" "manual" {
   hrid     = "manual"
   name     = "[Terraform] Manual dictionary"
@@ -72,7 +72,7 @@ resource "apim_dictionary" "manual" {
     properties = {
       env = "production"
     }
-    # Encrypted by APIM and never returned
+    # Stored encrypted by APIM; from 4.13.3, a read returns it masked
     encrypted_properties = {
       "api-key" = {
         value = var.api_key
@@ -115,7 +115,7 @@ Required:
 
 Optional:
 
-- `encryption` (Attributes) Encryption of the values the provider fetches. Omitting it keeps the current policy; set `encrypt_on_fetch = false` to stop encrypting. Requires APIM 4.13 or later. (see [below for nested schema](#nestedatt--dynamic--encryption))
+- `encryption` (Attributes) Encryption of the values the provider fetches. Omitting it turns encryption off, so removing the block takes effect. Values already encrypted stay encrypted. Requires APIM 4.13.2 or later. (see [below for nested schema](#nestedatt--dynamic--encryption))
 
 <a id="nestedatt--dynamic--provider"></a>
 ### Nested Schema for `dynamic.provider`
@@ -162,7 +162,7 @@ Required:
 
 Optional:
 
-- `encrypt_on_fetch` (Boolean) Encrypt every fetched value instead of relying on per-key classification. Default: false
+- `encrypt_on_fetch` (Boolean) Store every fetched value encrypted, from the first fetch. When false, APIM keeps each key's stored classification: a value already encrypted stays encrypted. Default: false
 
 
 
@@ -171,15 +171,15 @@ Optional:
 
 Optional:
 
-- `encrypted_properties` (Attributes Map) Secret properties, keyed by the property key. APIM encrypts the values and a read returns each of them masked as `••••••••••••`: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. A value of `••••••••••••` keeps the value APIM stores for that key, for instance after an import. Removing a key, or the attribute, deletes the secret. A key must not appear in both `properties` and `encrypted_properties`. To make a secret plain again, remove it from `encrypted_properties`, apply, then add it to `properties`: APIM rejects the move in a single apply with `dictionary.property.encryptedToPlain`. Requires APIM 4.13 or later. (see [below for nested schema](#nestedatt--manual--encrypted_properties))
-- `properties` (Map of String) Plain properties, keyed by the property key. A key APIM holds encrypted cannot move here in a single apply: see `encrypted_properties`.
+- `encrypted_properties` (Attributes Map) Secret properties, keyed by the property key. Terraform sends the values as plaintext and APIM stores them encrypted. Terraform keeps the configured values in its state: a secret key added or removed outside Terraform plans a change, but a value changed outside Terraform is not detected. Removing a key, or the attribute, deletes the secret. A key must not appear in both `properties` and `encrypted_properties`. To make a secret plain again, remove it from `encrypted_properties` and apply, then add it to `properties` and apply. Requires APIM 4.13.2 or later; earlier versions ignore this attribute and store nothing. From APIM 4.13.3, a read returns each key with its value masked, a value of `••••••••••••` keeps the value APIM stores for that key (for instance after an import), and a key APIM holds encrypted must be declared here: declaring it under `properties`, or moving it there in one apply, is rejected with `dictionary.property.encryptedToPlain`. APIM 4.13.2 keeps such a key encrypted instead, and Terraform then plans to add it to `properties` on every run. (see [below for nested schema](#nestedatt--manual--encrypted_properties))
+- `properties` (Map of String) Plain properties, keyed by the property key. A key APIM holds encrypted is never among them.
 
 <a id="nestedatt--manual--encrypted_properties"></a>
 ### Nested Schema for `manual.encrypted_properties`
 
-Required:
+Optional:
 
-- `value` (String, Sensitive) The plaintext to encrypt, or `••••••••••••` to keep the value APIM stores for this key. APIM rejects the mask for a key it does not hold encrypted with `dictionary.property.maskedValue`.
+- `value` (String, Sensitive) The plaintext to encrypt, or `••••••••••••` to keep the value APIM stores for this key. APIM rejects the mask for a key it does not hold encrypted with `dictionary.property.maskedValue`. Not Null
 
 ## Import
 
