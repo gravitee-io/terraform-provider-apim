@@ -173,7 +173,7 @@ func (r *SharedPolicyGroupResource) Schema(ctx context.Context, req resource.Sch
 							PlanModifiers: []planmodifier.String{
 								custom_stringplanmodifier.IgnoreUndeclaredFields(),
 							},
-							Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
+							Description: `JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.`,
 						},
 						"description": schema.StringAttribute{
 							Optional:    true,
