@@ -248,18 +248,22 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"encrypted_properties": schema.MapNestedAttribute{
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
+							},
 							Attributes: map[string]schema.Attribute{
 								"value": schema.StringAttribute{
-									Required:    true,
+									Optional:    true,
 									Sensitive:   true,
-									Description: `The plaintext to encrypt, or ` + "`" + `••••••••••••` + "`" + ` to keep the value APIM stores for this key. APIM rejects the mask for a key it does not hold encrypted with ` + "`" + `dictionary.property.maskedValue` + "`" + `.`,
+									Description: `The plaintext to encrypt, or ` + "`" + `••••••••••••` + "`" + ` to keep the value APIM stores for this key. APIM rejects the mask for a key it does not hold encrypted with ` + "`" + `dictionary.property.maskedValue` + "`" + `. Not Null`,
 									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
 										stringvalidator.UTF8LengthAtLeast(1),
 									},
 								},
 							},
 						},
-						Description: `Secret properties, keyed by the property key. Terraform sends the values as plaintext and APIM stores them encrypted. Terraform keeps the configured values in its state and does not detect a secret changed or deleted outside Terraform. Removing a key, or the attribute, deletes the secret. A key must not appear in both ` + "`" + `properties` + "`" + ` and ` + "`" + `encrypted_properties` + "`" + `. To make a secret plain again, remove it from ` + "`" + `encrypted_properties` + "`" + ` and apply, then add it to ` + "`" + `properties` + "`" + ` and apply. Requires APIM 4.13.2 or later; earlier versions ignore this attribute and store nothing. From APIM 4.13.3, a read returns each key with its value masked, a value of ` + "`" + `••••••••••••` + "`" + ` keeps the value APIM stores for that key (for instance after an import), and a key APIM holds encrypted must be declared here: declaring it under ` + "`" + `properties` + "`" + `, or moving it there in one apply, is rejected with ` + "`" + `dictionary.property.encryptedToPlain` + "`" + `. APIM 4.13.2 keeps such a key encrypted instead, and Terraform then plans to add it to ` + "`" + `properties` + "`" + ` on every run.`,
+						Description: `Secret properties, keyed by the property key. Terraform sends the values as plaintext and APIM stores them encrypted. Terraform keeps the configured values in its state: a secret key added or removed outside Terraform plans a change, but a value changed outside Terraform is not detected. Removing a key, or the attribute, deletes the secret. A key must not appear in both ` + "`" + `properties` + "`" + ` and ` + "`" + `encrypted_properties` + "`" + `. To make a secret plain again, remove it from ` + "`" + `encrypted_properties` + "`" + ` and apply, then add it to ` + "`" + `properties` + "`" + ` and apply. Requires APIM 4.13.2 or later; earlier versions ignore this attribute and store nothing. From APIM 4.13.3, a read returns each key with its value masked, a value of ` + "`" + `••••••••••••` + "`" + ` keeps the value APIM stores for that key (for instance after an import), and a key APIM holds encrypted must be declared here: declaring it under ` + "`" + `properties` + "`" + `, or moving it there in one apply, is rejected with ` + "`" + `dictionary.property.encryptedToPlain` + "`" + `. APIM 4.13.2 keeps such a key encrypted instead, and Terraform then plans to add it to ` + "`" + `properties` + "`" + ` on every run.`,
 					},
 					"properties": schema.MapAttribute{
 						Optional:    true,
