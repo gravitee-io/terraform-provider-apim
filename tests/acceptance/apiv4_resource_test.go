@@ -120,7 +120,6 @@ func TestAPIV4Resource_minimal_plugin_configuration(t *testing.T) {
 				ResourceName:             resourceAddress,
 				ImportState:              true,
 				ImportStateIdFunc:        importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
-				ImportStatePersist:       true,
 				ImportStateVerify:        true,
 				ImportStateVerifyIgnore: []string{
 					"notify_members",
@@ -130,13 +129,18 @@ func TestAPIV4Resource_minimal_plugin_configuration(t *testing.T) {
 					"endpoint_groups.0.shared_configuration",
 				},
 			},
-			// After an import, the plan keeps APIM's configuration rather than the declared one.
+			// Planned with an import block, the configuration keeps APIM's JSON rather than the declared one.
 			// The plan is not empty: an import leaves notify_members unset.
 			{
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          configDirectory("set_key"),
 				ConfigVariables:          variables,
-				ConfigPlanChecks: resource.ConfigPlanChecks{
+				ResourceName:             resourceAddress,
+				ImportState:              true,
+				ImportStateKind:          resource.ImportBlockWithID,
+				ImportStateIdFunc:        importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
+				ExpectNonEmptyPlan:       true,
+				ImportPlanChecks: resource.ImportPlanChecks{
 					PreApply: []plancheck.PlanCheck{
 						plancheck.ExpectKnownValue(resourceAddress,
 							tfjsonpath.New("endpoint_groups").AtSliceIndex(0).AtMapKey("shared_configuration"),
