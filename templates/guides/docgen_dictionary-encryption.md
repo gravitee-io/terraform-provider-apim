@@ -5,31 +5,48 @@ subcategory: "Dictionary"
 
 # Dictionary Encryption
 
--> **NOTE:** Dictionary encryption requires APIM 4.13 or later.
+-> **NOTE:** Dictionary encryption requires APIM 4.13.2 or later. Earlier versions ignore
+`encrypted_properties` and `encryption` and store nothing. APIM 4.13.3 or later is recommended: it
+reads secrets back masked and rejects a secret declared as plain, as described below.
 
 This example stores a backend API key as a secret in a manual dictionary, encrypts every value a
 dynamic dictionary fetches, and has an API send the secret to its backend.
 
 ## Secret properties
 
-APIM encrypts the values of `encrypted_properties` and never returns them. Terraform keeps the
-values it sent in its state, in plain text: protect the state as you would the secret itself.
-Terraform does not see a change made to a secret in the Console.
+APIM stores the values of `encrypted_properties` encrypted. From APIM 4.13.3, a read returns each
+key with its value masked. Terraform keeps the values it sent in its state, in plain text: protect
+the state as you would the secret itself. From APIM 4.13.3, a value of `••••••••••••` keeps the
+secret APIM stores for that key, for instance after an import.
+
+A secret added or deleted in the Console plans a change: the next apply removes it or restores it.
+A secret whose value changes in the Console does not: the mask only proves that a value is stored.
+If a secret is made plain in the Console, the plan shows the secret changing without printing the
+plain value, and the apply encrypts it again.
 
 Removing a key from `encrypted_properties`, or removing the whole attribute, deletes the secret.
 A key cannot be in both `properties` and `encrypted_properties`: APIM rejects it.
 
 A manual dictionary needs at least one property, plain or secret.
 
+## A key encrypted outside Terraform
+
+If a key declared in `properties` is encrypted in the Console, APIM 4.13.3 and later reject every
+apply of the dictionary with `dictionary.property.encryptedToPlain`. Move the key to
+`encrypted_properties` to apply again. APIM 4.13.2 keeps the key encrypted instead, and Terraform
+plans to add it to `properties` on every run until the key moves to `encrypted_properties`.
+
 ## Making a secret plain again
 
 It takes two applies: remove the key from `encrypted_properties` and apply, then add it to
-`properties` and apply. APIM keeps a secret key encrypted otherwise.
+`properties` and apply. From APIM 4.13.3, a single apply moving the key is rejected with
+`dictionary.property.encryptedToPlain`; APIM 4.13.2 keeps it encrypted.
 
 ## Fetched values
 
 `encrypt_on_fetch = true` encrypts every value the dynamic dictionary's provider fetches. Omitting
-`encryption` keeps the current policy; set `encrypt_on_fetch = false` to stop encrypting.
+`encryption` turns encryption off, so removing the block takes effect. Values already encrypted
+stay encrypted: APIM keeps each key's classification.
 
 ## Using a secret
 
@@ -53,7 +70,7 @@ resource "apim_dictionary" "encrypted" {
     properties = {
       env = "test"
     }
-    # Encrypted by APIM, never returned
+    # Stored encrypted by APIM; from 4.13.3, a read returns it masked
     encrypted_properties = {
       "backend-api-key" = {
         value = var.backend_api_key

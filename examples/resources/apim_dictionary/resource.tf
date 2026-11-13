@@ -47,7 +47,7 @@ variable "api_key" {
   sensitive = true
 }
 
-# Requires APIM 4.13 or later
+# Requires APIM 4.13.2 or later
 resource "apim_dictionary" "manual" {
   hrid     = "manual"
   name     = "[Terraform] Manual dictionary"
@@ -57,7 +57,7 @@ resource "apim_dictionary" "manual" {
     properties = {
       env = "production"
     }
-    # Encrypted by APIM and never returned
+    # Stored encrypted by APIM; from 4.13.3, a read returns it masked
     encrypted_properties = {
       "api-key" = {
         value = var.api_key

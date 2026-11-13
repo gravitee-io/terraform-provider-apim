@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/config"
 	"github.com/hashicorp/terraform-plugin-testing/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/knownvalue"
 	"github.com/hashicorp/terraform-plugin-testing/plancheck"
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 )
@@ -234,6 +235,7 @@ func TestDictionaryResource_manual_encrypted(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceAddress, "manual.properties.env", "test"),
 					resource.TestCheckResourceAttr(resourceAddress, "manual.encrypted_properties.api-key.value", "s3cr3t"),
+					checkDictionaryEncryptsKey(randomId, "api-key", "s3cr3t"),
 				),
 			},
 			// Verifies resource import: secret values are not read back.
@@ -254,19 +256,30 @@ func TestDictionaryResource_manual_encrypted(t *testing.T) {
 				ImportStateVerify:       true,
 				ImportStateVerifyIgnore: []string{"manual.encrypted_properties"},
 			},
-			// Verifies no drift.
+			// Verifies no drift while APIM reads the secret back masked.
 			{
+				PreConfig:                requireMaskedRead(t, randomId, "api-key", "s3cr3t"),
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables:          variables(plain, "s3cr3t", true),
 				PlanOnly:                 true,
 			},
-			// Verifies a secret rotation.
+			// Verifies a secret rotation: a hidden update, and APIM stores the new secret encrypted.
 			{
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables:          variables(plain, "r0tated", true),
-				Check:                    resource.TestCheckResourceAttr(resourceAddress, "manual.encrypted_properties.api-key.value", "r0tated"),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction(resourceAddress, plancheck.ResourceActionUpdate),
+						plancheck.ExpectSensitiveValue(resourceAddress,
+							tfjsonpath.New("manual").AtMapKey("encrypted_properties").AtMapKey("api-key").AtMapKey("value")),
+					},
+				},
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceAddress, "manual.encrypted_properties.api-key.value", "r0tated"),
+					checkDictionaryEncryptsKey(randomId, "api-key", "r0tated"),
+				),
 			},
 			// Verifies an empty secret is refused when planning.
 			{
@@ -329,13 +342,227 @@ func TestDictionaryResource_manual_encrypted(t *testing.T) {
 				ConfigVariables:          variables(madePlain, "r0tated", false),
 				PlanOnly:                 true,
 			},
+			// Verifies APIM rejects a dictionary left with neither plain nor secret properties.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(nil, "r0tated", false),
+				ExpectError:              regexp.MustCompile(`at least one property`),
+			},
 			// Testing framework implicitly verifies resource delete.
 		},
 	})
 }
 
-// Verifies the encryption policy of a dynamic dictionary: omitting it keeps
-// the current policy.
+// Verifies the import of a dictionary holding a secret: the state holds no
+// secret, so the first plan updates it, and the secret stays encrypted.
+func TestDictionaryResource_manual_encrypted_import(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+	resourceAddress := "apim_dictionary.test"
+	variables := config.Variables{
+		"hrid":   config.StringVariable(randomId),
+		"secret": config.StringVariable("s3cr3t"),
+	}
+	t.Cleanup(func() { deleteDictionary(randomId) })
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Verifies the import plans an update of the secret, hidden.
+			{
+				PreConfig: func() {
+					err := putDictionary(map[string]any{
+						"hrid":     randomId,
+						"name":     "[Terraform] Imported encrypted dictionary",
+						"deployed": false,
+						"type":     "MANUAL",
+						"manual": map[string]any{
+							"properties":          map[string]any{"env": "test"},
+							"encryptedProperties": map[string]any{"api-key": map[string]any{"value": "s3cr3t"}},
+						},
+					})
+					if err != nil {
+						t.Fatal(err)
+					}
+				},
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction(resourceAddress, plancheck.ResourceActionUpdate),
+						plancheck.ExpectSensitiveValue(resourceAddress,
+							tfjsonpath.New("manual").AtMapKey("encrypted_properties").AtMapKey("api-key").AtMapKey("value")),
+					},
+				},
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceAddress, "manual.encrypted_properties.api-key.value", "s3cr3t"),
+					checkDictionaryEncryptsKey(randomId, "api-key", "s3cr3t"),
+				),
+			},
+			// Verifies no drift.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables,
+				PlanOnly:                 true,
+			},
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
+// Verifies a dictionary changed outside Terraform. A secret made plain plans an
+// update that encrypts it again, without showing the plain value. A secret added
+// or deleted plans its removal or its restore. A plain key encrypted outside
+// Terraform plans an update that APIM rejects, until the configuration declares
+// the key encrypted.
+func TestDictionaryResource_manual_encrypted_outside_terraform(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+	resourceAddress := "apim_dictionary.test"
+	stringMap := func(values map[string]string) config.Variable {
+		variables := make(map[string]config.Variable, len(values))
+		for key, value := range values {
+			variables[key] = config.StringVariable(value)
+		}
+		return config.MapVariable(variables)
+	}
+	variables := func(properties, secrets map[string]string) config.Variables {
+		return config.Variables{
+			"hrid":       config.StringVariable(randomId),
+			"properties": stringMap(properties),
+			"secrets":    stringMap(secrets),
+		}
+	}
+	plain := map[string]string{"env": "test"}
+	plainWithToken := map[string]string{"env": "test", "token": "plain-token"}
+	secret := map[string]string{"api-key": "s3cr3t"}
+	secretWithToken := map[string]string{"api-key": "s3cr3t", "token": "console-token"}
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, secret),
+				Check:                    checkDictionaryEncryptsKey(randomId, "api-key", "s3cr3t"),
+			},
+			// Verifies a secret made plain outside Terraform plans a change.
+			{
+				PreConfig:                makePlainOutsideTerraform(t, randomId, "api-key", "now-plain"),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, secret),
+				PlanOnly:                 true,
+				ExpectNonEmptyPlan:       true,
+			},
+			// Verifies the apply encrypts it again, and the plan never shows the plain value.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, secret),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction(resourceAddress, plancheck.ResourceActionUpdate),
+						expectPlanWithoutValue("now-plain"),
+					},
+				},
+				Check: checkDictionaryEncryptsKey(randomId, "api-key", "s3cr3t"),
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, secret),
+				PlanOnly:                 true,
+			},
+			// Verifies a secret added outside Terraform plans its removal.
+			{
+				PreConfig:                addSecretOutsideTerraform(t, randomId, "added-in-console", "console-value"),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, secret),
+				PlanOnly:                 true,
+				ExpectNonEmptyPlan:       true,
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, secret),
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction(resourceAddress, plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: checkDictionaryLacksKey(randomId, "added-in-console"),
+			},
+			// Verifies a secret deleted outside Terraform plans its restore.
+			{
+				PreConfig:                deleteSecretOutsideTerraform(t, randomId, "api-key"),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, secret),
+				PlanOnly:                 true,
+				ExpectNonEmptyPlan:       true,
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, secret),
+				Check:                    checkDictionaryEncryptsKey(randomId, "api-key", "s3cr3t"),
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, secret),
+				PlanOnly:                 true,
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plainWithToken, secret),
+				Check:                    resource.TestCheckResourceAttr(resourceAddress, "manual.properties.token", "plain-token"),
+			},
+			// Verifies a plain key encrypted outside Terraform plans a change.
+			{
+				PreConfig:                encryptOutsideTerraform(t, randomId, "token", "console-token"),
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plainWithToken, secret),
+				PlanOnly:                 true,
+				ExpectNonEmptyPlan:       true,
+			},
+			// Verifies APIM rejects the key under properties.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plainWithToken, secret),
+				ExpectError:              regexp.MustCompile(`encryptedToPlain`),
+			},
+			// Verifies declaring the key encrypted converges.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, secretWithToken),
+				Check:                    checkDictionaryEncryptsKey(randomId, "token", "console-token"),
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables:          variables(plain, secretWithToken),
+				PlanOnly:                 true,
+			},
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
+// Verifies the encryption policy of a dynamic dictionary: omitting it turns
+// encryption off.
 func TestDictionaryResource_dynamic_encryption(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
 	t.Parallel()
@@ -382,7 +609,7 @@ func TestDictionaryResource_dynamic_encryption(t *testing.T) {
 				},
 				PlanOnly: true,
 			},
-			// Verifies that omitting the policy keeps it.
+			// Verifies that omitting the policy turns encryption off.
 			{
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestNameDirectory(),
@@ -391,12 +618,35 @@ func TestDictionaryResource_dynamic_encryption(t *testing.T) {
 				},
 				ConfigPlanChecks: resource.ConfigPlanChecks{
 					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectEmptyPlan(),
+						plancheck.ExpectResourceAction(resourceAddress, plancheck.ResourceActionUpdate),
+						plancheck.ExpectKnownValue(resourceAddress,
+							tfjsonpath.New("dynamic").AtMapKey("encryption").AtMapKey("encrypt_on_fetch"), knownvalue.Bool(false)),
 					},
 				},
-				Check: resource.TestCheckResourceAttr(resourceAddress, "dynamic.encryption.encrypt_on_fetch", "true"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceAddress, "dynamic.encryption.encrypt_on_fetch", "false"),
+					checkDictionaryEncryptsOnFetch(randomId, false),
+				),
 			},
-			// Verifies that encryption on fetch can be turned off.
+			// Verifies no drift while the policy stays omitted.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid": config.StringVariable(randomId),
+				},
+				PlanOnly: true,
+			},
+			// Verifies that encryption on fetch can be turned on again, then off explicitly.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"hrid":             config.StringVariable(randomId),
+					"encrypt_on_fetch": config.BoolVariable(true),
+				},
+				Check: checkDictionaryEncryptsOnFetch(randomId, true),
+			},
 			{
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestNameDirectory(),
@@ -404,7 +654,65 @@ func TestDictionaryResource_dynamic_encryption(t *testing.T) {
 					"hrid":             config.StringVariable(randomId),
 					"encrypt_on_fetch": config.BoolVariable(false),
 				},
-				Check: resource.TestCheckResourceAttr(resourceAddress, "dynamic.encryption.encrypt_on_fetch", "false"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceAddress, "dynamic.encryption.encrypt_on_fetch", "false"),
+					checkDictionaryEncryptsOnFetch(randomId, false),
+				),
+			},
+			// Testing framework implicitly verifies resource delete.
+		},
+	})
+}
+
+// Verifies the first apply of a dynamic dictionary whose HRID APIM already holds
+// with encryption on: omitting the policy turns it off at once.
+func TestDictionaryResource_dynamic_encryption_existing_hrid(t *testing.T) {
+	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+	resourceAddress := "apim_dictionary.test"
+	fixture := config.StaticDirectory("testdata/TestDictionaryResource_dynamic_encryption")
+	variables := config.Variables{"hrid": config.StringVariable(randomId)}
+	t.Cleanup(func() { deleteDictionary(randomId) })
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			{
+				PreConfig: func() {
+					err := putDictionary(map[string]any{
+						"hrid":     randomId,
+						"name":     "[Terraform] Encrypted dynamic dictionary",
+						"deployed": false,
+						"type":     "DYNAMIC",
+						"dynamic": map[string]any{
+							"provider": map[string]any{
+								"type":          "HTTP",
+								"url":           "https://api.gravitee.io/echo",
+								"method":        "GET",
+								"specification": `[{"operation": "shift", "spec": {"headers": {"*": {"$": "[#2].key", "@": "[#2].value"}}}}]`,
+							},
+							"trigger":    map[string]any{"rate": 5, "unit": "SECONDS"},
+							"encryption": map[string]any{"encryptOnFetch": true},
+						},
+					})
+					if err != nil {
+						t.Fatal(err)
+					}
+				},
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          fixture,
+				ConfigVariables:          variables,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceAddress, "dynamic.encryption.encrypt_on_fetch", "false"),
+					checkDictionaryEncryptsOnFetch(randomId, false),
+				),
+			},
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          fixture,
+				ConfigVariables:          variables,
+				PlanOnly:                 true,
 			},
 			// Testing framework implicitly verifies resource delete.
 		},

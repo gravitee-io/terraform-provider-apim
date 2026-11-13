@@ -14,7 +14,7 @@ resource "apim_dictionary" "encrypted" {
     properties = {
       env = "test"
     }
-    # Encrypted by APIM, never returned
+    # Stored encrypted by APIM; from 4.13.3, a read returns it masked
     encrypted_properties = {
       "backend-api-key" = {
         value = var.backend_api_key

@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	custom_listplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/listplanmodifier"
-	speakeasy_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
+	custom_objectplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/objectplanmodifier"
 	speakeasy_stringplanmodifier "github.com/gravitee-io/terraform-provider-apim/internal/planmodifiers/stringplanmodifier"
 	tfTypes "github.com/gravitee-io/terraform-provider-apim/internal/provider/types"
 	"github.com/gravitee-io/terraform-provider-apim/internal/sdk"
@@ -86,17 +86,17 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 						Computed: true,
 						Optional: true,
 						PlanModifiers: []planmodifier.Object{
-							speakeasy_objectplanmodifier.SuppressDiff(speakeasy_objectplanmodifier.ExplicitSuppress),
+							custom_objectplanmodifier.DisableEncryptionWhenOmitted(),
 						},
 						Attributes: map[string]schema.Attribute{
 							"encrypt_on_fetch": schema.BoolAttribute{
 								Computed:    true,
 								Optional:    true,
 								Default:     booldefault.StaticBool(false),
-								Description: `Encrypt every fetched value instead of relying on per-key classification. Default: false`,
+								Description: `Store every fetched value encrypted, from the first fetch. When false, APIM keeps each key's stored classification: a value already encrypted stays encrypted. Default: false`,
 							},
 						},
-						Description: `Encryption of the values the provider fetches. Omitting it keeps the current policy; set ` + "`" + `encrypt_on_fetch = false` + "`" + ` to stop encrypting. Requires APIM 4.13 or later.`,
+						Description: `Encryption of the values the provider fetches. Omitting it turns encryption off, so removing the block takes effect. Values already encrypted stay encrypted. Requires APIM 4.13.2 or later.`,
 					},
 					"provider": schema.SingleNestedAttribute{
 						Required: true,
@@ -248,23 +248,27 @@ func (r *DictionaryResource) Schema(ctx context.Context, req resource.SchemaRequ
 					"encrypted_properties": schema.MapNestedAttribute{
 						Optional: true,
 						NestedObject: schema.NestedAttributeObject{
+							Validators: []validator.Object{
+								speakeasy_objectvalidators.NotNull(),
+							},
 							Attributes: map[string]schema.Attribute{
 								"value": schema.StringAttribute{
-									Required:    true,
+									Optional:    true,
 									Sensitive:   true,
-									Description: `The plaintext to encrypt, or ` + "`" + `••••••••••••` + "`" + ` to keep the value APIM stores for this key. APIM rejects the mask for a key it does not hold encrypted with ` + "`" + `dictionary.property.maskedValue` + "`" + `.`,
+									Description: `The plaintext to encrypt, or ` + "`" + `••••••••••••` + "`" + ` to keep the value APIM stores for this key. APIM rejects the mask for a key it does not hold encrypted with ` + "`" + `dictionary.property.maskedValue` + "`" + `. Not Null`,
 									Validators: []validator.String{
+										speakeasy_stringvalidators.NotNull(),
 										stringvalidator.UTF8LengthAtLeast(1),
 									},
 								},
 							},
 						},
-						Description: `Secret properties, keyed by the property key. APIM encrypts the values and a read returns each of them masked as ` + "`" + `••••••••••••` + "`" + `: Terraform keeps the configured values in its state and does not detect a change made outside Terraform. A value of ` + "`" + `••••••••••••` + "`" + ` keeps the value APIM stores for that key, for instance after an import. Removing a key, or the attribute, deletes the secret. A key must not appear in both ` + "`" + `properties` + "`" + ` and ` + "`" + `encrypted_properties` + "`" + `. To make a secret plain again, remove it from ` + "`" + `encrypted_properties` + "`" + `, apply, then add it to ` + "`" + `properties` + "`" + `: APIM rejects the move in a single apply with ` + "`" + `dictionary.property.encryptedToPlain` + "`" + `. Requires APIM 4.13 or later.`,
+						Description: `Secret properties, keyed by the property key. Terraform sends the values as plaintext and APIM stores them encrypted. Terraform keeps the configured values in its state: a secret key added or removed outside Terraform plans a change, but a value changed outside Terraform is not detected. Removing a key, or the attribute, deletes the secret. A key must not appear in both ` + "`" + `properties` + "`" + ` and ` + "`" + `encrypted_properties` + "`" + `. To make a secret plain again, remove it from ` + "`" + `encrypted_properties` + "`" + ` and apply, then add it to ` + "`" + `properties` + "`" + ` and apply. Requires APIM 4.13.2 or later; earlier versions ignore this attribute and store nothing. From APIM 4.13.3, a read returns each key with its value masked, a value of ` + "`" + `••••••••••••` + "`" + ` keeps the value APIM stores for that key (for instance after an import), and a key APIM holds encrypted must be declared here: declaring it under ` + "`" + `properties` + "`" + `, or moving it there in one apply, is rejected with ` + "`" + `dictionary.property.encryptedToPlain` + "`" + `. APIM 4.13.2 keeps such a key encrypted instead, and Terraform then plans to add it to ` + "`" + `properties` + "`" + ` on every run.`,
 					},
 					"properties": schema.MapAttribute{
 						Optional:    true,
 						ElementType: types.StringType,
-						Description: `Plain properties, keyed by the property key. A key APIM holds encrypted cannot move here in a single apply: see ` + "`" + `encrypted_properties` + "`" + `.`,
+						Description: `Plain properties, keyed by the property key. A key APIM holds encrypted is never among them.`,
 					},
 				},
 				Description: `A manual dictionary with static key/value properties.`,
@@ -345,7 +349,9 @@ func (r *DictionaryResource) Create(ctx context.Context, req resource.CreateRequ
 
 	ctx = withSensitiveValues(ctx, req.Config, req.Plan)
 
-	request, requestDiags := data.ToOperationsCreateOrUpdateDictionariesRequest(ctx)
+	// BEGIN GRAVITEE DICTIONARY REQUEST
+	request, requestDiags := data.toDictionaryRequest(ctx)
+	// END GRAVITEE DICTIONARY REQUEST
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -371,7 +377,9 @@ func (r *DictionaryResource) Create(ctx context.Context, req resource.CreateRequ
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDictionaryState(ctx, res.DictionaryState)...)
+	// BEGIN GRAVITEE DICTIONARY SECRETS
+	resp.Diagnostics.Append(data.refreshKeepingSecrets(ctx, res.DictionaryState)...)
+	// END GRAVITEE DICTIONARY SECRETS
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -437,7 +445,9 @@ func (r *DictionaryResource) Read(ctx context.Context, req resource.ReadRequest,
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDictionaryState(ctx, res.DictionaryState)...)
+	// BEGIN GRAVITEE DICTIONARY SECRETS
+	resp.Diagnostics.Append(data.refreshKeepingSecrets(ctx, res.DictionaryState)...)
+	// END GRAVITEE DICTIONARY SECRETS
 
 	if resp.Diagnostics.HasError() {
 		return
@@ -471,7 +481,9 @@ func (r *DictionaryResource) Update(ctx context.Context, req resource.UpdateRequ
 
 	ctx = withSensitiveValues(ctx, req.Config, req.Plan, req.State)
 
-	request, requestDiags := data.ToOperationsCreateOrUpdateDictionariesRequest(ctx)
+	// BEGIN GRAVITEE DICTIONARY REQUEST
+	request, requestDiags := data.toDictionaryRequest(ctx)
+	// END GRAVITEE DICTIONARY REQUEST
 	resp.Diagnostics.Append(requestDiags...)
 
 	if resp.Diagnostics.HasError() {
@@ -497,7 +509,9 @@ func (r *DictionaryResource) Update(ctx context.Context, req resource.UpdateRequ
 		resp.Diagnostics.AddError("unexpected response from API. Got an unexpected response body", debugResponse(res.RawResponse))
 		return
 	}
-	resp.Diagnostics.Append(data.RefreshFromSharedDictionaryState(ctx, res.DictionaryState)...)
+	// BEGIN GRAVITEE DICTIONARY SECRETS
+	resp.Diagnostics.Append(data.refreshKeepingSecrets(ctx, res.DictionaryState)...)
+	// END GRAVITEE DICTIONARY SECRETS
 
 	if resp.Diagnostics.HasError() {
 		return
