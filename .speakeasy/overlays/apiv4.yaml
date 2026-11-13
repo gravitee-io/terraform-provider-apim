@@ -387,49 +387,49 @@ actions:
     update:
       x-speakeasy-type-override: any
       x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
-      description: 'JSON configuration for the `type` of `endpoints` that will be shared across all endpoints. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+      description: 'JSON configuration for the `type` of `endpoints` that will be shared across all endpoints. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
   - target: $.components.schemas.EndpointV4.properties.configuration
     description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
     update:
       x-speakeasy-type-override: any
       x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
-      description: 'JSON Configuration specific to this endpoint that cannot be define at the group level. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+      description: 'JSON Configuration specific to this endpoint that cannot be define at the group level. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
   - target: $.components.schemas.EndpointV4.properties.sharedConfigurationOverride
     description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
     update:
       x-speakeasy-type-override: any
       x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
-      description: 'JSON Configuration that replaces the shared configuration defined at the group level. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+      description: 'JSON Configuration that replaces the shared configuration defined at the group level. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
   - target: $.components.schemas.Entrypoint.properties.configuration
     description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
     update:
       x-speakeasy-type-override: any
       x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
-      description: 'JSON configuration for the selected `type`. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+      description: 'JSON configuration for the selected `type`. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
   - target: $.components.schemas.PageSource.properties.configuration
     description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
     update:
       x-speakeasy-type-override: any
       x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
-      description: 'JSON object configuration of the fetch plugin. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+      description: 'JSON object configuration of the fetch plugin. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
   - target: $.components.schemas.PlanSecurity.properties.configuration
     description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
     update:
       x-speakeasy-type-override: any
       x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
-      description: 'JSON Object to configure specific attributes of a Plan. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+      description: 'JSON Object to configure specific attributes of a Plan. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
   - target: $.components.schemas.APIResource.properties.configuration
     description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
     update:
       x-speakeasy-type-override: any
       x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
-      description: 'JSON Object configuration specific to this resource. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+      description: 'JSON Object configuration specific to this resource. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
   - target: $.components.schemas.ServiceV4.properties.configuration
     description: Configuration is a mapping, not an empty object. Easiest to define as JSON for now.
     update:
       x-speakeasy-type-override: any
       x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
-      description: 'JSON configuration of the service. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
+      description: 'JSON configuration of the service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.'
 
   ## Defaults
   - target: $.components.schemas.Analytics.properties.enabled.default
