@@ -82,7 +82,7 @@ Files listed in `.genignore` are **not** overwritten by Speakeasy even though si
 | `internal/provider/api_link_request.go`, `internal/provider/documentation_api_request.go`, `internal/provider/documentation_portal_request.go`, `internal/provider/portal_link_request.go` | Hand-written request builders used by generated resource hooks |
 | `internal/provider/gravitee_cloud.go` | Gravitee Cloud auth / server URL resolution |
 | `internal/provider/customtypes/**` | `TrimmedString`, `RFC3339` custom Terraform types (referenced from overlays) |
-| `internal/planmodifiers/stringplanmodifier/immutable.go`, `normalize_path.go`, `trim_trailing_slash.go` | Custom plan modifiers |
+| `internal/planmodifiers/stringplanmodifier/immutable.go`, `normalize_path.go`, `trim_trailing_slash.go`, `ignore_undeclared_fields.go` | Custom plan modifiers |
 | `internal/planmodifiers/listplanmodifier/ignore_empty_list.go`, `no_removal_by_name.go` | Custom plan modifiers |
 | `internal/planmodifiers/mapplanmodifier/response_template.go` | Custom plan modifier |
 | `internal/validators/listvalidators/sorted_by*.go` | Custom validators: lists the platform reports in its own order |
