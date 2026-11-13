@@ -1,16 +1,16 @@
 lockVersion: 2.0.0
 id: b5451c3d-2473-444c-bd62-9bf8987cd90b
 management:
-  docChecksum: 7cc67cd64b0368a0bfe03611a5ef625b
+  docChecksum: d4de17cb21619473e60feab494c25bcb
   docVersion: 1.0.0
   speakeasyVersion: 1.806.0
   generationVersion: 2.956.1
   releaseVersion: 1.2.0
   configChecksum: cdc5cdf1e8857328e4e0628ec0e1eb01
 persistentEdits:
-  generation_id: 07d42e33-06e2-4a53-a9fa-13fec99b5d83
-  pristine_commit_hash: b48715e74d256fe1696bf1dbcf1d0eb97c4ddd27
-  pristine_tree_hash: 3797781faa7d1970e3e30eea95859d41020d1d3d
+  generation_id: 47908e26-9937-4fe4-b4f0-3e466e28d283
+  pristine_commit_hash: ad0ddbefe884fc669d291f43eaa3b0c44d849753
+  pristine_tree_hash: 4adc739a6dc09e0f0a1488f172f82332f762ec67
 features:
   terraform:
     additionalDependencies: 0.1.0
@@ -282,16 +282,16 @@ trackedFiles:
     pristine_git_object: 23a636dfe9c1ea5c7098c3b1e23d9201ad94f069
   internal/provider/apiv4_data_source.go:
     id: 1b5cb67c37e9
-    last_write_checksum: sha1:07dc632f3742fadd8816e37e5769829bae6a04ab
-    pristine_git_object: 1bd4b8d335e7b313afd0307a5fc658d72bc7cc87
+    last_write_checksum: sha1:a1ecf529fb518506f0ce8fe36e64fb29f8e9d6cb
+    pristine_git_object: 6ac7fcc854bc892e1dbafb2038d4bbd4bafef9b5
   internal/provider/apiv4_data_source_sdk.go:
     id: 0f327fef7ee2
     last_write_checksum: sha1:8f9ef8ef8c979fde1a17d52c39a1794db90c3c76
     pristine_git_object: 83efd9bcb98bb486d574b397c195a6555c5d5d51
   internal/provider/apiv4_resource.go:
     id: 333e3a57e1ff
-    last_write_checksum: sha1:6cc0bb63b08b98e62a64419a0ffe0c81fdfda2e7
-    pristine_git_object: e94e42a89b91aca7eb79541a6771a962f0a4a1a8
+    last_write_checksum: sha1:69345b30ef8ab47b78ec5660843a6792e1047e51
+    pristine_git_object: 7f4f356727805160e7c3617fadd069698f9914b4
   internal/provider/apiv4_resource_sdk.go:
     id: ba8026d69f87
     last_write_checksum: sha1:55f4ee299d1616a18cb84a7740a469e99c6505dd
@@ -394,16 +394,16 @@ trackedFiles:
     pristine_git_object: d3b45ed816f4cc67957b83bbb5772f26dae81ae7
   internal/provider/mcpproxy_data_source.go:
     id: 843bedf73467
-    last_write_checksum: sha1:7fb59812210f39488ae93700f24321242892665e
-    pristine_git_object: 12abc28dc6150eb3baf37015a4e5e0d31091ec3f
+    last_write_checksum: sha1:bdb4cf107ee64713e3d296e5463bd6340e97f7c4
+    pristine_git_object: f534da1e2b39ddab812d754d8d2b23af6de98c75
   internal/provider/mcpproxy_data_source_sdk.go:
     id: 2958c39fc585
     last_write_checksum: sha1:5ea9b04fe0a5cc8be3a68a9a3a239b1f143f41a8
     pristine_git_object: 32927ba5e28aa9b70afb5e1b3ad2dae077e1a807
   internal/provider/mcpproxy_resource.go:
     id: 1fbc95b04bd5
-    last_write_checksum: sha1:ab9bbc118e9da8989ab4956c2e7f931f25c328c2
-    pristine_git_object: f642f68d677d10ed07d56f347987a1965bb2bb42
+    last_write_checksum: sha1:b9a28e69ab348faf03cd34a0443edb546ce74095
+    pristine_git_object: c203aeea6533324306e0212bea2fadc510776ba8
   internal/provider/mcpproxy_resource_sdk.go:
     id: 381350ac9576
     last_write_checksum: sha1:5efe89414492b72cf0eea9ac94125be8b5f579cf
@@ -538,32 +538,32 @@ trackedFiles:
     pristine_git_object: f8fe6e0d2ee93c3aaf7d690e8ffa901d80997d63
   internal/provider/sharedpolicygroup_data_source.go:
     id: 46320b35e95c
-    last_write_checksum: sha1:8db8725d5dd0d8a4636767355bdbd9fc95d9f68a
-    pristine_git_object: 5c6c936e8659dbf38b6fa026323848a6c5b9b6b0
+    last_write_checksum: sha1:b1530d02cb163dca2397b0a1811014b9751bc6ad
+    pristine_git_object: 5921494d89cae91b80ab8fb4e9aae515614c5597
   internal/provider/sharedpolicygroup_data_source_sdk.go:
     id: 7431f78d34d8
     last_write_checksum: sha1:dc94897c4ae5509d3c01fad0a413f7c041fb9095
     pristine_git_object: bac7bf763b4395f5e0a689fc2390ce72a8940a98
   internal/provider/sharedpolicygroup_resource.go:
     id: b8d307a6ab72
-    last_write_checksum: sha1:118c8ebe89219dbc160aad68bfed5c1987b36315
-    pristine_git_object: 6c8878e2536859bebd83f473c678f4b7fa3078b7
+    last_write_checksum: sha1:a854d2d4908ce52129e1f1f81715fda331afe546
+    pristine_git_object: a9b169091a33617d10f66d9cc1550513d170db1e
   internal/provider/sharedpolicygroup_resource_sdk.go:
     id: d0406f2ae70c
     last_write_checksum: sha1:b82d6fa67258f3176e7a5dcafabe93084f3d239e
     pristine_git_object: 03b6a225fe3875902bb1eb4dbd04ce8b58d851ca
   internal/provider/subscription_data_source.go:
     id: 228db6b8d459
-    last_write_checksum: sha1:e56bd46d36a8f8708a664c21cad8baa1a39ccc42
-    pristine_git_object: 0164f8e202e92140abf314322d7da37bde739bce
+    last_write_checksum: sha1:e948e450cdd74d3c58d00946a4b6463b81c34d9f
+    pristine_git_object: ed35573ed2d0d35bae05a6c8ae84bbd7707b1516
   internal/provider/subscription_data_source_sdk.go:
     id: 7861a4c1da39
     last_write_checksum: sha1:ef0dcc7f60e1315fbb70cebbe72d7bdd42d5d5f4
     pristine_git_object: b8e49e0ec32e45f0a5bd4f85569dfa799c1eaf3c
   internal/provider/subscription_resource.go:
     id: 466e40c89aec
-    last_write_checksum: sha1:5595cd93a2d116b4aa1945c70932edf1f630af6e
-    pristine_git_object: a5111cc3586c45e3f377ca686d1daf58d5167289
+    last_write_checksum: sha1:ed00a29205963ffcff80239443c1f5a087f61d63
+    pristine_git_object: 2e24b5a4eb901ffb4ff647fa97cc5fee56f49d48
   internal/provider/subscription_resource_sdk.go:
     id: 9ba4a8b00592
     last_write_checksum: sha1:4fd3fe99379aced058625abe50e23c5cfdc4558c
@@ -1424,12 +1424,12 @@ trackedFiles:
     pristine_git_object: 5d4fcf91ea8982fe2e3882b5c1a0cfc0ca526fbe
   internal/sdk/models/shared/aimmcpproxyflowstep.go:
     id: 785ee705096f
-    last_write_checksum: sha1:1779605d299ca638357cd4a4a4580f012df37baf
-    pristine_git_object: 02b4f754ed0865565ea294c63ced0ef04569c1dc
+    last_write_checksum: sha1:20bfde0646d0f1db2ff8c0bee6227650ac9c7088
+    pristine_git_object: c8643b39992072e6589fa50fe562cdf6e0f4c38f
   internal/sdk/models/shared/aimmcpproxyidentityprovideroutput.go:
     id: 82ce441e1ce5
-    last_write_checksum: sha1:6eea0207eba6416c4a137d5fac3ce17e7318341e
-    pristine_git_object: 6d98ba5ad9de1d4b607829666b6f0d4d4bb8e263
+    last_write_checksum: sha1:1447ce1ddcca561137120b89679d6b283a170c34
+    pristine_git_object: fbe22926f8f043d2aa557df57d078fa15b29f961
   internal/sdk/models/shared/aimmcpproxylifecyclestate.go:
     id: 58401f65299e
     last_write_checksum: sha1:3db7fca2cf137beb61f1f066605025d250e6d740
@@ -1488,8 +1488,8 @@ trackedFiles:
     pristine_git_object: 93d6bf8e49d566c463d421ee2556f26dcba9f6ed
   internal/sdk/models/shared/apiresource.go:
     id: b50be2eb1707
-    last_write_checksum: sha1:f924505824bf576ea711ffa2a44b65e8dad8f190
-    pristine_git_object: e61666e32d5b8758bec5d03f7299d7dacb47e31f
+    last_write_checksum: sha1:fa3dc82e8a4af0198dcb5dc6d3fe4ee70712e3d1
+    pristine_git_object: 530606ad4838f1ebfe810c2a4aa9aaa83d42c018
   internal/sdk/models/shared/apiservices.go:
     id: f0195ead7396
     last_write_checksum: sha1:4f7a3860dbf42f8f242677cc79787555973b923b
@@ -1605,20 +1605,20 @@ trackedFiles:
     pristine_git_object: 385de54dfcd764c28e88a5c02fac4ffbecb35bd2
   internal/sdk/models/shared/endpointgroupv4.go:
     id: 92903450e4ac
-    last_write_checksum: sha1:0a7ceba4f6f71af6358d45651cd16cb084f14e93
-    pristine_git_object: 82236950f736dc915cbfb47988508c684ae35d3d
+    last_write_checksum: sha1:cba1b97b6cb1c99daf4cb7ce12c28f5294af57d1
+    pristine_git_object: 336f80b4f6755d7c79f1efbf2723b305a4ed2ec8
   internal/sdk/models/shared/endpointservices.go:
     id: e0a032bc8da9
     last_write_checksum: sha1:7628f1747b62eb7bf9eae78409c1eb260d4218ac
     pristine_git_object: 9b79c7fbf6790041bf67915b32ba0b7f60100e6e
   internal/sdk/models/shared/endpointv4.go:
     id: ded632ea6b2c
-    last_write_checksum: sha1:35c4d068dcd1ba452fdd959108eb330f9b0782b1
-    pristine_git_object: eedbade8089b644d2b1b9bb92b7a2920a3c0c0fa
+    last_write_checksum: sha1:46c90560a54a0671d09f00f0b3b0683f8decfee6
+    pristine_git_object: 6acd5d15b93349e10a792eaa6fe2af592c08d5f7
   internal/sdk/models/shared/entrypoint.go:
     id: 5d4efdd50121
-    last_write_checksum: sha1:f8e5f0d80ff7600a64aac38d7884b5cc840d949d
-    pristine_git_object: 67193048d684e7f92ab88cc4ae9dd70cfd0ae8da
+    last_write_checksum: sha1:b5fed2b32938335baa48f818732d28b7407afde9
+    pristine_git_object: 7053626806831627ad75c88ef7f858e7784c9880
   internal/sdk/models/shared/error.go:
     id: a388f67481aa
     last_write_checksum: sha1:be8a47262d53bbc20a7fd85803cc0d1f2fdc07a2
@@ -1761,8 +1761,8 @@ trackedFiles:
     pristine_git_object: b336bcddb975e56ed276b6e0ce669bf1be8ad619
   internal/sdk/models/shared/pagesource.go:
     id: 2e065044b394
-    last_write_checksum: sha1:34b619fffb5ab663718e7a977ead2a9ce9405f12
-    pristine_git_object: 4142eb66c6a0ab8f60fd3591bbb9ebc35e644705
+    last_write_checksum: sha1:026c20e357d009204c7693caeb910d37ab35e22a
+    pristine_git_object: e489b5e7d010b8b4d9c9f92886730ad6fec28463
   internal/sdk/models/shared/pagetype.go:
     id: 5e47b818ccaa
     last_write_checksum: sha1:6f631e43e6eb7532d66bbe2490673f7dc903ec6e
@@ -1785,8 +1785,8 @@ trackedFiles:
     pristine_git_object: ffe63af23afff187ba44c9c1812b86dd6f8c1ff6
   internal/sdk/models/shared/plansecurity.go:
     id: d87d300648a2
-    last_write_checksum: sha1:6ba89b5356cf12314d142ac2bc4d3457fbc737c5
-    pristine_git_object: 78850194355f166e21466cd1427c5052dd8d14a0
+    last_write_checksum: sha1:8b29d6333f3dda1aee227a1df4f699625a5ff3d8
+    pristine_git_object: 9eaa5cb6ba85af57c796214afd17991f10f61935
   internal/sdk/models/shared/plansecuritytype.go:
     id: dfdbf70dd35c
     last_write_checksum: sha1:d072901271aaeb3173ecf62de5c0e67b0235852b
@@ -1913,8 +1913,8 @@ trackedFiles:
     pristine_git_object: 8cb4d9f94e6b7d133acc5e48a7fbcfcc61eab8cd
   internal/sdk/models/shared/servicev4.go:
     id: 02c134ec8b53
-    last_write_checksum: sha1:f299af44a0408647bc675372fce00463c0d83efd
-    pristine_git_object: 4aee8f7d29c1dc833d7bbbdf84a07f1385a9aea8
+    last_write_checksum: sha1:4735df77e07558ccdeb0085bb1cd9952cd6b20e8
+    pristine_git_object: ed90d3ddfb087750a5b5221213032d28cfe5481a
   internal/sdk/models/shared/sharedpolicygroupapitype.go:
     id: 46c2eacc7d77
     last_write_checksum: sha1:5625aebb0669a245fbf1421ddf439c1714ec98c8
@@ -1934,12 +1934,12 @@ trackedFiles:
     deleted: true
   internal/sdk/models/shared/stepv4.go:
     id: d2b48d84a43e
-    last_write_checksum: sha1:95c539911059ed3c85a483068cc77351c6b341cc
-    pristine_git_object: 7a638c59df61076b6f12081c68a6a08e7ef3ae27
+    last_write_checksum: sha1:2151f13bdb14499a8d74c954da640dce094a6ef3
+    pristine_git_object: 27d98b7b06c284362b8a3b4c68df4913ad8a24af
   internal/sdk/models/shared/subscriptionconsumerconfiguration.go:
     id: 763235b27f61
-    last_write_checksum: sha1:8a5905e3033b5706d52a0a561eb099edc84bbec0
-    pristine_git_object: 60aab846afc010c65eaf800ffd3d8e48923e8ea0
+    last_write_checksum: sha1:4496e2100c54d59b8869d3c2540fc10fd83903d7
+    pristine_git_object: e72e30324b015e6abeadfccfcfa918fe6f34c8dc
   internal/sdk/models/shared/subscriptionlistener.go:
     id: 667f75529609
     last_write_checksum: sha1:ac215fc8b2e7238725bf7dc0998eb5ff2f569102
@@ -2822,7 +2822,7 @@ examples:
         query:
           dryRun: true
       requestBody:
-        application/json: {"hrid": "github-mcp-proxy", "entityId": "mcp-proxy.github", "name": "GitHub", "contextPath": "/mcp/github", "mode": "PROXY", "proxy": {"serverUrl": "https://api.githubcopilot.com/mcp/"}, "state": "STARTED", "flows": [{"name": "Tools ACL", "enabled": true, "selectors": [{"methods": ["tools/list", "tools/call"], "type": "MCP"}], "request": [{"name": "MCP ACL", "enabled": true, "policy": "mcp-acl", "configuration": {"authorizations": [{"authorizedFeatures": [{"type": "TOOLS", "methods": ["TOOLS_LIST", "TOOLS_CALL"], "patternType": "ANY"}]}]}}]}], "identityProviders": [{"name": "am", "type": "GRAVITEE_AM"}, {"issuerUrl": "https://kc.example.com/realms/acme", "introspectionEndpoint": "/protocol/openid-connect/token/introspect", "introspectionEndpointMethod": "POST", "clientId": "gateway", "clientSecret": "secret://kubernetes/keycloak-gateway:client-secret", "name": "keycloak", "type": "OAUTH2_GENERIC"}], "plans": [{"name": "gold", "security": {"provider": "am", "scopes": ["repo:read"], "type": "OAUTH2"}, "flows": [{"name": "Gold rate limit", "enabled": true, "selectors": [{"methods": ["tools/call"], "type": "MCP"}], "request": [{"name": "Rate limit", "enabled": true, "policy": "rate-limit", "configuration": {"rate": {"limit": 100, "periodTime": 1, "periodTimeUnit": "MINUTES"}}}]}]}, {"name": "partners", "security": {"provider": "keycloak", "type": "OAUTH2"}}]}
+        application/json: {"hrid": "github-mcp-proxy", "entityId": "mcp-proxy.github", "name": "GitHub", "contextPath": "/mcp/github", "mode": "PROXY", "proxy": {"serverUrl": "https://api.githubcopilot.com/mcp/"}, "state": "STARTED", "flows": [{"name": "Tools ACL", "enabled": true, "selectors": [{"methods": ["tools/list", "tools/call"], "type": "MCP"}], "request": [{"name": "MCP ACL", "enabled": true, "policy": "mcp-acl", "configuration": {"authorizations": [{"authorizedFeatures": [{"type": "TOOLS", "methods": ["TOOLS_LIST", "TOOLS_CALL"], "patternType": "ANY"}]}]}}]}], "identityProviders": [{"name": "am", "type": "GRAVITEE_AM"}, {"issuerUrl": "https://kc.example.com/realms/acme", "introspectionEndpoint": "/protocol/openid-connect/token/introspect", "introspectionEndpointMethod": "POST", "clientId": "gateway", "clientSecret": "secret://kubernetes/keycloak-gateway:client-secret", "userInfoEndpoint": "/userinfo", "name": "keycloak", "type": "OAUTH2_GENERIC"}], "plans": [{"name": "gold", "security": {"provider": "am", "scopes": ["repo:read"], "type": "OAUTH2"}, "flows": [{"name": "Gold rate limit", "enabled": true, "selectors": [{"methods": ["tools/call"], "type": "MCP"}], "request": [{"name": "Rate limit", "enabled": true, "policy": "rate-limit", "configuration": {"rate": {"limit": 100, "periodTime": 1, "periodTimeUnit": "MINUTES"}}}]}]}, {"name": "partners", "security": {"provider": "keycloak", "type": "OAUTH2"}}]}
       responses:
         "200":
           application/json: {"hrid": "github-mcp", "entityId": "mcp-proxy.github", "name": "GitHub", "description": "GitHub tools proxied through the gateway", "contextPath": "/mcp/github", "mode": "PROXY", "proxy": {"serverUrl": "https://api.githubcopilot.com/mcp/"}, "studio": {"tools": [{"server": "github-mcp", "tool": "create_issue", "alias": "gh_create_issue"}], "enableFGA": false}, "state": "STARTED", "flows": [{"name": "Tools ACL", "enabled": true, "selectors": [{"methods": ["tools/list", "tools/call"], "type": "MCP"}], "request": [{"name": "MCP ACL", "enabled": true, "policy": "mcp-acl", "configuration": {"authorizations": [{"authorizedFeatures": [{"type": "TOOLS", "methods": ["TOOLS_LIST", "TOOLS_CALL"], "patternType": "ANY"}]}]}}]}], "identityProviders": [{"name": "am", "type": "GRAVITEE_AM"}], "plans": [{"name": "gold", "security": {"source": "HEADER", "type": "API_KEY"}}]}

@@ -227,7 +227,7 @@ Optional:
 Optional:
 
 - `condition` (String) Expression-language condition the step runs under; always when omitted
-- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. Parsed as JSON.
+- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) Human description of the step
 - `enabled` (Boolean) Whether the gateway runs the step; true when omitted. Default: true
 - `name` (String) Name of the step, shown in the policy studio. Not Null
@@ -240,7 +240,7 @@ Optional:
 Optional:
 
 - `condition` (String) Expression-language condition the step runs under; always when omitted
-- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. Parsed as JSON.
+- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) Human description of the step
 - `enabled` (Boolean) Whether the gateway runs the step; true when omitted. Default: true
 - `name` (String) Name of the step, shown in the policy studio. Not Null
@@ -345,7 +345,7 @@ Optional:
 Optional:
 
 - `condition` (String) Expression-language condition the step runs under; always when omitted
-- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. Parsed as JSON.
+- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) Human description of the step
 - `enabled` (Boolean) Whether the gateway runs the step; true when omitted. Default: true
 - `name` (String) Name of the step, shown in the policy studio. Not Null
@@ -358,7 +358,7 @@ Optional:
 Optional:
 
 - `condition` (String) Expression-language condition the step runs under; always when omitted
-- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. Parsed as JSON.
+- `configuration` (String) Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) Human description of the step
 - `enabled` (Boolean) Whether the gateway runs the step; true when omitted. Default: true
 - `name` (String) Name of the step, shown in the policy studio. Not Null
@@ -438,7 +438,7 @@ Not Null
 - `issuer_url` (String) Issuer URL of the authorization server, the base the endpoints are resolved against. Not Null
 - `name` (String) Name of the provider, the resource name on the proxy and the value plans reference. Not Null
 - `type` (String) Kind of authorization server. Default: "OAUTH2_GENERIC"; must be "OAUTH2_GENERIC"
-- `user_info_endpoint` (String) UserInfo endpoint, same rule as `introspectionEndpoint`
+- `user_info_endpoint` (String) UserInfo endpoint, same rule as `introspectionEndpoint`. Default: "/userinfo"
 
 
 

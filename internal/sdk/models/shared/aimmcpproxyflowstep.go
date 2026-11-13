@@ -19,7 +19,7 @@ type AimMcpProxyFlowStep struct {
 	Policy string `json:"policy"`
 	// Expression-language condition the step runs under; always when omitted
 	Condition *string `json:"condition,omitempty"`
-	// Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run
+	// Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.
 	Configuration any `json:"configuration,omitempty"`
 }
 

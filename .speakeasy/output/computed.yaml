@@ -2614,7 +2614,7 @@ components:
           x-speakeasy-param-computed: false
         entrypointConfiguration:
           type: object
-          description: The configuration to use at subscription time to push to the target service.
+          description: 'The configuration to use at subscription time to push to the target service. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
           example: |
             {
                 "callbackUrl": "https://webhook.site/aaaaaaaa-ffff-ffff-ffff-aaaaaaaa",
@@ -2631,6 +2631,7 @@ components:
             }
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
+          x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
       required: [entrypointId]
       x-speakeasy-param-computed: false
     SubscriptionStatus:
@@ -3121,14 +3122,16 @@ components:
           x-speakeasy-param-computed: false
         configuration:
           type: object
-          description: JSON Configuration specific to this endpoint that cannot be define at the group level.
+          description: 'JSON Configuration specific to this endpoint that cannot be define at the group level. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
+          x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
         sharedConfigurationOverride:
           type: object
-          description: JSON Configuration that replaces the shared configuration defined at the group level.
+          description: 'JSON Configuration that replaces the shared configuration defined at the group level. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
+          x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
         services:
           $ref: "#/components/schemas/EndpointServices"
           x-speakeasy-param-computed: false
@@ -3167,10 +3170,11 @@ components:
           $ref: "#/components/schemas/LoadBalancer"
           x-speakeasy-param-computed: false
         sharedConfiguration:
-          description: JSON configuration for the `type` of `endpoints` that will be shared across all endpoints.
+          description: 'JSON configuration for the `type` of `endpoints` that will be shared across all endpoints. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
           type: object
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
+          x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
         endpoints:
           type: array
           description: All endpoints of this API.
@@ -3221,10 +3225,11 @@ components:
           $ref: "#/components/schemas/Dlq"
           x-speakeasy-param-computed: false
         configuration:
-          description: JSON configuration for the selected `type`.
+          description: 'JSON configuration for the selected `type`. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
           type: object
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
+          x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
     FlowV4:
       description: API or PLan Flow
       type: object
@@ -3780,9 +3785,10 @@ components:
           x-speakeasy-param-computed: false
         configuration:
           type: object
-          description: JSON object configuration of the fetch plugin.
+          description: 'JSON object configuration of the fetch plugin. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
+          x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
       x-speakeasy-param-computed: false
     PathV4:
       description: API Path specification
@@ -3812,10 +3818,11 @@ components:
           $ref: "#/components/schemas/PlanSecurityType"
           x-speakeasy-param-computed: false
         configuration:
-          description: JSON Object to configure specific attributes of a Plan.
+          description: 'JSON Object to configure specific attributes of a Plan. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
           type: object
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
+          x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
       required:
         - type
       x-speakeasy-param-computed: false
@@ -3964,10 +3971,11 @@ components:
             - content-provider-inline-resource
           x-speakeasy-param-computed: false
         configuration:
-          description: JSON Object configuration specific to this resource.
+          description: 'JSON Object configuration specific to this resource. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
           type: object
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
+          x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
         enabled:
           description: Make it available or not.
           type: boolean
@@ -4098,9 +4106,10 @@ components:
           x-speakeasy-param-computed: false
         configuration:
           type: object
-          description: JSON configuration of the service.
+          description: 'JSON configuration of the service. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
+          x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
         enabled:
           type: boolean
           description: Is the service enabled or not.
@@ -4139,9 +4148,10 @@ components:
           x-speakeasy-param-computed: false
         configuration:
           type: object
-          description: JSON Object configuration of the policy used.
+          description: 'JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
+          x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
         condition:
           type: string
           description: The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
@@ -5900,9 +5910,10 @@ components:
         configuration:
           type: object
           additionalProperties: true
-          description: Configuration of the policy, free-form as the policy's own schema defines it; validated against that schema on apply and dry run
+          description: 'Configuration of the policy, free-form as the policy''s own schema defines it; validated against that schema on apply and dry run. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.'
           x-speakeasy-param-computed: false
           x-speakeasy-type-override: any
+          x-speakeasy-plan-modifiers: IgnoreUndeclaredFields
       required:
         - name
         - policy
@@ -5986,6 +5997,7 @@ components:
               type: string
               description: UserInfo endpoint, same rule as `introspectionEndpoint`
               x-speakeasy-param-computed: false
+              default: /userinfo
             name:
               type: string
               description: Name of the provider, the resource name on the proxy and the value plans reference
