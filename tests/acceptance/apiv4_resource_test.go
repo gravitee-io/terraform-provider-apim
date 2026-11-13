@@ -60,6 +60,77 @@ func TestAPIV4Resource_minimal(t *testing.T) {
 	})
 }
 
+// Verifies that the fields APIM fills with their defaults in a plugin configuration
+// never show as a change: a field the configuration leaves out belongs to APIM.
+func TestAPIV4Resource_minimal_plugin_configuration(t *testing.T) {
+	t.Parallel()
+
+	randomId := "test-" + acctest.RandString(10)
+	resourceAddress := "apim_apiv4.test"
+	dataSourceAddress := "data.apim_apiv4.test"
+	variables := config.Variables{
+		"environment_id":  config.StringVariable("DEFAULT"),
+		"hrid":            config.StringVariable(randomId),
+		"organization_id": config.StringVariable("DEFAULT"),
+	}
+	configDirectory := func(step string) config.TestStepConfigFunc {
+		return config.StaticDirectory("testdata/TestAPIV4Resource_minimal_plugin_configuration/" + step)
+	}
+	storedReadTimeout := func(value string) resource.TestCheckFunc {
+		return resource.TestMatchResourceAttr(dataSourceAddress, "endpoint_groups.0.shared_configuration",
+			regexp.MustCompile(`"readTimeout":`+value+`[,}]`))
+	}
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Create: the plan after apply is empty although APIM returns every default.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          configDirectory("create"),
+				ConfigVariables:          variables,
+				Check:                    storedReadTimeout("5000"),
+			},
+			// Removing a field plans nothing: APIM keeps its last value.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          configDirectory("remove_key"),
+				ConfigVariables:          variables,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
+				},
+				Check: storedReadTimeout("5000"),
+			},
+			// Setting a field again updates the API.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          configDirectory("set_key"),
+				ConfigVariables:          variables,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectResourceAction(resourceAddress, plancheck.ResourceActionUpdate),
+					},
+				},
+				Check: storedReadTimeout("10000"),
+			},
+			// The imported state holds APIM's configurations, defaults included.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          configDirectory("set_key"),
+				ConfigVariables:          variables,
+				ResourceName:             resourceAddress,
+				ImportState:              true,
+				ImportStateIdFunc:        importStateIDFunc(resourceAddress, []string{"environment_id", "hrid", "organization_id"}, nil),
+				ImportStateVerify:        true,
+				ImportStateVerifyIgnore: []string{
+					"notify_members",
+					"version",
+					"listeners.0.http.paths.0.override_access",
+				},
+			},
+		},
+	})
+}
+
 // Verifies omission and explicit clearing of HTTP listener settings.
 func TestAPIV4Resource_clearComputedListenerSettings(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11, utils.ApimV4_12)
