@@ -281,7 +281,7 @@ Optional:
 - `load_balancer` (Attributes) Load Balancer to distribute traffic between endpoints. (see [below for nested schema](#nestedatt--endpoint_groups--load_balancer))
 - `name` (String) The name of the endpoint group
 - `services` (Attributes) API Endpoint Group Services (see [below for nested schema](#nestedatt--endpoint_groups--services))
-- `shared_configuration` (String) JSON configuration for the `type` of `endpoints` that will be shared across all endpoints. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `shared_configuration` (String) JSON configuration for the `type` of `endpoints` that will be shared across all endpoints. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `type` (String) The type of the endpoint group. Not Null
 
 <a id="nestedatt--endpoint_groups--endpoints"></a>
@@ -289,12 +289,12 @@ Optional:
 
 Optional:
 
-- `configuration` (String) JSON Configuration specific to this endpoint that cannot be define at the group level. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Configuration specific to this endpoint that cannot be define at the group level. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `inherit_configuration` (Boolean) Enables shared configuration inheritance. Default: false
 - `name` (String) The name of the endpoint. Not Null
 - `secondary` (Boolean) Define this endpoint as fallback endpoint in case other endpoints are no longer responding. Default: false
 - `services` (Attributes) API Endpoint Services (see [below for nested schema](#nestedatt--endpoint_groups--endpoints--services))
-- `shared_configuration_override` (String) JSON Configuration that replaces the shared configuration defined at the group level. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `shared_configuration_override` (String) JSON Configuration that replaces the shared configuration defined at the group level. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `tenants` (List of String) The list of Getaway's tenants on which the endpoint can be used. Default: []
 - `type` (String) The type of endpoint. Not Null
 - `weight` (Number) The weight of the endpoint for the load balancer algorythm. Default: 1
@@ -311,7 +311,7 @@ Optional:
 
 Optional:
 
-- `configuration` (String) JSON configuration of the service. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.
+- `configuration` (String) JSON configuration of the service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.
 - `enabled` (Boolean) Is the service enabled or not. Default: true
 - `override_configuration` (Boolean) When the configuration overrides an inherited configuration. Default: false
 - `type` (String) The service plugin ID used. Not Null
@@ -340,7 +340,7 @@ Optional:
 
 Optional:
 
-- `configuration` (String) JSON configuration of the service. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.
+- `configuration` (String) JSON configuration of the service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.
 - `enabled` (Boolean) Is the service enabled or not. Default: true
 - `override_configuration` (Boolean) When the configuration overrides an inherited configuration. Default: false
 - `type` (String) The service plugin ID used. Not Null
@@ -351,7 +351,7 @@ Optional:
 
 Optional:
 
-- `configuration` (String) JSON configuration of the service. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.
+- `configuration` (String) JSON configuration of the service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.
 - `enabled` (Boolean) Is the service enabled or not. Default: true
 - `override_configuration` (Boolean) When the configuration overrides an inherited configuration. Default: false
 - `type` (String) The service plugin ID used. Not Null
@@ -405,7 +405,7 @@ Default: []
 
 Optional:
 
-- `configuration` (String) JSON configuration for the selected `type`. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON configuration for the selected `type`. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `dlq` (Attributes) Dead Letter Queue to process undelivered messages. (see [below for nested schema](#nestedatt--listeners--http--entrypoints--dlq))
 - `qos` (String) Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]
 - `type` (String) The type of the entrypoint. Not Null
@@ -454,7 +454,7 @@ Optional:
 
 Optional:
 
-- `configuration` (String) JSON configuration for the selected `type`. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON configuration for the selected `type`. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `dlq` (Attributes) Dead Letter Queue to process undelivered messages. (see [below for nested schema](#nestedatt--listeners--kafka--entrypoints--dlq))
 - `qos` (String) Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]
 - `type` (String) The type of the entrypoint. Not Null
@@ -483,7 +483,7 @@ Optional:
 
 Optional:
 
-- `configuration` (String) JSON configuration for the selected `type`. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON configuration for the selected `type`. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `dlq` (Attributes) Dead Letter Queue to process undelivered messages. (see [below for nested schema](#nestedatt--listeners--subscription--entrypoints--dlq))
 - `qos` (String) Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]
 - `type` (String) The type of the entrypoint. Not Null
@@ -513,7 +513,7 @@ Optional:
 
 Optional:
 
-- `configuration` (String) JSON configuration for the selected `type`. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON configuration for the selected `type`. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `dlq` (Attributes) Dead Letter Queue to process undelivered messages. (see [below for nested schema](#nestedatt--listeners--tcp--entrypoints--dlq))
 - `qos` (String) Type of the quality of service (for message APIs). Default: "AUTO"; must be one of ["NONE", "AUTO", "AT_MOST_ONCE", "AT_LEAST_ONCE"]
 - `type` (String) The type of the entrypoint. Not Null
@@ -719,7 +719,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)
@@ -733,7 +733,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)
@@ -747,7 +747,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)
@@ -761,7 +761,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)
@@ -775,7 +775,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)
@@ -841,7 +841,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)
@@ -897,7 +897,7 @@ overriding page content each time the source is fetched. (see [below for nested 
 
 Optional:
 
-- `configuration` (String) JSON object configuration of the fetch plugin. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON object configuration of the fetch plugin. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `type` (String) The type of the page source (fetcher plugin ID).
 
 
@@ -951,7 +951,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)
@@ -965,7 +965,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)
@@ -979,7 +979,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)
@@ -993,7 +993,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)
@@ -1007,7 +1007,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)
@@ -1073,7 +1073,7 @@ Optional:
 Optional:
 
 - `condition` (String) The EL condition return a boolean to execute this step at runtime. Empty expression implies it is enabled.
-- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object configuration of the policy used. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `description` (String) A description for the step
 - `enabled` (Boolean) To enable the step globally. Default: true
 - `message_condition` (String) The message condition of the step (for message API)
@@ -1087,7 +1087,7 @@ Optional:
 
 Optional:
 
-- `configuration` (String) JSON Object to configure specific attributes of a Plan. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
+- `configuration` (String) JSON Object to configure specific attributes of a Plan. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Parsed as JSON.
 - `type` (String) API Plan security implementation. Not Null; must be one of ["KEY_LESS", "OAUTH2", "JWT", "MTLS", "API_KEY"]
 
 
@@ -1127,7 +1127,7 @@ Read-Only:
 
 Optional:
 
-- `configuration` (String) JSON Object configuration specific to this resource. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.
+- `configuration` (String) JSON Object configuration specific to this resource. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.
 - `enabled` (Boolean) Make it available or not. Default: true
 - `name` (String) API resource name. Not Null
 - `type` (String) Resource type (resource plugin ID). Not Null
@@ -1145,7 +1145,7 @@ Optional:
 
 Optional:
 
-- `configuration` (String) JSON configuration of the service. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.
+- `configuration` (String) JSON configuration of the service. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want. Not Null; Parsed as JSON.
 - `enabled` (Boolean) Is the service enabled or not. Default: true
 - `override_configuration` (Boolean) When the configuration overrides an inherited configuration. Default: false
 - `type` (String) The service plugin ID used. Not Null

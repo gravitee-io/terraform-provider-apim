@@ -7,7 +7,7 @@ package shared
 type PlanSecurity struct {
 	// API Plan security implementation.
 	Type PlanSecurityType `json:"type"`
-	// JSON Object to configure specific attributes of a Plan. APIM fills each field left out with its default; those fields are not compared. Removing a field does not reset it in APIM: set the value you want.
+	// JSON Object to configure specific attributes of a Plan. APIM fills each field left out with its default. The resource does not compare those fields, and removing a field does not reset it in APIM: set the value you want.
 	Configuration any `json:"configuration,omitempty"`
 }
 
