@@ -1251,41 +1251,62 @@ func TestAPIV4Resource_console_notification(t *testing.T) {
 	})
 }
 
-// APIM never returns a property's `encrypted` flag and returns `dynamic` false
-// when the configuration leaves it out: the plan must stay empty (GKO-3471).
-func TestAPIV4Resource_property_idempotency(t *testing.T) {
+// Verifies that properties plan no change once applied, although APIM never returns
+// `encrypted`, and that the properties the dynamic properties service adds are kept
+// while the declared ones do not change (GKO-3471).
+func TestAPIV4Resource_properties(t *testing.T) {
 	t.Parallel()
 
-	environmentId := "DEFAULT"
-	organizationId := "DEFAULT"
-	randomId := "test-" + acctest.RandString(10)
+	resourceAddress := "apim_apiv4.test"
+	variables := config.Variables{
+		"environment_id":  config.StringVariable("DEFAULT"),
+		"hrid":            config.StringVariable("test-" + acctest.RandString(10)),
+		"organization_id": config.StringVariable("DEFAULT"),
+	}
+	configDirectory := func(step string) config.TestStepConfigFunc {
+		return config.StaticDirectory("testdata/TestAPIV4Resource_properties/" + step)
+	}
 
 	resource.Test(t, resource.TestCase{
 		Steps: []resource.TestStep{
-			// Create with a property.
+			// Create: the plan after apply is empty, and a declared property is not dynamic.
 			{
 				ProtoV6ProviderFactories: testProviders(),
-				ConfigDirectory:          config.TestNameDirectory(),
-				ConfigVariables: config.Variables{
-					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(randomId),
-					"organization_id": config.StringVariable(organizationId),
-				},
+				ConfigDirectory:          configDirectory("declared"),
+				ConfigVariables:          variables,
+				Check:                    resource.TestCheckResourceAttr(resourceAddress, "properties.0.dynamic", "false"),
 			},
-			// Re-apply the same config: plan must be empty (idempotency check).
+			// A property marked dynamic, as the service adds them.
 			{
 				ProtoV6ProviderFactories: testProviders(),
-				ConfigDirectory:          config.TestNameDirectory(),
-				ConfigVariables: config.Variables{
-					"environment_id":  config.StringVariable(environmentId),
-					"hrid":            config.StringVariable(randomId),
-					"organization_id": config.StringVariable(organizationId),
-				},
+				ConfigDirectory:          configDirectory("service"),
+				ConfigVariables:          variables,
+				Check:                    resource.TestCheckResourceAttr(resourceAddress, "properties.#", "2"),
+			},
+			// Left out of the configuration, the dynamic property is kept with no change planned.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          configDirectory("declared"),
+				ConfigVariables:          variables,
 				ConfigPlanChecks: resource.ConfigPlanChecks{
-					PreApply: []plancheck.PlanCheck{
-						plancheck.ExpectEmptyPlan(),
-					},
+					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
 				},
+				Check: resource.TestCheckTypeSetElemNestedAttrs(resourceAddress, "properties.*", map[string]string{
+					"key":     "X-Service",
+					"dynamic": "true",
+				}),
+			},
+			// A declared change removes it, and an inserted property is not dynamic.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          configDirectory("inserted"),
+				ConfigVariables:          variables,
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceAddress, "properties.#", "2"),
+					resource.TestCheckResourceAttr(resourceAddress, "properties.0.key", "a-key"),
+					resource.TestCheckResourceAttr(resourceAddress, "properties.0.dynamic", "false"),
+					resource.TestCheckResourceAttr(resourceAddress, "properties.1.dynamic", "false"),
+				),
 			},
 		},
 	})
