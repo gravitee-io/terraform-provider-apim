@@ -1750,7 +1750,7 @@ func (r *Apiv4DataSource) Schema(ctx context.Context, req datasource.SchemaReque
 						},
 					},
 				},
-				Description: `Properties usable using EL. The properties the dynamic properties service adds are kept, with no change planned, while the declared properties do not change. When a declared property changes, the plan removes them, and the service adds them back on its next run.`,
+				Description: `Properties usable using EL, the ones the dynamic properties service adds included. A resource keeps those with no change planned while its declared properties do not change; when one does, the plan removes them and the service adds them back on its next run.`,
 			},
 			"resources": schema.ListNestedAttribute{
 				Computed: true,
