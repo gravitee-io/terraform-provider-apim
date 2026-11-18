@@ -65,10 +65,9 @@ resource "apim_apiv4" "test" {
       key   = "plain-key"
       value = "plain-value"
     },
-    # Stands in for a property the dynamic properties service adds.
     {
-      key     = "X-Service"
-      value   = "from-service"
+      key     = "dynamic-key"
+      value   = "dynamic-value"
       dynamic = true
     }
   ]

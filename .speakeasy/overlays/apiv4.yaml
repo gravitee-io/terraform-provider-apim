@@ -233,16 +233,10 @@ actions:
 
   ### API
   - target: $.components.schemas.ApiV4Spec.properties.properties
-    description: Prevent empty array to create plan diff, and keep the properties the dynamic properties service adds
+    description: Prevent empty array to create plan diff
     update:
       x-speakeasy-param-computed: true
-      x-speakeasy-plan-modifiers:
-        - IgnoreEmptyList
-        - KeepDynamicProperties
-      description: >-
-        Properties usable using EL, the ones the dynamic properties service adds included. A resource keeps
-        those with no change planned while its declared properties do not change; when one does, the plan
-        removes them and the service adds them back on its next run.
+      x-speakeasy-plan-modifiers: IgnoreEmptyList
   - target: $.components.schemas.ApiV4Spec.properties.consoleNotification.properties.groups
     description: Prevent empty array to create plan diff
     update:
