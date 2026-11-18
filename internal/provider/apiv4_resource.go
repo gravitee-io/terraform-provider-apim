@@ -3136,7 +3136,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Description: `When the input value needs to be encrypted.`,
 						},
 						"encrypted": schema.BoolAttribute{
-							Computed:    true,
+							Computed: true,
+							PlanModifiers: []planmodifier.Bool{
+								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
+							},
 							Description: `When the value has been encrypted in database.`,
 						},
 						"key": schema.StringAttribute{
