@@ -2198,15 +2198,13 @@ components:
           x-speakeasy-param-computed: true
           x-speakeasy-param-suppress-computed-diff: true
         properties:
-          description: Properties usable using EL, the ones the dynamic properties service adds included. A resource keeps those with no change planned while its declared properties do not change; when one does, the plan removes them and the service adds them back on its next run.
+          description: Properties usable using EL.
           type: array
           items:
             $ref: "#/components/schemas/Property"
           default: []
           x-speakeasy-param-computed: true
-          x-speakeasy-plan-modifiers:
-            - IgnoreEmptyList
-            - KeepDynamicProperties
+          x-speakeasy-plan-modifiers: IgnoreEmptyList
         resources:
           type: array
           description: Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).

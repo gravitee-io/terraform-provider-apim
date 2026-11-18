@@ -3121,7 +3121,6 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
 					custom_listplanmodifier.IgnoreEmptyList(),
-					custom_listplanmodifier.KeepDynamicProperties(),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
@@ -3161,7 +3160,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 					},
 				},
-				Description: `Properties usable using EL, the ones the dynamic properties service adds included. A resource keeps those with no change planned while its declared properties do not change; when one does, the plan removes them and the service adds them back on its next run.`,
+				Description: `Properties usable using EL.`,
 			},
 			"resources": schema.ListNestedAttribute{
 				Computed: true,
