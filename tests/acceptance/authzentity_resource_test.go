@@ -216,7 +216,7 @@ func TestAuthzEntityResource_refused(t *testing.T) {
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables:          config.Variables{"hrid": config.StringVariable("test-" + acctest.RandString(10))},
-				ExpectError:              regexp.MustCompile(`not spelled the way the engine spells it`),
+				ExpectError:              regexp.MustCompile(`entityType\s+must\s+be\s+\[Group\],\s+got\s+\[group\]`),
 			},
 		},
 	})
