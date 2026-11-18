@@ -1252,8 +1252,7 @@ func TestAPIV4Resource_console_notification(t *testing.T) {
 }
 
 // Verifies that properties plan no change once applied, although APIM never returns
-// `encrypted`, and that the properties the dynamic properties service adds are kept
-// while the declared ones do not change (GKO-3471).
+// `encrypted`, and that `dynamic` stays with the property that declares it (GKO-3471).
 func TestAPIV4Resource_properties(t *testing.T) {
 	t.Parallel()
 
@@ -1276,27 +1275,17 @@ func TestAPIV4Resource_properties(t *testing.T) {
 				ConfigVariables:          variables,
 				Check:                    resource.TestCheckResourceAttr(resourceAddress, "properties.0.dynamic", "false"),
 			},
-			// A property marked dynamic, as the service adds them.
+			// A second property, marked dynamic.
 			{
 				ProtoV6ProviderFactories: testProviders(),
-				ConfigDirectory:          configDirectory("service"),
+				ConfigDirectory:          configDirectory("dynamic"),
 				ConfigVariables:          variables,
-				Check:                    resource.TestCheckResourceAttr(resourceAddress, "properties.#", "2"),
+				Check: resource.ComposeAggregateTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceAddress, "properties.#", "2"),
+					resource.TestCheckResourceAttr(resourceAddress, "properties.1.dynamic", "true"),
+				),
 			},
-			// Left out of the configuration, the dynamic property is kept with no change planned.
-			{
-				ProtoV6ProviderFactories: testProviders(),
-				ConfigDirectory:          configDirectory("declared"),
-				ConfigVariables:          variables,
-				ConfigPlanChecks: resource.ConfigPlanChecks{
-					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
-				},
-				Check: resource.TestCheckTypeSetElemNestedAttrs(resourceAddress, "properties.*", map[string]string{
-					"key":     "X-Service",
-					"dynamic": "true",
-				}),
-			},
-			// A declared change removes it, and an inserted property is not dynamic.
+			// A property inserted ahead does not take the flag of the one stored at its position.
 			{
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          configDirectory("inserted"),
