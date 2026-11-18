@@ -3135,7 +3135,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 						"encryptable": schema.BoolAttribute{
 							Optional:    true,
-							Description: `When the input value needs to be encrypted.`,
+							Description: `When the input value needs to be encrypted. APIM returns the encrypted value, which differs from the configured one, so such a property plans a change to ` + "`" + `value` + "`" + ` after every apply.`,
 						},
 						"encrypted": schema.BoolAttribute{
 							Computed: true,

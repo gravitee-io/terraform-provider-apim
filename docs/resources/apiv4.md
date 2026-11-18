@@ -1113,7 +1113,7 @@ Not Null
 Optional:
 
 - `dynamic` (Boolean) When the value was populated from dynamic property service. Default: false
-- `encryptable` (Boolean) When the input value needs to be encrypted.
+- `encryptable` (Boolean) When the input value needs to be encrypted. APIM returns the encrypted value, which differs from the configured one, so such a property plans a change to `value` after every apply.
 - `key` (String) Property key. Not Null
 - `value` (String) Property value. Not Null
 
