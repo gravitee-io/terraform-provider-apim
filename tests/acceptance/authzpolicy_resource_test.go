@@ -135,7 +135,7 @@ func TestAuthzPolicyResource_refused(t *testing.T) {
 				ProtoV6ProviderFactories: testProviders(),
 				ConfigDirectory:          config.TestNameDirectory(),
 				ConfigVariables:          config.Variables{"hrid": config.StringVariable("test-" + acctest.RandString(10))},
-				ExpectError:              regexp.MustCompile(`Policy templates aren't supported`),
+				ExpectError:              regexp.MustCompile(`policy\s+templates\s+\(\?principal,\s+\?resource\)\s+are\s+not\s+supported`),
 			},
 		},
 	})
