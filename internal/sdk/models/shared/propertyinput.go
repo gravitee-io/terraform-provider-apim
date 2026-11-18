@@ -15,7 +15,7 @@ type PropertyInput struct {
 	Value string `json:"value"`
 	// When the value was populated from dynamic property service.
 	Dynamic *bool `default:"false" json:"dynamic"`
-	// When the input value needs to be encrypted.
+	// When the input value needs to be encrypted. APIM returns the encrypted value, which differs from the configured one, so such a property plans a change to `value` after every apply.
 	Encryptable *bool `json:"encryptable,omitempty"`
 }
 
