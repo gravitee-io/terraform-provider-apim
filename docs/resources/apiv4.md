@@ -257,7 +257,7 @@ Default: true
 - `portal_navigation` (Attributes List) The API's internal documentation navigation tree for the next-gen portal. Requires APIM 4.13 or later.
 `order` sets the display order of a path among its siblings.
 Intermediate folders are implicitly created if not listed explicitly. (see [below for nested schema](#nestedatt--portal_navigation))
-- `properties` (Attributes List) Properties usable using EL, the ones the dynamic properties service adds included. A resource keeps those with no change planned while its declared properties do not change; when one does, the plan removes them and the service adds them back on its next run. (see [below for nested schema](#nestedatt--properties))
+- `properties` (Attributes List) Properties usable using EL. (see [below for nested schema](#nestedatt--properties))
 - `resources` (Attributes List) Data resources usable in policy to access (mostly) external data (authentication, cache, registries...). (see [below for nested schema](#nestedatt--resources))
 - `response_templates` (Map of Map of Object) Map of content-type dependent Response Templates for the API (Not applicable for Native
 API) to customize Gateway responses body on predefined errors.
