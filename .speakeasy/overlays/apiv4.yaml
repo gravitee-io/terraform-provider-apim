@@ -150,6 +150,12 @@ actions:
     description: A declared property is not one the dynamic properties service added, as APIM stores it
     update:
       default: false
+  - target: $.components.schemas.Property.properties.encryptable
+    description: Warn that APIM returns an encrypted value as stored, so it differs from the configuration
+    update:
+      description: >-
+        When the input value needs to be encrypted. APIM returns the encrypted value, which differs from the
+        configured one, so such a property plans a change to `value` after every apply.
   - target: $.components.schemas.ApiV4Spec.properties.responseTemplates
     description: Prevent empty response_templates.headers map from creating plan diff (GKO-3100)
     update:
