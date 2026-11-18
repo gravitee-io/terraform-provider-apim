@@ -147,10 +147,9 @@ actions:
       x-speakeasy-param-computed: true
       x-speakeasy-param-suppress-computed-diff: true
   - target: $.components.schemas.Property.properties.dynamic
-    description: APIM returns `dynamic` false for a property the configuration leaves it out of, so keep the stored value
+    description: A declared property is not one the dynamic properties service added, as APIM stores it
     update:
-      x-speakeasy-param-computed: true
-      x-speakeasy-param-suppress-computed-diff: true
+      default: false
   - target: $.components.schemas.ApiV4Spec.properties.responseTemplates
     description: Prevent empty response_templates.headers map from creating plan diff (GKO-3100)
     update:
@@ -234,10 +233,16 @@ actions:
 
   ### API
   - target: $.components.schemas.ApiV4Spec.properties.properties
-    description: Prevent empty array to create plan diff
+    description: Prevent empty array to create plan diff, and keep the properties the dynamic properties service adds
     update:
       x-speakeasy-param-computed: true
-      x-speakeasy-plan-modifiers: IgnoreEmptyList
+      x-speakeasy-plan-modifiers:
+        - IgnoreEmptyList
+        - KeepDynamicProperties
+      description: >-
+        Properties usable using EL, the ones the dynamic properties service adds included. A resource keeps
+        those with no change planned while its declared properties do not change; when one does, the plan
+        removes them and the service adds them back on its next run.
   - target: $.components.schemas.ApiV4Spec.properties.consoleNotification.properties.groups
     description: Prevent empty array to create plan diff
     update:

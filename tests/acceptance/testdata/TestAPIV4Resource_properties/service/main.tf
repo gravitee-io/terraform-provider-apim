@@ -14,7 +14,7 @@ resource "apim_apiv4" "test" {
   environment_id  = var.environment_id
   hrid            = var.hrid
   lifecycle_state = "UNPUBLISHED"
-  name            = "property-idempotency"
+  name            = "properties"
   organization_id = var.organization_id
   state           = "STOPPED"
   type            = "PROXY"
@@ -64,6 +64,12 @@ resource "apim_apiv4" "test" {
     {
       key   = "plain-key"
       value = "plain-value"
+    },
+    # Stands in for a property the dynamic properties service adds.
+    {
+      key     = "X-Service"
+      value   = "from-service"
+      dynamic = true
     }
   ]
 
