@@ -1251,6 +1251,46 @@ func TestAPIV4Resource_console_notification(t *testing.T) {
 	})
 }
 
+// APIM never returns a property's `encrypted` flag and returns `dynamic` false
+// when the configuration leaves it out: the plan must stay empty (GKO-3471).
+func TestAPIV4Resource_property_idempotency(t *testing.T) {
+	t.Parallel()
+
+	environmentId := "DEFAULT"
+	organizationId := "DEFAULT"
+	randomId := "test-" + acctest.RandString(10)
+
+	resource.Test(t, resource.TestCase{
+		Steps: []resource.TestStep{
+			// Create with a property.
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"organization_id": config.StringVariable(organizationId),
+				},
+			},
+			// Re-apply the same config: plan must be empty (idempotency check).
+			{
+				ProtoV6ProviderFactories: testProviders(),
+				ConfigDirectory:          config.TestNameDirectory(),
+				ConfigVariables: config.Variables{
+					"environment_id":  config.StringVariable(environmentId),
+					"hrid":            config.StringVariable(randomId),
+					"organization_id": config.StringVariable(organizationId),
+				},
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{
+						plancheck.ExpectEmptyPlan(),
+					},
+				},
+			},
+		},
+	})
+}
+
 func TestAPIV4Resource_webhook(t *testing.T) {
 	utils.SkipFor(t, utils.ApimV4_9, utils.ApimV4_10, utils.ApimV4_11)
 	t.Parallel()
