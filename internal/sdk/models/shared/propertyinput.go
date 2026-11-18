@@ -3,6 +3,10 @@
 
 package shared
 
+import (
+	"github.com/gravitee-io/terraform-provider-apim/internal/sdk/internal/utils"
+)
+
 // PropertyInput - API property can be used within the API using EL expression `{#api.properties['key']}.
 type PropertyInput struct {
 	// Property key.
@@ -10,9 +14,20 @@ type PropertyInput struct {
 	// Property value.
 	Value string `json:"value"`
 	// When the value was populated from dynamic property service.
-	Dynamic *bool `json:"dynamic,omitempty"`
+	Dynamic *bool `default:"false" json:"dynamic"`
 	// When the input value needs to be encrypted.
 	Encryptable *bool `json:"encryptable,omitempty"`
+}
+
+func (p PropertyInput) MarshalJSON() ([]byte, error) {
+	return utils.MarshalJSON(p, "", false)
+}
+
+func (p *PropertyInput) UnmarshalJSON(data []byte) error {
+	if err := utils.UnmarshalJSON(data, &p, "", false, nil); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (p *PropertyInput) GetKey() string {

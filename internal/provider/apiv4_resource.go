@@ -3121,6 +3121,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				Optional: true,
 				PlanModifiers: []planmodifier.List{
 					custom_listplanmodifier.IgnoreEmptyList(),
+					custom_listplanmodifier.KeepDynamicProperties(),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Validators: []validator.Object{
@@ -3128,12 +3129,10 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					},
 					Attributes: map[string]schema.Attribute{
 						"dynamic": schema.BoolAttribute{
-							Computed: true,
-							Optional: true,
-							PlanModifiers: []planmodifier.Bool{
-								speakeasy_boolplanmodifier.SuppressDiff(speakeasy_boolplanmodifier.ExplicitSuppress),
-							},
-							Description: `When the value was populated from dynamic property service.`,
+							Computed:    true,
+							Optional:    true,
+							Default:     booldefault.StaticBool(false),
+							Description: `When the value was populated from dynamic property service. Default: false`,
 						},
 						"encryptable": schema.BoolAttribute{
 							Optional:    true,
@@ -3162,7 +3161,7 @@ func (r *Apiv4Resource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						},
 					},
 				},
-				Description: `Properties usable using EL.`,
+				Description: `Properties usable using EL. The properties the dynamic properties service adds are kept, with no change planned, while the declared properties do not change. When a declared property changes, the plan removes them, and the service adds them back on its next run.`,
 			},
 			"resources": schema.ListNestedAttribute{
 				Computed: true,

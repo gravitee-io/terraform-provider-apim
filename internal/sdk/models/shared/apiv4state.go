@@ -158,7 +158,7 @@ type APIV4State struct {
 	Analytics *Analytics `json:"analytics,omitempty"`
 	// Defines the failover behavior to bypass endpoints when some are slow.
 	Failover *FailoverV4 `json:"failover,omitempty"`
-	// Properties usable using EL.
+	// Properties usable using EL. The properties the dynamic properties service adds are kept, with no change planned, while the declared properties do not change. When a declared property changes, the plan removes them, and the service adds them back on its next run.
 	Properties []PropertyOutput `json:"properties,omitempty"`
 	// Data resources usable in policy to access (mostly) external data (authentication, cache, registries...).
 	Resources []APIResource `json:"resources,omitempty"`
