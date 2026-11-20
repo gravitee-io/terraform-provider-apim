@@ -1,0 +1,78 @@
+---
+page_title: "Protect an API with Gravitee AM access tokens"
+subcategory: "Tutorials"
+---
+
+# Protect an API with Gravitee AM access tokens
+
+This tutorial has a backend service call an API on the APIM gateway with an access token from Gravitee Access
+Management (AM). The service gets the token from the AM gateway (OAuth 2.0 client credentials), and the APIM
+gateway checks it on every call. One Terraform configuration holds both sides: APIM with this provider, AM with
+the `gravitee-io/am` provider.
+
+~> All cited files in this tutorial are located in [examples/tutorials/v4api-am_oauth2](https://github.com/gravitee-io/terraform-provider-apim/tree/main/examples/tutorials/v4api-am_oauth2)
+
+## Before you start
+
+* The APIM provider reaches the APIM Automation API with `APIM_SERVER_URL` and `APIM_SA_TOKEN`; the AM provider
+  reaches the AM Automation API with `AM_SERVER_URL` and a service-account token in `AM_SA_TOKEN`.
+* Terraform 1.11 or later: the AM client secret values are write-only attributes.
+* The APIM gateway reaches the AM gateway.
+
+Both providers, in `provider.tf`:
+
+```terraform
+{{ .AMOAuth2Provider.Content }}
+```
+
+## The AM side
+
+The AM domain issuing the tokens, the consumer's application and the application the APIM gateway checks the
+tokens with, in `am.tf`:
+
+```terraform
+{{ .AMOAuth2AM.Content }}
+```
+
+## The APIM side
+
+The API, its OAuth2 plan and the consumer's subscription, in `apim.tf`. The API resource of type
+`oauth2-am-resource` points at the AM domain, and the plan uses it to introspect each token:
+
+```terraform
+{{ .AMOAuth2APIM.Content }}
+```
+
+Apply with `TF_VAR_billing_client_secret` and `TF_VAR_apim_gateway_client_secret` set. The billing service then
+gets a token from the AM gateway (curl prompts for its client secret) and calls the API with it:
+
+```shell
+TOKEN=$(curl -s -u acme-billing -d grant_type=client_credentials <AM gateway URL>/acme-invoices/oauth/token | jq -r .access_token)
+curl -H "Authorization: Bearer $TOKEN" <APIM gateway URL>/invoices/
+```
+
+The API answers `401` without a token or with one AM did not issue.
+
+## Check the tokens without calling AM: a JWT plan
+
+A JWT plan checks the signature of the token with the public keys the AM domain publishes, its JWKS, instead of
+calling AM for each request. Use `local.jwt_plan` in the `plans` of the API, and subscribe the application to the
+`jwt` plan:
+
+```terraform
+{{ .AMOAuth2JWTPlan.Content }}
+```
+
+## How it works
+
+* APIM finds the subscription from the client ID in the token: the `client_id` of the APIM application is the
+  one of the AM application, read from `am_application.billing`.
+* `securityDomain` is the path of the AM domain without its leading slash; `version = "V3_X"` fits AM 3.x and
+  later.
+* The OAuth2 plan asks AM about every token: disabling the AM application (`enabled = false`) refuses its tokens
+  at once. The JWT plan only checks the signature: the tokens AM already issued keep passing until they expire.
+* Deleting an AM client secret does not revoke the tokens issued with it, on either plan.
+* The API resource configuration is not write-only: the client secret of the APIM gateway is stored in the
+  Terraform state through `apim_apiv4`. Keep the state where secrets are safe.
+* To rotate the secret of the APIM gateway without an outage, apply three times: add an `am_client_secret` with a
+  new key and value, then give the new value to the API resource, then delete the old secret.

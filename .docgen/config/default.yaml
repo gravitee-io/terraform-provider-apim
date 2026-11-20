@@ -45,6 +45,8 @@ outputs:
    target: templates/guides/docgen_resource-tutorial.md
  - template: {{ .RootDir }}/tmpl/export-tutorial.md.tmpl
    target: templates/guides/docgen_export-tutorial.md
+ - template: {{ .RootDir }}/tmpl/am-oauth2-tutorial.md.tmpl
+   target: templates/guides/docgen_am-oauth2-tutorial.md
  - template: {{ .RootDir }}/tmpl/cert-rotation-tutorial.md.tmpl
    target: templates/guides/docgen_rotation-tutorial.md
  - template: {{ .RootDir }}/tmpl/dictionary-dynamic.md.tmpl
@@ -217,4 +219,16 @@ chunks:
     required: true
   - template: examples/use-cases/authorization/policy.tf
     exportedAs: AuthorizationPolicy
+    required: true
+  - template: examples/tutorials/v4api-am_oauth2/provider.tf
+    exportedAs: AMOAuth2Provider
+    required: true
+  - template: examples/tutorials/v4api-am_oauth2/am.tf
+    exportedAs: AMOAuth2AM
+    required: true
+  - template: examples/tutorials/v4api-am_oauth2/apim.tf
+    exportedAs: AMOAuth2APIM
+    required: true
+  - template: examples/tutorials/v4api-am_oauth2/jwt-plan.tf
+    exportedAs: AMOAuth2JWTPlan
     required: true
