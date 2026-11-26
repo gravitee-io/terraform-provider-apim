@@ -24,7 +24,8 @@ make lint
 make lint-overlays     # fail on an overlay action whose target matches nothing (speakeasy + yq)
 make lint-fix          # fix Terraform formatting
 
-# Sync OAS from upstream APIM
+# Sync OAS from upstream APIM at APIM_OAS_BRANCH. Every sync reads through the GitHub API, so it needs an
+# authenticated gh with access to the source repository
 make sync-oas
 
 # Sync the AI Management fragment from gravitee-gamma-module-aim at AIM_OAS_REF
@@ -207,5 +208,5 @@ Do not hand-edit `templates/guides/docgen_*.md` or `docs/` — they are generate
 - Import IDs are JSON-encoded composite keys (see acceptance test files for format)
 - APIM compatibility: 4.9+
 - CircleCI runs the acceptance and example tests on every push, across a matrix of Terraform versions (1.9.x, latest) × APIM versions (4.10.x, 4.11.x, 4.12.x, 4.13.x, master-latest). They need Docker, and the ACR credentials and APIM license come from Keeper. A CircleCI scheduled trigger on `main` (`trigger=acceptance`, `notify=true`) runs them nightly and posts to Slack. Unit tests and the base OAS check stay on GitHub Actions
-- CI re-fetches the three OpenAPI inputs and fails on a diff: the base document against APIM `master`, the AI Management fragment against the tag in `AIM_OAS_REF` (`make verify-aim-oas`, run in CircleCI by `hack/scripts/verify-aim-oas.mjs`: the repository is private and CircleCI holds the GitHub token, in Keeper), the AuthZ fragment against `AUTHZ_OAS_REF` the same way (`make verify-authz-oas`, `hack/scripts/verify-authz-oas.mjs`). No input is edited by hand; a PR does not sync the base document unless it implements what the sync brings
+- CI re-fetches the three OpenAPI inputs and fails on a diff: the base document against APIM `APIM_OAS_BRANCH` (`make verify-oas`), the AI Management fragment against the tag in `AIM_OAS_REF` (`make verify-aim-oas`), the AuthZ fragment against `AUTHZ_OAS_REF` (`make verify-authz-oas`). Each runs in CircleCI, triggered by `hack/scripts/verify-oas.mjs --check apim|aim|authz`: every input is read through the GitHub API with a token, which CircleCI holds in Keeper, so a source repository turning private keeps working. No input is edited by hand; a PR does not sync the base document unless it implements what the sync brings
 - Issues tracked at github.com/gravitee-io/issues with tag `project: GKO`
