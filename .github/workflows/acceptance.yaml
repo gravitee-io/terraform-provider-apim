@@ -22,8 +22,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Verify OAS schema matches upstream
-        uses: ./.github/actions/verify-oas-upstream
+      - name: Verify OAS schema matches upstream, in CircleCI where the token that reads the APIM repository lives
+        working-directory: hack/scripts
+        env:
+          CIRCLECI_TOKEN: ${{ secrets.CIRCLECI_TOKEN }}
+          # head_ref is empty on push, schedule and workflow_dispatch.
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          npm ci
+          npx zx verify-oas.mjs --check apim --branch "$BRANCH"
       - name: Send slack notification
         if: (failure() || success()) && github.event.schedule != ''
         continue-on-error: true

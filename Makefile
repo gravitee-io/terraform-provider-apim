@@ -54,13 +54,20 @@ node_modules: package.json package-lock.json
 lint-fix: ## Fix issues that can be found
 	@terraform fmt -recursive
 
+# Every OAS is read through the GitHub API with the gh token, so a source repository turning private keeps working.
+GH_RAW := gh api -H "Accept: application/vnd.github.raw"
+
 .PHONY: sync-oas
-sync-oas: ## Copy OAS from APIM assuming the project is in ../gravitee-apim-management
-	curl -fsSL "https://raw.githubusercontent.com/gravitee-io/gravitee-api-management/refs/heads/${APIM_OAS_BRANCH}/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml" -o automation-api-oas.yaml
+sync-oas: ## Copy the APIM Automation OAS from gravitee-api-management at APIM_OAS_BRANCH (needs an authenticated gh)
+	$(GH_RAW) "repos/gravitee-io/gravitee-api-management/contents/gravitee-apim-rest-api/gravitee-apim-rest-api-automation/gravitee-apim-rest-api-automation-rest/src/main/resources/open-api.yaml?ref=${APIM_OAS_BRANCH}" > automation-api-oas.yaml
+
+.PHONY: verify-oas
+verify-oas: sync-oas ## Fail when the APIM Automation OAS differs from gravitee-api-management at APIM_OAS_BRANCH (runs in CircleCI)
+	@git diff --exit-code -- automation-api-oas.yaml || (echo "automation-api-oas.yaml differs from gravitee-api-management at ${APIM_OAS_BRANCH}" && exit 1)
 
 .PHONY: sync-aim-oas
 sync-aim-oas: ## Copy the AI Management OAS fragment from gravitee-gamma-module-aim (private: needs an authenticated gh)
-	gh api -H "Accept: application/vnd.github.raw" "repos/gravitee-io/gravitee-gamma-module-aim/contents/src/main/resources/openapi/openapi-automation.yaml?ref=${AIM_OAS_REF}" > automation-api-aim-oas.yaml
+	$(GH_RAW) "repos/gravitee-io/gravitee-gamma-module-aim/contents/src/main/resources/openapi/openapi-automation.yaml?ref=${AIM_OAS_REF}" > automation-api-aim-oas.yaml
 
 .PHONY: verify-aim-oas
 verify-aim-oas: sync-aim-oas ## Fail when the AI Management OAS fragment differs from gravitee-gamma-module-aim at AIM_OAS_REF (runs in CircleCI)
@@ -68,7 +75,7 @@ verify-aim-oas: sync-aim-oas ## Fail when the AI Management OAS fragment differs
 
 .PHONY: sync-authz-oas
 sync-authz-oas: ## Copy the AuthZ OAS fragment from gravitee-gamma-module-authz (private: needs an authenticated gh)
-	gh api -H "Accept: application/vnd.github.raw" "repos/gravitee-io/gravitee-gamma-module-authz/contents/src/main/resources/openapi/openapi-automation.yaml?ref=${AUTHZ_OAS_REF}" > automation-api-authz-oas.yaml
+	$(GH_RAW) "repos/gravitee-io/gravitee-gamma-module-authz/contents/src/main/resources/openapi/openapi-automation.yaml?ref=${AUTHZ_OAS_REF}" > automation-api-authz-oas.yaml
 
 .PHONY: verify-authz-oas
 verify-authz-oas: sync-authz-oas ## Fail when the AuthZ OAS fragment differs from gravitee-gamma-module-authz at AUTHZ_OAS_REF (runs in CircleCI)
